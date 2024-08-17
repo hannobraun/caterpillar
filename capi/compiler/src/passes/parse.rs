@@ -21,11 +21,11 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
     let name = loop {
         if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
-            tokens.inner.pop_front();
+            tokens.take();
             continue;
         }
 
-        match tokens.inner.pop_front()? {
+        match tokens.take()? {
             Token::FunctionName { name } => {
                 break name;
             }
@@ -46,7 +46,7 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
 }
 
 fn parse_function(tokens: &mut Tokens) -> Option<Function> {
-    match tokens.inner.pop_front()? {
+    match tokens.take()? {
         Token::FunctionStart => {}
         token => {
             eprintln!("Unexpected token: {token:?}");
@@ -60,11 +60,11 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
                 parse_function(tokens);
             }
             Token::FunctionEnd => {
-                tokens.inner.pop_front();
+                tokens.take();
                 break;
             }
             _ => {
-                tokens.inner.pop_front();
+                tokens.take();
             }
         }
     }
@@ -79,5 +79,9 @@ struct Tokens {
 impl Tokens {
     pub fn peek(&self) -> Option<&Token> {
         self.inner.front()
+    }
+
+    pub fn take(&mut self) -> Option<Token> {
+        self.inner.pop_front()
     }
 }
