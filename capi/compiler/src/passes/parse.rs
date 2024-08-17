@@ -49,11 +49,14 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    while parse_branch(tokens).is_some() {}
+    let mut branches = Vec::new();
+    while let Some(branch) = parse_branch(tokens) {
+        branches.push(branch);
+    }
 
     Some(Function {
         name: None,
-        branches: Vec::new(),
+        branches,
         environment: BTreeSet::new(),
     })
 }
