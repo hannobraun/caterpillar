@@ -30,8 +30,7 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
                 break name;
             }
             token => {
-                eprintln!("Unexpected token: {token:?}");
-                return None;
+                panic!("Unexpected token: {token:?}");
             }
         }
     };
@@ -49,8 +48,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     match tokens.take()? {
         Token::FunctionStart => {}
         token => {
-            eprintln!("Unexpected token: {token:?}");
-            return None;
+            panic!("Unexpected token: {token:?}");
         }
     }
 
