@@ -1,6 +1,12 @@
 use std::mem;
 
 pub fn tokenize(source: String) -> Vec<Token> {
+    let eager_tokens = vec![
+        ("{", Token::FunctionOpen),
+        ("}", Token::FunctionClose),
+        ("|", Token::BranchHeadBoundary),
+    ];
+
     let mut state = State::Initial;
     let mut buffer = Buffer::default();
 
@@ -18,23 +24,19 @@ pub fn tokenize(source: String) -> Vec<Token> {
                         name: buffer.take(),
                     });
                 }
-                '{' => {
-                    buffer.take_identifier(&mut tokens);
-                    tokens.push(Token::FunctionOpen);
-                }
-                '}' => {
-                    buffer.take_identifier(&mut tokens);
-                    tokens.push(Token::FunctionClose);
-                }
-                '|' => {
-                    buffer.take_identifier(&mut tokens);
-                    tokens.push(Token::BranchHeadBoundary);
-                }
                 ch if ch.is_whitespace() => {
                     buffer.take_identifier(&mut tokens);
                 }
                 ch => {
                     buffer.push(ch);
+
+                    for (s, token) in &eager_tokens {
+                        if buffer.inner.ends_with(s) {
+                            buffer.inner.truncate(buffer.inner.len() - s.len());
+                            buffer.take_identifier(&mut tokens);
+                            tokens.push(token.clone());
+                        }
+                    }
                 }
             },
 
