@@ -63,7 +63,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
     tokens
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Token {
     Comment { text: String },
 
