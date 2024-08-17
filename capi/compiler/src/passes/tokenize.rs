@@ -12,10 +12,23 @@ pub fn tokenize(source: String) -> Vec<Token> {
                 '#' => {
                     tokens
                         .extend(buffer.take_if_not_empty().map(Token::Invalid));
-                    state = State::Comment;
+                    state = State::CommentStart;
                 }
                 ch => {
                     buffer.push(ch);
+                }
+            },
+            State::CommentStart => match ch {
+                '\n' => {
+                    tokens.push(Token::Comment {
+                        text: buffer.take(),
+                    });
+                    state = State::Initial;
+                }
+                ch if ch.is_whitespace() => {}
+                ch => {
+                    buffer.push(ch);
+                    state = State::Comment;
                 }
             },
             State::Comment => match ch {
@@ -44,6 +57,7 @@ pub enum Token {
 
 enum State {
     Initial,
+    CommentStart,
     Comment,
 }
 
