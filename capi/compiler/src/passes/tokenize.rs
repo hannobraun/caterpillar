@@ -13,6 +13,9 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     buffer.take_invalid(&mut tokens);
                     state = State::CommentStart;
                 }
+                ch if ch.is_whitespace() => {
+                    buffer.take_invalid(&mut tokens);
+                }
                 ch => {
                     buffer.push(ch);
                 }
