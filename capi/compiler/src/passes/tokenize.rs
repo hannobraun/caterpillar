@@ -1,10 +1,10 @@
-pub fn tokenize(_source: String) -> Vec<Token> {
+pub fn tokenize(source: String) -> Vec<Token> {
     let mut state = State::Initial;
     let mut buffer = String::new();
 
     let mut tokens = Vec::new();
 
-    for ch in _source.chars() {
+    for ch in source.chars() {
         match state {
             State::Initial => match ch {
                 '#' => {
