@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{BTreeSet, VecDeque};
 
 use crate::syntax::{Function, Script};
 
@@ -64,7 +64,11 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    Some(Function::default())
+    Some(Function {
+        name: None,
+        branches: Vec::new(),
+        environment: BTreeSet::new(),
+    })
 }
 
 struct Tokens {
