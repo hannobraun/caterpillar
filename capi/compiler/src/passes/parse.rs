@@ -54,6 +54,13 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         branches.push(branch);
     }
 
+    match tokens.take()? {
+        Token::FunctionEnd => {}
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    }
+
     Some(Function {
         name: None,
         branches,
@@ -78,7 +85,6 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                 parse_function(tokens);
             }
             Token::FunctionEnd => {
-                tokens.take();
                 break;
             }
             _ => {
