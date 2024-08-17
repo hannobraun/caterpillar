@@ -19,7 +19,7 @@ pub fn parse(tokens: Vec<Token>) -> Script {
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
     let name = loop {
-        if let Some(Token::Comment { .. }) = tokens.inner.front() {
+        if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
             tokens.inner.pop_front();
             continue;
@@ -54,7 +54,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    while let Some(token) = tokens.inner.front() {
+    while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
                 parse_function(tokens);
@@ -74,4 +74,10 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
 
 struct Tokens {
     inner: VecDeque<Token>,
+}
+
+impl Tokens {
+    pub fn peek(&self) -> Option<&Token> {
+        self.inner.front()
+    }
 }
