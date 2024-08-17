@@ -1,6 +1,12 @@
+use std::{fs::File, io::Read};
+
 use capi_compiler::syntax::Script;
 
 pub fn main() -> anyhow::Result<()> {
+    let mut source_code = String::new();
+    File::open("games/snake/snake.capi")?.read_to_string(&mut source_code)?;
+    dbg!(source_code);
+
     let mut script = Script::default();
     snake(&mut script);
 
