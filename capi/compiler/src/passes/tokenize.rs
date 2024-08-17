@@ -16,7 +16,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
-                    buffer.take_identifier(&mut tokens);
+                    buffer.take_literal_or_identifier(&mut tokens);
                     state = State::CommentStart;
                 }
                 ':' => {
@@ -25,7 +25,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     });
                 }
                 ch if ch.is_whitespace() => {
-                    buffer.take_identifier(&mut tokens);
+                    buffer.take_literal_or_identifier(&mut tokens);
                 }
                 ch => {
                     buffer.push(ch);
@@ -103,7 +103,7 @@ impl Buffer {
         }
     }
 
-    pub fn take_identifier(&mut self, tokens: &mut Vec<Token>) {
+    pub fn take_literal_or_identifier(&mut self, tokens: &mut Vec<Token>) {
         tokens.extend(self.take_if_not_empty().map(|token| {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
