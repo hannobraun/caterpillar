@@ -46,13 +46,13 @@ pub async fn build_and_watch_game(
 }
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
-    let script = Command::new("cargo")
+    let output = Command::new("cargo")
         .arg("run")
         .args(["--package", game])
         .output()
         .await?
         .stdout;
-    let stdout = str::from_utf8(&script)?;
+    let stdout = str::from_utf8(&output)?;
     let script = ron::from_str(stdout).with_context(|| {
         format!("Failed to parse message from game:\n{stdout}")
     })?;
