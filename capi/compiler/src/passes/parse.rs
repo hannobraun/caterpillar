@@ -107,6 +107,9 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
             Token::FunctionStart => {
                 parse_function(tokens);
             }
+            Token::BindingStart => {
+                parse_binding(tokens);
+            }
             Token::BranchHeadBoundary | Token::FunctionEnd => {
                 break;
             }
@@ -124,7 +127,6 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                 Token::IntegerLiteral { value } => {
                     body.push(Expression::Value(value.into()));
                 }
-                Token::BindingStart | Token::BindingEnd => {}
 
                 token => {
                     panic!("Unexpected token: {token:?}");
@@ -134,6 +136,29 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     }
 
     Some(Branch { parameters, body })
+}
+
+fn parse_binding(tokens: &mut Tokens) -> Option<Expression> {
+    match tokens.take()? {
+        Token::BindingStart => {}
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    }
+
+    loop {
+        match tokens.take()? {
+            Token::Identifier { name: _ } => {}
+            Token::BindingEnd => {
+                break;
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
+    }
+
+    None
 }
 
 struct Tokens {
