@@ -352,7 +352,12 @@ fn snake(script: &mut Script) {
                     e.ident("init_frame_count");
                 },
             )
-            .branch(|p| p.ident("_"), |_| {})
+            .branch(
+                |p| p.ident("_"),
+                |e| {
+                    e.c("No reset necessary.");
+                },
+            )
         });
 
     // Game state
