@@ -159,7 +159,13 @@ fn snake(script: &mut Script) {
                     .ident("tile_y")
                     .ident("check_tile_index")
                     .fun(|b| {
-                        b.branch(|p| p.lit(0), |_| {}).branch(
+                        b.branch(
+                            |p| p.lit(0),
+                            |e| {
+                                e.c("Done.");
+                            },
+                        )
+                        .branch(
                             |p| p.ident("_"),
                             |e| {
                                 e.c("Apparently we're not done yet.")
