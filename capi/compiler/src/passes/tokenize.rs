@@ -40,17 +40,18 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     }
                 }
             },
-
-            State::Comment if ch == '\n' => {
-                tokens.push(Token::Comment {
-                    text: buffer.take(),
-                });
-                state = State::Initial;
-            }
-            State::Comment => {
-                buffer.push(ch);
-                state = State::Comment
-            }
+            State::Comment => match ch {
+                '\n' => {
+                    tokens.push(Token::Comment {
+                        text: buffer.take(),
+                    });
+                    state = State::Initial;
+                }
+                ch => {
+                    buffer.push(ch);
+                    state = State::Comment
+                }
+            },
         }
     }
 
