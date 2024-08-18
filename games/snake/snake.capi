@@ -236,7 +236,7 @@ _count_frame_reset_frame_count_if_necessary: {
         init_frame_count
 
     |_|
-        # Not reset necessary.
+        # No reset necessary.
 }
 
 # Game state
