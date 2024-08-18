@@ -396,7 +396,12 @@ fn snake(script: &mut Script) {
                                     .ident("food_eat");
                             },
                         )
-                        .branch(|p| p.ident("_"), |_| {})
+                        .branch(
+                            |p| p.ident("_"),
+                            |e| {
+                                e.c("Nothing to do.");
+                            },
+                        )
                     })
                     .ident("eval");
             },
