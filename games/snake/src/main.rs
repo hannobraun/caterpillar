@@ -88,7 +88,7 @@ fn snake(script: &mut Script) {
             b.branch(
                 |p| p.lit(0).ident("_"),
                 |e| {
-                    e.c("Index is out of bounds. We're done");
+                    e.c("Index is out of bounds. We're done.");
                 },
             )
             .branch(
