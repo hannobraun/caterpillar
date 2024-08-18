@@ -19,7 +19,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
             State::Initial => match ch {
                 '#' => {
                     buffer.take_literal_or_identifier(&mut tokens);
-                    state = State::CommentText;
+                    state = State::Comment;
                 }
                 ':' => {
                     tokens.push(Token::FunctionName {
@@ -41,15 +41,15 @@ pub fn tokenize(source: String) -> Vec<Token> {
                 }
             },
 
-            State::CommentText if ch == '\n' => {
+            State::Comment if ch == '\n' => {
                 tokens.push(Token::Comment {
                     text: buffer.take(),
                 });
                 state = State::Initial;
             }
-            State::CommentText => {
+            State::Comment => {
                 buffer.push(ch);
-                state = State::CommentText
+                state = State::Comment
             }
         }
     }
@@ -75,7 +75,7 @@ pub enum Token {
 
 enum State {
     Initial,
-    CommentText,
+    Comment,
 }
 
 #[derive(Default)]
