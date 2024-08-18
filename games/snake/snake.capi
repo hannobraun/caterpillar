@@ -321,7 +321,7 @@ update_next_position: {
                 => next_x next_y .
                 tile_field_size
                 vec_load
-                limit_x limit_y
+                => limit_x limit_y .
                 next_x
                 limit_x
                 handle_coordinate_smaller_than_zero
