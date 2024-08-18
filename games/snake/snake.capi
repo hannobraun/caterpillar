@@ -187,7 +187,7 @@ is_out_of_bounds: {
     |x y|
         tile_field_size
         vec_load
-        limit_x limit_y
+        => limit_x limit_y .
         x
         limit_x
         _is_out_of_bounds_is_coord_within_bounds
