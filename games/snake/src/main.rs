@@ -678,7 +678,12 @@ fn snake(script: &mut Script) {
                                     .ident("pop_positions");
                             },
                         )
-                        .branch(|b| b.lit(1), |_| {})
+                        .branch(
+                            |b| b.lit(1),
+                            |e| {
+                                e.c("Collision. Do nothing.");
+                            },
+                        )
                     })
                     .ident("eval");
             },
