@@ -502,7 +502,12 @@ fn snake(script: &mut Script) {
                                     .ident("vec_store");
                             },
                         )
-                        .branch(|p| p.ident("_"), |_| {})
+                        .branch(
+                            |p| p.ident("_"),
+                            |e| {
+                                e.c("Not out of bounds. Nothing to do.");
+                            },
+                        )
                     })
                     .ident("eval");
             },
