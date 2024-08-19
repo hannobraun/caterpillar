@@ -19,7 +19,7 @@ pub async fn start(
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
-        .route("/code/:build_number", get(serve_code))
+        .route("/code", get(serve_code))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(ServerState { serve_dir, code });

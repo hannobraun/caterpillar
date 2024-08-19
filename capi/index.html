@@ -53,7 +53,7 @@
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
         let bytecode_version = 0;
-        const bytecode = await fetch(`/code/${bytecode_version}`)
+        const bytecode = await fetch(`/code`)
             .then((response) => {
                 return response.arrayBuffer();
             })
