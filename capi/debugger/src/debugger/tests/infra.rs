@@ -1,4 +1,4 @@
-use capi_compiler::{compile, fragments, syntax::Script};
+use capi_compiler::{compile, fragments, parse, tokenize};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -19,13 +19,9 @@ pub struct TestInfra {
 }
 
 impl TestInfra {
-    pub fn provide_source_code(
-        &mut self,
-        f: impl FnOnce(&mut Script),
-    ) -> &mut Self {
-        let mut script = Script::default();
-        f(&mut script);
-
+    pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
+        let tokens = tokenize(source);
+        let script = parse(tokens);
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(script);
 

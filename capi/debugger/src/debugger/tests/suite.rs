@@ -30,7 +30,7 @@ fn no_process() {
     // If `RemoteProcess` has received a code update but no runtime updates, the
     // active functions view should display that no process is available.
 
-    let debugger = init().provide_source_code(|_| {}).to_debugger();
+    let debugger = init().provide_source_code("").to_debugger();
 
     assert_eq!(
         debugger.active_functions,
@@ -54,41 +54,26 @@ fn basic_call_stack() {
     // display the instruction where we're currently paused up top.
 
     let debugger = init()
-        .provide_source_code(|script| {
-            script
-                .function("main", |b| {
-                    b.branch(
-                        |p| p.ident("size_x").ident("size_y"),
-                        |s| {
-                            s.ident("f")
-                                // Not triggered. Just here to prevent tail call
-                                // optimization from removing this function from the
-                                // call stack.
-                                .ident("brk");
-                        },
-                    )
-                })
-                .function("f", |b| {
-                    b.branch(
-                        |p| p,
-                        |s| {
-                            s.ident("g")
-                                // Not triggered. Just here to prevent tail call
-                                // optimization from removing this function from the
-                                // call stack.
-                                .ident("brk");
-                        },
-                    )
-                })
-                .function("g", |b| {
-                    b.branch(
-                        |p| p,
-                        |s| {
-                            s.ident("brk");
-                        },
-                    )
-                });
-        })
+        .provide_source_code(
+            r"
+            main: { |size_x size_y|
+                f
+
+                # Not triggered. Just here to prevent tail call elimination
+                # from removing this function from the call stack.
+                brk
+            }
+            f: { ||
+                g
+
+                # Not triggered. Just here to prevent tail call elimination
+                # from removing this function from the call stack.
+                brk
+            }
+            g: { ||
+                brk
+            }",
+        )
         .run_process()
         .to_debugger();
 
@@ -108,24 +93,13 @@ fn stopped_at_code_within_block() {
     // should be visible.
 
     let debugger = init()
-        .provide_source_code(|script| {
-            script.function("main", |b| {
-                b.branch(
-                    |p| p.ident("size_x").ident("size_y"),
-                    |s| {
-                        s.fun(|b| {
-                            b.branch(
-                                |b| b,
-                                |s| {
-                                    s.ident("brk");
-                                },
-                            )
-                        })
-                        .ident("eval");
-                    },
-                )
-            });
-        })
+        .provide_source_code(
+            r"
+                main: { |size_x size_y|
+                    { || brk } eval
+                }
+            ",
+        )
         .run_process()
         .to_debugger();
 
