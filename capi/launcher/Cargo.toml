@@ -10,8 +10,8 @@ rand = "*"
 [dependencies.capi-game-engine]
 path = "../game-engine"
 
-[dependencies.capi-watch]
-path = "../watch"
+[dependencies.capi-build-game]
+path = "../build-game"
 
 [dependencies.tokio]
 version = "*"

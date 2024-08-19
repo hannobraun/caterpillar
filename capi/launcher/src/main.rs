@@ -1,7 +1,7 @@
 use std::time::Instant;
 
+use capi_build_game::build_game_once;
 use capi_game_engine::{display::NUM_PIXEL_BYTES, game_engine::GameEngine};
-use capi_watch::build_game_once;
 use rand::random;
 
 #[tokio::main]

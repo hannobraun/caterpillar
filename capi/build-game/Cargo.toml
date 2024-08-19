@@ -2,3 +2,20 @@
 name = "capi-build-game"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+anyhow = "*"
+ron = "*"
+tokio = "*"
+
+[dependencies.capi-compiler]
+path = "../compiler"
+
+[dependencies.capi-game-engine]
+path = "../game-engine"
+
+[dependencies.capi-protocol]
+path = "../protocol"
+
+[dependencies.capi-watch]
+path = "../watch"

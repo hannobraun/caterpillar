@@ -341,6 +341,15 @@ checksum = "8b96ec4966b5813e2c0507c1f86115c8c5abaadc3980879c3424042a02fd1ad3"
 [[package]]
 name = "capi-build-game"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "capi-compiler",
+ "capi-game-engine",
+ "capi-protocol",
+ "capi-watch",
+ "ron",
+ "tokio",
+]
 
 [[package]]
 name = "capi-compiler"
@@ -389,8 +398,8 @@ name = "capi-launcher"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "capi-build-game",
  "capi-game-engine",
- "capi-watch",
  "rand",
  "tokio",
 ]
@@ -432,6 +441,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
+ "capi-build-game",
  "capi-protocol",
  "capi-watch",
  "clap",
@@ -446,11 +456,7 @@ name = "capi-watch"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "capi-compiler",
- "capi-game-engine",
- "capi-protocol",
  "notify",
- "ron",
  "tokio",
  "tracing",
 ]
