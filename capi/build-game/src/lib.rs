@@ -26,11 +26,11 @@ pub async fn build_and_watch_game(
 
     task::spawn(async move {
         while changes.wait_for_change().await {
-            let source_code = build_game_once(&game).await.unwrap();
+            let code = build_game_once(&game).await.unwrap();
             game_tx
                 .send(Versioned {
                     version: build_number,
-                    inner: source_code,
+                    inner: code,
                 })
                 .unwrap();
 
