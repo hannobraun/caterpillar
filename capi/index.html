@@ -52,7 +52,6 @@
         import initDebugger from "/capi-debugger.js";
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
-        let bytecode_version = 0;
         const bytecode = await fetch(`/code`)
             .then((response) => {
                 return response.arrayBuffer();
@@ -93,7 +92,7 @@
             runtime.code_write_len(),
         );
         code_tx.set(bytecode);
-        bytecode_version = runtime.on_new_bytecode();
+        let bytecode_version = runtime.on_new_bytecode();
         console.log(bytecode_version);
 
         window.requestAnimationFrame(mainLoop);
