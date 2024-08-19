@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 ron = "*"
-tokio = "*"
 
 [dependencies.capi-compiler]
 path = "../compiler"
@@ -19,3 +18,7 @@ path = "../protocol"
 
 [dependencies.capi-watch]
 path = "../watch"
+
+[dependencies.tokio]
+version = "*"
+features = ["fs"]
