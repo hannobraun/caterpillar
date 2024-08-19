@@ -47,7 +47,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     let path = format!("games/{game}/{game}.capi");
 
     let source = fs::read_to_string(path).await?;
-    let tokens = tokenize(source);
+    let tokens = tokenize(&source);
     let script = parse(tokens);
 
     let (fragments, instructions, source_map) =

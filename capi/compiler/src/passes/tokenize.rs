@@ -1,6 +1,6 @@
 use std::mem;
 
-pub fn tokenize(source: String) -> Vec<Token> {
+pub fn tokenize(source: &str) -> Vec<Token> {
     let eager_tokens = vec![
         ("{", Token::FunctionStart),
         ("}", Token::FunctionEnd),
