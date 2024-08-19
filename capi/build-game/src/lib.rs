@@ -1,11 +1,10 @@
 use std::str;
 
-use anyhow::Context;
-use capi_compiler::compile;
+use capi_compiler::{compile, parse, tokenize};
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::{updates::Code, Versioned};
 use capi_watch::DebouncedChanges;
-use tokio::{process::Command, sync::watch, task};
+use tokio::{fs, sync::watch, task};
 
 pub type CodeRx = watch::Receiver<Versioned<Code>>;
 
@@ -45,20 +44,11 @@ pub async fn build_and_watch_game(
 }
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
-    let output = Command::new("cargo")
-        .arg("run")
-        .args(["--package", game])
-        .output()
-        .await?;
+    let path = format!("games/{game}/{game}.capi");
 
-    let stderr = str::from_utf8(&output.stderr)?;
-    let stdout = str::from_utf8(&output.stdout)?;
-
-    eprintln!("{stderr}");
-
-    let script = ron::from_str(stdout).with_context(|| {
-        format!("Failed to parse output from game:\n{stdout}")
-    })?;
+    let source = fs::read_to_string(path).await?;
+    let tokens = tokenize(source);
+    let script = parse(tokens);
 
     let (fragments, instructions, source_map) =
         compile::<GameEngineHost>(script);
