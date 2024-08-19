@@ -2,16 +2,6 @@ use std::collections::BTreeMap;
 
 use crate::{operands::PopOperandError, InstructionAddress, Value};
 
-/// # Caterpillar's stack, supposedly
-///
-/// ## Implementation Note
-///
-/// This is more and more turning into a general "evaluator state" struct, of
-/// which the actual stack is just one part. For now, I'm going to accept this.
-///
-/// This code is under heavy construction, and I think the best time to clean up
-/// is when the new structure has fallen into place. Trying to separate it into
-/// sensible components before that, will only cause unnecessary churn.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
