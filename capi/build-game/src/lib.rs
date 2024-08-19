@@ -26,9 +26,7 @@ pub async fn build_and_watch_game(
 
     task::spawn(async move {
         while changes.wait_for_change().await {
-            dbg!("Change detected.");
             let source_code = build_game_once(&game).await.unwrap();
-            dbg!("Game built.");
             game_tx
                 .send(Versioned {
                     version: build_number,
