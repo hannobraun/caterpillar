@@ -14,7 +14,7 @@ use std::collections::BTreeMap;
 
 use capi_process::{Effect, Process};
 
-use crate::{compile, host::Host, parse, tokenize};
+use crate::{compile, host::Host};
 
 #[test]
 fn closure_in_function() {
@@ -27,9 +27,7 @@ fn closure_in_function() {
         }
     ";
 
-    let tokens = tokenize(source);
-    let script = parse(tokens);
-    let (_, instructions, _) = compile::<TestHost>(script);
+    let (_, instructions, _) = compile::<TestHost>(source);
 
     let mut signals = BTreeMap::new();
 

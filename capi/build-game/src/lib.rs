@@ -1,6 +1,6 @@
 use std::str;
 
-use capi_compiler::{compile, parse, tokenize};
+use capi_compiler::compile;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::{updates::Code, Versioned};
 use capi_watch::DebouncedChanges;
@@ -47,11 +47,9 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     let path = format!("games/{game}/{game}.capi");
 
     let source = fs::read_to_string(path).await?;
-    let tokens = tokenize(&source);
-    let script = parse(tokens);
 
     let (fragments, instructions, source_map) =
-        compile::<GameEngineHost>(script);
+        compile::<GameEngineHost>(&source);
 
     Ok(Code {
         fragments,

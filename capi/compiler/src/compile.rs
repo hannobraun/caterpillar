@@ -5,15 +5,14 @@ use crate::{
     host::Host,
     passes::{
         determine_tail_positions, generate_fragments, generate_instructions,
-        resolve_identifiers,
+        parse, resolve_identifiers, tokenize,
     },
     source_map::SourceMap,
-    syntax::Script,
 };
 
-pub fn compile<H: Host>(
-    mut script: Script,
-) -> (Fragments, Instructions, SourceMap) {
+pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
+    let tokens = tokenize(source);
+    let mut script = parse(tokens);
     determine_tail_positions(&mut script.functions);
     resolve_identifiers::<H>(&mut script.functions);
     let fragments = generate_fragments(script.functions);
