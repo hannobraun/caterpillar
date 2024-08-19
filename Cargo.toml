@@ -13,8 +13,6 @@ members = [
     "capi/server",
     "capi/watch",
 
-    "games/snake",
-
     "tools/builder",
     "tools/daily",
 ]
