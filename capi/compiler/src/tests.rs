@@ -14,30 +14,21 @@ use std::collections::BTreeMap;
 
 use capi_process::{Effect, Process};
 
-use crate::{compile, host::Host, syntax::Script};
+use crate::{compile, host::Host, parse, tokenize};
 
 #[test]
 fn closure_in_function() {
-    let mut script = Script::default();
-    script.function("main", |b| {
-        b.branch(
-            |p| p,
-            |s| {
-                s.v(0)
-                    .bind(["channel"])
-                    .fun(|b| {
-                        b.branch(
-                            |b| b,
-                            |s| {
-                                s.ident("channel").ident("send");
-                            },
-                        )
-                    })
-                    .ident("eval");
-            },
-        )
-    });
+    let source = r"
+        main: {
+            ||
+                0 => channel .
+                { || channel send }
+                    eval
+        }
+    ";
 
+    let tokens = tokenize(source);
+    let script = parse(tokens);
     let (_, instructions, _) = compile::<TestHost>(script);
 
     let mut signals = BTreeMap::new();
