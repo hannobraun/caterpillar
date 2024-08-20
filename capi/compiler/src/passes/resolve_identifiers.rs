@@ -16,6 +16,16 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
         .collect();
 
     for function in functions {
+        if !function.environment.is_empty() {
+            panic!(
+                "Named functions do not have an environment that they could \
+                access.\n\
+                \n\
+                Environment: {:#?}",
+                function.environment,
+            );
+        }
+
         resolve_in_function::<H>(
             &mut function.branches,
             &mut function.environment,
@@ -56,16 +66,6 @@ fn resolve_in_function<H: Host>(
             environment,
             known_named_functions,
         );
-
-        if !environment.is_empty() {
-            panic!(
-                "Named functions do not have an environment that they could \
-                access.\n\
-                \n\
-                Environment: {:#?}",
-                environment,
-            );
-        }
     }
 }
 
