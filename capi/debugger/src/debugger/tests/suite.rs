@@ -81,7 +81,7 @@ fn basic_call_stack() {
         .active_functions
         .expect_functions()
         .into_iter()
-        .map(|active_function| active_function.name)
+        .map(|active_function| active_function.name.unwrap())
         .collect::<Vec<_>>();
     assert_eq!(names, vec!["g", "f", "main"]);
 }
@@ -106,6 +106,8 @@ fn stopped_at_code_within_block() {
     let other = debugger
         .active_functions
         .expect_functions()
+        .remove(0)
+        .branches
         .remove(0)
         .body
         .remove(0)
