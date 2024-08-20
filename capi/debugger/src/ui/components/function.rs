@@ -74,7 +74,7 @@ fn Branch(
         .collect_view();
 
     view! {
-        <div>
+        <div class="pl-8">
             |{parameters}|
             <ol>
                 {expressions}
