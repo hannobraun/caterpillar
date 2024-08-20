@@ -36,11 +36,6 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
 
         match instruction {
-            Instruction::AssertBindingLeftNoOperands => {
-                if self.stack.operands_in_current_stack_frame().count() > 0 {
-                    return Err(Effect::BindingLeftValuesOnStack);
-                }
-            }
             Instruction::Bind { name } => {
                 let value = self.stack.pop_operand()?;
                 self.stack.define_binding(name.clone(), value);
