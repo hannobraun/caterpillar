@@ -8,13 +8,12 @@ use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Branch {
-    pub name: String,
     pub body: Vec<Expression>,
 }
 
 impl Branch {
     pub fn new(
-        name: String,
+        _: String,
         branch: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,
@@ -29,6 +28,6 @@ impl Branch {
             })
             .collect();
 
-        Self { name, body }
+        Self { body }
     }
 }
