@@ -14,6 +14,8 @@ pub enum Expression {
     Comment {
         text: String,
     },
+
+    /// A function literal
     Function {
         function: Function,
     },
