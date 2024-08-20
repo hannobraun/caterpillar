@@ -69,6 +69,34 @@ fn anonymous_function_parameter_shadowing() {
     assert!(signals.is_empty());
 }
 
+#[test]
+fn anonymous_function_captured_binding() {
+    let source = r"
+        main: { ||
+            0
+            { |channel|
+                { ||
+                    # Capturing `channel` from the parent
+                    channel send
+
+                    { ||
+                        # Capturing `channel` from the grandparent.
+                        channel send
+                    }
+                        eval
+                }
+                    eval
+            }
+                eval
+        }
+    ";
+
+    let mut signals = compile_and_run(source);
+
+    assert_eq!(signals.remove(&0), Some(2));
+    assert!(signals.is_empty());
+}
+
 fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let (_, instructions, _) = compile::<TestHost>(source);
 
