@@ -6,8 +6,8 @@ use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Function { expressions: Vec<Self> },
     Comment { text: String },
+    Function { expressions: Vec<Self> },
     Other(OtherExpression),
 }
 

@@ -57,18 +57,6 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
 
     let (expression, error) = match expression {
-        Expression::Function { expressions } => (
-            view! {
-                <span>
-                    "{"
-                    <Function
-                        expressions=expressions
-                        commands=commands />
-                    "}"
-                </span>
-            },
-            None,
-        ),
         Expression::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
@@ -81,6 +69,18 @@ pub fn Expression(
                 None,
             )
         }
+        Expression::Function { expressions } => (
+            view! {
+                <span>
+                    "{"
+                    <Function
+                        expressions=expressions
+                        commands=commands />
+                    "}"
+                </span>
+            },
+            None,
+        ),
         Expression::Other(OtherExpression {
             expression,
             first_instruction,
