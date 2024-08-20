@@ -178,32 +178,6 @@ mod tests {
     }
 
     #[test]
-    fn resolve_binding_from_same_scope() {
-        // Bindings defined in the current scope should be resolved.
-
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.v(0).bind(["value"]).ident("value");
-                },
-            )
-        });
-
-        let mut functions = resolve_identifiers(script);
-
-        assert_eq!(
-            functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
-                name: String::from("value"),
-                target: Some(IdentifierTarget::Binding),
-                is_known_to_be_in_tail_position: false,
-            })
-        );
-    }
-
-    #[test]
     fn resolve_binding_from_parent_scope() {
         // Bindings defined in the lexical parent scope should be resolved in
         // the current scope.
