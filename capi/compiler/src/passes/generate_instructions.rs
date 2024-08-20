@@ -229,7 +229,7 @@ fn compile_fragment<H: Host>(
                     // with the call later.
                     let address = output.generate_instruction(
                         Instruction::TriggerEffect {
-                            effect: Effect::Panic,
+                            effect: Effect::CompilerBug,
                         },
                         fragment.id(),
                     );

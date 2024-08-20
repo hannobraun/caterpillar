@@ -65,6 +65,9 @@ pub enum Effect {
     #[error("Breakpoint")]
     Breakpoint,
 
+    #[error("Mis-compilation due to compiler bug")]
+    CompilerBug,
+
     #[error("Divide by zero")]
     DivideByZero,
 
