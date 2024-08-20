@@ -104,9 +104,6 @@ pub enum Effect {
     #[error("Unresolved identifier")]
     UnresolvedIdentifier,
 
-    #[error("Panic")]
-    Panic,
-
     /// A host-specific effect
     ///
     /// This host is expected to handle this effect. Any information it requires
