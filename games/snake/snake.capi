@@ -776,10 +776,12 @@ vec_buf_last: {
         vec_buf_len
         1
         sub_u8
-        => index .
-        vec_buf
-        index
-        vec_buf_get
+        { |index|
+            vec_buf
+            index
+            vec_buf_get
+        }
+            eval
 }
 
 vec_buf_push: {
