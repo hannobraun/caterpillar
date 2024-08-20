@@ -1,13 +1,19 @@
 use capi_compiler::{
     fragments::{self, Fragment, FragmentPayload, Fragments},
     source_map::SourceMap,
+    syntax::Pattern,
 };
 use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Comment { text: String },
-    Function { expressions: Vec<Self> },
+    Comment {
+        text: String,
+    },
+    Function {
+        parameters: Vec<String>,
+        expressions: Vec<Self>,
+    },
     Other(OtherExpression),
 }
 
@@ -33,6 +39,15 @@ impl Expression {
                 Before this can happen, this code needs to be updated."
             );
 
+            let parameters = branch
+                .parameters
+                .inner
+                .into_iter()
+                .map(|pattern| match pattern {
+                    Pattern::Identifier { name } => name,
+                    Pattern::Literal { value } => format!("{value:?}"),
+                })
+                .collect();
             let expressions = fragments
                 .inner
                 .iter_from(branch.start)
@@ -42,7 +57,10 @@ impl Expression {
                 })
                 .collect();
 
-            return Some(Self::Function { expressions });
+            return Some(Self::Function {
+                parameters,
+                expressions,
+            });
         }
         if let fragments::Expression::Comment { text } = expression {
             return Some(Self::Comment {
