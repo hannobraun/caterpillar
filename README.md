@@ -190,6 +190,17 @@ The following daily thoughts provide more context:
 [2024-06-24](https://capi.hannobraun.com/daily/2024-06-24), and
 [2024-06-25](https://capi.hannobraun.com/daily/2024-06-25).
 
+### Designed to be used with tooling
+
+Caterpillar is designed to be used with tooling and makes various trade-off that
+benefit this intended use case, at the cost of other cases where tooling is not
+available.
+
+The following daily thoughts provide more context:
+[2024-07-21](https://capi.hannobraun.com/daily/2024-07-21),
+[2024-07-22](https://capi.hannobraun.com/daily/2024-07-22), and
+[2024-07-23](https://capi.hannobraun.com/daily/2024-07-23).
+
 ## Acknowledgements
 
 I'd like to thank [Martin Dederer](https://github.com/martindederer) for
