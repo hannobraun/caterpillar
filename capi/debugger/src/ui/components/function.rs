@@ -31,6 +31,20 @@ pub fn NamedFunction(
 #[component]
 fn Function(mut branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
     let expressions = branches.remove(0).body;
+
+    view! {
+        <span>
+            "{"
+            <Branch
+                expressions=expressions
+                commands=commands />
+            "}"
+        </span>
+    }
+}
+
+#[component]
+fn Branch(expressions: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
     let expressions = expressions
         .into_iter()
         .map(|fragment| {
@@ -45,13 +59,9 @@ fn Function(mut branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
         .collect_view();
 
     view! {
-        <span>
-            "{"
-            <ol>
-                {expressions}
-            </ol>
-            "}"
-        </span>
+        <ol>
+            {expressions}
+        </ol>
     }
 }
 
