@@ -23,7 +23,7 @@ pub fn generate_instructions<H: Host>(
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
     let main = output.instructions.push(Instruction::TriggerEffect {
-        effect: Effect::Panic,
+        effect: Effect::MissingMainFunction,
     });
     output.instructions.push(Instruction::Return);
     if let Some(id) = fragments.inner.find_function_by_name("main") {

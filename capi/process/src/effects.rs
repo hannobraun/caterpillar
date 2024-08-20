@@ -77,6 +77,9 @@ pub enum Effect {
     #[error("Invalid host effect")]
     InvalidHostEffect,
 
+    #[error("Missing `main` function")]
+    MissingMainFunction,
+
     #[error("Pattern matching resulted in no match")]
     NoMatch,
 
