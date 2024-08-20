@@ -16,7 +16,7 @@ impl Function {
         code: &Code,
         process: &Process,
     ) -> Self {
-        let name = function.name.clone();
+        let name = function.name;
         let branches = function
             .branches
             .into_iter()
