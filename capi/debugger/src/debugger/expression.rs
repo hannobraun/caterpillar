@@ -24,11 +24,8 @@ impl Expression {
             return None;
         };
 
-        if let fragments::Expression::Function { function } = expression {
-            let branch = function
-                .branches
-                .first()
-                .expect("All functions must have at least one branch.");
+        if let fragments::Expression::Function { mut function } = expression {
+            let branch = function.branches.remove(0);
             assert_eq!(
                 function.branches.len(),
                 1,
