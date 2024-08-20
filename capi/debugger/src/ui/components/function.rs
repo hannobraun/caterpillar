@@ -74,10 +74,12 @@ fn Branch(
         .collect_view();
 
     view! {
-        |{parameters}|
-        <ol>
-            {expressions}
-        </ol>
+        <div>
+            |{parameters}|
+            <ol>
+                {expressions}
+            </ol>
+        </div>
     }
 }
 
