@@ -1,6 +1,8 @@
-use capi_compiler::fragments;
+use capi_compiler::{
+    fragments::{self, Fragments},
+    source_map::SourceMap,
+};
 use capi_process::Process;
-use capi_protocol::updates::Code;
 
 use super::Branch;
 
@@ -13,16 +15,15 @@ pub struct Function {
 impl Function {
     pub fn new(
         function: fragments::Function,
-        code: &Code,
+        fragments: &Fragments,
+        source_map: &SourceMap,
         process: &Process,
     ) -> Self {
         let name = function.name;
         let branches = function
             .branches
             .into_iter()
-            .map(|branch| {
-                Branch::new(branch, &code.fragments, &code.source_map, process)
-            })
+            .map(|branch| Branch::new(branch, fragments, source_map, process))
             .collect();
 
         Self { name, branches }
