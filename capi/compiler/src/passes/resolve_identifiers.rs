@@ -77,13 +77,6 @@ fn resolve_in_branch<H: Host>(
 ) {
     for expression in body {
         match expression {
-            Expression::Binding { names } => {
-                if let Some(bindings) = scopes.last_mut() {
-                    for name in names {
-                        bindings.insert(name.clone());
-                    }
-                }
-            }
             Expression::Function { function } => {
                 resolve_in_function::<H>(
                     &mut function.branches,

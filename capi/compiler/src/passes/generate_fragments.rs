@@ -100,9 +100,6 @@ fn compile_expression(
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
-        syntax::Expression::Binding { names } => {
-            Expression::BindingDefinitions { names }
-        }
         syntax::Expression::Comment { text } => Expression::Comment { text },
         syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
