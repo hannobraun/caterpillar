@@ -124,7 +124,7 @@ fn compile_expression(
                     Expression::ResolvedBuiltinFunction { name }
                 }
                 Some(IdentifierTarget::Function) => {
-                    Expression::ResolvedFunction {
+                    Expression::CallToFunction {
                         name,
                         is_tail_call: is_in_tail_position,
                     }

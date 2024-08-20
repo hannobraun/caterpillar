@@ -171,7 +171,7 @@ impl FragmentHash for Expression {
                 hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedFunction { name, is_tail_call } => {
+            Self::CallToFunction { name, is_tail_call } => {
                 hasher.update(b"ResolvedFunction");
 
                 hasher.update(b"name");

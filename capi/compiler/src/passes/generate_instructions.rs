@@ -278,7 +278,7 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     ))
                 }
-                Expression::ResolvedFunction {
+                Expression::CallToFunction {
                     name, is_tail_call, ..
                 } => {
                     // We know that this expression refers to a user-defined

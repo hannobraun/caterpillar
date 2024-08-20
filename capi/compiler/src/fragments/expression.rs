@@ -60,7 +60,7 @@ pub enum Expression {
     /// As for the handling of those, here is some information on how Unison
     /// does that, which might prove useful:
     /// https://stackoverflow.com/a/73343072/8369834
-    ResolvedFunction {
+    CallToFunction {
         name: String,
 
         /// Indicate whether the call is in tail position
@@ -101,7 +101,7 @@ impl fmt::Display for Expression {
             Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
-            Self::ResolvedFunction { name, .. } => write!(f, "{name}"),
+            Self::CallToFunction { name, .. } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
