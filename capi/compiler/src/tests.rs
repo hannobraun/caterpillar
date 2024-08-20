@@ -21,8 +21,7 @@ fn closure_in_function() {
     let source = r"
         main: {
             ||
-                0 => channel .
-                { || channel send }
+                { || 0 send }
                     eval
         }
     ";
