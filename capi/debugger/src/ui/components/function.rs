@@ -74,7 +74,7 @@ pub fn Expression(
                 None,
             )
         }
-        Expression::Function { expressions } => (
+        Expression::Function { expressions, .. } => (
             view! {
                 <Function
                     expressions=expressions
