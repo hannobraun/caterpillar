@@ -220,9 +220,7 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.or(Some(assert_address))
                 }
-                Expression::CallToFunction {
-                    name, is_tail_call, ..
-                } => {
+                Expression::CallToFunction { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
                     // yet.
