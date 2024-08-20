@@ -540,6 +540,7 @@ grow_snake: {
             }
                 eval
         }
+            eval
 }
 
 check_body_collision: {
