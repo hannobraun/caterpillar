@@ -25,6 +25,13 @@ fn anonymous_function_eval() {
         }
     ";
 
+    let mut signals = compile_and_run(source);
+
+    assert_eq!(signals.remove(&0), Some(1));
+    assert!(signals.is_empty());
+}
+
+fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let (_, instructions, _) = compile::<TestHost>(source);
 
     let mut signals = BTreeMap::new();
@@ -58,8 +65,7 @@ fn anonymous_function_eval() {
         }
     }
 
-    assert_eq!(signals.remove(&0), Some(1));
-    assert!(signals.is_empty());
+    signals
 }
 
 #[derive(Debug)]
