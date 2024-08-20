@@ -300,7 +300,7 @@ fn compile_fragment<H: Host>(
                         // placeholder with the real instruction.
                         Some(output.generate_instruction(
                             Instruction::TriggerEffect {
-                                effect: Effect::Panic,
+                                effect: Effect::CompilerBug,
                             },
                             fragment.id(),
                         ))
