@@ -216,8 +216,12 @@ impl Evaluator {
                     .map(|name| {
                         let Some(value) = bindings.get(&name).cloned() else {
                             unreachable!(
-                                "Binding that is specified in block \
-                                environment must exist."
+                                "Binding `{name}`, from the environment of an \
+                                anonymous function, does not exist.\n\
+                                \n\
+                                A binding that is part of a function's \
+                                environment, must exist in the parent scope \
+                                of that function.",
                             );
                         };
 
