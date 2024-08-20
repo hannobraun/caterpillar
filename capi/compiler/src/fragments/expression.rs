@@ -11,6 +11,13 @@ pub enum Expression {
     BindingDefinitions {
         names: Vec<String>,
     },
+
+    /// A compiler intrinsic
+    CallToIntrinsic {
+        intrinsic: Intrinsic,
+        is_in_tail_position: bool,
+    },
+
     Comment {
         text: String,
     },
@@ -18,12 +25,6 @@ pub enum Expression {
     /// A function literal
     Function {
         function: Function,
-    },
-
-    /// A compiler intrinsic
-    CallToIntrinsic {
-        intrinsic: Intrinsic,
-        is_in_tail_position: bool,
     },
 
     ResolvedBinding {
@@ -93,11 +94,11 @@ impl fmt::Display for Expression {
                 }
                 write!(f, " .")
             }
-            Self::Comment { text } => write!(f, "# {text}"),
-            Self::Function { .. } => write!(f, "block"),
             Self::CallToIntrinsic { intrinsic, .. } => {
                 write!(f, "{intrinsic}")
             }
+            Self::Comment { text } => write!(f, "# {text}"),
+            Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedFunction { name, .. } => write!(f, "{name}"),

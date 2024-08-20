@@ -135,18 +135,6 @@ impl FragmentHash for Expression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::Comment { text } => {
-                hasher.update(b"Comment");
-
-                hasher.update(b"text");
-                hasher.update(text.as_bytes());
-            }
-            Self::Function { function } => {
-                hasher.update(b"Block");
-
-                hasher.update(b"function");
-                function.hash(hasher);
-            }
             Self::CallToIntrinsic {
                 intrinsic,
                 is_in_tail_position,
@@ -158,6 +146,18 @@ impl FragmentHash for Expression {
 
                 hasher.update(b"is_in_tail_position");
                 hasher.update(&[(*is_in_tail_position).into()]);
+            }
+            Self::Comment { text } => {
+                hasher.update(b"Comment");
+
+                hasher.update(b"text");
+                hasher.update(text.as_bytes());
+            }
+            Self::Function { function } => {
+                hasher.update(b"Block");
+
+                hasher.update(b"function");
+                function.hash(hasher);
             }
             Self::ResolvedBinding { name } => {
                 hasher.update(b"ResolvedBinding");

@@ -220,6 +220,17 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.or(Some(assert_address))
                 }
+                Expression::CallToIntrinsic {
+                    intrinsic,
+                    is_in_tail_position,
+                } => match intrinsic {
+                    Intrinsic::Eval => Some(output.generate_instruction(
+                        Instruction::Eval {
+                            is_tail_call: *is_in_tail_position,
+                        },
+                        fragment.id(),
+                    )),
+                },
                 Expression::Comment { .. } => None,
                 Expression::Function { function } => {
                     let address = if function.name.is_none() {
@@ -255,17 +266,6 @@ fn compile_fragment<H: Host>(
 
                     address
                 }
-                Expression::CallToIntrinsic {
-                    intrinsic,
-                    is_in_tail_position,
-                } => match intrinsic {
-                    Intrinsic::Eval => Some(output.generate_instruction(
-                        Instruction::Eval {
-                            is_tail_call: *is_in_tail_position,
-                        },
-                        fragment.id(),
-                    )),
-                },
                 Expression::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },
