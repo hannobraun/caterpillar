@@ -74,7 +74,7 @@ fn Branch(
         .collect_view();
 
     view! {
-    |{parameters}|
+        |{parameters}|
         <ol>
             {expressions}
         </ol>
