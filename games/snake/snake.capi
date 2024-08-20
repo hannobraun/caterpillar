@@ -566,31 +566,33 @@ check_body_collision_inner: {
                 vec_x
                 x
                 eq
-                => x_matches .
-                positions
-                index
-                vec_buf_get
-                vec_y
-                y
-                eq
-                { |y_matches|
-                    x_matches
-                    y_matches
-                    add_i32
-                    2
+                { |x_matches|
+                    positions
+                    index
+                    vec_buf_get
+                    vec_y
+                    y
                     eq
-                    copy
-                    {
-                        |0|
-                            drop
-                            x
-                            y
-                            index
-                            1
-                            add_i32
-                            check_body_collision_inner
+                    { |y_matches|
+                        x_matches
+                        y_matches
+                        add_i32
+                        2
+                        eq
+                        copy
+                        {
+                            |0|
+                                drop
+                                x
+                                y
+                                index
+                                1
+                                add_i32
+                                check_body_collision_inner
 
-                        |_|
+                            |_|
+                        }
+                            eval
                     }
                         eval
                 }
