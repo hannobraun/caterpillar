@@ -525,20 +525,21 @@ grow_snake: {
         load
         1
         add_i32
-        => snake_length_plus_growth .
-        snake_length_plus_growth
-        positions
-        vec_buf_capacity
-        greater_i32
-        {
-            |0|
-                snake_length_plus_growth
-                snake_length
-                store
+        { |snake_length_plus_growth|
+            snake_length_plus_growth
+            positions
+            vec_buf_capacity
+            greater_i32
+            {
+                |0|
+                    snake_length_plus_growth
+                    snake_length
+                    store
 
-            |_|
+                |_|
+            }
+                eval
         }
-            eval
 }
 
 check_body_collision: {
