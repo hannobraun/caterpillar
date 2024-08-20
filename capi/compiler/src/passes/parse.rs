@@ -110,9 +110,6 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                         .map(|function| Expression::Function { function }),
                 );
             }
-            Token::BindingStart => {
-                body.extend(parse_binding(tokens));
-            }
             Token::BranchHeadBoundary | Token::FunctionEnd => {
                 break;
             }
@@ -138,32 +135,6 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     }
 
     Some(Branch { parameters, body })
-}
-
-fn parse_binding(tokens: &mut Tokens) -> Option<Expression> {
-    match tokens.take()? {
-        Token::BindingStart => {}
-        token => {
-            panic!("Unexpected token: {token:?}");
-        }
-    }
-
-    let mut names = Vec::new();
-    loop {
-        match tokens.take()? {
-            Token::Identifier { name } => {
-                names.push(name);
-            }
-            Token::BindingEnd => {
-                break;
-            }
-            token => {
-                panic!("Unexpected token: {token:?}");
-            }
-        }
-    }
-
-    Some(Expression::Binding { names })
 }
 
 struct Tokens {
