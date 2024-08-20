@@ -11,11 +11,15 @@ use crate::{
 };
 
 #[component]
-pub fn NamedFunction(function: Branch, commands: CommandsTx) -> impl IntoView {
+pub fn NamedFunction(
+    name: String,
+    function: Branch,
+    commands: CommandsTx,
+) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <div class="font-bold">
-                {function.name}:
+                {name}:
             </div>
             <Function
                 expressions=function.body

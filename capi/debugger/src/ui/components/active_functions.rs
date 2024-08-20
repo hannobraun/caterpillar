@@ -18,8 +18,14 @@ pub fn ActiveFunctions(
             let functions = functions
                 .into_iter()
                 .map(|mut function| {
+                    let name = function.name.expect(
+                        "Only dealing with top-level functions here; should \
+                        be named.",
+                    );
+
                     view! {
                         <NamedFunction
+                            name=name
                             function=function.branches.remove(0)
                             commands=commands.clone() />
                     }
