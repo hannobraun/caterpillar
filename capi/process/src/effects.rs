@@ -101,6 +101,9 @@ pub enum Effect {
     #[error("Unknown host function")]
     UnknownHostFunction,
 
+    #[error("Unresolved identifier")]
+    UnresolvedIdentifier,
+
     #[error("Panic")]
     Panic,
 

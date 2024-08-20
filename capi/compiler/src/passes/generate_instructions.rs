@@ -334,7 +334,7 @@ fn compile_fragment<H: Host>(
                 Expression::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {
-                            effect: Effect::Panic,
+                            effect: Effect::UnresolvedIdentifier,
                         },
                         fragment.id(),
                     ))
