@@ -12,28 +12,6 @@ pub enum Expression {
         names: Vec<String>,
     },
 
-    /// # A call to a compiler intrinsic
-    CallToIntrinsic {
-        intrinsic: Intrinsic,
-        is_in_tail_position: bool,
-    },
-
-    Comment {
-        text: String,
-    },
-
-    /// A function literal
-    Function {
-        function: Function,
-    },
-
-    ResolvedBinding {
-        name: String,
-    },
-    ResolvedBuiltinFunction {
-        name: String,
-    },
-
     /// # A call to a user-defined function
     ///
     /// ## Implementation Note
@@ -75,6 +53,28 @@ pub enum Expression {
         is_tail_call: bool,
     },
 
+    /// # A call to a compiler intrinsic
+    CallToIntrinsic {
+        intrinsic: Intrinsic,
+        is_in_tail_position: bool,
+    },
+
+    Comment {
+        text: String,
+    },
+
+    /// A function literal
+    Function {
+        function: Function,
+    },
+
+    ResolvedBinding {
+        name: String,
+    },
+    ResolvedBuiltinFunction {
+        name: String,
+    },
+
     ResolvedHostFunction {
         name: String,
     },
@@ -94,6 +94,7 @@ impl fmt::Display for Expression {
                 }
                 write!(f, " .")
             }
+            Self::CallToFunction { name, .. } => write!(f, "{name}"),
             Self::CallToIntrinsic { intrinsic, .. } => {
                 write!(f, "{intrinsic}")
             }
@@ -101,7 +102,6 @@ impl fmt::Display for Expression {
             Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
-            Self::CallToFunction { name, .. } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),

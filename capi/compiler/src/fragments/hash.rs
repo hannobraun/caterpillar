@@ -135,6 +135,15 @@ impl FragmentHash for Expression {
                     hasher.update(name.as_bytes());
                 }
             }
+            Self::CallToFunction { name, is_tail_call } => {
+                hasher.update(b"ResolvedFunction");
+
+                hasher.update(b"name");
+                hasher.update(name.as_bytes());
+
+                hasher.update(b"is_tail_call");
+                hasher.update(&[(*is_tail_call).into()]);
+            }
             Self::CallToIntrinsic {
                 intrinsic,
                 is_in_tail_position,
@@ -170,15 +179,6 @@ impl FragmentHash for Expression {
 
                 hasher.update(b"name");
                 hasher.update(name.as_bytes());
-            }
-            Self::CallToFunction { name, is_tail_call } => {
-                hasher.update(b"ResolvedFunction");
-
-                hasher.update(b"name");
-                hasher.update(name.as_bytes());
-
-                hasher.update(b"is_tail_call");
-                hasher.update(&[(*is_tail_call).into()]);
             }
             Self::ResolvedHostFunction { name } => {
                 hasher.update(b"ResolvedHostFunction");

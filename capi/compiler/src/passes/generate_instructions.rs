@@ -220,6 +220,36 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.or(Some(assert_address))
                 }
+                Expression::CallToFunction {
+                    name, is_tail_call, ..
+                } => {
+                    // We know that this expression refers to a user-defined
+                    // function, but we might not have compiled that function
+                    // yet.
+                    //
+                    // For now, just generate a placeholder that we can replace
+                    // with the call later.
+                    let address = output.generate_instruction(
+                        Instruction::TriggerEffect {
+                            effect: Effect::Panic,
+                        },
+                        fragment.id(),
+                    );
+
+                    // We can't leave it at that, however. We need to make sure
+                    // this placeholder actually gets replaced later, and we're
+                    // doing that by adding it to this list.
+                    if let Some(id) = fragments.find_function_by_name(name) {
+                        output.placeholders.push(CallToFunction {
+                            name: name.clone(),
+                            id,
+                            address,
+                            is_tail_call: *is_tail_call,
+                        });
+                    }
+
+                    Some(address)
+                }
                 Expression::CallToIntrinsic {
                     intrinsic,
                     is_in_tail_position,
@@ -277,36 +307,6 @@ fn compile_fragment<H: Host>(
                         Instruction::CallBuiltin { name: name.clone() },
                         fragment.id(),
                     ))
-                }
-                Expression::CallToFunction {
-                    name, is_tail_call, ..
-                } => {
-                    // We know that this expression refers to a user-defined
-                    // function, but we might not have compiled that function
-                    // yet.
-                    //
-                    // For now, just generate a placeholder that we can replace
-                    // with the call later.
-                    let address = output.generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::Panic,
-                        },
-                        fragment.id(),
-                    );
-
-                    // We can't leave it at that, however. We need to make sure
-                    // this placeholder actually gets replaced later, and we're
-                    // doing that by adding it to this list.
-                    if let Some(id) = fragments.find_function_by_name(name) {
-                        output.placeholders.push(CallToFunction {
-                            name: name.clone(),
-                            id,
-                            address,
-                            is_tail_call: *is_tail_call,
-                        });
-                    }
-
-                    Some(address)
                 }
                 Expression::ResolvedHostFunction { name } => {
                     match H::function_name_to_effect_number(name) {
