@@ -17,7 +17,7 @@ use capi_process::{Effect, Process};
 use crate::{compile, host::Host};
 
 #[test]
-fn closure_in_function() {
+fn anonymous_function_eval() {
     let source = r"
         main: { ||
             { || 0 send }
