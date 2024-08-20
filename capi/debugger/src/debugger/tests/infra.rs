@@ -73,6 +73,9 @@ impl ActiveFunctionsExt for ActiveFunctions {
         };
 
         functions
+            .into_iter()
+            .map(|mut function| function.branches.remove(0))
+            .collect()
     }
 }
 

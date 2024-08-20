@@ -2,6 +2,7 @@ mod active_functions;
 mod branch;
 mod debugger;
 mod expression;
+mod function;
 mod remote_process;
 
 #[cfg(test)]
@@ -12,5 +13,6 @@ pub use self::{
     branch::Branch,
     debugger::Debugger,
     expression::{Expression, OtherExpression},
+    function::Function,
     remote_process::RemoteProcess,
 };

@@ -17,10 +17,10 @@ pub fn ActiveFunctions(
         ActiveFunctions::Functions { functions } => {
             let functions = functions
                 .into_iter()
-                .map(|function| {
+                .map(|mut function| {
                     view! {
                         <NamedFunction
-                            function=function
+                            function=function.branches.remove(0)
                             commands=commands.clone() />
                     }
                 })
