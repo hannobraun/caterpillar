@@ -76,13 +76,10 @@ fn anonymous_function_captured_binding() {
             0
             { |channel|
                 { ||
-                    # Capturing `channel` from the parent
-                    channel send
+                    # We are not using `channel` here, to make sure that
+                    # capturing works even from a grandparent scope.
 
-                    { ||
-                        # Capturing `channel` from the grandparent.
-                        channel send
-                    }
+                    { || channel send }
                         eval
                 }
                     eval
@@ -93,7 +90,7 @@ fn anonymous_function_captured_binding() {
 
     let mut signals = compile_and_run(source);
 
-    assert_eq!(signals.remove(&0), Some(2));
+    assert_eq!(signals.remove(&0), Some(1));
     assert!(signals.is_empty());
 }
 

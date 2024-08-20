@@ -91,6 +91,18 @@ fn resolve_in_branch<H: Host>(
                     scopes,
                     known_named_functions,
                 );
+
+                for name in &function.environment {
+                    // If the child function we just resolved identifiers for
+                    // captures something from its environment, and the current
+                    // scope doesn't already have that, then it needs to capture
+                    // it from its environment likewise.
+                    if let Some(bindings) = scopes.last() {
+                        if !bindings.contains(name) {
+                            environment.insert(name.clone());
+                        }
+                    }
+                }
             }
             Expression::Identifier { name, target, .. } => {
                 // The way this is written, definitions can silently shadow each
