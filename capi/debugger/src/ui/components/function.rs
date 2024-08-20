@@ -35,6 +35,7 @@ fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
         .map(|branch| {
             view! {
                 <Branch
+                    parameters=branch.parameters
                     expressions=branch.body
                     commands=commands.clone() />
             }
@@ -53,7 +54,12 @@ fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-fn Branch(expressions: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
+fn Branch(
+    parameters: Vec<String>,
+    expressions: Vec<Expression>,
+    commands: CommandsTx,
+) -> impl IntoView {
+    let parameters = parameters.join(" ");
     let expressions = expressions
         .into_iter()
         .map(|fragment| {
@@ -68,6 +74,7 @@ fn Branch(expressions: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
         .collect_view();
 
     view! {
+    |{parameters}|
         <ol>
             {expressions}
         </ol>
