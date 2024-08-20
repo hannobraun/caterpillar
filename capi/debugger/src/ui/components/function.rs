@@ -29,15 +29,24 @@ pub fn NamedFunction(
 }
 
 #[component]
-fn Function(mut branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
-    let expressions = branches.remove(0).body;
+fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
+    let branches = branches
+        .into_iter()
+        .map(|branch| {
+            view! {
+                <Branch
+                    expressions=branch.body
+                    commands=commands.clone() />
+            }
+        })
+        .collect::<Vec<_>>();
 
     view! {
         <span>
             "{"
-            <Branch
-                expressions=expressions
-                commands=commands />
+            <ol>
+                {branches}
+            </ol>
             "}"
         </span>
     }
