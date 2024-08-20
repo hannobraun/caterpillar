@@ -823,12 +823,14 @@ vec_buf_len: {
             vec_buf
             _vec_buf_next
             load
-            => next .
-            next
-            first
-            sub_u8_wrap
-            2
-            div_u8
+            { |next|
+                next
+                first
+                sub_u8_wrap
+                2
+                div_u8
+            }
+                eval
         }
             eval
 }
