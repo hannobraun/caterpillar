@@ -43,9 +43,13 @@ fn Function(
         .collect_view();
 
     view! {
-        <ol>
-            {expressions}
-        </ol>
+        <span>
+            "{"
+            <ol>
+                {expressions}
+            </ol>
+            "}"
+        </span>
     }
 }
 
@@ -72,13 +76,9 @@ pub fn Expression(
         }
         Expression::Function { expressions } => (
             view! {
-                <span>
-                    "{"
-                    <Function
-                        expressions=expressions
-                        commands=commands />
-                    "}"
-                </span>
+                <Function
+                    expressions=expressions
+                    commands=commands />
             }
             .into_view(),
             None,
