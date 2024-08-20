@@ -71,6 +71,7 @@ pub enum Expression {
         /// - No other expressions can result in a new stack frame.
         is_tail_call: bool,
     },
+
     ResolvedHostFunction {
         name: String,
     },
