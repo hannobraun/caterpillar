@@ -13,7 +13,7 @@ use crate::{
 #[component]
 pub fn NamedFunction(
     name: String,
-    mut branches: Vec<Branch>,
+    branches: Vec<Branch>,
     commands: CommandsTx,
 ) -> impl IntoView {
     view! {
@@ -22,17 +22,15 @@ pub fn NamedFunction(
                 {name}:
             </div>
             <Function
-                expressions=branches.remove(0).body
+                branches=branches
                 commands=commands />
         </div>
     }
 }
 
 #[component]
-fn Function(
-    expressions: Vec<Expression>,
-    commands: CommandsTx,
-) -> impl IntoView {
+fn Function(mut branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
+    let expressions = branches.remove(0).body;
     let expressions = expressions
         .into_iter()
         .map(|fragment| {
@@ -78,10 +76,10 @@ pub fn Expression(
                 None,
             )
         }
-        Expression::Function { mut function } => (
+        Expression::Function { function } => (
             view! {
                 <Function
-                    expressions=function.branches.remove(0).body
+                    branches=function.branches
                     commands=commands />
             }
             .into_view(),
