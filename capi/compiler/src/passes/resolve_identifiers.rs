@@ -5,7 +5,7 @@ use capi_process::builtin_by_name;
 use crate::{
     host::Host,
     intrinsics::Intrinsic,
-    syntax::{Expression, Function, IdentifierTarget, Pattern},
+    syntax::{Branch, Expression, Function, IdentifierTarget, Pattern},
 };
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
@@ -16,16 +16,22 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
         .collect();
 
     for function in functions {
-        resolve_in_function::<H>(function, &mut scopes, &known_named_functions);
+        resolve_in_function::<H>(
+            &mut function.branches,
+            &mut function.environment,
+            &mut scopes,
+            &known_named_functions,
+        );
     }
 }
 
 fn resolve_in_function<H: Host>(
-    function: &mut Function,
+    branches: &mut Vec<Branch>,
+    environment: &mut Environment,
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for branch in &mut function.branches {
+    for branch in branches {
         scopes.push(
             branch
                 .parameters
@@ -47,17 +53,17 @@ fn resolve_in_function<H: Host>(
         resolve_in_branch::<H>(
             &mut branch.body,
             scopes,
-            &mut function.environment,
+            environment,
             known_named_functions,
         );
 
-        if !function.environment.is_empty() {
+        if !environment.is_empty() {
             panic!(
                 "Named functions do not have an environment that they could \
                 access.\n\
                 \n\
                 Environment: {:#?}",
-                function.environment,
+                environment,
             );
         }
     }
