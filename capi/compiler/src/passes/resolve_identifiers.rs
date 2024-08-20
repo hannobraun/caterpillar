@@ -85,15 +85,12 @@ fn resolve_in_branch<H: Host>(
                 }
             }
             Expression::Function { function } => {
-                for branch in &mut function.branches {
-                    scopes.push(Bindings::new());
-                    resolve_in_branch::<H>(
-                        &mut branch.body,
-                        scopes,
-                        &mut function.environment,
-                        known_named_functions,
-                    );
-                }
+                resolve_in_function::<H>(
+                    &mut function.branches,
+                    &mut function.environment,
+                    scopes,
+                    known_named_functions,
+                );
             }
             Expression::Identifier { name, target, .. } => {
                 // The way this is written, definitions can silently shadow each
