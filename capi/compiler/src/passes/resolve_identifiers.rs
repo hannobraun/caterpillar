@@ -16,41 +16,49 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
         .collect();
 
     for function in functions {
-        for branch in &mut function.branches {
-            scopes.push(
-                branch
-                    .parameters
-                    .clone()
-                    .into_iter()
-                    .filter_map(|pattern| match pattern {
-                        Pattern::Identifier { name } => Some(name),
-                        Pattern::Literal { .. } => {
-                            // The scope is used to resolve identifiers against
-                            // known bindings. Literal patterns don't create
-                            // bindings, as their value is only used to select
-                            // the function to be called.
-                            None
-                        }
-                    })
-                    .collect(),
-            );
+        resolve_in_function::<H>(function, &mut scopes, &known_named_functions);
+    }
+}
 
-            resolve_in_branch::<H>(
-                &mut branch.body,
-                &mut scopes,
-                &mut function.environment,
-                &known_named_functions,
-            );
+fn resolve_in_function<H: Host>(
+    function: &mut Function,
+    scopes: &mut Scopes,
+    known_named_functions: &BTreeSet<String>,
+) {
+    for branch in &mut function.branches {
+        scopes.push(
+            branch
+                .parameters
+                .clone()
+                .into_iter()
+                .filter_map(|pattern| match pattern {
+                    Pattern::Identifier { name } => Some(name),
+                    Pattern::Literal { .. } => {
+                        // The scope is used to resolve identifiers against
+                        // known bindings. Literal patterns don't create
+                        // bindings, as their value is only used to select
+                        // the function to be called.
+                        None
+                    }
+                })
+                .collect(),
+        );
 
-            if !function.environment.is_empty() {
-                panic!(
-                    "Named functions do not have an environment that they \
-                    could access.\n\
-                    \n\
-                    Environment: {:#?}",
-                    function.environment,
-                );
-            }
+        resolve_in_branch::<H>(
+            &mut branch.body,
+            scopes,
+            &mut function.environment,
+            known_named_functions,
+        );
+
+        if !function.environment.is_empty() {
+            panic!(
+                "Named functions do not have an environment that they could \
+                access.\n\
+                \n\
+                Environment: {:#?}",
+                function.environment,
+            );
         }
     }
 }
