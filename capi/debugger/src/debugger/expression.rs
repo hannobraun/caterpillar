@@ -6,7 +6,7 @@ use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Block { expressions: Vec<Self> },
+    Function { expressions: Vec<Self> },
     Comment { text: String },
     Other(OtherExpression),
 }
@@ -45,7 +45,7 @@ impl Expression {
                 })
                 .collect();
 
-            return Some(Self::Block { expressions });
+            return Some(Self::Function { expressions });
         }
         if let fragments::Expression::Comment { text } = expression {
             return Some(Self::Comment {

@@ -57,7 +57,7 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
 
     let (expression, error) = match expression {
-        Expression::Block { expressions } => (
+        Expression::Function { expressions } => (
             view! {
                 <span>
                     "{"

@@ -83,7 +83,7 @@ pub trait ExpressionExt {
 
 impl ExpressionExt for Expression {
     fn expect_block(self) -> Vec<Expression> {
-        let Expression::Block { expressions } = self else {
+        let Expression::Function { expressions } = self else {
             panic!("Expected block");
         };
 
