@@ -11,7 +11,7 @@ use crate::{
 };
 
 #[component]
-pub fn Function(function: Branch, commands: CommandsTx) -> impl IntoView {
+pub fn NamedFunction(function: Branch, commands: CommandsTx) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <div class="font-bold">

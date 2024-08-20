@@ -3,7 +3,7 @@ use leptos::{component, view, CollectView, IntoView};
 use crate::{
     debugger::ActiveFunctions,
     ui::{
-        components::{function::Function, panel::Panel},
+        components::{function::NamedFunction, panel::Panel},
         CommandsTx,
     },
 };
@@ -19,7 +19,7 @@ pub fn ActiveFunctions(
                 .into_iter()
                 .map(|function| {
                     view! {
-                        <Function
+                        <NamedFunction
                             function=function
                             commands=commands.clone() />
                     }
