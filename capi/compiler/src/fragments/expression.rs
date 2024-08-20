@@ -21,7 +21,7 @@ pub enum Expression {
     },
 
     /// A compiler intrinsic
-    Intrinsic {
+    CallToIntrinsic {
         intrinsic: Intrinsic,
         is_in_tail_position: bool,
     },
@@ -95,7 +95,9 @@ impl fmt::Display for Expression {
             }
             Self::Comment { text } => write!(f, "# {text}"),
             Self::Function { .. } => write!(f, "block"),
-            Self::Intrinsic { intrinsic, .. } => write!(f, "{intrinsic}"),
+            Self::CallToIntrinsic { intrinsic, .. } => {
+                write!(f, "{intrinsic}")
+            }
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedFunction { name, .. } => write!(f, "{name}"),

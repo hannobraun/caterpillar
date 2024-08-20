@@ -133,7 +133,7 @@ fn compile_expression(
                     Expression::ResolvedHostFunction { name }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    Expression::Intrinsic {
+                    Expression::CallToIntrinsic {
                         intrinsic,
                         is_in_tail_position,
                     }

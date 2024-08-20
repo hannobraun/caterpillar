@@ -255,7 +255,7 @@ fn compile_fragment<H: Host>(
 
                     address
                 }
-                Expression::Intrinsic {
+                Expression::CallToIntrinsic {
                     intrinsic,
                     is_in_tail_position,
                 } => match intrinsic {

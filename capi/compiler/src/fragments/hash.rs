@@ -147,7 +147,7 @@ impl FragmentHash for Expression {
                 hasher.update(b"function");
                 function.hash(hasher);
             }
-            Self::Intrinsic {
+            Self::CallToIntrinsic {
                 intrinsic,
                 is_in_tail_position,
             } => {
