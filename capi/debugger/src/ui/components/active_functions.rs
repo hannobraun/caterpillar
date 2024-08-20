@@ -17,7 +17,7 @@ pub fn ActiveFunctions(
         ActiveFunctions::Functions { functions } => {
             let functions = functions
                 .into_iter()
-                .map(|mut function| {
+                .map(|function| {
                     let name = function.name.expect(
                         "Only dealing with top-level functions here; should \
                         be named.",
@@ -26,7 +26,7 @@ pub fn ActiveFunctions(
                     view! {
                         <NamedFunction
                             name=name
-                            function=function.branches.remove(0)
+                            branches=function.branches
                             commands=commands.clone() />
                     }
                 })
