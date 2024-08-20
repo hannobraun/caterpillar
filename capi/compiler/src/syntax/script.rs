@@ -112,15 +112,6 @@ impl ExpressionBuilder {
         })
     }
 
-    pub fn bind(
-        &mut self,
-        names: impl IntoIterator<Item = impl Into<String>>,
-    ) -> &mut Self {
-        self.push_expression(Expression::Binding {
-            names: names.into_iter().map(Into::into).collect(),
-        })
-    }
-
     pub fn c(&mut self, text: &str) -> &mut Self {
         self.push_expression(Expression::Comment { text: text.into() })
     }
