@@ -80,18 +80,29 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
-### Minimalist syntax over readable syntax, for now
+### Minimalism over readability, for now
 
-For the time being, the syntax is kept minimal. Most concepts, including control
-flow, are represented as simple function calls, and require no special syntax.
+For the time being, all control flow concepts (conditionals and iteration) map
+to a single primitive, pattern matching functions. And those pattern-matching
+functions have to be written out explicitly.
 
-This might not always be the most readable, but it keeps complexity low. I
-expect that this will get re-evaluated at a later point. And then, it will be
-clearer where special syntax is actually a benefit, and where the simple
-solution will do.
+This is not always the most readable, but it keeps complexity low. The plan is
+to add syntax sugar for various common control flow constructs in the future.
+And by then, it will be clearer where special syntax is actually a benefit, and
+where the simple solution will do.
 
-The following daily thought provides more context:
-[2024-07-24](https://capi.hannobraun.com/daily/2024-07-24)
+The following daily thoughts provide more context:
+[2024-07-24](https://capi.hannobraun.com/daily/2024-07-24),
+[2024-08-08](https://capi.hannobraun.com/daily/2024-08-08),
+[2024-08-10](https://capi.hannobraun.com/daily/2024-08-10),
+[2024-08-12](https://capi.hannobraun.com/daily/2024-08-12),
+[2024-08-13](https://capi.hannobraun.com/daily/2024-08-13),
+[2024-08-14](https://capi.hannobraun.com/daily/2024-08-14),
+[2024-08-15](https://capi.hannobraun.com/daily/2024-08-15),
+[2024-08-16](https://capi.hannobraun.com/daily/2024-08-16),
+[2024-08-17](https://capi.hannobraun.com/daily/2024-08-17),
+[2024-08-18](https://capi.hannobraun.com/daily/2024-08-18), and
+[2024-08-20](https://capi.hannobraun.com/daily/2024-08-20).
 
 ### Untyped now, dynamically typed soon, statically typed later
 
