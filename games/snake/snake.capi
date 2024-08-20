@@ -372,14 +372,16 @@ handle_coordinate_smaller_than_zero: {
         0
         coord
         greater_i8
-        => coord_smaller_than_zero .
-        coord_smaller_than_zero
-        {
-            |1|
-                coord limit add_i8
+        { |coord_smaller_than_zero|
+            coord_smaller_than_zero
+            {
+                |1|
+                    coord limit add_i8
 
-            |_|
-                coord
+                |_|
+                    coord
+            }
+                eval
         }
             eval
 }
