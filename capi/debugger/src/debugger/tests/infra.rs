@@ -83,11 +83,11 @@ pub trait ExpressionExt {
 
 impl ExpressionExt for Expression {
     fn expect_block(self) -> Vec<Expression> {
-        let Expression::Function { expressions, .. } = self else {
+        let Expression::Function { mut function } = self else {
             panic!("Expected block");
         };
 
-        expressions
+        function.branches.remove(0).body
     }
 
     fn expect_other(self) -> OtherExpression {

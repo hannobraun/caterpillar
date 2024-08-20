@@ -1,19 +1,15 @@
 use capi_compiler::{
     fragments::{self, Fragment, FragmentPayload, Fragments},
     source_map::SourceMap,
-    syntax::Pattern,
 };
 use capi_process::{Effect, InstructionAddress, Process};
 
+use super::Function;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Comment {
-        text: String,
-    },
-    Function {
-        parameters: Vec<String>,
-        expressions: Vec<Self>,
-    },
+    Comment { text: String },
+    Function { function: Function },
     Other(OtherExpression),
 }
 
@@ -30,37 +26,11 @@ impl Expression {
             return None;
         };
 
-        if let fragments::Expression::Function { mut function } = expression {
-            let branch = function.branches.remove(0);
-            assert_eq!(
-                function.branches.len(),
-                1,
-                "Blocks with multiple branches should not get generated yet. \
-                Before this can happen, this code needs to be updated."
-            );
+        if let fragments::Expression::Function { function } = expression {
+            let function =
+                Function::new(function, fragments, source_map, process);
 
-            let parameters = branch
-                .parameters
-                .inner
-                .into_iter()
-                .map(|pattern| match pattern {
-                    Pattern::Identifier { name } => name,
-                    Pattern::Literal { value } => format!("{value:?}"),
-                })
-                .collect();
-            let expressions = fragments
-                .inner
-                .iter_from(branch.start)
-                .cloned()
-                .filter_map(|fragment| {
-                    Self::new(fragment, fragments, source_map, process)
-                })
-                .collect();
-
-            return Some(Self::Function {
-                parameters,
-                expressions,
-            });
+            return Some(Self::Function { function });
         }
         if let fragments::Expression::Comment { text } = expression {
             return Some(Self::Comment {

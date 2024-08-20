@@ -78,10 +78,10 @@ pub fn Expression(
                 None,
             )
         }
-        Expression::Function { expressions, .. } => (
+        Expression::Function { mut function } => (
             view! {
                 <Function
-                    expressions=expressions
+                    expressions=function.branches.remove(0).body
                     commands=commands />
             }
             .into_view(),
