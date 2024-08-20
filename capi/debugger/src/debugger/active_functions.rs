@@ -63,9 +63,7 @@ impl ActiveFunctions {
         Self::Functions {
             functions: functions_and_branches
                 .into_iter()
-                .map(|(function, branch)| {
-                    Function::new(function, branch, code, process)
-                })
+                .map(|(function, _)| Function::new(function, code, process))
                 .collect(),
         }
     }
