@@ -14,17 +14,12 @@ pub struct Branch {
 
 impl Branch {
     pub fn new(
-        function: fragments::Function,
+        name: String,
         branch: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let name = function.name.expect(
-            "At this point, we should only be dealing with named functions. \
-            If there are any anonymous functions on the call stack, we should \
-            be seeing the named function in which it was defined here.",
-        );
         let body = fragments
             .inner
             .iter_from(branch.start)
