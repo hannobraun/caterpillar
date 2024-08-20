@@ -75,7 +75,7 @@ pub enum Expression {
         name: String,
     },
 
-    ResolvedHostFunction {
+    CallToHostFunction {
         name: String,
     },
     UnresolvedIdentifier {
@@ -102,7 +102,7 @@ impl fmt::Display for Expression {
             Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
-            Self::ResolvedHostFunction { name } => write!(f, "{name}"),
+            Self::CallToHostFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }

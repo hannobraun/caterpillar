@@ -180,7 +180,7 @@ impl FragmentHash for Expression {
                 hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedHostFunction { name } => {
+            Self::CallToHostFunction { name } => {
                 hasher.update(b"ResolvedHostFunction");
 
                 hasher.update(b"name");

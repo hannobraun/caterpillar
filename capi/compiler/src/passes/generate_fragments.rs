@@ -130,7 +130,7 @@ fn compile_expression(
                     }
                 }
                 Some(IdentifierTarget::HostFunction) => {
-                    Expression::ResolvedHostFunction { name }
+                    Expression::CallToHostFunction { name }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
                     Expression::CallToIntrinsic {
