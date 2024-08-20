@@ -13,7 +13,6 @@ pub struct Branch {
 
 impl Branch {
     pub fn new(
-        _: String,
         branch: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,

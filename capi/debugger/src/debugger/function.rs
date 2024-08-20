@@ -21,18 +21,7 @@ impl Function {
             .branches
             .into_iter()
             .map(|branch| {
-                Branch::new(
-                    name.clone().expect(
-                        "At this point, we should only be dealing with named \
-                        functions. If there are any anonymous functions on the \
-                        call stack, we should be seeing the named function in \
-                        which it was defined here.",
-                    ),
-                    branch,
-                    &code.fragments,
-                    &code.source_map,
-                    process,
-                )
+                Branch::new(branch, &code.fragments, &code.source_map, process)
             })
             .collect();
 
