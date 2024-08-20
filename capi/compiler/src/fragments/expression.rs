@@ -8,10 +8,6 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Expression {
-    BindingDefinitions {
-        names: Vec<String>,
-    },
-
     /// # A call to a user-defined function
     ///
     /// ## Implementation Note
@@ -88,13 +84,6 @@ pub enum Expression {
 impl fmt::Display for Expression {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::BindingDefinitions { names } => {
-                write!(f, "=>")?;
-                for name in names {
-                    write!(f, " {name}")?;
-                }
-                write!(f, " .")
-            }
             Self::CallToFunction { name, .. } => write!(f, "{name}"),
             Self::CallToHostFunction { name } => write!(f, "{name}"),
             Self::CallToIntrinsic { intrinsic, .. } => {

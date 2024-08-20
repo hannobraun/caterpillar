@@ -209,17 +209,6 @@ fn compile_fragment<H: Host>(
     match &fragment.payload {
         FragmentPayload::Expression { expression, .. } => {
             match expression {
-                Expression::BindingDefinitions { names } => {
-                    let bindings_address =
-                        output.generate_binding(names, fragment.id());
-
-                    let assert_address = output.generate_instruction(
-                        Instruction::AssertBindingLeftNoOperands,
-                        fragment.id(),
-                    );
-
-                    bindings_address.or(Some(assert_address))
-                }
                 Expression::CallToFunction { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function

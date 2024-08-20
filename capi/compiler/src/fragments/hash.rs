@@ -127,14 +127,6 @@ impl FragmentHash for Expression {
         hasher.update(b"FragmentExpression");
 
         match self {
-            Self::BindingDefinitions { names } => {
-                hasher.update(b"BindingDefinitions");
-
-                hasher.update(b"names");
-                for name in names {
-                    hasher.update(name.as_bytes());
-                }
-            }
             Self::CallToFunction { name, is_tail_call } => {
                 hasher.update(b"ResolvedFunction");
 
