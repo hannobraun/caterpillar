@@ -53,6 +53,7 @@ pub enum Expression {
         is_tail_call: bool,
     },
 
+    /// # A call to a function defined by the host
     CallToHostFunction {
         name: String,
     },
