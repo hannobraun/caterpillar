@@ -82,7 +82,7 @@ impl Stack {
     ) -> Result<(), PushStackFrameError> {
         // Not a tail call. This means we need to create a new stack frame.
         // Let's first check if we can even do that.
-        const STACK_LIMIT: usize = 16;
+        const STACK_LIMIT: usize = 32;
         if self.inner.len() >= STACK_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
