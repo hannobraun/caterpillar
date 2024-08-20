@@ -324,30 +324,32 @@ update_next_position: {
             |1|
                 next_position
                 vec_load
-                => next_x next_y .
-                tile_field_size
-                vec_load
-                { |limit_x limit_y|
-                    next_x
-                    limit_x
-                    handle_coordinate_smaller_than_zero
-                    { |next_x|
-                        next_y
-                        limit_y
+                { |next_x next_y|
+                    tile_field_size
+                    vec_load
+                    { |limit_x limit_y|
+                        next_x
+                        limit_x
                         handle_coordinate_smaller_than_zero
-                        { |next_y|
-                            next_x
-                            limit_x
-                            handle_coordinate_larger_than_limit
-                            { |next_x|
-                                next_y
-                                limit_y
+                        { |next_x|
+                            next_y
+                            limit_y
+                            handle_coordinate_smaller_than_zero
+                            { |next_y|
+                                next_x
+                                limit_x
                                 handle_coordinate_larger_than_limit
-                                { |next_y|
-                                    next_x
+                                { |next_x|
                                     next_y
-                                    next_position
-                                    vec_store
+                                    limit_y
+                                    handle_coordinate_larger_than_limit
+                                    { |next_y|
+                                        next_x
+                                        next_y
+                                        next_position
+                                        vec_store
+                                    }
+                                        eval
                                 }
                                     eval
                             }
