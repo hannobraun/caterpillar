@@ -451,12 +451,14 @@ _food_collides_with_snake: {
         food_position
         vec_load
         check_body_collision
-        => body_collides .
-        head_collides
-        body_collides
-        add_i32
-        0
-        greater_i32
+        { |body_collides|
+            head_collides
+            body_collides
+            add_i32
+            0
+            greater_i32
+        }
+            eval
 }
 
 # Game state - snake
