@@ -12,7 +12,7 @@ pub enum Expression {
         names: Vec<String>,
     },
 
-    /// A compiler intrinsic
+    /// # A call to a compiler intrinsic
     CallToIntrinsic {
         intrinsic: Intrinsic,
         is_in_tail_position: bool,
