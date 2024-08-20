@@ -267,7 +267,7 @@ fn compile_fragment<H: Host>(
                         }
                         None => Some(output.generate_instruction(
                             Instruction::TriggerEffect {
-                                effect: Effect::Panic,
+                                effect: Effect::UnknownHostFunction,
                             },
                             fragment.id(),
                         )),

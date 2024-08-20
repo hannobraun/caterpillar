@@ -98,6 +98,9 @@ pub enum Effect {
     #[error("Unknown builtin")]
     UnknownBuiltin,
 
+    #[error("Unknown host function")]
+    UnknownHostFunction,
+
     #[error("Panic")]
     Panic,
 
