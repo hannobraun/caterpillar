@@ -161,15 +161,9 @@ mod tests {
             b.branch(
                 |p| p,
                 |s| {
-                    s.fun(|b| {
-                        b.branch(
-                            |b| b,
-                            |s| {
-                                s.v(0).bind(["value"]);
-                            },
-                        )
-                    })
-                    .ident("value");
+                    s.v(0)
+                        .fun(|b| b.branch(|b| b.ident("value"), |_| {}))
+                        .ident("value");
                 },
             )
         });
