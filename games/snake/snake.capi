@@ -788,19 +788,21 @@ vec_buf_push: {
     |vec_buf x y|
         vec_buf
         _vec_buf_next
-        => next_addr .
-        vec_buf
-        next_addr
-        load
-        0
-        _vec_buf_address
-        => address .
-        x
-        y
-        address
-        vec_store
-        next_addr
-        _vec_buf_inc_index
+        { |next_addr|
+            vec_buf
+            next_addr
+            load
+            0
+            _vec_buf_address
+            => address .
+            x
+            y
+            address
+            vec_store
+            next_addr
+            _vec_buf_inc_index
+        }
+            eval
 }
 
 vec_buf_pop: {
