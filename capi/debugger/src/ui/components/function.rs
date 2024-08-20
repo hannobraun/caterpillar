@@ -65,7 +65,8 @@ pub fn Expression(
                     <span class=class_inner>
                         {text}
                     </span>
-                },
+                }
+                .into_view(),
                 None,
             )
         }
@@ -78,7 +79,8 @@ pub fn Expression(
                         commands=commands />
                     "}"
                 </span>
-            },
+            }
+            .into_view(),
             None,
         ),
         Expression::Other(OtherExpression {
@@ -146,7 +148,8 @@ pub fn Expression(
                         on:click=toggle_breakpoint>
                         {expression}
                     </span>
-                },
+                }
+                .into_view(),
                 Some(view! {
                     <span class="mx-2 font-bold text-red-800">
                         {error}
