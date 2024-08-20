@@ -248,6 +248,31 @@ fn compile_fragment<H: Host>(
 
                     Some(address)
                 }
+                Expression::CallToHostFunction { name } => {
+                    match H::function_name_to_effect_number(name) {
+                        Some(effect) => {
+                            let address = output.generate_instruction(
+                                Instruction::Push {
+                                    value: effect.into(),
+                                },
+                                fragment.id(),
+                            );
+                            output.generate_instruction(
+                                Instruction::TriggerEffect {
+                                    effect: Effect::Host,
+                                },
+                                fragment.id(),
+                            );
+                            Some(address)
+                        }
+                        None => Some(output.generate_instruction(
+                            Instruction::TriggerEffect {
+                                effect: Effect::Panic,
+                            },
+                            fragment.id(),
+                        )),
+                    }
+                }
                 Expression::CallToIntrinsic {
                     intrinsic,
                     is_in_tail_position,
@@ -306,32 +331,6 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     ))
                 }
-                Expression::CallToHostFunction { name } => {
-                    match H::function_name_to_effect_number(name) {
-                        Some(effect) => {
-                            let address = output.generate_instruction(
-                                Instruction::Push {
-                                    value: effect.into(),
-                                },
-                                fragment.id(),
-                            );
-                            output.generate_instruction(
-                                Instruction::TriggerEffect {
-                                    effect: Effect::Host,
-                                },
-                                fragment.id(),
-                            );
-                            Some(address)
-                        }
-                        None => Some(output.generate_instruction(
-                            Instruction::TriggerEffect {
-                                effect: Effect::Panic,
-                            },
-                            fragment.id(),
-                        )),
-                    }
-                }
-
                 Expression::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {

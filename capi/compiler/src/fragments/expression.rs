@@ -53,6 +53,10 @@ pub enum Expression {
         is_tail_call: bool,
     },
 
+    CallToHostFunction {
+        name: String,
+    },
+
     /// # A call to a compiler intrinsic
     CallToIntrinsic {
         intrinsic: Intrinsic,
@@ -74,10 +78,6 @@ pub enum Expression {
     ResolvedBuiltinFunction {
         name: String,
     },
-
-    CallToHostFunction {
-        name: String,
-    },
     UnresolvedIdentifier {
         name: String,
     },
@@ -95,6 +95,7 @@ impl fmt::Display for Expression {
                 write!(f, " .")
             }
             Self::CallToFunction { name, .. } => write!(f, "{name}"),
+            Self::CallToHostFunction { name } => write!(f, "{name}"),
             Self::CallToIntrinsic { intrinsic, .. } => {
                 write!(f, "{intrinsic}")
             }
@@ -102,7 +103,6 @@ impl fmt::Display for Expression {
             Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
-            Self::CallToHostFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
