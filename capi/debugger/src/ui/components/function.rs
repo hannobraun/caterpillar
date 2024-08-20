@@ -17,7 +17,7 @@ pub fn NamedFunction(function: Branch, commands: CommandsTx) -> impl IntoView {
             <div class="font-bold">
                 {function.name}:
             </div>
-            <Block
+            <Function
                 expressions=function.body
                 commands=commands />
         </div>
@@ -25,7 +25,10 @@ pub fn NamedFunction(function: Branch, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-fn Block(expressions: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
+fn Function(
+    expressions: Vec<Expression>,
+    commands: CommandsTx,
+) -> impl IntoView {
     let expressions = expressions
         .into_iter()
         .map(|fragment| {
@@ -58,7 +61,7 @@ pub fn Expression(
             view! {
                 <span>
                     "{"
-                    <Block
+                    <Function
                         expressions=expressions
                         commands=commands />
                     "}"
