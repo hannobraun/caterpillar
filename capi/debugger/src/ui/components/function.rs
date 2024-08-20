@@ -43,13 +43,13 @@ fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
         .collect::<Vec<_>>();
 
     view! {
-        <span>
+        <div>
             "{"
             <ol>
                 {branches}
             </ol>
             "}"
-        </span>
+        </div>
     }
 }
 
