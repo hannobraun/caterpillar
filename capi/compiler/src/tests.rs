@@ -19,10 +19,9 @@ use crate::{compile, host::Host};
 #[test]
 fn closure_in_function() {
     let source = r"
-        main: {
-            ||
-                { || 0 send }
-                    eval
+        main: { ||
+            { || 0 send }
+                eval
         }
     ";
 
