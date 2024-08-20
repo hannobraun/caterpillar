@@ -391,16 +391,18 @@ handle_coordinate_larger_than_limit: {
         limit
         coord
         greater_u8
-        => limit_greater_than_coord .
-        limit_greater_than_coord
-        {
-            |0|
-                coord
-                limit
-                sub_i32
+        { |limit_greater_than_coord|
+            limit_greater_than_coord
+            {
+                |0|
+                    coord
+                    limit
+                    sub_i32
 
-            |1|
-                coord
+                |1|
+                    coord
+            }
+                eval
         }
             eval
 }
