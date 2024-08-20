@@ -48,6 +48,27 @@ fn anonymous_function_parameter() {
     assert!(signals.is_empty());
 }
 
+#[test]
+fn anonymous_function_parameter_shadowing() {
+    let source = r"
+        main: { ||
+            0
+            { |channel|
+                channel
+                { |channel| channel }
+                    eval
+            }
+                eval
+                send
+        }
+    ";
+
+    let mut signals = compile_and_run(source);
+
+    assert_eq!(signals.remove(&0), Some(1));
+    assert!(signals.is_empty());
+}
+
 fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let (_, instructions, _) = compile::<TestHost>(source);
 
