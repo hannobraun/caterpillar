@@ -53,7 +53,7 @@ impl ActiveFunctions {
             let function_and_branch = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .map(|(function, branch)| (function.clone(), branch.clone()));
+                .map(|(function, _)| function.clone());
 
             if let Some(function_and_branch) = function_and_branch {
                 functions_and_branches.push_front(function_and_branch);
@@ -63,7 +63,7 @@ impl ActiveFunctions {
         Self::Functions {
             functions: functions_and_branches
                 .into_iter()
-                .map(|(function, _)| Function::new(function, code, process))
+                .map(|function| Function::new(function, code, process))
                 .collect(),
         }
     }
