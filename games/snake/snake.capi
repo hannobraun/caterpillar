@@ -343,11 +343,13 @@ update_next_position: {
                 next_y
                 limit_y
                 handle_coordinate_larger_than_limit
-                => next_y .
-                next_x
-                next_y
-                next_position
-                vec_store
+                { |next_y|
+                    next_x
+                    next_y
+                    next_position
+                    vec_store
+                }
+                    eval
 
             |_|
                 # Not out of bounds. Nothing to do.
