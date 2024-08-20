@@ -40,10 +40,12 @@ _draw_snake_inner: {
         vec_buf_len
         index
         greater_i8
-        => index_is_within_bounds .
-        index_is_within_bounds
-        index
-        _draw_snake_draw_rest_of_snake
+        { |index_is_within_bounds|
+            index_is_within_bounds
+            index
+            _draw_snake_draw_rest_of_snake
+        }
+            eval
 }
 
 _draw_snake_draw_rest_of_snake: {
