@@ -794,13 +794,15 @@ vec_buf_push: {
             load
             0
             _vec_buf_address
-            => address .
-            x
-            y
-            address
-            vec_store
-            next_addr
-            _vec_buf_inc_index
+            { |address|
+                x
+                y
+                address
+                vec_store
+                next_addr
+                _vec_buf_inc_index
+            }
+                eval
         }
             eval
 }
