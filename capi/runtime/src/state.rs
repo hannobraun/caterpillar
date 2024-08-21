@@ -28,7 +28,7 @@ impl RuntimeState {
         }
     }
 
-    pub fn update(&mut self, _delta_time_ms: f64, pixels: &mut [u8]) {
+    pub fn update(&mut self, delta_time_ms: f64, pixels: &mut [u8]) {
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
 
@@ -73,7 +73,7 @@ impl RuntimeState {
         }
 
         self.game_engine
-            .run_until_end_of_frame(_delta_time_ms, pixels);
+            .run_until_end_of_frame(delta_time_ms, pixels);
 
         self.updates.queue_updates(
             &self.game_engine.process,
