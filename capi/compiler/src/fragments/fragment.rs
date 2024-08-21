@@ -46,9 +46,16 @@ impl Fragment {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentKind {
+    /// # This fragment carries a payload
     Expression {
         expression: Expression,
         next: FragmentId,
     },
+
+    /// # This fragment is a terminator
+    ///
+    /// Terminators carry no payload and, well, terminate any context in which
+    /// fragments reside. The reason for this is explained in the documentation
+    /// of [`Fragment`]'s `parent` field.
     Terminator,
 }
