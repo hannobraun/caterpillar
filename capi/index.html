@@ -92,8 +92,8 @@
             runtime.code_write_len(),
         );
         code_tx.set(bytecode);
-        let bytecode_version = runtime.on_new_bytecode();
-        console.log(bytecode_version);
+        let timestamp = runtime.on_new_bytecode();
+        console.log(timestamp);
 
         window.requestAnimationFrame(mainLoop);
 
