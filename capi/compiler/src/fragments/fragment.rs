@@ -1,5 +1,6 @@
 use super::{hash::FragmentHash, Expression, FragmentId};
 
+/// # A content-addressed piece of code
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
     /// # This fragment's parent
