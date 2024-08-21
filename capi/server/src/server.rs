@@ -20,6 +20,7 @@ pub async fn start(
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/code", get(serve_code))
+        .route("/code/:timestamp", get(serve_code))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(ServerState { serve_dir, code });
@@ -49,17 +50,33 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
 }
 
-async fn serve_code(State(state): State<ServerState>) -> Response {
-    let code = &*state.code.borrow();
-    let code = Versioned {
-        timestamp: code.timestamp,
-        inner: &code.inner,
-    };
-    ron::to_string(&code)
-        .unwrap()
-        .as_bytes()
-        .to_vec()
-        .into_response()
+async fn serve_code(
+    State(mut state): State<ServerState>,
+    timestamp: Option<Path<u64>>,
+) -> impl IntoResponse {
+    loop {
+        if let Some(timestamp) = &timestamp {
+            if timestamp.0 >= state.code.borrow().timestamp {
+                if state.code.changed().await.is_err() {
+                    // Sender has been dropped.
+                    return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+                }
+                continue;
+            }
+        }
+
+        let code = &*state.code.borrow();
+        let code = Versioned {
+            timestamp: code.timestamp,
+            inner: &code.inner,
+        };
+
+        return ron::to_string(&code)
+            .unwrap()
+            .as_bytes()
+            .to_vec()
+            .into_response();
+    }
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
