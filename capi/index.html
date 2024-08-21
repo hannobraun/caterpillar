@@ -97,7 +97,6 @@
         fetch(`/code/${timestamp}`).then(() => {
             window.location.reload();
         });
-        console.log(timestamp);
 
         let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
