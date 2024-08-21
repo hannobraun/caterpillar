@@ -37,15 +37,10 @@ pub enum Expression {
     CallToFunction {
         name: String,
 
-        /// Indicate whether the call is in tail position
+        /// # Indicate whether the call is in tail position
         ///
-        /// This flag is relevant for tail call elimination. It is only required
-        /// for calls to user-defined functions, as only those require compile-
-        /// time tail call elimination:
-        ///
-        /// - Built-in functions are expected to perform their own tail call
-        ///   elimination at runtime, if necessary.
-        /// - No other expressions can result in a new stack frame.
+        /// This is relevant as function calls might necessitate tail call
+        /// elimination.
         is_tail_call: bool,
     },
 
