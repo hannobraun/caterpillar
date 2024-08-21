@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{Branch, Expression, Fragment, FragmentId, FragmentKind, Function};
+use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Payload};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -43,7 +43,7 @@ impl Fragments {
                 .values()
                 .filter_map(|fragment| match &fragment.kind {
                     FragmentKind::Payload {
-                        payload: Expression::Function { function },
+                        payload: Payload::Function { function },
                         ..
                     } => Some((fragment.id(), function)),
                     _ => None,
@@ -89,7 +89,7 @@ impl FragmentMap {
             .values()
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Payload {
-                    payload: Expression::Function { function },
+                    payload: Payload::Function { function },
                     ..
                 } => Some((&function.name, fragment.id())),
                 _ => None,

@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Branch, Expression, Fragment, FragmentId, FragmentKind, FragmentMap,
-        Fragments, Function, Parameters,
+        Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
+        Function, Parameters, Payload,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -81,7 +81,7 @@ fn compile_function(
     Fragment {
         parent,
         kind: FragmentKind::Payload {
-            payload: Expression::Function {
+            payload: Payload::Function {
                 function: Function {
                     name: function.name,
                     branches,
@@ -100,7 +100,7 @@ fn compile_expression(
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let payload = match expression {
-        syntax::Expression::Comment { text } => Expression::Comment { text },
+        syntax::Expression::Comment { text } => Payload::Comment { text },
         syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
         }
@@ -115,30 +115,28 @@ fn compile_expression(
 
             match target {
                 Some(IdentifierTarget::Binding) => {
-                    Expression::ResolvedBinding { name }
+                    Payload::ResolvedBinding { name }
                 }
                 Some(IdentifierTarget::BuiltinFunction) => {
-                    Expression::ResolvedBuiltinFunction { name }
+                    Payload::ResolvedBuiltinFunction { name }
                 }
-                Some(IdentifierTarget::Function) => {
-                    Expression::CallToFunction {
-                        name,
-                        is_tail_call: is_in_tail_position,
-                    }
-                }
+                Some(IdentifierTarget::Function) => Payload::CallToFunction {
+                    name,
+                    is_tail_call: is_in_tail_position,
+                },
                 Some(IdentifierTarget::HostFunction) => {
-                    Expression::CallToHostFunction { name }
+                    Payload::CallToHostFunction { name }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    Expression::CallToIntrinsic {
+                    Payload::CallToIntrinsic {
                         intrinsic,
                         is_tail_call: is_in_tail_position,
                     }
                 }
-                None => Expression::UnresolvedIdentifier { name },
+                None => Payload::UnresolvedIdentifier { name },
             }
         }
-        syntax::Expression::Value(value) => Expression::Value(value),
+        syntax::Expression::Value(value) => Payload::Value(value),
     };
 
     Fragment {
@@ -152,7 +150,7 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        fragments::{Expression, Fragment, FragmentKind, Fragments, Function},
+        fragments::{Fragment, FragmentKind, Fragments, Function, Payload},
         syntax::{self, Script},
     };
 
@@ -179,7 +177,7 @@ mod tests {
             kind:
                 FragmentKind::Payload {
                     payload:
-                        Expression::Function {
+                        Payload::Function {
                             function: Function { mut branches, .. },
                         },
                     ..
@@ -202,8 +200,8 @@ mod tests {
         assert_eq!(
             body,
             [
-                Expression::Value(Value(1i32.to_le_bytes())),
-                Expression::Value(Value(1i32.to_le_bytes())),
+                Payload::Value(Value(1i32.to_le_bytes())),
+                Payload::Value(Value(1i32.to_le_bytes())),
             ]
         );
     }
@@ -224,7 +222,7 @@ mod tests {
             kind:
                 FragmentKind::Payload {
                     payload:
-                        Expression::Function {
+                        Payload::Function {
                             function: Function { mut branches, .. },
                         },
                     ..
@@ -263,7 +261,7 @@ mod tests {
             kind:
                 FragmentKind::Payload {
                     payload:
-                        Expression::Function {
+                        Payload::Function {
                             function: Function { mut branches, .. },
                         },
                     next,
@@ -281,7 +279,7 @@ mod tests {
             let Fragment {
                 kind:
                     FragmentKind::Payload {
-                        payload: Expression::Function { function },
+                        payload: Payload::Function { function },
                         ..
                     },
                 ..

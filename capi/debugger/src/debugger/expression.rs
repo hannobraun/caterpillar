@@ -25,13 +25,13 @@ impl Expression {
             return None;
         };
 
-        if let fragments::Expression::Function { function } = payload {
+        if let fragments::Payload::Function { function } = payload {
             let function =
                 Function::new(function, fragments, source_map, process);
 
             return Some(Self::Function { function });
         }
-        if let fragments::Expression::Comment { text } = payload {
+        if let fragments::Payload::Comment { text } = payload {
             return Some(Self::Comment {
                 text: format!("# {text}"),
             });
@@ -85,7 +85,7 @@ impl Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
-    pub expression: fragments::Expression,
+    pub expression: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_on_call_stack: bool,

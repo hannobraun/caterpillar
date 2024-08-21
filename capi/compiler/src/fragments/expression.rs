@@ -7,7 +7,7 @@ use crate::intrinsics::Intrinsic;
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Expression {
+pub enum Payload {
     /// # A call to a user-defined function
     ///
     /// ## Implementation Note
@@ -95,7 +95,7 @@ pub enum Expression {
     Value(Value),
 }
 
-impl fmt::Display for Expression {
+impl fmt::Display for Payload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::CallToFunction { name, .. } => write!(f, "{name}"),

@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Expression, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
-        Function, Parameters,
+        Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
+        Parameters, Payload,
     },
     host::Host,
     intrinsics::Intrinsic,
@@ -209,7 +209,7 @@ fn compile_fragment<H: Host>(
     match &fragment.kind {
         FragmentKind::Payload { payload, .. } => {
             match payload {
-                Expression::CallToFunction { name, is_tail_call } => {
+                Payload::CallToFunction { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
                     // yet.
@@ -237,7 +237,7 @@ fn compile_fragment<H: Host>(
 
                     Some(address)
                 }
-                Expression::CallToHostFunction { name } => {
+                Payload::CallToHostFunction { name } => {
                     match H::function_name_to_effect_number(name) {
                         Some(effect) => {
                             let address = output.generate_instruction(
@@ -262,7 +262,7 @@ fn compile_fragment<H: Host>(
                         )),
                     }
                 }
-                Expression::CallToIntrinsic {
+                Payload::CallToIntrinsic {
                     intrinsic,
                     is_tail_call,
                 } => match intrinsic {
@@ -273,8 +273,8 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     )),
                 },
-                Expression::Comment { .. } => None,
-                Expression::Function { function } => {
+                Payload::Comment { .. } => None,
+                Payload::Function { function } => {
                     let address = if function.name.is_none() {
                         // If this is an anonymous function, we need to emit an
                         // instruction that allocates it, and takes care of its
@@ -308,19 +308,19 @@ fn compile_fragment<H: Host>(
 
                     address
                 }
-                Expression::ResolvedBinding { name } => {
+                Payload::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },
                         fragment.id(),
                     ))
                 }
-                Expression::ResolvedBuiltinFunction { name } => {
+                Payload::ResolvedBuiltinFunction { name } => {
                     Some(output.generate_instruction(
                         Instruction::CallBuiltin { name: name.clone() },
                         fragment.id(),
                     ))
                 }
-                Expression::UnresolvedIdentifier { name: _ } => {
+                Payload::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::UnresolvedIdentifier,
@@ -328,7 +328,7 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     ))
                 }
-                Expression::Value(value) => Some(output.generate_instruction(
+                Payload::Value(value) => Some(output.generate_instruction(
                     Instruction::Push { value: *value },
                     fragment.id(),
                 )),

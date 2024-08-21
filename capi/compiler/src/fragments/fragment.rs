@@ -1,4 +1,4 @@
-use super::{hash::FragmentHash, Expression, FragmentId};
+use super::{hash::FragmentHash, FragmentId, Payload};
 
 /// # A content-addressed piece of code
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -49,7 +49,7 @@ pub enum FragmentKind {
     /// # This fragment carries a payload
     Payload {
         /// # The payload that the fragment carries
-        payload: Expression,
+        payload: Payload,
 
         /// # The next fragment after this one
         ///
