@@ -209,7 +209,7 @@ impl FragmentHash for FragmentId {
 
 impl FragmentHash for FragmentKind {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        hasher.update(b"FragmentPayload");
+        hasher.update(b"FragmentKind");
 
         match self {
             Self::Expression { expression, next } => {
