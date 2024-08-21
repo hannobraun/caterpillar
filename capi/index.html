@@ -99,9 +99,13 @@
         });
         console.log(timestamp);
 
+        let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
 
-        function mainLoop() {
+        function mainLoop(currentTimeMs) {
+            const deltaTimeMs = currentTimeMs - previousTimeMs;
+            previousTimeMs = currentTimeMs;
+
             while (runtime.push_random(Math.random())) { }
 
             while (true) {
@@ -128,8 +132,7 @@
                 }
             }
 
-            runtime.on_frame();
-
+            runtime.on_frame(deltaTimeMs);
 
             const pixels = new Uint8ClampedArray(
                 runtime.memory.buffer,
