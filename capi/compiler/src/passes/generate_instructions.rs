@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Expression, Fragment, FragmentId, FragmentMap, FragmentPayload,
-        Fragments, Function, Parameters,
+        Expression, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
+        Function, Parameters,
     },
     host::Host,
     intrinsics::Intrinsic,
@@ -207,7 +207,7 @@ fn compile_fragment<H: Host>(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     match &fragment.payload {
-        FragmentPayload::Expression { expression, .. } => {
+        FragmentKind::Expression { expression, .. } => {
             match expression {
                 Expression::CallToFunction { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
@@ -334,7 +334,7 @@ fn compile_fragment<H: Host>(
                 )),
             }
         }
-        FragmentPayload::Terminator => Some(
+        FragmentKind::Terminator => Some(
             output.generate_instruction(Instruction::Return, fragment.id()),
         ),
     }

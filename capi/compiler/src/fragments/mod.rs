@@ -9,7 +9,7 @@ mod id;
 
 pub use self::{
     expression::Expression,
-    fragment::{Fragment, FragmentPayload},
+    fragment::{Fragment, FragmentKind},
     fragments::{FragmentMap, Fragments},
     function::{Branch, Function, Parameters},
     id::FragmentId,

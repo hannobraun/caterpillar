@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, Fragment, FragmentPayload, Fragments},
+    fragments::{self, Fragment, FragmentKind, Fragments},
     source_map::SourceMap,
 };
 use capi_process::{Effect, InstructionAddress, Process};
@@ -21,7 +21,7 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
-        let FragmentPayload::Expression { expression, .. } = fragment.payload
+        let FragmentKind::Expression { expression, .. } = fragment.payload
         else {
             return None;
         };

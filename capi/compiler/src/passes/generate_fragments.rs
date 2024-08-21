@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Branch, Expression, Fragment, FragmentId, FragmentMap, FragmentPayload,
+        Branch, Expression, Fragment, FragmentId, FragmentMap, FragmentKind,
         Fragments, Function, Parameters,
     },
     syntax::{self, IdentifierTarget},
@@ -39,7 +39,7 @@ where
     let mut next = {
         let terminator = Fragment {
             parent,
-            payload: FragmentPayload::Terminator,
+            payload: FragmentKind::Terminator,
         };
         let terminator_id = terminator.id();
 
@@ -80,7 +80,7 @@ fn compile_function(
 
     Fragment {
         parent,
-        payload: FragmentPayload::Expression {
+        payload: FragmentKind::Expression {
             expression: Expression::Function {
                 function: Function {
                     name: function.name,
@@ -143,7 +143,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        payload: FragmentPayload::Expression { expression, next },
+        payload: FragmentKind::Expression { expression, next },
     }
 }
 
@@ -153,7 +153,7 @@ mod tests {
 
     use crate::{
         fragments::{
-            Expression, Fragment, FragmentPayload, Fragments, Function,
+            Expression, Fragment, FragmentKind, Fragments, Function,
         },
         syntax::{self, Script},
     };
@@ -179,7 +179,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Expression {
+                FragmentKind::Expression {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -196,10 +196,10 @@ mod tests {
             .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.payload {
-                FragmentPayload::Expression { expression, .. } => {
+                FragmentKind::Expression { expression, .. } => {
                     Some(expression.clone())
                 }
-                FragmentPayload::Terminator => None,
+                FragmentKind::Terminator => None,
             })
             .collect::<Vec<_>>();
 
@@ -226,7 +226,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Expression {
+                FragmentKind::Expression {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -241,7 +241,7 @@ mod tests {
         let branch = branches.remove(0);
         let last_fragment =
             fragments.inner.iter_from(branch.start).last().unwrap();
-        assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
+        assert_eq!(last_fragment.payload, FragmentKind::Terminator);
     }
 
     #[test]
@@ -265,7 +265,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Expression {
+                FragmentKind::Expression {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -284,7 +284,7 @@ mod tests {
         let block_fragments = {
             let Fragment {
                 payload:
-                    FragmentPayload::Expression {
+                    FragmentKind::Expression {
                         expression: Expression::Function { function },
                         ..
                     },

@@ -18,7 +18,7 @@ pub struct Fragment {
     /// fragment the parent, a circular dependency is avoided.
     pub parent: Option<FragmentId>,
 
-    pub payload: FragmentPayload,
+    pub payload: FragmentKind,
 }
 
 impl Fragment {
@@ -30,14 +30,14 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.payload {
-            FragmentPayload::Expression { next, .. } => Some(*next),
-            FragmentPayload::Terminator => None,
+            FragmentKind::Expression { next, .. } => Some(*next),
+            FragmentKind::Terminator => None,
         }
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FragmentPayload {
+pub enum FragmentKind {
     Expression {
         expression: Expression,
         next: FragmentId,
