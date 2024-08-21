@@ -172,7 +172,7 @@ pub fn on_command() {
 }
 
 #[no_mangle]
-pub fn on_frame(_delta_time_ms: f64) {
+pub fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
@@ -180,7 +180,7 @@ pub fn on_frame(_delta_time_ms: f64) {
     // the host.
     let pixels = unsafe { PIXELS.access() };
 
-    state.update(_delta_time_ms, pixels);
+    state.update(delta_time_ms, pixels);
 
     for update in state.updates.take_queued_updates() {
         let update = update.serialize();
