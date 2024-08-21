@@ -75,7 +75,11 @@ impl GameEngine {
         self.process.reset(self.arguments);
     }
 
-    pub fn run_until_end_of_frame(&mut self, pixels: &mut [u8]) {
+    pub fn run_until_end_of_frame(
+        &mut self,
+        _delta_time_ms: f64,
+        pixels: &mut [u8],
+    ) {
         while self.process.can_step() {
             let Some(instructions) = &self.instructions else {
                 return;
