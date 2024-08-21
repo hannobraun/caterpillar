@@ -63,6 +63,11 @@ pub enum Expression {
     /// directly.
     CallToIntrinsic {
         intrinsic: Intrinsic,
+
+        /// # Indicate whether the call is in tail position
+        ///
+        /// This is relevant, as intrinsics can trigger function calls, which
+        /// might necessitate tail call elimination.
         is_tail_call: bool,
     },
 
