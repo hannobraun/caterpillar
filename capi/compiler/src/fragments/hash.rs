@@ -123,7 +123,7 @@ impl FragmentHash for Fragment {
 
 impl FragmentHash for Payload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        hasher.update(b"FragmentExpression");
+        hasher.update(b"Payload");
 
         match self {
             Self::CallToFunction { name, is_tail_call } => {
