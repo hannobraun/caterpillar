@@ -28,7 +28,7 @@ impl RuntimeState {
         }
     }
 
-    pub fn update(&mut self, pixels: &mut [u8]) {
+    pub fn update(&mut self, _delta_time_ms: f64, pixels: &mut [u8]) {
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
 
