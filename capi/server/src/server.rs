@@ -31,7 +31,7 @@ pub async fn start(
     Ok(())
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ServerState {
     serve_dir: PathBuf,
     code: CodeRx,
