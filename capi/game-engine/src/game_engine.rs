@@ -11,6 +11,7 @@ use crate::{
 pub struct GameEngine {
     pub process: Process,
 
+    acc_time_s: f64,
     instructions: Option<Instructions>,
     arguments: [Value; 2],
     memory: Memory,
@@ -22,6 +23,7 @@ impl GameEngine {
     pub fn new() -> Self {
         Self {
             process: Process::default(),
+            acc_time_s: 0.,
             instructions: None,
             arguments: [Value::from(TILES_PER_AXIS); 2],
             memory: Memory::default(),
@@ -81,6 +83,32 @@ impl GameEngine {
         pixels: &mut [u8],
     ) {
         eprintln!("Delta time: {delta_time_s:.3} s");
+
+        // For now, we're targeting an unambitious 30 fps.
+        let frame_time_s = 1. / 30.;
+
+        self.acc_time_s += delta_time_s;
+
+        if self.acc_time_s >= frame_time_s {
+            // It's time to run another frame!
+            self.acc_time_s -= frame_time_s;
+
+            if self.acc_time_s >= frame_time_s {
+                // We subtracted the current frame from the accumulated time,
+                // and there's still at least one full frame time left.
+                //
+                // This could mean that the game was paused, and we're coming
+                // back with a huge delta time. Or that we're running too slow,
+                // getting behind on frames.
+                //
+                // Either way, we don't want to burn the CPU by trying to catch
+                // up.
+                self.acc_time_s = 0.;
+            }
+        } else {
+            // It's not time to run another frame yet.
+            return;
+        }
 
         while self.process.can_step() {
             let Some(instructions) = &self.instructions else {
