@@ -21,7 +21,7 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
-        let FragmentKind::Expression { expression, .. } = fragment.payload
+        let FragmentKind::Expression { expression, .. } = fragment.kind
         else {
             return None;
         };

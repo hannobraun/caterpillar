@@ -18,7 +18,7 @@ pub struct Fragment {
     /// fragment the parent, a circular dependency is avoided.
     pub parent: Option<FragmentId>,
 
-    pub payload: FragmentKind,
+    pub kind: FragmentKind,
 }
 
 impl Fragment {
@@ -29,7 +29,7 @@ impl Fragment {
     }
 
     pub fn next(&self) -> Option<FragmentId> {
-        match &self.payload {
+        match &self.kind {
             FragmentKind::Expression { next, .. } => Some(*next),
             FragmentKind::Terminator => None,
         }

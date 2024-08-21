@@ -206,7 +206,7 @@ fn compile_fragment<H: Host>(
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
-    match &fragment.payload {
+    match &fragment.kind {
         FragmentKind::Expression { expression, .. } => {
             match expression {
                 Expression::CallToFunction { name, is_tail_call } => {

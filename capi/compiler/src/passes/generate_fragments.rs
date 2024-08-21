@@ -39,7 +39,7 @@ where
     let mut next = {
         let terminator = Fragment {
             parent,
-            payload: FragmentKind::Terminator,
+            kind: FragmentKind::Terminator,
         };
         let terminator_id = terminator.id();
 
@@ -80,7 +80,7 @@ fn compile_function(
 
     Fragment {
         parent,
-        payload: FragmentKind::Expression {
+        kind: FragmentKind::Expression {
             expression: Expression::Function {
                 function: Function {
                     name: function.name,
@@ -143,7 +143,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        payload: FragmentKind::Expression { expression, next },
+        kind: FragmentKind::Expression { expression, next },
     }
 }
 
@@ -178,7 +178,7 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload:
+            kind:
                 FragmentKind::Expression {
                     expression:
                         Expression::Function {
@@ -195,7 +195,7 @@ mod tests {
         let body = fragments
             .inner
             .iter_from(branch.start)
-            .filter_map(|fragment| match &fragment.payload {
+            .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Expression { expression, .. } => {
                     Some(expression.clone())
                 }
@@ -225,7 +225,7 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload:
+            kind:
                 FragmentKind::Expression {
                     expression:
                         Expression::Function {
@@ -241,7 +241,7 @@ mod tests {
         let branch = branches.remove(0);
         let last_fragment =
             fragments.inner.iter_from(branch.start).last().unwrap();
-        assert_eq!(last_fragment.payload, FragmentKind::Terminator);
+        assert_eq!(last_fragment.kind, FragmentKind::Terminator);
     }
 
     #[test]
@@ -264,7 +264,7 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload:
+            kind:
                 FragmentKind::Expression {
                     expression:
                         Expression::Function {
@@ -283,7 +283,7 @@ mod tests {
             fragments.inner.iter_from(branch.start).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
-                payload:
+                kind:
                     FragmentKind::Expression {
                         expression: Expression::Function { function },
                         ..

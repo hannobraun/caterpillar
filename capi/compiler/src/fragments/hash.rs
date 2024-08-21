@@ -110,7 +110,10 @@ impl FragmentHash for Fragment {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         hasher.update(b"Fragment");
 
-        let Self { parent, payload } = self;
+        let Self {
+            parent,
+            kind: payload,
+        } = self;
 
         hasher.update(b"parent");
         if let Some(parent) = parent {
