@@ -78,7 +78,7 @@ pub enum Expression {
         text: String,
     },
 
-    /// A function literal
+    /// # A function literal
     Function {
         function: Function,
     },
