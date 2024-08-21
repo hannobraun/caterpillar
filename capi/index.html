@@ -93,6 +93,10 @@
         );
         code_tx.set(bytecode);
         let timestamp = runtime.on_new_bytecode();
+
+        fetch(`/code/${timestamp}`).then(() => {
+            window.location.reload();
+        });
         console.log(timestamp);
 
         window.requestAnimationFrame(mainLoop);
