@@ -260,7 +260,7 @@ update: {
         # The update logic does not run every frame.
         frame_count
         load
-        5
+        2
         remainder_i32
         not
         should_game_run
