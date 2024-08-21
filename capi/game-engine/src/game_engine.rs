@@ -80,6 +80,8 @@ impl GameEngine {
         _delta_time_ms: f64,
         pixels: &mut [u8],
     ) {
+        eprintln!("Delta time: {_delta_time_ms} ms");
+
         while self.process.can_step() {
             let Some(instructions) = &self.instructions else {
                 return;
