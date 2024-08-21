@@ -12,6 +12,7 @@ impl Host for GameEngineHost {
             "set_pixel" => GameEngineEffect::SetPixel,
             "store" => GameEngineEffect::Store,
             "submit_frame" => GameEngineEffect::SubmitFrame,
+
             _ => {
                 return None;
             }
