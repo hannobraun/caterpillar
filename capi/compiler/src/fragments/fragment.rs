@@ -38,7 +38,7 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.kind {
-            FragmentKind::Expression { next, .. } => Some(*next),
+            FragmentKind::Payload { next, .. } => Some(*next),
             FragmentKind::Terminator => None,
         }
     }
@@ -47,7 +47,7 @@ impl Fragment {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentKind {
     /// # This fragment carries a payload
-    Expression {
+    Payload {
         expression: Expression,
         next: FragmentId,
     },

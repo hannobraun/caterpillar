@@ -212,7 +212,7 @@ impl FragmentHash for FragmentKind {
         hasher.update(b"FragmentKind");
 
         match self {
-            Self::Expression { expression, next } => {
+            Self::Payload { expression, next } => {
                 hasher.update(b"Expression");
 
                 hasher.update(b"expression");

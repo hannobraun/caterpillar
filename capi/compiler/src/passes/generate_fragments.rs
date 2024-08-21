@@ -80,7 +80,7 @@ fn compile_function(
 
     Fragment {
         parent,
-        kind: FragmentKind::Expression {
+        kind: FragmentKind::Payload {
             expression: Expression::Function {
                 function: Function {
                     name: function.name,
@@ -143,7 +143,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        kind: FragmentKind::Expression { expression, next },
+        kind: FragmentKind::Payload { expression, next },
     }
 }
 
@@ -177,7 +177,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
-                FragmentKind::Expression {
+                FragmentKind::Payload {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -194,7 +194,7 @@ mod tests {
             .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.kind {
-                FragmentKind::Expression { expression, .. } => {
+                FragmentKind::Payload { expression, .. } => {
                     Some(expression.clone())
                 }
                 FragmentKind::Terminator => None,
@@ -224,7 +224,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
-                FragmentKind::Expression {
+                FragmentKind::Payload {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -263,7 +263,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
-                FragmentKind::Expression {
+                FragmentKind::Payload {
                     expression:
                         Expression::Function {
                             function: Function { mut branches, .. },
@@ -282,7 +282,7 @@ mod tests {
         let block_fragments = {
             let Fragment {
                 kind:
-                    FragmentKind::Expression {
+                    FragmentKind::Payload {
                         expression: Expression::Function { function },
                         ..
                     },
