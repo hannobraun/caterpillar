@@ -82,8 +82,6 @@ impl GameEngine {
         delta_time_s: f64,
         pixels: &mut [u8],
     ) {
-        eprintln!("Delta time: {delta_time_s:.3} s");
-
         // For now, we're targeting an unambitious 30 fps.
         let frame_time_s = 1. / 30.;
 
