@@ -1,4 +1,4 @@
-use std::str;
+use std::{str, time::SystemTime};
 
 use capi_compiler::compile;
 use capi_game_engine::host::GameEngineHost;
@@ -14,27 +14,27 @@ pub async fn build_and_watch_game(
 ) -> anyhow::Result<CodeRx> {
     let game = game.into();
 
-    let mut build_number = 0;
+    let mut timestamp = Timestamp(0);
 
     let code = build_game_once(&game).await?;
 
+    timestamp.update();
     let (game_tx, game_rx) = watch::channel(Versioned {
-        version: build_number,
+        version: timestamp.0,
         inner: code,
     });
-    build_number += 1;
 
     task::spawn(async move {
         while changes.wait_for_change().await {
             let code = build_game_once(&game).await.unwrap();
+
+            timestamp.update();
             game_tx
                 .send(Versioned {
-                    version: build_number,
+                    version: timestamp.0,
                     inner: code,
                 })
                 .unwrap();
-
-            build_number += 1;
         }
     });
 
@@ -54,4 +54,33 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
         instructions,
         source_map,
     })
+}
+
+struct Timestamp(u64);
+
+impl Timestamp {
+    fn update(&mut self) {
+        let timestamp = SystemTime::UNIX_EPOCH
+            .elapsed()
+            .expect(
+                "Current system time should never be later than Unix epoch.",
+            )
+            .as_nanos()
+            .try_into()
+            .expect(
+                "`u64` should be able to represent nanosecond timestamps \
+                until the year 2554.",
+            );
+
+        let timestamp = if timestamp > self.0 {
+            timestamp
+        } else {
+            // Due to various factors, the new timestamp isn't necessarily
+            // larger than the previous one. We need it to be though, otherwise
+            // we can't use it to distinguish new builds from previous ones.
+            self.0 + 1
+        };
+
+        self.0 = timestamp;
+    }
 }
