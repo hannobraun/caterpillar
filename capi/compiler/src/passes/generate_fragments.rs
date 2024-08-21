@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Branch, Expression, Fragment, FragmentId, FragmentMap, FragmentKind,
+        Branch, Expression, Fragment, FragmentId, FragmentKind, FragmentMap,
         Fragments, Function, Parameters,
     },
     syntax::{self, IdentifierTarget},
@@ -152,9 +152,7 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        fragments::{
-            Expression, Fragment, FragmentKind, Fragments, Function,
-        },
+        fragments::{Expression, Fragment, FragmentKind, Fragments, Function},
         syntax::{self, Script},
     };
 

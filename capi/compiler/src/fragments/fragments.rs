@@ -1,8 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{
-    Branch, Expression, Fragment, FragmentId, FragmentKind, Function,
-};
+use super::{Branch, Expression, Fragment, FragmentId, FragmentKind, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
