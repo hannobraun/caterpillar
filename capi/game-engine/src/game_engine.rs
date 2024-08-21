@@ -77,10 +77,10 @@ impl GameEngine {
 
     pub fn run_until_end_of_frame(
         &mut self,
-        delta_time_ms: f64,
+        delta_time_s: f64,
         pixels: &mut [u8],
     ) {
-        eprintln!("Delta time: {delta_time_ms:.2} ms");
+        eprintln!("Delta time: {delta_time_s:.3} s");
 
         while self.process.can_step() {
             let Some(instructions) = &self.instructions else {

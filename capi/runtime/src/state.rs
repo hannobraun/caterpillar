@@ -73,7 +73,7 @@ impl RuntimeState {
         }
 
         self.game_engine
-            .run_until_end_of_frame(delta_time_ms, pixels);
+            .run_until_end_of_frame(delta_time_ms / 1000., pixels);
 
         self.updates.queue_updates(
             &self.game_engine.process,

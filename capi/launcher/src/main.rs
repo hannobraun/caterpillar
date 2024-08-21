@@ -26,8 +26,7 @@ async fn main() -> anyhow::Result<()> {
         now2 = Instant::now();
 
         while game_engine.push_random(random()) {}
-        game_engine
-            .run_until_end_of_frame(elapsed.as_secs_f64() * 1000., &mut pixels);
+        game_engine.run_until_end_of_frame(elapsed.as_secs_f64(), &mut pixels);
 
         if let Some(effect) = game_engine.process.effects().first() {
             eprintln!("Unhandled effect: {effect:#?}");
