@@ -14,6 +14,7 @@ async fn main() -> anyhow::Result<()> {
     game_engine.on_new_bytecode(code.instructions);
 
     let mut now = Instant::now();
+    let mut now2 = Instant::now();
 
     let mut total_frame_times_ms = 0;
     let mut min_frame_time = None;
@@ -21,8 +22,12 @@ async fn main() -> anyhow::Result<()> {
     let mut num_frame_times = 0;
 
     while !game_engine.process.has_finished() {
+        let elapsed = now2.elapsed();
+        now2 = Instant::now();
+
         while game_engine.push_random(random()) {}
-        game_engine.run_until_end_of_frame(0., &mut pixels);
+        game_engine
+            .run_until_end_of_frame(elapsed.as_secs_f64() * 1000., &mut pixels);
 
         if let Some(effect) = game_engine.process.effects().first() {
             eprintln!("Unhandled effect: {effect:#?}");
