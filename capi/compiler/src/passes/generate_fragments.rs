@@ -132,7 +132,7 @@ fn compile_expression(
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
                     Expression::CallToIntrinsic {
                         intrinsic,
-                        is_in_tail_position,
+                        is_tail_call: is_in_tail_position,
                     }
                 }
                 None => Expression::UnresolvedIdentifier { name },

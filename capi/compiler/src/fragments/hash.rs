@@ -144,7 +144,7 @@ impl FragmentHash for Expression {
             }
             Self::CallToIntrinsic {
                 intrinsic,
-                is_in_tail_position,
+                is_tail_call: is_in_tail_position,
             } => {
                 hasher.update(b"Intrinsic");
 

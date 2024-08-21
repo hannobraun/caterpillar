@@ -63,7 +63,7 @@ pub enum Expression {
     /// directly.
     CallToIntrinsic {
         intrinsic: Intrinsic,
-        is_in_tail_position: bool,
+        is_tail_call: bool,
     },
 
     Comment {

@@ -264,7 +264,7 @@ fn compile_fragment<H: Host>(
                 }
                 Expression::CallToIntrinsic {
                     intrinsic,
-                    is_in_tail_position,
+                    is_tail_call: is_in_tail_position,
                 } => match intrinsic {
                     Intrinsic::Eval => Some(output.generate_instruction(
                         Instruction::Eval {
