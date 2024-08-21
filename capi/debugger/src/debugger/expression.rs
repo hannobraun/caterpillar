@@ -21,21 +21,17 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
-        let FragmentKind::Payload {
-            payload: expression,
-            ..
-        } = fragment.kind
-        else {
+        let FragmentKind::Payload { payload, .. } = fragment.kind else {
             return None;
         };
 
-        if let fragments::Expression::Function { function } = expression {
+        if let fragments::Expression::Function { function } = payload {
             let function =
                 Function::new(function, fragments, source_map, process);
 
             return Some(Self::Function { function });
         }
-        if let fragments::Expression::Comment { text } = expression {
+        if let fragments::Expression::Comment { text } = payload {
             return Some(Self::Comment {
                 text: format!("# {text}"),
             });
@@ -77,7 +73,7 @@ impl Expression {
         };
 
         Some(Self::Other(OtherExpression {
-            expression,
+            expression: payload,
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
