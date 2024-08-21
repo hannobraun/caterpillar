@@ -14,6 +14,6 @@ pub const COMMANDS_BUFFER_SIZE: usize = 1024;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct Versioned<T> {
-    pub version: u64,
+    pub timestamp: u64,
     pub inner: T,
 }

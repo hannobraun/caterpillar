@@ -147,7 +147,7 @@ pub fn on_new_bytecode() -> u64 {
 
     state.game_engine.on_new_bytecode(code.inner.instructions);
 
-    code.version
+    code.timestamp
 }
 
 #[no_mangle]

@@ -20,7 +20,7 @@ pub async fn build_and_watch_game(
 
     timestamp.update();
     let (game_tx, game_rx) = watch::channel(Versioned {
-        version: timestamp.0,
+        timestamp: timestamp.0,
         inner: code,
     });
 
@@ -31,7 +31,7 @@ pub async fn build_and_watch_game(
             timestamp.update();
             game_tx
                 .send(Versioned {
-                    version: timestamp.0,
+                    timestamp: timestamp.0,
                     inner: code,
                 })
                 .unwrap();
