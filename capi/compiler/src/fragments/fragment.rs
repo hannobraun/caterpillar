@@ -48,7 +48,15 @@ impl Fragment {
 pub enum FragmentKind {
     /// # This fragment carries a payload
     Payload {
+        /// # The payload that the fragment carries
         expression: Expression,
+
+        /// # The next fragment after this one
+        ///
+        /// Every fragment resides in a context, either a function or the root
+        /// context. Every payload-carrying fragment has a fragment that follows
+        /// it within that context, which is either another payload-carrying
+        /// fragment, or a terminator.
         next: FragmentId,
     },
 
