@@ -194,10 +194,7 @@ mod tests {
             .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.kind {
-                FragmentKind::Payload {
-                    payload: expression,
-                    ..
-                } => Some(expression.clone()),
+                FragmentKind::Payload { payload, .. } => Some(payload.clone()),
                 FragmentKind::Terminator => None,
             })
             .collect::<Vec<_>>();
