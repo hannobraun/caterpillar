@@ -2,20 +2,27 @@ use super::{hash::FragmentHash, Expression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
-    /// The parent of this fragment
+    /// # This fragment's parent
     ///
-    /// Points to the fragment that is the parent of this fragment. If this
-    /// fragment resides in the root context, then this is `None`.
+    /// Refers to the fragment that is the parent of this fragment. If this
+    /// fragment resides in the root context, then is has no parent.
     ///
-    /// Otherwise, this fragment must reside in a function or block. In this
-    /// case, by convention, this points to the first fragment _after_ the
-    /// function or block (i.e. its next fragment).
+    /// All other fragments have a parent. By convention, this is the fragment
+    /// _after_ the function that this fragment resides in (i.e. the `next`
+    /// fragment of that function).
     ///
-    /// This must be so, because the block or function itself, or any fragments
-    /// preceding it, are not complete yet, and thus do not have a hash. Their
-    /// hash depends on the hashes of the fragments they contain, which in turn
-    /// depend on their parents. By making the function's or block's next
-    /// fragment the parent, a circular dependency is avoided.
+    /// This must be so, because by the time that a fragment is constructed, the
+    /// function fragment for the function it resides in, or any fragments
+    /// preceding that, are not constructed yet. Thus, they do not have an ID
+    /// that can be used to refer to them.
+    ///
+    /// Any _succeeding_ fragments, on the other hand, are already constructed.
+    /// Therefore, the `next` fragment of the function fragment can stand in as
+    /// the parent.
+    ///
+    /// Function fragments always have a `next` fragment that can be used in
+    /// this way. This is that reason that terminators exist, to make sure of
+    /// that.
     pub parent: Option<FragmentId>,
 
     pub kind: FragmentKind,
