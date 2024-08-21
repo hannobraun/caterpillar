@@ -49,13 +49,17 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
 }
 
-async fn serve_code(State(state): State<ServerState>) -> impl IntoResponse {
+async fn serve_code(State(state): State<ServerState>) -> Response {
     let code = &*state.code.borrow();
     let code = Versioned {
         timestamp: code.timestamp,
         inner: &code.inner,
     };
-    ron::to_string(&code).unwrap().as_bytes().to_vec()
+    ron::to_string(&code)
+        .unwrap()
+        .as_bytes()
+        .to_vec()
+        .into_response()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
