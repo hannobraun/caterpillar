@@ -60,9 +60,10 @@ pub enum Expression {
     ///
     /// Compiler intrinsics present as functions to the user. But contrary to
     /// regular functions, they have no representation in the form of
-    /// Caterpillar code. They are special functions, known to the compiler,
-    /// which translates each call to them to the appropriate instructions
-    /// directly.
+    /// Caterpillar code.
+    ///
+    /// The compiler translates calls to intrinsics directly into whichever
+    /// instructions are required for the specific intrinsic.
     CallToIntrinsic {
         intrinsic: Intrinsic,
 
