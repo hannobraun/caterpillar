@@ -81,7 +81,7 @@ fn compile_function(
     Fragment {
         parent,
         kind: FragmentKind::Payload {
-            expression: Expression::Function {
+            payload: Expression::Function {
                 function: Function {
                     name: function.name,
                     branches,
@@ -143,7 +143,10 @@ fn compile_expression(
 
     Fragment {
         parent,
-        kind: FragmentKind::Payload { expression, next },
+        kind: FragmentKind::Payload {
+            payload: expression,
+            next,
+        },
     }
 }
 
@@ -178,7 +181,7 @@ mod tests {
         let Fragment {
             kind:
                 FragmentKind::Payload {
-                    expression:
+                    payload:
                         Expression::Function {
                             function: Function { mut branches, .. },
                         },
@@ -194,9 +197,10 @@ mod tests {
             .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.kind {
-                FragmentKind::Payload { expression, .. } => {
-                    Some(expression.clone())
-                }
+                FragmentKind::Payload {
+                    payload: expression,
+                    ..
+                } => Some(expression.clone()),
                 FragmentKind::Terminator => None,
             })
             .collect::<Vec<_>>();
@@ -225,7 +229,7 @@ mod tests {
         let Fragment {
             kind:
                 FragmentKind::Payload {
-                    expression:
+                    payload:
                         Expression::Function {
                             function: Function { mut branches, .. },
                         },
@@ -264,7 +268,7 @@ mod tests {
         let Fragment {
             kind:
                 FragmentKind::Payload {
-                    expression:
+                    payload:
                         Expression::Function {
                             function: Function { mut branches, .. },
                         },
@@ -283,7 +287,7 @@ mod tests {
             let Fragment {
                 kind:
                     FragmentKind::Payload {
-                        expression: Expression::Function { function },
+                        payload: Expression::Function { function },
                         ..
                     },
                 ..

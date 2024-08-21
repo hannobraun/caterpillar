@@ -49,7 +49,7 @@ pub enum FragmentKind {
     /// # This fragment carries a payload
     Payload {
         /// # The payload that the fragment carries
-        expression: Expression,
+        payload: Expression,
 
         /// # The next fragment after this one
         ///

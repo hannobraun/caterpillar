@@ -43,7 +43,7 @@ impl Fragments {
                 .values()
                 .filter_map(|fragment| match &fragment.kind {
                     FragmentKind::Payload {
-                        expression: Expression::Function { function },
+                        payload: Expression::Function { function },
                         ..
                     } => Some((fragment.id(), function)),
                     _ => None,
@@ -89,7 +89,7 @@ impl FragmentMap {
             .values()
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Payload {
-                    expression: Expression::Function { function },
+                    payload: Expression::Function { function },
                     ..
                 } => Some((&function.name, fragment.id())),
                 _ => None,
