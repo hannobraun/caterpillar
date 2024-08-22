@@ -48,8 +48,8 @@ impl ActiveFunctions {
                 .find_function_by_fragment_in_body(&fragment_id)
                 .map(|(function, _)| function.clone());
 
-            if let Some(function_and_branch) = function {
-                functions_and_branches.push_front(function_and_branch);
+            if let Some(function) = function {
+                functions_and_branches.push_front(function);
             }
         }
 
