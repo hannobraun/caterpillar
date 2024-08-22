@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_compiler::fragments::{self, FragmentKind, Payload};
+use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
@@ -42,7 +42,7 @@ impl ActiveFunctions {
         let mut functions = VecDeque::new();
 
         if let Some(outer) = call_stack.front() {
-            let outer = instruction_to_function(outer, code);
+            let (outer, _) = instruction_to_function(outer, code);
             if outer.name.as_deref() != Some("main") {
                 let main_id = code
                     .fragments
@@ -71,7 +71,7 @@ impl ActiveFunctions {
         }
 
         while let Some(instruction) = call_stack.pop_front() {
-            let function = instruction_to_function(&instruction, code);
+            let (function, _) = instruction_to_function(&instruction, code);
             functions.push_front(function);
         }
 
@@ -123,7 +123,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_function(
     instruction: &InstructionAddress,
     code: &Code,
-) -> fragments::Function {
+) -> (fragments::Function, FragmentId) {
     let Some(fragment_id) =
         code.source_map.instruction_to_fragment(instruction)
     else {
@@ -141,5 +141,5 @@ fn instruction_to_function(
             known function.",
         );
 
-    function.clone()
+    (function.clone(), fragment_id)
 }
