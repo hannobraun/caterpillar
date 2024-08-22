@@ -15,11 +15,16 @@ pub enum Intrinsic {
 
 impl Intrinsic {
     pub fn from_name(name: &str) -> Option<Intrinsic> {
-        match name {
-            "brk" => Some(Self::Brk),
-            "eval" => Some(Self::Eval),
-            _ => None,
-        }
+        let intrinsic = match name {
+            "brk" => Self::Brk,
+            "eval" => Self::Eval,
+
+            _ => {
+                return None;
+            }
+        };
+
+        Some(intrinsic)
     }
 }
 
