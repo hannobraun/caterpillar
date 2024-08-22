@@ -72,10 +72,10 @@ impl ActiveFunctions {
         }
 
         while let Some(instruction) = call_stack.pop_front() {
-            let (function, fragment_id) =
+            let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
             functions_with_active_fragments
-                .push_front((function, Some(fragment_id)));
+                .push_front((function, Some(active_fragment)));
         }
 
         Self::Functions {
