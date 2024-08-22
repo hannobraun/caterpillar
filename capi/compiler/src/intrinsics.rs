@@ -1,5 +1,9 @@
 use std::fmt;
 
+/// # Special functions that are known to the compiler
+///
+/// When encountering a call to an intrinsic, the compiler will directly
+/// translate that into the appropriate instructions.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Intrinsic {
     /// # Evaluate an anonymous function
