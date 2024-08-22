@@ -43,12 +43,12 @@ impl ActiveFunctions {
 
         while let Some(instruction) = call_stack.pop_front() {
             let fragment_id = instruction_to_fragment(&instruction, code);
-            let function_and_branch = code
+            let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
                 .map(|(function, _)| function.clone());
 
-            if let Some(function_and_branch) = function_and_branch {
+            if let Some(function_and_branch) = function {
                 functions_and_branches.push_front(function_and_branch);
             }
         }
