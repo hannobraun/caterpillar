@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_compiler::fragments::FragmentId;
+use capi_compiler::fragments;
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
@@ -42,16 +42,8 @@ impl ActiveFunctions {
         let mut functions = VecDeque::new();
 
         while let Some(instruction) = call_stack.pop_front() {
-            let fragment_id = instruction_to_fragment(&instruction, code);
-            let (function, _) = code
-                .fragments
-                .find_function_by_fragment_in_body(&fragment_id)
-                .expect(
-                    "Expecting code that is referenced on call stack to be \
-                    part of a known function.",
-                );
-
-            functions.push_front(function.clone());
+            let function = instruction_to_function(&instruction, code);
+            functions.push_front(function);
         }
 
         Self::Functions {
@@ -99,10 +91,10 @@ impl fmt::Display for ActiveFunctionsMessage {
     }
 }
 
-fn instruction_to_fragment(
+fn instruction_to_function(
     instruction: &InstructionAddress,
     code: &Code,
-) -> FragmentId {
+) -> fragments::Function {
     let Some(fragment_id) =
         code.source_map.instruction_to_fragment(instruction)
     else {
@@ -112,5 +104,13 @@ fn instruction_to_fragment(
         );
     };
 
-    fragment_id
+    let (function, _) = code
+        .fragments
+        .find_function_by_fragment_in_body(&fragment_id)
+        .expect(
+            "Expecting code that is referenced on call stack to be part of a \
+            known function.",
+        );
+
+    function.clone()
 }
