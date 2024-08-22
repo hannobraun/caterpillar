@@ -111,6 +111,6 @@ fn stopped_at_code_within_block() {
         .expect_other();
     assert_eq!(expression.effect, Some(Effect::Breakpoint));
 
-    let builtin = expression.expression.expect_intrinsic();
-    assert_eq!(builtin, Intrinsic::Brk);
+    let intrinsic = expression.expression.expect_intrinsic();
+    assert_eq!(intrinsic, Intrinsic::Brk);
 }
