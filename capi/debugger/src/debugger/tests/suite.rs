@@ -46,8 +46,8 @@ fn no_process() {
 fn basic_call_stack() {
     // All functions in the call stack should show up in the active functions
     // view, if the process is stopped. This test constructs a scenario that
-    // requires no special handling to detect and fix tail call optimization, to
-    // provide a baseline.
+    // requires no special handling to detect and fix the effects of tail call
+    // elimination, to provide a baseline.
     //
     // This test expects all defined functions to be active functions. The order
     // of functions is inner to outer, as it's most useful to the developer to
