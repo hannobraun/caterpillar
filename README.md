@@ -80,16 +80,23 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
-### Minimalism over readability, for now
+### Minimalism over convenience, for now
 
-For the time being, all control flow concepts (conditionals and iteration) map
-to a single primitive, pattern matching functions. And those pattern-matching
-functions have to be written out explicitly.
+For the time being, to make iterating on the language easier, simplicity trumps
+convenience. This means that a small number of concepts is used to cover a wide
+range of use cases.
 
-This is not always the most readable, but it keeps complexity low. The plan is
-to add syntax sugar for various common control flow constructs in the future.
-And by then, it will be clearer where special syntax is actually a benefit, and
-where the simple solution will do.
+To give a concrete examples, pattern-matching functions are the single tool used
+to represent all control flow (both conditionals, via the pattern matching; and
+iteration, via recursion).
+
+This is sometimes more verbose than more specific constructs, which makes the
+language less convenient to write and harder to read. For now, I consider this
+to be an acceptable trade-off.
+
+Later on, it will make more and more sense to add syntax sugar, thereby
+increasing convenience, while under the hood still mapping the new syntax to
+simple primitives.
 
 The following daily thoughts provide more context:
 [2024-07-24](https://capi.hannobraun.com/daily/2024-07-24),
@@ -101,8 +108,10 @@ The following daily thoughts provide more context:
 [2024-08-15](https://capi.hannobraun.com/daily/2024-08-15),
 [2024-08-16](https://capi.hannobraun.com/daily/2024-08-16),
 [2024-08-17](https://capi.hannobraun.com/daily/2024-08-17),
-[2024-08-18](https://capi.hannobraun.com/daily/2024-08-18), and
-[2024-08-20](https://capi.hannobraun.com/daily/2024-08-20).
+[2024-08-18](https://capi.hannobraun.com/daily/2024-08-18),
+[2024-08-20](https://capi.hannobraun.com/daily/2024-08-20),
+[2024-08-21](https://capi.hannobraun.com/daily/2024-08-21), and
+[2024-08-22](https://capi.hannobraun.com/daily/2024-08-22).
 
 ### Untyped now, dynamically typed soon, statically typed later
 
