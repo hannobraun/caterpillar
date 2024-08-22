@@ -117,7 +117,7 @@ pub fn Expression(
             expression,
             first_instruction,
             has_durable_breakpoint,
-            is_active: is_on_call_stack,
+            is_active,
             effect,
         }) => {
             if has_durable_breakpoint {
@@ -131,7 +131,7 @@ pub fn Expression(
                     _ => class_inner.push_str(" bg-red-300"),
                 }
             }
-            if is_on_call_stack {
+            if is_active {
                 class_inner.push_str(" font-bold");
             }
 
