@@ -10,6 +10,7 @@ use super::Branch;
 pub struct Function {
     pub name: Option<String>,
     pub branches: Vec<Branch>,
+    pub active_fragment: Option<FragmentId>,
 }
 
 impl Function {
@@ -35,6 +36,10 @@ impl Function {
             })
             .collect();
 
-        Self { name, branches }
+        Self {
+            name,
+            branches,
+            active_fragment,
+        }
     }
 }
