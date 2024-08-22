@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_compiler::fragments;
+use capi_compiler::fragments::{self, FragmentKind, Payload};
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
@@ -40,6 +40,35 @@ impl ActiveFunctions {
             process.evaluator().active_instructions().collect();
 
         let mut functions = VecDeque::new();
+
+        if let Some(outer) = call_stack.front() {
+            let outer = instruction_to_function(outer, code);
+            if outer.name.as_deref() != Some("main") {
+                let main_id = code
+                    .fragments
+                    .inner
+                    .find_function_by_name("main")
+                    .expect("Expecting `main` function to exist.");
+                let main_fragment =
+                    code.fragments.inner.inner.get(&main_id).expect(
+                        "Just got this `FragmentId` by searching for a \
+                        function. Must refer to a valid fragment.",
+                    );
+
+                let FragmentKind::Payload {
+                    payload: Payload::Function { function: main },
+                    ..
+                } = &main_fragment.kind
+                else {
+                    panic!(
+                        "Got fragment by specifically searching for `main` \
+                        function. Expecting it to be a function fragment."
+                    );
+                };
+
+                functions.push_front(main.clone());
+            }
+        }
 
         while let Some(instruction) = call_stack.pop_front() {
             let function = instruction_to_function(&instruction, code);

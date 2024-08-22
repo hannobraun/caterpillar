@@ -114,3 +114,30 @@ fn stopped_at_code_within_block() {
     let intrinsic = expression.expression.expect_intrinsic();
     assert_eq!(intrinsic, Intrinsic::Brk);
 }
+
+#[test]
+fn call_stack_reconstruction_missing_main() {
+    // Tail call elimination can leave gaps in the call stack. If the `main`
+    // function is missing due to that, it should be reconstructed.
+
+    let debugger = init()
+        .provide_source_code(
+            r"
+            main: { |size_x size_y|
+                f
+            }
+            f: { ||
+                brk
+            }",
+        )
+        .run_process()
+        .to_debugger();
+
+    let names = debugger
+        .active_functions
+        .expect_functions()
+        .into_iter()
+        .map(|active_function| active_function.name.unwrap())
+        .collect::<Vec<_>>();
+    assert_eq!(names, vec!["f", "main"]);
+}
