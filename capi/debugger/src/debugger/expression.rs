@@ -77,7 +77,7 @@ impl Expression {
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
-            is_on_call_stack,
+            is_active: is_on_call_stack,
             effect,
         }))
     }
@@ -88,6 +88,6 @@ pub struct OtherExpression {
     pub expression: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
-    pub is_on_call_stack: bool,
+    pub is_active: bool,
     pub effect: Option<Effect>,
 }

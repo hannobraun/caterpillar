@@ -117,7 +117,7 @@ pub fn Expression(
             expression,
             first_instruction,
             has_durable_breakpoint,
-            is_on_call_stack,
+            is_active: is_on_call_stack,
             effect,
         }) => {
             if has_durable_breakpoint {
