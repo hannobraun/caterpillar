@@ -59,7 +59,7 @@ impl Expression {
             }
         });
 
-        let is_on_call_stack = if let Some(instructions) = instructions {
+        let is_active = if let Some(instructions) = instructions {
             instructions.iter().copied().any(|mut instruction| {
                 instruction.increment();
 
@@ -77,7 +77,7 @@ impl Expression {
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
-            is_active: is_on_call_stack,
+            is_active,
             effect,
         }))
     }
