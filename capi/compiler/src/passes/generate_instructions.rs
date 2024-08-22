@@ -266,6 +266,12 @@ fn compile_fragment<H: Host>(
                     intrinsic,
                     is_tail_call,
                 } => match intrinsic {
+                    Intrinsic::Brk => Some(output.generate_instruction(
+                        Instruction::TriggerEffect {
+                            effect: Effect::Breakpoint,
+                        },
+                        fragment.id(),
+                    )),
                     Intrinsic::Eval => Some(output.generate_instruction(
                         Instruction::Eval {
                             is_tail_call: *is_tail_call,
