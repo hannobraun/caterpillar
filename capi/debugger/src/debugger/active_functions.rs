@@ -103,7 +103,8 @@ fn instruction_to_fragment(
     instruction: &InstructionAddress,
     code: &Code,
 ) -> FragmentId {
-    let Some(fragment) = code.source_map.instruction_to_fragment(instruction)
+    let Some(fragment_id) =
+        code.source_map.instruction_to_fragment(instruction)
     else {
         panic!(
             "Expecting all instructions referenced on call stack to map to a \
@@ -111,5 +112,5 @@ fn instruction_to_fragment(
         );
     };
 
-    fragment
+    fragment_id
 }
