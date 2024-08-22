@@ -97,7 +97,7 @@ fn stopped_at_code_within_block() {
         .run_process()
         .to_debugger();
 
-    let other = debugger
+    let expression = debugger
         .active_functions
         .expect_functions()
         .remove(0)
@@ -108,8 +108,8 @@ fn stopped_at_code_within_block() {
         .expect_block()
         .remove(0)
         .expect_other();
-    assert_eq!(other.effect, Some(Effect::Breakpoint));
+    assert_eq!(expression.effect, Some(Effect::Breakpoint));
 
-    let builtin = other.expression.expect_builtin_function();
+    let builtin = expression.expression.expect_builtin_function();
     assert_eq!(builtin, "brk");
 }
