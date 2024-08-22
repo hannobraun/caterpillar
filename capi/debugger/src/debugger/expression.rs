@@ -88,6 +88,12 @@ pub struct OtherExpression {
     pub expression: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
+
+    /// # Indicate whether the expression is active
+    ///
+    /// An expression is active, either if it is currently being executed, or if
+    /// it calls an active function.
     pub is_active: bool,
+
     pub effect: Option<Effect>,
 }
