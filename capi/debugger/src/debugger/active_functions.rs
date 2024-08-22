@@ -66,21 +66,23 @@ impl ActiveFunctions {
                     );
                 };
 
-                functions.push_front(main.clone());
+                functions.push_front((main.clone(), None));
             }
         }
 
         while let Some(instruction) = call_stack.pop_front() {
-            let (function, _) = instruction_to_function(&instruction, code);
-            functions.push_front(function);
+            let (function, fragment_id) =
+                instruction_to_function(&instruction, code);
+            functions.push_front((function, Some(fragment_id)));
         }
 
         Self::Functions {
             functions: functions
                 .into_iter()
-                .map(|function| {
+                .map(|(function, active_fragment)| {
                     Function::new(
                         function,
+                        active_fragment,
                         &code.fragments,
                         &code.source_map,
                         process,

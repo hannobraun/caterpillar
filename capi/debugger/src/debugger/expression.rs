@@ -27,8 +27,13 @@ impl Expression {
         };
 
         if let fragments::Payload::Function { function } = payload {
-            let function =
-                Function::new(function, fragments, source_map, process);
+            let function = Function::new(
+                function,
+                active_fragment,
+                fragments,
+                source_map,
+                process,
+            );
 
             return Some(Self::Function { function });
         }
