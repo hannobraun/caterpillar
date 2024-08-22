@@ -19,41 +19,39 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
+        let active_fragment = function.branches.iter().find_map(|branch| {
+            fragments.inner.iter_from(branch.start).cloned().find_map(
+                |fragment| {
+                    let instructions =
+                        source_map.fragment_to_instructions(&fragment.id());
+
+                    let is_active = if let Some(instructions) = instructions {
+                        instructions.iter().copied().any(|mut instruction| {
+                            instruction.increment();
+
+                            process
+                                .evaluator()
+                                .active_instructions()
+                                .any(|next| next == instruction)
+                        })
+                    } else {
+                        false
+                    };
+
+                    if is_active {
+                        Some(fragment.id())
+                    } else {
+                        None
+                    }
+                },
+            )
+        });
+
         let name = function.name;
         let branches = function
             .branches
             .into_iter()
             .map(|branch| {
-                let active_fragment =
-                    fragments.inner.iter_from(branch.start).cloned().find_map(
-                        |fragment| {
-                            let instructions = source_map
-                                .fragment_to_instructions(&fragment.id());
-
-                            let is_active =
-                                if let Some(instructions) = instructions {
-                                    instructions.iter().copied().any(
-                                        |mut instruction| {
-                                            instruction.increment();
-
-                                            process
-                                                .evaluator()
-                                                .active_instructions()
-                                                .any(|next| next == instruction)
-                                        },
-                                    )
-                                } else {
-                                    false
-                                };
-
-                            if is_active {
-                                Some(fragment.id())
-                            } else {
-                                None
-                            }
-                        },
-                    );
-
                 Branch::new(
                     branch,
                     active_fragment,
