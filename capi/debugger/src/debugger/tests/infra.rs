@@ -1,4 +1,4 @@
-use capi_compiler::{compile, fragments};
+use capi_compiler::{compile, fragments, intrinsics::Intrinsic};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -100,7 +100,10 @@ impl ExpressionExt for Expression {
 }
 
 pub trait FragmentExpressionExt {
+    #[allow(unused)] // currently not in use, but likely to be useful soon
     fn expect_builtin_function(self) -> String;
+
+    fn expect_intrinsic(self) -> Intrinsic;
 
     #[allow(unused)] // currently not in use, but likely to be useful soon
     fn expect_user_function(self) -> String;
@@ -113,6 +116,14 @@ impl FragmentExpressionExt for fragments::Payload {
         };
 
         name
+    }
+
+    fn expect_intrinsic(self) -> Intrinsic {
+        let fragments::Payload::CallToIntrinsic { intrinsic, .. } = self else {
+            panic!("Expected call to intrinsic function.");
+        };
+
+        intrinsic
     }
 
     fn expect_user_function(self) -> String {

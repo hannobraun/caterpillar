@@ -1,3 +1,4 @@
+use capi_compiler::intrinsics::Intrinsic;
 use capi_process::Effect;
 
 use crate::debugger::{
@@ -110,6 +111,6 @@ fn stopped_at_code_within_block() {
         .expect_other();
     assert_eq!(expression.effect, Some(Effect::Breakpoint));
 
-    let builtin = expression.expression.expect_builtin_function();
-    assert_eq!(builtin, "brk");
+    let builtin = expression.expression.expect_intrinsic();
+    assert_eq!(builtin, Intrinsic::Brk);
 }
