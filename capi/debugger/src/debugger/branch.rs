@@ -35,9 +35,12 @@ impl Branch {
             .iter_from(branch.start)
             .cloned()
             .filter_map(|fragment| {
-                let is_active = Some(fragment.id()) == active_fragment;
                 Expression::new(
-                    fragment, is_active, fragments, source_map, process,
+                    fragment,
+                    active_fragment,
+                    fragments,
+                    source_map,
+                    process,
                 )
             })
             .collect();

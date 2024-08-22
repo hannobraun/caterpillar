@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, Fragment, FragmentKind, Fragments},
+    fragments::{self, Fragment, FragmentId, FragmentKind, Fragments},
     source_map::SourceMap,
 };
 use capi_process::{Effect, InstructionAddress, Process};
@@ -16,7 +16,7 @@ pub enum Expression {
 impl Expression {
     pub fn new(
         fragment: Fragment,
-        is_active: bool,
+        active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
@@ -47,6 +47,8 @@ impl Expression {
         } else {
             false
         };
+
+        let is_active = Some(fragment_id) == active_fragment;
 
         let effect = process.effects().first().and_then(|effect| {
             let effect_fragment = source_map
