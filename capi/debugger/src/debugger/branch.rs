@@ -34,7 +34,24 @@ impl Branch {
             .iter_from(branch.start)
             .cloned()
             .filter_map(|fragment| {
-                Expression::new(fragment, fragments, source_map, process)
+                let instructions =
+                    source_map.fragment_to_instructions(&fragment.id());
+
+                let is_active = if let Some(instructions) = instructions {
+                    instructions.iter().copied().any(|mut instruction| {
+                        instruction.increment();
+
+                        process
+                            .evaluator()
+                            .active_instructions()
+                            .any(|next| next == instruction)
+                    })
+                } else {
+                    false
+                };
+                Expression::new(
+                    fragment, is_active, fragments, source_map, process,
+                )
             })
             .collect();
 

@@ -16,6 +16,7 @@ pub enum Expression {
 impl Expression {
     pub fn new(
         fragment: Fragment,
+        is_active: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
@@ -58,19 +59,6 @@ impl Expression {
                 None
             }
         });
-
-        let is_active = if let Some(instructions) = instructions {
-            instructions.iter().copied().any(|mut instruction| {
-                instruction.increment();
-
-                process
-                    .evaluator()
-                    .active_instructions()
-                    .any(|next| next == instruction)
-            })
-        } else {
-            false
-        };
 
         Some(Self::Other(OtherExpression {
             expression: payload,
