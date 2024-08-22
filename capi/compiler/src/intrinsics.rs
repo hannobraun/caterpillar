@@ -2,6 +2,7 @@ use std::fmt;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Intrinsic {
+    /// # Evaluate an anonymous function
     Eval,
 }
 
