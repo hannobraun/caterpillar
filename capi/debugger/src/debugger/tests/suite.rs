@@ -58,17 +58,11 @@ fn basic_call_stack() {
             r"
             main: { |size_x size_y|
                 f
-
-                # Not triggered. Just here to prevent tail call elimination
-                # from removing this function from the call stack.
-                brk
+                nop # make sure the previous call is not a tail call
             }
             f: { ||
                 g
-
-                # Not triggered. Just here to prevent tail call elimination
-                # from removing this function from the call stack.
-                brk
+                nop # make sure the previous call is not a tail call
             }
             g: { ||
                 brk
