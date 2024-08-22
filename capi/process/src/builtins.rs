@@ -7,7 +7,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "add_u8" => add_u8,
         "add_u8_wrap" => add_u8_wrap,
         "and" => and,
-        "brk" => brk,
         "copy" => copy,
         "div_i32" => div_i32,
         "div_u8" => div_u8,
@@ -106,10 +105,6 @@ fn and(stack: &mut Stack) -> Result {
     stack.push_operand(c);
 
     Ok(())
-}
-
-fn brk(_: &mut Stack) -> Result {
-    Err(Effect::Breakpoint)
 }
 
 fn copy(stack: &mut Stack) -> Result {
