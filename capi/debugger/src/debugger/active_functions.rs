@@ -43,16 +43,15 @@ impl ActiveFunctions {
 
         while let Some(instruction) = call_stack.pop_front() {
             let fragment_id = instruction_to_fragment(&instruction, code);
-            let function = code
+            let (function, _) = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .map(|(function, _)| function.clone())
                 .expect(
                     "Expecting code that is referenced on call stack to be \
                     part of a known function.",
                 );
 
-            functions.push_front(function);
+            functions.push_front(function.clone());
         }
 
         Self::Functions {
