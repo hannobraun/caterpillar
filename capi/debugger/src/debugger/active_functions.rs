@@ -88,8 +88,9 @@ impl ActiveFunctions {
                     None
                 };
 
-                expected_next_function = tail_call
-                    .map(|tail_call| call_id_to_function_name(tail_call, code));
+                expected_next_function = tail_call.and_then(|tail_call| {
+                    call_id_to_function_name(tail_call, code)
+                });
 
                 entries.push_front(ActiveFunctionsEntry::Function(
                     Function::new(
@@ -107,14 +108,12 @@ impl ActiveFunctions {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
 
-            if let Some(name) = expected_next_function.take() {
-                if name != function.name {
-                    entries.push_front(ActiveFunctionsEntry::Gap);
-                }
+            if expected_next_function != function.name {
+                entries.push_front(ActiveFunctionsEntry::Gap);
             }
 
             expected_next_function =
-                Some(call_id_to_function_name(active_fragment, code));
+                call_id_to_function_name(active_fragment, code);
 
             entries.push_front(ActiveFunctionsEntry::Function(Function::new(
                 function,
