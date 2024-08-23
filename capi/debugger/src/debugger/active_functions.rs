@@ -8,12 +8,8 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
-    Functions {
-        functions: Vec<ActiveFunctionsEntry>,
-    },
-    Message {
-        message: ActiveFunctionsMessage,
-    },
+    Functions { entries: Vec<ActiveFunctionsEntry> },
+    Message { message: ActiveFunctionsMessage },
 }
 
 impl ActiveFunctions {
@@ -104,7 +100,7 @@ impl ActiveFunctions {
         }
 
         Self::Functions {
-            functions: functions_with_active_fragments
+            entries: functions_with_active_fragments
                 .into_iter()
                 .map(|(function, active_fragment)| {
                     Function::new(
