@@ -63,16 +63,16 @@ impl TestInfra {
 }
 
 pub trait ActiveFunctionsExt {
-    fn expect_functions(self) -> Vec<Function>;
+    fn expect_functions(&self) -> Vec<Function>;
 }
 
 impl ActiveFunctionsExt for ActiveFunctions {
-    fn expect_functions(self) -> Vec<Function> {
+    fn expect_functions(&self) -> Vec<Function> {
         let ActiveFunctions::Functions { functions } = self else {
             panic!("Expected active functions to be displayed");
         };
 
-        functions
+        functions.clone()
     }
 }
 
