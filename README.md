@@ -123,7 +123,8 @@ has to choose a specific operation, depending on what specific type they expect
 This isn't a final decision. It just was the easiest place to start in. The goal
 is to make the language statically typed. I expect this to be a gradual process,
 where the compiler understands more and more about types over time, until it can
-select the correct operation itself (and the developer only calls `add` or `+`).
+select the correct operation itself (and the developer can just call `add` or
+`+`).
 
 The following daily thoughts provide more context:
 [2024-07-16](https://capi.hannobraun.com/daily/2024-07-16),
