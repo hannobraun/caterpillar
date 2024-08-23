@@ -10,7 +10,7 @@ use crate::debugger::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
         FragmentExpressionExt,
     },
-    ActiveFunctions,
+    ActiveFunctions, ActiveFunctionsEntry,
 };
 
 #[test]
@@ -159,4 +159,45 @@ fn call_stack_reconstruction_missing_main() {
         panic!()
     };
     assert_eq!(name, "f");
+}
+
+#[test]
+fn display_gaps_in_call_stack() {
+    // Tail call elimination can leave gaps in the call stack. The `main`
+    // function gets reconstructed if missing, and the currently active
+    // instruction couldn't have been optimized away (even if it's a tail call,
+    // it's also the source of an effect; meaning the call hasn't happened yet).
+    // As a result, we are only left with gaps in the middle.
+    //
+    // Eventually, all these gaps should get reconstructed, but for now, they
+    // should at least get detected and made explicit.
+
+    let debugger = init()
+        .provide_source_code(
+            r"
+                main: { |size_x size_y|
+                    f
+                }
+
+                f: { ||
+                    g
+                }
+
+                g: { ||
+                    brk
+                }
+            ",
+        )
+        .run_process()
+        .to_debugger();
+
+    let entries = debugger.active_functions.expect_entries();
+    assert!(matches!(
+        dbg!(entries.as_slice()),
+        &[
+            ActiveFunctionsEntry::Function(_),
+            ActiveFunctionsEntry::Gap,
+            ActiveFunctionsEntry::Function(_)
+        ]
+    ));
 }

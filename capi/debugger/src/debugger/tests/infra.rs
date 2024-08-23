@@ -92,8 +92,11 @@ pub trait ActiveFunctionsEntriesExt {
 impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
     fn functions(&self) -> Vec<Function> {
         self.iter()
-            .map(|entry| match entry {
-                ActiveFunctionsEntry::Function(function) => function.clone(),
+            .filter_map(|entry| match entry {
+                ActiveFunctionsEntry::Function(function) => {
+                    Some(function.clone())
+                }
+                ActiveFunctionsEntry::Gap => None,
             })
             .collect()
     }

@@ -17,18 +17,25 @@ pub fn ActiveFunctions(
         ActiveFunctions::Entries { entries } => {
             let functions = entries
                 .into_iter()
-                .map(|ActiveFunctionsEntry::Function(function)| {
+                .filter_map(|entry| {
+                    let function = match entry {
+                        ActiveFunctionsEntry::Function(function) => function,
+                        ActiveFunctionsEntry::Gap => {
+                            return None;
+                        }
+                    };
+
                     let name = function.name.expect(
                         "Only dealing with top-level functions here; should \
                         be named.",
                     );
 
-                    view! {
+                    Some(view! {
                         <NamedFunction
                             name=name
                             branches=function.branches
                             commands=commands.clone() />
-                    }
+                    })
                 })
                 .collect_view();
 

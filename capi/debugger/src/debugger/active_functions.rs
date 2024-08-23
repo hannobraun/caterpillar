@@ -40,6 +40,7 @@ impl ActiveFunctions {
             process.evaluator().active_instructions().collect();
 
         let mut entries = VecDeque::new();
+        let mut expected_next_function = None;
 
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
@@ -87,6 +88,9 @@ impl ActiveFunctions {
                     None
                 };
 
+                expected_next_function = tail_call
+                    .map(|tail_call| call_id_to_function_name(tail_call, code));
+
                 entries.push_front(ActiveFunctionsEntry::Function(
                     Function::new(
                         main.clone(),
@@ -102,6 +106,16 @@ impl ActiveFunctions {
         while let Some(instruction) = call_stack.pop_front() {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
+
+            if let Some(name) = expected_next_function.take() {
+                if name != function.name {
+                    entries.push_front(ActiveFunctionsEntry::Gap);
+                }
+            }
+
+            expected_next_function =
+                Some(call_id_to_function_name(active_fragment, code));
+
             entries.push_front(ActiveFunctionsEntry::Function(Function::new(
                 function,
                 Some(active_fragment),
@@ -120,6 +134,7 @@ impl ActiveFunctions {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctionsEntry {
     Function(Function),
+    Gap,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -180,4 +195,23 @@ fn instruction_to_function(
         );
 
     (function.clone(), fragment_id)
+}
+
+fn call_id_to_function_name(id: FragmentId, code: &Code) -> Option<String> {
+    let fragment = code
+        .fragments
+        .inner
+        .inner
+        .get(&id)
+        .expect("Fragment referenced by active function must exist.");
+
+    let FragmentKind::Payload {
+        payload: Payload::CallToFunction { name, .. },
+        ..
+    } = &fragment.kind
+    else {
+        return None;
+    };
+
+    Some(name.clone())
 }
