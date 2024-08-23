@@ -14,7 +14,7 @@ pub fn ActiveFunctions(
     commands: CommandsTx,
 ) -> impl IntoView {
     let active_functions = match active_functions {
-        ActiveFunctions::Functions { entries } => {
+        ActiveFunctions::Entries { entries } => {
             let functions = entries
                 .into_iter()
                 .map(|ActiveFunctionsEntry::Function(function)| {

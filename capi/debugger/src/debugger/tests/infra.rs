@@ -69,7 +69,7 @@ pub trait ActiveFunctionsExt {
 
 impl ActiveFunctionsExt for ActiveFunctions {
     fn expect_functions(&self) -> Vec<Function> {
-        let ActiveFunctions::Functions { entries } = self else {
+        let ActiveFunctions::Entries { entries } = self else {
             panic!("Expected active functions to be displayed");
         };
 
