@@ -123,12 +123,14 @@ fn call_stack_reconstruction_missing_main() {
     let debugger = init()
         .provide_source_code(
             r"
-            main: { |size_x size_y|
-                f
-            }
-            f: { ||
-                brk
-            }",
+                main: { |size_x size_y|
+                    f
+                }
+
+                f: { ||
+                    brk
+                }
+            ",
         )
         .run_process()
         .to_debugger();
