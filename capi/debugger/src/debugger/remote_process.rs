@@ -2,7 +2,7 @@ use capi_game_engine::memory::Memory;
 use capi_process::Process;
 use capi_protocol::updates::{Code, Update};
 
-use super::{ActiveFunctions, Debugger};
+use super::Debugger;
 
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
@@ -28,25 +28,10 @@ impl RemoteProcess {
     }
 
     pub fn to_debugger(&self) -> Debugger {
-        let active_functions =
-            ActiveFunctions::new(self.code.as_ref(), self.process.as_ref());
-        let operands = self
-            .process
-            .as_ref()
-            .map(|process| {
-                process
-                    .stack()
-                    .operands_in_current_stack_frame()
-                    .copied()
-                    .collect::<Vec<_>>()
-            })
-            .unwrap_or_default();
-        let memory = self.memory.clone();
-
-        Debugger {
-            active_functions,
-            operands,
-            memory,
-        }
+        Debugger::new(
+            self.code.clone(),
+            self.memory.clone(),
+            self.process.as_ref(),
+        )
     }
 }
