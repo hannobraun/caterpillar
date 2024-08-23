@@ -39,7 +39,7 @@ impl ActiveFunctions {
         let mut call_stack: VecDeque<InstructionAddress> =
             process.evaluator().active_instructions().collect();
 
-        let mut functions_with_active_fragments = VecDeque::new();
+        let mut entries = VecDeque::new();
 
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
@@ -87,20 +87,18 @@ impl ActiveFunctions {
                     None
                 };
 
-                functions_with_active_fragments
-                    .push_front((main.clone(), tail_call));
+                entries.push_front((main.clone(), tail_call));
             }
         }
 
         while let Some(instruction) = call_stack.pop_front() {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
-            functions_with_active_fragments
-                .push_front((function, Some(active_fragment)));
+            entries.push_front((function, Some(active_fragment)));
         }
 
         Self::Entries {
-            entries: functions_with_active_fragments
+            entries: entries
                 .into_iter()
                 .map(|(function, active_fragment)| {
                     Function::new(
