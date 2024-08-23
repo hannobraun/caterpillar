@@ -79,9 +79,9 @@ impl ActiveFunctionsExt for ActiveFunctions {
 
     fn expect_functions(&self) -> Vec<Function> {
         self.expect_entries()
-            .iter()
+            .into_iter()
             .map(|entry| match entry {
-                ActiveFunctionsEntry::Function(function) => function.clone(),
+                ActiveFunctionsEntry::Function(function) => function,
             })
             .collect()
     }
