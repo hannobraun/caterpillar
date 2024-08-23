@@ -17,11 +17,27 @@ pub fn ActiveFunctions(
         ActiveFunctions::Entries { entries } => {
             let functions = entries
                 .into_iter()
-                .filter_map(|entry| {
+                .map(|entry| {
                     let function = match entry {
                         ActiveFunctionsEntry::Function(function) => function,
                         ActiveFunctionsEntry::Gap => {
-                            return None;
+                            return view! {
+                                <span class="inline-block max-w-xl p-4 font-bold text-red-600">
+                                    <p>
+                                        "Functions that should be displayed \
+                                        here are omitted. This is the result \
+                                        of a compiler optimization."
+                                    </p>
+                                    <p class="mt-4">
+                                        "It's possible to figure out which \
+                                        functions are missing here, and still \
+                                        display them correctly. But we're not \
+                                        quite there yet. Sorry for the \
+                                        inconvenience!"
+                                    </p>
+                                </span>
+                            }
+                            .into_view()
                         }
                     };
 
@@ -30,12 +46,12 @@ pub fn ActiveFunctions(
                         be named.",
                     );
 
-                    Some(view! {
+                    view! {
                         <NamedFunction
                             name=name
                             branches=function.branches
                             commands=commands.clone() />
-                    })
+                    }
                 })
                 .collect_view();
 
