@@ -21,8 +21,10 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> Self {
+        let process = Process::default();
+
         Self {
-            process: Process::default(),
+            process,
             acc_time_s: 0.,
             instructions: None,
             arguments: [Value::from(TILES_PER_AXIS); 2],
