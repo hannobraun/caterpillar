@@ -104,7 +104,7 @@
             );
             code_tx.set(code);
 
-            let timestamp = runtime.on_new_code();
+            const timestamp = runtime.on_new_code();
 
             fetchCode(`/${timestamp}`).then((code) => {
                 updateCode(code);
