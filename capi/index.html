@@ -52,7 +52,7 @@
         import initDebugger from "/capi-debugger.js";
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
-        const bytecode = await fetch(`/code`)
+        const code = await fetch(`/code`)
             .then((response) => {
                 return response.arrayBuffer();
             })
@@ -85,13 +85,13 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        runtime.code_write(bytecode.byteLength);
+        runtime.code_write(code.byteLength);
         const code_tx = new Uint8Array(
             runtime.memory.buffer,
             runtime.code_write_ptr(),
             runtime.code_write_len(),
         );
-        code_tx.set(bytecode);
+        code_tx.set(code);
         let timestamp = runtime.on_new_bytecode();
 
         fetch(`/code/${timestamp}`).then(() => {
