@@ -133,7 +133,7 @@ pub fn push_random(random: f64) -> bool {
 }
 
 #[no_mangle]
-pub fn on_new_bytecode() -> u64 {
+pub fn on_new_code() -> u64 {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 

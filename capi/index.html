@@ -92,7 +92,7 @@
             runtime.code_write_len(),
         );
         code_tx.set(code);
-        let timestamp = runtime.on_new_bytecode();
+        let timestamp = runtime.on_new_code();
 
         fetch(`/code/${timestamp}`).then(() => {
             window.location.reload();
