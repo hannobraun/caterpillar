@@ -43,7 +43,6 @@ impl GameEngine {
 
     pub fn on_new_instructions(&mut self, instructions: Instructions) {
         self.instructions = Some(instructions);
-        self.reset();
     }
 
     pub fn on_input(&mut self, value: u8) {
