@@ -85,21 +85,26 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        runtime.code_write(code.byteLength);
-        const code_tx = new Uint8Array(
-            runtime.memory.buffer,
-            runtime.code_write_ptr(),
-            runtime.code_write_len(),
-        );
-        code_tx.set(code);
-        let timestamp = runtime.on_new_code();
-
-        fetch(`/code/${timestamp}`).then(() => {
-            window.location.reload();
-        });
+        updateCode(code);
 
         let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
+
+        function updateCode(code) {
+            runtime.code_write(code.byteLength);
+            const code_tx = new Uint8Array(
+                runtime.memory.buffer,
+                runtime.code_write_ptr(),
+                runtime.code_write_len(),
+            );
+            code_tx.set(code);
+
+            let timestamp = runtime.on_new_code();
+
+            fetch(`/code/${timestamp}`).then(() => {
+                window.location.reload();
+            });
+        }
 
         function mainLoop(currentTimeMs) {
             const deltaTimeMs = currentTimeMs - previousTimeMs;
