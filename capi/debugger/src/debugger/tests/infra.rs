@@ -4,8 +4,8 @@ use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    ActiveFunctions, Debugger, Expression, Function, OtherExpression,
-    RemoteProcess,
+    active_functions::ActiveFunctionsEntry, ActiveFunctions, Debugger,
+    Expression, Function, OtherExpression, RemoteProcess,
 };
 
 pub fn init() -> TestInfra {
@@ -73,7 +73,10 @@ impl ActiveFunctionsExt for ActiveFunctions {
             panic!("Expected active functions to be displayed");
         };
 
-        functions.clone()
+        functions
+            .iter()
+            .map(|ActiveFunctionsEntry::Function(function)| function.clone())
+            .collect()
     }
 
     fn names(&self) -> Vec<String> {

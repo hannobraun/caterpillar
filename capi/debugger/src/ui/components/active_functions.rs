@@ -1,7 +1,7 @@
 use leptos::{component, view, CollectView, IntoView};
 
 use crate::{
-    debugger::ActiveFunctions,
+    debugger::{ActiveFunctions, ActiveFunctionsEntry},
     ui::{
         components::{function::NamedFunction, panel::Panel},
         CommandsTx,
@@ -17,7 +17,7 @@ pub fn ActiveFunctions(
         ActiveFunctions::Functions { functions } => {
             let functions = functions
                 .into_iter()
-                .map(|function| {
+                .map(|ActiveFunctionsEntry::Function(function)| {
                     let name = function.name.expect(
                         "Only dealing with top-level functions here; should \
                         be named.",

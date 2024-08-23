@@ -8,8 +8,12 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
-    Functions { functions: Vec<Function> },
-    Message { message: ActiveFunctionsMessage },
+    Functions {
+        functions: Vec<ActiveFunctionsEntry>,
+    },
+    Message {
+        message: ActiveFunctionsMessage,
+    },
 }
 
 impl ActiveFunctions {
@@ -111,9 +115,15 @@ impl ActiveFunctions {
                         process,
                     )
                 })
+                .map(ActiveFunctionsEntry::Function)
                 .collect(),
         }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ActiveFunctionsEntry {
+    Function(Function),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

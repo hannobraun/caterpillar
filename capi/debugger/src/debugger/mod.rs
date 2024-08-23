@@ -9,7 +9,7 @@ mod remote_process;
 mod tests;
 
 pub use self::{
-    active_functions::ActiveFunctions,
+    active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
     debugger::Debugger,
     expression::{Expression, OtherExpression},
