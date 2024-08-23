@@ -75,7 +75,9 @@ impl ActiveFunctionsExt for ActiveFunctions {
 
         entries
             .iter()
-            .map(|ActiveFunctionsEntry::Function(function)| function.clone())
+            .map(|entry| match entry {
+                ActiveFunctionsEntry::Function(function) => function.clone(),
+            })
             .collect()
     }
 
