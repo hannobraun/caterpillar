@@ -113,19 +113,22 @@ The following daily thoughts provide more context:
 [2024-08-21](https://capi.hannobraun.com/daily/2024-08-21), and
 [2024-08-22](https://capi.hannobraun.com/daily/2024-08-22).
 
-### Untyped now, dynamically typed soon, statically typed later
+### Untyped now, statically typed later
 
-Caterpillar is currently untyped, meaning there is only a single data type,
-32-bit words, and all values are represented using those. This isn't a final
-decision. It's just the easiest place to start at.
+Caterpillar is currently untyped. This means there is only a single data type,
+32-bit words, and all values are represented using those. The developer often
+has to choose a specific operation, depending on what specific type they expect
+(`add_i8` vs `add_i32`, for example).
 
-Hopefully soon, the language will become dynamically typed. Over time, I expect
-that types can be inferred in more and more situations, until the language is
-statically typed.
+This isn't a final decision. It just was the easiest place to start in. The goal
+is to make the language statically typed. I expect this to be a gradual process,
+where the compiler understands more and more about types over time, until it can
+select the correct operation itself (and the developer only calls `add` or `+`).
 
 The following daily thoughts provide more context:
-[2024-07-16](https://capi.hannobraun.com/daily/2024-07-16) and
-[2024-07-17](https://capi.hannobraun.com/daily/2024-07-17).
+[2024-07-16](https://capi.hannobraun.com/daily/2024-07-16),
+[2024-07-17](https://capi.hannobraun.com/daily/2024-07-17), and
+[2024-08-23](https://capi.hannobraun.com/daily/2024-08-23).
 
 ### Caterpillar code is embedded into a host
 
