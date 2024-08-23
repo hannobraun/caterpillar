@@ -135,11 +135,6 @@ fn call_stack_reconstruction_missing_main() {
         .run_process()
         .to_debugger();
 
-    let names = debugger
-        .active_functions
-        .expect_functions()
-        .into_iter()
-        .map(|active_function| active_function.name.unwrap())
-        .collect::<Vec<_>>();
+    let names = debugger.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
 }

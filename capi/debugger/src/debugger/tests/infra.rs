@@ -64,6 +64,7 @@ impl TestInfra {
 
 pub trait ActiveFunctionsExt {
     fn expect_functions(&self) -> Vec<Function>;
+    fn names(&self) -> Vec<String>;
 }
 
 impl ActiveFunctionsExt for ActiveFunctions {
@@ -73,6 +74,13 @@ impl ActiveFunctionsExt for ActiveFunctions {
         };
 
         functions.clone()
+    }
+
+    fn names(&self) -> Vec<String> {
+        self.expect_functions()
+            .into_iter()
+            .filter_map(|function| function.name)
+            .collect()
     }
 }
 
