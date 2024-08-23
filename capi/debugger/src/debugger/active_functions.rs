@@ -112,7 +112,7 @@ impl ActiveFunctions {
         }
 
         Self::Entries {
-            entries: entries.into_iter().collect(),
+            entries: entries.into(),
         }
     }
 }
