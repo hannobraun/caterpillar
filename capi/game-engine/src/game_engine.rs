@@ -36,7 +36,7 @@ impl GameEngine {
         &self.memory
     }
 
-    pub fn on_new_bytecode(&mut self, instructions: Instructions) {
+    pub fn on_new_instructions(&mut self, instructions: Instructions) {
         self.instructions = Some(instructions);
         self.reset();
     }

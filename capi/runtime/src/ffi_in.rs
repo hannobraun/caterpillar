@@ -156,7 +156,9 @@ pub fn on_new_code() -> u64 {
         }
     };
 
-    state.game_engine.on_new_bytecode(code.inner.instructions);
+    state
+        .game_engine
+        .on_new_instructions(code.inner.instructions);
 
     code.timestamp
 }
