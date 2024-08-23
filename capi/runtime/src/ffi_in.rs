@@ -144,7 +144,17 @@ pub fn on_new_code() -> u64 {
     let code = buffer.read_frame();
     let code = str::from_utf8(code)
         .expect("Expecting new code to be valid UTF-8 string");
-    let code: Versioned<Code> = ron::from_str(code).unwrap();
+    let code: Versioned<Code> = match ron::from_str(code) {
+        Ok(code) => code,
+        Err(err) => {
+            panic!(
+                "Error receiving new code: `{err}`\n\"
+                \n\
+                New code:\n\
+                {code}"
+            );
+        }
+    };
 
     state.game_engine.on_new_bytecode(code.inner.instructions);
 
