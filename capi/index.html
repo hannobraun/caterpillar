@@ -52,13 +52,7 @@
         import initDebugger from "/capi-debugger.js";
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
-        const code = await fetch(`/code`)
-            .then((response) => {
-                return response.arrayBuffer();
-            })
-            .then((arrayBuffer) => {
-                return new Uint8Array(arrayBuffer);
-            });
+        const code = await fetchCode();
 
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
@@ -89,6 +83,17 @@
 
         let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
+
+
+        async function fetchCode() {
+            return await fetch(`/code`)
+                .then((response) => {
+                    return response.arrayBuffer();
+                })
+                .then((arrayBuffer) => {
+                    return new Uint8Array(arrayBuffer);
+                });
+        }
 
         function updateCode(code) {
             runtime.code_write(code.byteLength);
