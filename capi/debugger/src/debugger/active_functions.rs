@@ -87,12 +87,14 @@ impl ActiveFunctions {
                     None
                 };
 
-                entries.push_front(Function::new(
-                    main.clone(),
-                    tail_call,
-                    &code.fragments,
-                    &code.source_map,
-                    process,
+                entries.push_front(ActiveFunctionsEntry::Function(
+                    Function::new(
+                        main.clone(),
+                        tail_call,
+                        &code.fragments,
+                        &code.source_map,
+                        process,
+                    ),
                 ));
             }
         }
@@ -100,20 +102,17 @@ impl ActiveFunctions {
         while let Some(instruction) = call_stack.pop_front() {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
-            entries.push_front(Function::new(
+            entries.push_front(ActiveFunctionsEntry::Function(Function::new(
                 function,
                 Some(active_fragment),
                 &code.fragments,
                 &code.source_map,
                 process,
-            ));
+            )));
         }
 
         Self::Entries {
-            entries: entries
-                .into_iter()
-                .map(ActiveFunctionsEntry::Function)
-                .collect(),
+            entries: entries.into_iter().collect(),
         }
     }
 }
