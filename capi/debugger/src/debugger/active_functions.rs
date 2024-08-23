@@ -66,8 +66,29 @@ impl ActiveFunctions {
                     );
                 };
 
+                let tail_call = if main.branches.len() == 1 {
+                    if let Some(branch) = main.branches.first() {
+                        let mut tail_call = None;
+
+                        for fragment in
+                            code.fragments.inner.iter_from(branch.start)
+                        {
+                            match fragment.kind {
+                                FragmentKind::Terminator => {}
+                                _ => tail_call = Some(fragment.id()),
+                            }
+                        }
+
+                        tail_call
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
+
                 functions_with_active_fragments
-                    .push_front((main.clone(), None));
+                    .push_front((main.clone(), tail_call));
             }
         }
 

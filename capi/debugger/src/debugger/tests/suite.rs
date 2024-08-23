@@ -1,4 +1,7 @@
-use capi_compiler::intrinsics::Intrinsic;
+use capi_compiler::{
+    fragments::{FragmentKind, Payload},
+    intrinsics::Intrinsic,
+};
 use capi_process::Effect;
 
 use crate::debugger::{
@@ -137,4 +140,24 @@ fn call_stack_reconstruction_missing_main() {
 
     let names = debugger.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
+
+    let tail_call = {
+        let id = debugger
+            .active_functions
+            .expect_functions()
+            .last()
+            .unwrap()
+            .active_fragment
+            .unwrap();
+        let code = debugger.code.unwrap();
+        code.fragments.inner.inner.get(&id).unwrap().clone()
+    };
+    let FragmentKind::Payload {
+        payload: Payload::CallToFunction { name, .. },
+        ..
+    } = tail_call.kind
+    else {
+        panic!()
+    };
+    assert_eq!(name, "f");
 }
