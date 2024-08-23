@@ -52,7 +52,7 @@
         import initDebugger from "/capi-debugger.js";
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
-        const code = await fetchCode();
+        const code = await fetchCode("");
 
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
@@ -85,8 +85,8 @@
         window.requestAnimationFrame(mainLoop);
 
 
-        async function fetchCode() {
-            return await fetch(`/code`)
+        async function fetchCode(argument) {
+            return await fetch(`/code${argument}`)
                 .then((response) => {
                     return response.arrayBuffer();
                 })
