@@ -60,17 +60,18 @@ fn basic_call_stack() {
     let debugger = init()
         .provide_source_code(
             r"
-            main: { |size_x size_y|
-                f
-                nop # make sure the previous call is not a tail call
-            }
-            f: { ||
-                g
-                nop # make sure the previous call is not a tail call
-            }
-            g: { ||
-                brk
-            }",
+                main: { |size_x size_y|
+                    f
+                    nop # make sure the previous call is not a tail call
+                }
+                f: { ||
+                    g
+                    nop # make sure the previous call is not a tail call
+                }
+                g: { ||
+                    brk
+                }
+            ",
         )
         .run_process()
         .to_debugger();
