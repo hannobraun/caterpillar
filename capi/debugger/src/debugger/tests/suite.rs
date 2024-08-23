@@ -7,7 +7,8 @@ use capi_process::Effect;
 use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
-        init, ActiveFunctionsExt, ExpressionExt, FragmentExpressionExt,
+        init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
+        FragmentExpressionExt,
     },
     ActiveFunctions,
 };
@@ -99,7 +100,8 @@ fn stopped_at_code_within_block() {
 
     let expression = debugger
         .active_functions
-        .expect_functions()
+        .expect_entries()
+        .functions()
         .remove(0)
         .branches
         .remove(0)
@@ -140,7 +142,8 @@ fn call_stack_reconstruction_missing_main() {
     let tail_call = {
         let id = debugger
             .active_functions
-            .expect_functions()
+            .expect_entries()
+            .functions()
             .last()
             .unwrap()
             .active_fragment
