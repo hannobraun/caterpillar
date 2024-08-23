@@ -6,6 +6,9 @@ use super::ActiveFunctions;
 
 #[derive(Clone, Debug)]
 pub struct Debugger {
+    #[allow(unused)] // currently only used in test suite; remove once used
+    pub code: Option<Code>,
+
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
     pub memory: Option<Memory>,
@@ -29,6 +32,7 @@ impl Debugger {
             .unwrap_or_default();
 
         Self {
+            code,
             active_functions,
             operands,
             memory,
