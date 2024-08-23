@@ -106,7 +106,7 @@
 
             let timestamp = runtime.on_new_code();
 
-            fetch(`/code/${timestamp}`).then(() => {
+            fetchCode(`/${timestamp}`).then(() => {
                 window.location.reload();
             });
         }
