@@ -87,28 +87,31 @@ impl ActiveFunctions {
                     None
                 };
 
-                entries.push_front((main.clone(), tail_call));
+                entries.push_front(Function::new(
+                    main.clone(),
+                    tail_call,
+                    &code.fragments,
+                    &code.source_map,
+                    process,
+                ));
             }
         }
 
         while let Some(instruction) = call_stack.pop_front() {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
-            entries.push_front((function, Some(active_fragment)));
+            entries.push_front(Function::new(
+                function,
+                Some(active_fragment),
+                &code.fragments,
+                &code.source_map,
+                process,
+            ));
         }
 
         Self::Entries {
             entries: entries
                 .into_iter()
-                .map(|(function, active_fragment)| {
-                    Function::new(
-                        function,
-                        active_fragment,
-                        &code.fragments,
-                        &code.source_map,
-                        process,
-                    )
-                })
                 .map(ActiveFunctionsEntry::Function)
                 .collect(),
         }
