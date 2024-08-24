@@ -39,7 +39,18 @@ impl Breakpoints {
             self.ephemeral_at(instruction) || self.durable_at(instruction);
 
         if self.ephemeral_at(instruction) {
-            self.ephemeral.remove(instruction);
+            // The debugger sets ephemeral breakpoints to implement its "Step"
+            // functionality. It might only set one such breakpoint, that needs
+            // to be cleared once it's hit.
+            //
+            // But if the next step is into a branch, the debugger might not
+            // know where exactly it's going to go, and might set breakpoints
+            // into all of the branches.
+            //
+            // We don't want those breakpoints to hang around, to stop execution
+            // at some later point. Therefore, we clear all of them when a
+            // single one is hit.
+            self.ephemeral.clear();
         }
 
         should_stop
