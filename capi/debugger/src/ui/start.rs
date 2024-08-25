@@ -28,7 +28,7 @@ pub fn start(
     });
 
     leptos::spawn_local(async move {
-        let code = Request::get("/code").send().await.unwrap();
+        let code = Request::get("/code").send().await;
         on_new_code(code, &mut remote_process).await;
 
         loop {
@@ -43,8 +43,11 @@ pub fn start(
     });
 }
 
-async fn on_new_code(code: Response, remote_process: &mut RemoteProcess) {
-    let code = code.text().await.unwrap();
+async fn on_new_code(
+    code: Result<Response, gloo_net::Error>,
+    remote_process: &mut RemoteProcess,
+) {
+    let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
 
     remote_process.on_code_update(code.inner);
