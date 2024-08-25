@@ -38,7 +38,7 @@ pub fn start(
                 break;
             };
 
-            on_update(update, &mut remote_process, &debugger_write)
+            on_process_update(update, &mut remote_process, &debugger_write)
         }
     });
 }
@@ -50,7 +50,7 @@ async fn on_new_code(code: Response, remote_process: &mut RemoteProcess) {
     remote_process.on_code_update(code.inner);
 }
 
-fn on_update(
+fn on_process_update(
     update: Vec<u8>,
     remote_process: &mut RemoteProcess,
     debugger_write: &WriteSignal<Debugger>,
