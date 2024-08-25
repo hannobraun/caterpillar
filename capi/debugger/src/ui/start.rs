@@ -2,7 +2,7 @@ use capi_protocol::{
     updates::{Code, SerializedUpdate, Update},
     Versioned,
 };
-use gloo_net::http::Request;
+use gloo_net::http::{Request, Response};
 use leptos::{create_signal, SignalSet, WriteSignal};
 use tokio::sync::mpsc;
 
@@ -29,10 +29,7 @@ pub fn start(
 
     leptos::spawn_local(async move {
         let code = Request::get("/code").send().await.unwrap();
-        let code = code.text().await.unwrap();
-        let code: Versioned<Code> = ron::from_str(&code).unwrap();
-
-        remote_process.on_code_update(code.inner);
+        on_new_code(code, &mut remote_process).await;
 
         loop {
             let Some(update) = updates_rx.recv().await else {
@@ -44,6 +41,13 @@ pub fn start(
             on_update(update, &mut remote_process, &debugger_write)
         }
     });
+}
+
+async fn on_new_code(code: Response, remote_process: &mut RemoteProcess) {
+    let code = code.text().await.unwrap();
+    let code: Versioned<Code> = ron::from_str(&code).unwrap();
+
+    remote_process.on_code_update(code.inner);
 }
 
 fn on_update(
