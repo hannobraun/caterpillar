@@ -185,3 +185,43 @@ fn display_gap_where_call_stack_is_missing_single_branch_function() {
         ]
     ));
 }
+
+#[test]
+fn display_gap_where_call_stack_is_missing_multi_branch_function() {
+    // Tail call elimination can leave gaps in the call stack. Some simpler
+    // cases are already getting reconstructed, but right now, we're not doing
+    // that yet for functions with multiple branches.
+
+    let debugger = init()
+        .provide_source_code(
+            r"
+                main: {
+                    |0 0|
+                        f
+
+                    |size_x size_y|
+                        f
+                }
+
+                f: { ||
+                    g
+                }
+
+                g: { ||
+                    brk
+                }
+            ",
+        )
+        .run_process()
+        .to_debugger();
+
+    let entries = debugger.active_functions.expect_entries();
+    assert!(matches!(
+        dbg!(entries.as_slice()),
+        &[
+            ActiveFunctionsEntry::Function(_),
+            ActiveFunctionsEntry::Gap,
+            ActiveFunctionsEntry::Function(_)
+        ]
+    ));
+}
