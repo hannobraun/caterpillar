@@ -54,7 +54,11 @@ impl ActiveFunctions {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
 
-            if expected_next_function != function.name {
+            if let Some(expected_name) = &expected_next_function {
+                if Some(expected_name) != function.name.as_ref() {
+                    entries.push_front(ActiveFunctionsEntry::Gap);
+                }
+            } else {
                 entries.push_front(ActiveFunctionsEntry::Gap);
             }
 
