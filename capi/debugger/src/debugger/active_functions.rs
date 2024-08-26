@@ -158,7 +158,7 @@ fn reconstruct_function(
     );
 
     let FragmentKind::Payload {
-        payload: Payload::Function { function: main },
+        payload: Payload::Function { function },
         ..
     } = &function_fragment.kind
     else {
@@ -168,8 +168,8 @@ fn reconstruct_function(
         );
     };
 
-    let tail_call = if main.branches.len() == 1 {
-        if let Some(branch) = main.branches.first() {
+    let tail_call = if function.branches.len() == 1 {
+        if let Some(branch) = function.branches.first() {
             let mut tail_call = None;
 
             for fragment in code.fragments.inner.iter_from(branch.start) {
@@ -191,7 +191,7 @@ fn reconstruct_function(
         .and_then(|tail_call| call_id_to_function_name(tail_call, code));
 
     entries.push_front(ActiveFunctionsEntry::Function(Function::new(
-        main.clone(),
+        function.clone(),
         tail_call,
         &code.fragments,
         &code.source_map,
