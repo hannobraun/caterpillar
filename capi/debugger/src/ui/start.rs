@@ -38,7 +38,7 @@ pub fn start(
                 break;
             };
 
-            on_process_update(update, &mut remote_process, &debugger_write)
+            on_process_update(update, &mut remote_process, &debugger_write);
         }
     });
 }
