@@ -146,7 +146,7 @@ fn call_stack_reconstruction_missing_main() {
 }
 
 #[test]
-fn display_gaps_in_call_stack() {
+fn display_gap_where_call_stack_is_missing_single_branch_function() {
     // Tail call elimination can leave gaps in the call stack. The `main`
     // function gets reconstructed if missing, and the currently active
     // instruction couldn't have been optimized away. (Even if it's a tail call,
