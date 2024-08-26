@@ -146,21 +146,17 @@ fn call_stack_reconstruction_missing_main() {
 }
 
 #[test]
-fn display_gap_where_call_stack_is_missing_single_branch_function() {
-    // Tail call elimination can leave gaps in the call stack. The `main`
-    // function gets reconstructed if missing, and the currently active
-    // instruction couldn't have been optimized away. (Even if it's a tail call,
-    // it's also the source of an effect; meaning the call hasn't happened yet.)
-    // As a result, we are only left with gaps in the middle.
-    //
-    // Eventually, all these gaps should get reconstructed, but for now, they
-    // should at least get detected and made explicit.
+fn call_stack_reconstruction_missing_single_branch_function() {
+    // Tail call elimination can leave gaps in the call stack. If the missing
+    // functions have only a single branch each, it is possible to add them back
+    // without any additional hints being required.
 
     let debugger = init()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
                     f
+                    nop # make sure the previous call is not a tail call
                 }
 
                 f: { ||
@@ -175,15 +171,16 @@ fn display_gap_where_call_stack_is_missing_single_branch_function() {
         .run_process()
         .to_debugger();
 
-    let entries = debugger.active_functions.expect_entries();
-    assert!(matches!(
-        dbg!(entries.as_slice()),
-        &[
-            ActiveFunctionsEntry::Function(_),
-            ActiveFunctionsEntry::Gap,
-            ActiveFunctionsEntry::Function(_)
-        ]
-    ));
+    let names = debugger.active_functions.names();
+    assert_eq!(names, vec!["g", "f", "main"]);
+
+    debugger
+        .active_functions
+        .expect_entries()
+        .functions()
+        .with_name("f")
+        .active_fragment(&debugger)
+        .expect_call_to("g");
 }
 
 #[test]

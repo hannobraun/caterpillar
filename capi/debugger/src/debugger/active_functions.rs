@@ -56,7 +56,12 @@ impl ActiveFunctions {
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {
-                    entries.push_front(ActiveFunctionsEntry::Gap);
+                    reconstruct_function(
+                        expected_name,
+                        &mut entries,
+                        code,
+                        process,
+                    );
                 }
             } else {
                 entries.push_front(ActiveFunctionsEntry::Gap);
