@@ -8,7 +8,7 @@ use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
-        FragmentExpressionExt,
+        FragmentExpressionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
 };
@@ -144,8 +144,7 @@ fn call_stack_reconstruction_missing_main() {
             .active_functions
             .expect_entries()
             .functions()
-            .last()
-            .unwrap()
+            .with_name("main")
             .active_fragment
             .unwrap();
         let code = debugger.code.unwrap();

@@ -102,6 +102,18 @@ impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
     }
 }
 
+pub trait FunctionsExt {
+    fn with_name(self, name: &str) -> Function;
+}
+
+impl FunctionsExt for Vec<Function> {
+    fn with_name(self, name: &str) -> Function {
+        self.into_iter()
+            .find(|function| function.name.as_deref() == Some(name))
+            .unwrap()
+    }
+}
+
 pub trait ExpressionExt {
     fn expect_block(self) -> Vec<Expression>;
     fn expect_other(self) -> OtherExpression;
