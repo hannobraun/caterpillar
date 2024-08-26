@@ -20,7 +20,9 @@ pub fn start(
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger debugger=debugger_read commands=commands_tx />
+            <Debugger
+                debugger=debugger_read
+                commands=commands_tx />
         }
     });
 
