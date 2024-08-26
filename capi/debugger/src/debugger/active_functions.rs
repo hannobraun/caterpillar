@@ -40,7 +40,7 @@ impl ActiveFunctions {
             process.evaluator().active_instructions().collect();
 
         let mut entries = VecDeque::new();
-        let mut expected_next_function = None;
+        let mut expected_next_function = Some("main".to_string());
 
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
