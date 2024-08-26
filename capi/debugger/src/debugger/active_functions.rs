@@ -162,7 +162,7 @@ fn reconstruct_function(
     } = &function_fragment.kind
     else {
         panic!(
-            "Got fragment by specifically searching for `main` function. \
+            "Got fragment by specifically searching for a function (`{name}`). \
             Expecting it to be a function fragment."
         );
     };
