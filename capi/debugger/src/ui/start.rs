@@ -3,13 +3,10 @@ use capi_protocol::{
     Versioned,
 };
 use gloo_net::http::{Request, Response};
-use leptos::{create_signal, SignalSet, WriteSignal};
+use leptos::{create_signal, SignalSet};
 use tokio::{select, sync::mpsc};
 
-use crate::{
-    debugger::{Debugger, RemoteProcess},
-    ui::components::debugger::Debugger,
-};
+use crate::{debugger::RemoteProcess, ui::components::debugger::Debugger};
 
 use super::CommandsTx;
 
@@ -35,7 +32,6 @@ pub fn start(
             select! {
                 code = Request::get(&format!("/code/{timestamp}")).send() => {
                     timestamp = on_new_code(code, &mut remote_process).await;
-                    debugger_write.set(remote_process.to_debugger());
                 }
                 update = updates_rx.recv() => {
                     let Some(update) = update else {
@@ -47,10 +43,11 @@ pub fn start(
                     on_process_update(
                         update,
                         &mut remote_process,
-                        &debugger_write,
                     );
                 }
             }
+
+            debugger_write.set(remote_process.to_debugger());
         }
     });
 }
@@ -67,13 +64,7 @@ async fn on_new_code(
     code.timestamp
 }
 
-fn on_process_update(
-    update: Vec<u8>,
-    remote_process: &mut RemoteProcess,
-    debugger_write: &WriteSignal<Debugger>,
-) {
+fn on_process_update(update: Vec<u8>, remote_process: &mut RemoteProcess) {
     let update = Update::deserialize(update);
     remote_process.on_runtime_update(update);
-
-    debugger_write.set(remote_process.to_debugger());
 }
