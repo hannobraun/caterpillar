@@ -45,62 +45,8 @@ impl ActiveFunctions {
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
             if outer.name.as_deref() != Some("main") {
-                let main_id = code
-                    .fragments
-                    .inner
-                    .find_function_by_name("main")
-                    .expect("Expecting `main` function to exist.");
-                let main_fragment =
-                    code.fragments.inner.inner.get(&main_id).expect(
-                        "Just got this `FragmentId` by searching for a \
-                        function. Must refer to a valid fragment.",
-                    );
-
-                let FragmentKind::Payload {
-                    payload: Payload::Function { function: main },
-                    ..
-                } = &main_fragment.kind
-                else {
-                    panic!(
-                        "Got fragment by specifically searching for `main` \
-                        function. Expecting it to be a function fragment."
-                    );
-                };
-
-                let tail_call = if main.branches.len() == 1 {
-                    if let Some(branch) = main.branches.first() {
-                        let mut tail_call = None;
-
-                        for fragment in
-                            code.fragments.inner.iter_from(branch.start)
-                        {
-                            match fragment.kind {
-                                FragmentKind::Terminator => {}
-                                _ => tail_call = Some(fragment.id()),
-                            }
-                        }
-
-                        tail_call
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                };
-
-                expected_next_function = tail_call.and_then(|tail_call| {
-                    call_id_to_function_name(tail_call, code)
-                });
-
-                entries.push_front(ActiveFunctionsEntry::Function(
-                    Function::new(
-                        main.clone(),
-                        tail_call,
-                        &code.fragments,
-                        &code.source_map,
-                        process,
-                    ),
-                ));
+                expected_next_function =
+                    reconstruct_function(&mut entries, code, process);
             }
         }
 
@@ -194,6 +140,64 @@ fn instruction_to_function(
         );
 
     (function.clone(), fragment_id)
+}
+
+fn reconstruct_function(
+    entries: &mut VecDeque<ActiveFunctionsEntry>,
+    code: &Code,
+    process: &Process,
+) -> Option<String> {
+    let main_id = code
+        .fragments
+        .inner
+        .find_function_by_name("main")
+        .expect("Expecting `main` function to exist.");
+    let main_fragment = code.fragments.inner.inner.get(&main_id).expect(
+        "Just got this `FragmentId` by searching for a function. Must refer to a valid fragment.",
+    );
+
+    let FragmentKind::Payload {
+        payload: Payload::Function { function: main },
+        ..
+    } = &main_fragment.kind
+    else {
+        panic!(
+            "Got fragment by specifically searching for `main` function. \
+            Expecting it to be a function fragment."
+        );
+    };
+
+    let tail_call = if main.branches.len() == 1 {
+        if let Some(branch) = main.branches.first() {
+            let mut tail_call = None;
+
+            for fragment in code.fragments.inner.iter_from(branch.start) {
+                match fragment.kind {
+                    FragmentKind::Terminator => {}
+                    _ => tail_call = Some(fragment.id()),
+                }
+            }
+
+            tail_call
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+
+    let expected_next_function = tail_call
+        .and_then(|tail_call| call_id_to_function_name(tail_call, code));
+
+    entries.push_front(ActiveFunctionsEntry::Function(Function::new(
+        main.clone(),
+        tail_call,
+        &code.fragments,
+        &code.source_map,
+        process,
+    )));
+
+    expected_next_function
 }
 
 fn call_id_to_function_name(id: FragmentId, code: &Code) -> Option<String> {
