@@ -153,14 +153,14 @@ fn reconstruct_function(
         .inner
         .find_function_by_name(name)
         .expect("Expecting `main` function to exist.");
-    let main_fragment = code.fragments.inner.inner.get(&function_id).expect(
+    let function_fragment = code.fragments.inner.inner.get(&function_id).expect(
         "Just got this `FragmentId` by searching for a function. Must refer to a valid fragment.",
     );
 
     let FragmentKind::Payload {
         payload: Payload::Function { function: main },
         ..
-    } = &main_fragment.kind
+    } = &function_fragment.kind
     else {
         panic!(
             "Got fragment by specifically searching for `main` function. \
