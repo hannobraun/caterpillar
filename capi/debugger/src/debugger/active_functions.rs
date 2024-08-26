@@ -46,7 +46,7 @@ impl ActiveFunctions {
             let (outer, _) = instruction_to_function(outer, code);
             if outer.name.as_deref() != Some("main") {
                 expected_next_function =
-                    reconstruct_function(&mut entries, code, process);
+                    reconstruct_function("main", &mut entries, code, process);
             }
         }
 
@@ -143,6 +143,7 @@ fn instruction_to_function(
 }
 
 fn reconstruct_function(
+    name: &str,
     entries: &mut VecDeque<ActiveFunctionsEntry>,
     code: &Code,
     process: &Process,
@@ -150,7 +151,7 @@ fn reconstruct_function(
     let main_id = code
         .fragments
         .inner
-        .find_function_by_name("main")
+        .find_function_by_name(name)
         .expect("Expecting `main` function to exist.");
     let main_fragment = code.fragments.inner.inner.get(&main_id).expect(
         "Just got this `FragmentId` by searching for a function. Must refer to a valid fragment.",
