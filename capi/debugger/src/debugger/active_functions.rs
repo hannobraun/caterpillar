@@ -44,7 +44,7 @@ impl ActiveFunctions {
 
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
-            if outer.name.as_deref() != Some("main") {
+            if outer.name != expected_next_function {
                 expected_next_function =
                     reconstruct_function("main", &mut entries, code, process);
             }
