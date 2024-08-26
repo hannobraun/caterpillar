@@ -150,7 +150,7 @@ fn reconstruct_function(
 ) -> Option<String> {
     let Some(function_id) = code.fragments.inner.find_function_by_name(name)
     else {
-        panic!("Expecting `main` function to exist.");
+        panic!("Expecting function `{name}` to exist.");
     };
     let function_fragment = code.fragments.inner.inner.get(&function_id).expect(
         "Just got this `FragmentId` by searching for a function. Must refer to a valid fragment.",
