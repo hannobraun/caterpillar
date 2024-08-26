@@ -1,4 +1,8 @@
-use capi_compiler::{compile, fragments, intrinsics::Intrinsic};
+use capi_compiler::{
+    compile,
+    fragments::{self, Fragment},
+    intrinsics::Intrinsic,
+};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -111,6 +115,18 @@ impl FunctionsExt for Vec<Function> {
         self.into_iter()
             .find(|function| function.name.as_deref() == Some(name))
             .unwrap()
+    }
+}
+
+pub trait FunctionExt {
+    fn active_fragment(self, debugger: &Debugger) -> Fragment;
+}
+
+impl FunctionExt for Function {
+    fn active_fragment(self, debugger: &Debugger) -> Fragment {
+        let fragments = &debugger.code.as_ref().unwrap().fragments;
+        let id = self.active_fragment.unwrap();
+        fragments.inner.inner.get(&id).cloned().unwrap()
     }
 }
 

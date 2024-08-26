@@ -8,7 +8,7 @@ use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
-        FragmentExpressionExt, FunctionsExt,
+        FragmentExpressionExt, FunctionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
 };
@@ -140,15 +140,12 @@ fn call_stack_reconstruction_missing_main() {
     assert_eq!(names, vec!["f", "main"]);
 
     let tail_call = {
-        let id = debugger
+        debugger
             .active_functions
             .expect_entries()
             .functions()
             .with_name("main")
-            .active_fragment
-            .unwrap();
-        let code = debugger.code.unwrap();
-        code.fragments.inner.inner.get(&id).unwrap().clone()
+            .active_fragment(&debugger)
     };
     let FragmentKind::Payload {
         payload: Payload::CallToFunction { name, .. },
