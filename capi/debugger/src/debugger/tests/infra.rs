@@ -1,6 +1,6 @@
 use capi_compiler::{
     compile,
-    fragments::{self, Fragment},
+    fragments::{self, Fragment, FragmentKind, Payload},
     intrinsics::Intrinsic,
 };
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
@@ -127,6 +127,23 @@ impl FunctionExt for Function {
         let fragments = &debugger.code.as_ref().unwrap().fragments;
         let id = self.active_fragment.unwrap();
         fragments.inner.inner.get(&id).cloned().unwrap()
+    }
+}
+
+pub trait FragmentExt {
+    fn expect_call_to(self, name: &str);
+}
+
+impl FragmentExt for Fragment {
+    fn expect_call_to(self, called_fn: &str) {
+        let FragmentKind::Payload {
+            payload: Payload::CallToFunction { name, .. },
+            ..
+        } = self.kind
+        else {
+            panic!()
+        };
+        assert_eq!(called_fn, name);
     }
 }
 

@@ -1,14 +1,11 @@
-use capi_compiler::{
-    fragments::{FragmentKind, Payload},
-    intrinsics::Intrinsic,
-};
+use capi_compiler::intrinsics::Intrinsic;
 use capi_process::Effect;
 
 use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
-        FragmentExpressionExt, FunctionExt, FunctionsExt,
+        FragmentExpressionExt, FragmentExt, FunctionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
 };
@@ -139,20 +136,13 @@ fn call_stack_reconstruction_missing_main() {
     let names = debugger.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
 
-    let tail_call = debugger
+    debugger
         .active_functions
         .expect_entries()
         .functions()
         .with_name("main")
-        .active_fragment(&debugger);
-    let FragmentKind::Payload {
-        payload: Payload::CallToFunction { name, .. },
-        ..
-    } = tail_call.kind
-    else {
-        panic!()
-    };
-    assert_eq!(name, "f");
+        .active_fragment(&debugger)
+        .expect_call_to("f");
 }
 
 #[test]
