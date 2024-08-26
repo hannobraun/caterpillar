@@ -80,6 +80,26 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
+### Simplicity over familiarity and short-term convenience
+
+Caterpillar strives to be simple, even where that is unfamiliar to most
+developers (because it's different to other languages), and even where that
+might be inconvenient in some situations.
+
+Simplicity makes the language easier to understand. For the developer, but also
+for tooling, which can then provide a better experience to the developer. Unless
+this advantage is clearly outweighed by other factors, the simple design should
+be chosen.
+
+An example of this is not supporting early returns. Functions in Caterpillar (or
+rather their branches, to be precise) have a single exit point, which can make
+code easier to follow for the developer, but especially allows the debugger to
+do call stack reconstruction.
+
+The following daily thoughts provide more context:
+[2024-08-25](https://capi.hannobraun.com/daily/2024-08-25) and
+[2024-08-26](https://capi.hannobraun.com/daily/2024-08-26).
+
 ### Minimalism over convenience, for now
 
 For the time being, to make iterating on the language easier, simplicity trumps
