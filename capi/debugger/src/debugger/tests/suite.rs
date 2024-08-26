@@ -139,14 +139,12 @@ fn call_stack_reconstruction_missing_main() {
     let names = debugger.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
 
-    let tail_call = {
-        debugger
-            .active_functions
-            .expect_entries()
-            .functions()
-            .with_name("main")
-            .active_fragment(&debugger)
-    };
+    let tail_call = debugger
+        .active_functions
+        .expect_entries()
+        .functions()
+        .with_name("main")
+        .active_fragment(&debugger);
     let FragmentKind::Payload {
         payload: Payload::CallToFunction { name, .. },
         ..
