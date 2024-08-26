@@ -31,4 +31,4 @@ features = ["csr"]
 
 [dependencies.tokio]
 version = "*"
-features = ["sync"]
+features = ["macros", "sync"]
