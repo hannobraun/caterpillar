@@ -4,7 +4,7 @@ use capi_protocol::{
 };
 use gloo_net::http::{Request, Response};
 use leptos::{create_signal, SignalSet, WriteSignal};
-use tokio::sync::mpsc;
+use tokio::{select, sync::mpsc};
 
 use crate::{
     debugger::{Debugger, RemoteProcess},
@@ -29,16 +29,28 @@ pub fn start(
 
     leptos::spawn_local(async move {
         let code = Request::get("/code").send().await;
-        on_new_code(code, &mut remote_process).await;
+        let mut timestamp = on_new_code(code, &mut remote_process).await;
 
         loop {
-            let Some(update) = updates_rx.recv().await else {
-                // This means the other end has hung up. Nothing we can do,
-                // except end this task too.
-                break;
-            };
+            select! {
+                code = Request::get(&format!("/code/{timestamp}")).send() => {
+                    timestamp = on_new_code(code, &mut remote_process).await;
+                    debugger_write.set(remote_process.to_debugger());
+                }
+                update = updates_rx.recv() => {
+                    let Some(update) = update else {
+                        // This means the other end has hung up. Nothing we can
+                        // do, except end this task too.
+                        break;
+                    };
 
-            on_process_update(update, &mut remote_process, &debugger_write);
+                    on_process_update(
+                        update,
+                        &mut remote_process,
+                        &debugger_write,
+                    );
+                }
+            }
         }
     });
 }
