@@ -46,11 +46,13 @@ pub fn start(
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     remote_process: &mut RemoteProcess,
-) {
+) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
 
     remote_process.on_code_update(code.inner);
+
+    code.timestamp
 }
 
 fn on_process_update(
