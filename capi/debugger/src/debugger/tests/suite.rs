@@ -184,7 +184,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
 }
 
 #[test]
-fn display_gap_where_call_stack_is_missing_multi_branch_function() {
+fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
     // Tail call elimination can leave gaps in the call stack. Some simpler
     // cases are already getting reconstructed, but right now, we're not doing
     // that yet for functions with multiple branches.
