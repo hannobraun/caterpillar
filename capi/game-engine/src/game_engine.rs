@@ -86,7 +86,7 @@ impl GameEngine {
     pub fn run_until_end_of_frame(
         &mut self,
         delta_time_s: f64,
-        _current_time_s: f64,
+        current_time_s: f64,
         pixels: &mut [u8],
     ) -> bool {
         // For now, we're targeting an unambitious 30 fps.
@@ -97,7 +97,7 @@ impl GameEngine {
         if self.acc_time_s >= frame_time_s {
             // It's time to run another frame!
             self.acc_time_s -= frame_time_s;
-            self.last_frame_start_s = Some(_current_time_s);
+            self.last_frame_start_s = Some(current_time_s);
 
             if self.acc_time_s >= frame_time_s {
                 // We subtracted the current frame from the accumulated time,
