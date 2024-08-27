@@ -85,7 +85,7 @@ impl GameEngine {
         &mut self,
         delta_time_s: f64,
         pixels: &mut [u8],
-    ) {
+    ) -> bool {
         // For now, we're targeting an unambitious 30 fps.
         let frame_time_s = 1. / 30.;
 
@@ -109,12 +109,12 @@ impl GameEngine {
             }
         } else {
             // It's not time to run another frame yet.
-            return;
+            return false;
         }
 
         while self.process.can_step() {
             let Some(instructions) = &self.instructions else {
-                return;
+                return true;
             };
 
             self.process.step(instructions);
@@ -142,6 +142,8 @@ impl GameEngine {
                 }
             }
         }
+
+        true
     }
 
     fn handle_effect(
