@@ -26,6 +26,7 @@ async fn main() -> anyhow::Result<()> {
         now2 = Instant::now();
 
         while game_engine.push_random(random()) {}
+
         if !game_engine
             .run_until_end_of_frame(elapsed.as_secs_f64(), &mut pixels)
         {
