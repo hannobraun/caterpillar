@@ -12,6 +12,7 @@ pub struct GameEngine {
     pub process: Process,
 
     acc_time_s: f64,
+    last_frame_start_s: Option<f64>,
     instructions: Option<Instructions>,
     arguments: [Value; 2],
     memory: Memory,
@@ -29,6 +30,7 @@ impl GameEngine {
         Self {
             process,
             acc_time_s: 0.,
+            last_frame_start_s: None,
             instructions: None,
             arguments,
             memory: Memory::default(),
@@ -95,6 +97,7 @@ impl GameEngine {
         if self.acc_time_s >= frame_time_s {
             // It's time to run another frame!
             self.acc_time_s -= frame_time_s;
+            self.last_frame_start_s = Some(_current_time_s);
 
             if self.acc_time_s >= frame_time_s {
                 // We subtracted the current frame from the accumulated time,
