@@ -84,6 +84,7 @@ impl GameEngine {
     pub fn run_until_end_of_frame(
         &mut self,
         delta_time_s: f64,
+        _current_time_s: f64,
         pixels: &mut [u8],
     ) -> bool {
         // For now, we're targeting an unambitious 30 fps.
