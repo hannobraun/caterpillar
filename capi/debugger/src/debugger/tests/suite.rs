@@ -218,7 +218,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
         &[
             ActiveFunctionsEntry::Function(_),
             ActiveFunctionsEntry::Gap,
-            ActiveFunctionsEntry::Function(_)
+            ActiveFunctionsEntry::Function(_),
         ]
     ));
 }
