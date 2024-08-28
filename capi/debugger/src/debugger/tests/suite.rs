@@ -222,3 +222,49 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
         ]
     ));
 }
+
+#[test]
+#[ignore = "known bug"]
+fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
+    // Tail call elimination can leave gaps in the call stack. Some simpler
+    // cases are already getting reconstructed, but right now, we're not doing
+    // that yet for anonymous functions with multiple branches.
+
+    let debugger = init()
+        .provide_source_code(
+            r"
+                main: { |size_x size_y|
+                    0 f
+                }
+
+                f: {
+                    |0|
+                        g
+
+                    |n|
+                        g
+                }
+
+                g: { ||
+                    h
+                }
+
+                h: { ||
+                    brk
+                }
+            ",
+        )
+        .run_process()
+        .to_debugger();
+
+    let entries = debugger.active_functions.expect_entries();
+    assert!(matches!(
+        dbg!(entries.as_slice()),
+        &[
+            ActiveFunctionsEntry::Function(_),
+            ActiveFunctionsEntry::Function(_),
+            ActiveFunctionsEntry::Gap,
+            ActiveFunctionsEntry::Function(_),
+        ]
+    ));
+}
