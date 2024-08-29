@@ -102,6 +102,7 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
             self.effects.trigger(Effect::Breakpoint);
+            return;
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
