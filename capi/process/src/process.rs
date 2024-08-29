@@ -86,8 +86,8 @@ impl Process {
     }
 
     pub fn stop(&mut self) {
-        let next_instruction = self.evaluator.next_instruction;
-        self.breakpoints.set_ephemeral(next_instruction);
+        self.breakpoints
+            .set_ephemeral(self.evaluator.next_instruction);
     }
 
     pub fn step(&mut self, instructions: &Instructions) {
