@@ -90,6 +90,9 @@ pub enum Instruction {
     /// # Add two signed 8-bit integers
     AddS8,
 
+    /// # Add two signed 32-bit integers
+    AddS32,
+
     Bind {
         name: String,
     },
