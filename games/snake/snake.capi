@@ -308,13 +308,13 @@ update_next_position: {
         velocity
         vec_load
         vec_x
-        add_i8
+        add_s8
         snake_head
         vec_y
         velocity
         vec_load
         vec_y
-        add_i8
+        add_s8
         next_position
         vec_store
         next_position
@@ -376,7 +376,7 @@ handle_coordinate_smaller_than_zero: {
             coord_smaller_than_zero
             {
                 |1|
-                    coord limit add_i8
+                    coord limit add_s8
 
                 |_|
                     coord
