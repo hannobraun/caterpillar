@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::builtin_by_name, function::Pattern, Effect, Function,
-    Instruction, InstructionAddress, Instructions, Stack,
+    builtins::builtin_by_name, function::Pattern, value::IntegerOverflow,
+    Effect, Function, Instruction, InstructionAddress, Instructions, Stack,
 };
 
 #[derive(
@@ -36,6 +36,19 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
 
         match instruction {
+            Instruction::AddS8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_i8()?;
+                let b = b.to_i8()?;
+
+                let Some(c) = a.checked_add(b) else {
+                    return Err(IntegerOverflow.into());
+                };
+
+                self.stack.push_operand(c);
+            }
             Instruction::Bind { name } => {
                 let value = self.stack.pop_operand()?;
                 self.stack.define_binding(name.clone(), value);
