@@ -228,7 +228,7 @@ count_frame: {
         load
         # Increment the frame count.
         1
-        add_i32
+        add_s32
         # Place a copy of the new frame count back where it came
         # from.
         copy
@@ -454,7 +454,7 @@ _food_collides_with_snake: {
             { |body_collides|
                 head_collides
                 body_collides
-                add_i32
+                add_s32
                 0
                 greater_i32
             }
@@ -524,7 +524,7 @@ grow_snake: {
         snake_length
         load
         1
-        add_i32
+        add_s32
         { |snake_length_plus_growth|
             snake_length_plus_growth
             positions
@@ -577,7 +577,7 @@ check_body_collision_inner: {
                     { |y_matches|
                         x_matches
                         y_matches
-                        add_i32
+                        add_s32
                         2
                         eq
                         copy
@@ -588,7 +588,7 @@ check_body_collision_inner: {
                                 y
                                 index
                                 1
-                                add_i32
+                                add_s32
                                 check_body_collision_inner
 
                             |_|
@@ -697,7 +697,7 @@ vec_load: {
         load
         address
         1
-        add_i32
+        add_s32
         load
 }
 
@@ -709,7 +709,7 @@ vec_store: {
         y
         address
         1
-        add_i32
+        add_s32
         store
 }
 
@@ -881,22 +881,22 @@ _vec_buf_inc_index: {
 
 _vec_buf_first: {
     |vec_buf|
-        vec_buf 0 add_i32
+        vec_buf 0 add_s32
 }
 
 _vec_buf_next: {
     |vec_buf|
-        vec_buf 1 add_i32
+        vec_buf 1 add_s32
 }
 
 _vec_buf_capacity: {
     |vec_buf|
-        vec_buf 2 add_i32
+        vec_buf 2 add_s32
 }
 
 _vec_buf_buffer: {
     |vec_buf|
-        vec_buf 3 add_i32
+        vec_buf 3 add_s32
 }
 
 # Utilities - Miscellaneous
