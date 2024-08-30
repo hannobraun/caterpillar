@@ -6,6 +6,9 @@ use std::fmt;
 /// translate that into the appropriate instructions.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Intrinsic {
+    /// # Add two signed 8-bit integers
+    AddS8,
+
     /// # Trigger a breakpoint
     Brk,
 
@@ -16,6 +19,7 @@ pub enum Intrinsic {
 impl Intrinsic {
     pub fn from_name(name: &str) -> Option<Intrinsic> {
         let intrinsic = match name {
+            "add_s8" => Self::AddS8,
             "brk" => Self::Brk,
             "eval" => Self::Eval,
 
@@ -31,6 +35,7 @@ impl Intrinsic {
 impl fmt::Display for Intrinsic {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            Intrinsic::AddS8 => write!(f, "add_s8"),
             Intrinsic::Brk => write!(f, "brk"),
             Intrinsic::Eval => write!(f, "eval"),
         }

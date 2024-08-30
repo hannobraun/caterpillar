@@ -266,6 +266,10 @@ fn compile_fragment<H: Host>(
                     intrinsic,
                     is_tail_call,
                 } => match intrinsic {
+                    Intrinsic::AddS8 => Some(output.generate_instruction(
+                        Instruction::AddS8,
+                        fragment.id(),
+                    )),
                     Intrinsic::Brk => Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::Breakpoint,
