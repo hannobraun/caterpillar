@@ -35,9 +35,9 @@ impl Intrinsic {
 impl fmt::Display for Intrinsic {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Intrinsic::AddS8 => write!(f, "add_s8"),
-            Intrinsic::Brk => write!(f, "brk"),
-            Intrinsic::Eval => write!(f, "eval"),
+            Self::AddS8 => write!(f, "add_s8"),
+            Self::Brk => write!(f, "brk"),
+            Self::Eval => write!(f, "eval"),
         }
     }
 }
