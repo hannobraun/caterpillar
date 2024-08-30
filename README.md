@@ -138,7 +138,7 @@ The following daily thoughts provide more context:
 Caterpillar is currently untyped. This means there is only a single data type,
 32-bit words, and all values are represented using those. The developer often
 has to choose a specific operation, depending on what specific type they expect
-(`add_i8` vs `add_i32`, for example).
+(`add_s8` vs `add_i32`, for example).
 
 This isn't a final decision. It just was the easiest place to start in. The goal
 is to make the language statically typed. I expect this to be a gradual process,
