@@ -96,6 +96,9 @@ pub enum Instruction {
     /// # Add two unsigned 8-bit integers, triggering an error on overflow
     AddU8,
 
+    /// # Add two unsigned 8-bit integers, wrapping on overflow
+    AddU8Wrap,
+
     Bind {
         name: String,
     },
