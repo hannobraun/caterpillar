@@ -44,13 +44,13 @@ macro_rules! intrinsics {
 }
 
 intrinsics! {
-    /// # Add two signed 8-bit integers
+    /// # Add two signed 8-bit integers, triggering an error on overflow
     "add_s8", AddS8;
 
-    /// # Add two signed 32-bit integers
+    /// # Add two signed 32-bit integers, triggering an error on overflow
     "add_s32", AddS32;
 
-    /// # Add two unsigned 8-bit integers
+    /// # Add two unsigned 8-bit integers, triggering an error on overflow
     "add_u8", AddU8;
 
     /// # Trigger a breakpoint

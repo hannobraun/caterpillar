@@ -87,13 +87,13 @@ impl fmt::Display for InstructionAddress {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
-    /// # Add two signed 8-bit integers
+    /// # Add two signed 8-bit integers, triggering an error on overflow
     AddS8,
 
-    /// # Add two signed 32-bit integers
+    /// # Add two signed 32-bit integers, triggering an error on overflow
     AddS32,
 
-    /// # Add two unsigned 8-bit integers
+    /// # Add two unsigned 8-bit integers, triggering an error on overflow
     AddU8,
 
     Bind {
