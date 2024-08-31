@@ -50,6 +50,9 @@ intrinsics! {
     /// # Add two signed 32-bit integers
     "add_s32", AddS32;
 
+    /// # Add two unsigned 8-bit integers
+    "add_u8", AddU8;
+
     /// # Trigger a breakpoint
     "brk", Brk;
 

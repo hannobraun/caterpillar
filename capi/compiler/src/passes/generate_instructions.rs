@@ -274,6 +274,10 @@ fn compile_fragment<H: Host>(
                         Instruction::AddS32,
                         fragment.id(),
                     )),
+                    Intrinsic::AddU8 => Some(output.generate_instruction(
+                        Instruction::AddU8,
+                        fragment.id(),
+                    )),
                     Intrinsic::Brk => Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::Breakpoint,
