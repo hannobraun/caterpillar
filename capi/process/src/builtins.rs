@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "add_u8" => add_u8,
         "add_u8_wrap" => add_u8_wrap,
         "and" => and,
         "copy" => copy,
@@ -32,22 +31,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn add_u8(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_u8()?;
-    let b = b.to_u8()?;
-
-    let Some(c) = a.checked_add(b) else {
-        return Err(IntegerOverflow.into());
-    };
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn add_u8_wrap(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
