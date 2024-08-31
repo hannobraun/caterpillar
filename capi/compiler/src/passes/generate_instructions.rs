@@ -278,6 +278,10 @@ fn compile_fragment<H: Host>(
                         Instruction::AddU8,
                         fragment.id(),
                     )),
+                    Intrinsic::AddU8Wrap => Some(output.generate_instruction(
+                        Instruction::AddU8Wrap,
+                        fragment.id(),
+                    )),
                     Intrinsic::Brk => Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::Breakpoint,

@@ -53,6 +53,9 @@ intrinsics! {
     /// # Add two unsigned 8-bit integers, triggering an error on overflow
     "add_u8", AddU8;
 
+    /// # Add two unsigned 8-bit integers, wrapping on overflow
+    "add_u8_wrap", AddU8Wrap;
+
     /// # Trigger a breakpoint
     "brk", Brk;
 
