@@ -62,6 +62,19 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::AddU8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                let Some(c) = a.checked_add(b) else {
+                    return Err(IntegerOverflow.into());
+                };
+
+                self.stack.push_operand(c);
+            }
             Instruction::Bind { name } => {
                 let value = self.stack.pop_operand()?;
                 self.stack.define_binding(name.clone(), value);
