@@ -212,6 +212,10 @@ pub enum Instruction {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,
     },
+
+    /// # Multiply two signed 32-bit numbers
+    MulS32,
+
     Push {
         value: Value,
     },

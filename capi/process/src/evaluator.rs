@@ -388,6 +388,19 @@ impl Evaluator {
 
                 self.stack.push_operand(index);
             }
+            Instruction::MulS32 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_i32();
+                let b = b.to_i32();
+
+                let Some(c) = a.checked_mul(b) else {
+                    return Err(IntegerOverflow.into());
+                };
+
+                self.stack.push_operand(c);
+            }
             Instruction::Push { value } => {
                 self.stack.push_operand(*value);
             }
