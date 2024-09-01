@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "mul_i32" => mul_i32,
         "mul_u8_wrap" => mul_u8_wrap,
         "neg_i32" => neg_i32,
         "not" => not,
@@ -20,22 +19,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn mul_i32(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_i32();
-    let b = b.to_i32();
-
-    let Some(c) = a.checked_mul(b) else {
-        return Err(IntegerOverflow.into());
-    };
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn mul_u8_wrap(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
