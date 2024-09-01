@@ -74,6 +74,9 @@ intrinsics! {
     /// # Drop a value
     "drop", Drop;
 
+    /// # Compare two values for equality
+    "eq", Eq;
+
     /// # Evaluate an anonymous function
     "eval", Eval;
 }
