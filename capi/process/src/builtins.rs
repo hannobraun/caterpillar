@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "drop" => drop,
         "eq" => eq,
         "greater_i8" => greater_i8,
         "greater_i32" => greater_i32,
@@ -26,11 +25,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn drop(stack: &mut Stack) -> Result {
-    stack.pop_operand()?;
-    Ok(())
-}
 
 fn eq(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
