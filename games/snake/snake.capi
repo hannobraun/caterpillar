@@ -261,7 +261,7 @@ update: {
         frame_count
         load
         2
-        remainder_i32
+        remainder_s32
         not
         should_game_run
         load
@@ -415,13 +415,13 @@ food_init: {
         tile_field_size
         vec_load
         vec_x
-        remainder_i32
+        remainder_s32
         negatable_random
         abs
         tile_field_size
         vec_load
         vec_y
-        remainder_i32
+        remainder_s32
         food_position
         vec_store
 }
@@ -863,7 +863,7 @@ _vec_buf_address: {
         vec_buf
         _vec_buf_capacity
         load
-        remainder_i32
+        remainder_s32
         vec_buf
         _vec_buf_buffer
         add_u8_wrap
