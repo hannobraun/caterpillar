@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "remainder_i32" => remainder_i32,
         "sub_i32" => sub_i32,
         "sub_u8" => sub_u8,
         "sub_u8_wrap" => sub_u8_wrap,
@@ -16,23 +15,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn remainder_i32(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_i32();
-    let b = b.to_i32();
-
-    if b == 0 {
-        return Err(Effect::DivideByZero);
-    }
-    let c = a % b;
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn sub_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
