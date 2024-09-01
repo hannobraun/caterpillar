@@ -106,19 +106,6 @@ pub enum Instruction {
         name: String,
     },
 
-    /// # Call a built-in function by name
-    ///
-    /// ## Implementation Note
-    ///
-    /// With the addition of compiler intrinsics, this instruction is on its way
-    /// out. Compiler intrinsics can, in principle, offer the same things as
-    /// built-in functions do, but do so in a more appropriate way. They move
-    /// the required smarts into the compiler, allowing the evaluator to be
-    /// simpler.
-    CallBuiltin {
-        name: String,
-    },
-
     /// # Call a function, selecting the right branch via pattern matching
     ///
     /// ## Implementation Note

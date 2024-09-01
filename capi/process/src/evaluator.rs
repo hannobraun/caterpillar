@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::builtin_by_name, function::Pattern, value::IntegerOverflow,
-    Effect, Function, Instruction, InstructionAddress, Instructions, Stack,
+    function::Pattern, value::IntegerOverflow, Effect, Function, Instruction,
+    InstructionAddress, Instructions, Stack,
 };
 
 #[derive(
@@ -110,14 +110,6 @@ impl Evaluator {
                 };
                 self.stack.push_operand(value);
             }
-            Instruction::CallBuiltin { name } => match builtin_by_name(name) {
-                Some(f) => {
-                    f(&mut self.stack)?;
-                }
-                None => {
-                    return Err(Effect::UnknownBuiltin);
-                }
-            },
             Instruction::CallFunction {
                 function,
                 is_tail_call,
