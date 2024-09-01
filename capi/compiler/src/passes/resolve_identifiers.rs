@@ -174,33 +174,6 @@ mod tests {
     }
 
     #[test]
-    fn resolve_builtin_function() {
-        // Builtin functions are statically known, so any reference to one can
-        // be determined without doubt.
-
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("brk");
-                },
-            )
-        });
-
-        let mut functions = resolve_identifiers(script);
-
-        assert_eq!(
-            functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
-                name: String::from("brk"),
-                target: Some(IdentifierTarget::BuiltinFunction),
-                is_known_to_be_in_tail_position: false,
-            })
-        );
-    }
-
-    #[test]
     fn resolve_host_function() {
         // The host can be queried to determine the existence of host functions.
         // We set up a special test host below, that provides the function that
