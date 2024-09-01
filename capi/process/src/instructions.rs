@@ -199,6 +199,9 @@ pub enum Instruction {
     /// # Determine if the first of two signed 8-bit numbers is greater
     GreaterS8,
 
+    /// # Determine if the first of two signed 32-bit numbers is greater
+    GreaterS32,
+
     MakeClosure {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,
