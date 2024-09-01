@@ -71,6 +71,9 @@ intrinsics! {
     /// # Divide two unsigned 8-bit integers
     "div_u8", DivU8;
 
+    /// # Drop a value
+    "drop", Drop;
+
     /// # Evaluate an anonymous function
     "eval", Eval;
 }

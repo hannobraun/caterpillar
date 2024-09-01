@@ -306,6 +306,10 @@ fn compile_fragment<H: Host>(
                         Instruction::DivU8,
                         fragment.id(),
                     )),
+                    Intrinsic::Drop => Some(output.generate_instruction(
+                        Instruction::Drop,
+                        fragment.id(),
+                    )),
                     Intrinsic::Eval => Some(output.generate_instruction(
                         Instruction::Eval {
                             is_tail_call: *is_tail_call,
