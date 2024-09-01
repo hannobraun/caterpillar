@@ -65,6 +65,9 @@ intrinsics! {
     /// # Copy a value
     "copy", Copy;
 
+    /// # Divide two signed 32-bit integers
+    "div_s32", DivS32;
+
     /// # Evaluate an anonymous function
     "eval", Eval;
 }
