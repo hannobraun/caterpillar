@@ -112,4 +112,7 @@ intrinsics! {
 
     /// # Subtract two unsigned 8-bit numbers, triggering an error on overflow
     "sub_u8", SubU8;
+
+    /// # Subtract two unsigned 8-bit numbers, wrapping on overflow
+    "sub_u8_wrap", SubU8Wrap;
 }

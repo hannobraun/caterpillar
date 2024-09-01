@@ -294,6 +294,7 @@ fn compile_fragment<H: Host>(
                         Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
                         Intrinsic::SubS32 => Instruction::SubS32,
                         Intrinsic::SubU8 => Instruction::SubU8,
+                        Intrinsic::SubU8Wrap => Instruction::SubU8Wrap,
                     };
 
                     Some(
