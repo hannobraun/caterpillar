@@ -196,6 +196,9 @@ pub enum Instruction {
         is_tail_call: bool,
     },
 
+    /// # Determine if the first of two signed 8-bit numbers is greater
+    GreaterS8,
+
     MakeClosure {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,

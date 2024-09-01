@@ -302,6 +302,17 @@ impl Evaluator {
                     return Err(Effect::NoMatch);
                 }
             }
+            Instruction::GreaterS8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_i8()?;
+                let b = b.to_i8()?;
+
+                let c = if a > b { 1 } else { 0 };
+
+                self.stack.push_operand(c);
+            }
             Instruction::MakeClosure {
                 branches,
                 environment,
