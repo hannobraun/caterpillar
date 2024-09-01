@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "div_i32" => div_i32,
         "div_u8" => div_u8,
         "drop" => drop,
         "eq" => eq,
@@ -28,26 +27,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn div_i32(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_i32();
-    let b = b.to_i32();
-
-    if b == 0 {
-        return Err(Effect::DivideByZero);
-    }
-    let Some(c) = a.checked_div(b) else {
-        // Can't be divide by zero. Already handled that.
-        return Err(IntegerOverflow.into());
-    };
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn div_u8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
