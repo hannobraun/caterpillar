@@ -1,5 +1,4 @@
 mod breakpoints;
-mod builtins;
 mod effects;
 mod evaluator;
 mod function;
@@ -11,7 +10,6 @@ mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
-    builtins::builtin_by_name,
     effects::{Effect, Effects},
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
