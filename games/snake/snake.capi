@@ -924,7 +924,7 @@ abs: {
         greater_s32
         {
             |0|
-                neg_i32
+                neg_s32
 
             |_|
         }
