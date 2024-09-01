@@ -234,6 +234,9 @@ pub enum Instruction {
 
     Return,
 
+    /// # Subtract two signed 32-bit numbers, triggering an error on overflow
+    SubS32,
+
     /// Trigger an effect
     TriggerEffect {
         effect: Effect,
