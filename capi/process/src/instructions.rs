@@ -219,6 +219,9 @@ pub enum Instruction {
     /// # Multiply two unsigned 8-bit numbers, wrapping on overflow
     MulU8Wrap,
 
+    /// # Negate a signed 32-bit number
+    NegS32,
+
     Push {
         value: Value,
     },

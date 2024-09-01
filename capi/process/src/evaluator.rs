@@ -411,6 +411,18 @@ impl Evaluator {
                 let c = a.wrapping_mul(b);
                 self.stack.push_operand(c);
             }
+            Instruction::NegS32 => {
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_i32();
+
+                if a == i32::MIN {
+                    return Err(IntegerOverflow.into());
+                }
+                let b = -a;
+
+                self.stack.push_operand(b);
+            }
             Instruction::Push { value } => {
                 self.stack.push_operand(*value);
             }
