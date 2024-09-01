@@ -56,6 +56,9 @@ intrinsics! {
     /// # Add two unsigned 8-bit integers, wrapping on overflow
     "add_u8_wrap", AddU8Wrap;
 
+    /// # Logical and
+    "and", And;
+
     /// # Trigger a breakpoint
     "brk", Brk;
 
