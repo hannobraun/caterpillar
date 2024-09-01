@@ -265,84 +265,35 @@ fn compile_fragment<H: Host>(
                 Payload::CallToIntrinsic {
                     intrinsic,
                     is_tail_call,
-                } => match intrinsic {
-                    Intrinsic::AddS8 => Some(output.generate_instruction(
-                        Instruction::AddS8,
-                        fragment.id(),
-                    )),
-                    Intrinsic::AddS32 => Some(output.generate_instruction(
-                        Instruction::AddS32,
-                        fragment.id(),
-                    )),
-                    Intrinsic::AddU8 => Some(output.generate_instruction(
-                        Instruction::AddU8,
-                        fragment.id(),
-                    )),
-                    Intrinsic::AddU8Wrap => Some(output.generate_instruction(
-                        Instruction::AddU8Wrap,
-                        fragment.id(),
-                    )),
-                    Intrinsic::And => {
-                        Some(output.generate_instruction(
-                            Instruction::And,
-                            fragment.id(),
-                        ))
-                    }
-                    Intrinsic::Brk => Some(output.generate_instruction(
-                        Instruction::TriggerEffect {
+                } => {
+                    let instruction = match intrinsic {
+                        Intrinsic::AddS8 => Instruction::AddS8,
+                        Intrinsic::AddS32 => Instruction::AddS32,
+                        Intrinsic::AddU8 => Instruction::AddU8,
+                        Intrinsic::AddU8Wrap => Instruction::AddU8Wrap,
+                        Intrinsic::And => Instruction::And,
+                        Intrinsic::Brk => Instruction::TriggerEffect {
                             effect: Effect::Breakpoint,
                         },
-                        fragment.id(),
-                    )),
-                    Intrinsic::Copy => Some(output.generate_instruction(
-                        Instruction::Copy,
-                        fragment.id(),
-                    )),
-                    Intrinsic::DivS32 => Some(output.generate_instruction(
-                        Instruction::DivS32,
-                        fragment.id(),
-                    )),
-                    Intrinsic::DivU8 => Some(output.generate_instruction(
-                        Instruction::DivU8,
-                        fragment.id(),
-                    )),
-                    Intrinsic::Drop => Some(output.generate_instruction(
-                        Instruction::Drop,
-                        fragment.id(),
-                    )),
-                    Intrinsic::Eq => {
-                        Some(output.generate_instruction(
-                            Instruction::Eq,
-                            fragment.id(),
-                        ))
-                    }
-                    Intrinsic::Eval => Some(output.generate_instruction(
-                        Instruction::Eval {
+                        Intrinsic::Copy => Instruction::Copy,
+                        Intrinsic::DivS32 => Instruction::DivS32,
+                        Intrinsic::DivU8 => Instruction::DivU8,
+                        Intrinsic::Drop => Instruction::Drop,
+                        Intrinsic::Eq => Instruction::Eq,
+                        Intrinsic::Eval => Instruction::Eval {
                             is_tail_call: *is_tail_call,
                         },
-                        fragment.id(),
-                    )),
-                    Intrinsic::GreaterS8 => Some(output.generate_instruction(
-                        Instruction::GreaterS8,
-                        fragment.id(),
-                    )),
-                    Intrinsic::GreaterS32 => Some(output.generate_instruction(
-                        Instruction::GreaterS32,
-                        fragment.id(),
-                    )),
-                    Intrinsic::GreaterU8 => Some(output.generate_instruction(
-                        Instruction::GreaterU8,
-                        fragment.id(),
-                    )),
-                    Intrinsic::MulS32 => Some(output.generate_instruction(
-                        Instruction::MulS32,
-                        fragment.id(),
-                    )),
-                    Intrinsic::S32ToS8 => Some(output.generate_instruction(
-                        Instruction::ConvertS32ToS8,
-                        fragment.id(),
-                    )),
-                },
+                        Intrinsic::GreaterS8 => Instruction::GreaterS8,
+                        Intrinsic::GreaterS32 => Instruction::GreaterS32,
+                        Intrinsic::GreaterU8 => Instruction::GreaterU8,
+                        Intrinsic::MulS32 => Instruction::MulS32,
+                        Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
+                    };
+
+                    Some(
+                        output.generate_instruction(instruction, fragment.id()),
+                    )
+                }
                 Payload::Comment { .. } => None,
                 Payload::Function { function } => {
                     let address = if function.name.is_none() {
