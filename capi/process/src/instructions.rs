@@ -177,6 +177,9 @@ pub enum Instruction {
     /// # Drop a value
     Drop,
 
+    /// # Compare two values for equality
+    Eq,
+
     /// # Evaluate the current function on the stack
     ///
     /// ## Implementation Note
