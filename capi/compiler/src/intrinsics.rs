@@ -79,4 +79,7 @@ intrinsics! {
 
     /// # Evaluate an anonymous function
     "eval", Eval;
+
+    /// # Determine if the first of two signed 8-bit numbers is greater
+    "greater_s8", GreaterS8;
 }
