@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "and" => and,
         "copy" => copy,
         "div_i32" => div_i32,
         "div_u8" => div_u8,
@@ -30,17 +29,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn and(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let c = if a.0 == [0; 4] || b.0 == [0; 4] { 0 } else { 1 };
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn copy(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
