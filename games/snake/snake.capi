@@ -39,7 +39,7 @@ _draw_snake_inner: {
         positions
         vec_buf_len
         index
-        greater_i8
+        greater_s8
         { |index_is_within_bounds|
             index_is_within_bounds
             index
@@ -371,7 +371,7 @@ handle_coordinate_smaller_than_zero: {
     |coord limit|
         0
         coord
-        greater_i8
+        greater_s8
         { |coord_smaller_than_zero|
             coord_smaller_than_zero
             {
