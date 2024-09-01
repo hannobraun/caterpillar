@@ -93,7 +93,7 @@ be chosen.
 
 An example of this is not supporting early returns. Functions in Caterpillar (or
 rather their branches, to be precise) have a single exit point, which can make
-code easier to follow for the developer, but especially allows the debugger to
+code easier to follow for the developer, but specifically allows the debugger to
 do call stack reconstruction.
 
 The following daily thoughts provide more context:
