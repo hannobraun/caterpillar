@@ -85,7 +85,7 @@ impl Evaluator {
                 let c = a.wrapping_add(b);
                 self.stack.push_operand(c);
             }
-            Instruction::And => {
+            Instruction::LogicalAnd => {
                 let b = self.stack.pop_operand()?;
                 let a = self.stack.pop_operand()?;
 

@@ -100,7 +100,7 @@ pub enum Instruction {
     AddU8Wrap,
 
     /// # Logical and
-    And,
+    LogicalAnd,
 
     Bind {
         name: String,

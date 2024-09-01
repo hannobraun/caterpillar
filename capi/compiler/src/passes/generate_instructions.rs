@@ -271,7 +271,7 @@ fn compile_fragment<H: Host>(
                         Intrinsic::AddS32 => Instruction::AddS32,
                         Intrinsic::AddU8 => Instruction::AddU8,
                         Intrinsic::AddU8Wrap => Instruction::AddU8Wrap,
-                        Intrinsic::And => Instruction::And,
+                        Intrinsic::And => Instruction::LogicalAnd,
                         Intrinsic::Brk => Instruction::TriggerEffect {
                             effect: Effect::Breakpoint,
                         },
