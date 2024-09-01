@@ -432,6 +432,20 @@ impl Evaluator {
             Instruction::Push { value } => {
                 self.stack.push_operand(*value);
             }
+            Instruction::RemainderS32 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_i32();
+                let b = b.to_i32();
+
+                if b == 0 {
+                    return Err(Effect::DivideByZero);
+                }
+                let c = a % b;
+
+                self.stack.push_operand(c);
+            }
             Instruction::Return => {
                 if let Some(return_address) = self.stack.pop_frame() {
                     self.next_instruction = return_address;

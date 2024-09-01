@@ -228,6 +228,10 @@ pub enum Instruction {
     Push {
         value: Value,
     },
+
+    /// # Compute the remainder of the division of two signed 32-bit numbers
+    RemainderS32,
+
     Return,
 
     /// Trigger an effect
