@@ -293,6 +293,7 @@ fn compile_fragment<H: Host>(
                         Intrinsic::RemainderS32 => Instruction::RemainderS32,
                         Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
                         Intrinsic::SubS32 => Instruction::SubS32,
+                        Intrinsic::SubU8 => Instruction::SubU8,
                     };
 
                     Some(

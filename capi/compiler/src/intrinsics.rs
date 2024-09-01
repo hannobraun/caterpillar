@@ -109,4 +109,7 @@ intrinsics! {
 
     /// # Subtract two signed 32-bit numbers, triggering an error on overflow
     "sub_s32", SubS32;
+
+    /// # Subtract two unsigned 8-bit numbers, triggering an error on overflow
+    "sub_u8", SubU8;
 }
