@@ -240,6 +240,9 @@ pub enum Instruction {
     /// # Subtract two unsigned 8-bit numbers, triggering an error on overflow
     SubU8,
 
+    /// # Subtract two unsigned 8-bit numbers, wrapping on overflow
+    SubU8Wrap,
+
     /// Trigger an effect
     TriggerEffect {
         effect: Effect,

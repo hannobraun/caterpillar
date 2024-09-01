@@ -477,6 +477,16 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::SubU8Wrap => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                let c = a.wrapping_sub(b);
+                self.stack.push_operand(c);
+            }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
             }
