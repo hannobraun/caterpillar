@@ -99,9 +99,6 @@ pub enum Instruction {
     /// # Add two unsigned 8-bit integers, wrapping on overflow
     AddU8Wrap,
 
-    /// # Logical and
-    LogicalAnd,
-
     Bind {
         name: String,
     },
@@ -207,6 +204,9 @@ pub enum Instruction {
 
     /// # Determine if the first of two unsigned 8-bit numbers is greater
     GreaterU8,
+
+    /// # Logical and
+    LogicalAnd,
 
     MakeClosure {
         branches: Vec<Branch>,
