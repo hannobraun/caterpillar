@@ -334,6 +334,10 @@ fn compile_fragment<H: Host>(
                         Instruction::GreaterU8,
                         fragment.id(),
                     )),
+                    Intrinsic::S32ToS8 => Some(output.generate_instruction(
+                        Instruction::ConvertS32ToS8,
+                        fragment.id(),
+                    )),
                 },
                 Payload::Comment { .. } => None,
                 Payload::Function { function } => {

@@ -88,4 +88,7 @@ intrinsics! {
 
     /// # Determine if the first of two unsigned 8-bit numbers is greater
     "greater_u8", GreaterU8;
+
+    /// # Convert a signed 32-bit number to a signed 8-bit number
+    "s32_to_s8", S32ToS8;
 }
