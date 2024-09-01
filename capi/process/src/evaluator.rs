@@ -219,6 +219,9 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::Drop => {
+                self.stack.pop_operand()?;
+            }
             Instruction::Eval { is_tail_call } => {
                 // This duplicates code from other places, which is unfortunate,
                 // but works for now.

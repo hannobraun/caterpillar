@@ -174,6 +174,9 @@ pub enum Instruction {
     /// # Divide two unsigned 8-bit integers
     DivU8,
 
+    /// # Drop a value
+    Drop,
+
     /// # Evaluate the current function on the stack
     ///
     /// ## Implementation Note
