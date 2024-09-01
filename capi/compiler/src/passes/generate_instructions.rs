@@ -287,6 +287,7 @@ fn compile_fragment<H: Host>(
                         Intrinsic::GreaterS32 => Instruction::GreaterS32,
                         Intrinsic::GreaterU8 => Instruction::GreaterU8,
                         Intrinsic::MulS32 => Instruction::MulS32,
+                        Intrinsic::MulU8Wrap => Instruction::MulU8Wrap,
                         Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
                     };
 
