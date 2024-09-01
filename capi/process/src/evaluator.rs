@@ -464,6 +464,19 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::SubU8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                let Some(c) = a.checked_sub(b) else {
+                    return Err(IntegerOverflow.into());
+                };
+
+                self.stack.push_operand(c);
+            }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
             }

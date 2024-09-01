@@ -237,6 +237,9 @@ pub enum Instruction {
     /// # Subtract two signed 32-bit numbers, triggering an error on overflow
     SubS32,
 
+    /// # Subtract two unsigned 8-bit numbers, triggering an error on overflow
+    SubU8,
+
     /// Trigger an effect
     TriggerEffect {
         effect: Effect,
