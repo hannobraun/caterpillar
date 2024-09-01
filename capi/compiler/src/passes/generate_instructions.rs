@@ -292,6 +292,7 @@ fn compile_fragment<H: Host>(
                         Intrinsic::Not => Instruction::LogicalNot,
                         Intrinsic::RemainderS32 => Instruction::RemainderS32,
                         Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
+                        Intrinsic::SubS32 => Instruction::SubS32,
                     };
 
                     Some(
