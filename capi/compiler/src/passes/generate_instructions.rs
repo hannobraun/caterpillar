@@ -294,6 +294,10 @@ fn compile_fragment<H: Host>(
                         },
                         fragment.id(),
                     )),
+                    Intrinsic::Copy => Some(output.generate_instruction(
+                        Instruction::Copy,
+                        fragment.id(),
+                    )),
                     Intrinsic::Eval => Some(output.generate_instruction(
                         Instruction::Eval {
                             is_tail_call: *is_tail_call,

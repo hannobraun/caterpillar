@@ -62,6 +62,9 @@ intrinsics! {
     /// # Trigger a breakpoint
     "brk", Brk;
 
+    /// # Copy a value
+    "copy", Copy;
+
     /// # Evaluate an anonymous function
     "eval", Eval;
 }
