@@ -171,6 +171,9 @@ pub enum Instruction {
     /// # Divide two signed 32-bit integers
     DivS32,
 
+    /// # Divide two unsigned 8-bit integers
+    DivU8,
+
     /// # Evaluate the current function on the stack
     ///
     /// ## Implementation Note

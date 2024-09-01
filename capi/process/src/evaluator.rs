@@ -202,6 +202,23 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::DivU8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                if b == 0 {
+                    return Err(Effect::DivideByZero);
+                }
+                let Some(c) = a.checked_div(b) else {
+                    // Can't be divide by zero. Already handled that.
+                    return Err(IntegerOverflow.into());
+                };
+
+                self.stack.push_operand(c);
+            }
             Instruction::Eval { is_tail_call } => {
                 // This duplicates code from other places, which is unfortunate,
                 // but works for now.
