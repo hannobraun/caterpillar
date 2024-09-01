@@ -168,6 +168,9 @@ pub enum Instruction {
     /// # Copy a value,
     Copy,
 
+    /// # Divide two signed 32-bit integers
+    DivS32,
+
     /// # Evaluate the current function on the stack
     ///
     /// ## Implementation Note
