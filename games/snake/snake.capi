@@ -842,7 +842,7 @@ vec_buf_capacity: {
         _vec_buf_capacity
         load
         2
-        div_i32
+        div_s32
 }
 
 _vec_buf_address: {
