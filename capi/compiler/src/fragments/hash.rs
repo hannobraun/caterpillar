@@ -171,12 +171,6 @@ impl FragmentHash for Payload {
                 hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedBuiltinFunction { name } => {
-                hasher.update(b"ResolvedBuiltinFunction");
-
-                hasher.update(b"name");
-                hasher.update(name.as_bytes());
-            }
             Self::UnresolvedIdentifier { name } => {
                 hasher.update(b"UnresolvedIdentifier");
 

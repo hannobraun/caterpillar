@@ -90,9 +90,6 @@ pub enum Payload {
     ResolvedBinding {
         name: String,
     },
-    ResolvedBuiltinFunction {
-        name: String,
-    },
     UnresolvedIdentifier {
         name: String,
     },
@@ -110,7 +107,6 @@ impl fmt::Display for Payload {
             Self::Comment { text } => write!(f, "# {text}"),
             Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
-            Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }

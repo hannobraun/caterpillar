@@ -342,12 +342,6 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     ))
                 }
-                Payload::ResolvedBuiltinFunction { name } => {
-                    Some(output.generate_instruction(
-                        Instruction::CallBuiltin { name: name.clone() },
-                        fragment.id(),
-                    ))
-                }
                 Payload::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {
