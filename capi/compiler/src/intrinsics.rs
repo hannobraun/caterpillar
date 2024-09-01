@@ -82,4 +82,7 @@ intrinsics! {
 
     /// # Determine if the first of two signed 8-bit numbers is greater
     "greater_s8", GreaterS8;
+
+    /// # Determine if the first of two signed 32-bit numbers is greater
+    "greater_s32", GreaterS32;
 }

@@ -326,6 +326,10 @@ fn compile_fragment<H: Host>(
                         Instruction::GreaterS8,
                         fragment.id(),
                     )),
+                    Intrinsic::GreaterS32 => Some(output.generate_instruction(
+                        Instruction::GreaterS32,
+                        fragment.id(),
+                    )),
                 },
                 Payload::Comment { .. } => None,
                 Payload::Function { function } => {
