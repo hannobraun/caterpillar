@@ -614,14 +614,14 @@ handle_input: {
         # up
         0
         -1
-        i32_to_i8
+        s32_to_s8
         velocity
         vec_store
 
     |2|
         # left
         -1
-        i32_to_i8
+        s32_to_s8
         0
         velocity
         vec_store
