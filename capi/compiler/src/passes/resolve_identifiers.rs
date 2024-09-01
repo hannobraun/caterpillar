@@ -1,7 +1,5 @@
 use std::collections::BTreeSet;
 
-use capi_process::builtin_by_name;
-
 use crate::{
     host::Host,
     intrinsics::Intrinsic,
@@ -111,9 +109,6 @@ fn resolve_in_branch<H: Host>(
                             environment.insert(name.clone());
                         }
                     }
-                }
-                if builtin_by_name(name).is_some() {
-                    *target = Some(IdentifierTarget::BuiltinFunction);
                 }
                 if let Some(intrinsic) = Intrinsic::from_name(name) {
                     *target = Some(IdentifierTarget::Intrinsic { intrinsic });
