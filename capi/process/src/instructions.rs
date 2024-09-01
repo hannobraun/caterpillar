@@ -213,7 +213,7 @@ pub enum Instruction {
         environment: BTreeSet<String>,
     },
 
-    /// # Multiply two signed 32-bit numbers
+    /// # Multiply two signed 32-bit numbers, triggering an error on overflow
     MulS32,
 
     Push {

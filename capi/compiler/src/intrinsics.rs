@@ -89,7 +89,7 @@ intrinsics! {
     /// # Determine if the first of two unsigned 8-bit numbers is greater
     "greater_u8", GreaterU8;
 
-    /// # Multiply two signed 32-bit numbers
+    /// # Multiply two signed 32-bit numbers, triggering an error on overflow
     "mul_s32", MulS32;
 
     /// # Convert a signed 32-bit number to a signed 8-bit number
