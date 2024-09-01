@@ -117,9 +117,6 @@ fn compile_expression(
                 Some(IdentifierTarget::Binding) => {
                     Payload::ResolvedBinding { name }
                 }
-                Some(IdentifierTarget::BuiltinFunction) => {
-                    Payload::ResolvedBuiltinFunction { name }
-                }
                 Some(IdentifierTarget::Function) => Payload::CallToFunction {
                     name,
                     is_tail_call: is_in_tail_position,

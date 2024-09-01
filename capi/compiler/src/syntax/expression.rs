@@ -45,7 +45,6 @@ pub enum Expression {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum IdentifierTarget {
     Binding,
-    BuiltinFunction,
     Function,
     HostFunction,
     Intrinsic { intrinsic: Intrinsic },
