@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "greater_i8" => greater_i8,
         "greater_i32" => greater_i32,
         "greater_u8" => greater_u8,
         "i32_to_i8" => i32_to_i8,
@@ -24,20 +23,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn greater_i8(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_i8()?;
-    let b = b.to_i8()?;
-
-    let c = if a > b { 1 } else { 0 };
-
-    stack.push_operand(c);
-
-    Ok(())
-}
 
 fn greater_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
