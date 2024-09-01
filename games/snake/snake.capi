@@ -136,7 +136,7 @@ check_tile_index: {
         tile_y
         # Leave zero, if the y-coordinate has advanced beyond the last
         # line of the tile field. Otherwise, leave non-zero value.
-        sub_i32
+        sub_s32
 }
 
 increment_tile_index: {
@@ -397,7 +397,7 @@ handle_coordinate_larger_than_limit: {
                 |0|
                     coord
                     limit
-                    sub_i32
+                    sub_s32
 
                 |1|
                     coord
@@ -556,7 +556,7 @@ check_body_collision_inner: {
         positions
         vec_buf_len
         1
-        sub_i32
+        sub_s32
         index
         greater_s32
         {
