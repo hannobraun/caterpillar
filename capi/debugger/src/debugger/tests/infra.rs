@@ -174,9 +174,6 @@ impl ExpressionExt for Expression {
 }
 
 pub trait FragmentExpressionExt {
-    #[allow(unused)] // currently not in use, but likely to be useful soon
-    fn expect_builtin_function(self) -> String;
-
     fn expect_intrinsic(self) -> Intrinsic;
 
     #[allow(unused)] // currently not in use, but likely to be useful soon
@@ -184,14 +181,6 @@ pub trait FragmentExpressionExt {
 }
 
 impl FragmentExpressionExt for fragments::Payload {
-    fn expect_builtin_function(self) -> String {
-        let fragments::Payload::ResolvedBuiltinFunction { name } = self else {
-            panic!("Expected builtin function");
-        };
-
-        name
-    }
-
     fn expect_intrinsic(self) -> Intrinsic {
         let fragments::Payload::CallToIntrinsic { intrinsic, .. } = self else {
             panic!("Expected call to intrinsic function.");
