@@ -401,6 +401,16 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::MulU8Wrap => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                let c = a.wrapping_mul(b);
+                self.stack.push_operand(c);
+            }
             Instruction::Push { value } => {
                 self.stack.push_operand(*value);
             }

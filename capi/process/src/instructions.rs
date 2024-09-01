@@ -216,6 +216,9 @@ pub enum Instruction {
     /// # Multiply two signed 32-bit numbers, triggering an error on overflow
     MulS32,
 
+    /// # Multiply two unsigned 8-bit numbers, wrapping on overflow
+    MulU8Wrap,
+
     Push {
         value: Value,
     },
