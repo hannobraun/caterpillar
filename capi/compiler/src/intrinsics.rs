@@ -95,6 +95,9 @@ intrinsics! {
     /// # Multiply two unsigned 8-bit numbers, wrapping on overflow
     "mul_u8_wrap", MulU8Wrap;
 
+    /// # Negate a signed 32-bit number
+    "neg_s32", NegS32;
+
     /// # Convert a signed 32-bit number to a signed 8-bit number
     "s32_to_s8", S32ToS8;
 }
