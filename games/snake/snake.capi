@@ -456,7 +456,7 @@ _food_collides_with_snake: {
                 body_collides
                 add_s32
                 0
-                greater_i32
+                greater_s32
             }
                 eval
         }
@@ -507,7 +507,7 @@ pop_positions: {
         vec_buf_len
         snake_length
         load
-        greater_i32
+        greater_s32
         {
             |1|
                 positions
@@ -529,7 +529,7 @@ grow_snake: {
             snake_length_plus_growth
             positions
             vec_buf_capacity
-            greater_i32
+            greater_s32
             {
                 |0|
                     snake_length_plus_growth
@@ -558,7 +558,7 @@ check_body_collision_inner: {
         1
         sub_i32
         index
-        greater_i32
+        greater_s32
         {
             |1|
                 positions
@@ -921,7 +921,7 @@ abs: {
         v
         v
         -1
-        greater_i32
+        greater_s32
         {
             |0|
                 neg_i32
