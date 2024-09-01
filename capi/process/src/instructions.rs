@@ -165,6 +165,9 @@ pub enum Instruction {
         is_tail_call: bool,
     },
 
+    /// # Copy a value,
+    Copy,
+
     /// # Evaluate the current function on the stack
     ///
     /// ## Implementation Note

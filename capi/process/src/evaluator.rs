@@ -179,6 +179,12 @@ impl Evaluator {
                     return Err(Effect::NoMatch);
                 }
             }
+            Instruction::Copy => {
+                let a = self.stack.pop_operand()?;
+
+                self.stack.push_operand(a);
+                self.stack.push_operand(a);
+            }
             Instruction::Eval { is_tail_call } => {
                 // This duplicates code from other places, which is unfortunate,
                 // but works for now.
