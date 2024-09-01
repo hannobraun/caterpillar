@@ -324,6 +324,17 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::GreaterU8 => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let a = a.to_u8()?;
+                let b = b.to_u8()?;
+
+                let c = if a > b { 1 } else { 0 };
+
+                self.stack.push_operand(c);
+            }
             Instruction::MakeClosure {
                 branches,
                 environment,
