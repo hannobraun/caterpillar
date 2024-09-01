@@ -343,6 +343,12 @@ impl Evaluator {
 
                 self.stack.push_operand(c);
             }
+            Instruction::LogicalNot => {
+                let a = self.stack.pop_operand()?;
+
+                let b = if a.0 == [0; 4] { 1 } else { 0 };
+                self.stack.push_operand(b);
+            }
             Instruction::MakeClosure {
                 branches,
                 environment,

@@ -208,6 +208,9 @@ pub enum Instruction {
     /// # Logical and
     LogicalAnd,
 
+    /// # Logical not
+    LogicalNot,
+
     MakeClosure {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,
