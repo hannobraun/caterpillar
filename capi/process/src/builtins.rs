@@ -2,7 +2,6 @@ use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "not" => not,
         "remainder_i32" => remainder_i32,
         "sub_i32" => sub_i32,
         "sub_u8" => sub_u8,
@@ -17,15 +16,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack) -> Result;
-
-fn not(stack: &mut Stack) -> Result {
-    let a = stack.pop_operand()?;
-
-    let b = if a.0 == [0; 4] { 1 } else { 0 };
-    stack.push_operand(b);
-
-    Ok(())
-}
 
 fn remainder_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
