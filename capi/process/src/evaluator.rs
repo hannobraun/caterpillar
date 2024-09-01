@@ -85,6 +85,14 @@ impl Evaluator {
                 let c = a.wrapping_add(b);
                 self.stack.push_operand(c);
             }
+            Instruction::And => {
+                let b = self.stack.pop_operand()?;
+                let a = self.stack.pop_operand()?;
+
+                let c = if a.0 == [0; 4] || b.0 == [0; 4] { 0 } else { 1 };
+
+                self.stack.push_operand(c);
+            }
             Instruction::Bind { name } => {
                 let value = self.stack.pop_operand()?;
                 self.stack.define_binding(name.clone(), value);
