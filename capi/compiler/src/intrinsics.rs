@@ -68,6 +68,9 @@ intrinsics! {
     /// # Divide two signed 32-bit integers
     "div_s32", DivS32;
 
+    /// # Divide two unsigned 8-bit integers
+    "div_u8", DivU8;
+
     /// # Evaluate an anonymous function
     "eval", Eval;
 }
