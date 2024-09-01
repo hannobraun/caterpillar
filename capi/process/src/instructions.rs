@@ -165,6 +165,9 @@ pub enum Instruction {
         is_tail_call: bool,
     },
 
+    /// # Convert a signed 32-bit number to a signed 8-bit number
+    ConvertS32ToS8,
+
     /// # Copy a value,
     Copy,
 

@@ -179,6 +179,14 @@ impl Evaluator {
                     return Err(Effect::NoMatch);
                 }
             }
+            Instruction::ConvertS32ToS8 => {
+                let v = self.stack.pop_operand()?;
+
+                let v = v.to_i32();
+                let v: i8 = v.try_into()?;
+
+                self.stack.push_operand(v);
+            }
             Instruction::Copy => {
                 let a = self.stack.pop_operand()?;
 
