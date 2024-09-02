@@ -125,7 +125,7 @@ pub enum Instruction {
     /// directly. (And maybe even pushing a frame and jumping to an instructions
     /// could and should be decoupled eventually.)
     ///
-    /// Pattern matching could move into the functions themselves. The compiler
+    /// Pattern matching could move into the branches themselves. The compiler
     /// could generate the necessary code as required, using the following
     /// approach:
     ///
@@ -134,11 +134,11 @@ pub enum Instruction {
     /// - If there are literal patterns, generate code that compares them
     ///   against the call stack.
     ///   - If all patterns match, remove the respective operands from the
-    ///     stack and continue with the rest of the function as normal.
-    ///     (Although probably the next step would be the compiler-generated
-    ///     code that handles the arguments.
+    ///     stack and continue with the rest of the branch as normal. (Although
+    ///     probably the next step would be the compiler-generated code that
+    ///     handles the arguments.
     ///   - If the patterns don't match, leave the operands as-is and jump
-    ///     directly to the next function, which continues with its own pattern
+    ///     directly to the next branch, which continues with its own pattern
     ///     matching.
     ///
     /// This would require some new instructions for doing the comparison and
