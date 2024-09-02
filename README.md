@@ -18,10 +18,10 @@ intuitive.
 
 ## Status
 
-There's a very basic language, and a [very basic game](games/snake/snake.capi)
-implemented in it. So far, not much thought has been given to using Caterpillar
-outside of this specific scenario. If you want to experiment with it, your best
-bet is to clone this repository and play around with what's already here.
+There's a very basic language, and a [very basic game][Snake] implemented in it.
+So far, not much thought has been given to using Caterpillar outside of this
+specific scenario. If you want to experiment with it, your best bet is to clone
+this repository and play around with what's already here.
 
 Interactive programming is currently being implemented (it was already present
 in a [previous prototype](archive/prototypes/07/)). Right now, the most basic
@@ -259,6 +259,7 @@ liable for problems.
 
 See [LICENSE.md] for full details.
 
+[Snake]: games/snake/snake.capi
 [daily thoughts]: https://capi.hannobraun.com/daily
 [Zero Clause BSD License]: https://opensource.org/licenses/0BSD
 [LICENSE.md]: LICENSE.md
