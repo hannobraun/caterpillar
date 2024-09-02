@@ -36,18 +36,15 @@ impl Effects {
     }
 }
 
-/// # An effect that interrupts code execution
+/// # An effect that interrupts evaluation
 ///
-/// Effects are produced when calling a host function, and can be produced by
-/// various built-in functions, mostly (but not only) in case of an error.
+/// Effects can be triggered when instructions are executed. Most of them
+/// represent error conditions, but some are used for debugging
+/// ([`Effect::Breakpoint`]) or communication with the host ([`Effect::Host`]).
 ///
-/// Effects can be handled, which is common for host effects, which are designed
-/// to pause the process and provide an opportunity for the host to interact
-/// with it.
-///
-/// Other effects, error conditions, are meant to halt the process completely.
-/// They can be displayed in the debugger, so the developer can learn what's
-/// going on and fix their code accordingly.
+/// Effects can be handled, after which evaluation can resume. This is common
+/// for host effects, which are designed to provide an opportunity for the host
+/// to interact with the process.
 #[derive(
     Clone,
     Copy,
