@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    function::Pattern, value::IntegerOverflow, Effect, Function, Instruction,
-    InstructionAddress, Instructions, Stack,
+    function::Pattern, Effect, Function, Instruction, InstructionAddress,
+    Instructions, Stack,
 };
 
 #[derive(
@@ -44,7 +44,7 @@ impl Evaluator {
                 let b = b.to_i8()?;
 
                 let Some(c) = a.checked_add(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -57,7 +57,7 @@ impl Evaluator {
                 let b = b.to_i32();
 
                 let Some(c) = a.checked_add(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -70,7 +70,7 @@ impl Evaluator {
                 let b = b.to_u8()?;
 
                 let Some(c) = a.checked_add(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -189,7 +189,7 @@ impl Evaluator {
                 }
                 let Some(c) = a.checked_div(b) else {
                     // Can't be divide by zero. Already handled that.
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -206,7 +206,7 @@ impl Evaluator {
                 }
                 let Some(c) = a.checked_div(b) else {
                     // Can't be divide by zero. Already handled that.
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -394,7 +394,7 @@ impl Evaluator {
                 let b = b.to_i32();
 
                 let Some(c) = a.checked_mul(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -415,7 +415,7 @@ impl Evaluator {
                 let a = a.to_i32();
 
                 if a == i32::MIN {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 }
                 let b = -a;
 
@@ -451,7 +451,7 @@ impl Evaluator {
                 let b = b.to_i32();
 
                 let Some(c) = a.checked_sub(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
@@ -464,7 +464,7 @@ impl Evaluator {
                 let b = b.to_u8()?;
 
                 let Some(c) = a.checked_sub(b) else {
-                    return Err(IntegerOverflow.into());
+                    return Err(Effect::IntegerOverflow);
                 };
 
                 self.stack.push_operand(c);
