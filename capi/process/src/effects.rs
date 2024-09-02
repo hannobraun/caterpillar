@@ -113,6 +113,9 @@ pub enum Effect {
     Host,
 }
 
+// This conversion is implemented manually, because doing it automatically using
+// `thiserror`'s `#[from]` would add an instance of the error into the type.
+// This makes the respective effect more complex to construct manually.
 impl From<IntegerOverflow> for Effect {
     fn from(_: IntegerOverflow) -> Self {
         Self::IntegerOverflow
