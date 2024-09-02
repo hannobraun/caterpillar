@@ -135,11 +135,11 @@ impl FragmentHash for Payload {
                 hasher.update(b"is_tail_call");
                 hasher.update(&[(*is_tail_call).into()]);
             }
-            Self::CallToHostFunction { name } => {
+            Self::CallToHostFunction { effect_number } => {
                 hasher.update(b"ResolvedHostFunction");
 
-                hasher.update(b"name");
-                hasher.update(name.as_bytes());
+                hasher.update(b"effect_number");
+                hasher.update(&[*effect_number]);
             }
             Self::CallToIntrinsic {
                 intrinsic,

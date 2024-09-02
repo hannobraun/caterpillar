@@ -121,8 +121,8 @@ fn compile_expression(
                     name,
                     is_tail_call: is_in_tail_position,
                 },
-                Some(IdentifierTarget::HostFunction { .. }) => {
-                    Payload::CallToHostFunction { name }
+                Some(IdentifierTarget::HostFunction { effect_number }) => {
+                    Payload::CallToHostFunction { effect_number }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
                     Payload::CallToIntrinsic {

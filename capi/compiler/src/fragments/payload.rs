@@ -53,7 +53,7 @@ pub enum Payload {
     /// trigger a specific effect. This effect is then handled by the host in
     /// whatever way it deems appropriate.
     CallToHostFunction {
-        name: String,
+        effect_number: u8,
     },
 
     /// # A call to a compiler intrinsic

@@ -7,13 +7,12 @@ use crate::{
         Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
         Parameters, Payload,
     },
-    host::Host,
     intrinsics::Intrinsic,
     source_map::SourceMap,
     syntax::Pattern,
 };
 
-pub fn generate_instructions<H: Host>(
+pub fn generate_instructions(
     fragments: Fragments,
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
@@ -36,12 +35,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     // Seed the queue from the root context.
-    compile_context::<H>(
-        fragments.root,
-        &fragments.inner,
-        &mut output,
-        &mut queue,
-    );
+    compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
 
     while let Some(unit) = queue.pop_front() {
         let CompileUnit {
@@ -68,7 +62,7 @@ pub fn generate_instructions<H: Host>(
                 });
             let bindings_address = output.generate_binding(parameters, id);
 
-            let context_address = compile_context::<H>(
+            let context_address = compile_context(
                 branch.start,
                 &fragments.inner,
                 &mut output,
@@ -176,7 +170,7 @@ pub fn generate_instructions<H: Host>(
     (output.instructions, output.source_map)
 }
 
-fn compile_context<H: Host>(
+fn compile_context(
     start: FragmentId,
     fragments: &FragmentMap,
     output: &mut Output,
@@ -185,7 +179,7 @@ fn compile_context<H: Host>(
     let mut first_instruction = None;
 
     for fragment in fragments.iter_from(start) {
-        let addr = compile_fragment::<H>(fragment, fragments, output, queue);
+        let addr = compile_fragment(fragment, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
 
@@ -200,7 +194,7 @@ fn compile_context<H: Host>(
     first_instruction
 }
 
-fn compile_fragment<H: Host>(
+fn compile_fragment(
     fragment: &Fragment,
     fragments: &FragmentMap,
     output: &mut Output,
@@ -237,30 +231,20 @@ fn compile_fragment<H: Host>(
 
                     Some(address)
                 }
-                Payload::CallToHostFunction { name } => {
-                    match H::function_name_to_effect_number(name) {
-                        Some(effect) => {
-                            let address = output.generate_instruction(
-                                Instruction::Push {
-                                    value: effect.into(),
-                                },
-                                fragment.id(),
-                            );
-                            output.generate_instruction(
-                                Instruction::TriggerEffect {
-                                    effect: Effect::Host,
-                                },
-                                fragment.id(),
-                            );
-                            Some(address)
-                        }
-                        None => Some(output.generate_instruction(
-                            Instruction::TriggerEffect {
-                                effect: Effect::UnknownHostFunction,
-                            },
-                            fragment.id(),
-                        )),
-                    }
+                Payload::CallToHostFunction { effect_number } => {
+                    let address = output.generate_instruction(
+                        Instruction::Push {
+                            value: (*effect_number).into(),
+                        },
+                        fragment.id(),
+                    );
+                    output.generate_instruction(
+                        Instruction::TriggerEffect {
+                            effect: Effect::Host,
+                        },
+                        fragment.id(),
+                    );
+                    Some(address)
                 }
                 Payload::CallToIntrinsic {
                     intrinsic,
