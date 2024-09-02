@@ -72,7 +72,7 @@ pub enum Effect {
     DivideByZero,
 
     #[error("Integer overflow")]
-    IntegerOverflow(IntegerOverflow),
+    IntegerOverflow,
 
     #[error("Invalid function")]
     InvalidFunction,
@@ -114,8 +114,8 @@ pub enum Effect {
 }
 
 impl From<IntegerOverflow> for Effect {
-    fn from(value: IntegerOverflow) -> Self {
-        Self::IntegerOverflow(value)
+    fn from(_: IntegerOverflow) -> Self {
+        Self::IntegerOverflow
     }
 }
 
