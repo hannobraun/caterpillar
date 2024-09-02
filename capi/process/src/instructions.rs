@@ -167,7 +167,12 @@ pub enum Instruction {
     /// # Compare two values for equality
     Eq,
 
-    /// # Evaluate the current function on the stack
+    /// # Evaluate an anonymous function
+    ///
+    /// The top value on the stack is interpreted as the index of the anonymous
+    /// function. If it doesn't identify an anonymous function (because the
+    /// anonymous function was evaluated previously, or such an index never
+    /// existed), an error is triggered.
     ///
     /// ## Implementation Note
     ///
