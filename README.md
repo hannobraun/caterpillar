@@ -18,9 +18,20 @@ intuitive.
 
 ## Status
 
-Caterpillar is still early-stage and experimental. It can hardly be called a
-programming language right now. Development is focused on creating a basic
-solution for one use case (game development) on one platform (browsers).
+There's a very basic language, and a [very basic game](games/snake/snake.capi)
+implemented in it. So far, not much thought has been given to using Caterpillar
+outside of this specific scenario. If you want to experiment with it, your best
+bet is to clone this repository and play around with what's already here.
+
+Interactive programming is currently being implemented (it was already present
+in a [previous prototype](archive/prototypes/07/)). Right now, the most basic
+cases work, but most changes will result in undefined behavior. Fixing this is
+an ongoing process.
+
+The other part of the goal, bringing the interactive development experience to
+many places, is _not_ being worked on yet. Right now, the focus is to create a
+basic solution for a single use case (game development) on a single platform
+(browsers).
 
 You can keep up with the project by reading my [daily thoughts], which include
 development updates.
