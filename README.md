@@ -21,7 +21,7 @@ intuitive.
 There's a very basic language, and a [very basic game][Snake] implemented in it.
 So far, not much thought has been given to using Caterpillar outside of this
 specific scenario. If you want to experiment with it, your best bet is to clone
-this repository and play around with what's already here.
+this repository and play around with what's already here (see _Usage_ below).
 
 Interactive programming is currently being implemented (it was already present
 in a [previous prototype](archive/prototypes/07/)). Right now, the most basic
