@@ -36,6 +36,28 @@ basic solution for a single use case (game development) on a single platform
 You can keep up with the project by reading my [daily thoughts], which include
 development updates.
 
+## Usage
+
+As per _Status_ above, not much thought has been given to using Caterpillar
+outside of this repository. If you want to play around with it, playing around
+with this repository is the way to do it:
+
+1. Clone this repository.
+2. Run `cargo run` (requires [Rust](https://rust-lang.org/) to be installed).
+
+That second step will start a build tool that should compile everything in here,
+start a development server, and eventually output a link.
+
+Open that link in your browser. You should see the Snake game running, alongside
+the Caterpillar debugger.
+
+You can modify the [code of the game][Snake] or any of the
+[Caterpillar code](capi/) itself. The builder should automatically re-compile
+every change, and the web page should reload, if necessary.
+
+Please note that there currently is a
+[substantial number of bugs and other basic problems](https://github.com/hannobraun/caterpillar/issues).
+
 ## Inspiration
 
 Caterpillar draws inspiration from many sources. The following is an
