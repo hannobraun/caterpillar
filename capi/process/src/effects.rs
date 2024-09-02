@@ -71,7 +71,7 @@ pub enum Effect {
     #[error("Divide by zero")]
     DivideByZero,
 
-    #[error(transparent)]
+    #[error("Integer overflow")]
     IntegerOverflow(IntegerOverflow),
 
     #[error("Invalid function")]
