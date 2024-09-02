@@ -39,9 +39,6 @@ pub struct Function {
     /// anonymous ones. This is just a snapshot of the current situation,
     /// however, and will most likely change as the language becomes less
     /// limited.
-    ///
-    /// This field refers to the captured values by name. It is likely that
-    /// there are advantages to instead referring to them by fragment ID.
     pub environment: BTreeSet<String>,
 }
 
