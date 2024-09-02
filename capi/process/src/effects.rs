@@ -92,9 +92,6 @@ pub enum Effect {
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
 
-    #[error("Unknown builtin")]
-    UnknownBuiltin,
-
     #[error("Unknown host function")]
     UnknownHostFunction,
 
