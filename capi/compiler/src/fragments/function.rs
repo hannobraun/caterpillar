@@ -28,10 +28,10 @@ pub struct Function {
     /// until one branch matches. This branch is then evaluated.
     pub branches: Vec<Branch>,
 
-    /// # Values captured by the function from an enclosing scope
+    /// # Values captured by the function from a parent scope
     ///
     /// All functions in Caterpillar are closures that can use values from
-    /// enclosing scopes. The names of those values are stored here.
+    /// parent scopes. The names of those values are stored here.
     ///
     /// ## Implementation Note
     ///
