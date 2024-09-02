@@ -46,6 +46,6 @@ pub enum Expression {
 pub enum IdentifierTarget {
     Binding,
     Function,
-    HostFunction,
+    HostFunction { effect_number: u8 },
     Intrinsic { intrinsic: Intrinsic },
 }

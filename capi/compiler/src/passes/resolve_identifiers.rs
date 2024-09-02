@@ -113,8 +113,11 @@ fn resolve_in_branch<H: Host>(
                 if let Some(intrinsic) = Intrinsic::from_name(name) {
                     *target = Some(IdentifierTarget::Intrinsic { intrinsic });
                 }
-                if H::function_name_to_effect_number(name).is_some() {
-                    *target = Some(IdentifierTarget::HostFunction);
+                if let Some(effect_number) =
+                    H::function_name_to_effect_number(name)
+                {
+                    *target =
+                        Some(IdentifierTarget::HostFunction { effect_number });
                 }
                 if known_named_functions.contains(name) {
                     *target = Some(IdentifierTarget::Function);
@@ -190,7 +193,9 @@ mod tests {
             functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
-                target: Some(IdentifierTarget::HostFunction),
+                target: Some(IdentifierTarget::HostFunction {
+                    effect_number: 0
+                }),
                 is_known_to_be_in_tail_position: false,
             })
         );
