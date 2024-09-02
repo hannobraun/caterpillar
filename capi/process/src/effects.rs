@@ -72,7 +72,7 @@ pub enum Effect {
     DivideByZero,
 
     #[error(transparent)]
-    IntegerOverflow(#[from] IntegerOverflow),
+    IntegerOverflow(IntegerOverflow),
 
     #[error("Invalid function")]
     InvalidFunction,
@@ -111,6 +111,12 @@ pub enum Effect {
     /// effect is triggered.
     #[error("Host-specific effect")]
     Host,
+}
+
+impl From<IntegerOverflow> for Effect {
+    fn from(value: IntegerOverflow) -> Self {
+        Self::IntegerOverflow(value)
+    }
 }
 
 // This conversion is implemented manually, because doing it automatically using
