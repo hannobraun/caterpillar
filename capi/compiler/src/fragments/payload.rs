@@ -100,7 +100,9 @@ impl fmt::Display for Payload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::CallToFunction { name, .. } => write!(f, "{name}"),
-            Self::CallToHostFunction { name } => write!(f, "{name}"),
+            Self::CallToHostFunction { .. } => {
+                write!(f, "call to host function")
+            }
             Self::CallToIntrinsic { intrinsic, .. } => {
                 write!(f, "{intrinsic}")
             }
