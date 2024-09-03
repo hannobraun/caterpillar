@@ -37,15 +37,6 @@ impl Evaluator {
             return Ok(());
         }
 
-        self.step_inner(instructions)?;
-
-        Ok(())
-    }
-
-    fn step_inner(
-        &mut self,
-        instructions: &Instructions,
-    ) -> Result<(), Effect> {
         let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
