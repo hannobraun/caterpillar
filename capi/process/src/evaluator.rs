@@ -241,8 +241,6 @@ impl Evaluator {
                         .ok_or(Effect::InvalidFunction)?
                 };
 
-                let any_member_matched = false;
-
                 for branch in &function.branches {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
@@ -291,9 +289,7 @@ impl Evaluator {
                     }
                 }
 
-                if !any_member_matched {
-                    return Err(Effect::NoMatch);
-                }
+                return Err(Effect::NoMatch);
             }
             Instruction::GreaterS8 => {
                 let b = self.stack.pop_operand()?;
