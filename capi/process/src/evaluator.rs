@@ -37,11 +37,10 @@ impl Evaluator {
         &mut self,
         instructions: &Instructions,
     ) -> Result<(), Effect> {
-        let address = self.next_instruction;
         self.next_instruction.index += 1;
 
         let instruction = instructions
-            .get(&address)
+            .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
 
         match instruction {
