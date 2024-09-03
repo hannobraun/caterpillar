@@ -10,7 +10,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    inner: Option<Effect>,
+    pub(crate) inner: Option<Effect>,
 }
 
 impl Effects {
