@@ -13,20 +13,6 @@ pub struct Effects {
     pub(crate) inner: Option<Effect>,
 }
 
-impl Effects {
-    /// # Handle the triggered effect
-    ///
-    /// Returns the currently triggered effect, and considers it handled. Right
-    /// after this call, subsequent calls to [`Effects::handle`] or
-    /// [`Effects::inspect`] will return `None`.
-    ///
-    /// This method can safely be called, if no effect is currently triggered.
-    /// In that case, it returns `None` and has no effect.
-    pub fn handle(&mut self) -> Option<Effect> {
-        self.inner.take()
-    }
-}
-
 /// # An effect that interrupts evaluation
 ///
 /// Effects can be triggered when instructions are executed. Most of them

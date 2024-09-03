@@ -53,8 +53,16 @@ impl Process {
         self.effects.inner.as_ref()
     }
 
+    /// # Handle the triggered effect
+    ///
+    /// Returns the currently triggered effect, and considers it handled. Right
+    /// after this call, subsequent calls to [`Effects::handle`] or
+    /// [`Effects::inspect`] will return `None`.
+    ///
+    /// This method can safely be called, if no effect is currently triggered.
+    /// In that case, it returns `None` and has no effect.
     pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effects.handle()
+        self.effects.inner.take()
     }
 
     pub fn evaluator(&self) -> &Evaluator {
