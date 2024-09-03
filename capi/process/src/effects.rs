@@ -32,6 +32,7 @@ impl Effects {
     ///
     /// The new effect is added to the front of the queue.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
+        assert!(self.queue.is_empty());
         self.queue.push_front(effect.into());
     }
 }
