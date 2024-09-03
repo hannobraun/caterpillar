@@ -123,8 +123,6 @@ impl Evaluator {
                 function,
                 is_tail_call,
             } => {
-                let any_member_matched = false;
-
                 for branch in &function.branches {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
@@ -166,9 +164,7 @@ impl Evaluator {
                     }
                 }
 
-                if !any_member_matched {
-                    return Err(Effect::NoMatch);
-                }
+                return Err(Effect::NoMatch);
             }
             Instruction::ConvertS32ToS8 => {
                 let v = self.stack.pop_operand()?;
