@@ -14,11 +14,6 @@ pub struct Effects {
 }
 
 impl Effects {
-    /// # Inspect the triggered effect
-    pub fn inspect(&self) -> Option<&Effect> {
-        self.inner.as_ref()
-    }
-
     /// # Trigger the provided effect
     ///
     /// This must not be called, while an effect is already triggered. Only call

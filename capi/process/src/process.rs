@@ -29,8 +29,9 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
+    /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
-        self.effects.inspect()
+        self.effects.inner.as_ref()
     }
 
     pub fn effects(&self) -> &Effects {
