@@ -38,7 +38,12 @@ impl Effects {
     ///
     /// Panics, if an effect is already triggered.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        assert!(self.inner.is_none());
+        assert!(
+            self.inner.is_none(),
+            "Trying to trigger an effect, while one is currently triggered. \
+            This must never be done. That it still happened is a bug in \
+            Caterpillar."
+        );
         self.inner = Some(effect.into());
     }
 }
