@@ -139,7 +139,6 @@ impl GameEngine {
                         self.process.effects_mut().trigger(effect);
                     }
                     Err(new_effect) => {
-                        self.process.effects_mut().trigger(effect);
                         self.process.effects_mut().trigger(new_effect);
                     }
                 }
