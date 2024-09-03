@@ -77,6 +77,22 @@ For more information on future design directions, please follow my
 [daily thoughts]. There's also a [design document](design.md), which I'd like to
 phase out, but that still provides some value.
 
+### Developer experience is the priority, but not an absolute one
+
+Caterpillar's core premise is to improve developer experience using interactive
+programming. But this does not make developer experience an absolute priority.
+It must always be weighed against other factors.
+
+Where developer experience conflicts with performance, the decision will be made
+configurable, if practical. Where possible, designs are chosen that are good for
+both.
+
+The following daily thoughts provide more context:
+[2024-08-30](https://capi.hannobraun.com/daily/2024-08-30),
+[2024-09-01](https://capi.hannobraun.com/daily/2024-09-01),
+[2024-09-02](https://capi.hannobraun.com/daily/2024-09-02), and
+[2024-09-03](https://capi.hannobraun.com/daily/2024-09-03).
+
 ### Experimentation first; conservative decisions later, as necessary
 
 I want Caterpillar to be adopted. That could mean that I need to focus
