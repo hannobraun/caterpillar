@@ -73,6 +73,12 @@ impl InstructionAddress {
             index: self.index - 1,
         }
     }
+
+    pub fn next(&self) -> Self {
+        Self {
+            index: self.index + 1,
+        }
+    }
 }
 
 impl InstructionAddress {

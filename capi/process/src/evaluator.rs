@@ -49,9 +49,7 @@ impl Evaluator {
         let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
-        let next_instruction = InstructionAddress {
-            index: self.next_instruction.index + 1,
-        };
+        let next_instruction = self.next_instruction.next();
 
         match current_instruction {
             Instruction::AddS8 => {
