@@ -55,7 +55,7 @@ impl Expression {
 
         let is_active = Some(fragment_id) == active_fragment;
 
-        let effect = process.effects().first().and_then(|effect| {
+        let effect = process.effects().inspect().and_then(|effect| {
             let effect_fragment = source_map
                 .instruction_to_fragment(&process.most_recent_step().unwrap())
                 .expect("Expecting effects to originate from user code.");

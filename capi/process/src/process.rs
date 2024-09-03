@@ -22,7 +22,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.effects.first().is_none()
+        !self.has_finished() && self.effects.inspect().is_none()
     }
 
     pub fn has_finished(&self) -> bool {
@@ -76,7 +76,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Breakpoint) = self.effects.first() {
+        if let Some(Effect::Breakpoint) = self.effects.inspect() {
             if let Some(address) = and_stop_at {
                 self.breakpoints.set_ephemeral(address);
             }
