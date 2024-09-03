@@ -14,25 +14,6 @@ pub struct Effects {
 }
 
 impl Effects {
-    /// # Trigger the provided effect
-    ///
-    /// This must not be called, while an effect is already triggered. Only call
-    /// it from contexts, where it's known that no effect could be triggered, or
-    /// right after handling a currently triggered effect.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if an effect is already triggered.
-    pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        assert!(
-            self.inner.is_none(),
-            "Trying to trigger an effect, while one is currently triggered. \
-            This must never be done. That it still happened is a bug in \
-            Caterpillar."
-        );
-        self.inner = Some(effect.into());
-    }
-
     /// # Handle the triggered effect
     ///
     /// Returns the currently triggered effect, and considers it handled. Right

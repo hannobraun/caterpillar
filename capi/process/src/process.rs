@@ -29,8 +29,23 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
+    /// # Trigger the provided effect
+    ///
+    /// This must not be called, while an effect is already triggered. Only call
+    /// it from contexts, where it's known that no effect could be triggered, or
+    /// right after handling a currently triggered effect.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if an effect is already triggered.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
-        self.effects.trigger(effect)
+        assert!(
+            self.effects.inner.is_none(),
+            "Trying to trigger an effect, while one is currently triggered. \
+            This must never be done. That it still happened is a bug in \
+            Caterpillar."
+        );
+        self.effects.inner = Some(effect.into());
     }
 
     /// # Inspect the triggered effect
