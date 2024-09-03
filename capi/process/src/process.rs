@@ -81,7 +81,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(address);
             }
 
-            self.effects.handle_first();
+            self.effects.handle();
         }
     }
 

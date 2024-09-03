@@ -43,7 +43,7 @@ impl Effects {
     /// If it can't be handled for some reason, which is probably a fatal
     /// failure, it should be re-triggered, to make sure all required
     /// information is available for debugging.
-    pub fn handle_first(&mut self) -> Option<Effect> {
+    pub fn handle(&mut self) -> Option<Effect> {
         self.inner.take()
     }
 }
