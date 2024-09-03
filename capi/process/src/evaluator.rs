@@ -28,6 +28,13 @@ impl Evaluator {
             return Ok(());
         }
 
+        self.step_inner(instructions)
+    }
+
+    fn step_inner(
+        &mut self,
+        instructions: &Instructions,
+    ) -> Result<(), Effect> {
         let address = self.next_instruction;
         self.next_instruction.index += 1;
 
