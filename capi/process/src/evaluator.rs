@@ -27,9 +27,7 @@ impl Evaluator {
                 // the _next_ instruction to execute in the respective frame.
                 // Let's make sure we get the correct address before translating
                 // it into a fragment.
-                InstructionAddress {
-                    index: instruction.index - 1,
-                }
+                instruction.previous()
             })
             .chain([self.next_instruction])
     }

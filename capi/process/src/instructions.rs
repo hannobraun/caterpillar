@@ -68,6 +68,14 @@ pub struct InstructionAddress {
 }
 
 impl InstructionAddress {
+    pub fn previous(&self) -> Self {
+        Self {
+            index: self.index - 1,
+        }
+    }
+}
+
+impl InstructionAddress {
     fn to_usize(self) -> usize {
         self.index
             .try_into()
