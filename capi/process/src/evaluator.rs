@@ -37,12 +37,12 @@ impl Evaluator {
         &mut self,
         instructions: &Instructions,
     ) -> Result<(), Effect> {
-        let instruction = instructions
+        let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
         self.next_instruction.index += 1;
 
-        match instruction {
+        match current_instruction {
             Instruction::AddS8 => {
                 let b = self.stack.pop_operand()?;
                 let a = self.stack.pop_operand()?;
