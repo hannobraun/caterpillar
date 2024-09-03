@@ -22,6 +22,7 @@ impl Evaluator {
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.stack
             .return_addresses()
+            .chain([self.next_instruction])
             .map(|instruction| {
                 // All instructions addresses on the call stack point point to
                 // the _next_ instruction to execute in the respective frame.
@@ -29,7 +30,6 @@ impl Evaluator {
                 // it into a fragment.
                 instruction.previous()
             })
-            .chain([self.next_instruction])
     }
 
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
