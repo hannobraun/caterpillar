@@ -105,7 +105,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     while process.can_step() {
         process.step(&instructions);
 
-        while let Some(effect) = process.effects_mut().handle_first() {
+        if let Some(effect) = process.effects_mut().handle_first() {
             match effect {
                 Effect::Host => {
                     let effect = process.stack_mut().pop_operand().unwrap();
