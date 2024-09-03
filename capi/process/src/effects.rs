@@ -38,11 +38,14 @@ impl Effects {
         self.inner = Some(effect.into());
     }
 
-    /// Handle the first effect in the queue
+    /// # Handle the triggered effect
     ///
-    /// If it can't be handled for some reason, which is probably a fatal
-    /// failure, it should be re-triggered, to make sure all required
-    /// information is available for debugging.
+    /// Returns the currently triggered effect, and considers it handled. Right
+    /// after this call, subsequent calls to [`Effects::handle`] or
+    /// [`Effects::inspect`] will return `None`.
+    ///
+    /// This method can safely be called, if no effect is currently triggered.
+    /// In that case, it returns `None` and has no effect.
     pub fn handle(&mut self) -> Option<Effect> {
         self.inner.take()
     }
