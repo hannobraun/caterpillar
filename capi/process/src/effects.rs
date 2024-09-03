@@ -25,9 +25,6 @@ use crate::{
     thiserror::Error,
 )]
 pub enum Effect {
-    #[error("Binding expression left values on stack")]
-    BindingLeftValuesOnStack,
-
     #[error("Breakpoint")]
     Breakpoint,
 
