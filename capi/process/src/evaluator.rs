@@ -50,6 +50,7 @@ impl Evaluator {
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
         let next_instruction = self.next_instruction.next();
+        self.next_instruction = next_instruction;
 
         match current_instruction {
             Instruction::AddS8 => {
@@ -490,7 +491,6 @@ impl Evaluator {
             }
         }
 
-        self.next_instruction = next_instruction;
         Ok(())
     }
 }
