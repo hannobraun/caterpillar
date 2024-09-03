@@ -34,10 +34,6 @@ impl Process {
         self.effects.inner.as_ref()
     }
 
-    pub fn effects(&self) -> &Effects {
-        &self.effects
-    }
-
     pub fn effects_mut(&mut self) -> &mut Effects {
         &mut self.effects
     }
