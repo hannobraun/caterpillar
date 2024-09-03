@@ -29,6 +29,10 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
+    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
+        self.effects.trigger(effect)
+    }
+
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
         self.effects.inner.as_ref()
@@ -102,12 +106,12 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.effects.trigger(Effect::Breakpoint);
+            self.trigger_effect(Effect::Breakpoint);
             return;
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects.trigger(effect);
+            self.trigger_effect(effect);
         }
 
         self.most_recent_step = Some(next_instruction);

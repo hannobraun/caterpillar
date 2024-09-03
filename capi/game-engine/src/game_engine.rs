@@ -136,10 +136,10 @@ impl GameEngine {
                         break;
                     }
                     Ok(EffectOutcome::Unhandled) => {
-                        self.process.effects_mut().trigger(effect);
+                        self.process.trigger_effect(effect);
                     }
                     Err(new_effect) => {
-                        self.process.effects_mut().trigger(new_effect);
+                        self.process.trigger_effect(new_effect);
                     }
                 }
             }
