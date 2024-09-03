@@ -28,7 +28,9 @@ impl Evaluator {
             return Ok(());
         }
 
-        self.step_inner(instructions)
+        let () = self.step_inner(instructions)?;
+
+        Ok(())
     }
 
     fn step_inner(
