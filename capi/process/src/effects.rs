@@ -14,7 +14,7 @@ pub struct Effects {
 }
 
 impl Effects {
-    /// Look at the first effect in the queue
+    /// # Inspect the triggered effect
     pub fn inspect(&self) -> Option<&Effect> {
         self.inner.as_ref()
     }
