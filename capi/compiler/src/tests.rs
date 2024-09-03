@@ -105,7 +105,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     while process.can_step() {
         process.step(&instructions);
 
-        while let Some(effect) = process.effects().inspect() {
+        while let Some(effect) = process.effects_mut().handle_first() {
             match effect {
                 Effect::Host => {
                     let effect = process.stack_mut().pop_operand().unwrap();
@@ -115,7 +115,6 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
                     let channel: u32 = u32::from_le_bytes(channel.0);
 
                     *signals.entry(channel).or_default() += 1;
-                    process.effects_mut().handle_first();
                 }
                 effect => {
                     panic!(
