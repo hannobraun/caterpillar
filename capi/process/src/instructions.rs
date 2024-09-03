@@ -68,10 +68,6 @@ pub struct InstructionAddress {
 }
 
 impl InstructionAddress {
-    pub fn increment(&mut self) {
-        self.index += 1;
-    }
-
     fn to_usize(self) -> usize {
         self.index
             .try_into()

@@ -29,7 +29,7 @@ impl Evaluator {
         }
 
         let address = self.next_instruction;
-        self.next_instruction.increment();
+        self.next_instruction.index += 1;
 
         let instruction = instructions
             .get(&address)
