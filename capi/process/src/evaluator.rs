@@ -22,7 +22,6 @@ impl Evaluator {
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.stack
             .return_addresses()
-            .chain([self.next_instruction])
             .map(|instruction| {
                 // All instructions addresses on the call stack point point to
                 // the _next_ instruction to execute in the respective frame.
@@ -32,6 +31,7 @@ impl Evaluator {
                     index: instruction.index - 1,
                 }
             })
+            .chain([self.next_instruction])
     }
 
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
@@ -51,7 +51,9 @@ impl Evaluator {
         let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
-        self.next_instruction.index += 1;
+        let next_instruction = InstructionAddress {
+            index: self.next_instruction.index + 1,
+        };
 
         match current_instruction {
             Instruction::AddS8 => {
@@ -161,7 +163,7 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(self.next_instruction)?;
+                            self.stack.push_frame(next_instruction)?;
                         }
 
                         self.next_instruction = branch.start;
@@ -279,7 +281,7 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(self.next_instruction)?;
+                            self.stack.push_frame(next_instruction)?;
                         }
 
                         self.stack
@@ -487,10 +489,12 @@ impl Evaluator {
                 self.stack.push_operand(c);
             }
             Instruction::TriggerEffect { effect } => {
+                self.next_instruction = next_instruction;
                 return Err(*effect);
             }
         }
 
+        self.next_instruction = next_instruction;
         Ok(())
     }
 }
