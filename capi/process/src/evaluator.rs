@@ -123,7 +123,7 @@ impl Evaluator {
                 function,
                 is_tail_call,
             } => {
-                let mut any_member_matched = false;
+                let any_member_matched = false;
 
                 for branch in &function.branches {
                     let mut used_operands = Vec::new();
@@ -158,9 +158,7 @@ impl Evaluator {
                         }
 
                         self.next_instruction = branch.start;
-                        any_member_matched = true;
-
-                        break;
+                        return Ok(());
                     } else {
                         for value in used_operands.into_iter().rev() {
                             self.stack.push_operand(value);
