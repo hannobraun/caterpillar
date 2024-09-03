@@ -28,9 +28,15 @@ impl Effects {
         self.inner.take()
     }
 
-    /// Trigger the provided effect
+    /// # Trigger the provided effect
     ///
-    /// The new effect is added to the front of the queue.
+    /// This must not be called, while an effect is already triggered. Only call
+    /// it from contexts, where it's known that no effect could be triggered, or
+    /// right after handling a currently triggered effect.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if an effect is already triggered.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
         assert!(self.inner.is_none());
         self.inner = Some(effect.into());
