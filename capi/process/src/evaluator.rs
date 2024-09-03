@@ -438,6 +438,7 @@ impl Evaluator {
             Instruction::Return => {
                 if let Some(return_address) = self.stack.pop_frame() {
                     self.next_instruction = return_address;
+                    return Ok(());
                 }
             }
             Instruction::SubS32 => {
