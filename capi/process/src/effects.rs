@@ -19,15 +19,6 @@ impl Effects {
         self.inner.as_ref()
     }
 
-    /// Handle the first effect in the queue
-    ///
-    /// If it can't be handled for some reason, which is probably a fatal
-    /// failure, it should be re-triggered, to make sure all required
-    /// information is available for debugging.
-    pub fn handle_first(&mut self) -> Option<Effect> {
-        self.inner.take()
-    }
-
     /// # Trigger the provided effect
     ///
     /// This must not be called, while an effect is already triggered. Only call
@@ -45,6 +36,15 @@ impl Effects {
             Caterpillar."
         );
         self.inner = Some(effect.into());
+    }
+
+    /// Handle the first effect in the queue
+    ///
+    /// If it can't be handled for some reason, which is probably a fatal
+    /// failure, it should be re-triggered, to make sure all required
+    /// information is available for debugging.
+    pub fn handle_first(&mut self) -> Option<Effect> {
+        self.inner.take()
     }
 }
 
