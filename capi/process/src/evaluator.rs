@@ -49,8 +49,7 @@ impl Evaluator {
         let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
-        let next_instruction = self.next_instruction.next();
-        self.next_instruction = next_instruction;
+        self.next_instruction = self.next_instruction.next();
 
         match current_instruction {
             Instruction::AddS8 => {
@@ -160,7 +159,7 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(next_instruction)?;
+                            self.stack.push_frame(self.next_instruction)?;
                         }
 
                         self.next_instruction = branch.start;
@@ -278,7 +277,7 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(next_instruction)?;
+                            self.stack.push_frame(self.next_instruction)?;
                         }
 
                         self.stack
@@ -486,7 +485,6 @@ impl Evaluator {
                 self.stack.push_operand(c);
             }
             Instruction::TriggerEffect { effect } => {
-                self.next_instruction = next_instruction;
                 return Err(*effect);
             }
         }
