@@ -122,7 +122,7 @@ impl GameEngine {
 
             self.process.step(instructions);
 
-            if let Some(effect) = self.process.effects_mut().handle() {
+            if let Some(effect) = self.process.handle_effect() {
                 match self.handle_effect(&effect, pixels) {
                     Ok(EffectOutcome::Handled) => {}
                     Ok(EffectOutcome::WasSubmit) => {

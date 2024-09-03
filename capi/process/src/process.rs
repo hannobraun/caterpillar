@@ -53,6 +53,10 @@ impl Process {
         self.effects.inner.as_ref()
     }
 
+    pub fn handle_effect(&mut self) -> Option<Effect> {
+        self.effects.handle()
+    }
+
     pub fn effects_mut(&mut self) -> &mut Effects {
         &mut self.effects
     }
@@ -101,7 +105,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(address);
             }
 
-            self.effects.handle();
+            self.handle_effect();
         }
     }
 
