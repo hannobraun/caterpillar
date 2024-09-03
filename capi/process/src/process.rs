@@ -2,8 +2,7 @@ use std::mem;
 
 use crate::{
     breakpoints::Breakpoints, evaluator::Evaluator,
-    instructions::InstructionAddress, Effect, Effects, Instructions, Stack,
-    Value,
+    instructions::InstructionAddress, Effect, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -11,7 +10,7 @@ use crate::{
 )]
 pub struct Process {
     most_recent_step: Option<InstructionAddress>,
-    effects: Effects,
+    effects: Option<Effect>,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }
@@ -40,17 +39,17 @@ impl Process {
     /// Panics, if an effect is already triggered.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
         assert!(
-            self.effects.inner.is_none(),
+            self.effects.is_none(),
             "Trying to trigger an effect, while one is currently triggered. \
             This must never be done. That it still happened is a bug in \
             Caterpillar."
         );
-        self.effects.inner = Some(effect.into());
+        self.effects = Some(effect.into());
     }
 
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
-        self.effects.inner.as_ref()
+        self.effects.as_ref()
     }
 
     /// # Handle the triggered effect
@@ -62,7 +61,7 @@ impl Process {
     /// This method can safely be called, if no effect is currently triggered.
     /// In that case, it returns `None` and has no effect.
     pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effects.inner.take()
+        self.effects.take()
     }
 
     pub fn evaluator(&self) -> &Evaluator {

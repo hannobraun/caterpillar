@@ -5,14 +5,6 @@ use crate::{
     value::IntegerOverflow,
 };
 
-/// The queue of currently active effects
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct Effects {
-    pub(crate) inner: Option<Effect>,
-}
-
 /// # An effect that interrupts evaluation
 ///
 /// Effects can be triggered when instructions are executed. Most of them
