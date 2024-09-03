@@ -124,15 +124,8 @@ fn instruction_to_function(
     instruction: &InstructionAddress,
     code: &Code,
 ) -> (fragments::Function, FragmentId) {
-    // All instructions addresses on the call stack point point to the _next_
-    // instruction to execute in the respective frame. Let's make sure we get
-    // the correct address before translating it into a fragment.
-    let instruction = InstructionAddress {
-        index: instruction.index - 1,
-    };
-
     let Some(fragment_id) =
-        code.source_map.instruction_to_fragment(&instruction)
+        code.source_map.instruction_to_fragment(instruction)
     else {
         panic!(
             "Expecting all instructions referenced on call stack to map to a \

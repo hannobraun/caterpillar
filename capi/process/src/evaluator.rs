@@ -20,7 +20,18 @@ impl Evaluator {
     pub fn active_instructions(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
-        self.stack.return_addresses().chain([self.next_instruction])
+        self.stack
+            .return_addresses()
+            .chain([self.next_instruction])
+            .map(|instruction| {
+                // All instructions addresses on the call stack point point to
+                // the _next_ instruction to execute in the respective frame.
+                // Let's make sure we get the correct address before translating
+                // it into a fragment.
+                InstructionAddress {
+                    index: instruction.index - 1,
+                }
+            })
     }
 
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
