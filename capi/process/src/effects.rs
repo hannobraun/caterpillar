@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, num::TryFromIntError};
+use std::num::TryFromIntError;
 
 use crate::{
     operands::PopOperandError, stack::PushStackFrameError,
@@ -10,13 +10,13 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    queue: VecDeque<Effect>,
+    queue: Option<Effect>,
 }
 
 impl Effects {
     /// Look at the first effect in the queue
     pub fn first(&self) -> Option<&Effect> {
-        self.queue.front()
+        self.queue.as_ref()
     }
 
     /// Handle the first effect in the queue
@@ -25,15 +25,15 @@ impl Effects {
     /// failure, it should be re-triggered, to make sure all required
     /// information is available for debugging.
     pub fn handle_first(&mut self) -> Option<Effect> {
-        self.queue.pop_front()
+        self.queue.take()
     }
 
     /// Trigger the provided effect
     ///
     /// The new effect is added to the front of the queue.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        assert!(self.queue.is_empty());
-        self.queue.push_front(effect.into());
+        assert!(self.queue.is_none());
+        self.queue = Some(effect.into());
     }
 }
 
