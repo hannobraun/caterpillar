@@ -37,7 +37,7 @@ impl Evaluator {
             return Ok(());
         }
 
-        self.next_instruction = self.step_inner(instructions)?;
+        self.step_inner(instructions)?;
 
         Ok(())
     }
@@ -45,7 +45,7 @@ impl Evaluator {
     fn step_inner(
         &mut self,
         instructions: &Instructions,
-    ) -> Result<InstructionAddress, Effect> {
+    ) -> Result<(), Effect> {
         let current_instruction = instructions
             .get(&self.next_instruction)
             .expect("Expected instruction referenced on stack to exist");
@@ -162,7 +162,8 @@ impl Evaluator {
                             self.stack.push_frame(next_instruction)?;
                         }
 
-                        return Ok(branch.start);
+                        self.next_instruction = branch.start;
+                        return Ok(());
                     } else {
                         for value in used_operands.into_iter().rev() {
                             self.stack.push_operand(value);
@@ -286,7 +287,8 @@ impl Evaluator {
                             )
                             .extend(function.environment);
 
-                        return Ok(branch.start);
+                        self.next_instruction = branch.start;
+                        return Ok(());
                     } else {
                         for value in used_operands.into_iter().rev() {
                             self.stack.push_operand(value);
@@ -442,7 +444,8 @@ impl Evaluator {
             }
             Instruction::Return => {
                 if let Some(return_address) = self.stack.pop_frame() {
-                    return Ok(return_address);
+                    self.next_instruction = return_address;
+                    return Ok(());
                 }
             }
             Instruction::SubS32 => {
@@ -487,7 +490,8 @@ impl Evaluator {
             }
         }
 
-        Ok(next_instruction)
+        self.next_instruction = next_instruction;
+        Ok(())
     }
 }
 
