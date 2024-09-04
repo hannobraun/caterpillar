@@ -90,7 +90,7 @@ pub fn Fragment(
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (expression, error) = match fragment.kind {
+    let (fragment, error) = match fragment.kind {
         DebugFragmentKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
@@ -190,7 +190,7 @@ pub fn Fragment(
     view! {
         <span>
             <span class=class_outer>
-                {expression}
+                {fragment}
             </span>
             {error}
         </span>
