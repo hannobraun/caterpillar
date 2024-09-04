@@ -7,6 +7,7 @@ edition = "2021"
 anyhow = "*"
 tempfile = "*"
 tracing = "*"
+walkdir = "*"
 wasm-bindgen-cli-support = "*"
 
 [dependencies.capi-watch]
