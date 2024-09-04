@@ -113,19 +113,17 @@ pub fn Fragment(
             .into_view(),
             None,
         ),
-        DebugFragmentKind::Other(OtherExpression {
-            payload,
-            first_instruction,
-            effect,
-        }) => make_single_expression(
-            format!("{payload}"),
-            fragment.has_durable_breakpoint,
-            fragment.is_active,
-            first_instruction,
-            effect,
-            &mut class_outer,
-            commands,
-        ),
+        DebugFragmentKind::Other(OtherExpression { payload, effect }) => {
+            make_single_expression(
+                format!("{payload}"),
+                fragment.has_durable_breakpoint,
+                fragment.is_active,
+                fragment.first_instruction,
+                effect,
+                &mut class_outer,
+                commands,
+            )
+        }
     };
 
     view! {

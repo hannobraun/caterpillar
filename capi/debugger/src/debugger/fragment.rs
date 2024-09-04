@@ -17,6 +17,7 @@ pub struct DebugFragment {
     pub is_active: bool,
 
     pub has_durable_breakpoint: bool,
+    pub first_instruction: Option<InstructionAddress>,
 }
 
 impl DebugFragment {
@@ -52,6 +53,8 @@ impl DebugFragment {
             kind,
             is_active,
             has_durable_breakpoint,
+            first_instruction: instructions
+                .and_then(|instruction| instruction.first().copied()),
         })
     }
 }
@@ -67,7 +70,7 @@ impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
-        instructions: Option<&Vec<InstructionAddress>>,
+        _: Option<&Vec<InstructionAddress>>,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
@@ -106,18 +109,12 @@ impl DebugFragmentKind {
             }
         });
 
-        Some(Self::Other(OtherExpression {
-            payload,
-            first_instruction: instructions
-                .and_then(|instruction| instruction.first().copied()),
-            effect,
-        }))
+        Some(Self::Other(OtherExpression { payload, effect }))
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
     pub payload: fragments::Payload,
-    pub first_instruction: Option<InstructionAddress>,
     pub effect: Option<Effect>,
 }
