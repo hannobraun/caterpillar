@@ -1,4 +1,3 @@
-use capi_compiler::fragments::Payload;
 use capi_process::{Effect, InstructionAddress};
 use capi_protocol::command::Command;
 use leptos::{
@@ -119,9 +118,9 @@ pub fn Fragment(
             first_instruction,
             effect,
         }) => make_single_expression(
+            format!("{payload}"),
             fragment.has_durable_breakpoint,
             fragment.is_active,
-            payload,
             first_instruction,
             effect,
             &mut class_outer,
@@ -140,9 +139,9 @@ pub fn Fragment(
 }
 
 fn make_single_expression(
+    expression: String,
     has_durable_breakpoint: bool,
     is_active: bool,
-    payload: Payload,
     first_instruction: Option<InstructionAddress>,
     effect: Option<Effect>,
     class_outer: &mut String,
@@ -192,8 +191,6 @@ fn make_single_expression(
 
         leptos::spawn_local(send_command(command, commands.clone()));
     };
-
-    let expression = format!("{payload}");
 
     (
         view! {
