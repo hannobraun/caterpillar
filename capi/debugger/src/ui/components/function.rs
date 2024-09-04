@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Branch, Expression, ExpressionKind, OtherExpression},
+    debugger::{Branch, DebugFragment, ExpressionKind, OtherExpression},
     ui::{send_command, CommandsTx},
 };
 
@@ -56,7 +56,7 @@ fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
 #[component]
 fn Branch(
     parameters: Vec<String>,
-    expressions: Vec<Expression>,
+    expressions: Vec<DebugFragment>,
     commands: CommandsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
@@ -85,7 +85,7 @@ fn Branch(
 
 #[component]
 pub fn Expression(
-    expression: Expression,
+    expression: DebugFragment,
     commands: CommandsTx,
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");

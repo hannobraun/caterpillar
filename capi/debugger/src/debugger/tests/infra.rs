@@ -8,8 +8,9 @@ use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch, Debugger,
-    Expression, ExpressionKind, Function, OtherExpression, RemoteProcess,
+    active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch,
+    DebugFragment, Debugger, ExpressionKind, Function, OtherExpression,
+    RemoteProcess,
 };
 
 pub fn init() -> TestInfra {
@@ -163,12 +164,12 @@ impl FragmentExt for Fragment {
 }
 
 pub trait ExpressionExt {
-    fn expect_function(self) -> Vec<Expression>;
+    fn expect_function(self) -> Vec<DebugFragment>;
     fn expect_other(self) -> OtherExpression;
 }
 
-impl ExpressionExt for Expression {
-    fn expect_function(self) -> Vec<Expression> {
+impl ExpressionExt for DebugFragment {
+    fn expect_function(self) -> Vec<DebugFragment> {
         let ExpressionKind::Function { mut function } = self.kind else {
             panic!("Expected block");
         };

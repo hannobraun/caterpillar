@@ -12,7 +12,7 @@ pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
     debugger::Debugger,
-    expression::{Expression, ExpressionKind, OtherExpression},
+    expression::{DebugFragment, ExpressionKind, OtherExpression},
     function::Function,
     remote_process::RemoteProcess,
 };

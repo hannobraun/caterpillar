@@ -7,7 +7,7 @@ use capi_process::{Effect, InstructionAddress, Process};
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Expression {
+pub struct DebugFragment {
     pub kind: ExpressionKind,
 
     /// # Indicate whether the expression is active
@@ -19,7 +19,7 @@ pub struct Expression {
     pub has_durable_breakpoint: bool,
 }
 
-impl Expression {
+impl DebugFragment {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,

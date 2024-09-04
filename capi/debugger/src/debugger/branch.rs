@@ -5,12 +5,12 @@ use capi_compiler::{
 };
 use capi_process::Process;
 
-use super::Expression;
+use super::DebugFragment;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Branch {
     pub parameters: Vec<String>,
-    pub body: Vec<Expression>,
+    pub body: Vec<DebugFragment>,
 }
 
 impl Branch {
@@ -35,7 +35,7 @@ impl Branch {
             .iter_from(branch.start)
             .cloned()
             .filter_map(|fragment| {
-                Expression::new(
+                DebugFragment::new(
                     fragment,
                     active_fragment,
                     fragments,
