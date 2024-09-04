@@ -50,7 +50,9 @@
         const runtime = instance.exports;
 
         import initDebugger from "/capi-debugger.js";
-        const debugger_ = await initDebugger("capi-debugger_bg.wasm");
+        const debugger_ = await initDebugger(
+            { module_or_path: "capi-debugger_bg.wasm" }
+        );
 
         const code = await fetchCode("");
 
