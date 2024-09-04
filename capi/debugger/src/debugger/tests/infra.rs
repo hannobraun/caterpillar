@@ -145,13 +145,13 @@ impl DebugFunctionExt for DebugFunction {
 }
 
 pub trait DebugFragmentExt {
-    fn expect_call_to(self, name: &str);
+    fn expect_call_to_function(self, name: &str);
     fn expect_function(self) -> DebugFunction;
     fn expect_other_expression(self) -> fragments::Payload;
 }
 
 impl DebugFragmentExt for DebugFragment {
-    fn expect_call_to(self, called_fn: &str) {
+    fn expect_call_to_function(self, called_fn: &str) {
         let DebugFragmentKind::CallToFunction { name } = self.kind else {
             panic!("Expected call to function.");
         };

@@ -142,7 +142,7 @@ fn call_stack_reconstruction_missing_main() {
         .functions()
         .with_name("main")
         .active_fragment()
-        .expect_call_to("f");
+        .expect_call_to_function("f");
 }
 
 #[test]
@@ -180,7 +180,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
         .functions()
         .with_name("f")
         .active_fragment()
-        .expect_call_to("g");
+        .expect_call_to_function("g");
 }
 
 #[test]
