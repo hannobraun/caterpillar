@@ -103,7 +103,7 @@ fn stopped_at_code_within_block() {
         .only_branch()
         .body
         .remove(0)
-        .expect_block()
+        .expect_function()
         .remove(0)
         .expect_other();
     assert_eq!(expression.effect, Some(Effect::Breakpoint));

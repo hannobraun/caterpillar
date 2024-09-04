@@ -163,12 +163,12 @@ impl FragmentExt for Fragment {
 }
 
 pub trait ExpressionExt {
-    fn expect_block(self) -> Vec<Expression>;
+    fn expect_function(self) -> Vec<Expression>;
     fn expect_other(self) -> OtherExpression;
 }
 
 impl ExpressionExt for Expression {
-    fn expect_block(self) -> Vec<Expression> {
+    fn expect_function(self) -> Vec<Expression> {
         let ExpressionKind::Function { mut function } = self.kind else {
             panic!("Expected block");
         };
