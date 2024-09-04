@@ -161,7 +161,7 @@ impl DebugFragmentExt for DebugFragment {
         };
 
         let Payload::CallToFunction { name, .. } = payload else {
-            panic!()
+            panic!("Expected call to function.");
         };
 
         assert_eq!(called_fn, name);
