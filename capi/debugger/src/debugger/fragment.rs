@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, Fragment, FragmentId, FragmentKind, Fragments},
+    fragments::{Fragment, FragmentId, FragmentKind, Fragments, Payload},
     source_map::SourceMap,
 };
 use capi_process::{Effect, InstructionAddress, Process};
@@ -88,7 +88,7 @@ pub enum DebugFragmentKind {
     /// This shouldn't exist. We should split out all the relevant variants, so
     /// the UI code can match on them. This would also pave the way for syntax
     /// highlighting in the debugger.
-    OtherExpression(fragments::Payload),
+    OtherExpression(Payload),
 }
 
 impl DebugFragmentKind {
@@ -103,7 +103,7 @@ impl DebugFragmentKind {
             return None;
         };
 
-        if let fragments::Payload::Function { function } = payload {
+        if let Payload::Function { function } = payload {
             let function = DebugFunction::new(
                 function,
                 active_fragment,
@@ -114,7 +114,7 @@ impl DebugFragmentKind {
 
             return Some(Self::Function { function });
         }
-        if let fragments::Payload::Comment { text } = payload {
+        if let Payload::Comment { text } = payload {
             return Some(Self::Comment {
                 text: format!("# {text}"),
             });
