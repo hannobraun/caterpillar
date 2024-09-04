@@ -6,6 +6,7 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         let effect = match name {
+            "halt" => GameEngineEffect::Halt,
             "load" => GameEngineEffect::Load,
             "read_input" => GameEngineEffect::ReadInput,
             "read_random" => GameEngineEffect::ReadRandom,
@@ -47,6 +48,21 @@ impl Host for GameEngineHost {
 )]
 #[repr(u8)]
 pub enum GameEngineEffect {
+    /// # Halt the game
+    ///
+    /// This essentially works like the `brk` intrinsic. It was added
+    /// specifically to have a breakpoint-like effect in the game engine, for
+    /// use in the debugger's test suite. Maybe it will find other uses later.
+    ///
+    /// ## Input
+    ///
+    /// none
+    ///
+    /// ## Output
+    ///
+    /// none
+    Halt,
+
     /// # Load a value from a given memory address
     ///
     /// ## Input

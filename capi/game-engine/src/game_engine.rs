@@ -167,6 +167,9 @@ impl GameEngine {
         };
 
         match host_effect {
+            GameEngineEffect::Halt => {
+                return Ok(EffectOutcome::Unhandled);
+            }
             GameEngineEffect::SubmitFrame => {
                 return Ok(EffectOutcome::WasSubmit);
             }
