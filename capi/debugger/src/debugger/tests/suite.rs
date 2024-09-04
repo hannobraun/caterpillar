@@ -1,11 +1,10 @@
-use capi_compiler::intrinsics::Intrinsic;
 use capi_process::Effect;
 
 use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, DebugFragmentExt,
-        DebugFunctionExt, FragmentExpressionExt, FunctionsExt,
+        DebugFunctionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
 };
@@ -109,8 +108,7 @@ fn stopped_at_code_within_block() {
         .remove(0);
     assert_eq!(fragment.effect, Some(Effect::Breakpoint));
 
-    let intrinsic = fragment.expect_other_expression().expect_intrinsic();
-    assert_eq!(intrinsic, Intrinsic::Brk);
+    fragment.expect_call_to_intrinsic("brk");
 }
 
 #[test]

@@ -1,4 +1,4 @@
-use capi_compiler::{compile, fragments, intrinsics::Intrinsic};
+use capi_compiler::compile;
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -146,8 +146,8 @@ impl DebugFunctionExt for DebugFunction {
 
 pub trait DebugFragmentExt {
     fn expect_call_to_function(self, name: &str);
+    fn expect_call_to_intrinsic(self, called_intrinsic: &str);
     fn expect_function(self) -> DebugFunction;
-    fn expect_other_expression(self) -> fragments::Payload;
 }
 
 impl DebugFragmentExt for DebugFragment {
@@ -159,33 +159,19 @@ impl DebugFragmentExt for DebugFragment {
         assert_eq!(called_fn, name);
     }
 
+    fn expect_call_to_intrinsic(self, called_intrinsic: &str) {
+        let DebugFragmentKind::CallToIntrinsic { name } = self.kind else {
+            panic!("Expected call to function.");
+        };
+
+        assert_eq!(called_intrinsic, name);
+    }
+
     fn expect_function(self) -> DebugFunction {
         let DebugFragmentKind::Function { function } = self.kind else {
             panic!("Expected function");
         };
 
         function
-    }
-
-    fn expect_other_expression(self) -> fragments::Payload {
-        let DebugFragmentKind::OtherExpression(other) = self.kind else {
-            panic!("Expected other expression");
-        };
-
-        other
-    }
-}
-
-pub trait FragmentExpressionExt {
-    fn expect_intrinsic(self) -> Intrinsic;
-}
-
-impl FragmentExpressionExt for fragments::Payload {
-    fn expect_intrinsic(self) -> Intrinsic {
-        let fragments::Payload::CallToIntrinsic { intrinsic, .. } = self else {
-            panic!("Expected call to intrinsic function.");
-        };
-
-        intrinsic
     }
 }

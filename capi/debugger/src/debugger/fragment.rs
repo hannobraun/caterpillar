@@ -77,6 +77,9 @@ pub enum DebugFragmentKind {
     CallToFunction {
         name: String,
     },
+    CallToIntrinsic {
+        name: String,
+    },
     Comment {
         text: String,
     },
@@ -109,6 +112,11 @@ impl DebugFragmentKind {
         let kind = match payload {
             Payload::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
+            }
+            Payload::CallToIntrinsic { intrinsic, .. } => {
+                Self::CallToIntrinsic {
+                    name: intrinsic.to_string(),
+                }
             }
             Payload::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
