@@ -65,7 +65,7 @@ fn Branch(
         .map(|fragment| {
             view! {
                 <li class="ml-8">
-                    <Expression
+                    <Fragment
                         fragment=fragment
                         commands=commands.clone() />
                 </li>
@@ -84,7 +84,7 @@ fn Branch(
 }
 
 #[component]
-pub fn Expression(
+pub fn Fragment(
     fragment: DebugFragment,
     commands: CommandsTx,
 ) -> impl IntoView {
