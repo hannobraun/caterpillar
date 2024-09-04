@@ -114,7 +114,7 @@ pub fn Expression(
             None,
         ),
         ExpressionKind::Other(OtherExpression {
-            payload: expression,
+            payload,
             first_instruction,
             has_durable_breakpoint,
             is_active,
@@ -167,7 +167,7 @@ pub fn Expression(
                 leptos::spawn_local(send_command(command, commands.clone()));
             };
 
-            let expression = format!("{expression}");
+            let expression = format!("{payload}");
 
             (
                 view! {
