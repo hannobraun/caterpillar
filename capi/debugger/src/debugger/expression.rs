@@ -26,15 +26,15 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let is_active = Some(fragment.id()) == active_fragment;
-
-        ExpressionKind::new(
+        let kind = ExpressionKind::new(
             fragment,
             active_fragment,
             fragments,
             source_map,
             process,
-        )
-        .map(|kind| Self { kind, is_active })
+        )?;
+
+        Some(Self { kind, is_active })
     }
 }
 
