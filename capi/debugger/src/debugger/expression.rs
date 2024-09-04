@@ -92,7 +92,7 @@ impl ExpressionKind {
         });
 
         Some(Self::Other(OtherExpression {
-            expression: payload,
+            payload,
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
@@ -104,7 +104,7 @@ impl ExpressionKind {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
-    pub expression: fragments::Payload,
+    pub payload: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
 

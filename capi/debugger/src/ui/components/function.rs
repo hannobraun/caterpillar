@@ -114,7 +114,7 @@ pub fn Expression(
             None,
         ),
         ExpressionKind::Other(OtherExpression {
-            expression,
+            payload: expression,
             first_instruction,
             has_durable_breakpoint,
             is_active,
