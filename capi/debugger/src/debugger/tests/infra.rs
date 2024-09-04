@@ -151,7 +151,7 @@ impl DebugFunctionExt for DebugFunction {
 
 pub trait DebugFragmentExt {
     fn expect_call_to(self, name: &str);
-    fn expect_function(self) -> Vec<DebugFragment>;
+    fn expect_function(self) -> DebugFunction;
     fn expect_other(self) -> OtherExpression;
 }
 
@@ -170,12 +170,12 @@ impl DebugFragmentExt for DebugFragment {
         assert_eq!(called_fn, name);
     }
 
-    fn expect_function(self) -> Vec<DebugFragment> {
-        let DebugFragmentKind::Function { mut function } = self.kind else {
+    fn expect_function(self) -> DebugFunction {
+        let DebugFragmentKind::Function { function } = self.kind else {
             panic!("Expected function");
         };
 
-        function.branches.remove(0).body
+        function
     }
 
     fn expect_other(self) -> OtherExpression {

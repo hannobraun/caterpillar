@@ -104,6 +104,9 @@ fn stopped_at_code_within_block() {
         .body
         .remove(0)
         .expect_function()
+        .branches
+        .remove(0)
+        .body
         .remove(0)
         .expect_other();
     assert_eq!(expression.effect, Some(Effect::Breakpoint));
