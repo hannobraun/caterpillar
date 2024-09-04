@@ -9,6 +9,12 @@ use super::Function;
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Expression {
     pub kind: ExpressionKind,
+
+    /// # Indicate whether the expression is active
+    ///
+    /// An expression is active, either if it is currently being executed, or if
+    /// it calls an active function.
+    pub is_active: bool,
 }
 
 impl Expression {
@@ -19,6 +25,8 @@ impl Expression {
         source_map: &SourceMap,
         process: &Process,
     ) -> Option<Self> {
+        let is_active = Some(fragment.id()) == active_fragment;
+
         ExpressionKind::new(
             fragment,
             active_fragment,
@@ -26,7 +34,7 @@ impl Expression {
             source_map,
             process,
         )
-        .map(|kind| Self { kind })
+        .map(|kind| Self { kind, is_active })
     }
 }
 
@@ -77,8 +85,6 @@ impl ExpressionKind {
             false
         };
 
-        let is_active = Some(fragment_id) == active_fragment;
-
         let effect = process.inspect_effect().and_then(|effect| {
             let effect_fragment = source_map
                 .instruction_to_fragment(&process.most_recent_step().unwrap())
@@ -96,7 +102,6 @@ impl ExpressionKind {
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
-            is_active,
             effect,
         }))
     }
@@ -107,12 +112,5 @@ pub struct OtherExpression {
     pub payload: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
-
-    /// # Indicate whether the expression is active
-    ///
-    /// An expression is active, either if it is currently being executed, or if
-    /// it calls an active function.
-    pub is_active: bool,
-
     pub effect: Option<Effect>,
 }
