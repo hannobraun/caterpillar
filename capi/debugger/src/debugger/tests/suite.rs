@@ -99,7 +99,7 @@ fn stopped_at_code_within_block() {
         .active_functions
         .expect_entries()
         .functions()
-        .remove(0)
+        .with_name("main")
         .branches
         .remove(0)
         .body
