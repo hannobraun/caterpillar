@@ -122,12 +122,12 @@ impl FunctionsExt for Vec<DebugFunction> {
     }
 }
 
-pub trait FunctionExt {
+pub trait DebugFunctionExt {
     fn active_fragment(self, debugger: &Debugger) -> Fragment;
     fn only_branch(self) -> Branch;
 }
 
-impl FunctionExt for DebugFunction {
+impl DebugFunctionExt for DebugFunction {
     fn active_fragment(self, debugger: &Debugger) -> Fragment {
         let fragments = &debugger.code.as_ref().unwrap().fragments;
         let id = self.active_fragment.unwrap();
