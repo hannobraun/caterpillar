@@ -8,7 +8,7 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragment {
-    pub kind: ExpressionKind,
+    pub kind: DebugFragmentKind,
 
     /// # Indicate whether the expression is active
     ///
@@ -39,7 +39,7 @@ impl DebugFragment {
             false
         };
 
-        let kind = ExpressionKind::new(
+        let kind = DebugFragmentKind::new(
             fragment,
             active_fragment,
             instructions,
@@ -57,13 +57,13 @@ impl DebugFragment {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum ExpressionKind {
+pub enum DebugFragmentKind {
     Comment { text: String },
     Function { function: Function },
     Other(OtherExpression),
 }
 
-impl ExpressionKind {
+impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,

@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Branch, DebugFragment, ExpressionKind, OtherExpression},
+    debugger::{Branch, DebugFragment, DebugFragmentKind, OtherExpression},
     ui::{send_command, CommandsTx},
 };
 
@@ -91,7 +91,7 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
 
     let (expression, error) = match expression.kind {
-        ExpressionKind::Comment { text } => {
+        DebugFragmentKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
             (
@@ -104,7 +104,7 @@ pub fn Expression(
                 None,
             )
         }
-        ExpressionKind::Function { function } => (
+        DebugFragmentKind::Function { function } => (
             view! {
                 <Function
                     branches=function.branches
@@ -113,7 +113,7 @@ pub fn Expression(
             .into_view(),
             None,
         ),
-        ExpressionKind::Other(OtherExpression {
+        DebugFragmentKind::Other(OtherExpression {
             payload,
             first_instruction,
             effect,
