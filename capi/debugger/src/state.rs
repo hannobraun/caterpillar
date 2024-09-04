@@ -35,7 +35,8 @@ impl DebuggerState {
 
                 select! {
                     code = response => {
-                        timestamp = on_new_code(code, &mut remote_process).await;
+                        timestamp =
+                            on_new_code(code, &mut remote_process).await;
                     }
                     update = updates_rx.recv() => {
                         let Some(update) = update else {
