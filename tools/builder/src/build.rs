@@ -8,6 +8,7 @@ use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
+use walkdir::WalkDir;
 use wasm_bindgen_cli_support::Bindgen;
 
 pub fn start(changes: DebouncedChanges) -> UpdatesRx {
@@ -94,7 +95,16 @@ async fn build_once(
         .generate(&new_output_dir)?;
 
     let www_dir = "capi/debugger/www";
-    copy(www_dir, new_output_dir.path(), "index.html").await?;
+    for entry in WalkDir::new(www_dir) {
+        let entry = entry?;
+
+        if entry.file_type().is_dir() {
+            continue;
+        }
+
+        let relative_path = entry.path().strip_prefix(www_dir)?;
+        copy(www_dir, new_output_dir.path(), relative_path).await?;
+    }
 
     let output_path = new_output_dir.path().to_path_buf();
 
