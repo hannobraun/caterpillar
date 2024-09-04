@@ -1,9 +1,26 @@
 use capi_compiler::host::Host;
+use num_enum::TryFromPrimitive;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
+    fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
+        let effect = GameEngineEffect::try_from_primitive(effect).ok()?;
+
+        let name = match effect {
+            GameEngineEffect::Halt => "halt",
+            GameEngineEffect::Load => "load",
+            GameEngineEffect::Store => "store",
+            GameEngineEffect::ReadInput => "read_input",
+            GameEngineEffect::ReadRandom => "read_random",
+            GameEngineEffect::SetPixel => "set_pixel",
+            GameEngineEffect::SubmitFrame => "submit_frame",
+        };
+
+        Some(name)
+    }
+
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         let effect = match name {
             "halt" => GameEngineEffect::Halt,

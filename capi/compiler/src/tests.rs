@@ -133,6 +133,13 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 struct TestHost {}
 
 impl Host for TestHost {
+    fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
+        match effect {
+            0 => Some("send"),
+            _ => None,
+        }
+    }
+
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         match name {
             "send" => Some(0),
