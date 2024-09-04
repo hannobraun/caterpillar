@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Branch, DebugFragment, DebugFragmentKind, OtherExpression},
+    debugger::{Branch, DebugFragment, DebugFragmentKind},
     ui::{send_command, CommandsTx},
 };
 
@@ -113,17 +113,15 @@ pub fn Fragment(
             .into_view(),
             None,
         ),
-        DebugFragmentKind::Other(OtherExpression { payload }) => {
-            make_single_expression(
-                format!("{payload}"),
-                fragment.has_durable_breakpoint,
-                fragment.is_active,
-                fragment.first_instruction,
-                fragment.effect,
-                &mut class_outer,
-                commands,
-            )
-        }
+        DebugFragmentKind::Other(payload) => make_single_expression(
+            format!("{payload}"),
+            fragment.has_durable_breakpoint,
+            fragment.is_active,
+            fragment.first_instruction,
+            fragment.effect,
+            &mut class_outer,
+            commands,
+        ),
     };
 
     view! {

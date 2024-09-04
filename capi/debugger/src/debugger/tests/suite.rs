@@ -109,10 +109,7 @@ fn stopped_at_code_within_block() {
         .remove(0);
     assert_eq!(fragment.effect, Some(Effect::Breakpoint));
 
-    let intrinsic = fragment
-        .expect_other_expression()
-        .payload
-        .expect_intrinsic();
+    let intrinsic = fragment.expect_other_expression().expect_intrinsic();
     assert_eq!(intrinsic, Intrinsic::Brk);
 }
 

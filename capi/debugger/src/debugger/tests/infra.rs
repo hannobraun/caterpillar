@@ -9,8 +9,7 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
     active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch,
-    DebugFragment, DebugFragmentKind, DebugFunction, Debugger, OtherExpression,
-    RemoteProcess,
+    DebugFragment, DebugFragmentKind, DebugFunction, Debugger, RemoteProcess,
 };
 
 pub fn init() -> TestInfra {
@@ -152,14 +151,12 @@ impl DebugFunctionExt for DebugFunction {
 pub trait DebugFragmentExt {
     fn expect_call_to(self, name: &str);
     fn expect_function(self) -> DebugFunction;
-    fn expect_other_expression(self) -> OtherExpression;
+    fn expect_other_expression(self) -> fragments::Payload;
 }
 
 impl DebugFragmentExt for DebugFragment {
     fn expect_call_to(self, called_fn: &str) {
-        let DebugFragmentKind::Other(OtherExpression { payload, .. }) =
-            self.kind
-        else {
+        let DebugFragmentKind::Other(payload) = self.kind else {
             panic!()
         };
 
@@ -178,7 +175,7 @@ impl DebugFragmentExt for DebugFragment {
         function
     }
 
-    fn expect_other_expression(self) -> OtherExpression {
+    fn expect_other_expression(self) -> fragments::Payload {
         let DebugFragmentKind::Other(other) = self.kind else {
             panic!("Expected other expression");
         };
