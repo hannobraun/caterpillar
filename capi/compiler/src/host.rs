@@ -6,11 +6,11 @@ pub trait Host {
 pub struct NoHost {}
 
 impl Host for NoHost {
-    fn effect_number_to_function_name(_effect: u8) -> Option<&'static str> {
+    fn effect_number_to_function_name(_: u8) -> Option<&'static str> {
         None
     }
 
-    fn function_name_to_effect_number(_name: &str) -> Option<u8> {
+    fn function_name_to_effect_number(_: &str) -> Option<u8> {
         None
     }
 }
