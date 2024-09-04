@@ -145,7 +145,7 @@ impl DebugFunctionExt for DebugFunction {
 }
 
 pub trait DebugFragmentExt {
-    fn expect_call_to_function(self, name: &str);
+    fn expect_call_to_function(self, called_fn: &str);
     fn expect_call_to_intrinsic(self, called_intrinsic: &str);
     fn expect_function(self) -> DebugFunction;
 }
