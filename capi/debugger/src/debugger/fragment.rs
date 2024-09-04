@@ -103,23 +103,24 @@ impl DebugFragmentKind {
             return None;
         };
 
-        if let Payload::Function { function } = payload {
-            let function = DebugFunction::new(
-                function,
-                active_fragment,
-                fragments,
-                source_map,
-                process,
-            );
-
-            return Some(Self::Function { function });
-        }
-        if let Payload::Comment { text } = payload {
-            return Some(Self::Comment {
+        let kind = match payload {
+            Payload::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
-            });
-        }
+            },
+            Payload::Function { function } => {
+                let function = DebugFunction::new(
+                    function,
+                    active_fragment,
+                    fragments,
+                    source_map,
+                    process,
+                );
 
-        Some(Self::OtherExpression(payload))
+                Self::Function { function }
+            }
+            payload => Self::OtherExpression(payload),
+        };
+
+        Some(kind)
     }
 }
