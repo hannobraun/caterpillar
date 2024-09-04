@@ -224,7 +224,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
 }
 
 #[test]
-#[ignore = "https://github.com/hannobraun/caterpillar/issues/47"]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/47
 fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     // Tail call elimination can leave gaps in the call stack. Some simpler
     // cases are already getting reconstructed, but right now, we're not doing
