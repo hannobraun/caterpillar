@@ -70,13 +70,15 @@ impl ActiveFunctions {
             expected_next_function =
                 call_id_to_function_name(active_fragment, code);
 
-            entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
-                function,
-                Some(active_fragment),
-                &code.fragments,
-                &code.source_map,
-                process,
-            )));
+            entries.push_front(ActiveFunctionsEntry::Function(
+                DebugFunction::new(
+                    function,
+                    Some(active_fragment),
+                    &code.fragments,
+                    &code.source_map,
+                    process,
+                ),
+            ));
         }
 
         Self::Entries {
