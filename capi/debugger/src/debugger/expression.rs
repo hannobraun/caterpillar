@@ -7,13 +7,37 @@ use capi_process::{Effect, InstructionAddress, Process};
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Expression {
+pub struct Expression {
+    pub kind: ExpressionKind,
+}
+
+impl Expression {
+    pub fn new(
+        fragment: Fragment,
+        active_fragment: Option<FragmentId>,
+        fragments: &Fragments,
+        source_map: &SourceMap,
+        process: &Process,
+    ) -> Option<Self> {
+        ExpressionKind::new(
+            fragment,
+            active_fragment,
+            fragments,
+            source_map,
+            process,
+        )
+        .map(|kind| Self { kind })
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ExpressionKind {
     Comment { text: String },
     Function { function: Function },
     Other(OtherExpression),
 }
 
-impl Expression {
+impl ExpressionKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,

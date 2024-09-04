@@ -9,7 +9,7 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
     active_functions::ActiveFunctionsEntry, ActiveFunctions, Debugger,
-    Expression, Function, OtherExpression, RemoteProcess,
+    Expression, ExpressionKind, Function, OtherExpression, RemoteProcess,
 };
 
 pub fn init() -> TestInfra {
@@ -157,7 +157,7 @@ pub trait ExpressionExt {
 
 impl ExpressionExt for Expression {
     fn expect_block(self) -> Vec<Expression> {
-        let Expression::Function { mut function } = self else {
+        let ExpressionKind::Function { mut function } = self.kind else {
             panic!("Expected block");
         };
 
@@ -165,7 +165,7 @@ impl ExpressionExt for Expression {
     }
 
     fn expect_other(self) -> OtherExpression {
-        let Expression::Other(other) = self else {
+        let ExpressionKind::Other(other) = self.kind else {
             panic!("Expected other expression");
         };
 
