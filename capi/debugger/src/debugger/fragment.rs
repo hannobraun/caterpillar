@@ -74,8 +74,20 @@ impl DebugFragment {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
-    Comment { text: String },
-    Function { function: DebugFunction },
+    Comment {
+        text: String,
+    },
+    Function {
+        function: DebugFunction,
+    },
+
+    /// # An expression, not covered by other variants
+    ///
+    /// ## Implementation Note
+    ///
+    /// This shouldn't exist. We should split out all the relevant variants, so
+    /// the UI code can match on them. This would also pave the way for syntax
+    /// highlighting in the debugger.
     OtherExpression(fragments::Payload),
 }
 
