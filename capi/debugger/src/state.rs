@@ -1,10 +1,14 @@
+use capi_process::Instructions;
 use capi_protocol::{
     updates::{Code, SerializedUpdate, Update},
     Versioned,
 };
 use gloo_net::http::{Request, Response};
 use leptos::SignalSet;
-use tokio::{select, sync::mpsc};
+use tokio::{
+    select,
+    sync::{mpsc, watch},
+};
 
 use crate::{
     debugger::RemoteProcess,
@@ -13,11 +17,13 @@ use crate::{
 
 pub struct DebuggerState {
     pub updates_tx: mpsc::UnboundedSender<SerializedUpdate>,
+    pub code_rx: watch::Receiver<Instructions>,
     pub commands_rx: CommandsRx,
 }
 
 impl DebuggerState {
     pub fn new() -> Self {
+        let (code_tx, code_rx) = watch::channel(Instructions::default());
         let (commands_tx, commands_rx) = mpsc::unbounded_channel();
         let (updates_tx, mut updates_rx) = mpsc::unbounded_channel();
 
@@ -27,7 +33,8 @@ impl DebuggerState {
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
-            let mut timestamp = on_new_code(code, &mut remote_process).await;
+            let mut timestamp =
+                on_new_code(code, &code_tx, &mut remote_process).await;
 
             loop {
                 let response =
@@ -36,7 +43,12 @@ impl DebuggerState {
                 select! {
                     code = response => {
                         timestamp =
-                            on_new_code(code, &mut remote_process).await;
+                            on_new_code(
+                                code,
+                                &code_tx,
+                                &mut remote_process,
+                            )
+                            .await;
                     }
                     update = updates_rx.recv() => {
                         let Some(update) = update else {
@@ -60,6 +72,7 @@ impl DebuggerState {
 
         Self {
             updates_tx,
+            code_rx,
             commands_rx,
         }
     }
@@ -73,10 +86,15 @@ impl Default for DebuggerState {
 
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
+    code_tx: &watch::Sender<Instructions>,
     remote_process: &mut RemoteProcess,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
+
+    code_tx
+        .send(code.inner.instructions.clone())
+        .expect("Code receiver should never drop.");
 
     remote_process.on_code_update(code.inner);
 
