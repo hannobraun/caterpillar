@@ -4,7 +4,7 @@ use capi_process::Effect;
 use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
-        init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, ExpressionExt,
+        init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, DebugFragmentExt,
         FragmentExpressionExt, FragmentExt, FunctionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
