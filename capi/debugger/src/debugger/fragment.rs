@@ -18,6 +18,7 @@ pub struct DebugFragment {
 
     pub has_durable_breakpoint: bool,
     pub first_instruction: Option<InstructionAddress>,
+    pub effect: Option<Effect>,
 }
 
 impl DebugFragment {
@@ -40,6 +41,18 @@ impl DebugFragment {
             false
         };
 
+        let effect = process.inspect_effect().and_then(|effect| {
+            let effect_fragment = source_map
+                .instruction_to_fragment(&process.most_recent_step().unwrap())
+                .expect("Expecting effects to originate from user code.");
+
+            if effect_fragment == fragment.id() {
+                Some(*effect)
+            } else {
+                None
+            }
+        });
+
         let kind = DebugFragmentKind::new(
             fragment,
             active_fragment,
@@ -54,6 +67,7 @@ impl DebugFragment {
             has_durable_breakpoint,
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
+            effect,
         })
     }
 }
@@ -73,7 +87,6 @@ impl DebugFragmentKind {
         source_map: &SourceMap,
         process: &Process,
     ) -> Option<Self> {
-        let fragment_id = fragment.id();
         let FragmentKind::Payload { payload, .. } = fragment.kind else {
             return None;
         };
@@ -95,24 +108,11 @@ impl DebugFragmentKind {
             });
         }
 
-        let effect = process.inspect_effect().and_then(|effect| {
-            let effect_fragment = source_map
-                .instruction_to_fragment(&process.most_recent_step().unwrap())
-                .expect("Expecting effects to originate from user code.");
-
-            if effect_fragment == fragment_id {
-                Some(*effect)
-            } else {
-                None
-            }
-        });
-
-        Some(Self::Other(OtherExpression { payload, effect }))
+        Some(Self::Other(OtherExpression { payload }))
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
     pub payload: fragments::Payload,
-    pub effect: Option<Effect>,
 }

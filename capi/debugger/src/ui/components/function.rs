@@ -113,13 +113,13 @@ pub fn Fragment(
             .into_view(),
             None,
         ),
-        DebugFragmentKind::Other(OtherExpression { payload, effect }) => {
+        DebugFragmentKind::Other(OtherExpression { payload }) => {
             make_single_expression(
                 format!("{payload}"),
                 fragment.has_durable_breakpoint,
                 fragment.is_active,
                 fragment.first_instruction,
-                effect,
+                fragment.effect,
                 &mut class_outer,
                 commands,
             )

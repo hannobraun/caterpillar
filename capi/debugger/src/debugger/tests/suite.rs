@@ -95,7 +95,7 @@ fn stopped_at_code_within_block() {
         .run_process()
         .to_debugger();
 
-    let expression = debugger
+    let fragment = debugger
         .active_functions
         .expect_entries()
         .functions()
@@ -106,11 +106,13 @@ fn stopped_at_code_within_block() {
         .expect_function()
         .only_branch()
         .body
-        .remove(0)
-        .expect_other_expression();
-    assert_eq!(expression.effect, Some(Effect::Breakpoint));
+        .remove(0);
+    assert_eq!(fragment.effect, Some(Effect::Breakpoint));
 
-    let intrinsic = expression.payload.expect_intrinsic();
+    let intrinsic = fragment
+        .expect_other_expression()
+        .payload
+        .expect_intrinsic();
     assert_eq!(intrinsic, Intrinsic::Brk);
 }
 
