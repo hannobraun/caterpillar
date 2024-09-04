@@ -2,9 +2,9 @@ use std::{str, sync::Mutex};
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_game_engine::display::NUM_PIXEL_BYTES;
+use capi_process::Instructions;
 use capi_protocol::{
-    updates::Code, Versioned, CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE,
-    UPDATES_BUFFER_SIZE,
+    CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
 };
 
 use crate::state::RuntimeState;
@@ -133,7 +133,7 @@ pub fn push_random(random: f64) -> bool {
 }
 
 #[no_mangle]
-pub fn on_new_code() -> u64 {
+pub fn on_new_code() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
@@ -144,7 +144,7 @@ pub fn on_new_code() -> u64 {
     let code = buffer.read_frame();
     let code = str::from_utf8(code)
         .expect("Expecting new code to be valid UTF-8 string");
-    let code: Versioned<Code> = match ron::from_str(code) {
+    let code: Instructions = match ron::from_str(code) {
         Ok(code) => code,
         Err(err) => {
             panic!(
@@ -156,11 +156,7 @@ pub fn on_new_code() -> u64 {
         }
     };
 
-    state
-        .game_engine
-        .on_new_instructions(code.inner.instructions);
-
-    code.timestamp
+    state.game_engine.on_new_instructions(code);
 }
 
 #[no_mangle]

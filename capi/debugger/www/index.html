@@ -54,8 +54,6 @@
             { module_or_path: "capi-debugger_bg.wasm" }
         );
 
-        const code = await fetchCode("");
-
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
 
@@ -81,37 +79,8 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        updateCode(code);
-
         let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
-
-
-        async function fetchCode(argument) {
-            return await fetch(`/code${argument}`)
-                .then((response) => {
-                    return response.arrayBuffer();
-                })
-                .then((arrayBuffer) => {
-                    return new Uint8Array(arrayBuffer);
-                });
-        }
-
-        function updateCode(code) {
-            runtime.code_write(code.byteLength);
-            const code_tx = new Uint8Array(
-                runtime.memory.buffer,
-                runtime.code_write_ptr(),
-                runtime.code_write_len(),
-            );
-            code_tx.set(code);
-
-            const timestamp = runtime.on_new_code();
-
-            fetchCode(`/${timestamp}`).then((code) => {
-                updateCode(code);
-            });
-        }
 
         function mainLoop(currentTimeMs) {
             const deltaTimeMs = currentTimeMs - previousTimeMs;
@@ -119,6 +88,29 @@
 
             while (runtime.push_random(Math.random())) { }
 
+            while (true) {
+                debugger_.code_read();
+                const code_rx = new Uint8Array(
+                    debugger_.memory.buffer,
+                    debugger_.code_read_ptr(),
+                    debugger_.code_read_len(),
+                );
+
+                if (code_rx.byteLength > 0) {
+                    runtime.code_write(code_rx.byteLength);
+                    const code_tx = new Uint8Array(
+                        runtime.memory.buffer,
+                        runtime.code_write_ptr(),
+                        runtime.code_write_len(),
+                    );
+                    code_tx.set(code_rx);
+
+                    runtime.on_new_code();
+                }
+                else {
+                    break;
+                }
+            }
             while (true) {
                 debugger_.commands_read();
                 const command_rx = new Uint8Array(
