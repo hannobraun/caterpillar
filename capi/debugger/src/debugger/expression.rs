@@ -25,10 +25,13 @@ impl Expression {
         source_map: &SourceMap,
         process: &Process,
     ) -> Option<Self> {
+        let instructions = source_map.fragment_to_instructions(&fragment.id());
+
         let is_active = Some(fragment.id()) == active_fragment;
         let kind = ExpressionKind::new(
             fragment,
             active_fragment,
+            instructions,
             fragments,
             source_map,
             process,
@@ -49,6 +52,7 @@ impl ExpressionKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
+        instructions: Option<&Vec<InstructionAddress>>,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
@@ -74,8 +78,6 @@ impl ExpressionKind {
                 text: format!("# {text}"),
             });
         }
-
-        let instructions = source_map.fragment_to_instructions(&fragment_id);
 
         let has_durable_breakpoint = if let Some(instructions) = &instructions {
             instructions.iter().any(|instruction| {
