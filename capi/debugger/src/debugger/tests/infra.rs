@@ -1,6 +1,6 @@
 use capi_compiler::{
     compile,
-    fragments::{self, Fragment, FragmentKind, Payload},
+    fragments::{self, Payload},
     intrinsics::Intrinsic,
 };
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
@@ -123,15 +123,18 @@ impl FunctionsExt for Vec<DebugFunction> {
 }
 
 pub trait DebugFunctionExt {
-    fn active_fragment(self, debugger: &Debugger) -> Fragment;
+    fn active_fragment(self, debugger: &Debugger) -> DebugFragment;
     fn only_branch(self) -> Branch;
 }
 
 impl DebugFunctionExt for DebugFunction {
-    fn active_fragment(self, debugger: &Debugger) -> Fragment {
-        let fragments = &debugger.code.as_ref().unwrap().fragments;
-        let id = self.active_fragment.unwrap();
-        fragments.inner.inner.get(&id).cloned().unwrap()
+    fn active_fragment(self, _: &Debugger) -> DebugFragment {
+        self.branches
+            .into_iter()
+            .find_map(|branch| {
+                branch.body.into_iter().find(|fragment| fragment.is_active)
+            })
+            .expect("Expected to find an active fragment")
     }
 
     fn only_branch(mut self) -> Branch {
@@ -146,29 +149,27 @@ impl DebugFunctionExt for DebugFunction {
     }
 }
 
-pub trait FragmentExt {
-    fn expect_call_to(self, name: &str);
-}
-
-impl FragmentExt for Fragment {
-    fn expect_call_to(self, called_fn: &str) {
-        let FragmentKind::Payload {
-            payload: Payload::CallToFunction { name, .. },
-            ..
-        } = self.kind
-        else {
-            panic!()
-        };
-        assert_eq!(called_fn, name);
-    }
-}
-
 pub trait DebugFragmentExt {
+    fn expect_call_to(self, name: &str);
     fn expect_function(self) -> Vec<DebugFragment>;
     fn expect_other(self) -> OtherExpression;
 }
 
 impl DebugFragmentExt for DebugFragment {
+    fn expect_call_to(self, called_fn: &str) {
+        let DebugFragmentKind::Other(OtherExpression { payload, .. }) =
+            self.kind
+        else {
+            panic!()
+        };
+
+        let Payload::CallToFunction { name, .. } = payload else {
+            panic!()
+        };
+
+        assert_eq!(called_fn, name);
+    }
+
     fn expect_function(self) -> Vec<DebugFragment> {
         let DebugFragmentKind::Function { mut function } = self.kind else {
             panic!("Expected block");

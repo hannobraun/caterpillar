@@ -5,7 +5,7 @@ use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, DebugFragmentExt,
-        DebugFunctionExt, FragmentExpressionExt, FragmentExt, FunctionsExt,
+        DebugFunctionExt, FragmentExpressionExt, FunctionsExt,
     },
     ActiveFunctions, ActiveFunctionsEntry,
 };
