@@ -43,7 +43,6 @@ impl DebugFragment {
         let kind = DebugFragmentKind::new(
             fragment,
             active_fragment,
-            instructions,
             fragments,
             source_map,
             process,
@@ -70,7 +69,6 @@ impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
-        _: Option<&Vec<InstructionAddress>>,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
