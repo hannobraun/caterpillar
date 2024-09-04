@@ -172,7 +172,7 @@ impl DebugFragmentExt for DebugFragment {
 
     fn expect_function(self) -> Vec<DebugFragment> {
         let DebugFragmentKind::Function { mut function } = self.kind else {
-            panic!("Expected block");
+            panic!("Expected function");
         };
 
         function.branches.remove(0).body
