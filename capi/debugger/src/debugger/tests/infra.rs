@@ -178,9 +178,6 @@ impl DebugFragmentExt for DebugFragment {
 
 pub trait FragmentExpressionExt {
     fn expect_intrinsic(self) -> Intrinsic;
-
-    #[allow(unused)] // currently not in use, but likely to be useful soon
-    fn expect_user_function(self) -> String;
 }
 
 impl FragmentExpressionExt for fragments::Payload {
@@ -190,13 +187,5 @@ impl FragmentExpressionExt for fragments::Payload {
         };
 
         intrinsic
-    }
-
-    fn expect_user_function(self) -> String {
-        let fragments::Payload::CallToFunction { name, .. } = self else {
-            panic!("Expected user function");
-        };
-
-        name
     }
 }
