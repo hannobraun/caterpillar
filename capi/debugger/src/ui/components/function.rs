@@ -1,8 +1,9 @@
+use capi_compiler::fragments::Payload;
 use capi_process::{Effect, InstructionAddress};
 use capi_protocol::command::Command;
 use leptos::{
-    component, ev::MouseEvent, view, wasm_bindgen::JsCast,
-    web_sys::HtmlSpanElement, CollectView, IntoView,
+    component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
+    web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,
 };
 
 use crate::{
@@ -117,74 +118,15 @@ pub fn Fragment(
             payload,
             first_instruction,
             effect,
-        }) => {
-            if fragment.has_durable_breakpoint {
-                class_outer.push_str(" bg-blue-300");
-            }
-
-            let mut class_inner = String::from("px-0.5");
-            if let Some(effect) = &effect {
-                match effect {
-                    Effect::Breakpoint => class_inner.push_str(" bg-green-300"),
-                    _ => class_inner.push_str(" bg-red-300"),
-                }
-            }
-            if fragment.is_active {
-                class_inner.push_str(" font-bold");
-            }
-
-            let data_instruction =
-                first_instruction.map(|instruction| instruction.index);
-            let data_breakpoint = fragment.has_durable_breakpoint;
-
-            let error = effect.map(|effect| format!("{:?}", effect));
-
-            let toggle_breakpoint = move |event: MouseEvent| {
-                let event_target = event.target().unwrap();
-                let element =
-                    event_target.dyn_ref::<HtmlSpanElement>().unwrap();
-
-                let Some(instruction) =
-                    element.get_attribute("data-instruction")
-                else {
-                    // This happens, if the user clicks on a comment.
-                    return;
-                };
-                let instruction = InstructionAddress {
-                    index: instruction.parse().expect(
-                        "Expected `data-instruction` attribute to be a number",
-                    ),
-                };
-
-                let command = if element.has_attribute("data-breakpoint") {
-                    Command::BreakpointClear { instruction }
-                } else {
-                    Command::BreakpointSet { instruction }
-                };
-
-                leptos::spawn_local(send_command(command, commands.clone()));
-            };
-
-            let expression = format!("{payload}");
-
-            (
-                view! {
-                    <span
-                        class=class_inner
-                        data-instruction=data_instruction
-                        data-breakpoint=data_breakpoint
-                        on:click=toggle_breakpoint>
-                        {expression}
-                    </span>
-                }
-                .into_view(),
-                Some(view! {
-                    <span class="mx-2 font-bold text-red-800">
-                        {error}
-                    </span>
-                }),
-            )
-        }
+        }) => make_single_expression(
+            fragment.has_durable_breakpoint,
+            fragment.is_active,
+            payload,
+            first_instruction,
+            effect,
+            &mut class_outer,
+            commands,
+        ),
     };
 
     view! {
@@ -195,4 +137,79 @@ pub fn Fragment(
             {error}
         </span>
     }
+}
+
+fn make_single_expression(
+    has_durable_breakpoint: bool,
+    is_active: bool,
+    payload: Payload,
+    first_instruction: Option<InstructionAddress>,
+    effect: Option<Effect>,
+    class_outer: &mut String,
+    commands: CommandsTx,
+) -> (View, Option<HtmlElement<Span>>) {
+    if has_durable_breakpoint {
+        class_outer.push_str(" bg-blue-300");
+    }
+
+    let mut class_inner = String::from("px-0.5");
+    if let Some(effect) = &effect {
+        match effect {
+            Effect::Breakpoint => class_inner.push_str(" bg-green-300"),
+            _ => class_inner.push_str(" bg-red-300"),
+        }
+    }
+    if is_active {
+        class_inner.push_str(" font-bold");
+    }
+
+    let data_instruction =
+        first_instruction.map(|instruction| instruction.index);
+    let data_breakpoint = has_durable_breakpoint;
+
+    let error = effect.map(|effect| format!("{:?}", effect));
+
+    let toggle_breakpoint = move |event: MouseEvent| {
+        let event_target = event.target().unwrap();
+        let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
+
+        let Some(instruction) = element.get_attribute("data-instruction")
+        else {
+            // This happens, if the user clicks on a comment.
+            return;
+        };
+        let instruction = InstructionAddress {
+            index: instruction
+                .parse()
+                .expect("Expected `data-instruction` attribute to be a number"),
+        };
+
+        let command = if element.has_attribute("data-breakpoint") {
+            Command::BreakpointClear { instruction }
+        } else {
+            Command::BreakpointSet { instruction }
+        };
+
+        leptos::spawn_local(send_command(command, commands.clone()));
+    };
+
+    let expression = format!("{payload}");
+
+    (
+        view! {
+            <span
+                class=class_inner
+                data-instruction=data_instruction
+                data-breakpoint=data_breakpoint
+                on:click=toggle_breakpoint>
+                {expression}
+            </span>
+        }
+        .into_view(),
+        Some(view! {
+            <span class="mx-2 font-bold text-red-800">
+                {error}
+            </span>
+        }),
+    )
 }
