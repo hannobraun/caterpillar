@@ -30,8 +30,11 @@ impl DebuggerState {
             let mut timestamp = on_new_code(code, &mut remote_process).await;
 
             loop {
+                let response =
+                    Request::get(&format!("/code/{timestamp}")).send();
+
                 select! {
-                    code = Request::get(&format!("/code/{timestamp}")).send() => {
+                    code = response => {
                         timestamp = on_new_code(code, &mut remote_process).await;
                     }
                     update = updates_rx.recv() => {
