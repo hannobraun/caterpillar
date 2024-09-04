@@ -60,7 +60,7 @@ fn Branch(
     commands: CommandsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
-    let expressions = body
+    let fragments = body
         .into_iter()
         .map(|fragment| {
             view! {
@@ -77,7 +77,7 @@ fn Branch(
         <div class="pl-8">
             |{parameters}|
             <ol>
-                {expressions}
+                {fragments}
             </ol>
         </div>
     }
