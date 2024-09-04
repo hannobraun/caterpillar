@@ -4,7 +4,7 @@ use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
-use super::Function;
+use super::DebugFunction;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
@@ -70,7 +70,7 @@ impl ActiveFunctions {
             expected_next_function =
                 call_id_to_function_name(active_fragment, code);
 
-            entries.push_front(ActiveFunctionsEntry::Function(Function::new(
+            entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
                 function,
                 Some(active_fragment),
                 &code.fragments,
@@ -87,7 +87,7 @@ impl ActiveFunctions {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctionsEntry {
-    Function(Function),
+    Function(DebugFunction),
     Gap,
 }
 
@@ -191,7 +191,7 @@ fn reconstruct_function(
     let expected_next_function = tail_call
         .and_then(|tail_call| call_id_to_function_name(tail_call, code));
 
-    entries.push_front(ActiveFunctionsEntry::Function(Function::new(
+    entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
         tail_call,
         &code.fragments,

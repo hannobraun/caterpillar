@@ -7,13 +7,13 @@ use capi_process::Process;
 use super::Branch;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Function {
+pub struct DebugFunction {
     pub name: Option<String>,
     pub branches: Vec<Branch>,
     pub active_fragment: Option<FragmentId>,
 }
 
-impl Function {
+impl DebugFunction {
     pub fn new(
         function: fragments::Function,
         active_fragment: Option<FragmentId>,

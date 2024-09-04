@@ -13,6 +13,6 @@ pub use self::{
     branch::Branch,
     debugger::Debugger,
     fragment::{DebugFragment, DebugFragmentKind, OtherExpression},
-    function::Function,
+    function::DebugFunction,
     remote_process::RemoteProcess,
 };

@@ -4,7 +4,7 @@ use capi_compiler::{
 };
 use capi_process::{Effect, InstructionAddress, Process};
 
-use super::Function;
+use super::DebugFunction;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragment {
@@ -59,7 +59,7 @@ impl DebugFragment {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
     Comment { text: String },
-    Function { function: Function },
+    Function { function: DebugFunction },
     Other(OtherExpression),
 }
 
@@ -78,7 +78,7 @@ impl DebugFragmentKind {
         };
 
         if let fragments::Payload::Function { function } = payload {
-            let function = Function::new(
+            let function = DebugFunction::new(
                 function,
                 active_fragment,
                 fragments,

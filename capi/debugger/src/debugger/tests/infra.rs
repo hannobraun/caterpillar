@@ -9,7 +9,7 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
     active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch,
-    DebugFragment, DebugFragmentKind, Debugger, Function, OtherExpression,
+    DebugFragment, DebugFragmentKind, DebugFunction, Debugger, OtherExpression,
     RemoteProcess,
 };
 
@@ -91,11 +91,11 @@ impl ActiveFunctionsExt for ActiveFunctions {
 }
 
 pub trait ActiveFunctionsEntriesExt {
-    fn functions(&self) -> Vec<Function>;
+    fn functions(&self) -> Vec<DebugFunction>;
 }
 
 impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
-    fn functions(&self) -> Vec<Function> {
+    fn functions(&self) -> Vec<DebugFunction> {
         self.iter()
             .map(|entry| match entry {
                 ActiveFunctionsEntry::Function(function) => function.clone(),
@@ -111,11 +111,11 @@ impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
 }
 
 pub trait FunctionsExt {
-    fn with_name(self, name: &str) -> Function;
+    fn with_name(self, name: &str) -> DebugFunction;
 }
 
-impl FunctionsExt for Vec<Function> {
-    fn with_name(self, name: &str) -> Function {
+impl FunctionsExt for Vec<DebugFunction> {
+    fn with_name(self, name: &str) -> DebugFunction {
         self.into_iter()
             .find(|function| function.name.as_deref() == Some(name))
             .unwrap()
@@ -127,7 +127,7 @@ pub trait FunctionExt {
     fn only_branch(self) -> Branch;
 }
 
-impl FunctionExt for Function {
+impl FunctionExt for DebugFunction {
     fn active_fragment(self, debugger: &Debugger) -> Fragment {
         let fragments = &debugger.code.as_ref().unwrap().fragments;
         let id = self.active_fragment.unwrap();
