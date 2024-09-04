@@ -116,10 +116,9 @@ pub fn Expression(
         ExpressionKind::Other(OtherExpression {
             payload,
             first_instruction,
-            has_durable_breakpoint,
             effect,
         }) => {
-            if has_durable_breakpoint {
+            if expression.has_durable_breakpoint {
                 class_outer.push_str(" bg-blue-300");
             }
 
@@ -136,7 +135,7 @@ pub fn Expression(
 
             let data_instruction =
                 first_instruction.map(|instruction| instruction.index);
-            let data_breakpoint = has_durable_breakpoint;
+            let data_breakpoint = expression.has_durable_breakpoint;
 
             let error = effect.map(|effect| format!("{:?}", effect));
 

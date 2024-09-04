@@ -15,6 +15,8 @@ pub struct Expression {
     /// An expression is active, either if it is currently being executed, or if
     /// it calls an active function.
     pub is_active: bool,
+
+    pub has_durable_breakpoint: bool,
 }
 
 impl Expression {
@@ -28,6 +30,15 @@ impl Expression {
         let instructions = source_map.fragment_to_instructions(&fragment.id());
 
         let is_active = Some(fragment.id()) == active_fragment;
+
+        let has_durable_breakpoint = if let Some(instructions) = &instructions {
+            instructions.iter().any(|instruction| {
+                process.breakpoints().durable_at(instruction)
+            })
+        } else {
+            false
+        };
+
         let kind = ExpressionKind::new(
             fragment,
             active_fragment,
@@ -37,7 +48,11 @@ impl Expression {
             process,
         )?;
 
-        Some(Self { kind, is_active })
+        Some(Self {
+            kind,
+            is_active,
+            has_durable_breakpoint,
+        })
     }
 }
 
@@ -79,14 +94,6 @@ impl ExpressionKind {
             });
         }
 
-        let has_durable_breakpoint = if let Some(instructions) = &instructions {
-            instructions.iter().any(|instruction| {
-                process.breakpoints().durable_at(instruction)
-            })
-        } else {
-            false
-        };
-
         let effect = process.inspect_effect().and_then(|effect| {
             let effect_fragment = source_map
                 .instruction_to_fragment(&process.most_recent_step().unwrap())
@@ -103,7 +110,6 @@ impl ExpressionKind {
             payload,
             first_instruction: instructions
                 .and_then(|instruction| instruction.first().copied()),
-            has_durable_breakpoint,
             effect,
         }))
     }
@@ -113,6 +119,5 @@ impl ExpressionKind {
 pub struct OtherExpression {
     pub payload: fragments::Payload,
     pub first_instruction: Option<InstructionAddress>,
-    pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
 }
