@@ -100,8 +100,7 @@ fn stopped_at_code_within_block() {
         .expect_entries()
         .functions()
         .with_name("main")
-        .branches
-        .remove(0)
+        .only_branch()
         .body
         .remove(0)
         .expect_block()

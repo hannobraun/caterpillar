@@ -8,7 +8,7 @@ use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsEntry, ActiveFunctions, Debugger,
+    active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch, Debugger,
     Expression, ExpressionKind, Function, OtherExpression, RemoteProcess,
 };
 
@@ -123,6 +123,7 @@ impl FunctionsExt for Vec<Function> {
 
 pub trait FunctionExt {
     fn active_fragment(self, debugger: &Debugger) -> Fragment;
+    fn only_branch(self) -> Branch;
 }
 
 impl FunctionExt for Function {
@@ -130,6 +131,17 @@ impl FunctionExt for Function {
         let fragments = &debugger.code.as_ref().unwrap().fragments;
         let id = self.active_fragment.unwrap();
         fragments.inner.inner.get(&id).cloned().unwrap()
+    }
+
+    fn only_branch(mut self) -> Branch {
+        let branch = self.branches.remove(0);
+
+        assert!(
+            self.branches.is_empty(),
+            "Expected one branch, but there are multiple."
+        );
+
+        branch
     }
 }
 
