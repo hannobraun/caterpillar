@@ -113,7 +113,7 @@ pub fn Fragment(
             .into_view(),
             None,
         ),
-        DebugFragmentKind::Other(payload) => make_single_expression(
+        DebugFragmentKind::OtherExpression(payload) => make_single_expression(
             format!("{payload}"),
             fragment.has_durable_breakpoint,
             fragment.is_active,

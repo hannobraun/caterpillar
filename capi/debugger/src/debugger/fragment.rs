@@ -76,7 +76,7 @@ impl DebugFragment {
 pub enum DebugFragmentKind {
     Comment { text: String },
     Function { function: DebugFunction },
-    Other(fragments::Payload),
+    OtherExpression(fragments::Payload),
 }
 
 impl DebugFragmentKind {
@@ -108,6 +108,6 @@ impl DebugFragmentKind {
             });
         }
 
-        Some(Self::Other(payload))
+        Some(Self::OtherExpression(payload))
     }
 }

@@ -156,7 +156,7 @@ pub trait DebugFragmentExt {
 
 impl DebugFragmentExt for DebugFragment {
     fn expect_call_to(self, called_fn: &str) {
-        let DebugFragmentKind::Other(payload) = self.kind else {
+        let DebugFragmentKind::OtherExpression(payload) = self.kind else {
             panic!()
         };
 
@@ -176,7 +176,7 @@ impl DebugFragmentExt for DebugFragment {
     }
 
     fn expect_other_expression(self) -> fragments::Payload {
-        let DebugFragmentKind::Other(other) = self.kind else {
+        let DebugFragmentKind::OtherExpression(other) = self.kind else {
             panic!("Expected other expression");
         };
 
