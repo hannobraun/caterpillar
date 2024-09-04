@@ -1,7 +1,9 @@
 use capi_compiler::{
     fragments::{Fragment, FragmentId, FragmentKind, Fragments, Payload},
+    host::Host,
     source_map::SourceMap,
 };
+use capi_game_engine::host::GameEngineHost;
 use capi_process::{Effect, InstructionAddress, Process};
 
 use super::DebugFunction;
@@ -77,6 +79,9 @@ pub enum DebugFragmentKind {
     CallToFunction {
         name: String,
     },
+    CallToHostFunction {
+        name: String,
+    },
     CallToIntrinsic {
         name: String,
     },
@@ -112,6 +117,15 @@ impl DebugFragmentKind {
         let kind = match payload {
             Payload::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
+            }
+            Payload::CallToHostFunction { effect_number } => {
+                let name = GameEngineHost::effect_number_to_function_name(
+                    effect_number,
+                )
+                .expect("Expected effect number in code to be valid.")
+                .to_string();
+
+                Self::CallToHostFunction { name }
             }
             Payload::CallToIntrinsic { intrinsic, .. } => {
                 Self::CallToIntrinsic {

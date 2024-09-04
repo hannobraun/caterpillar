@@ -78,6 +78,31 @@ fn basic_call_stack() {
 }
 
 #[test]
+fn stopped_at_host_function() {
+    // If execution is stopped at a host function, it should be displayed as
+    // such.
+
+    let debugger = init()
+        .provide_source_code(
+            r"
+                main: { |size_x size_y|
+                    halt
+                }
+            ",
+        )
+        .run_process()
+        .to_debugger();
+
+    debugger
+        .active_functions
+        .expect_entries()
+        .functions()
+        .with_name("main")
+        .active_fragment()
+        .expect_call_to_host_function("halt");
+}
+
+#[test]
 fn stopped_at_code_within_block() {
     // If execution is stopped within a block, the function that contains that
     // block should appear as an active function, and the current instruction

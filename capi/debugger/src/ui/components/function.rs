@@ -100,6 +100,17 @@ pub fn Fragment(
             &mut class_outer,
             commands,
         ),
+        DebugFragmentKind::CallToHostFunction { name } => {
+            make_single_expression(
+                name,
+                fragment.has_durable_breakpoint,
+                fragment.is_active,
+                fragment.first_instruction,
+                fragment.effect,
+                &mut class_outer,
+                commands,
+            )
+        }
         DebugFragmentKind::CallToIntrinsic { name } => make_single_expression(
             name,
             fragment.has_durable_breakpoint,
