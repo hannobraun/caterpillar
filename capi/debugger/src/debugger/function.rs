@@ -10,7 +10,6 @@ use super::Branch;
 pub struct DebugFunction {
     pub name: Option<String>,
     pub branches: Vec<Branch>,
-    pub active_fragment: Option<FragmentId>,
 }
 
 impl DebugFunction {
@@ -36,10 +35,6 @@ impl DebugFunction {
             })
             .collect();
 
-        Self {
-            name,
-            branches,
-            active_fragment,
-        }
+        Self { name, branches }
     }
 }
