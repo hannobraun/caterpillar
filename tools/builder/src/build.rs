@@ -93,7 +93,7 @@ async fn build_once(
         .web(true)?
         .generate(&new_output_dir)?;
 
-    copy("capi", new_output_dir.path(), "index.html").await?;
+    copy("capi/debugger/www", new_output_dir.path(), "index.html").await?;
 
     let output_path = new_output_dir.path().to_path_buf();
 
