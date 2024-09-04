@@ -1,8 +1,4 @@
-use capi_compiler::{
-    compile,
-    fragments::{self, Payload},
-    intrinsics::Intrinsic,
-};
+use capi_compiler::{compile, fragments, intrinsics::Intrinsic};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -156,11 +152,7 @@ pub trait DebugFragmentExt {
 
 impl DebugFragmentExt for DebugFragment {
     fn expect_call_to(self, called_fn: &str) {
-        let DebugFragmentKind::OtherExpression(payload) = self.kind else {
-            panic!()
-        };
-
-        let Payload::CallToFunction { name, .. } = payload else {
+        let DebugFragmentKind::CallToFunction { name } = self.kind else {
             panic!("Expected call to function.");
         };
 

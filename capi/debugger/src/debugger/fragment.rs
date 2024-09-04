@@ -74,6 +74,9 @@ impl DebugFragment {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
+    CallToFunction {
+        name: String,
+    },
     Comment {
         text: String,
     },
@@ -104,6 +107,9 @@ impl DebugFragmentKind {
         };
 
         let kind = match payload {
+            Payload::CallToFunction { name, .. } => {
+                Self::CallToFunction { name }
+            }
             Payload::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },

@@ -91,9 +91,17 @@ pub fn Fragment(
     let mut class_outer = String::from("py-1");
 
     let (fragment, error) = match fragment.kind {
+        DebugFragmentKind::CallToFunction { name } => make_single_expression(
+            name,
+            fragment.has_durable_breakpoint,
+            fragment.is_active,
+            fragment.first_instruction,
+            fragment.effect,
+            &mut class_outer,
+            commands,
+        ),
         DebugFragmentKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
-
             (
                 view! {
                     <span class=class_inner>
