@@ -87,11 +87,16 @@ Where developer experience conflicts with performance, the decision will be made
 configurable, if practical. Where possible, designs are chosen that are good for
 both.
 
+And while a focus on developer experience might decrease _peak_ performance, it
+might improve performance in general. Simply because developers have the tools
+and spare resources to make their programs run fast.
+
 The following daily thoughts provide more context:
 [2024-08-30](https://capi.hannobraun.com/daily/2024-08-30),
 [2024-09-01](https://capi.hannobraun.com/daily/2024-09-01),
-[2024-09-02](https://capi.hannobraun.com/daily/2024-09-02), and
-[2024-09-03](https://capi.hannobraun.com/daily/2024-09-03).
+[2024-09-02](https://capi.hannobraun.com/daily/2024-09-02),
+[2024-09-03](https://capi.hannobraun.com/daily/2024-09-03), and
+[2024-09-04](https://capi.hannobraun.com/daily/2024-09-04).
 
 ### Experimentation first; conservative decisions later, as necessary
 
