@@ -66,7 +66,7 @@ fn Branch(
             view! {
                 <li class="ml-8">
                     <Expression
-                        expression=fragment
+                        fragment=fragment
                         commands=commands.clone() />
                 </li>
             }
@@ -85,12 +85,12 @@ fn Branch(
 
 #[component]
 pub fn Expression(
-    expression: DebugFragment,
+    fragment: DebugFragment,
     commands: CommandsTx,
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (expression, error) = match expression.kind {
+    let (expression, error) = match fragment.kind {
         DebugFragmentKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
@@ -118,7 +118,7 @@ pub fn Expression(
             first_instruction,
             effect,
         }) => {
-            if expression.has_durable_breakpoint {
+            if fragment.has_durable_breakpoint {
                 class_outer.push_str(" bg-blue-300");
             }
 
@@ -129,13 +129,13 @@ pub fn Expression(
                     _ => class_inner.push_str(" bg-red-300"),
                 }
             }
-            if expression.is_active {
+            if fragment.is_active {
                 class_inner.push_str(" font-bold");
             }
 
             let data_instruction =
                 first_instruction.map(|instruction| instruction.index);
-            let data_breakpoint = expression.has_durable_breakpoint;
+            let data_breakpoint = fragment.has_durable_breakpoint;
 
             let error = effect.map(|effect| format!("{:?}", effect));
 
