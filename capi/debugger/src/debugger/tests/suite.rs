@@ -107,7 +107,7 @@ fn stopped_at_code_within_block() {
         .only_branch()
         .body
         .remove(0)
-        .expect_other();
+        .expect_other_expression();
     assert_eq!(expression.effect, Some(Effect::Breakpoint));
 
     let intrinsic = expression.payload.expect_intrinsic();

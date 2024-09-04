@@ -152,7 +152,7 @@ impl DebugFunctionExt for DebugFunction {
 pub trait DebugFragmentExt {
     fn expect_call_to(self, name: &str);
     fn expect_function(self) -> DebugFunction;
-    fn expect_other(self) -> OtherExpression;
+    fn expect_other_expression(self) -> OtherExpression;
 }
 
 impl DebugFragmentExt for DebugFragment {
@@ -178,7 +178,7 @@ impl DebugFragmentExt for DebugFragment {
         function
     }
 
-    fn expect_other(self) -> OtherExpression {
+    fn expect_other_expression(self) -> OtherExpression {
         let DebugFragmentKind::Other(other) = self.kind else {
             panic!("Expected other expression");
         };
