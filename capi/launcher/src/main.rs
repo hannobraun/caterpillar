@@ -42,10 +42,12 @@ async fn main() -> anyhow::Result<()> {
 
         if times_gross.total_ms >= 1000 {
             let avg_gross = times_gross.total_ms / times_gross.num;
-            let max = times_gross.max_ms.unwrap();
+            let max_gross = times_gross.max_ms.unwrap();
             let min = times_gross.min_ms.unwrap();
 
-            eprintln!("avg: {avg_gross} ms; max: {max} ms; min: {min} ms",);
+            eprintln!(
+                "avg: {avg_gross} ms; max: {max_gross} ms; min: {min} ms",
+            );
 
             times_gross = Measurements::default();
         }
