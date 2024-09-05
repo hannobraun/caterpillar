@@ -109,9 +109,23 @@ pub enum Instruction {
     /// # Add two unsigned 8-bit integers, wrapping on overflow
     AddU8Wrap,
 
+    /// # Bind a value to a name
+    ///
+    /// ## Implementation Note
+    ///
+    /// This is one of those high-level instructions that I'd like to get rid
+    /// of, eventually. There's no need to know about the names of values at
+    /// runtime.
+    ///
+    /// The compiler should just keep track of all names and the respective
+    /// value's locations on the stack at compile-time. This requires changes to
+    /// the instruction set, either in the form of an instruction that can copy
+    /// any value to the top of the stack, or new means to specify which values
+    /// a given instruction targets.
     Bind {
         name: String,
     },
+
     BindingEvaluate {
         name: String,
     },
