@@ -82,7 +82,6 @@ impl GameEngine {
 
     pub fn run_until_end_of_frame(
         &mut self,
-        _delta_time_s: f64,
         current_time_s: f64,
         pixels: &mut [u8],
     ) -> bool {

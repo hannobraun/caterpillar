@@ -15,7 +15,6 @@ async fn main() -> anyhow::Result<()> {
 
     let start = Instant::now();
     let mut now = Instant::now();
-    let mut start_of_loop = Instant::now();
 
     let mut total_frame_times_ms = 0;
     let mut min_frame_time = None;
@@ -23,16 +22,11 @@ async fn main() -> anyhow::Result<()> {
     let mut num_frame_times = 0;
 
     while !game_engine.process.has_finished() {
-        let elapsed = start_of_loop.elapsed();
-        start_of_loop = Instant::now();
-
         while game_engine.push_random(random()) {}
 
-        if !game_engine.run_until_end_of_frame(
-            elapsed.as_secs_f64(),
-            start.elapsed().as_secs_f64(),
-            &mut pixels,
-        ) {
+        if !game_engine
+            .run_until_end_of_frame(start.elapsed().as_secs_f64(), &mut pixels)
+        {
             // Game engine decided that it's not time to run another frame yet.
             continue;
         }
