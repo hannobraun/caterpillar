@@ -38,6 +38,7 @@ async fn main() -> anyhow::Result<()> {
         }
 
         let frame_time = now.elapsed().as_millis();
+        now = Instant::now();
 
         total_frame_times_ms += frame_time;
         num_frame_times += 1;
@@ -69,10 +70,6 @@ async fn main() -> anyhow::Result<()> {
             min_frame_time = None;
             num_frame_times = 0;
         }
-
-        // Do this after the whole frame time bookkeeping, so it's not
-        // influencing the performance measurement.
-        now = Instant::now();
     }
 
     Ok(())
