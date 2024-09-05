@@ -1,5 +1,3 @@
-use std::fmt;
-
 use capi_process::Value;
 
 use crate::intrinsics::Intrinsic;
@@ -94,23 +92,4 @@ pub enum Payload {
         name: String,
     },
     Value(Value),
-}
-
-impl fmt::Display for Payload {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::CallToFunction { name, .. } => write!(f, "{name}"),
-            Self::CallToHostFunction { .. } => {
-                write!(f, "call to host function")
-            }
-            Self::CallToIntrinsic { intrinsic, .. } => {
-                write!(f, "{intrinsic}")
-            }
-            Self::Comment { text } => write!(f, "# {text}"),
-            Self::Function { .. } => write!(f, "block"),
-            Self::ResolvedBinding { name } => write!(f, "{name}"),
-            Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
-            Self::Value(value) => write!(f, "{value}"),
-        }
-    }
 }
