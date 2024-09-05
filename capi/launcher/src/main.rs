@@ -14,11 +14,15 @@ async fn main() -> anyhow::Result<()> {
     game_engine.on_new_instructions(code.instructions);
 
     let start_of_game = Instant::now();
+    let mut start_of_loop;
     let mut start_of_frame = Instant::now();
 
+    let mut times_net = Measurements::default();
     let mut times_gross = Measurements::default();
 
     while !game_engine.process.has_finished() {
+        start_of_loop = Instant::now();
+
         while game_engine.push_random(random()) {}
 
         if !game_engine.run_until_end_of_frame(
@@ -35,20 +39,30 @@ async fn main() -> anyhow::Result<()> {
             break;
         }
 
+        let frame_time_net = start_of_loop.elapsed().as_millis();
         let frame_time_gross = start_of_frame.elapsed().as_millis();
+
         start_of_frame = Instant::now();
 
+        times_net.measure(frame_time_net);
         times_gross.measure(frame_time_gross);
 
         if times_gross.total_ms >= 1000 {
+            let avg_net = times_net.total_ms / times_net.num;
+            let max_net = times_net.max_ms.unwrap();
+            let min_net = times_net.min_ms.unwrap();
+
             let avg_gross = times_gross.total_ms / times_gross.num;
             let max_gross = times_gross.max_ms.unwrap();
             let min_gross = times_gross.min_ms.unwrap();
 
             eprintln!(
-                "avg: {avg_gross} ms; max: {max_gross} ms; min: {min_gross} ms",
+                "avg: {avg_net} / {avg_gross} ms; \
+                max: {max_net} / {max_gross} ms; \
+                min: {min_net} / {min_gross} ms",
             );
 
+            times_net = Measurements::default();
             times_gross = Measurements::default();
         }
     }
