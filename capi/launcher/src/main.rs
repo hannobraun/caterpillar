@@ -16,12 +16,7 @@ async fn main() -> anyhow::Result<()> {
     let start_of_game = Instant::now();
     let mut start_of_frame = Instant::now();
 
-    let mut times_gross = Measurements {
-        total_ms: 0,
-        min_ms: None,
-        max_ms: None,
-        num: 0,
-    };
+    let mut times_gross = Measurements::default();
 
     while !game_engine.process.has_finished() {
         while game_engine.push_random(random()) {}
@@ -68,18 +63,14 @@ async fn main() -> anyhow::Result<()> {
 
             eprintln!("avg: {avg} ms; max: {max} ms; min: {min} ms",);
 
-            times_gross = Measurements {
-                total_ms: 0,
-                min_ms: None,
-                max_ms: None,
-                num: 0,
-            }
+            times_gross = Measurements::default();
         }
     }
 
     Ok(())
 }
 
+#[derive(Default)]
 pub struct Measurements {
     total_ms: u128,
     min_ms: Option<u128>,
