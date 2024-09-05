@@ -16,10 +16,12 @@ async fn main() -> anyhow::Result<()> {
     let start_of_game = Instant::now();
     let mut start_of_frame = Instant::now();
 
-    let mut total_frame_times_ms = 0;
-    let mut min_frame_time = None;
-    let mut max_frame_time = None;
-    let mut num_frame_times = 0;
+    let mut times_gross = Measurements {
+        total_ms: 0,
+        min_ms: None,
+        max_ms: None,
+        num: 0,
+    };
 
     while !game_engine.process.has_finished() {
         while game_engine.push_random(random()) {}
@@ -41,37 +43,46 @@ async fn main() -> anyhow::Result<()> {
         let frame_time_gross = start_of_frame.elapsed().as_millis();
         start_of_frame = Instant::now();
 
-        total_frame_times_ms += frame_time_gross;
-        num_frame_times += 1;
+        times_gross.total_ms += frame_time_gross;
+        times_gross.num += 1;
 
-        if let Some(min) = min_frame_time {
+        if let Some(min) = times_gross.min_ms {
             if frame_time_gross < min {
-                min_frame_time = Some(frame_time_gross);
+                times_gross.min_ms = Some(frame_time_gross);
             }
         } else {
-            min_frame_time = Some(frame_time_gross);
+            times_gross.min_ms = Some(frame_time_gross);
         }
-        if let Some(max) = max_frame_time {
+        if let Some(max) = times_gross.max_ms {
             if frame_time_gross > max {
-                max_frame_time = Some(frame_time_gross);
+                times_gross.max_ms = Some(frame_time_gross);
             }
         } else {
-            max_frame_time = Some(frame_time_gross);
+            times_gross.max_ms = Some(frame_time_gross);
         }
 
-        if total_frame_times_ms >= 1000 {
-            let avg = total_frame_times_ms / num_frame_times;
-            let max = max_frame_time.unwrap();
-            let min = min_frame_time.unwrap();
+        if times_gross.total_ms >= 1000 {
+            let avg = times_gross.total_ms / times_gross.num;
+            let max = times_gross.max_ms.unwrap();
+            let min = times_gross.min_ms.unwrap();
 
             eprintln!("avg: {avg} ms; max: {max} ms; min: {min} ms",);
 
-            total_frame_times_ms = 0;
-            max_frame_time = None;
-            min_frame_time = None;
-            num_frame_times = 0;
+            times_gross = Measurements {
+                total_ms: 0,
+                min_ms: None,
+                max_ms: None,
+                num: 0,
+            }
         }
     }
 
     Ok(())
+}
+
+pub struct Measurements {
+    total_ms: u128,
+    min_ms: Option<u128>,
+    max_ms: Option<u128>,
+    num: u128,
 }
