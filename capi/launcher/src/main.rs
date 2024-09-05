@@ -38,25 +38,25 @@ async fn main() -> anyhow::Result<()> {
             break;
         }
 
-        let frame_time = start_of_frame.elapsed().as_millis();
+        let frame_time_gross = start_of_frame.elapsed().as_millis();
         start_of_frame = Instant::now();
 
-        total_frame_times_ms += frame_time;
+        total_frame_times_ms += frame_time_gross;
         num_frame_times += 1;
 
         if let Some(min) = min_frame_time {
-            if frame_time < min {
-                min_frame_time = Some(frame_time);
+            if frame_time_gross < min {
+                min_frame_time = Some(frame_time_gross);
             }
         } else {
-            min_frame_time = Some(frame_time);
+            min_frame_time = Some(frame_time_gross);
         }
         if let Some(max) = max_frame_time {
-            if frame_time > max {
-                max_frame_time = Some(frame_time);
+            if frame_time_gross > max {
+                max_frame_time = Some(frame_time_gross);
             }
         } else {
-            max_frame_time = Some(frame_time);
+            max_frame_time = Some(frame_time_gross);
         }
 
         if total_frame_times_ms >= 1000 {
