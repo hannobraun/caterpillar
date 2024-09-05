@@ -22,7 +22,7 @@ pub fn generate_instructions(
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
     let main = output.instructions.push(Instruction::TriggerEffect {
-        effect: Effect::MissingMainFunction,
+        effect: Effect::BuildError,
     });
     output.instructions.push(Instruction::Return);
     if let Some(id) = fragments.inner.find_function_by_name("main") {
@@ -329,7 +329,7 @@ fn compile_fragment(
                 Payload::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {
-                            effect: Effect::UnresolvedIdentifier,
+                            effect: Effect::BuildError,
                         },
                         fragment.id(),
                     ))

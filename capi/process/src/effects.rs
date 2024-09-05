@@ -28,6 +28,11 @@ pub enum Effect {
     #[error("Breakpoint")]
     Breakpoint,
 
+    #[error(
+        "Hit instruction that was generated from invalid Caterpillar code"
+    )]
+    BuildError,
+
     #[error("Mis-compilation due to a compiler bug")]
     CompilerBug,
 
@@ -43,9 +48,6 @@ pub enum Effect {
     #[error("Invalid host effect")]
     InvalidHostEffect,
 
-    #[error("Missing `main` function")]
-    MissingMainFunction,
-
     #[error("Pattern matching resulted in no match")]
     NoMatch,
 
@@ -57,9 +59,6 @@ pub enum Effect {
 
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
-
-    #[error("Unresolved identifier")]
-    UnresolvedIdentifier,
 
     /// A host-specific effect
     ///
