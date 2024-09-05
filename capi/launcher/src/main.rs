@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
     game_engine.on_new_instructions(code.instructions);
 
     let start = Instant::now();
-    let mut now = Instant::now();
+    let mut start_of_frame = Instant::now();
 
     let mut total_frame_times_ms = 0;
     let mut min_frame_time = None;
@@ -37,8 +37,8 @@ async fn main() -> anyhow::Result<()> {
             break;
         }
 
-        let frame_time = now.elapsed().as_millis();
-        now = Instant::now();
+        let frame_time = start_of_frame.elapsed().as_millis();
+        start_of_frame = Instant::now();
 
         total_frame_times_ms += frame_time;
         num_frame_times += 1;
