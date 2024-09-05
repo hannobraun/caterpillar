@@ -79,13 +79,9 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        let previousTimeMs = document.timeline.currentTime;
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop(currentTimeMs) {
-            const deltaTimeMs = currentTimeMs - previousTimeMs;
-            previousTimeMs = currentTimeMs;
-
             while (runtime.push_random(Math.random())) { }
 
             while (true) {
@@ -135,7 +131,7 @@
                 }
             }
 
-            runtime.on_frame(deltaTimeMs, currentTimeMs);
+            runtime.on_frame(currentTimeMs);
 
             const pixels = new Uint8ClampedArray(
                 runtime.memory.buffer,

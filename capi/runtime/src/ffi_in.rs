@@ -181,7 +181,7 @@ pub fn on_command() {
 }
 
 #[no_mangle]
-pub fn on_frame(_delta_time_ms: f64, current_time_ms: f64) {
+pub fn on_frame(current_time_ms: f64) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
