@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Branch, DebugFragment, DebugFragmentKind},
+    debugger::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
     ui::{send_command, CommandsTx},
 };
 
@@ -93,30 +93,21 @@ pub fn Fragment(
     let (fragment, error) = match fragment.kind {
         DebugFragmentKind::CallToFunction { name } => make_single_expression(
             name,
-            fragment.data.has_durable_breakpoint,
-            fragment.data.is_active,
-            fragment.data.first_instruction,
-            fragment.data.effect,
+            fragment.data,
             &mut class_outer,
             commands,
         ),
         DebugFragmentKind::CallToHostFunction { name } => {
             make_single_expression(
                 name,
-                fragment.data.has_durable_breakpoint,
-                fragment.data.is_active,
-                fragment.data.first_instruction,
-                fragment.data.effect,
+                fragment.data,
                 &mut class_outer,
                 commands,
             )
         }
         DebugFragmentKind::CallToIntrinsic { name } => make_single_expression(
             name,
-            fragment.data.has_durable_breakpoint,
-            fragment.data.is_active,
-            fragment.data.first_instruction,
-            fragment.data.effect,
+            fragment.data,
             &mut class_outer,
             commands,
         ),
@@ -143,30 +134,21 @@ pub fn Fragment(
         ),
         DebugFragmentKind::ResolvedBinding { name } => make_single_expression(
             name,
-            fragment.data.has_durable_breakpoint,
-            fragment.data.is_active,
-            fragment.data.first_instruction,
-            fragment.data.effect,
+            fragment.data,
             &mut class_outer,
             commands,
         ),
         DebugFragmentKind::UnresolvedIdentifier { name } => {
             make_single_expression(
                 name,
-                fragment.data.has_durable_breakpoint,
-                fragment.data.is_active,
-                fragment.data.first_instruction,
-                fragment.data.effect,
+                fragment.data,
                 &mut class_outer,
                 commands,
             )
         }
         DebugFragmentKind::Value { as_string } => make_single_expression(
             as_string,
-            fragment.data.has_durable_breakpoint,
-            fragment.data.is_active,
-            fragment.data.first_instruction,
-            fragment.data.effect,
+            fragment.data,
             &mut class_outer,
             commands,
         ),
@@ -184,33 +166,30 @@ pub fn Fragment(
 
 fn make_single_expression(
     expression: String,
-    has_durable_breakpoint: bool,
-    is_active: bool,
-    first_instruction: Option<InstructionAddress>,
-    effect: Option<Effect>,
+    data: DebugFragmentData,
     class_outer: &mut String,
     commands: CommandsTx,
 ) -> (View, Option<HtmlElement<Span>>) {
-    if has_durable_breakpoint {
+    if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
 
     let mut class_inner = String::from("px-0.5");
-    if let Some(effect) = &effect {
+    if let Some(effect) = &data.effect {
         match effect {
             Effect::Breakpoint => class_inner.push_str(" bg-green-300"),
             _ => class_inner.push_str(" bg-red-300"),
         }
     }
-    if is_active {
+    if data.is_active {
         class_inner.push_str(" font-bold");
     }
 
     let data_instruction =
-        first_instruction.map(|instruction| instruction.index);
-    let data_breakpoint = has_durable_breakpoint;
+        data.first_instruction.map(|instruction| instruction.index);
+    let data_breakpoint = data.has_durable_breakpoint;
 
-    let error = effect.map(|effect| format!("{:?}", effect));
+    let error = data.effect.map(|effect| format!("{:?}", effect));
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
