@@ -42,8 +42,6 @@ async fn main() -> anyhow::Result<()> {
         let frame_time_net = start_of_loop.elapsed().as_millis();
         let frame_time_gross = start_of_frame.elapsed().as_millis();
 
-        start_of_frame = Instant::now();
-
         times_net.measure(frame_time_net);
         times_gross.measure(frame_time_gross);
 
@@ -65,6 +63,10 @@ async fn main() -> anyhow::Result<()> {
             times_net = Measurements::default();
             times_gross = Measurements::default();
         }
+
+        // Do this after the whole frame time bookkeeping, so it's not
+        // influencing the performance measurement.
+        start_of_frame = Instant::now();
     }
 
     Ok(())
