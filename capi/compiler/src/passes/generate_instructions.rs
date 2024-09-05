@@ -21,6 +21,10 @@ pub fn generate_instructions(
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
+    //
+    // If there's no `main` function, this won't get replaced. Since this is a
+    // result of wrong code, an instruction generating the `BuildError` effect
+    // is an appropriate placeholder.
     let main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     });
