@@ -15,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
 
     let start = Instant::now();
     let mut now = Instant::now();
-    let mut now2 = Instant::now();
+    let mut start_of_loop = Instant::now();
 
     let mut total_frame_times_ms = 0;
     let mut min_frame_time = None;
@@ -23,8 +23,8 @@ async fn main() -> anyhow::Result<()> {
     let mut num_frame_times = 0;
 
     while !game_engine.process.has_finished() {
-        let elapsed = now2.elapsed();
-        now2 = Instant::now();
+        let elapsed = start_of_loop.elapsed();
+        start_of_loop = Instant::now();
 
         while game_engine.push_random(random()) {}
 
