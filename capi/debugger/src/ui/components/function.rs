@@ -161,8 +161,8 @@ pub fn Fragment(
                 commands,
             )
         }
-        DebugFragmentKind::OtherExpression(payload) => make_single_expression(
-            format!("{payload}"),
+        DebugFragmentKind::Value { as_string } => make_single_expression(
+            as_string,
             fragment.has_durable_breakpoint,
             fragment.is_active,
             fragment.first_instruction,

@@ -76,36 +76,14 @@ impl DebugFragment {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
-    CallToFunction {
-        name: String,
-    },
-    CallToHostFunction {
-        name: String,
-    },
-    CallToIntrinsic {
-        name: String,
-    },
-    Comment {
-        text: String,
-    },
-    Function {
-        function: DebugFunction,
-    },
-    ResolvedBinding {
-        name: String,
-    },
-    UnresolvedIdentifier {
-        name: String,
-    },
-
-    /// # An expression, not covered by other variants
-    ///
-    /// ## Implementation Note
-    ///
-    /// This shouldn't exist. We should split out all the relevant variants, so
-    /// the UI code can match on them. This would also pave the way for syntax
-    /// highlighting in the debugger.
-    OtherExpression(Payload),
+    CallToFunction { name: String },
+    CallToHostFunction { name: String },
+    CallToIntrinsic { name: String },
+    Comment { text: String },
+    Function { function: DebugFunction },
+    ResolvedBinding { name: String },
+    UnresolvedIdentifier { name: String },
+    Value { as_string: String },
 }
 
 impl DebugFragmentKind {
@@ -156,7 +134,9 @@ impl DebugFragmentKind {
             Payload::UnresolvedIdentifier { name } => {
                 Self::UnresolvedIdentifier { name }
             }
-            payload => Self::OtherExpression(payload),
+            Payload::Value(value) => Self::Value {
+                as_string: value.to_string(),
+            },
         };
 
         Some(kind)
