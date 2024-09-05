@@ -25,7 +25,7 @@ pub fn generate_instructions(
     // If there's no `main` function, this won't get replaced. Since this is a
     // result of wrong code, an instruction generating the `BuildError` effect
     // is an appropriate placeholder.
-    let main = output.instructions.push(Instruction::TriggerEffect {
+    let call_to_main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     });
     output.instructions.push(Instruction::Return);
@@ -33,7 +33,7 @@ pub fn generate_instructions(
         output.placeholders.push(CallToFunction {
             name: "main".to_string(),
             id,
-            address: main,
+            address: call_to_main,
             is_tail_call: true,
         });
     }
