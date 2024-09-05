@@ -11,7 +11,6 @@ use crate::{
 pub struct GameEngine {
     pub process: Process,
 
-    acc_time_s: f64,
     last_frame_start_s: Option<f64>,
     instructions: Option<Instructions>,
     arguments: [Value; 2],
@@ -29,7 +28,6 @@ impl GameEngine {
 
         Self {
             process,
-            acc_time_s: 0.,
             last_frame_start_s: None,
             instructions: None,
             arguments,
@@ -84,35 +82,43 @@ impl GameEngine {
 
     pub fn run_until_end_of_frame(
         &mut self,
-        delta_time_s: f64,
+        _delta_time_s: f64,
         current_time_s: f64,
         pixels: &mut [u8],
     ) -> bool {
         // For now, we're targeting an unambitious 30 fps.
         let frame_time_s = 1. / 30.;
 
-        self.acc_time_s += delta_time_s;
+        if let Some(last_frame_start_s) = self.last_frame_start_s {
+            let time_since_last_frame_start_s =
+                current_time_s - last_frame_start_s;
 
-        if self.acc_time_s >= frame_time_s {
-            // It's time to run another frame!
-            self.acc_time_s -= frame_time_s;
-            self.last_frame_start_s = Some(current_time_s);
-
-            if self.acc_time_s >= frame_time_s {
-                // We subtracted the current frame from the accumulated time,
-                // and there's still at least one full frame time left.
+            if time_since_last_frame_start_s >= frame_time_s * 2. {
+                // It's time for another frame, but it seems that has been true
+                // for a while. This could mean that the game was paused, or
+                // that we're running too slow, getting behind on frames.
                 //
-                // This could mean that the game was paused, and we're coming
-                // back with a huge delta time. Or that we're running too slow,
-                // getting behind on frames.
-                //
-                // Either way, we don't want to burn the CPU by trying to catch
+                // Either way, we don't want to burn the CPU, trying to catch
                 // up.
-                self.acc_time_s = 0.;
+                self.last_frame_start_s = Some(current_time_s);
+            } else if time_since_last_frame_start_s >= frame_time_s {
+                // It's time for another frame, and we don't seem to be getting
+                // behind.
+                //
+                // In this case, don't remember the current time as the start
+                // time of the frame, but instead just advance that by the
+                // nominal frame time. This way, any timing inaccuracies in
+                // calling this function should get smoothed out a bit, on
+                // average.
+                self.last_frame_start_s =
+                    Some(last_frame_start_s + frame_time_s);
+            } else {
+                // It's not time for another frame yet!
+                return false;
             }
         } else {
-            // It's not time to run another frame yet.
-            return false;
+            // This seems to be the first frame. Just run it immediately.
+            self.last_frame_start_s = Some(current_time_s);
         }
 
         while self.process.can_step() {
