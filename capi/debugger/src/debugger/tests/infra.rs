@@ -127,7 +127,10 @@ impl DebugFunctionExt for DebugFunction {
         self.branches
             .into_iter()
             .find_map(|branch| {
-                branch.body.into_iter().find(|fragment| fragment.is_active)
+                branch
+                    .body
+                    .into_iter()
+                    .find(|fragment| fragment.data.is_active)
             })
             .expect("Expected to find an active fragment")
     }

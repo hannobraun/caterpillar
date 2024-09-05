@@ -131,7 +131,7 @@ fn stopped_at_code_within_block() {
         .only_branch()
         .body
         .remove(0);
-    assert_eq!(fragment.effect, Some(Effect::Breakpoint));
+    assert_eq!(fragment.data.effect, Some(Effect::Breakpoint));
 
     fragment.expect_call_to_intrinsic("brk");
 }

@@ -10,17 +10,8 @@ use super::DebugFunction;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragment {
+    pub data: DebugFragmentData,
     pub kind: DebugFragmentKind,
-
-    /// # Indicate whether the expression is active
-    ///
-    /// An expression is active, either if it is currently being executed, or if
-    /// it calls an active function.
-    pub is_active: bool,
-
-    pub has_durable_breakpoint: bool,
-    pub first_instruction: Option<InstructionAddress>,
-    pub effect: Option<Effect>,
 }
 
 impl DebugFragment {
@@ -65,13 +56,28 @@ impl DebugFragment {
 
         Some(Self {
             kind,
-            is_active,
-            has_durable_breakpoint,
-            first_instruction: instructions
-                .and_then(|instruction| instruction.first().copied()),
-            effect,
+            data: DebugFragmentData {
+                is_active,
+                has_durable_breakpoint,
+                first_instruction: instructions
+                    .and_then(|instruction| instruction.first().copied()),
+                effect,
+            },
         })
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DebugFragmentData {
+    /// # Indicate whether the expression is active
+    ///
+    /// An expression is active, either if it is currently being executed, or if
+    /// it calls an active function.
+    pub is_active: bool,
+
+    pub has_durable_breakpoint: bool,
+    pub first_instruction: Option<InstructionAddress>,
+    pub effect: Option<Effect>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
