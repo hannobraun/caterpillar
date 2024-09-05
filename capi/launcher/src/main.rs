@@ -38,23 +38,7 @@ async fn main() -> anyhow::Result<()> {
         let frame_time_gross = start_of_frame.elapsed().as_millis();
         start_of_frame = Instant::now();
 
-        times_gross.total_ms += frame_time_gross;
-        times_gross.num += 1;
-
-        if let Some(min) = times_gross.min_ms {
-            if frame_time_gross < min {
-                times_gross.min_ms = Some(frame_time_gross);
-            }
-        } else {
-            times_gross.min_ms = Some(frame_time_gross);
-        }
-        if let Some(max) = times_gross.max_ms {
-            if frame_time_gross > max {
-                times_gross.max_ms = Some(frame_time_gross);
-            }
-        } else {
-            times_gross.max_ms = Some(frame_time_gross);
-        }
+        times_gross.measure(frame_time_gross);
 
         if times_gross.total_ms >= 1000 {
             let avg = times_gross.total_ms / times_gross.num;
@@ -76,4 +60,26 @@ pub struct Measurements {
     min_ms: Option<u128>,
     max_ms: Option<u128>,
     num: u128,
+}
+
+impl Measurements {
+    fn measure(&mut self, time_ms: u128) {
+        self.total_ms += time_ms;
+        self.num += 1;
+
+        if let Some(min) = self.min_ms {
+            if time_ms < min {
+                self.min_ms = Some(time_ms);
+            }
+        } else {
+            self.min_ms = Some(time_ms);
+        }
+        if let Some(max) = self.max_ms {
+            if time_ms > max {
+                self.max_ms = Some(time_ms);
+            }
+        } else {
+            self.max_ms = Some(time_ms);
+        }
+    }
 }
