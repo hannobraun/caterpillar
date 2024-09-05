@@ -91,6 +91,9 @@ pub enum DebugFragmentKind {
     Function {
         function: DebugFunction,
     },
+    ResolvedBinding {
+        name: String,
+    },
 
     /// # An expression, not covered by other variants
     ///
@@ -146,6 +149,7 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
+            Payload::ResolvedBinding { name } => Self::ResolvedBinding { name },
             payload => Self::OtherExpression(payload),
         };
 
