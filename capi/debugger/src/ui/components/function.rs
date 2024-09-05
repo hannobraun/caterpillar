@@ -150,6 +150,17 @@ pub fn Fragment(
             &mut class_outer,
             commands,
         ),
+        DebugFragmentKind::UnresolvedIdentifier { name } => {
+            make_single_expression(
+                name,
+                fragment.has_durable_breakpoint,
+                fragment.is_active,
+                fragment.first_instruction,
+                fragment.effect,
+                &mut class_outer,
+                commands,
+            )
+        }
         DebugFragmentKind::OtherExpression(payload) => make_single_expression(
             format!("{payload}"),
             fragment.has_durable_breakpoint,
