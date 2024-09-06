@@ -5,8 +5,6 @@ use crate::ui::{components::panel::Panel, send_command, CommandsTx};
 
 #[component]
 pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
-    let event_continue = Command::Continue;
-
     view! {
         <Panel class="">
             <Button
@@ -19,7 +17,7 @@ pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
                 commands=commands.clone() />
             <Button
                 label="Continue"
-                command=event_continue
+                command=Command::Continue
                 commands=commands.clone() />
             <Button
                 label="Step Into"
