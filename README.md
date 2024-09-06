@@ -288,6 +288,22 @@ The following daily thoughts provide more context:
 [2024-07-22](https://capi.hannobraun.com/daily/2024-07-22), and
 [2024-07-23](https://capi.hannobraun.com/daily/2024-07-23).
 
+### Compilation doesn't stop on errors
+
+The compiler doesn't stop, when encountering an error. Instead it encodes the
+error into the representation it is currently generating, still creating an
+executable result in the end. If code generated from one of the build errors is
+hit, this results in a runtime panic.
+
+This has advantages, like allowing you to run tests or debug a piece of code,
+even while something else doesn't currently typecheck, for example. This could
+make day-to-day development easier. It also makes sure that the enriched version
+of the source code that the debugger displays, is always available.
+
+The following daily thoughts provide more context:
+[2024-09-05](https://capi.hannobraun.com/daily/2024-09-05) and
+[2024-09-06](https://capi.hannobraun.com/daily/2024-09-06).
+
 ## Acknowledgements
 
 I'd like to thank [Martin Dederer](https://github.com/martindederer) for
