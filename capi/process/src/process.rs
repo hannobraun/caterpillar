@@ -32,7 +32,7 @@ impl Process {
     ///
     /// This must not be called, while an effect is already triggered. Only call
     /// it from contexts, where it's known that no effect could be triggered, or
-    /// right after handling a currently triggered effect.
+    /// right after handling the currently triggered effect.
     ///
     /// ## Panics
     ///
