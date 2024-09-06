@@ -29,6 +29,41 @@ draw: {
         submit_frame
 }
 
+# Draw - clear pixels
+clear_pixels: {
+    ||
+        init_tile_index clear_pixels_inner
+}
+
+clear_pixels_inner: {
+    |tile_x tile_y|
+        # This is a recursive function, so we might have been at
+        # it for a while, if we make it here. Check if the tile
+        # index has gone beyond the last tile, which would let
+        # us know that we're done.
+        tile_y
+        check_tile_index
+        {
+            |0|
+                # Done.
+
+            |_|
+                # Apparently we're not done yet.
+                tile_x
+                tile_y
+                0
+                0
+                0
+                255
+                set_pixel
+                tile_x
+                tile_y
+                increment_tile_index
+                clear_pixels_inner
+        }
+            eval
+}
+
 draw_snake: {
     ||
         0 _draw_snake_inner
@@ -85,41 +120,6 @@ draw_food: {
         0
         255
         set_pixel
-}
-
-# Draw - clear pixels
-clear_pixels: {
-    ||
-        init_tile_index clear_pixels_inner
-}
-
-clear_pixels_inner: {
-    |tile_x tile_y|
-        # This is a recursive function, so we might have been at
-        # it for a while, if we make it here. Check if the tile
-        # index has gone beyond the last tile, which would let
-        # us know that we're done.
-        tile_y
-        check_tile_index
-        {
-            |0|
-                # Done.
-
-            |_|
-                # Apparently we're not done yet.
-                tile_x
-                tile_y
-                0
-                0
-                0
-                255
-                set_pixel
-                tile_x
-                tile_y
-                increment_tile_index
-                clear_pixels_inner
-        }
-            eval
 }
 
 # Draw - write tiles - tile index
