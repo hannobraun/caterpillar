@@ -45,8 +45,8 @@ impl RuntimeState {
                         .breakpoints_mut()
                         .set_durable(instruction);
                 }
-                Command::Continue { and_stop_at } => {
-                    self.game_engine.process.continue_(and_stop_at);
+                Command::Continue => {
+                    self.game_engine.process.continue_(None);
                 }
                 Command::Reset => self.game_engine.reset(),
                 Command::Step => {

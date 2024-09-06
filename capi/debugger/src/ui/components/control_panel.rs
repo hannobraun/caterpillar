@@ -5,7 +5,7 @@ use crate::ui::{components::panel::Panel, send_command, CommandsTx};
 
 #[component]
 pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
-    let event_continue = Command::Continue { and_stop_at: None };
+    let event_continue = Command::Continue;
 
     view! {
         <Panel class="">
