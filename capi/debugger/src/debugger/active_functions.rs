@@ -87,6 +87,12 @@ impl ActiveFunctions {
     }
 }
 
+impl Default for ActiveFunctions {
+    fn default() -> Self {
+        Self::new(None, None)
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctionsEntry {
     Function(DebugFunction),
