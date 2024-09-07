@@ -29,6 +29,7 @@ impl DebuggerState {
 
         let mut debugger = Debugger::default();
         let mut remote_process = RemoteProcess::default();
+
         let (debugger_read, debugger_write) =
             leptos::create_signal(debugger.clone());
 
