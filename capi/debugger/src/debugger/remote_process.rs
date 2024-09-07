@@ -2,8 +2,6 @@ use capi_game_engine::memory::Memory;
 use capi_process::Process;
 use capi_protocol::updates::{Code, Update};
 
-use super::Debugger;
-
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
     pub code: Option<Code>,
@@ -25,13 +23,5 @@ impl RemoteProcess {
                 self.process = Some(process);
             }
         }
-    }
-
-    pub fn update_debugger(&self, debugger: &mut Debugger) {
-        debugger.update(
-            self.code.clone(),
-            self.memory.clone(),
-            self.process.as_ref(),
-        );
     }
 }

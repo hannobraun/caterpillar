@@ -66,7 +66,11 @@ impl DebuggerState {
                     }
                 }
 
-                remote_process.update_debugger(&mut debugger);
+                debugger.update(
+                    remote_process.code.clone(),
+                    remote_process.memory.clone(),
+                    remote_process.process.as_ref(),
+                );
                 debugger_write.set(debugger.clone());
             }
         });
