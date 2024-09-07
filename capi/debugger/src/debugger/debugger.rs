@@ -4,7 +4,7 @@ use capi_protocol::updates::Code;
 
 use super::ActiveFunctions;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Debugger {
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
@@ -33,11 +33,5 @@ impl Debugger {
             operands,
             memory,
         }
-    }
-}
-
-impl Default for Debugger {
-    fn default() -> Self {
-        Self::new(None, None, None)
     }
 }
