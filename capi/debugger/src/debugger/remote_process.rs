@@ -27,7 +27,7 @@ impl RemoteProcess {
         }
     }
 
-    pub fn to_debugger(&self, debugger: &mut Debugger) {
+    pub fn update_debugger(&self, debugger: &mut Debugger) {
         *debugger = Debugger::new(
             self.code.clone(),
             self.memory.clone(),
