@@ -35,3 +35,9 @@ impl Debugger {
         }
     }
 }
+
+impl Default for Debugger {
+    fn default() -> Self {
+        Self::new(None, None, None)
+    }
+}
