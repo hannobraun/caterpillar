@@ -11,7 +11,7 @@ use tokio::{
 };
 
 use crate::{
-    debugger::RemoteProcess,
+    debugger::{Debugger, RemoteProcess},
     ui::{self, CommandsRx},
 };
 
@@ -27,9 +27,10 @@ impl DebuggerState {
         let (commands_tx, commands_rx) = mpsc::unbounded_channel();
         let (updates_tx, mut updates_rx) = mpsc::unbounded_channel();
 
+        let mut debugger = Debugger::default();
         let mut remote_process = RemoteProcess::default();
         let (debugger_read, debugger_write) =
-            leptos::create_signal(remote_process.to_debugger());
+            leptos::create_signal(debugger.clone());
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
@@ -64,7 +65,8 @@ impl DebuggerState {
                     }
                 }
 
-                debugger_write.set(remote_process.to_debugger());
+                remote_process.to_debugger(&mut debugger);
+                debugger_write.set(debugger.clone());
             }
         });
 

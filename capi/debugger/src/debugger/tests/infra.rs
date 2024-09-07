@@ -58,7 +58,9 @@ impl TestInfra {
     }
 
     pub fn to_debugger(&self) -> Debugger {
-        self.remote_process.to_debugger()
+        let mut debugger = Debugger::default();
+        self.remote_process.to_debugger(&mut debugger);
+        debugger
     }
 }
 
