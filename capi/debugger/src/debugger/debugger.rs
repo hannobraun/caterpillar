@@ -12,13 +12,14 @@ pub struct Debugger {
 }
 
 impl Debugger {
-    pub fn new(
+    pub fn update(
+        &mut self,
         code: Option<Code>,
         memory: Option<Memory>,
         process: Option<&Process>,
-    ) -> Self {
-        let active_functions = ActiveFunctions::new(code.as_ref(), process);
-        let operands = process
+    ) {
+        self.active_functions = ActiveFunctions::new(code.as_ref(), process);
+        self.operands = process
             .map(|process| {
                 process
                     .stack()
@@ -27,11 +28,6 @@ impl Debugger {
                     .collect::<Vec<_>>()
             })
             .unwrap_or_default();
-
-        Self {
-            active_functions,
-            operands,
-            memory,
-        }
+        self.memory = memory;
     }
 }
