@@ -5,7 +5,7 @@ use crate::{
     value::IntegerOverflow,
 };
 
-/// # The queue of unhandled effects
+/// # A first-in, first-out queue of unhandled effects
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
