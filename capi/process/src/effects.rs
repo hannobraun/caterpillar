@@ -29,6 +29,15 @@ impl Effects {
     pub fn inspect_first(&self) -> Option<&Effect> {
         self.queue.front()
     }
+
+    /// # Handle the first effect in the queue
+    ///
+    /// Removes the first unhandled effect in the queue, considering it handled.
+    ///
+    /// Returns `None`, if the queue is empty.
+    pub fn handle_first(&mut self) -> Option<Effect> {
+        self.queue.pop_front()
+    }
 }
 
 /// # An effect that interrupts evaluation

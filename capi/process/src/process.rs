@@ -38,7 +38,7 @@ impl Process {
     /// This method can safely be called, if no effect is currently triggered.
     /// In that case, it returns `None` and has no effect.
     pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effects.queue.pop_front()
+        self.effects.handle_first()
     }
 
     pub fn effects(&self) -> &Effects {
