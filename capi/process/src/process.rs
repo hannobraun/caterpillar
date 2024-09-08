@@ -29,19 +29,6 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
-    /// # Trigger the provided effect
-    ///
-    /// This must not be called, while an effect is already triggered. Only call
-    /// it from contexts, where it's known that no effect could be triggered, or
-    /// right after handling the currently triggered effect.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if an effect is already triggered.
-    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
-        self.effects.trigger(effect)
-    }
-
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
         self.effects.queue.front()
@@ -127,12 +114,12 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.trigger_effect(Effect::Breakpoint);
+            self.effects_mut().trigger(Effect::Breakpoint);
             return;
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.trigger_effect(effect);
+            self.effects_mut().trigger(effect);
         }
 
         self.most_recent_step = Some(next_instruction);
