@@ -59,7 +59,7 @@ impl DebuggerState {
                             break;
                         };
 
-                        on_process_update(
+                        on_update_from_process(
                             update,
                             &mut remote_process,
                         );
@@ -108,7 +108,7 @@ async fn on_new_code(
     code.timestamp
 }
 
-fn on_process_update(update: Vec<u8>, remote_process: &mut RemoteProcess) {
+fn on_update_from_process(update: Vec<u8>, remote_process: &mut RemoteProcess) {
     let update = Update::deserialize(update);
     remote_process.on_runtime_update(update);
 }
