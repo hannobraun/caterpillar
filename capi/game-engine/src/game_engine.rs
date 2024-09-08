@@ -127,7 +127,7 @@ impl GameEngine {
 
             self.process.step(instructions);
 
-            if let Some(effect) = self.process.handle_effect() {
+            if let Some(effect) = self.process.effects_mut().handle_first() {
                 match self.handle_effect(&effect, pixels) {
                     Ok(EffectOutcome::Handled) => {}
                     Ok(EffectOutcome::WasSubmit) => {

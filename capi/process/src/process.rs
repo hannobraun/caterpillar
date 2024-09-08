@@ -29,18 +29,6 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
-    /// # Handle the triggered effect
-    ///
-    /// Returns the currently triggered effect, and considers it handled. Right
-    /// after this call, subsequent calls to [`Effects::handle`] or
-    /// [`Effects::inspect`] will return `None`.
-    ///
-    /// This method can safely be called, if no effect is currently triggered.
-    /// In that case, it returns `None` and has no effect.
-    pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effects.handle_first()
-    }
-
     pub fn effects(&self) -> &Effects {
         &self.effects
     }
@@ -93,7 +81,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(address);
             }
 
-            self.handle_effect();
+            self.effects_mut().handle_first();
         }
     }
 
