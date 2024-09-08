@@ -10,7 +10,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    pub queue: VecDeque<Effect>,
+    queue: VecDeque<Effect>,
 }
 
 impl Effects {
