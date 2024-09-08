@@ -16,13 +16,9 @@ pub struct Effects {
 impl Effects {
     /// # Trigger the provided effect
     ///
-    /// This must not be called, while an effect is already triggered. Only call
-    /// it from contexts, where it's known that no effect could be triggered, or
-    /// right after handling the currently triggered effect.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if an effect is already triggered.
+    /// Triggering an effect adds it to the queue of unhandled effects. If
+    /// there already are other unhandled effects in the queue, this new effect
+    /// is added in last place.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
         self.queue.push_back(effect.into());
     }
