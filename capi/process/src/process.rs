@@ -86,8 +86,7 @@ impl Process {
     }
 
     pub fn stop(&mut self) {
-        self.breakpoints
-            .set_ephemeral(self.evaluator.next_instruction);
+        self.effects_mut().trigger(Effect::Breakpoint);
     }
 
     pub fn step(&mut self, instructions: &Instructions) {
