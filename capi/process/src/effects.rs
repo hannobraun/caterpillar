@@ -6,7 +6,12 @@ use crate::{
 };
 
 /// # The queue of unhandled effects
-pub type Effects = Option<Effect>;
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
+pub struct Effects {
+    pub queue: Option<Effect>,
+}
 
 /// # An effect that interrupts evaluation
 ///

@@ -40,17 +40,17 @@ impl Process {
     /// Panics, if an effect is already triggered.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
         assert!(
-            self.effect.is_none(),
+            self.effect.queue.is_none(),
             "Trying to trigger an effect, while one is currently triggered. \
             This must never be done. That it still happened is a bug in \
             Caterpillar."
         );
-        self.effect = Some(effect.into());
+        self.effect.queue = Some(effect.into());
     }
 
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
-        self.effect.as_ref()
+        self.effect.queue.as_ref()
     }
 
     /// # Handle the triggered effect
@@ -62,7 +62,7 @@ impl Process {
     /// This method can safely be called, if no effect is currently triggered.
     /// In that case, it returns `None` and has no effect.
     pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effect.take()
+        self.effect.queue.take()
     }
 
     pub fn evaluator(&self) -> &Evaluator {
