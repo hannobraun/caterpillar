@@ -51,7 +51,7 @@ impl RuntimeState {
                 Command::Reset => self.game_engine.reset(),
                 Command::Step => {
                     if let Some(Effect::Breakpoint) =
-                        self.game_engine.process.inspect_effect()
+                        self.game_engine.process.effects().inspect_first()
                     {
                         let and_stop_at = self
                             .game_engine

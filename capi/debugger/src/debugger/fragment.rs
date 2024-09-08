@@ -34,7 +34,7 @@ impl DebugFragment {
             false
         };
 
-        let effect = process.inspect_effect().and_then(|effect| {
+        let effect = process.effects().inspect_first().and_then(|effect| {
             let effect_fragment = source_map
                 .instruction_to_fragment(&process.most_recent_step().unwrap())
                 .expect("Expecting effects to originate from user code.");

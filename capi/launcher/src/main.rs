@@ -33,7 +33,7 @@ async fn main() -> anyhow::Result<()> {
             continue;
         }
 
-        if let Some(effect) = game_engine.process.inspect_effect() {
+        if let Some(effect) = game_engine.process.effects().inspect_first() {
             eprintln!("Unhandled effect: {effect:#?}");
             eprintln!("Current stack:\n{:#?}", game_engine.process.stack());
             break;
