@@ -10,7 +10,7 @@ mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
-    effects::Effect,
+    effects::{Effect, Effects},
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,

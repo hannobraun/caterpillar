@@ -2,7 +2,8 @@ use std::mem;
 
 use crate::{
     breakpoints::Breakpoints, evaluator::Evaluator,
-    instructions::InstructionAddress, Effect, Instructions, Stack, Value,
+    instructions::InstructionAddress, Effect, Effects, Instructions, Stack,
+    Value,
 };
 
 #[derive(
@@ -10,7 +11,7 @@ use crate::{
 )]
 pub struct Process {
     most_recent_step: Option<InstructionAddress>,
-    effect: Option<Effect>,
+    effect: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }

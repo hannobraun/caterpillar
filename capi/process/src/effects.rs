@@ -5,6 +5,9 @@ use crate::{
     value::IntegerOverflow,
 };
 
+/// # The queue of unhandled effects
+pub type Effects = Option<Effect>;
+
 /// # An effect that interrupts evaluation
 ///
 /// Effects can be triggered when instructions are executed. Most of them
