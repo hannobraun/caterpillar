@@ -1,4 +1,4 @@
-use std::num::TryFromIntError;
+use std::{collections::VecDeque, num::TryFromIntError};
 
 use crate::{
     operands::PopOperandError, stack::PushStackFrameError,
@@ -10,7 +10,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    pub queue: Option<Effect>,
+    pub queue: VecDeque<Effect>,
 }
 
 /// # An effect that interrupts evaluation
