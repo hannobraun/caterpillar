@@ -91,7 +91,7 @@ pub fn commands_read() {
     let state = state.get_or_insert_with(Default::default);
 
     loop {
-        let command = match state.commands_rx.try_recv() {
+        let command = match state.to_process_rx.try_recv() {
             Ok(command) => command,
             Err(TryRecvError::Empty) => {
                 break;
