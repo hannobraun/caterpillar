@@ -24,7 +24,7 @@ pub struct DebuggerState {
 impl DebuggerState {
     pub fn new() -> Self {
         let (code_tx, code_rx) = watch::channel(Instructions::default());
-        let (commands_tx, commands_rx) = mpsc::unbounded_channel();
+        let (to_process_tx, commands_rx) = mpsc::unbounded_channel();
         let (updates_tx, mut updates_rx) = mpsc::unbounded_channel();
 
         let mut debugger = Debugger::default();
@@ -75,7 +75,7 @@ impl DebuggerState {
             }
         });
 
-        ui::start(debugger_read, commands_tx);
+        ui::start(debugger_read, to_process_tx);
 
         Self {
             from_process_tx: updates_tx,
