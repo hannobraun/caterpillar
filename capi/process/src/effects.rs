@@ -24,12 +24,6 @@ impl Effects {
     ///
     /// Panics, if an effect is already triggered.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        assert!(
-            self.queue.is_empty(),
-            "Trying to trigger an effect, while one is currently triggered. \
-            This must never be done. That it still happened is a bug in \
-            Caterpillar."
-        );
         self.queue.push_back(effect.into());
     }
 }
