@@ -11,7 +11,7 @@ use crate::{
 )]
 pub struct Process {
     most_recent_step: Option<InstructionAddress>,
-    effect: Effects,
+    effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }
@@ -40,17 +40,17 @@ impl Process {
     /// Panics, if an effect is already triggered.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
         assert!(
-            self.effect.queue.is_none(),
+            self.effects.queue.is_none(),
             "Trying to trigger an effect, while one is currently triggered. \
             This must never be done. That it still happened is a bug in \
             Caterpillar."
         );
-        self.effect.queue = Some(effect.into());
+        self.effects.queue = Some(effect.into());
     }
 
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
-        self.effect.queue.as_ref()
+        self.effects.queue.as_ref()
     }
 
     /// # Handle the triggered effect
@@ -62,7 +62,7 @@ impl Process {
     /// This method can safely be called, if no effect is currently triggered.
     /// In that case, it returns `None` and has no effect.
     pub fn handle_effect(&mut self) -> Option<Effect> {
-        self.effect.queue.take()
+        self.effects.queue.take()
     }
 
     pub fn evaluator(&self) -> &Evaluator {
