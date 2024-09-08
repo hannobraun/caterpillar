@@ -24,6 +24,8 @@ impl Effects {
     }
 
     /// # Inspect the first effect in the queue
+    ///
+    /// Returns `None`, if the queue is empty.
     pub fn inspect_first(&self) -> Option<&Effect> {
         self.queue.front()
     }
