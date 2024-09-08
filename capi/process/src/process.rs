@@ -59,6 +59,10 @@ impl Process {
         self.effects.queue.pop_front()
     }
 
+    pub fn effects_mut(&mut self) -> &mut Effects {
+        &mut self.effects
+    }
+
     pub fn evaluator(&self) -> &Evaluator {
         &self.evaluator
     }
