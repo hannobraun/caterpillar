@@ -140,5 +140,5 @@ pub fn on_update() {
     let buffer = unsafe { UPDATES.access() };
 
     let update = buffer.read_frame().to_vec();
-    state.updates_tx.send(update).unwrap();
+    state.from_process_tx.send(update).unwrap();
 }

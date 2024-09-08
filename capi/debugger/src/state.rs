@@ -16,7 +16,7 @@ use crate::{
 };
 
 pub struct DebuggerState {
-    pub updates_tx: mpsc::UnboundedSender<SerializedUpdate>,
+    pub from_process_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub code_rx: watch::Receiver<Instructions>,
     pub to_process_rx: CommandsRx,
 }
@@ -78,7 +78,7 @@ impl DebuggerState {
         ui::start(debugger_read, commands_tx);
 
         Self {
-            updates_tx,
+            from_process_tx: updates_tx,
             code_rx,
             to_process_rx: commands_rx,
         }
