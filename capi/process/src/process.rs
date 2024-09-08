@@ -39,13 +39,7 @@ impl Process {
     ///
     /// Panics, if an effect is already triggered.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
-        assert!(
-            self.effects.queue.is_empty(),
-            "Trying to trigger an effect, while one is currently triggered. \
-            This must never be done. That it still happened is a bug in \
-            Caterpillar."
-        );
-        self.effects.queue.push_back(effect.into());
+        self.effects.trigger(effect)
     }
 
     /// # Inspect the triggered effect

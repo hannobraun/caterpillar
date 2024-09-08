@@ -13,6 +13,27 @@ pub struct Effects {
     pub queue: VecDeque<Effect>,
 }
 
+impl Effects {
+    /// # Trigger the provided effect
+    ///
+    /// This must not be called, while an effect is already triggered. Only call
+    /// it from contexts, where it's known that no effect could be triggered, or
+    /// right after handling the currently triggered effect.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if an effect is already triggered.
+    pub fn trigger(&mut self, effect: impl Into<Effect>) {
+        assert!(
+            self.queue.is_empty(),
+            "Trying to trigger an effect, while one is currently triggered. \
+            This must never be done. That it still happened is a bug in \
+            Caterpillar."
+        );
+        self.queue.push_back(effect.into());
+    }
+}
+
 /// # An effect that interrupts evaluation
 ///
 /// Effects can be triggered when instructions are executed. Most of them
