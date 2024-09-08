@@ -22,6 +22,11 @@ impl Effects {
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
         self.queue.push_back(effect.into());
     }
+
+    /// # Inspect the first effect in the queue
+    pub fn inspect_first(&self) -> Option<&Effect> {
+        self.queue.front()
+    }
 }
 
 /// # An effect that interrupts evaluation

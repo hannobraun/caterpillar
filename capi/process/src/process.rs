@@ -31,7 +31,7 @@ impl Process {
 
     /// # Inspect the triggered effect
     pub fn inspect_effect(&self) -> Option<&Effect> {
-        self.effects.queue.front()
+        self.effects.inspect_first()
     }
 
     /// # Handle the triggered effect
