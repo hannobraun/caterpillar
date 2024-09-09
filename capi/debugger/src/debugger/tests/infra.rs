@@ -14,6 +14,7 @@ pub fn init() -> TestInfra {
 
 #[derive(Default)]
 pub struct TestInfra {
+    debugger: Debugger,
     remote_process: RemoteProcess,
     instructions: Option<Instructions>,
 }
@@ -28,6 +29,10 @@ impl TestInfra {
             instructions: instructions.clone(),
             source_map,
         };
+
+        self.debugger.on_new_code(code.clone());
+        self.debugger.update(None, None);
+
         self.remote_process.on_code_update(code);
 
         self.instructions = Some(instructions);
@@ -55,19 +60,16 @@ impl TestInfra {
             self.remote_process.on_update_from_runtime(update);
         }
 
+        self.debugger.update(
+            self.remote_process.memory.clone(),
+            self.remote_process.process.as_ref(),
+        );
+
         self
     }
 
     pub fn to_debugger(&self) -> Debugger {
-        let mut debugger = Debugger::default();
-        if let Some(code) = &self.remote_process.code {
-            debugger.on_new_code(code.clone());
-        }
-        debugger.update(
-            self.remote_process.memory.clone(),
-            self.remote_process.process.as_ref(),
-        );
-        debugger
+        self.debugger.clone()
     }
 }
 
