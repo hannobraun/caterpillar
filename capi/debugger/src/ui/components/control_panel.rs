@@ -34,6 +34,12 @@ fn Button(
     actions: ActionsTx,
 ) -> impl IntoView {
     let command = match action {
+        Action::BreakpointClear { instruction } => {
+            CommandToRuntime::BreakpointClear { instruction }
+        }
+        Action::BreakpointSet { instruction } => {
+            CommandToRuntime::BreakpointSet { instruction }
+        }
         Action::Continue => CommandToRuntime::Continue,
         Action::Reset => CommandToRuntime::Reset,
         Action::Step => CommandToRuntime::Step,

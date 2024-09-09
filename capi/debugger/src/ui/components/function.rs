@@ -7,7 +7,7 @@ use leptos::{
 
 use crate::{
     debugger::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
-    ui::{send_command, ActionsTx},
+    ui::{send_command, Action, ActionsTx},
 };
 
 #[component]
@@ -204,9 +204,22 @@ fn make_single_expression(
         };
 
         let command = if element.has_attribute("data-breakpoint") {
-            CommandToRuntime::BreakpointClear { instruction }
+            Action::BreakpointClear { instruction }
         } else {
-            CommandToRuntime::BreakpointSet { instruction }
+            Action::BreakpointSet { instruction }
+        };
+
+        let command = match command {
+            Action::BreakpointClear { instruction } => {
+                CommandToRuntime::BreakpointClear { instruction }
+            }
+            Action::BreakpointSet { instruction } => {
+                CommandToRuntime::BreakpointSet { instruction }
+            }
+            Action::Continue => CommandToRuntime::Continue,
+            Action::Reset => CommandToRuntime::Reset,
+            Action::Step => CommandToRuntime::Step,
+            Action::Stop => CommandToRuntime::Stop,
         };
 
         leptos::spawn_local(send_command(command, actions.clone()));
