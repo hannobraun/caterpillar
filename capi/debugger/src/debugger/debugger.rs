@@ -34,7 +34,10 @@ impl Debugger {
         self.memory = memory;
     }
 
-    pub fn set_durable_breakpoint(&mut self, address: InstructionAddress) {
+    pub fn set_durable_breakpoint(
+        &mut self,
+        address: InstructionAddress,
+    ) -> anyhow::Result<()> {
         let code = self.code.as_ref().expect(
             "Trying to set breakpoint from the UI, which means the code must \
             already be available to the UI. And therefore, must be available \
@@ -51,5 +54,7 @@ impl Debugger {
             .clone();
 
         self.breakpoints.set_durable(address, instruction);
+
+        Ok(())
     }
 }

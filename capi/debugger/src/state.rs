@@ -147,7 +147,10 @@ fn on_ui_action(
             }
         }
         Action::BreakpointSet { address } => {
-            debugger.set_durable_breakpoint(address);
+            debugger.set_durable_breakpoint(address).expect(
+                "Failed to set durable breakpoint from the UI. This is  a bug \
+                in the Caterpillar debugger",
+            );
 
             CommandToRuntime::BreakpointSet {
                 instruction: address,
