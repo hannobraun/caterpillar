@@ -145,6 +145,7 @@ fn on_ui_action(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
             );
+
             CommandToRuntime::BreakpointClear {
                 instruction: address,
             }
