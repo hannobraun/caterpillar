@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
-    updates::{Code, SerializedUpdate, Update},
+    updates::{Code, SerializedUpdate, UpdateFromRuntime},
     Versioned,
 };
 use gloo_net::http::{Request, Response};
@@ -111,6 +111,6 @@ async fn on_new_code(
 }
 
 fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
-    let update = Update::deserialize(update);
+    let update = UpdateFromRuntime::deserialize(update);
     remote_process.on_runtime_update(update);
 }

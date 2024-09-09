@@ -1,6 +1,6 @@
 use capi_game_engine::memory::Memory;
 use capi_process::Process;
-use capi_protocol::updates::{Code, Update};
+use capi_protocol::updates::{Code, UpdateFromRuntime};
 
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
@@ -14,12 +14,12 @@ impl RemoteProcess {
         self.code = Some(code);
     }
 
-    pub fn on_runtime_update(&mut self, update: Update) {
+    pub fn on_runtime_update(&mut self, update: UpdateFromRuntime) {
         match update {
-            Update::Memory { memory } => {
+            UpdateFromRuntime::Memory { memory } => {
                 self.memory = Some(memory);
             }
-            Update::Process(process) => {
+            UpdateFromRuntime::Process(process) => {
                 self.process = Some(process);
             }
         }
