@@ -32,8 +32,6 @@ impl TestInfra {
         self.debugger.on_new_code(code.clone());
         self.debugger.update(None, None);
 
-        self.remote_process.on_code_update(code);
-
         self
     }
 

@@ -117,7 +117,7 @@ async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
     debugger: &mut Debugger,
-    remote_process: &mut RemoteProcess,
+    _: &mut RemoteProcess,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
@@ -127,7 +127,6 @@ async fn on_new_code(
         .expect("Code receiver should never drop.");
 
     debugger.on_new_code(code.inner.clone());
-    remote_process.on_code_update(code.inner);
 
     code.timestamp
 }
