@@ -15,12 +15,13 @@ use tokio::{
 };
 
 use crate::{
+    code::CodeRx,
     debugger::{Debugger, RemoteProcess},
     ui::{self, Action},
 };
 
 pub struct DebuggerState {
-    pub code_rx: watch::Receiver<Instructions>,
+    pub code_rx: CodeRx,
     pub updates_from_runtime_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub commands_to_runtime_rx:
         mpsc::UnboundedReceiver<SerializedCommandToRuntime>,

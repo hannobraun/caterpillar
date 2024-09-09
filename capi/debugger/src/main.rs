@@ -1,3 +1,4 @@
+mod code;
 mod debugger;
 mod ffi;
 mod state;
