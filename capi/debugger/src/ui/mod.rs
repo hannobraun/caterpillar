@@ -3,4 +3,8 @@ mod commands;
 mod components;
 mod init;
 
-pub use self::{actions::ActionsTx, commands::send_command, init::init};
+pub use self::{
+    actions::{Action, ActionsTx},
+    commands::send_command,
+    init::init,
+};

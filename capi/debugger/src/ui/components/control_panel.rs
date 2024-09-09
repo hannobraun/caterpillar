@@ -1,7 +1,7 @@
 use capi_protocol::command::CommandToRuntime;
 use leptos::{component, view, IntoView};
 
-use crate::ui::{components::panel::Panel, send_command, ActionsTx};
+use crate::ui::{components::panel::Panel, send_command, Action, ActionsTx};
 
 #[component]
 pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
@@ -9,19 +9,19 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
         <Panel class="">
             <Button
                 label="Reset"
-                command=CommandToRuntime::Reset
+                command=Action::Reset
                 actions=actions.clone() />
             <Button
                 label="Stop"
-                command=CommandToRuntime::Stop
+                command=Action::Stop
                 actions=actions.clone() />
             <Button
                 label="Continue"
-                command=CommandToRuntime::Continue
+                command=Action::Continue
                 actions=actions.clone() />
             <Button
                 label="Step Into"
-                command=CommandToRuntime::Step
+                command=Action::Step
                 actions=actions />
         </Panel>
     }
@@ -30,9 +30,16 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
 #[component]
 fn Button(
     label: &'static str,
-    command: CommandToRuntime,
+    command: Action,
     actions: ActionsTx,
 ) -> impl IntoView {
+    let command = match command {
+        Action::Continue => CommandToRuntime::Continue,
+        Action::Reset => CommandToRuntime::Reset,
+        Action::Step => CommandToRuntime::Step,
+        Action::Stop => CommandToRuntime::Stop,
+    };
+
     let on_click = move |_| {
         leptos::spawn_local(send_command(command.clone(), actions.clone()));
     };
