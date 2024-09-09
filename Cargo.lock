@@ -365,6 +365,7 @@ dependencies = [
 name = "capi-debugger"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "capi-compiler",
  "capi-ffi",
  "capi-game-engine",
