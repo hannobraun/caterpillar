@@ -1,5 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
+    command::SerializedCommandToRuntime,
     updates::{Code, SerializedUpdate, UpdateFromRuntime},
     Versioned,
 };
@@ -12,13 +13,14 @@ use tokio::{
 
 use crate::{
     debugger::{Debugger, RemoteProcess},
-    ui::{self, CommandsRx},
+    ui,
 };
 
 pub struct DebuggerState {
     pub code_rx: watch::Receiver<Instructions>,
     pub updates_from_runtime_tx: mpsc::UnboundedSender<SerializedUpdate>,
-    pub commands_to_runtime_rx: CommandsRx,
+    pub commands_to_runtime_rx:
+        mpsc::UnboundedReceiver<SerializedCommandToRuntime>,
 }
 
 impl DebuggerState {

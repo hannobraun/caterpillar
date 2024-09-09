@@ -1,7 +1,6 @@
 use capi_protocol::command::{CommandToRuntime, SerializedCommandToRuntime};
 use tokio::sync::mpsc;
 
-pub type CommandsRx = mpsc::UnboundedReceiver<SerializedCommandToRuntime>;
 pub type CommandsTx = mpsc::UnboundedSender<SerializedCommandToRuntime>;
 
 pub async fn send_command(command: CommandToRuntime, commands: CommandsTx) {
