@@ -12,7 +12,7 @@ impl Breakpoints {
         self.durable.insert(address);
     }
 
-    pub fn clear_durable(&mut self, instruction: &InstructionAddress) {
-        self.durable.remove(instruction);
+    pub fn clear_durable(&mut self, address: &InstructionAddress) {
+        self.durable.remove(address);
     }
 }
