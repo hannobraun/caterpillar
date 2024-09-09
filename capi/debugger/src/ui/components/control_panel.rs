@@ -10,19 +10,19 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
             <Button
                 label="Reset"
                 command=CommandToRuntime::Reset
-                commands=actions.clone() />
+                actions=actions.clone() />
             <Button
                 label="Stop"
                 command=CommandToRuntime::Stop
-                commands=actions.clone() />
+                actions=actions.clone() />
             <Button
                 label="Continue"
                 command=CommandToRuntime::Continue
-                commands=actions.clone() />
+                actions=actions.clone() />
             <Button
                 label="Step Into"
                 command=CommandToRuntime::Step
-                commands=actions />
+                actions=actions />
         </Panel>
     }
 }
@@ -31,10 +31,10 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
 fn Button(
     label: &'static str,
     command: CommandToRuntime,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(send_command(command.clone(), commands.clone()));
+        leptos::spawn_local(send_command(command.clone(), actions.clone()));
     };
 
     view! {
