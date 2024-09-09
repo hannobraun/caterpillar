@@ -15,7 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    code::CodeRx,
+    code::{CodeRx, CodeTx},
     debugger::{Debugger, RemoteProcess},
     ui::{self, Action},
 };
@@ -115,7 +115,7 @@ impl Default for DebuggerState {
 
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
-    code_tx: &watch::Sender<Instructions>,
+    code_tx: &CodeTx,
     remote_process: &mut RemoteProcess,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
