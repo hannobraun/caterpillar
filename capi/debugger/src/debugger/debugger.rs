@@ -46,11 +46,9 @@ impl Debugger {
         let instruction = code
             .instructions
             .get(&address)
-            .expect(
-                "Trying to set breakpoint for instruction from UI. Expecting \
-                that instruction to exist, because otherwise, where would the \
-                UI have gotten the address?",
-            )
+            .ok_or_else(|| {
+                anyhow!("Instruction at `{address}` does not exist.")
+            })?
             .clone();
 
         self.breakpoints.set_durable(address, instruction);
