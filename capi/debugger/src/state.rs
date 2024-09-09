@@ -73,13 +73,13 @@ impl DebuggerState {
                         );
                     }
                     action = actions_rx.recv() => {
-                        let Some(command) = action else {
+                        let Some(action) = action else {
                             // This means the other end has hung up. Nothing we
                             // can do, except end this task too.
                             break;
                         };
 
-                        on_ui_action(command, &commands_to_runtime_tx);
+                        on_ui_action(action, &commands_to_runtime_tx);
                     }
                 }
 
