@@ -51,7 +51,7 @@ impl TestInfra {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            self.remote_process.on_runtime_update(update);
+            self.remote_process.on_update_from_runtime(update);
         }
 
         self

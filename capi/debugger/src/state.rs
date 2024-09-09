@@ -114,5 +114,5 @@ async fn on_new_code(
 
 fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
     let update = UpdateFromRuntime::deserialize(update);
-    remote_process.on_runtime_update(update);
+    remote_process.on_update_from_runtime(update);
 }
