@@ -1,5 +1,4 @@
 use capi_process::{Effect, InstructionAddress};
-use capi_protocol::command::CommandToRuntime;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
     web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,
@@ -209,20 +208,7 @@ fn make_single_expression(
             Action::BreakpointSet { instruction }
         };
 
-        let command = match action {
-            Action::BreakpointClear { instruction } => {
-                CommandToRuntime::BreakpointClear { instruction }
-            }
-            Action::BreakpointSet { instruction } => {
-                CommandToRuntime::BreakpointSet { instruction }
-            }
-            Action::Continue => CommandToRuntime::Continue,
-            Action::Reset => CommandToRuntime::Reset,
-            Action::Step => CommandToRuntime::Step,
-            Action::Stop => CommandToRuntime::Stop,
-        };
-
-        leptos::spawn_local(send_command(command, actions.clone()));
+        leptos::spawn_local(send_command(action, actions.clone()));
     };
 
     (

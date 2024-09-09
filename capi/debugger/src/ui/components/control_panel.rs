@@ -1,4 +1,3 @@
-use capi_protocol::command::CommandToRuntime;
 use leptos::{component, view, IntoView};
 
 use crate::ui::{components::panel::Panel, send_command, Action, ActionsTx};
@@ -33,21 +32,8 @@ fn Button(
     action: Action,
     actions: ActionsTx,
 ) -> impl IntoView {
-    let command = match action {
-        Action::BreakpointClear { instruction } => {
-            CommandToRuntime::BreakpointClear { instruction }
-        }
-        Action::BreakpointSet { instruction } => {
-            CommandToRuntime::BreakpointSet { instruction }
-        }
-        Action::Continue => CommandToRuntime::Continue,
-        Action::Reset => CommandToRuntime::Reset,
-        Action::Step => CommandToRuntime::Step,
-        Action::Stop => CommandToRuntime::Stop,
-    };
-
     let on_click = move |_| {
-        leptos::spawn_local(send_command(command.clone(), actions.clone()));
+        leptos::spawn_local(send_command(action.clone(), actions.clone()));
     };
 
     view! {
