@@ -207,7 +207,7 @@ fn make_single_expression(
                 address: instruction,
             }
         } else {
-            Action::BreakpointSet { instruction }
+            Action::BreakpointSet { address: instruction }
         };
 
         leptos::spawn_local(action.send(actions.clone()));

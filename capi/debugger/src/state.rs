@@ -146,7 +146,9 @@ fn on_ui_action(
                 instruction: address,
             }
         }
-        Action::BreakpointSet { instruction } => {
+        Action::BreakpointSet {
+            address: instruction,
+        } => {
             debugger.breakpoints.set_durable(instruction);
             CommandToRuntime::BreakpointSet { instruction }
         }
