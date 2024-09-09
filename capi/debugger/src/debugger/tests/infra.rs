@@ -41,10 +41,13 @@ impl TestInfra {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = self.instructions.as_ref().expect(
-            "Must provide source code via `TestInfra::provide_source_code` \
-            before calling `TestInfra::run_process`.",
-        );
+        let instructions = &self.debugger.code
+            .as_ref()
+            .expect(
+                "Must provide source code via `TestInfra::provide_source_code` \
+                before calling `TestInfra::run_process`."
+            )
+            .instructions;
 
         let mut process = Process::default();
         process.reset([0, 0].map(Value::from));
