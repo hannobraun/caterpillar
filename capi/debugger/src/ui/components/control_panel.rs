@@ -9,19 +9,19 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
         <Panel class="">
             <Button
                 label="Reset"
-                command=Action::Reset
+                action=Action::Reset
                 actions=actions.clone() />
             <Button
                 label="Stop"
-                command=Action::Stop
+                action=Action::Stop
                 actions=actions.clone() />
             <Button
                 label="Continue"
-                command=Action::Continue
+                action=Action::Continue
                 actions=actions.clone() />
             <Button
                 label="Step Into"
-                command=Action::Step
+                action=Action::Step
                 actions=actions />
         </Panel>
     }
@@ -30,10 +30,10 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
 #[component]
 fn Button(
     label: &'static str,
-    command: Action,
+    action: Action,
     actions: ActionsTx,
 ) -> impl IntoView {
-    let command = match command {
+    let command = match action {
         Action::Continue => CommandToRuntime::Continue,
         Action::Reset => CommandToRuntime::Reset,
         Action::Step => CommandToRuntime::Step,
