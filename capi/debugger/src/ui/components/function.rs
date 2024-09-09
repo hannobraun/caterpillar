@@ -23,13 +23,13 @@ pub fn NamedFunction(
             </div>
             <Function
                 branches=branches
-                commands=actions />
+                actions=actions />
         </div>
     }
 }
 
 #[component]
-fn Function(branches: Vec<Branch>, commands: ActionsTx) -> impl IntoView {
+fn Function(branches: Vec<Branch>, actions: ActionsTx) -> impl IntoView {
     let branches = branches
         .into_iter()
         .map(|branch| {
@@ -37,7 +37,7 @@ fn Function(branches: Vec<Branch>, commands: ActionsTx) -> impl IntoView {
                 <Branch
                     parameters=branch.parameters
                     body=branch.body
-                    commands=commands.clone() />
+                    commands=actions.clone() />
             }
         })
         .collect::<Vec<_>>();
@@ -127,7 +127,7 @@ pub fn Fragment(
             view! {
                 <Function
                     branches=function.branches
-                    commands=commands />
+                    actions=commands />
             }
             .into_view(),
             None,
