@@ -69,7 +69,7 @@ impl TestInfra {
     }
 
     pub fn into_debugger(self) -> Debugger {
-        self.debugger.clone()
+        self.debugger
     }
 }
 
