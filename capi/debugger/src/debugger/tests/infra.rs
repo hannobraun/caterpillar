@@ -68,7 +68,7 @@ impl TestInfra {
         self
     }
 
-    pub fn to_debugger(&self) -> Debugger {
+    pub fn into_debugger(self) -> Debugger {
         self.debugger.clone()
     }
 }
