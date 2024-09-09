@@ -145,6 +145,7 @@ fn on_ui_action(
             CommandToRuntime::BreakpointClear { instruction }
         }
         Action::BreakpointSet { instruction } => {
+            debugger.breakpoints.set_durable(instruction);
             CommandToRuntime::BreakpointSet { instruction }
         }
         Action::Continue => CommandToRuntime::Continue,
