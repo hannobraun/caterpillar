@@ -1,6 +1,6 @@
 use leptos::{component, view, IntoView};
 
-use crate::ui::{components::panel::Panel, send_command, Action, ActionsTx};
+use crate::ui::{components::panel::Panel, send_action, Action, ActionsTx};
 
 #[component]
 pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
@@ -33,7 +33,7 @@ fn Button(
     actions: ActionsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(send_command(action.clone(), actions.clone()));
+        leptos::spawn_local(send_action(action.clone(), actions.clone()));
     };
 
     view! {
