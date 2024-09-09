@@ -17,18 +17,6 @@ impl Breakpoints {
         self.durable.insert(address, instruction);
     }
 
-    /// # Clear a durable breakpoint
-    ///
-    /// Must only be called with an `address` argument that designates a
-    /// currently active durable breakpoint. Meaning, and address for which a
-    /// breakpoint has previously been set, using [`Breakpoints::set_durable`],
-    /// without having been cleared since, using this method.
-    ///
-    /// Returns the instruction that was previously passed to `set_durable`.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if `address` does not designate a currently active breakpoint.
     pub fn clear_durable(
         &mut self,
         address: &InstructionAddress,
