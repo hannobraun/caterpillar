@@ -9,3 +9,9 @@ pub type CodeTx = watch::Sender<Instructions>;
 pub struct DebugCode {
     pub inner: Option<Code>,
 }
+
+impl DebugCode {
+    pub fn on_new_code(&mut self, code: Code) {
+        self.inner = Some(code);
+    }
+}

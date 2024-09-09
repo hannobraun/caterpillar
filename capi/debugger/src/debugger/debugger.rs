@@ -1,7 +1,6 @@
 use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
-use capi_protocol::updates::Code;
 
 use super::{code::DebugCode, ActiveFunctions, Breakpoints};
 
@@ -15,10 +14,6 @@ pub struct Debugger {
 }
 
 impl Debugger {
-    pub fn on_new_code(&mut self, code: Code) {
-        self.code.inner = Some(code);
-    }
-
     pub fn update(
         &mut self,
         memory: Option<Memory>,

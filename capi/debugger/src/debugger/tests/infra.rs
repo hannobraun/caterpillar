@@ -29,7 +29,7 @@ impl TestInfra {
             source_map,
         };
 
-        self.debugger.on_new_code(code.clone());
+        self.debugger.code.on_new_code(code.clone());
         self.debugger.update(None, None);
 
         self
