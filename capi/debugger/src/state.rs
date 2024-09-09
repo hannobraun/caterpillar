@@ -147,7 +147,23 @@ fn on_ui_action(
             }
         }
         Action::BreakpointSet { address } => {
-            debugger.breakpoints.set_durable(address);
+            let code = debugger.code.as_ref().expect(
+                "Trying to set breakpoint from the UI, which means the code \
+                must already be available to the UI. And therefore, must be \
+                available in general.",
+            );
+            let instruction = code
+                .instructions
+                .get(&address)
+                .expect(
+                    "Trying to set breakpoint for instruction from UI. \
+                     Expecting that instruction to exist, because otherwise, \
+                     where would the UI have gotten the address?",
+                )
+                .clone();
+
+            debugger.breakpoints.set_durable(address, instruction);
+
             CommandToRuntime::BreakpointSet {
                 instruction: address,
             }
