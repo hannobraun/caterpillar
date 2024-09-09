@@ -2,8 +2,8 @@ use capi_protocol::command::CommandToRuntime;
 
 use super::{Action, ActionsTx};
 
-pub async fn send_command(command: Action, actions: ActionsTx) {
-    let command = match command {
+pub async fn send_command(action: Action, actions: ActionsTx) {
+    let command = match action {
         Action::BreakpointClear { instruction } => {
             CommandToRuntime::BreakpointClear { instruction }
         }
