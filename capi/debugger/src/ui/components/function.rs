@@ -67,7 +67,7 @@ fn Branch(
                 <li class="ml-8">
                     <Fragment
                         fragment=fragment
-                        commands=actions.clone() />
+                        actions=actions.clone() />
                 </li>
             }
         })
@@ -84,10 +84,7 @@ fn Branch(
 }
 
 #[component]
-pub fn Fragment(
-    fragment: DebugFragment,
-    commands: ActionsTx,
-) -> impl IntoView {
+pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
     let (fragment, error) = match fragment.kind {
@@ -95,21 +92,21 @@ pub fn Fragment(
             name,
             fragment.data,
             &mut class_outer,
-            commands,
+            actions,
         ),
         DebugFragmentKind::CallToHostFunction { name } => {
             make_single_expression(
                 name,
                 fragment.data,
                 &mut class_outer,
-                commands,
+                actions,
             )
         }
         DebugFragmentKind::CallToIntrinsic { name } => make_single_expression(
             name,
             fragment.data,
             &mut class_outer,
-            commands,
+            actions,
         ),
         DebugFragmentKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
@@ -127,7 +124,7 @@ pub fn Fragment(
             view! {
                 <Function
                     branches=function.branches
-                    actions=commands />
+                    actions=actions />
             }
             .into_view(),
             None,
@@ -136,21 +133,21 @@ pub fn Fragment(
             name,
             fragment.data,
             &mut class_outer,
-            commands,
+            actions,
         ),
         DebugFragmentKind::UnresolvedIdentifier { name } => {
             make_single_expression(
                 name,
                 fragment.data,
                 &mut class_outer,
-                commands,
+                actions,
             )
         }
         DebugFragmentKind::Value { as_string } => make_single_expression(
             as_string,
             fragment.data,
             &mut class_outer,
-            commands,
+            actions,
         ),
     };
 
