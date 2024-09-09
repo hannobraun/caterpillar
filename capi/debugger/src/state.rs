@@ -15,8 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    code::{CodeRx, CodeTx},
-    debugger::{Debugger, RemoteProcess},
+    debugger::{CodeRx, CodeTx, Debugger, RemoteProcess},
     ui::{self, Action},
 };
 
