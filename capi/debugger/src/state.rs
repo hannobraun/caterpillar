@@ -79,7 +79,7 @@ impl DebuggerState {
             }
         });
 
-        ui::start(debugger_read, commands_to_runtime_tx);
+        ui::init(debugger_read, commands_to_runtime_tx);
 
         Self {
             updates_from_runtime_tx,
