@@ -50,7 +50,7 @@ pub fn ActiveFunctions(
                         <NamedFunction
                             name=name
                             branches=function.branches
-                            commands=actions.clone() />
+                            actions=actions.clone() />
                     }
                 })
                 .collect_view();

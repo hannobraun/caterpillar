@@ -14,7 +14,7 @@ use crate::{
 pub fn NamedFunction(
     name: String,
     branches: Vec<Branch>,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
@@ -23,7 +23,7 @@ pub fn NamedFunction(
             </div>
             <Function
                 branches=branches
-                commands=commands />
+                commands=actions />
         </div>
     }
 }
