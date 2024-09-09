@@ -1,8 +1,8 @@
 use capi_game_engine::memory::Memory;
-use capi_process::{Breakpoints, Process, Value};
+use capi_process::{Process, Value};
 use capi_protocol::updates::Code;
 
-use super::ActiveFunctions;
+use super::{ActiveFunctions, Breakpoints};
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
