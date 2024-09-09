@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     debugger::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
-    ui::{send_action, Action, ActionsTx},
+    ui::{Action, ActionsTx},
 };
 
 #[component]
@@ -208,7 +208,7 @@ fn make_single_expression(
             Action::BreakpointSet { instruction }
         };
 
-        leptos::spawn_local(send_action(action, actions.clone()));
+        leptos::spawn_local(action.send_action(actions.clone()));
     };
 
     (
