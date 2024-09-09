@@ -37,7 +37,7 @@ fn Function(branches: Vec<Branch>, actions: ActionsTx) -> impl IntoView {
                 <Branch
                     parameters=branch.parameters
                     body=branch.body
-                    commands=actions.clone() />
+                    actions=actions.clone() />
             }
         })
         .collect::<Vec<_>>();
@@ -57,7 +57,7 @@ fn Function(branches: Vec<Branch>, actions: ActionsTx) -> impl IntoView {
 fn Branch(
     parameters: Vec<String>,
     body: Vec<DebugFragment>,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
     let fragments = body
@@ -67,7 +67,7 @@ fn Branch(
                 <li class="ml-8">
                     <Fragment
                         fragment=fragment
-                        commands=commands.clone() />
+                        commands=actions.clone() />
                 </li>
             }
         })
