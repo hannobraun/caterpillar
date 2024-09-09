@@ -143,7 +143,7 @@ fn on_ui_action(
         Action::BreakpointClear { address } => {
             debugger.clear_durable_breakpoint(&address).expect(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
-                in the Caterpillar debugger.",
+                in the Caterpillar debugger",
             );
             CommandToRuntime::BreakpointClear {
                 instruction: address,
