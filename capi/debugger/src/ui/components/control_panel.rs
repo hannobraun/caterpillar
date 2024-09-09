@@ -4,25 +4,25 @@ use leptos::{component, view, IntoView};
 use crate::ui::{components::panel::Panel, send_command, ActionsTx};
 
 #[component]
-pub fn ControlPanel(commands: ActionsTx) -> impl IntoView {
+pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
     view! {
         <Panel class="">
             <Button
                 label="Reset"
                 command=CommandToRuntime::Reset
-                commands=commands.clone() />
+                commands=actions.clone() />
             <Button
                 label="Stop"
                 command=CommandToRuntime::Stop
-                commands=commands.clone() />
+                commands=actions.clone() />
             <Button
                 label="Continue"
                 command=CommandToRuntime::Continue
-                commands=commands.clone() />
+                commands=actions.clone() />
             <Button
                 label="Step Into"
                 command=CommandToRuntime::Step
-                commands=commands />
+                commands=actions />
         </Panel>
     }
 }
