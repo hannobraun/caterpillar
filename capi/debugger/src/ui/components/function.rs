@@ -196,18 +196,16 @@ fn make_single_expression(
             // This happens, if the user clicks on a comment.
             return;
         };
-        let instruction = InstructionAddress {
+        let address = InstructionAddress {
             index: instruction
                 .parse()
                 .expect("Expected `data-instruction` attribute to be a number"),
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            Action::BreakpointClear {
-                address: instruction,
-            }
+            Action::BreakpointClear { address }
         } else {
-            Action::BreakpointSet { address: instruction }
+            Action::BreakpointSet { address }
         };
 
         leptos::spawn_local(action.send(actions.clone()));
