@@ -15,13 +15,15 @@ pub struct Debugger {
 }
 
 impl Debugger {
+    pub fn on_new_code(&mut self, code: Code) {
+        self.code = Some(code);
+    }
+
     pub fn update(
         &mut self,
-        code: Option<Code>,
         memory: Option<Memory>,
         process: Option<&Process>,
     ) {
-        self.code = code;
         self.active_functions =
             ActiveFunctions::new(self.code.as_ref(), process);
         self.operands = process

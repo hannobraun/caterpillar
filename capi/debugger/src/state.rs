@@ -44,7 +44,8 @@ impl DebuggerState {
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
             let mut timestamp =
-                on_new_code(code, &code_tx, &mut remote_process).await;
+                on_new_code(code, &code_tx, &mut debugger, &mut remote_process)
+                    .await;
 
             loop {
                 let response =
@@ -56,6 +57,7 @@ impl DebuggerState {
                             on_new_code(
                                 code,
                                 &code_tx,
+                                &mut debugger,
                                 &mut remote_process,
                             )
                             .await;
@@ -88,7 +90,6 @@ impl DebuggerState {
                 }
 
                 debugger.update(
-                    remote_process.code.clone(),
                     remote_process.memory.clone(),
                     remote_process.process.as_ref(),
                 );
@@ -115,6 +116,7 @@ impl Default for DebuggerState {
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
+    debugger: &mut Debugger,
     remote_process: &mut RemoteProcess,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
@@ -124,6 +126,7 @@ async fn on_new_code(
         .send(code.inner.instructions.clone())
         .expect("Code receiver should never drop.");
 
+    debugger.on_new_code(code.inner.clone());
     remote_process.on_code_update(code.inner);
 
     code.timestamp
