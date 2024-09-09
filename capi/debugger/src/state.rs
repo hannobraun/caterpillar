@@ -131,10 +131,10 @@ fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
 }
 
 fn on_ui_action(
-    command: Action,
+    action: Action,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
-    let command = match command {
+    let command = match action {
         Action::BreakpointClear { instruction } => {
             CommandToRuntime::BreakpointClear { instruction }
         }
