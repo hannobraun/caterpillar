@@ -79,7 +79,11 @@ impl DebuggerState {
                             break;
                         };
 
-                        on_ui_action(action, &commands_to_runtime_tx);
+                        on_ui_action(
+                            action,
+                            &mut debugger,
+                            &commands_to_runtime_tx,
+                        );
                     }
                 }
 
@@ -132,10 +136,12 @@ fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
 
 fn on_ui_action(
     action: Action,
+    debugger: &mut Debugger,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
     let command = match action {
         Action::BreakpointClear { instruction } => {
+            debugger.breakpoints.clear_durable(&instruction);
             CommandToRuntime::BreakpointClear { instruction }
         }
         Action::BreakpointSet { instruction } => {

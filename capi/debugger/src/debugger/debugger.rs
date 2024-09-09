@@ -1,11 +1,12 @@
 use capi_game_engine::memory::Memory;
-use capi_process::{Process, Value};
+use capi_process::{Breakpoints, Process, Value};
 use capi_protocol::updates::Code;
 
 use super::ActiveFunctions;
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
+    pub breakpoints: Breakpoints,
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
     pub memory: Option<Memory>,
