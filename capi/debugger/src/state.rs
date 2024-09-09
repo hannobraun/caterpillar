@@ -123,7 +123,7 @@ async fn on_new_code(
         .send(code.inner.instructions.clone())
         .expect("Code receiver should never drop.");
 
-    debugger.code.on_new_code(code.inner.clone());
+    debugger.code.update(code.inner.clone());
 
     code.timestamp
 }

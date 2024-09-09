@@ -11,7 +11,7 @@ pub struct DebugCode {
 }
 
 impl DebugCode {
-    pub fn on_new_code(&mut self, code: Code) {
+    pub fn update(&mut self, code: Code) {
         self.inner = Some(code);
     }
 }
