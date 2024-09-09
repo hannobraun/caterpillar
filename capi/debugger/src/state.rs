@@ -8,7 +8,10 @@ use gloo_net::http::{Request, Response};
 use leptos::SignalSet;
 use tokio::{
     select,
-    sync::{mpsc, watch},
+    sync::{
+        mpsc::{self, UnboundedSender},
+        watch,
+    },
 };
 
 use crate::{
@@ -75,7 +78,8 @@ impl DebuggerState {
                             // can do, except end this task too.
                             break;
                         };
-                        commands_to_runtime_tx.send(command).unwrap();
+
+                        on_ui_action(command, &commands_to_runtime_tx);
                     }
                 }
 
@@ -124,4 +128,11 @@ async fn on_new_code(
 fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
     let update = UpdateFromRuntime::deserialize(update);
     remote_process.on_update_from_runtime(update);
+}
+
+fn on_ui_action(
+    command: SerializedCommandToRuntime,
+    commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
+) {
+    commands_to_runtime_tx.send(command).unwrap();
 }
