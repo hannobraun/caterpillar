@@ -140,11 +140,11 @@ fn on_ui_action(
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
     let command = match action {
-        Action::BreakpointClear {
-            address: instruction,
-        } => {
-            debugger.breakpoints.clear_durable(&instruction);
-            CommandToRuntime::BreakpointClear { instruction }
+        Action::BreakpointClear { address } => {
+            debugger.breakpoints.clear_durable(&address);
+            CommandToRuntime::BreakpointClear {
+                instruction: address,
+            }
         }
         Action::BreakpointSet { instruction } => {
             debugger.breakpoints.set_durable(instruction);
