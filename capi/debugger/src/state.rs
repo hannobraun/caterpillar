@@ -44,8 +44,7 @@ impl DebuggerState {
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
             let mut timestamp =
-                on_new_code(code, &code_tx, &mut debugger, &mut remote_process)
-                    .await;
+                on_new_code(code, &code_tx, &mut debugger).await;
 
             loop {
                 let response =
@@ -58,7 +57,6 @@ impl DebuggerState {
                                 code,
                                 &code_tx,
                                 &mut debugger,
-                                &mut remote_process,
                             )
                             .await;
                     }
@@ -117,7 +115,6 @@ async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
     debugger: &mut Debugger,
-    _: &mut RemoteProcess,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
