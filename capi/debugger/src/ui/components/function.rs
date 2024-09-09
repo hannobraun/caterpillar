@@ -208,7 +208,7 @@ fn make_single_expression(
             Action::BreakpointSet { instruction }
         };
 
-        leptos::spawn_local(action.send_action(actions.clone()));
+        leptos::spawn_local(action.send(actions.clone()));
     };
 
     (
