@@ -1,5 +1,5 @@
 use capi_game_engine::memory::Memory;
-use capi_process::{Process, Value};
+use capi_process::{InstructionAddress, Process, Value};
 use capi_protocol::updates::Code;
 
 use super::{ActiveFunctions, Breakpoints};
@@ -32,5 +32,24 @@ impl Debugger {
             })
             .unwrap_or_default();
         self.memory = memory;
+    }
+
+    pub fn set_durable_breakpoint(&mut self, address: InstructionAddress) {
+        let code = self.code.as_ref().expect(
+            "Trying to set breakpoint from the UI, which means the code must \
+            already be available to the UI. And therefore, must be available \
+            in general.",
+        );
+        let instruction = code
+            .instructions
+            .get(&address)
+            .expect(
+                "Trying to set breakpoint for instruction from UI. Expecting \
+                that instruction to exist, because otherwise, where would the \
+                UI have gotten the address?",
+            )
+            .clone();
+
+        self.breakpoints.set_durable(address, instruction);
     }
 }
