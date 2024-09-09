@@ -23,11 +23,12 @@ impl TestInfra {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        self.remote_process.on_code_update(Code {
+        let code = Code {
             fragments: fragments.clone(),
             instructions: instructions.clone(),
             source_map,
-        });
+        };
+        self.remote_process.on_code_update(code);
 
         self.instructions = Some(instructions);
 
