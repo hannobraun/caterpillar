@@ -6,6 +6,7 @@ use super::{ActiveFunctions, Breakpoints};
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
+    pub code: Option<Code>,
     pub breakpoints: Breakpoints,
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
@@ -20,6 +21,7 @@ impl Debugger {
         process: Option<&Process>,
     ) {
         self.active_functions = ActiveFunctions::new(code.as_ref(), process);
+        self.code = code;
         self.operands = process
             .map(|process| {
                 process
