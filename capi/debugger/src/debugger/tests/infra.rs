@@ -20,7 +20,7 @@ pub struct TestInfra {
 }
 
 impl TestInfra {
-    pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
+    pub fn provide_source_code(mut self, source: &str) -> Self {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
