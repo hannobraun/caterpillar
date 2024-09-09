@@ -11,7 +11,7 @@ use crate::{
 #[component]
 pub fn ActiveFunctions(
     active_functions: ActiveFunctions,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> impl IntoView {
     let active_functions = match active_functions {
         ActiveFunctions::Entries { entries } => {
@@ -50,7 +50,7 @@ pub fn ActiveFunctions(
                         <NamedFunction
                             name=name
                             branches=function.branches
-                            commands=commands.clone() />
+                            commands=actions.clone() />
                     }
                 })
                 .collect_view();

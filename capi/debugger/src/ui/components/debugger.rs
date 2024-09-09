@@ -36,7 +36,7 @@ pub fn Debugger(
                     commands=commands.clone() />
                 <ActiveFunctions
                     active_functions=debugger.active_functions
-                    commands=commands.clone() />
+                    actions=commands.clone() />
                 {stack_explorer}
                 {memory_explorer}
             </div>
