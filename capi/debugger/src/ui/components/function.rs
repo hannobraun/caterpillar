@@ -203,13 +203,13 @@ fn make_single_expression(
                 .expect("Expected `data-instruction` attribute to be a number"),
         };
 
-        let command = if element.has_attribute("data-breakpoint") {
+        let action = if element.has_attribute("data-breakpoint") {
             Action::BreakpointClear { instruction }
         } else {
             Action::BreakpointSet { instruction }
         };
 
-        let command = match command {
+        let command = match action {
             Action::BreakpointClear { instruction } => {
                 CommandToRuntime::BreakpointClear { instruction }
             }
