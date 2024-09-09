@@ -16,7 +16,13 @@ impl Breakpoints {
         self.durable.insert(address, instruction);
     }
 
-    pub fn clear_durable(&mut self, address: &InstructionAddress) {
-        self.durable.remove(address);
+    pub fn clear_durable(
+        &mut self,
+        address: &InstructionAddress,
+    ) -> Instruction {
+        self.durable.remove(address).expect(
+            "This method must not be called with an address that does not mark \
+            a current breakpoint.",
+        )
     }
 }
