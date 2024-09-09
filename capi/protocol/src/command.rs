@@ -11,14 +11,14 @@ pub enum CommandToRuntime {
 }
 
 impl CommandToRuntime {
-    pub fn deserialize(bytes: SerializedCommand) -> Self {
+    pub fn deserialize(bytes: SerializedCommandToRuntime) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
     }
 
-    pub fn serialize(&self) -> SerializedCommand {
+    pub fn serialize(&self) -> SerializedCommandToRuntime {
         ron::to_string(self).unwrap().into_bytes()
     }
 }
 
-pub type SerializedCommand = Vec<u8>;
+pub type SerializedCommandToRuntime = Vec<u8>;
