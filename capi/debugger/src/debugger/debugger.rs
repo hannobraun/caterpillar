@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 use capi_protocol::updates::Code;
@@ -38,11 +39,10 @@ impl Debugger {
         &mut self,
         address: InstructionAddress,
     ) -> anyhow::Result<()> {
-        let code = self.code.as_ref().expect(
-            "Trying to set breakpoint from the UI, which means the code must \
-            already be available to the UI. And therefore, must be available \
-            in general.",
-        );
+        let code = self
+            .code
+            .as_ref()
+            .ok_or_else(|| anyhow!("Code is not available yet."))?;
         let instruction = code
             .instructions
             .get(&address)
