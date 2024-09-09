@@ -40,7 +40,7 @@ impl TestInfra {
         self
     }
 
-    pub fn run_process(&mut self) -> &mut Self {
+    pub fn run_process(mut self) -> Self {
         let instructions = self.instructions.as_ref().expect(
             "Must provide source code via `TestInfra::provide_source_code` \
             before calling `TestInfra::run_process`.",
