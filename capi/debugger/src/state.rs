@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
-    command::SerializedCommandToRuntime,
+    command::{CommandToRuntime, SerializedCommandToRuntime},
     updates::{Code, SerializedUpdate, UpdateFromRuntime},
     Versioned,
 };
@@ -131,8 +131,8 @@ fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
 }
 
 fn on_ui_action(
-    command: SerializedCommandToRuntime,
+    command: CommandToRuntime,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
-    commands_to_runtime_tx.send(command).unwrap();
+    commands_to_runtime_tx.send(command.serialize()).unwrap();
 }
