@@ -36,8 +36,8 @@ impl TestInfra {
 
     pub fn run_process(&mut self) -> &mut Self {
         let instructions = self.instructions.as_ref().expect(
-            "Must provide source code via `TestSetup::source_code` before \
-            running process.",
+            "Must provide source code via `TestInfra::provide_source_code` \
+            before calling `TestInfra::run_process`.",
         );
 
         let mut process = Process::default();
