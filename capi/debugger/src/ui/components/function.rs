@@ -1,5 +1,5 @@
 use capi_process::{Effect, InstructionAddress};
-use capi_protocol::command::Command;
+use capi_protocol::command::CommandToRuntime;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
     web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,
@@ -207,9 +207,9 @@ fn make_single_expression(
         };
 
         let command = if element.has_attribute("data-breakpoint") {
-            Command::BreakpointClear { instruction }
+            CommandToRuntime::BreakpointClear { instruction }
         } else {
-            Command::BreakpointSet { instruction }
+            CommandToRuntime::BreakpointSet { instruction }
         };
 
         leptos::spawn_local(send_command(command, commands.clone()));

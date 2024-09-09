@@ -3,7 +3,7 @@ use std::panic;
 use capi_game_engine::game_engine::GameEngine;
 use capi_process::Effect;
 use capi_protocol::{
-    command::{Command, SerializedCommand},
+    command::{CommandToRuntime, SerializedCommand},
     updates::Updates,
 };
 
@@ -30,26 +30,26 @@ impl RuntimeState {
 
     pub fn update(&mut self, current_time_ms: f64, pixels: &mut [u8]) {
         for command in self.commands.drain(..) {
-            let command = Command::deserialize(command);
+            let command = CommandToRuntime::deserialize(command);
 
             match command {
-                Command::BreakpointClear { instruction } => {
+                CommandToRuntime::BreakpointClear { instruction } => {
                     self.game_engine
                         .process
                         .breakpoints_mut()
                         .clear_durable(&instruction);
                 }
-                Command::BreakpointSet { instruction } => {
+                CommandToRuntime::BreakpointSet { instruction } => {
                     self.game_engine
                         .process
                         .breakpoints_mut()
                         .set_durable(instruction);
                 }
-                Command::Continue => {
+                CommandToRuntime::Continue => {
                     self.game_engine.process.continue_(None);
                 }
-                Command::Reset => self.game_engine.reset(),
-                Command::Step => {
+                CommandToRuntime::Reset => self.game_engine.reset(),
+                CommandToRuntime::Step => {
                     if let Some(Effect::Breakpoint) =
                         self.game_engine.process.effects().inspect_first()
                     {
@@ -66,7 +66,7 @@ impl RuntimeState {
                         // silently being ignored here.
                     }
                 }
-                Command::Stop => {
+                CommandToRuntime::Stop => {
                     self.game_engine.process.stop();
                 }
             }

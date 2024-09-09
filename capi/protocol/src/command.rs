@@ -1,7 +1,7 @@
 use capi_process::InstructionAddress;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum Command {
+pub enum CommandToRuntime {
     BreakpointClear { instruction: InstructionAddress },
     BreakpointSet { instruction: InstructionAddress },
     Continue,
@@ -10,7 +10,7 @@ pub enum Command {
     Stop,
 }
 
-impl Command {
+impl CommandToRuntime {
     pub fn deserialize(bytes: SerializedCommand) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
