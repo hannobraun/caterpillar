@@ -165,7 +165,7 @@ fn make_single_expression(
     expression: String,
     data: DebugFragmentData,
     class_outer: &mut String,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> (View, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
@@ -209,7 +209,7 @@ fn make_single_expression(
             CommandToRuntime::BreakpointSet { instruction }
         };
 
-        leptos::spawn_local(send_command(command, commands.clone()));
+        leptos::spawn_local(send_command(command, actions.clone()));
     };
 
     (
