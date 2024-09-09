@@ -16,7 +16,7 @@ use tokio::{
 
 use crate::{
     debugger::{Debugger, RemoteProcess},
-    ui,
+    ui::{self, Action},
 };
 
 pub struct DebuggerState {
@@ -131,8 +131,21 @@ fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
 }
 
 fn on_ui_action(
-    command: CommandToRuntime,
+    command: Action,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
+    let command = match command {
+        Action::BreakpointClear { instruction } => {
+            CommandToRuntime::BreakpointClear { instruction }
+        }
+        Action::BreakpointSet { instruction } => {
+            CommandToRuntime::BreakpointSet { instruction }
+        }
+        Action::Continue => CommandToRuntime::Continue,
+        Action::Reset => CommandToRuntime::Reset,
+        Action::Step => CommandToRuntime::Step,
+        Action::Stop => CommandToRuntime::Stop,
+    };
+
     commands_to_runtime_tx.send(command.serialize()).unwrap();
 }

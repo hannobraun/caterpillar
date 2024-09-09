@@ -1,8 +1,7 @@
 use capi_process::InstructionAddress;
-use capi_protocol::command::CommandToRuntime;
 use tokio::sync::mpsc;
 
-pub type ActionsTx = mpsc::UnboundedSender<CommandToRuntime>;
+pub type ActionsTx = mpsc::UnboundedSender<Action>;
 
 #[derive(Clone)]
 pub enum Action {
