@@ -1,8 +1,8 @@
 mod commands;
 mod components;
-mod start;
+mod init;
 
 pub use self::{
     commands::{send_command, CommandsTx},
-    start::init,
+    init::init,
 };
