@@ -30,6 +30,7 @@ impl DebuggerState {
             mpsc::unbounded_channel();
         let (commands_to_runtime_tx, commands_to_runtime_rx) =
             mpsc::unbounded_channel();
+        let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
         let mut debugger = Debugger::default();
         let mut remote_process = RemoteProcess::default();
@@ -68,6 +69,14 @@ impl DebuggerState {
                             &mut remote_process,
                         );
                     }
+                    action = actions_rx.recv() => {
+                        let Some(command) = action else {
+                            // This means the other end has hung up. Nothing we
+                            // can do, except end this task too.
+                            break;
+                        };
+                        commands_to_runtime_tx.send(command).unwrap();
+                    }
                 }
 
                 debugger.update(
@@ -79,7 +88,7 @@ impl DebuggerState {
             }
         });
 
-        ui::init(debugger_read, commands_to_runtime_tx);
+        ui::init(debugger_read, actions_tx);
 
         Self {
             updates_from_runtime_tx,
