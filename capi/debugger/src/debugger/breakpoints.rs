@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use anyhow::anyhow;
 use capi_process::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
@@ -31,10 +32,9 @@ impl Breakpoints {
     pub fn clear_durable(
         &mut self,
         address: &InstructionAddress,
-    ) -> Instruction {
-        self.durable.remove(address).expect(
-            "This method must not be called with an address that does not mark \
-            a current breakpoint.",
-        )
+    ) -> anyhow::Result<Instruction> {
+        self.durable
+            .remove(address)
+            .ok_or_else(|| anyhow!("No breakpoint at `{address}`"))
     }
 }
