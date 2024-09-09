@@ -24,7 +24,7 @@ pub struct DebuggerState {
 impl DebuggerState {
     pub fn new() -> Self {
         let (code_tx, code_rx) = watch::channel(Instructions::default());
-        let (updates_from_runtime_tx, mut from_process_rx) =
+        let (updates_from_runtime_tx, mut updates_from_runtime_rx) =
             mpsc::unbounded_channel();
         let (commands_to_runtime_tx, commands_to_runtime_rx) =
             mpsc::unbounded_channel();
@@ -54,7 +54,7 @@ impl DebuggerState {
                             )
                             .await;
                     }
-                    update = from_process_rx.recv() => {
+                    update = updates_from_runtime_rx.recv() => {
                         let Some(update) = update else {
                             // This means the other end has hung up. Nothing we
                             // can do, except end this task too.
