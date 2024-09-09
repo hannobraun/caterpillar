@@ -5,7 +5,7 @@ pub type ActionsTx = mpsc::UnboundedSender<Action>;
 
 #[derive(Clone)]
 pub enum Action {
-    BreakpointClear { instruction: InstructionAddress },
+    BreakpointClear { address: InstructionAddress },
     BreakpointSet { instruction: InstructionAddress },
     Continue,
     Reset,

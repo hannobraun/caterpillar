@@ -203,7 +203,9 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            Action::BreakpointClear { instruction }
+            Action::BreakpointClear {
+                address: instruction,
+            }
         } else {
             Action::BreakpointSet { instruction }
         };
