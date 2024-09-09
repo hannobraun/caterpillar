@@ -2,9 +2,9 @@ use leptos::ReadSignal;
 
 use crate::{debugger::Debugger, ui::components::debugger::Debugger};
 
-use super::CommandsTx;
+use super::ActionsTx;
 
-pub fn init(debugger: ReadSignal<Debugger>, commands: CommandsTx) {
+pub fn init(debugger: ReadSignal<Debugger>, commands: ActionsTx) {
     leptos::mount_to_body(move || {
         leptos::view! {
             <Debugger

@@ -1,9 +1,8 @@
-use capi_protocol::command::{CommandToRuntime, SerializedCommandToRuntime};
-use tokio::sync::mpsc;
+use capi_protocol::command::CommandToRuntime;
 
-pub type CommandsTx = mpsc::UnboundedSender<SerializedCommandToRuntime>;
+use super::ActionsTx;
 
-pub async fn send_command(command: CommandToRuntime, commands: CommandsTx) {
+pub async fn send_command(command: CommandToRuntime, commands: ActionsTx) {
     if let Err(err) = commands.send(command.serialize()) {
         log::error!("Error sending command: {err}");
     }

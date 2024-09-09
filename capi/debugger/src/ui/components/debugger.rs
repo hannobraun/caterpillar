@@ -7,14 +7,14 @@ use crate::{
             active_functions::ActiveFunctions, control_panel::ControlPanel,
             memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
         },
-        CommandsTx,
+        ActionsTx,
     },
 };
 
 #[component]
 pub fn Debugger(
     debugger: ReadSignal<Debugger>,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> impl IntoView {
     move || {
         let debugger = debugger.get();

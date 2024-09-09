@@ -7,14 +7,14 @@ use leptos::{
 
 use crate::{
     debugger::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
-    ui::{send_command, CommandsTx},
+    ui::{send_command, ActionsTx},
 };
 
 #[component]
 pub fn NamedFunction(
     name: String,
     branches: Vec<Branch>,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
@@ -29,7 +29,7 @@ pub fn NamedFunction(
 }
 
 #[component]
-fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
+fn Function(branches: Vec<Branch>, commands: ActionsTx) -> impl IntoView {
     let branches = branches
         .into_iter()
         .map(|branch| {
@@ -57,7 +57,7 @@ fn Function(branches: Vec<Branch>, commands: CommandsTx) -> impl IntoView {
 fn Branch(
     parameters: Vec<String>,
     body: Vec<DebugFragment>,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
     let fragments = body
@@ -86,7 +86,7 @@ fn Branch(
 #[component]
 pub fn Fragment(
     fragment: DebugFragment,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
@@ -168,7 +168,7 @@ fn make_single_expression(
     expression: String,
     data: DebugFragmentData,
     class_outer: &mut String,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> (View, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");

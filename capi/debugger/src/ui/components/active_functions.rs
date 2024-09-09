@@ -4,14 +4,14 @@ use crate::{
     debugger::{ActiveFunctions, ActiveFunctionsEntry},
     ui::{
         components::{function::NamedFunction, panel::Panel},
-        CommandsTx,
+        ActionsTx,
     },
 };
 
 #[component]
 pub fn ActiveFunctions(
     active_functions: ActiveFunctions,
-    commands: CommandsTx,
+    commands: ActionsTx,
 ) -> impl IntoView {
     let active_functions = match active_functions {
         ActiveFunctions::Entries { entries } => {
