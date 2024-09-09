@@ -21,8 +21,9 @@ impl Debugger {
         memory: Option<Memory>,
         process: Option<&Process>,
     ) {
-        self.active_functions = ActiveFunctions::new(code.as_ref(), process);
         self.code = code;
+        self.active_functions =
+            ActiveFunctions::new(self.code.as_ref(), process);
         self.operands = process
             .map(|process| {
                 process
