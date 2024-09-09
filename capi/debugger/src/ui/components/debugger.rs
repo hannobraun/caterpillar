@@ -14,7 +14,7 @@ use crate::{
 #[component]
 pub fn Debugger(
     debugger: ReadSignal<Debugger>,
-    commands: ActionsTx,
+    actions: ActionsTx,
 ) -> impl IntoView {
     move || {
         let debugger = debugger.get();
@@ -33,10 +33,10 @@ pub fn Debugger(
         view! {
             <div>
                 <ControlPanel
-                    actions=commands.clone() />
+                    actions=actions.clone() />
                 <ActiveFunctions
                     active_functions=debugger.active_functions
-                    actions=commands.clone() />
+                    actions=actions.clone() />
                 {stack_explorer}
                 {memory_explorer}
             </div>

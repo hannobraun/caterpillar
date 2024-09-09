@@ -9,7 +9,7 @@ pub fn init(debugger: ReadSignal<Debugger>, commands: ActionsTx) {
         leptos::view! {
             <Debugger
                 debugger=debugger
-                commands=commands />
+                actions=commands />
         }
     });
 }
