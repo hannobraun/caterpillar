@@ -1,6 +1,6 @@
 use capi_compiler::compile;
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
-use capi_process::{Instructions, Process, Value};
+use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
@@ -16,7 +16,6 @@ pub fn init() -> TestInfra {
 pub struct TestInfra {
     debugger: Debugger,
     remote_process: RemoteProcess,
-    instructions: Option<Instructions>,
 }
 
 impl TestInfra {
@@ -34,8 +33,6 @@ impl TestInfra {
         self.debugger.update(None, None);
 
         self.remote_process.on_code_update(code);
-
-        self.instructions = Some(instructions);
 
         self
     }
