@@ -8,8 +8,8 @@ pub struct Breakpoints {
 }
 
 impl Breakpoints {
-    pub fn set_durable(&mut self, instruction: InstructionAddress) {
-        self.durable.insert(instruction);
+    pub fn set_durable(&mut self, address: InstructionAddress) {
+        self.durable.insert(address);
     }
 
     pub fn clear_durable(&mut self, instruction: &InstructionAddress) {
