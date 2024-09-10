@@ -23,7 +23,7 @@ impl TestInfra {
             compile::<GameEngineHost>(source);
 
         self.persistent.code.update(Code {
-            fragments: fragments.clone(),
+            fragments,
             instructions: instructions.clone(),
             source_map,
         });
