@@ -39,6 +39,14 @@ impl DebugCode {
 
         Ok(())
     }
+
+    pub fn clear_durable_breakpoint(
+        &mut self,
+        address: &InstructionAddress,
+    ) -> anyhow::Result<()> {
+        self.breakpoints.clear_durable(address)?;
+        Ok(())
+    }
 }
 
 #[derive(Clone, Debug, Default)]

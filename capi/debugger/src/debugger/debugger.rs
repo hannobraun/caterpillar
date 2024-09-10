@@ -1,5 +1,5 @@
 use capi_game_engine::memory::Memory;
-use capi_process::{InstructionAddress, Process, Value};
+use capi_process::{Process, Value};
 
 use crate::code::DebugCode;
 
@@ -31,13 +31,5 @@ impl Debugger {
             })
             .unwrap_or_default();
         self.memory = memory;
-    }
-
-    pub fn clear_durable_breakpoint(
-        &mut self,
-        address: &InstructionAddress,
-    ) -> anyhow::Result<()> {
-        self.code.breakpoints.clear_durable(address)?;
-        Ok(())
     }
 }
