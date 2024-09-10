@@ -14,7 +14,7 @@ fn no_server() {
     // If `RemoteProcess` has received no updates at all, the active functions
     // view should display that no server is available.
 
-    let (debugger, transient) = init().into_debugger();
+    let (debugger, transient) = init().into_state();
 
     assert_eq!(
         transient.active_functions,
@@ -31,7 +31,7 @@ fn no_process() {
     // If `RemoteProcess` has received a code update but no runtime updates, the
     // active functions view should display that no process is available.
 
-    let (debugger, transient) = init().provide_source_code("").into_debugger();
+    let (debugger, transient) = init().provide_source_code("").into_state();
 
     assert_eq!(
         transient.active_functions,
@@ -71,7 +71,7 @@ fn basic_call_stack() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -91,7 +91,7 @@ fn stopped_at_host_function() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     transient
         .active_functions
@@ -117,7 +117,7 @@ fn stopped_at_code_within_block() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let fragment = transient
         .active_functions
@@ -154,7 +154,7 @@ fn call_stack_reconstruction_missing_main() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
@@ -192,7 +192,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -233,7 +233,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(
@@ -278,7 +278,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             ",
         )
         .run_process()
-        .into_debugger();
+        .into_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(

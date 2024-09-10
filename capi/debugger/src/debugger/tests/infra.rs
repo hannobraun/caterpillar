@@ -57,7 +57,7 @@ impl TestInfra {
         self
     }
 
-    pub fn into_debugger(mut self) -> (PersistentState, TransientState) {
+    pub fn into_state(mut self) -> (PersistentState, TransientState) {
         let transient = self.persistent.update();
         (self.persistent, transient)
     }
