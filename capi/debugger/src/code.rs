@@ -16,7 +16,7 @@ impl CodeManager {
     pub async fn new(code_tx: &CodeTx, state: &mut PersistentState) -> Self {
         let code = Request::get("/code").send().await;
         Self {
-            timestamp: on_new_code(code, code_tx, state).await,
+            timestamp: on_new_code(code, code_tx, state).await.unwrap(),
         }
     }
 }
@@ -25,7 +25,7 @@ pub async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
     state: &mut PersistentState,
-) -> u64 {
+) -> anyhow::Result<u64> {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
 
@@ -35,5 +35,5 @@ pub async fn on_new_code(
 
     state.code = Some(code.inner.clone());
 
-    code.timestamp
+    Ok(code.timestamp)
 }

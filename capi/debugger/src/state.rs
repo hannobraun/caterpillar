@@ -58,7 +58,8 @@ impl DebuggerState {
                                 &code_tx,
                                 &mut persistent,
                             )
-                            .await;
+                            .await
+                            .unwrap();
                     }
                     update = updates_from_runtime_rx.recv() => {
                         let Some(update) = update else {
