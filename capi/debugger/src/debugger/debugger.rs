@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 
@@ -32,28 +31,6 @@ impl Debugger {
             })
             .unwrap_or_default();
         self.memory = memory;
-    }
-
-    pub fn set_durable_breakpoint(
-        &mut self,
-        address: InstructionAddress,
-    ) -> anyhow::Result<()> {
-        let code = self
-            .code
-            .code_from_server
-            .as_ref()
-            .ok_or_else(|| anyhow!("Code is not available yet."))?;
-        let instruction = code
-            .instructions
-            .get(&address)
-            .ok_or_else(|| {
-                anyhow!("Instruction at `{address}` does not exist.")
-            })?
-            .clone();
-
-        self.code.breakpoints.set_durable(address, instruction);
-
-        Ok(())
     }
 
     pub fn clear_durable_breakpoint(
