@@ -35,16 +35,16 @@ impl DebuggerState {
             mpsc::unbounded_channel();
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
-        let mut debugger = PersistentState::default();
-        let transient = debugger.update();
+        let mut persistent = PersistentState::default();
+        let transient = persistent.update();
 
         let (debugger_read, debugger_write) =
-            leptos::create_signal((debugger.clone(), transient));
+            leptos::create_signal((persistent.clone(), transient));
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
             let mut timestamp =
-                on_new_code(code, &code_tx, &mut debugger).await;
+                on_new_code(code, &code_tx, &mut persistent).await;
 
             loop {
                 let response =
@@ -56,7 +56,7 @@ impl DebuggerState {
                             on_new_code(
                                 code,
                                 &code_tx,
-                                &mut debugger,
+                                &mut persistent,
                             )
                             .await;
                     }
@@ -69,7 +69,7 @@ impl DebuggerState {
 
                         on_update_from_runtime(
                             update,
-                            &mut debugger,
+                            &mut persistent,
                         );
                     }
                     action = actions_rx.recv() => {
@@ -81,14 +81,14 @@ impl DebuggerState {
 
                         on_ui_action(
                             action,
-                            &mut debugger.code,
+                            &mut persistent.code,
                             &commands_to_runtime_tx,
                         );
                     }
                 }
 
-                let transient = debugger.update();
-                debugger_write.set((debugger.clone(), transient));
+                let transient = persistent.update();
+                debugger_write.set((persistent.clone(), transient));
             }
         });
 
