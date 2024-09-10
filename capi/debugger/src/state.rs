@@ -87,10 +87,8 @@ impl DebuggerState {
                     }
                 }
 
-                debugger.update(
-                    remote_process.memory.clone(),
-                    remote_process.process.as_ref(),
-                );
+                debugger.memory = remote_process.memory.clone();
+                debugger.update(remote_process.process.as_ref());
                 debugger_write.set(debugger.clone());
             }
         });

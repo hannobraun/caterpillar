@@ -13,11 +13,7 @@ pub struct Debugger {
 }
 
 impl Debugger {
-    pub fn update(
-        &mut self,
-        memory: Option<Memory>,
-        process: Option<&Process>,
-    ) {
+    pub fn update(&mut self, process: Option<&Process>) {
         self.active_functions =
             ActiveFunctions::new(self.code.code_from_server.as_ref(), process);
         self.operands = process
@@ -29,6 +25,5 @@ impl Debugger {
                     .collect::<Vec<_>>()
             })
             .unwrap_or_default();
-        self.memory = memory;
     }
 }
