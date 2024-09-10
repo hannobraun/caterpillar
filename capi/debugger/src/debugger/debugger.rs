@@ -1,9 +1,7 @@
 use capi_game_engine::memory::Memory;
 use capi_process::{Process, Value};
 
-use crate::code::DebugCode;
-
-use super::ActiveFunctions;
+use super::{ActiveFunctions, DebugCode};
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
