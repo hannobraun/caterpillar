@@ -11,6 +11,7 @@ pub type CodeTx = watch::Sender<Instructions>;
 #[derive(Clone, Debug, Default)]
 pub struct DebugCode {
     pub code_from_server: Option<Code>,
+    pub breakpoints: Breakpoints,
 }
 
 impl DebugCode {

@@ -2,14 +2,13 @@ use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 
-use crate::code::{Breakpoints, DebugCode};
+use crate::code::DebugCode;
 
 use super::ActiveFunctions;
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
     pub code: DebugCode,
-    pub breakpoints: Breakpoints,
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
     pub memory: Option<Memory>,
@@ -52,7 +51,7 @@ impl Debugger {
             })?
             .clone();
 
-        self.breakpoints.set_durable(address, instruction);
+        self.code.breakpoints.set_durable(address, instruction);
 
         Ok(())
     }
@@ -61,7 +60,7 @@ impl Debugger {
         &mut self,
         address: &InstructionAddress,
     ) -> anyhow::Result<()> {
-        self.breakpoints.clear_durable(address)?;
+        self.code.breakpoints.clear_durable(address)?;
         Ok(())
     }
 }
