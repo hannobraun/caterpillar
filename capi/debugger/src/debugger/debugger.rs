@@ -9,9 +9,6 @@ pub struct Debugger {
     pub code: DebugCode,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
-
-    pub active_functions: ActiveFunctions,
-    pub operands: Vec<Value>,
 }
 
 impl Debugger {
@@ -26,21 +23,29 @@ impl Debugger {
         }
     }
 
-    pub fn update(&mut self) {
-        self.active_functions = ActiveFunctions::new(
-            self.code.code_from_server.as_ref(),
-            self.process.as_ref(),
-        );
-        self.operands = self
-            .process
-            .as_ref()
-            .map(|process| {
-                process
-                    .stack()
-                    .operands_in_current_stack_frame()
-                    .copied()
-                    .collect::<Vec<_>>()
-            })
-            .unwrap_or_default();
+    pub fn update(&mut self) -> TransientState {
+        TransientState {
+            active_functions: ActiveFunctions::new(
+                self.code.code_from_server.as_ref(),
+                self.process.as_ref(),
+            ),
+            operands: self
+                .process
+                .as_ref()
+                .map(|process| {
+                    process
+                        .stack()
+                        .operands_in_current_stack_frame()
+                        .copied()
+                        .collect::<Vec<_>>()
+                })
+                .unwrap_or_default(),
+        }
     }
+}
+
+#[derive(Clone)]
+pub struct TransientState {
+    pub active_functions: ActiveFunctions,
+    pub operands: Vec<Value>,
 }

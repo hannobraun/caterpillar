@@ -1,7 +1,7 @@
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    debugger::Debugger,
+    debugger::{Debugger, TransientState},
     ui::{
         components::{
             active_functions::ActiveFunctions, control_panel::ControlPanel,
@@ -13,15 +13,15 @@ use crate::{
 
 #[component]
 pub fn Debugger(
-    debugger: ReadSignal<Debugger>,
+    debugger: ReadSignal<(Debugger, TransientState)>,
     actions: ActionsTx,
 ) -> impl IntoView {
     move || {
-        let debugger = debugger.get();
+        let (debugger, transient) = debugger.get();
 
         let stack_explorer = view! {
             <StackExplorer
-                current=debugger.operands />
+                current=transient.operands />
         };
         let memory_explorer = debugger.memory.map(|memory| {
             view! {
@@ -35,7 +35,7 @@ pub fn Debugger(
                 <ControlPanel
                     actions=actions.clone() />
                 <ActiveFunctions
-                    active_functions=debugger.active_functions
+                    active_functions=transient.active_functions
                     actions=actions.clone() />
                 {stack_explorer}
                 {memory_explorer}

@@ -4,8 +4,9 @@ use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch,
-    DebugFragment, DebugFragmentKind, DebugFunction, Debugger,
+    active_functions::ActiveFunctionsEntry, debugger::TransientState,
+    ActiveFunctions, Branch, DebugFragment, DebugFragmentKind, DebugFunction,
+    Debugger,
 };
 
 pub fn init() -> TestInfra {
@@ -62,9 +63,9 @@ impl TestInfra {
         self
     }
 
-    pub fn into_debugger(mut self) -> Debugger {
-        self.debugger.update();
-        self.debugger
+    pub fn into_debugger(mut self) -> (Debugger, TransientState) {
+        let transient = self.debugger.update();
+        (self.debugger, transient)
     }
 }
 

@@ -36,9 +36,10 @@ impl DebuggerState {
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
         let mut debugger = Debugger::default();
+        let transient = debugger.update();
 
         let (debugger_read, debugger_write) =
-            leptos::create_signal(debugger.clone());
+            leptos::create_signal((debugger.clone(), transient));
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
@@ -86,8 +87,8 @@ impl DebuggerState {
                     }
                 }
 
-                debugger.update();
-                debugger_write.set(debugger.clone());
+                let transient = debugger.update();
+                debugger_write.set((debugger.clone(), transient));
             }
         });
 

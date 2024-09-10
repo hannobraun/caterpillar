@@ -12,7 +12,7 @@ pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
     code::{CodeRx, CodeTx, DebugCode},
-    debugger::Debugger,
+    debugger::{Debugger, TransientState},
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
 };
