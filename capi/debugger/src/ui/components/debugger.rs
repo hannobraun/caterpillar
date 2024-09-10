@@ -13,11 +13,11 @@ use crate::{
 
 #[component]
 pub fn Debugger(
-    debugger: ReadSignal<(PersistentState, TransientState)>,
+    state: ReadSignal<(PersistentState, TransientState)>,
     actions: ActionsTx,
 ) -> impl IntoView {
     move || {
-        let (debugger, transient) = debugger.get();
+        let (debugger, transient) = state.get();
 
         let stack_explorer = view! {
             <StackExplorer

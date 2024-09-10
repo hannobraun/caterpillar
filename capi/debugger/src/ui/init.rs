@@ -14,7 +14,7 @@ pub fn init(
     leptos::mount_to_body(move || {
         leptos::view! {
             <Debugger
-                debugger=debugger
+                state=debugger
                 actions=actions />
         }
     });
