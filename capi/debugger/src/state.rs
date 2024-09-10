@@ -46,10 +46,7 @@ impl DebuggerState {
 
             loop {
                 select! {
-                    _ = code.wait_for_new_code(
-                        &code_tx,
-                        &mut persistent
-                    ) => {
+                    _ = code.wait_for_new_code(&code_tx, &mut persistent) => {
                         // Nothing to do, except do the update that happens
                         // below this `select!`.
                     }
