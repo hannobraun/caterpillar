@@ -4,9 +4,8 @@ use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsEntry, state::TransientState,
-    ActiveFunctions, Branch, DebugFragment, DebugFragmentKind, DebugFunction,
-    PersistentState,
+    ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
+    DebugFragmentKind, DebugFunction, PersistentState, TransientState,
 };
 
 pub fn init() -> TestInfra {
