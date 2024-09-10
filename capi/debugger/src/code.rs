@@ -29,8 +29,8 @@ pub async fn on_new_code(
     code_tx: &CodeTx,
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {
-    let code = code.unwrap().text().await.unwrap();
-    let code: Versioned<Code> = ron::from_str(&code).unwrap();
+    let code = code?.text().await?;
+    let code: Versioned<Code> = ron::from_str(&code)?;
 
     code_tx
         .send(code.inner.instructions.clone())
