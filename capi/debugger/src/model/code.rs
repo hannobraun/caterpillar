@@ -13,12 +13,6 @@ pub struct DebugCode {
     pub code_from_server: Option<Code>,
 }
 
-impl DebugCode {
-    pub fn update(&mut self, code: Code) {
-        self.code_from_server = Some(code);
-    }
-}
-
 #[derive(Clone, Debug, Default)]
 pub struct Breakpoints {
     durable: BTreeMap<InstructionAddress, Instruction>,

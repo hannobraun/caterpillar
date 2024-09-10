@@ -22,7 +22,7 @@ impl TestInfra {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        self.persistent.code.update(Code {
+        self.persistent.code.code_from_server = Some(Code {
             fragments,
             instructions,
             source_map,
