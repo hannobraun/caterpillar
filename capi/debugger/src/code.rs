@@ -1,7 +1,12 @@
+use capi_process::Instructions;
 use capi_protocol::{updates::Code, Versioned};
 use gloo_net::http::Response;
+use tokio::sync::watch;
 
-use crate::model::{CodeTx, PersistentState};
+use crate::model::PersistentState;
+
+pub type CodeRx = watch::Receiver<Instructions>;
+pub type CodeTx = watch::Sender<Instructions>;
 
 pub struct CodeManager {
     pub timestamp: u64,

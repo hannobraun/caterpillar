@@ -1,11 +1,7 @@
 use std::collections::BTreeMap;
 
 use anyhow::anyhow;
-use capi_process::{Instruction, InstructionAddress, Instructions};
-use tokio::sync::watch;
-
-pub type CodeRx = watch::Receiver<Instructions>;
-pub type CodeTx = watch::Sender<Instructions>;
+use capi_process::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
 pub struct Breakpoints {

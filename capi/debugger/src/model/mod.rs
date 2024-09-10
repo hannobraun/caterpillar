@@ -11,7 +11,7 @@ mod tests;
 pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
-    breakpoints::{Breakpoints, CodeRx, CodeTx},
+    breakpoints::Breakpoints,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
     state::{PersistentState, TransientState},

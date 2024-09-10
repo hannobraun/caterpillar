@@ -14,8 +14,8 @@ use tokio::{
 };
 
 use crate::{
-    code::{on_new_code, CodeManager},
-    model::{CodeRx, PersistentState},
+    code::{on_new_code, CodeManager, CodeRx},
+    model::PersistentState,
     ui::{self, Action},
 };
 
