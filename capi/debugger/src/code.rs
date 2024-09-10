@@ -27,12 +27,14 @@ impl CodeManager {
         &mut self,
         code_tx: &CodeTx,
         state: &mut PersistentState,
-    ) {
+    ) -> anyhow::Result<()> {
         let code = Request::get(&format!("/code/{}", self.timestamp))
             .send()
             .await;
 
-        self.timestamp = on_new_code(code, code_tx, state).await.unwrap();
+        self.timestamp = on_new_code(code, code_tx, state).await?;
+
+        Ok(())
     }
 }
 
