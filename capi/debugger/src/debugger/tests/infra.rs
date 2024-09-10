@@ -29,7 +29,6 @@ impl TestInfra {
         };
 
         self.persistent.code.update(code);
-        self.persistent.update();
 
         self
     }
