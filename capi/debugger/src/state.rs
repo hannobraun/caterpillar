@@ -111,7 +111,7 @@ impl Default for DebuggerState {
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
-    debugger: &mut PersistentState,
+    state: &mut PersistentState,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
@@ -120,7 +120,7 @@ async fn on_new_code(
         .send(code.inner.instructions.clone())
         .expect("Code receiver should never drop.");
 
-    debugger.code.update(code.inner.clone());
+    state.code.update(code.inner.clone());
 
     code.timestamp
 }
