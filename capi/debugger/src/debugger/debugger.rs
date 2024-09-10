@@ -6,9 +6,10 @@ use super::{ActiveFunctions, DebugCode};
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
     pub code: DebugCode,
+    pub memory: Option<Memory>,
+
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
-    pub memory: Option<Memory>,
 }
 
 impl Debugger {
