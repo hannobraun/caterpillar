@@ -43,9 +43,8 @@ impl DebuggerState {
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
-            let mut code_updater = CodeManager {
-                timestamp: on_new_code(code, &code_tx, &mut persistent).await,
-            };
+            let mut code_updater =
+                CodeManager::new(code, &code_tx, &mut persistent).await;
 
             loop {
                 let response =

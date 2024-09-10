@@ -12,6 +12,18 @@ pub struct CodeManager {
     pub timestamp: u64,
 }
 
+impl CodeManager {
+    pub async fn new(
+        code: Result<Response, gloo_net::Error>,
+        code_tx: &CodeTx,
+        state: &mut PersistentState,
+    ) -> Self {
+        Self {
+            timestamp: on_new_code(code, code_tx, state).await,
+        }
+    }
+}
+
 pub async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
