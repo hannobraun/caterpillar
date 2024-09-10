@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{updates::Code, Versioned};
-use gloo_net::http::Response;
+use gloo_net::http::{Request, Response};
 use tokio::sync::watch;
 
 use crate::model::PersistentState;
@@ -13,11 +13,8 @@ pub struct CodeManager {
 }
 
 impl CodeManager {
-    pub async fn new(
-        code: Result<Response, gloo_net::Error>,
-        code_tx: &CodeTx,
-        state: &mut PersistentState,
-    ) -> Self {
+    pub async fn new(code_tx: &CodeTx, state: &mut PersistentState) -> Self {
+        let code = Request::get("/code").send().await;
         Self {
             timestamp: on_new_code(code, code_tx, state).await,
         }
