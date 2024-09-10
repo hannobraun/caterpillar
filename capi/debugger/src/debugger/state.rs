@@ -23,7 +23,7 @@ impl PersistentState {
         }
     }
 
-    pub fn update(&mut self) -> TransientState {
+    pub fn update(&self) -> TransientState {
         TransientState {
             active_functions: ActiveFunctions::new(
                 self.code.code_from_server.as_ref(),
