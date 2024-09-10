@@ -15,7 +15,7 @@ pub fn init() -> TestInfra {
 #[derive(Default)]
 pub struct TestInfra {
     code: Option<Code>,
-    debugger: PersistentState,
+    persistent: PersistentState,
 }
 
 impl TestInfra {
@@ -30,8 +30,8 @@ impl TestInfra {
         };
 
         self.code = Some(code.clone());
-        self.debugger.code.update(code);
-        self.debugger.update();
+        self.persistent.code.update(code);
+        self.persistent.update();
 
         self
     }
@@ -56,15 +56,15 @@ impl TestInfra {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            self.debugger.on_update_from_runtime(update);
+            self.persistent.on_update_from_runtime(update);
         }
 
         self
     }
 
     pub fn into_debugger(mut self) -> (PersistentState, TransientState) {
-        let transient = self.debugger.update();
-        (self.debugger, transient)
+        let transient = self.persistent.update();
+        (self.persistent, transient)
     }
 }
 
