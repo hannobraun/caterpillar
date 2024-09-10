@@ -59,12 +59,11 @@ impl TestInfra {
             self.debugger.on_update_from_runtime(update);
         }
 
-        self.debugger.update();
-
         self
     }
 
-    pub fn into_debugger(self) -> Debugger {
+    pub fn into_debugger(mut self) -> Debugger {
+        self.debugger.update();
         self.debugger
     }
 }
