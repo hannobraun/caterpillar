@@ -14,6 +14,7 @@ pub fn init() -> TestInfra {
 
 #[derive(Default)]
 pub struct TestInfra {
+    code: Option<Code>,
     debugger: Debugger,
     remote_process: RemoteProcess,
 }
@@ -29,6 +30,7 @@ impl TestInfra {
             source_map,
         };
 
+        self.code = Some(code.clone());
         self.debugger.code.update(code.clone());
         self.debugger.update(None, None);
 
@@ -36,11 +38,11 @@ impl TestInfra {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = &self.debugger.code.code_from_server
+        let instructions = &self.code
             .as_ref()
             .expect(
                 "Must provide source code via `TestInfra::provide_source_code` \
-                before calling `TestInfra::run_process`."
+                before calling `TestInfra::run_process`.",
             )
             .instructions;
 
