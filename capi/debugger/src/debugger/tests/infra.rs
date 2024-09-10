@@ -14,7 +14,6 @@ pub fn init() -> TestInfra {
 
 #[derive(Default)]
 pub struct TestInfra {
-    code: Option<Code>,
     persistent: PersistentState,
 }
 
@@ -29,7 +28,6 @@ impl TestInfra {
             source_map,
         };
 
-        self.code = Some(code.clone());
         self.persistent.code.update(code);
         self.persistent.update();
 
@@ -37,7 +35,7 @@ impl TestInfra {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = &self.code
+        let instructions = &self.persistent.code.code_from_server
             .as_ref()
             .expect(
                 "Must provide source code via `TestInfra::provide_source_code` \
