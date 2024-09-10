@@ -31,7 +31,7 @@ impl TestInfra {
         };
 
         self.code = Some(code.clone());
-        self.debugger.code.update(code.clone());
+        self.debugger.code.update(code);
         self.debugger.update(None, None);
 
         self
