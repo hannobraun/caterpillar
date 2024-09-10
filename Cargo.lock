@@ -1072,9 +1072,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cde7055719c54e36e95e8719f95883f22072a48ede39db7fc17a4e1d5281e9b9"
+checksum = "da62f120a8a37763efb0cf8fdf264b884c7b8b9ac8660b900c8661030c00e6ba"
 dependencies = [
  "bytes",
  "futures-util",
@@ -2658,9 +2658,9 @@ dependencies = [
 
 [[package]]
 name = "walrus"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "467611cafbc8a84834b77d2b4bb191fd2f5769752def8340407e924390c6883b"
+checksum = "160c3708e3ad718ab4d84bec8de8c3d3450cd2902bd6c3ee3bbf50ad7529c2ad"
 dependencies = [
  "anyhow",
  "gimli 0.26.2",
