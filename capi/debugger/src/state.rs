@@ -38,7 +38,7 @@ impl DebuggerState {
         let mut persistent = PersistentState::default();
         let transient = persistent.update();
 
-        let (state_read, debugger_write) =
+        let (state_read, state_write) =
             leptos::create_signal((persistent.clone(), transient));
 
         leptos::spawn_local(async move {
@@ -88,7 +88,7 @@ impl DebuggerState {
                 }
 
                 let transient = persistent.update();
-                debugger_write.set((persistent.clone(), transient));
+                state_write.set((persistent.clone(), transient));
             }
         });
 
