@@ -3,7 +3,7 @@ use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 use capi_protocol::updates::{Code, UpdateFromRuntime};
 
-use super::{breakpoints::Breakpoints, ActiveFunctions};
+use super::{ActiveFunctions, Breakpoints};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
