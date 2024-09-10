@@ -36,7 +36,7 @@ impl DebuggerState {
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
         let mut persistent = PersistentState::default();
-        let transient = persistent.update();
+        let transient = persistent.generate_transient_state();
 
         let (state_read, state_write) =
             leptos::create_signal((persistent.clone(), transient));
@@ -87,7 +87,7 @@ impl DebuggerState {
                     }
                 }
 
-                let transient = persistent.update();
+                let transient = persistent.generate_transient_state();
                 state_write.set((persistent.clone(), transient));
             }
         });

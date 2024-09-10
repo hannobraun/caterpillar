@@ -58,7 +58,7 @@ impl TestInfra {
     }
 
     pub fn into_state(self) -> (PersistentState, TransientState) {
-        let transient = self.persistent.update();
+        let transient = self.persistent.generate_transient_state();
         (self.persistent, transient)
     }
 }

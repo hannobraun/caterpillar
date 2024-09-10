@@ -25,7 +25,7 @@ impl PersistentState {
         }
     }
 
-    pub fn update(&self) -> TransientState {
+    pub fn generate_transient_state(&self) -> TransientState {
         TransientState {
             active_functions: ActiveFunctions::new(
                 self.code.as_ref(),
