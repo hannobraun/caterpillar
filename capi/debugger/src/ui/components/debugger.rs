@@ -17,13 +17,13 @@ pub fn Debugger(
     actions: ActionsTx,
 ) -> impl IntoView {
     move || {
-        let (debugger, transient) = state.get();
+        let (persistent, transient) = state.get();
 
         let stack_explorer = view! {
             <StackExplorer
                 current=transient.operands />
         };
-        let memory_explorer = debugger.memory.map(|memory| {
+        let memory_explorer = persistent.memory.map(|memory| {
             view! {
                 <MemoryExplorer
                     memory=memory />
