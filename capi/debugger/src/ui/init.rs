@@ -8,13 +8,13 @@ use crate::{
 use super::ActionsTx;
 
 pub fn init(
-    debugger: ReadSignal<(PersistentState, TransientState)>,
+    state: ReadSignal<(PersistentState, TransientState)>,
     actions: ActionsTx,
 ) {
     leptos::mount_to_body(move || {
         leptos::view! {
             <Debugger
-                state=debugger
+                state=state
                 actions=actions />
         }
     });
