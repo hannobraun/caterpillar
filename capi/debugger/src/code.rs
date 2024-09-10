@@ -36,7 +36,7 @@ impl CodeManager {
     }
 }
 
-pub async fn on_new_code(
+async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
     state: &mut PersistentState,
