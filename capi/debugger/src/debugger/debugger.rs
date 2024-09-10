@@ -2,7 +2,9 @@ use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 
-use super::{code::DebugCode, ActiveFunctions, Breakpoints};
+use crate::code::{Breakpoints, DebugCode};
+
+use super::ActiveFunctions;
 
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
