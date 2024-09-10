@@ -24,7 +24,7 @@ impl TestInfra {
 
         self.persistent.code.update(Code {
             fragments,
-            instructions: instructions.clone(),
+            instructions,
             source_map,
         });
 
