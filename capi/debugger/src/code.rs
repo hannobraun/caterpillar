@@ -13,11 +13,14 @@ pub struct CodeManager {
 }
 
 impl CodeManager {
-    pub async fn new(code_tx: &CodeTx, state: &mut PersistentState) -> Self {
+    pub async fn new(
+        code_tx: &CodeTx,
+        state: &mut PersistentState,
+    ) -> anyhow::Result<Self> {
         let code = Request::get("/code").send().await;
-        let timestamp = on_new_code(code, code_tx, state).await.unwrap();
+        let timestamp = on_new_code(code, code_tx, state).await?;
 
-        Self { timestamp }
+        Ok(Self { timestamp })
     }
 }
 
