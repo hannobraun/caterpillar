@@ -4,7 +4,7 @@ use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsEntry, debugger::TransientState,
+    active_functions::ActiveFunctionsEntry, state::TransientState,
     ActiveFunctions, Branch, DebugFragment, DebugFragmentKind, DebugFunction,
     PersistentState,
 };
