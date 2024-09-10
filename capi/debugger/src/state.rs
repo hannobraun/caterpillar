@@ -45,11 +45,11 @@ impl DebuggerState {
                 CodeManager::new(&code_tx, &mut persistent).await.unwrap();
 
             loop {
-                let response =
-                    code_updater.wait_for_new_code(&code_tx, &mut persistent);
-
                 select! {
-                    _ = response => {
+                    _ = code_updater.wait_for_new_code(
+                        &code_tx,
+                        &mut persistent
+                    ) => {
                         // Nothing to do, except do the update that happens
                         // below this `select!`.
                     }
