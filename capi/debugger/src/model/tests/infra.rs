@@ -22,7 +22,7 @@ impl TestInfra {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        self.persistent.code.code_from_server = Some(Code {
+        self.persistent.code = Some(Code {
             fragments,
             instructions,
             source_map,
@@ -32,7 +32,7 @@ impl TestInfra {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = &self.persistent.code.code_from_server
+        let instructions = &self.persistent.code
             .as_ref()
             .expect(
                 "Must provide source code via `TestInfra::provide_source_code` \

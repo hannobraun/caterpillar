@@ -120,7 +120,7 @@ async fn on_new_code(
         .send(code.inner.instructions.clone())
         .expect("Code receiver should never drop.");
 
-    state.code.code_from_server = Some(code.inner.clone());
+    state.code = Some(code.inner.clone());
 
     code.timestamp
 }

@@ -1,13 +1,13 @@
 use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
-use capi_protocol::updates::UpdateFromRuntime;
+use capi_protocol::updates::{Code, UpdateFromRuntime};
 
-use super::{code::Breakpoints, ActiveFunctions, DebugCode};
+use super::{code::Breakpoints, ActiveFunctions};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
-    pub code: DebugCode,
+    pub code: Option<Code>,
     pub breakpoints: Breakpoints,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
@@ -28,7 +28,7 @@ impl PersistentState {
     pub fn update(&self) -> TransientState {
         TransientState {
             active_functions: ActiveFunctions::new(
-                self.code.code_from_server.as_ref(),
+                self.code.as_ref(),
                 self.process.as_ref(),
             ),
             operands: self
@@ -51,7 +51,6 @@ impl PersistentState {
     ) -> anyhow::Result<()> {
         let code = self
             .code
-            .code_from_server
             .as_ref()
             .ok_or_else(|| anyhow!("Code is not available yet."))?;
         let instruction = code
