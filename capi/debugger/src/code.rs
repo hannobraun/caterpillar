@@ -15,6 +15,7 @@ pub struct CodeManager {
 impl CodeManager {
     pub async fn new(code_tx: &CodeTx, state: &mut PersistentState) -> Self {
         let code = Request::get("/code").send().await;
+
         Self {
             timestamp: on_new_code(code, code_tx, state).await.unwrap(),
         }
