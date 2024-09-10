@@ -3,11 +3,12 @@ use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 use capi_protocol::updates::UpdateFromRuntime;
 
-use super::{ActiveFunctions, DebugCode};
+use super::{code::Breakpoints, ActiveFunctions, DebugCode};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
     pub code: DebugCode,
+    pub breakpoints: Breakpoints,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
@@ -61,7 +62,7 @@ impl PersistentState {
             })?
             .clone();
 
-        self.code.breakpoints.set_durable(address, instruction);
+        self.breakpoints.set_durable(address, instruction);
 
         Ok(())
     }
@@ -70,7 +71,7 @@ impl PersistentState {
         &mut self,
         address: &InstructionAddress,
     ) -> anyhow::Result<()> {
-        self.code.breakpoints.clear_durable(address)?;
+        self.breakpoints.clear_durable(address)?;
         Ok(())
     }
 }
