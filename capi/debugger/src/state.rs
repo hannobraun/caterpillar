@@ -15,7 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    model::{CodeRx, CodeTx, DebugCode, PersistentState},
+    model::{CodeRx, CodeTx, PersistentState},
     ui::{self, Action},
 };
 
@@ -81,7 +81,7 @@ impl DebuggerState {
 
                         on_ui_action(
                             action,
-                            &mut persistent.code,
+                            &mut persistent,
                             &commands_to_runtime_tx,
                         );
                     }
@@ -132,12 +132,12 @@ fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
 
 fn on_ui_action(
     action: Action,
-    code: &mut DebugCode,
+    state: &mut PersistentState,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
     let command = match action {
         Action::BreakpointClear { address } => {
-            code.clear_durable_breakpoint(&address).expect(
+            state.code.clear_durable_breakpoint(&address).expect(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
             );
@@ -147,7 +147,7 @@ fn on_ui_action(
             }
         }
         Action::BreakpointSet { address } => {
-            code.set_durable_breakpoint(address).expect(
+            state.code.set_durable_breakpoint(address).expect(
                 "Failed to set durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
             );
