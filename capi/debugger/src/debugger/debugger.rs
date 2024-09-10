@@ -6,6 +6,7 @@ use super::{ActiveFunctions, DebugCode};
 #[derive(Clone, Debug, Default)]
 pub struct Debugger {
     pub code: DebugCode,
+    pub process: Option<Process>,
     pub memory: Option<Memory>,
 
     pub active_functions: ActiveFunctions,
@@ -13,10 +14,14 @@ pub struct Debugger {
 }
 
 impl Debugger {
-    pub fn update(&mut self, process: Option<&Process>) {
-        self.active_functions =
-            ActiveFunctions::new(self.code.code_from_server.as_ref(), process);
-        self.operands = process
+    pub fn update(&mut self) {
+        self.active_functions = ActiveFunctions::new(
+            self.code.code_from_server.as_ref(),
+            self.process.as_ref(),
+        );
+        self.operands = self
+            .process
+            .as_ref()
             .map(|process| {
                 process
                     .stack()

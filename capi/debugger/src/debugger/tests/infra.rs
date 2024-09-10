@@ -32,7 +32,7 @@ impl TestInfra {
 
         self.code = Some(code.clone());
         self.debugger.code.update(code);
-        self.debugger.update(None);
+        self.debugger.update();
 
         self
     }
@@ -60,8 +60,9 @@ impl TestInfra {
             self.remote_process.on_update_from_runtime(update);
         }
 
+        self.debugger.process = self.remote_process.process.clone();
         self.debugger.memory = self.remote_process.memory.clone();
-        self.debugger.update(self.remote_process.process.as_ref());
+        self.debugger.update();
 
         self
     }
