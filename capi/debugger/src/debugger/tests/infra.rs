@@ -6,7 +6,7 @@ use capi_protocol::updates::{Code, Updates};
 use crate::debugger::{
     active_functions::ActiveFunctionsEntry, debugger::TransientState,
     ActiveFunctions, Branch, DebugFragment, DebugFragmentKind, DebugFunction,
-    Debugger,
+    PersistentState,
 };
 
 pub fn init() -> TestInfra {
@@ -16,7 +16,7 @@ pub fn init() -> TestInfra {
 #[derive(Default)]
 pub struct TestInfra {
     code: Option<Code>,
-    debugger: Debugger,
+    debugger: PersistentState,
 }
 
 impl TestInfra {
@@ -63,7 +63,7 @@ impl TestInfra {
         self
     }
 
-    pub fn into_debugger(mut self) -> (Debugger, TransientState) {
+    pub fn into_debugger(mut self) -> (PersistentState, TransientState) {
         let transient = self.debugger.update();
         (self.debugger, transient)
     }

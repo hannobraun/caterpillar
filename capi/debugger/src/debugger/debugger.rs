@@ -5,13 +5,13 @@ use capi_protocol::updates::UpdateFromRuntime;
 use super::{ActiveFunctions, DebugCode};
 
 #[derive(Clone, Debug, Default)]
-pub struct Debugger {
+pub struct PersistentState {
     pub code: DebugCode,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
 
-impl Debugger {
+impl PersistentState {
     pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
         match update {
             UpdateFromRuntime::Memory { memory } => {

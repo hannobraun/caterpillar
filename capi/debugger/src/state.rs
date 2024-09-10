@@ -15,7 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    debugger::{CodeRx, CodeTx, DebugCode, Debugger},
+    debugger::{CodeRx, CodeTx, DebugCode, PersistentState},
     ui::{self, Action},
 };
 
@@ -35,7 +35,7 @@ impl DebuggerState {
             mpsc::unbounded_channel();
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
-        let mut debugger = Debugger::default();
+        let mut debugger = PersistentState::default();
         let transient = debugger.update();
 
         let (debugger_read, debugger_write) =
@@ -111,7 +111,7 @@ impl Default for DebuggerState {
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
-    debugger: &mut Debugger,
+    debugger: &mut PersistentState,
 ) -> u64 {
     let code = code.unwrap().text().await.unwrap();
     let code: Versioned<Code> = ron::from_str(&code).unwrap();
@@ -125,7 +125,7 @@ async fn on_new_code(
     code.timestamp
 }
 
-fn on_update_from_runtime(update: Vec<u8>, debugger: &mut Debugger) {
+fn on_update_from_runtime(update: Vec<u8>, debugger: &mut PersistentState) {
     let update = UpdateFromRuntime::deserialize(update);
     debugger.on_update_from_runtime(update);
 }
