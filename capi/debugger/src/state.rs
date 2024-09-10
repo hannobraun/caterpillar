@@ -51,7 +51,7 @@ impl DebuggerState {
                     => {
                         result.unwrap();
 
-                        // Nothing to do, except do the update that happens
+                        // Nothing else to do, except do the update that happens
                         // below this `select!`.
                     }
                     update = updates_from_runtime_rx.recv() => {
