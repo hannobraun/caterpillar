@@ -41,12 +41,12 @@ impl DebuggerState {
             leptos::create_signal((persistent.clone(), transient));
 
         leptos::spawn_local(async move {
-            let mut code_updater =
+            let mut code =
                 CodeManager::new(&code_tx, &mut persistent).await.unwrap();
 
             loop {
                 select! {
-                    _ = code_updater.wait_for_new_code(
+                    _ = code.wait_for_new_code(
                         &code_tx,
                         &mut persistent
                     ) => {
