@@ -22,13 +22,11 @@ impl TestInfra {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        let code = Code {
+        self.persistent.code.update(Code {
             fragments: fragments.clone(),
             instructions: instructions.clone(),
             source_map,
-        };
-
-        self.persistent.code.update(code);
+        });
 
         self
     }
