@@ -137,7 +137,7 @@ fn on_ui_action(
 ) {
     let command = match action {
         Action::BreakpointClear { address } => {
-            state.code.clear_durable_breakpoint(&address).expect(
+            state.clear_durable_breakpoint(&address).expect(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
             );

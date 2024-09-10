@@ -65,6 +65,14 @@ impl PersistentState {
 
         Ok(())
     }
+
+    pub fn clear_durable_breakpoint(
+        &mut self,
+        address: &InstructionAddress,
+    ) -> anyhow::Result<()> {
+        self.code.breakpoints.clear_durable(address)?;
+        Ok(())
+    }
 }
 
 #[derive(Clone)]
