@@ -22,7 +22,7 @@ impl Debugger {
         process: Option<&Process>,
     ) {
         self.active_functions =
-            ActiveFunctions::new(self.code.inner.as_ref(), process);
+            ActiveFunctions::new(self.code.code_from_server.as_ref(), process);
         self.operands = process
             .map(|process| {
                 process
@@ -41,7 +41,7 @@ impl Debugger {
     ) -> anyhow::Result<()> {
         let code = self
             .code
-            .inner
+            .code_from_server
             .as_ref()
             .ok_or_else(|| anyhow!("Code is not available yet."))?;
         let instruction = code

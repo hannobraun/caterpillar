@@ -10,12 +10,12 @@ pub type CodeTx = watch::Sender<Instructions>;
 
 #[derive(Clone, Debug, Default)]
 pub struct DebugCode {
-    pub inner: Option<Code>,
+    pub code_from_server: Option<Code>,
 }
 
 impl DebugCode {
     pub fn update(&mut self, code: Code) {
-        self.inner = Some(code);
+        self.code_from_server = Some(code);
     }
 }
 

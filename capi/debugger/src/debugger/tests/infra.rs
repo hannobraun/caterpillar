@@ -36,7 +36,7 @@ impl TestInfra {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = &self.debugger.code.inner
+        let instructions = &self.debugger.code.code_from_server
             .as_ref()
             .expect(
                 "Must provide source code via `TestInfra::provide_source_code` \
