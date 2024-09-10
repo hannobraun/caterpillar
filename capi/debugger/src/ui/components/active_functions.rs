@@ -1,7 +1,7 @@
 use leptos::{component, view, CollectView, IntoView};
 
 use crate::{
-    debugger::{ActiveFunctions, ActiveFunctionsEntry},
+    model::{ActiveFunctions, ActiveFunctionsEntry},
     ui::{
         components::{function::NamedFunction, panel::Panel},
         ActionsTx,

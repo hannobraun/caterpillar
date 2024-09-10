@@ -15,7 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    debugger::{CodeRx, CodeTx, DebugCode, PersistentState},
+    model::{CodeRx, CodeTx, DebugCode, PersistentState},
     ui::{self, Action},
 };
 

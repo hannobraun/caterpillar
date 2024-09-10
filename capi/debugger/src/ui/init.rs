@@ -1,7 +1,7 @@
 use leptos::ReadSignal;
 
 use crate::{
-    debugger::{PersistentState, TransientState},
+    model::{PersistentState, TransientState},
     ui::components::debugger::Debugger,
 };
 

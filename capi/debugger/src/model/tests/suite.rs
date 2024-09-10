@@ -1,6 +1,6 @@
 use capi_process::Effect;
 
-use crate::debugger::{
+use crate::model::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
         init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, DebugFragmentExt,

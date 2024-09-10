@@ -1,5 +1,5 @@
-mod debugger;
 mod ffi;
+mod model;
 mod state;
 mod ui;
 

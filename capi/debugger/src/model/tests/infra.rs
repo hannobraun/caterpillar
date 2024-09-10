@@ -3,7 +3,7 @@ use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
-use crate::debugger::{
+use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
     DebugFragmentKind, DebugFunction, PersistentState, TransientState,
 };

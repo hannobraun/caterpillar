@@ -5,7 +5,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
+    model::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
     ui::{Action, ActionsTx},
 };
 

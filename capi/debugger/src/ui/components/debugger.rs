@@ -1,7 +1,7 @@
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    debugger::{PersistentState, TransientState},
+    model::{PersistentState, TransientState},
     ui::{
         components::{
             active_functions::ActiveFunctions, control_panel::ControlPanel,
