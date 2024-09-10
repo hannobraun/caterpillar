@@ -1,5 +1,6 @@
 use capi_game_engine::memory::Memory;
 use capi_process::{Process, Value};
+use capi_protocol::updates::UpdateFromRuntime;
 
 use super::{ActiveFunctions, DebugCode};
 
@@ -14,6 +15,17 @@ pub struct Debugger {
 }
 
 impl Debugger {
+    pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
+        match update {
+            UpdateFromRuntime::Memory { memory } => {
+                self.memory = Some(memory);
+            }
+            UpdateFromRuntime::Process(process) => {
+                self.process = Some(process);
+            }
+        }
+    }
+
     pub fn update(&mut self) {
         self.active_functions = ActiveFunctions::new(
             self.code.code_from_server.as_ref(),

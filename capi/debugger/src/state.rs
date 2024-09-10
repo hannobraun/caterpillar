@@ -15,7 +15,7 @@ use tokio::{
 };
 
 use crate::{
-    debugger::{CodeRx, CodeTx, DebugCode, Debugger, RemoteProcess},
+    debugger::{CodeRx, CodeTx, DebugCode, Debugger},
     ui::{self, Action},
 };
 
@@ -36,7 +36,6 @@ impl DebuggerState {
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
         let mut debugger = Debugger::default();
-        let mut remote_process = RemoteProcess::default();
 
         let (debugger_read, debugger_write) =
             leptos::create_signal(debugger.clone());
@@ -69,7 +68,7 @@ impl DebuggerState {
 
                         on_update_from_runtime(
                             update,
-                            &mut remote_process,
+                            &mut debugger,
                         );
                     }
                     action = actions_rx.recv() => {
@@ -87,8 +86,6 @@ impl DebuggerState {
                     }
                 }
 
-                debugger.process = remote_process.process.clone();
-                debugger.memory = remote_process.memory.clone();
                 debugger.update();
                 debugger_write.set(debugger.clone());
             }
@@ -127,9 +124,9 @@ async fn on_new_code(
     code.timestamp
 }
 
-fn on_update_from_runtime(update: Vec<u8>, remote_process: &mut RemoteProcess) {
+fn on_update_from_runtime(update: Vec<u8>, debugger: &mut Debugger) {
     let update = UpdateFromRuntime::deserialize(update);
-    remote_process.on_update_from_runtime(update);
+    debugger.on_update_from_runtime(update);
 }
 
 fn on_ui_action(

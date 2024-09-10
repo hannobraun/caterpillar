@@ -4,7 +4,6 @@ mod code;
 mod debugger;
 mod fragment;
 mod function;
-mod remote_process;
 
 #[cfg(test)]
 mod tests;
@@ -16,5 +15,4 @@ pub use self::{
     debugger::Debugger,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
-    remote_process::RemoteProcess,
 };

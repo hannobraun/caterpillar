@@ -5,7 +5,7 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
     active_functions::ActiveFunctionsEntry, ActiveFunctions, Branch,
-    DebugFragment, DebugFragmentKind, DebugFunction, Debugger, RemoteProcess,
+    DebugFragment, DebugFragmentKind, DebugFunction, Debugger,
 };
 
 pub fn init() -> TestInfra {
@@ -16,7 +16,6 @@ pub fn init() -> TestInfra {
 pub struct TestInfra {
     code: Option<Code>,
     debugger: Debugger,
-    remote_process: RemoteProcess,
 }
 
 impl TestInfra {
@@ -57,11 +56,9 @@ impl TestInfra {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            self.remote_process.on_update_from_runtime(update);
+            self.debugger.on_update_from_runtime(update);
         }
 
-        self.debugger.process = self.remote_process.process.clone();
-        self.debugger.memory = self.remote_process.memory.clone();
         self.debugger.update();
 
         self
