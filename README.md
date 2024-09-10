@@ -74,8 +74,7 @@ design. Due to the current state of the project, this isn't (yet) a long list,
 nor is anything here going to be final.
 
 For more information on future design directions, please follow my
-[daily thoughts]. There's also a [design document](design.md), which I'd like to
-phase out, but that still provides some value.
+[daily thoughts].
 
 ### Developer experience is the priority, but not an absolute one
 
