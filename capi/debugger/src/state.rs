@@ -125,9 +125,9 @@ async fn on_new_code(
     code.timestamp
 }
 
-fn on_update_from_runtime(update: Vec<u8>, debugger: &mut PersistentState) {
+fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
     let update = UpdateFromRuntime::deserialize(update);
-    debugger.on_update_from_runtime(update);
+    state.on_update_from_runtime(update);
 }
 
 fn on_ui_action(
