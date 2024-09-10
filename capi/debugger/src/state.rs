@@ -3,7 +3,6 @@ use capi_protocol::{
     command::{CommandToRuntime, SerializedCommandToRuntime},
     updates::{SerializedUpdate, UpdateFromRuntime},
 };
-use gloo_net::http::Request;
 use leptos::SignalSet;
 use tokio::{
     select,
@@ -14,7 +13,7 @@ use tokio::{
 };
 
 use crate::{
-    code::{on_new_code, CodeManager, CodeRx},
+    code::{CodeManager, CodeRx},
     model::PersistentState,
     ui::{self, Action},
 };
@@ -47,19 +46,12 @@ impl DebuggerState {
 
             loop {
                 let response =
-                    Request::get(&format!("/code/{}", code_updater.timestamp))
-                        .send();
+                    code_updater.wait_for_new_code(&code_tx, &mut persistent);
 
                 select! {
-                    code = response => {
-                        code_updater.timestamp =
-                            on_new_code(
-                                code,
-                                &code_tx,
-                                &mut persistent,
-                            )
-                            .await
-                            .unwrap();
+                    _ = response => {
+                        // Nothing to do, except do the update that happens
+                        // below this `select!`.
                     }
                     update = updates_from_runtime_rx.recv() => {
                         let Some(update) = update else {

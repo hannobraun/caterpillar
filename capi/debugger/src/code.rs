@@ -22,6 +22,18 @@ impl CodeManager {
 
         Ok(Self { timestamp })
     }
+
+    pub async fn wait_for_new_code(
+        &mut self,
+        code_tx: &CodeTx,
+        state: &mut PersistentState,
+    ) {
+        let code = Request::get(&format!("/code/{}", self.timestamp))
+            .send()
+            .await;
+
+        self.timestamp = on_new_code(code, code_tx, state).await.unwrap();
+    }
 }
 
 pub async fn on_new_code(
