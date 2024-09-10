@@ -19,27 +19,6 @@ impl DebugCode {
         self.code_from_server = Some(code);
     }
 
-    pub fn set_durable_breakpoint(
-        &mut self,
-        address: InstructionAddress,
-    ) -> anyhow::Result<()> {
-        let code = self
-            .code_from_server
-            .as_ref()
-            .ok_or_else(|| anyhow!("Code is not available yet."))?;
-        let instruction = code
-            .instructions
-            .get(&address)
-            .ok_or_else(|| {
-                anyhow!("Instruction at `{address}` does not exist.")
-            })?
-            .clone();
-
-        self.breakpoints.set_durable(address, instruction);
-
-        Ok(())
-    }
-
     pub fn clear_durable_breakpoint(
         &mut self,
         address: &InstructionAddress,
