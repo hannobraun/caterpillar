@@ -48,7 +48,7 @@ impl DebuggerState {
 
             loop {
                 let response =
-                    Request::get(&format!("/code/{timestamp}")).send();
+                    Request::get(&format!("/code/{}", timestamp)).send();
 
                 select! {
                     code = response => {
