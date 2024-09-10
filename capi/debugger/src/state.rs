@@ -1,10 +1,9 @@
 use capi_process::Instructions;
 use capi_protocol::{
     command::{CommandToRuntime, SerializedCommandToRuntime},
-    updates::{Code, SerializedUpdate, UpdateFromRuntime},
-    Versioned,
+    updates::{SerializedUpdate, UpdateFromRuntime},
 };
-use gloo_net::http::{Request, Response};
+use gloo_net::http::Request;
 use leptos::SignalSet;
 use tokio::{
     select,
@@ -15,8 +14,8 @@ use tokio::{
 };
 
 use crate::{
-    code::CodeManager,
-    model::{CodeRx, CodeTx, PersistentState},
+    code::{on_new_code, CodeManager},
+    model::{CodeRx, PersistentState},
     ui::{self, Action},
 };
 
@@ -109,23 +108,6 @@ impl Default for DebuggerState {
     fn default() -> Self {
         Self::new()
     }
-}
-
-async fn on_new_code(
-    code: Result<Response, gloo_net::Error>,
-    code_tx: &CodeTx,
-    state: &mut PersistentState,
-) -> u64 {
-    let code = code.unwrap().text().await.unwrap();
-    let code: Versioned<Code> = ron::from_str(&code).unwrap();
-
-    code_tx
-        .send(code.inner.instructions.clone())
-        .expect("Code receiver should never drop.");
-
-    state.code = Some(code.inner.clone());
-
-    code.timestamp
 }
 
 fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
