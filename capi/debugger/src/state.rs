@@ -15,6 +15,7 @@ use tokio::{
 };
 
 use crate::{
+    code::CodeManager,
     model::{CodeRx, CodeTx, PersistentState},
     ui::{self, Action},
 };
@@ -43,16 +44,18 @@ impl DebuggerState {
 
         leptos::spawn_local(async move {
             let code = Request::get("/code").send().await;
-            let mut timestamp =
-                on_new_code(code, &code_tx, &mut persistent).await;
+            let mut code_updater = CodeManager {
+                timestamp: on_new_code(code, &code_tx, &mut persistent).await,
+            };
 
             loop {
                 let response =
-                    Request::get(&format!("/code/{}", timestamp)).send();
+                    Request::get(&format!("/code/{}", code_updater.timestamp))
+                        .send();
 
                 select! {
                     code = response => {
-                        timestamp =
+                        code_updater.timestamp =
                             on_new_code(
                                 code,
                                 &code_tx,

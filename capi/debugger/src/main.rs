@@ -1,3 +1,4 @@
+mod code;
 mod ffi;
 mod model;
 mod state;
