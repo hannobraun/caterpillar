@@ -1,6 +1,6 @@
 mod active_functions;
 mod branch;
-mod code;
+mod breakpoints;
 mod fragment;
 mod function;
 mod state;
@@ -11,7 +11,7 @@ mod tests;
 pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
-    code::{CodeRx, CodeTx},
+    breakpoints::{CodeRx, CodeTx},
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
     state::{PersistentState, TransientState},
