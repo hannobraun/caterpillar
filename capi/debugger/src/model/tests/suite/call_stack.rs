@@ -2,8 +2,8 @@ use capi_process::Effect;
 
 use crate::model::{
     tests::infra::{
-        init, ActiveFunctionsEntriesExt, ActiveFunctionsExt, DebugFragmentExt,
-        DebugFunctionExt, FunctionsExt,
+        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
+        DebugFragmentExt, DebugFunctionExt, FunctionsExt,
     },
     ActiveFunctionsEntry,
 };
@@ -19,7 +19,7 @@ fn basic_call_stack() {
     // of functions is inner to outer, as it's most useful to the developer to
     // display the instruction where we're currently paused up top.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -47,7 +47,7 @@ fn stopped_at_host_function() {
     // If execution is stopped at a host function, it should be displayed as
     // such.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -73,7 +73,7 @@ fn stopped_at_code_within_block() {
     // block should appear as an active function, and the current instruction
     // should be visible.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -106,7 +106,7 @@ fn call_stack_reconstruction_missing_main() {
     // Tail call elimination can leave gaps in the call stack. If the `main`
     // function is missing due to that, it should be reconstructed.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -139,7 +139,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     // functions have only a single branch each, it is possible to add them back
     // without any additional hints being required.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -177,7 +177,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
     // cases are already getting reconstructed, but right now, we're not doing
     // that yet for functions with multiple branches.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: {
@@ -218,7 +218,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     // cases are already getting reconstructed, but right now, we're not doing
     // that yet for anonymous functions with multiple branches.
 
-    let (_, transient) = init()
+    let (_, transient) = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|

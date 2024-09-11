@@ -8,7 +8,7 @@ use crate::model::{
     DebugFragmentKind, DebugFunction, PersistentState, TransientState,
 };
 
-pub fn init() -> TestDebugger {
+pub fn debugger() -> TestDebugger {
     TestDebugger::default()
 }
 
