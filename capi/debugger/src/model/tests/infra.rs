@@ -143,6 +143,20 @@ impl DebugFunctionExt for DebugFunction {
     }
 }
 
+pub trait BranchExt {
+    fn fragment(&self, i: usize) -> DebugFragment;
+}
+
+impl BranchExt for Branch {
+    fn fragment(&self, i: usize) -> DebugFragment {
+        let Some(fragment) = self.body.get(i) else {
+            panic!("{i}-th fragment in `{:?}` not available", self.body);
+        };
+
+        fragment.clone()
+    }
+}
+
 pub trait DebugFragmentExt {
     fn expect_call_to_function(self, called_fn: &str);
     fn expect_call_to_host_function(self, called_host_fn: &str);

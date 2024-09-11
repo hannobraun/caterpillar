@@ -13,7 +13,11 @@ pub enum ActiveFunctions {
 }
 
 impl ActiveFunctions {
-    pub fn new(code: Option<&Code>, process: Option<&Process>) -> Self {
+    pub fn new(
+        code: Option<&Code>,
+        breakpoints: &Breakpoints,
+        process: Option<&Process>,
+    ) -> Self {
         let Some(code) = code else {
             return Self::Message {
                 message: ActiveFunctionsMessage::NoServer,
@@ -24,7 +28,6 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::NoProcess,
             };
         };
-        let breakpoints = process.breakpoints();
 
         if process.can_step() {
             return Self::Message {

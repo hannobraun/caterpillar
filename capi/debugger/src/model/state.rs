@@ -30,6 +30,7 @@ impl PersistentState {
         TransientState {
             active_functions: ActiveFunctions::new(
                 self.code.as_ref(),
+                &self.breakpoints,
                 self.process.as_ref(),
             ),
             operands: self
