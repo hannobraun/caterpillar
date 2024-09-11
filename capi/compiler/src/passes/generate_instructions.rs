@@ -224,11 +224,12 @@ fn compile_fragment(
                     // We can't leave it at that, however. We need to make sure
                     // this placeholder actually gets replaced later, and we're
                     // doing that by adding it to this list.
-                    if let Some((id, _)) = fragments.find_function_by_name(name)
+                    if let Some(function) =
+                        fragments.find_function_by_name(name)
                     {
                         output.placeholders.push(CallToFunction {
                             name: name.clone(),
-                            id,
+                            id: function.id,
                             address,
                             is_tail_call: *is_tail_call,
                         });
