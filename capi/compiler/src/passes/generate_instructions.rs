@@ -29,10 +29,10 @@ pub fn generate_instructions(
         effect: Effect::BuildError,
     });
     output.instructions.push(Instruction::Return);
-    if let Some((id, _)) = fragments.find_function_by_name("main") {
+    if let Some(function) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
             name: "main".to_string(),
-            id,
+            id: function.id,
             address: call_to_main,
             is_tail_call: true,
         });
