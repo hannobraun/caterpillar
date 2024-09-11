@@ -1,10 +1,10 @@
 use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
-use capi_process::{Process, Value};
+use capi_process::{Breakpoints, Process, Value};
 use capi_protocol::updates::{Code, UpdateFromRuntime};
 
-use super::{ActiveFunctions, Breakpoints};
+use super::ActiveFunctions;
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
