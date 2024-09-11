@@ -53,12 +53,6 @@ impl GameEngine {
         }
 
         match command {
-            Command::BreakpointClear { instruction } => {
-                self.process.breakpoints_mut().clear_durable(&instruction);
-            }
-            Command::BreakpointSet { instruction } => {
-                self.process.breakpoints_mut().set_durable(instruction);
-            }
             Command::Continue => {
                 self.process.continue_(None);
             }
