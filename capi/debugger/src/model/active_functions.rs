@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_process::{InstructionAddress, Process};
+use capi_process::{Breakpoints, InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
 use super::DebugFunction;
@@ -45,8 +45,13 @@ impl ActiveFunctions {
         if let Some(outer) = call_stack.front() {
             let (outer, _) = instruction_to_function(outer, code);
             if outer.name != expected_next_function {
-                expected_next_function =
-                    reconstruct_function("main", &mut entries, code, process);
+                expected_next_function = reconstruct_function(
+                    "main",
+                    &mut entries,
+                    code,
+                    process.breakpoints(),
+                    process,
+                );
             }
         }
 
@@ -60,6 +65,7 @@ impl ActiveFunctions {
                         expected_name,
                         &mut entries,
                         code,
+                        process.breakpoints(),
                         process,
                     );
                 }
@@ -157,6 +163,7 @@ fn reconstruct_function(
     name: &str,
     entries: &mut VecDeque<ActiveFunctionsEntry>,
     code: &Code,
+    breakpoints: &Breakpoints,
     process: &Process,
 ) -> Option<String> {
     let Some(function_id) = code.fragments.inner.find_function_by_name(name)
@@ -205,7 +212,7 @@ fn reconstruct_function(
         tail_call,
         &code.fragments,
         &code.source_map,
-        process.breakpoints(),
+        breakpoints,
         process,
     )));
 
