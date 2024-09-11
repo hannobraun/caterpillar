@@ -51,7 +51,7 @@ impl DebugFragment {
             is_active,
             has_durable_breakpoint,
             first_instruction: instructions
-                .and_then(|instruction| instruction.first().copied()),
+                .and_then(|instructions| instructions.first().copied()),
             effect,
         };
         let kind = DebugFragmentKind::new(
