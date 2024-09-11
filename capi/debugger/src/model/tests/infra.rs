@@ -1,4 +1,4 @@
-use capi_compiler::compile;
+use capi_compiler::{compile, fragments::FragmentId};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -55,6 +55,32 @@ impl TestDebugger {
         }
 
         self
+    }
+
+    pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {
+        let Some(fragment) = self
+            .state
+            .generate_transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .into_iter()
+            .find_map(|function| {
+                function.branches.iter().find_map(|branch| {
+                    branch.body.iter().find_map(|fragment| {
+                        if fragment.data.id == *id {
+                            Some(fragment.clone())
+                        } else {
+                            None
+                        }
+                    })
+                })
+            })
+        else {
+            panic!("Expected to find fragment with ID `{id}`");
+        };
+
+        fragment
     }
 }
 
@@ -144,6 +170,7 @@ impl DebugFunctionExt for DebugFunction {
 }
 
 pub trait BranchExt {
+    #[allow(unused)] // currently unused, but might come in handy later
     fn fragment(&self, i: usize) -> DebugFragment;
 }
 

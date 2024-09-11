@@ -1,10 +1,4 @@
-use crate::model::{
-    tests::infra::{
-        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt, BranchExt,
-        DebugFunctionExt, FunctionsExt, TestDebugger,
-    },
-    DebugFragment,
-};
+use crate::model::tests::infra::debugger;
 
 #[test]
 fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
@@ -19,24 +13,21 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
             ",
         )
         .run_process();
-    fn fragment(debugger: &TestDebugger) -> DebugFragment {
-        debugger
-            .state
-            .generate_transient_state()
-            .active_functions
-            .expect_entries()
-            .expect_functions()
-            .with_name("main")
-            .only_branch()
-            .fragment(0)
-    }
 
-    assert!(!fragment(&debugger).data.has_durable_breakpoint);
+    let fragments = &debugger.state.code.as_ref().unwrap().fragments;
+    let nop = fragments
+        .find_function_by_name("main")
+        .unwrap()
+        .expect_one_branch()
+        .iter(fragments)
+        .next()
+        .unwrap()
+        .id();
 
-    debugger
-        .state
-        .set_durable_breakpoint(&fragment(&debugger).data.id)?;
-    assert!(fragment(&debugger).data.has_durable_breakpoint);
+    assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
+
+    debugger.state.set_durable_breakpoint(&nop)?;
+    assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     Ok(())
 }
