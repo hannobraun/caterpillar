@@ -14,7 +14,7 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
-    state: PersistentState,
+    pub state: PersistentState,
 }
 
 impl TestDebugger {
