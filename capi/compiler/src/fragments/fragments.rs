@@ -1,4 +1,8 @@
-use std::{collections::BTreeMap, iter, ops::Deref};
+use std::{
+    collections::BTreeMap,
+    iter,
+    ops::{Deref, DerefMut},
+};
 
 use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Payload};
 
@@ -83,6 +87,12 @@ impl Deref for Fragments {
 
     fn deref(&self) -> &Self::Target {
         &self.inner
+    }
+}
+
+impl DerefMut for Fragments {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 
