@@ -13,7 +13,7 @@ use tokio::{
 };
 
 use crate::{
-    code::{CodeManager, CodeRx, CodeTx},
+    code::{CodeFetcher, CodeRx, CodeTx},
     model::{PersistentState, UserAction},
     ui,
 };
@@ -42,7 +42,7 @@ impl Debugger {
 
         leptos::spawn_local(async move {
             let mut code =
-                CodeManager::new(&code_tx, &mut persistent).await.unwrap();
+                CodeFetcher::new(&code_tx, &mut persistent).await.unwrap();
 
             loop {
                 select! {

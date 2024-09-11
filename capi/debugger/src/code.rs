@@ -8,11 +8,11 @@ use crate::model::PersistentState;
 pub type CodeRx = watch::Receiver<Instructions>;
 pub type CodeTx = watch::Sender<Instructions>;
 
-pub struct CodeManager {
+pub struct CodeFetcher {
     pub timestamp: u64,
 }
 
-impl CodeManager {
+impl CodeFetcher {
     pub async fn new(
         code_tx: &CodeTx,
         state: &mut PersistentState,
