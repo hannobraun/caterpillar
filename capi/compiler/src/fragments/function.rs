@@ -42,6 +42,26 @@ pub struct Function {
     pub environment: BTreeSet<String>,
 }
 
+impl Function {
+    /// # Expect the function to have one branch and access that
+    ///
+    /// This is a convenience method, designed for tests and such. It should not
+    /// be used in code that requires proper error handling.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if the function does not have exactly one branch.
+    pub fn expect_one_branch(&self) -> &Branch {
+        assert_eq!(
+            self.branches.len(),
+            1,
+            "Expected function to have exactly one branch."
+        );
+
+        &self.branches[0]
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Branch {
     pub parameters: Parameters,
