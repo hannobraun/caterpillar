@@ -55,4 +55,8 @@ impl Breakpoints {
 
         should_stop
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = InstructionAddress> + '_ {
+        self.durable.iter().chain(self.ephemeral.iter()).copied()
+    }
 }
