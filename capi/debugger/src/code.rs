@@ -46,7 +46,7 @@ async fn on_new_code(
     let code = code?.text().await?;
     let code: Versioned<Code> = ron::from_str(&code)?;
 
-    let instructions = state.on_new_code(code.inner.clone());
+    let instructions = state.on_new_code(code.inner);
 
     code_tx
         .send(instructions)
