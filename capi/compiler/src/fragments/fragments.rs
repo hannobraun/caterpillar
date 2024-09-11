@@ -53,11 +53,14 @@ impl FragmentMap {
             })
     }
 
-    /// Find the function that contains the provided fragment
+    /// Find the named function that contains the provided fragment
     ///
-    /// Any fragment that is syntactically a part of the function body will do.
-    /// This specifically includes fragments within blocks that are defined in
-    /// the function.
+    /// Any fragment that is syntactically a part of the named function will do.
+    /// This specifically includes fragments within anonymous functions that are
+    /// defined in the named function.
+    ///
+    /// Returns the found function, as well as the branch within which the
+    /// fragment was found.
     pub fn find_named_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
