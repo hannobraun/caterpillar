@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::syntax::Pattern;
 
-use super::FragmentId;
+use super::{Fragment, FragmentId, FragmentMap};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
@@ -66,6 +66,16 @@ impl Function {
 pub struct Branch {
     pub parameters: Parameters,
     pub start: FragmentId,
+}
+
+impl Branch {
+    /// # Iterate over the fragments in this branch
+    pub fn iter<'r>(
+        &self,
+        fragments: &'r FragmentMap,
+    ) -> impl Iterator<Item = &'r Fragment> {
+        fragments.iter_from(self.start)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
