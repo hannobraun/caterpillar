@@ -55,6 +55,7 @@ impl DebugFragment {
             active_fragment,
             fragments,
             source_map,
+            breakpoints,
             process,
         )?;
 
@@ -96,6 +97,7 @@ impl DebugFragmentKind {
         active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
+        breakpoints: &Breakpoints,
         process: &Process,
     ) -> Option<Self> {
         let FragmentKind::Payload { payload, .. } = fragment.kind else {
@@ -129,7 +131,7 @@ impl DebugFragmentKind {
                     active_fragment,
                     fragments,
                     source_map,
-                    process.breakpoints(),
+                    breakpoints,
                     process,
                 );
 
