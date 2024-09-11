@@ -87,7 +87,7 @@ impl PersistentState {
             .first()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))?;
 
-        self.breakpoints.clear_durable(address)?;
+        self.breakpoints.clear_durable(address);
 
         Ok(())
     }
