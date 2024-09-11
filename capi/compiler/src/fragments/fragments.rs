@@ -120,6 +120,7 @@ impl FragmentMap {
         })
     }
 }
+
 pub struct FoundFunction<'r> {
     pub id: FragmentId,
     pub function: &'r Function,
