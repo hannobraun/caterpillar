@@ -47,6 +47,7 @@ impl DebugFragment {
         });
 
         let data = DebugFragmentData {
+            fragment: fragment.id(),
             is_active,
             has_durable_breakpoint,
             first_instruction: instructions
@@ -67,6 +68,9 @@ impl DebugFragment {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragmentData {
+    /// # The fragment ID
+    pub fragment: FragmentId,
+
     /// # Indicate whether the expression is active
     ///
     /// An expression is active, either if it is currently being executed, or if
