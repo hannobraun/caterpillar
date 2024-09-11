@@ -3,7 +3,7 @@ use capi_compiler::{
     source_map::SourceMap,
     syntax::Pattern,
 };
-use capi_process::Process;
+use capi_process::{Breakpoints, Process};
 
 use super::DebugFragment;
 
@@ -19,6 +19,7 @@ impl Branch {
         active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
+        breakpoints: &Breakpoints,
         process: &Process,
     ) -> Self {
         let parameters = branch
@@ -40,7 +41,7 @@ impl Branch {
                     active_fragment,
                     fragments,
                     source_map,
-                    process.breakpoints(),
+                    breakpoints,
                     process,
                 )
             })
