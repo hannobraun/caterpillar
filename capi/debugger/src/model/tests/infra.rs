@@ -14,7 +14,7 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
-    persistent: PersistentState,
+    state: PersistentState,
 }
 
 impl TestDebugger {
@@ -22,7 +22,7 @@ impl TestDebugger {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        self.persistent.code = Some(Code {
+        self.state.code = Some(Code {
             fragments,
             instructions,
             source_map,
@@ -32,7 +32,7 @@ impl TestDebugger {
     }
 
     pub fn run_process(mut self) -> Self {
-        let instructions = &self.persistent.code
+        let instructions = &self.state.code
             .as_ref()
             .expect(
                 "Must provide source code via `TestInfra::provide_source_code` \
@@ -51,15 +51,15 @@ impl TestDebugger {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            self.persistent.on_update_from_runtime(update);
+            self.state.on_update_from_runtime(update);
         }
 
         self
     }
 
     pub fn into_state(self) -> (PersistentState, TransientState) {
-        let transient = self.persistent.generate_transient_state();
-        (self.persistent, transient)
+        let transient = self.state.generate_transient_state();
+        (self.state, transient)
     }
 }
 
