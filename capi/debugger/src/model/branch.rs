@@ -32,7 +32,6 @@ impl Branch {
             })
             .collect();
         let body = fragments
-            .inner
             .iter_from(branch.start)
             .cloned()
             .filter_map(|fragment| {

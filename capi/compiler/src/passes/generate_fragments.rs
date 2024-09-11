@@ -186,7 +186,6 @@ mod tests {
         };
         let branch = branches.remove(0);
         let body = fragments
-            .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Payload { payload, .. } => Some(payload.clone()),
@@ -230,8 +229,7 @@ mod tests {
             unreachable!("`f` must be the root element.");
         };
         let branch = branches.remove(0);
-        let last_fragment =
-            fragments.inner.iter_from(branch.start).last().unwrap();
+        let last_fragment = fragments.iter_from(branch.start).last().unwrap();
         assert_eq!(last_fragment.kind, FragmentKind::Terminator);
     }
 
@@ -271,7 +269,7 @@ mod tests {
         };
         let branch = branches.remove(0);
         let branch_fragments =
-            fragments.inner.iter_from(branch.start).collect::<Vec<_>>();
+            fragments.iter_from(branch.start).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
                 kind:
@@ -287,7 +285,7 @@ mod tests {
 
             let branch = function.branches.first().unwrap();
 
-            fragments.inner.iter_from(branch.start).collect::<Vec<_>>()
+            fragments.iter_from(branch.start).collect::<Vec<_>>()
         };
 
         assert_eq!(branch_fragments[0].parent, Some(next));

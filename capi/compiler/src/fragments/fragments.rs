@@ -76,9 +76,13 @@ impl Fragments {
             break None;
         }
     }
+}
 
-    pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.inner.find_function_by_name(name)
+impl Deref for Fragments {
+    type Target = FragmentMap;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
 
