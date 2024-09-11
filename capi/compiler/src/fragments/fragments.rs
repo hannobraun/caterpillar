@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, iter};
+use std::{collections::BTreeMap, iter, ops::Deref};
 
 use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Payload};
 
@@ -123,4 +123,12 @@ impl FragmentMap {
 pub struct FoundFunction<'r> {
     pub id: FragmentId,
     pub function: &'r Function,
+}
+
+impl Deref for FoundFunction<'_> {
+    type Target = Function;
+
+    fn deref(&self) -> &Self::Target {
+        self.function
+    }
 }

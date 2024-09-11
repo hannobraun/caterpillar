@@ -168,8 +168,8 @@ fn reconstruct_function(
         panic!("Expecting function `{name}` to exist.");
     };
 
-    let tail_call = if function.function.branches.len() == 1 {
-        if let Some(branch) = function.function.branches.first() {
+    let tail_call = if function.branches.len() == 1 {
+        if let Some(branch) = function.branches.first() {
             let mut tail_call = None;
 
             for fragment in code.fragments.inner.iter_from(branch.start) {
@@ -191,7 +191,7 @@ fn reconstruct_function(
         .and_then(|tail_call| call_id_to_function_name(tail_call, code));
 
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
-        function.function.clone(),
+        function.clone(),
         tail_call,
         &code.fragments,
         &code.source_map,
