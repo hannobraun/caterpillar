@@ -19,7 +19,7 @@ fn basic_call_stack() {
     // of functions is inner to outer, as it's most useful to the developer to
     // display the instruction where we're currently paused up top.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -36,7 +36,8 @@ fn basic_call_stack() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -47,7 +48,7 @@ fn stopped_at_host_function() {
     // If execution is stopped at a host function, it should be displayed as
     // such.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -56,7 +57,8 @@ fn stopped_at_host_function() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     transient
         .active_functions
@@ -73,7 +75,7 @@ fn stopped_at_code_within_block() {
     // block should appear as an active function, and the current instruction
     // should be visible.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -82,7 +84,8 @@ fn stopped_at_code_within_block() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let fragment = transient
         .active_functions
@@ -106,7 +109,7 @@ fn call_stack_reconstruction_missing_main() {
     // Tail call elimination can leave gaps in the call stack. If the `main`
     // function is missing due to that, it should be reconstructed.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -119,7 +122,8 @@ fn call_stack_reconstruction_missing_main() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
@@ -139,7 +143,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     // functions have only a single branch each, it is possible to add them back
     // without any additional hints being required.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -157,7 +161,8 @@ fn call_stack_reconstruction_missing_single_branch_function() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -177,7 +182,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
     // cases are already getting reconstructed, but right now, we're not doing
     // that yet for functions with multiple branches.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: {
@@ -198,7 +203,8 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(
@@ -218,7 +224,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     // cases are already getting reconstructed, but right now, we're not doing
     // that yet for anonymous functions with multiple branches.
 
-    let (_, transient) = debugger()
+    let transient = debugger()
         .provide_source_code(
             r"
                 main: { |size_x size_y|
@@ -243,7 +249,8 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             ",
         )
         .run_process()
-        .into_state();
+        .state
+        .generate_transient_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(

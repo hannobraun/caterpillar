@@ -5,7 +5,7 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
-    DebugFragmentKind, DebugFunction, PersistentState, TransientState,
+    DebugFragmentKind, DebugFunction, PersistentState,
 };
 
 pub fn debugger() -> TestDebugger {
@@ -55,11 +55,6 @@ impl TestDebugger {
         }
 
         self
-    }
-
-    pub fn into_state(self) -> (PersistentState, TransientState) {
-        let transient = self.state.generate_transient_state();
-        (self.state, transient)
     }
 }
 
