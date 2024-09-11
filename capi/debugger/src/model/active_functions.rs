@@ -148,7 +148,7 @@ fn instruction_to_function(
 
     let (function, _) = code
         .fragments
-        .find_function_by_fragment_in_body(&fragment_id)
+        .find_named_function_by_fragment_in_body(&fragment_id)
         .expect(
             "Expecting code that is referenced on call stack to be part of a \
             known function.",

@@ -58,7 +58,7 @@ impl FragmentMap {
     /// Any fragment that is syntactically a part of the function body will do.
     /// This specifically includes fragments within blocks that are defined in
     /// the function.
-    pub fn find_function_by_fragment_in_body(
+    pub fn find_named_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
     ) -> Option<(FoundFunction, &Branch)> {
