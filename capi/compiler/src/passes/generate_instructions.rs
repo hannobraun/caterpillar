@@ -29,7 +29,7 @@ pub fn generate_instructions(
         effect: Effect::BuildError,
     });
     output.instructions.push(Instruction::Return);
-    if let Some(id) = fragments.inner.find_function_by_name("main") {
+    if let Some(id) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
             name: "main".to_string(),
             id,

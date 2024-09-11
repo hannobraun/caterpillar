@@ -164,8 +164,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     process: &Process,
 ) -> Option<String> {
-    let Some(function_id) = code.fragments.inner.find_function_by_name(name)
-    else {
+    let Some(function_id) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
     let function_fragment = code.fragments.inner.inner.get(&function_id).expect(

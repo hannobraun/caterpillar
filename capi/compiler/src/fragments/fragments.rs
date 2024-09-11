@@ -76,6 +76,10 @@ impl Fragments {
             break None;
         }
     }
+
+    pub fn find_function_by_name(&self, name: &str) -> Option<FragmentId> {
+        self.inner.find_function_by_name(name)
+    }
 }
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
