@@ -193,6 +193,16 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
+        let fragment = {
+            let Some(fragment) = element.get_attribute("data-fragment") else {
+                // This happens, if the user clicks on a comment.
+                return;
+            };
+
+            ron::from_str(&fragment).expect(
+                "Expecting serialized fragment IDs in DOM to always be valid.",
+            )
+        };
         let Some(instruction) = element.get_attribute("data-instruction")
         else {
             // This happens, if the user clicks on a comment.
@@ -205,9 +215,9 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            Action::BreakpointClear { address }
+            Action::BreakpointClear { fragment, address }
         } else {
-            Action::BreakpointSet { address }
+            Action::BreakpointSet { fragment, address }
         };
 
         leptos::spawn_local(action.send(actions.clone()));

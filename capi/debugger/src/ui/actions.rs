@@ -1,3 +1,4 @@
+use capi_compiler::fragments::FragmentId;
 use capi_process::InstructionAddress;
 use tokio::sync::mpsc;
 
@@ -5,8 +6,14 @@ pub type ActionsTx = mpsc::UnboundedSender<Action>;
 
 #[derive(Clone)]
 pub enum Action {
-    BreakpointClear { address: InstructionAddress },
-    BreakpointSet { address: InstructionAddress },
+    BreakpointClear {
+        fragment: FragmentId,
+        address: InstructionAddress,
+    },
+    BreakpointSet {
+        fragment: FragmentId,
+        address: InstructionAddress,
+    },
     Continue,
     Reset,
     Step,

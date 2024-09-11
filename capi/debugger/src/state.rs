@@ -113,7 +113,9 @@ fn on_ui_action(
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
     let command = match action {
-        Action::BreakpointClear { address } => {
+        Action::BreakpointClear { fragment, address } => {
+            let _ = fragment;
+
             state.clear_durable_breakpoint(&address).expect(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
@@ -123,7 +125,9 @@ fn on_ui_action(
                 instruction: address,
             })
         }
-        Action::BreakpointSet { address } => {
+        Action::BreakpointSet { fragment, address } => {
+            let _ = fragment;
+
             state.set_durable_breakpoint(address).expect(
                 "Failed to set durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
