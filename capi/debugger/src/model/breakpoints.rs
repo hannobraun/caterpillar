@@ -1,19 +1,15 @@
-use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 
-use capi_process::{Instruction, InstructionAddress};
+use capi_process::InstructionAddress;
 
 #[derive(Clone, Debug, Default)]
 pub struct Breakpoints {
-    durable: BTreeMap<InstructionAddress, Instruction>,
+    durable: BTreeSet<InstructionAddress>,
 }
 
 impl Breakpoints {
-    pub fn set_durable(
-        &mut self,
-        address: InstructionAddress,
-        instruction: Instruction,
-    ) {
-        self.durable.insert(address, instruction);
+    pub fn set_durable(&mut self, address: InstructionAddress) {
+        self.durable.insert(address);
     }
 
     pub fn clear_durable(&mut self, address: &InstructionAddress) {

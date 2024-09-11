@@ -60,15 +60,8 @@ impl PersistentState {
             .first()
             .copied()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))?;
-        let instruction = code
-            .instructions
-            .get(&address)
-            .ok_or_else(|| {
-                anyhow!("Instruction at `{address}` does not exist.")
-            })?
-            .clone();
 
-        self.breakpoints.set_durable(address, instruction);
+        self.breakpoints.set_durable(address);
 
         Ok(())
     }
