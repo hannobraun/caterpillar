@@ -14,7 +14,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         )
         .run_process();
 
-    let fragments = &debugger.state.code.as_ref().unwrap().fragments;
+    let fragments = debugger.expect_code();
     let nop = fragments
         .find_function_by_name("main")
         .unwrap()

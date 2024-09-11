@@ -1,4 +1,7 @@
-use capi_compiler::{compile, fragments::FragmentId};
+use capi_compiler::{
+    compile,
+    fragments::{FragmentId, Fragments},
+};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -55,6 +58,10 @@ impl TestDebugger {
         }
 
         self
+    }
+
+    pub fn expect_code(&self) -> &Fragments {
+        &self.state.code.as_ref().unwrap().fragments
     }
 
     pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {
