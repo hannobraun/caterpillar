@@ -119,9 +119,9 @@ fn on_ui_action(
                 in the Caterpillar debugger",
             );
 
-            CommandToRuntime::BreakpointClear {
+            Some(CommandToRuntime::BreakpointClear {
                 instruction: address,
-            }
+            })
         }
         Action::BreakpointSet { address } => {
             state.set_durable_breakpoint(address).expect(
@@ -129,15 +129,17 @@ fn on_ui_action(
                 in the Caterpillar debugger",
             );
 
-            CommandToRuntime::BreakpointSet {
+            Some(CommandToRuntime::BreakpointSet {
                 instruction: address,
-            }
+            })
         }
-        Action::Continue => CommandToRuntime::Continue,
-        Action::Reset => CommandToRuntime::Reset,
-        Action::Step => CommandToRuntime::Step,
-        Action::Stop => CommandToRuntime::Stop,
+        Action::Continue => Some(CommandToRuntime::Continue),
+        Action::Reset => Some(CommandToRuntime::Reset),
+        Action::Step => Some(CommandToRuntime::Step),
+        Action::Stop => Some(CommandToRuntime::Stop),
     };
 
-    commands_to_runtime_tx.send(command.serialize()).unwrap();
+    if let Some(command) = command {
+        commands_to_runtime_tx.send(command.serialize()).unwrap();
+    }
 }
