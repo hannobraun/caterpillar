@@ -121,6 +121,10 @@ impl FragmentMap {
     }
 }
 
+/// # Return type of several methods that search for functions
+///
+/// This type bundles the found function and its ID. It [`Deref`]s to
+/// `Function`.
 pub struct FoundFunction<'r> {
     pub id: FragmentId,
     pub function: &'r Function,
