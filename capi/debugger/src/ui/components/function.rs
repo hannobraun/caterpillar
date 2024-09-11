@@ -181,7 +181,7 @@ fn make_single_expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_fragment = ron::to_string(&data.fragment)
+    let data_fragment = ron::to_string(&data.id)
         .expect("Expecting serialization of `FragmentId` to always work.");
     let data_instruction =
         data.first_instruction.map(|instruction| instruction.index);
