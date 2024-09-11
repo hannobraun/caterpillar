@@ -24,6 +24,7 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::NoProcess,
             };
         };
+        let breakpoints = process.breakpoints();
 
         if process.can_step() {
             return Self::Message {
@@ -49,7 +50,7 @@ impl ActiveFunctions {
                     "main",
                     &mut entries,
                     code,
-                    process.breakpoints(),
+                    breakpoints,
                     process,
                 );
             }
@@ -65,7 +66,7 @@ impl ActiveFunctions {
                         expected_name,
                         &mut entries,
                         code,
-                        process.breakpoints(),
+                        breakpoints,
                         process,
                     );
                 }
@@ -82,7 +83,7 @@ impl ActiveFunctions {
                     Some(active_fragment),
                     &code.fragments,
                     &code.source_map,
-                    process.breakpoints(),
+                    breakpoints,
                     process,
                 ),
             ));
