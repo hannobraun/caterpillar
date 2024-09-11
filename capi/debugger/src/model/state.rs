@@ -74,9 +74,7 @@ impl PersistentState {
 
                 self.breakpoints.clear_durable(&address);
 
-                Some(Command::BreakpointClear {
-                    instruction: address,
-                })
+                None
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self
@@ -94,9 +92,7 @@ impl PersistentState {
 
                 self.breakpoints.set_durable(address);
 
-                Some(Command::BreakpointSet {
-                    instruction: address,
-                })
+                None
             }
             UserAction::Continue => Some(Command::Continue),
             UserAction::Reset => Some(Command::Reset),
