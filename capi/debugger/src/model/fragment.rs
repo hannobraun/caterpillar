@@ -46,6 +46,13 @@ impl DebugFragment {
             }
         });
 
+        let data = DebugFragmentData {
+            is_active,
+            has_durable_breakpoint,
+            first_instruction: instructions
+                .and_then(|instruction| instruction.first().copied()),
+            effect,
+        };
         let kind = DebugFragmentKind::new(
             fragment,
             active_fragment,
@@ -54,16 +61,7 @@ impl DebugFragment {
             process,
         )?;
 
-        Some(Self {
-            kind,
-            data: DebugFragmentData {
-                is_active,
-                has_durable_breakpoint,
-                first_instruction: instructions
-                    .and_then(|instruction| instruction.first().copied()),
-                effect,
-            },
-        })
+        Some(Self { kind, data })
     }
 }
 
