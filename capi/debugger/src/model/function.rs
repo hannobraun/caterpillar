@@ -2,7 +2,7 @@ use capi_compiler::{
     fragments::{self, FragmentId, Fragments},
     source_map::SourceMap,
 };
-use capi_process::Process;
+use capi_process::{Breakpoints, Process};
 
 use super::Branch;
 
@@ -18,6 +18,7 @@ impl DebugFunction {
         active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
+        breakpoints: &Breakpoints,
         process: &Process,
     ) -> Self {
         let name = function.name;
@@ -30,7 +31,7 @@ impl DebugFunction {
                     active_fragment,
                     fragments,
                     source_map,
-                    process.breakpoints(),
+                    breakpoints,
                     process,
                 )
             })

@@ -76,6 +76,7 @@ impl ActiveFunctions {
                     Some(active_fragment),
                     &code.fragments,
                     &code.source_map,
+                    process.breakpoints(),
                     process,
                 ),
             ));
@@ -204,6 +205,7 @@ fn reconstruct_function(
         tail_call,
         &code.fragments,
         &code.source_map,
+        process.breakpoints(),
         process,
     )));
 
