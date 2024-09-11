@@ -61,7 +61,7 @@ impl FragmentMap {
     pub fn find_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
-    ) -> Option<(&Function, &Branch)> {
+    ) -> Option<(FoundFunction, &Branch)> {
         let mut fragment_id = *fragment_id;
 
         loop {
@@ -102,7 +102,7 @@ impl FragmentMap {
                 if function.name.is_some() {
                     // It's a named function! Exactly what we've been looking
                     // for.
-                    return Some((function, branch));
+                    return Some((FoundFunction { id, function }, branch));
                 } else {
                     // An anonymous function. Let's continue our search in the
                     // context where it was defined.
