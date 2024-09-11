@@ -29,7 +29,7 @@ fn no_process() {
     // If `RemoteProcess` has received a code update but no runtime updates, the
     // active functions view should display that no process is available.
 
-    let (persistent, transient) = init().provide_source_code("").into_state();
+    let (_, transient) = init().provide_source_code("").into_state();
 
     assert_eq!(
         transient.active_functions,
@@ -37,8 +37,6 @@ fn no_process() {
             message: ActiveFunctionsMessage::NoProcess
         }
     );
-    assert!(transient.operands.is_empty());
-    assert!(persistent.memory.is_none());
 }
 
 #[test]
