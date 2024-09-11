@@ -40,6 +40,7 @@ impl Branch {
                     active_fragment,
                     fragments,
                     source_map,
+                    process.breakpoints(),
                     process,
                 )
             })

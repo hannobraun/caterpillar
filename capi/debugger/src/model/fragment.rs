@@ -4,7 +4,7 @@ use capi_compiler::{
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
-use capi_process::{Effect, InstructionAddress, Process};
+use capi_process::{Breakpoints, Effect, InstructionAddress, Process};
 
 use super::DebugFunction;
 
@@ -20,6 +20,7 @@ impl DebugFragment {
         active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
+        breakpoints: &Breakpoints,
         process: &Process,
     ) -> Option<Self> {
         let instructions = source_map.fragment_to_instructions(&fragment.id());
@@ -28,7 +29,7 @@ impl DebugFragment {
 
         let has_durable_breakpoint = instructions
             .iter()
-            .any(|instruction| process.breakpoints().durable_at(instruction));
+            .any(|instruction| breakpoints.durable_at(instruction));
 
         let effect = process.effects().inspect_first().and_then(|effect| {
             let effect_fragment = source_map
