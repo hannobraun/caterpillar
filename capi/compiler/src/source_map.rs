@@ -38,7 +38,8 @@ impl SourceMap {
 
     /// Get the address of the instruction that the given fragment maps to
     ///
-    /// Can return `None`, as comments have no mapping to instructions.
+    /// Can return a reference to an empty `Vec`, as comments have no mapping to
+    /// instructions.
     pub fn fragment_to_instructions(
         &self,
         fragment: &FragmentId,
