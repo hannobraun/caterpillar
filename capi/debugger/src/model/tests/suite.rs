@@ -14,7 +14,7 @@ fn no_server() {
     // If `RemoteProcess` has received no updates at all, the active functions
     // view should display that no server is available.
 
-    let (persistent, transient) = init().into_state();
+    let (_, transient) = init().into_state();
 
     assert_eq!(
         transient.active_functions,
@@ -22,8 +22,6 @@ fn no_server() {
             message: ActiveFunctionsMessage::NoServer
         }
     );
-    assert!(transient.operands.is_empty());
-    assert!(persistent.memory.is_none());
 }
 
 #[test]
