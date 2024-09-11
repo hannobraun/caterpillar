@@ -42,7 +42,11 @@ impl SourceMap {
     pub fn fragment_to_instructions(
         &self,
         fragment: &FragmentId,
-    ) -> Option<&Vec<InstructionAddress>> {
-        self.fragment_to_instructions.get(fragment)
+    ) -> &Vec<InstructionAddress> {
+        static EMPTY: Vec<InstructionAddress> = Vec::new();
+
+        self.fragment_to_instructions
+            .get(fragment)
+            .unwrap_or(&EMPTY)
     }
 }

@@ -26,13 +26,9 @@ impl DebugFragment {
 
         let is_active = Some(fragment.id()) == active_fragment;
 
-        let has_durable_breakpoint = if let Some(instructions) = &instructions {
-            instructions.iter().any(|instruction| {
-                process.breakpoints().durable_at(instruction)
-            })
-        } else {
-            false
-        };
+        let has_durable_breakpoint = instructions
+            .iter()
+            .any(|instruction| process.breakpoints().durable_at(instruction));
 
         let effect = process.effects().inspect_first().and_then(|effect| {
             let effect_fragment = source_map
@@ -50,8 +46,7 @@ impl DebugFragment {
             fragment: fragment.id(),
             is_active,
             has_durable_breakpoint,
-            first_instruction: instructions
-                .and_then(|instructions| instructions.first().copied()),
+            first_instruction: instructions.first().copied(),
             effect,
         };
         let kind = DebugFragmentKind::new(
