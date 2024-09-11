@@ -74,7 +74,7 @@ impl ActiveFunctionsExt for ActiveFunctions {
 
     fn names(&self) -> Vec<String> {
         self.expect_entries()
-            .functions()
+            .expect_functions()
             .into_iter()
             .filter_map(|function| function.name)
             .collect()
@@ -82,11 +82,11 @@ impl ActiveFunctionsExt for ActiveFunctions {
 }
 
 pub trait ActiveFunctionsEntriesExt {
-    fn functions(&self) -> Vec<DebugFunction>;
+    fn expect_functions(&self) -> Vec<DebugFunction>;
 }
 
 impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
-    fn functions(&self) -> Vec<DebugFunction> {
+    fn expect_functions(&self) -> Vec<DebugFunction> {
         self.iter()
             .map(|entry| match entry {
                 ActiveFunctionsEntry::Function(function) => function.clone(),

@@ -25,7 +25,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
             .generate_transient_state()
             .active_functions
             .expect_entries()
-            .functions()
+            .expect_functions()
             .with_name("main")
             .only_branch()
             .fragment(0)
