@@ -126,9 +126,7 @@ fn on_ui_action(
             })
         }
         Action::BreakpointSet { fragment, address } => {
-            let _ = fragment;
-
-            state.set_durable_breakpoint(address).expect(
+            state.set_durable_breakpoint(&fragment).expect(
                 "Failed to set durable breakpoint from the UI. This is a bug \
                 in the Caterpillar debugger",
             );

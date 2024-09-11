@@ -1,4 +1,5 @@
 use anyhow::anyhow;
+use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
 use capi_process::{InstructionAddress, Process, Value};
 use capi_protocol::updates::{Code, UpdateFromRuntime};
@@ -47,12 +48,18 @@ impl PersistentState {
 
     pub fn set_durable_breakpoint(
         &mut self,
-        address: InstructionAddress,
+        fragment: &FragmentId,
     ) -> anyhow::Result<()> {
         let code = self
             .code
             .as_ref()
             .ok_or_else(|| anyhow!("Code is not available yet."))?;
+        let address = code
+            .source_map
+            .fragment_to_instructions(fragment)
+            .first()
+            .copied()
+            .ok_or_else(|| anyhow!("Fragment does not map to instruction."))?;
         let instruction = code
             .instructions
             .get(&address)
