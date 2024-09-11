@@ -8,16 +8,16 @@ use crate::model::{
     DebugFragmentKind, DebugFunction, PersistentState, TransientState,
 };
 
-pub fn init() -> TestInfra {
-    TestInfra::default()
+pub fn init() -> TestDebugger {
+    TestDebugger::default()
 }
 
 #[derive(Default)]
-pub struct TestInfra {
+pub struct TestDebugger {
     persistent: PersistentState,
 }
 
-impl TestInfra {
+impl TestDebugger {
     pub fn provide_source_code(mut self, source: &str) -> Self {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
