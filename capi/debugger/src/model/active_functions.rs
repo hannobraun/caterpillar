@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{Breakpoints, InstructionAddress, Process};
-use capi_protocol::{state::RuntimeState, updates::Code};
+use capi_protocol::{runtime_state::RuntimeState, updates::Code};
 
 use super::DebugFunction;
 
