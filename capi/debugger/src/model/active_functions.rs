@@ -36,7 +36,10 @@ impl ActiveFunctions {
                         message: ActiveFunctionsMessage::ProcessFinished,
                     };
                 }
-                RuntimeState::Stopped { .. } => {}
+                RuntimeState::Stopped {
+                    effects: _,
+                    active_instructions: _,
+                } => {}
             },
             None => {
                 return Self::Message {
