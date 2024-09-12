@@ -1,14 +1,4 @@
-use capi_process::InstructionAddress;
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum Command {
-    BreakpointClear { instruction: InstructionAddress },
-    BreakpointSet { instruction: InstructionAddress },
-    Continue,
-    Reset,
-    Step,
-    Stop,
-}
+use capi_process::Command;
 
 pub trait CommandExt {
     fn deserialize(bytes: SerializedCommandToRuntime) -> Self;

@@ -1,9 +1,9 @@
 use std::panic;
 
 use capi_game_engine::game_engine::GameEngine;
-use capi_process::Effect;
+use capi_process::{Command, Effect};
 use capi_protocol::{
-    command::{Command, CommandExt, SerializedCommandToRuntime},
+    command::{CommandExt, SerializedCommandToRuntime},
     updates::Updates,
 };
 
