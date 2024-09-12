@@ -31,12 +31,12 @@ impl ActiveFunctions {
                         message: ActiveFunctionsMessage::ProcessRunning,
                     };
                 }
-                RuntimeState::Stopped { .. } => {}
                 RuntimeState::Finished => {
                     return Self::Message {
                         message: ActiveFunctionsMessage::ProcessFinished,
                     };
                 }
+                RuntimeState::Stopped { .. } => {}
             },
             None => {
                 return Self::Message {

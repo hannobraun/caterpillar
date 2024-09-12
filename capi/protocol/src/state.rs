@@ -6,6 +6,9 @@ pub enum RuntimeState {
     /// # The process is currently running
     Running,
 
+    /// # The process has finished
+    Finished,
+
     /// # The process is currently stopped
     Stopped {
         /// # The queue of unhandled effects
@@ -14,7 +17,4 @@ pub enum RuntimeState {
         /// # The active instructions
         active_instructions: Vec<InstructionAddress>,
     },
-
-    /// # The process has finished
-    Finished,
 }
