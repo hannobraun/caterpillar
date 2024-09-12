@@ -163,7 +163,6 @@ mod tests {
 
         let root = fragments
             .inner
-            .inner
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
@@ -207,7 +206,6 @@ mod tests {
 
         let root = fragments
             .inner
-            .inner
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
@@ -244,7 +242,6 @@ mod tests {
         let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
-            .inner
             .inner
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");

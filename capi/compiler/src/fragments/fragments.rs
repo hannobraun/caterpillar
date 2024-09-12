@@ -38,6 +38,10 @@ impl FragmentMap {
         self.inner.insert(id, fragment);
     }
 
+    pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
+        self.inner.remove(id)
+    }
+
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
         self.inner
             .values()
