@@ -76,7 +76,9 @@ impl Process {
         let breakpoints = mem::take(&mut self.breakpoints);
         *self = Self {
             breakpoints,
-            ..Self::default()
+
+            effects: Effects::default(),
+            evaluator: Evaluator::default(),
         };
 
         for argument in arguments {
