@@ -1,24 +1,8 @@
-use capi_compiler::fragments::FragmentId;
-use capi_process::InstructionAddress;
 use tokio::sync::mpsc;
 
-pub type ActionsTx = mpsc::UnboundedSender<Action>;
+use crate::model::Action;
 
-#[derive(Clone)]
-pub enum Action {
-    BreakpointClear {
-        fragment: FragmentId,
-        address: InstructionAddress,
-    },
-    BreakpointSet {
-        fragment: FragmentId,
-        address: InstructionAddress,
-    },
-    Continue,
-    Reset,
-    Step,
-    Stop,
-}
+pub type ActionsTx = mpsc::UnboundedSender<Action>;
 
 pub async fn send_action(action: Action, actions: ActionsTx) {
     if let Err(err) = actions.send(action) {

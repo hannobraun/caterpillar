@@ -5,8 +5,10 @@ use leptos::{
 };
 
 use crate::{
-    model::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
-    ui::{actions::send_action, Action, ActionsTx},
+    model::{
+        Action, Branch, DebugFragment, DebugFragmentData, DebugFragmentKind,
+    },
+    ui::{actions::send_action, ActionsTx},
 };
 
 #[component]

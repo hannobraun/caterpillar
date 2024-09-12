@@ -14,8 +14,8 @@ use tokio::{
 
 use crate::{
     code::{CodeManager, CodeRx},
-    model::PersistentState,
-    ui::{self, Action},
+    model::{Action, PersistentState},
+    ui,
 };
 
 pub struct DebuggerState {

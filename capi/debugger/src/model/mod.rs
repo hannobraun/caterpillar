@@ -1,3 +1,4 @@
+mod action;
 mod active_functions;
 mod branch;
 mod fragment;
@@ -8,6 +9,7 @@ mod state;
 mod tests;
 
 pub use self::{
+    action::Action,
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},

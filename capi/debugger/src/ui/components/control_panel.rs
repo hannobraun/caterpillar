@@ -1,7 +1,8 @@
 use leptos::{component, view, IntoView};
 
-use crate::ui::{
-    actions::send_action, components::panel::Panel, Action, ActionsTx,
+use crate::{
+    model::Action,
+    ui::{actions::send_action, components::panel::Panel, ActionsTx},
 };
 
 #[component]
