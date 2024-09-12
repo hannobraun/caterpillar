@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
-use capi_process::{Breakpoints, Process, Value};
+use capi_process::{Breakpoints, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
@@ -14,7 +14,6 @@ pub struct PersistentState {
     pub code: Option<Code>,
     pub breakpoints: Breakpoints,
     pub runtime_state: Option<RuntimeState>,
-    pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
 
@@ -45,7 +44,6 @@ impl PersistentState {
                 };
 
                 self.runtime_state = Some(runtime_state);
-                self.process = Some(process);
             }
         }
     }
