@@ -20,7 +20,7 @@ async fn main() -> anyhow::Result<()> {
     let mut times_net = Measurements::default();
     let mut times_gross = Measurements::default();
 
-    while !game_engine.process.has_finished() {
+    while !game_engine.process.state().has_finished() {
         start_of_loop = Instant::now();
 
         while game_engine.push_random(random()) {}

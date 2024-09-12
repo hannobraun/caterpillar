@@ -128,4 +128,8 @@ impl ProcessState {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
     }
+
+    pub fn has_finished(&self) -> bool {
+        matches!(self, Self::Finished)
+    }
 }
