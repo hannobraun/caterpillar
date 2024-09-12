@@ -23,11 +23,10 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let instructions = source_map.fragment_to_instructions(&fragment.id());
-
         let is_active = Some(fragment.id()) == active_fragment;
 
-        let has_durable_breakpoint = instructions
+        let has_durable_breakpoint = source_map
+            .fragment_to_instructions(&fragment.id())
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
