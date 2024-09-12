@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{Breakpoints, InstructionAddress, Process};
-use capi_protocol::updates::Code;
+use capi_protocol::{state::RuntimeState, updates::Code};
 
 use super::DebugFunction;
 
@@ -16,6 +16,7 @@ impl ActiveFunctions {
     pub fn new(
         code: Option<&Code>,
         breakpoints: &Breakpoints,
+        state: Option<&RuntimeState>,
         process: Option<&Process>,
     ) -> Self {
         let Some(code) = code else {
@@ -23,22 +24,31 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::NoServer,
             };
         };
+        match state {
+            Some(state) => match state {
+                RuntimeState::Running => {
+                    return Self::Message {
+                        message: ActiveFunctionsMessage::ProcessRunning,
+                    };
+                }
+                RuntimeState::Stopped { .. } => {}
+                RuntimeState::Finished => {
+                    return Self::Message {
+                        message: ActiveFunctionsMessage::ProcessFinished,
+                    };
+                }
+            },
+            None => {
+                return Self::Message {
+                    message: ActiveFunctionsMessage::NoProcess,
+                };
+            }
+        }
         let Some(process) = process else {
             return Self::Message {
                 message: ActiveFunctionsMessage::NoProcess,
             };
         };
-
-        if process.can_step() {
-            return Self::Message {
-                message: ActiveFunctionsMessage::ProcessRunning,
-            };
-        }
-        if process.has_finished() {
-            return Self::Message {
-                message: ActiveFunctionsMessage::ProcessFinished,
-            };
-        }
 
         let mut call_stack: VecDeque<InstructionAddress> =
             process.evaluator().active_instructions().collect();

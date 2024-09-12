@@ -50,6 +50,7 @@ impl PersistentState {
             active_functions: ActiveFunctions::new(
                 self.code.as_ref(),
                 &self.breakpoints,
+                self.runtime_state.as_ref(),
                 self.process.as_ref(),
             ),
             operands: self
