@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
-use capi_process::{Breakpoints, Value};
+use capi_process::{Breakpoints, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
@@ -24,12 +24,10 @@ impl PersistentState {
                 self.memory = Some(memory);
             }
             UpdateFromRuntime::Process(process) => {
-                let runtime_state = if process.has_finished() {
-                    RuntimeState::Finished
-                } else if process.can_step() {
-                    RuntimeState::Running
-                } else {
-                    RuntimeState::Stopped {
+                let runtime_state = match process.state() {
+                    ProcessState::Running => RuntimeState::Running,
+                    ProcessState::Finished => RuntimeState::Finished,
+                    ProcessState::Stopped => RuntimeState::Stopped {
                         effects: process.effects().queue().collect(),
                         active_instructions: process
                             .evaluator()
@@ -40,7 +38,7 @@ impl PersistentState {
                             .operands_in_current_stack_frame()
                             .copied()
                             .collect::<Vec<_>>(),
-                    }
+                    },
                 };
 
                 self.runtime_state = Some(runtime_state);
