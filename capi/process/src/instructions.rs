@@ -254,6 +254,9 @@ pub enum Instruction {
     /// # Negate a signed 32-bit number
     NegS32,
 
+    /// # Do nothing (no operation)
+    Nop,
+
     Push {
         value: Value,
     },

@@ -416,6 +416,9 @@ impl Evaluator {
 
                 self.stack.push_operand(b);
             }
+            Instruction::Nop => {
+                // "no operation"
+            }
             Instruction::Push { value } => {
                 self.stack.push_operand(*value);
             }
