@@ -28,9 +28,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
-    debugger
-        .state
-        .on_ui_action(Action::BreakpointSet { fragment: nop })?;
+    debugger.on_user_action(Action::BreakpointSet { fragment: nop })?;
     assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     Ok(())
