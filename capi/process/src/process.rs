@@ -21,6 +21,16 @@ impl Process {
         self.most_recent_step
     }
 
+    pub fn state(&self) -> ProcessState {
+        if self.effects().inspect_first().is_some() {
+            ProcessState::Stopped
+        } else if self.has_finished() {
+            ProcessState::Finished
+        } else {
+            ProcessState::Running
+        }
+    }
+
     pub fn can_step(&self) -> bool {
         !self.has_finished() && self.effects().inspect_first().is_none()
     }
