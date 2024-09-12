@@ -9,8 +9,8 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .provide_source_code(
             r"
                 main: { |size_x size_y|
-                    nop
-                    brk
+                    nop # this is where the breakpoint will be set
+                    brk # prevent process from ending before we set breakpoint
                 }
             ",
         )
