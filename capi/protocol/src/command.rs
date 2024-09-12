@@ -10,13 +10,18 @@ pub enum CommandToRuntime {
     Stop,
 }
 
-impl CommandToRuntime {
-    pub fn deserialize(bytes: SerializedCommandToRuntime) -> Self {
+pub trait CommandExt {
+    fn deserialize(bytes: SerializedCommandToRuntime) -> Self;
+    fn serialize(&self) -> SerializedCommandToRuntime;
+}
+
+impl CommandExt for CommandToRuntime {
+    fn deserialize(bytes: SerializedCommandToRuntime) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
     }
 
-    pub fn serialize(&self) -> SerializedCommandToRuntime {
+    fn serialize(&self) -> SerializedCommandToRuntime {
         ron::to_string(self).unwrap().into_bytes()
     }
 }

@@ -3,7 +3,7 @@ use std::panic;
 use capi_game_engine::game_engine::GameEngine;
 use capi_process::Effect;
 use capi_protocol::{
-    command::{CommandToRuntime, SerializedCommandToRuntime},
+    command::{CommandExt, CommandToRuntime, SerializedCommandToRuntime},
     updates::Updates,
 };
 

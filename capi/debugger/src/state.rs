@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
-    command::SerializedCommandToRuntime,
+    command::{CommandExt, SerializedCommandToRuntime},
     updates::{SerializedUpdate, UpdateFromRuntime},
 };
 use leptos::SignalSet;
