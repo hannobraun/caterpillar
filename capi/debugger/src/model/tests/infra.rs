@@ -37,6 +37,16 @@ impl TestDebugger {
     }
 
     pub fn run_process(&mut self) -> &mut Self {
+        let process = Process::new([0, 0].map(Value::from));
+
+        self.process = Some(process);
+        self.process_commands();
+
+        let process = self
+            .process
+            .as_mut()
+            .expect("Just set `self.process` to `Some`");
+
         let instructions = &self.state.code
             .as_ref()
             .expect(
@@ -45,7 +55,6 @@ impl TestDebugger {
             )
             .instructions;
 
-        let mut process = Process::new([0, 0].map(Value::from));
         while process.state().is_running() {
             process.step(instructions);
         }
@@ -53,13 +62,10 @@ impl TestDebugger {
         let memory = Memory::default();
         let mut updates = Updates::default();
 
-        updates.queue_updates(&process, &memory);
+        updates.queue_updates(process, &memory);
         for update in updates.take_queued_updates() {
             self.state.on_update_from_runtime(update);
         }
-
-        self.process = Some(process);
-        self.process_commands();
 
         self
     }
