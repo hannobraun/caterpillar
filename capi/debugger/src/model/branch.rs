@@ -3,7 +3,7 @@ use capi_compiler::{
     source_map::SourceMap,
     syntax::Pattern,
 };
-use capi_process::{Breakpoints, Process};
+use capi_process::{Breakpoints, Effect, Process};
 
 use super::DebugFragment;
 
@@ -22,6 +22,8 @@ impl Branch {
         breakpoints: &Breakpoints,
         process: &Process,
     ) -> Self {
+        let effects: Vec<Effect> = process.effects().queue().collect();
+
         let parameters = branch
             .parameters
             .inner
@@ -41,6 +43,7 @@ impl Branch {
                     fragments,
                     source_map,
                     breakpoints,
+                    &effects,
                     process,
                 )
             })

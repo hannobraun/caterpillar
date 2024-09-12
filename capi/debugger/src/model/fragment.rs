@@ -21,6 +21,7 @@ impl DebugFragment {
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
+        effects: &[Effect],
         process: &Process,
     ) -> Option<Self> {
         let instructions = source_map.fragment_to_instructions(&fragment.id());
@@ -31,7 +32,7 @@ impl DebugFragment {
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
-        let effect = process.effects().inspect_first().and_then(|effect| {
+        let effect = effects.first().and_then(|effect| {
             let effect_fragment = source_map
                 .instruction_to_fragment(&process.most_recent_step().unwrap())
                 .expect("Expecting effects to originate from user code.");
