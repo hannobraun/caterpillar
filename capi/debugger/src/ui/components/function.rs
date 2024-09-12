@@ -1,4 +1,4 @@
-use capi_process::{Effect, InstructionAddress};
+use capi_process::Effect;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
     web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,
@@ -204,16 +204,6 @@ fn make_single_expression(
             ron::from_str(&fragment).expect(
                 "Expecting serialized fragment IDs in DOM to always be valid.",
             )
-        };
-        let Some(instruction) = element.get_attribute("data-instruction")
-        else {
-            // This happens, if the user clicks on a comment.
-            return;
-        };
-        let _ = InstructionAddress {
-            index: instruction
-                .parse()
-                .expect("Expected `data-instruction` attribute to be a number"),
         };
 
         let action = if element.has_attribute("data-breakpoint") {
