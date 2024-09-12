@@ -67,7 +67,7 @@ impl Process {
     }
 
     pub fn reset(&mut self) {
-        // All we need to preserve when we reset are the breakpoints. Anything
+        // There are some fields we need to preserve over the reset. Anything
         // else needs to go back to start conditions.
         //
         // Doing it like this, as opposed to just resetting all other fields,
