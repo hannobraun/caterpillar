@@ -67,14 +67,10 @@ use super::{
 /// ## Limitations
 ///
 /// Rule 4 can be circumvented, if struct fields contain data that is equal to a
-/// field name. It would probably be better to generate long, random strings to
-/// use instead of field names, but it's unclear how to generate those. (Every
-/// contributor should be able to do this, so we'd need tooling in this
-/// repository.)
+/// field name.
 ///
-/// Either way, with or without random strings, this scheme won't stand up to
-/// any effort by a motivated attacher, and must not be relied upon for this
-/// purpose.
+/// The general problem is pretty well explained in this article:
+/// <https://www.dfns.co/article/unambiguous-hashing>
 ///
 /// ## Implementation Note
 ///
@@ -82,11 +78,19 @@ use super::{
 /// be written, and then require ongoing maintenance. It's unclear if and when
 /// doing so would actually be an advantage.
 ///
+/// It might be possible to use an external crate for this though. [`udigest`]
+/// (which is presented in the article mentioned above) looks suitable. At first
+/// glance, it even looks like [`blake3`] is supported by that (via the
+/// [`digest`] crate, for which `blake3` has optional support).
+///
 /// In addition, if random strings were used as per the discussion in the
 /// section on limitations, we'd have to store the random strings in the
 /// repository and make them accessible to the derive macro. Otherwise, hashes
 /// would not be stable over builds, making them unsuitable for some of the
 /// intended use cases.
+///
+/// [`udigest`]: https://crates.io/crates/udigest
+/// [`digest`]: https://crates.io/crates/digest
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
