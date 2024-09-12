@@ -1,7 +1,7 @@
 use std::panic;
 
 use capi_game_engine::game_engine::GameEngine;
-use capi_process::{Command, Effect};
+use capi_process::Command;
 use capi_protocol::{
     command::{CommandExt, SerializedCommandToRuntime},
     updates::Updates,
@@ -31,45 +31,7 @@ impl RuntimeState {
     pub fn update(&mut self, current_time_ms: f64, pixels: &mut [u8]) {
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
-
-            match command {
-                Command::BreakpointClear { instruction } => {
-                    self.game_engine
-                        .process
-                        .breakpoints_mut()
-                        .clear_durable(&instruction);
-                }
-                Command::BreakpointSet { instruction } => {
-                    self.game_engine
-                        .process
-                        .breakpoints_mut()
-                        .set_durable(instruction);
-                }
-                Command::Continue => {
-                    self.game_engine.process.continue_(None);
-                }
-                Command::Reset => self.game_engine.reset(),
-                Command::Step => {
-                    if let Some(Effect::Breakpoint) =
-                        self.game_engine.process.effects().inspect_first()
-                    {
-                        let and_stop_at = self
-                            .game_engine
-                            .process
-                            .evaluator()
-                            .next_instruction;
-                        self.game_engine.process.continue_(Some(and_stop_at))
-                    } else {
-                        // If we're not stopped at a breakpoint, we can't step.
-                        // It would be better, if this resulted in an explicit
-                        // error that is sent to the debugger, instead of
-                        // silently being ignored here.
-                    }
-                }
-                Command::Stop => {
-                    self.game_engine.process.stop();
-                }
-            }
+            self.game_engine.on_command(command);
         }
 
         self.game_engine

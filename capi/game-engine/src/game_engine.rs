@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{Effect, Instructions, Process, Value};
+use capi_process::{Command, Effect, Instructions, Process, Value};
 
 use crate::{
     display::{self, TILES_PER_AXIS},
@@ -47,6 +47,37 @@ impl GameEngine {
 
     pub fn on_input(&mut self, value: u8) {
         self.input.push_back(value);
+    }
+
+    pub fn on_command(&mut self, command: Command) {
+        match command {
+            Command::BreakpointClear { instruction } => {
+                self.process.breakpoints_mut().clear_durable(&instruction);
+            }
+            Command::BreakpointSet { instruction } => {
+                self.process.breakpoints_mut().set_durable(instruction);
+            }
+            Command::Continue => {
+                self.process.continue_(None);
+            }
+            Command::Reset => self.reset(),
+            Command::Step => {
+                if let Some(Effect::Breakpoint) =
+                    self.process.effects().inspect_first()
+                {
+                    let and_stop_at = self.process.evaluator().next_instruction;
+                    self.process.continue_(Some(and_stop_at))
+                } else {
+                    // If we're not stopped at a breakpoint, we can't step.
+                    // It would be better, if this resulted in an explicit
+                    // error that is sent to the debugger, instead of
+                    // silently being ignored here.
+                }
+            }
+            Command::Stop => {
+                self.process.stop();
+            }
+        }
     }
 
     /// # Top off the game engine's random numbers
