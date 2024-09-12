@@ -93,7 +93,7 @@ impl Process {
                 }
             }
             Command::Stop => {
-                self.stop();
+                self.effects_mut().trigger(Effect::Breakpoint);
             }
         }
     }
@@ -129,10 +129,6 @@ impl Process {
 
             self.effects_mut().handle_first();
         }
-    }
-
-    pub fn stop(&mut self) {
-        self.effects_mut().trigger(Effect::Breakpoint);
     }
 
     pub fn step(&mut self, instructions: &Instructions) {
