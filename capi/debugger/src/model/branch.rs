@@ -20,10 +20,9 @@ impl Branch {
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
+        effects: &[Effect],
         process: &Process,
     ) -> Self {
-        let effects: Vec<Effect> = process.effects().queue().collect();
-
         let parameters = branch
             .parameters
             .inner
@@ -43,7 +42,7 @@ impl Branch {
                     fragments,
                     source_map,
                     breakpoints,
-                    &effects,
+                    effects,
                     process,
                 )
             })
