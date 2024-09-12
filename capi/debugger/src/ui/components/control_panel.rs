@@ -33,7 +33,7 @@ fn Button(
     actions: ActionsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(action.clone().send(actions.clone()));
+        leptos::spawn_local(action.clone().send_action(actions.clone()));
     };
 
     view! {

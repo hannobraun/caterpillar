@@ -21,7 +21,7 @@ pub enum Action {
 }
 
 impl Action {
-    pub async fn send(self, actions: ActionsTx) {
+    pub async fn send_action(self, actions: ActionsTx) {
         if let Err(err) = actions.send(self) {
             log::error!(
                 "Sending a UI action failed, as the receive is no longer \

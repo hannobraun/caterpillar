@@ -220,7 +220,7 @@ fn make_single_expression(
             Action::BreakpointSet { fragment, address }
         };
 
-        leptos::spawn_local(action.send(actions.clone()));
+        leptos::spawn_local(action.send_action(actions.clone()));
     };
 
     (
