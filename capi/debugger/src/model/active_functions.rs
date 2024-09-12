@@ -69,6 +69,7 @@ impl ActiveFunctions {
                     &mut entries,
                     code,
                     breakpoints,
+                    &effects,
                     process,
                 );
             }
@@ -85,6 +86,7 @@ impl ActiveFunctions {
                         &mut entries,
                         code,
                         breakpoints,
+                        &effects,
                         process,
                     );
                 }
@@ -178,10 +180,9 @@ fn reconstruct_function(
     entries: &mut VecDeque<ActiveFunctionsEntry>,
     code: &Code,
     breakpoints: &Breakpoints,
+    effects: &[Effect],
     process: &Process,
 ) -> Option<String> {
-    let effects: Vec<Effect> = process.effects().queue().collect();
-
     let Some(function) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
@@ -214,7 +215,7 @@ fn reconstruct_function(
         &code.fragments,
         &code.source_map,
         breakpoints,
-        &effects,
+        effects,
         process,
     )));
 
