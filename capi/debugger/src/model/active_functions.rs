@@ -215,8 +215,6 @@ fn reconstruct_function(
 fn call_id_to_function_name(id: FragmentId, code: &Code) -> Option<String> {
     let fragment = code
         .fragments
-        .inner
-        .inner
         .get(&id)
         .expect("Fragment referenced by active function must exist.");
 
