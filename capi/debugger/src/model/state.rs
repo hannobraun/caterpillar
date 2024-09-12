@@ -56,17 +56,12 @@ impl PersistentState {
             &self.breakpoints,
             self.runtime_state.as_ref(),
         );
-        let operands = self
-            .process
-            .as_ref()
-            .map(|process| {
-                process
-                    .stack()
-                    .operands_in_current_stack_frame()
-                    .copied()
-                    .collect::<Vec<_>>()
-            })
-            .unwrap_or_default();
+        let operands = match &self.runtime_state {
+            Some(RuntimeState::Stopped {
+                current_operands, ..
+            }) => current_operands.clone(),
+            _ => Vec::new(),
+        };
 
         TransientState {
             active_functions,
