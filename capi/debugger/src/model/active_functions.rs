@@ -154,13 +154,15 @@ fn instruction_to_function(
         );
     };
 
-    let (function, _) = code
+    let Some((function, _)) = code
         .fragments
         .find_named_function_by_fragment_in_body(&fragment_id)
-        .expect(
+    else {
+        panic!(
             "Expecting code that is referenced on call stack to be part of a \
             known function.",
-        );
+        )
+    };
 
     (function.clone(), fragment_id)
 }
