@@ -59,8 +59,21 @@ impl PersistentState {
                     instruction: address,
                 })
             }
-            Action::BreakpointSet { fragment, address } => {
-                self.set_durable_breakpoint(&fragment)?;
+            Action::BreakpointSet { fragment, .. } => {
+                let code = self
+                    .code
+                    .as_ref()
+                    .ok_or_else(|| anyhow!("Code is not available yet."))?;
+                let address = code
+                    .source_map
+                    .fragment_to_instructions(&fragment)
+                    .first()
+                    .copied()
+                    .ok_or_else(|| {
+                        anyhow!("Fragment does not map to instruction.")
+                    })?;
+
+                self.breakpoints.set_durable(address);
 
                 Some(CommandToRuntime::BreakpointSet {
                     instruction: address,
@@ -92,26 +105,6 @@ impl PersistentState {
             active_functions,
             operands,
         }
-    }
-
-    pub fn set_durable_breakpoint(
-        &mut self,
-        fragment: &FragmentId,
-    ) -> anyhow::Result<()> {
-        let code = self
-            .code
-            .as_ref()
-            .ok_or_else(|| anyhow!("Code is not available yet."))?;
-        let address = code
-            .source_map
-            .fragment_to_instructions(fragment)
-            .first()
-            .copied()
-            .ok_or_else(|| anyhow!("Fragment does not map to instruction."))?;
-
-        self.breakpoints.set_durable(address);
-
-        Ok(())
     }
 
     pub fn clear_durable_breakpoint(

@@ -9,7 +9,6 @@ pub enum Action {
     },
     BreakpointSet {
         fragment: FragmentId,
-        address: InstructionAddress,
     },
     Continue,
     Reset,
