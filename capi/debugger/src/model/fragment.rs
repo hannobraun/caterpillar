@@ -4,7 +4,7 @@ use capi_compiler::{
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
-use capi_process::{Breakpoints, Effect, InstructionAddress};
+use capi_process::{Breakpoints, Effect};
 
 use super::DebugFunction;
 
@@ -51,7 +51,6 @@ impl DebugFragment {
             id: fragment.id(),
             is_active,
             has_durable_breakpoint,
-            first_instruction: instructions.first().copied(),
             effect,
         };
         let kind = DebugFragmentKind::new(
@@ -79,7 +78,6 @@ pub struct DebugFragmentData {
     pub is_active: bool,
 
     pub has_durable_breakpoint: bool,
-    pub first_instruction: Option<InstructionAddress>,
     pub effect: Option<Effect>,
 }
 
