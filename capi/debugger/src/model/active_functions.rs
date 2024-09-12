@@ -164,23 +164,8 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     process: &Process,
 ) -> Option<String> {
-    let Some((function_id, _)) = code.fragments.find_function_by_name(name)
-    else {
+    let Some((_, function)) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
-    };
-    let function_fragment = code.fragments.inner.inner.get(&function_id).expect(
-        "Just got this `FragmentId` by searching for a function. Must refer to a valid fragment.",
-    );
-
-    let FragmentKind::Payload {
-        payload: Payload::Function { function },
-        ..
-    } = &function_fragment.kind
-    else {
-        panic!(
-            "Got fragment by specifically searching for a function (`{name}`). \
-            Expecting it to be a function fragment."
-        );
     };
 
     let tail_call = if function.branches.len() == 1 {
