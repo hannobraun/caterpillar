@@ -57,6 +57,7 @@ impl DebugFragment {
             fragments,
             source_map,
             breakpoints,
+            effects,
             process,
         )?;
 
@@ -99,10 +100,9 @@ impl DebugFragmentKind {
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
+        effects: &[Effect],
         process: &Process,
     ) -> Option<Self> {
-        let effects: Vec<Effect> = process.effects().queue().collect();
-
         let FragmentKind::Payload { payload, .. } = fragment.kind else {
             return None;
         };
@@ -135,7 +135,7 @@ impl DebugFragmentKind {
                     fragments,
                     source_map,
                     breakpoints,
-                    &effects,
+                    effects,
                     process,
                 );
 
