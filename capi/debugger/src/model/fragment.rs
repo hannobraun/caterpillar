@@ -33,11 +33,15 @@ impl DebugFragment {
             .any(|instruction| breakpoints.durable_at(instruction));
 
         let effect = effects.first().and_then(|effect| {
-            let effect_fragment = source_map
-                .instruction_to_fragment(&process.most_recent_step().unwrap())
-                .expect("Expecting effects to originate from user code.");
-
-            if effect_fragment == fragment.id() {
+            // This displays the effect on _any_ active fragment in _any_ active
+            // function, not just the fragment that actually triggered the
+            // effect.
+            //
+            // This makes sense, as the effect is relevant, regardless of which
+            // active function you're looking at. The developer might step
+            // through some functions, hit the effect, but might not want to
+            // actually step into the function where the effect comes from.
+            if is_active {
                 Some(*effect)
             } else {
                 None
