@@ -35,7 +35,9 @@ impl Updates {
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
 
-            if process_at_client.can_step() && process.can_step() {
+            if process_at_client.state().is_running()
+                && process.state().is_running()
+            {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
                 return false;

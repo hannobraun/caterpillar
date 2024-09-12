@@ -100,7 +100,7 @@ impl Process {
     }
 
     pub fn step(&mut self, instructions: &Instructions) {
-        if !self.can_step() {
+        if !self.state().is_running() {
             return;
         }
 
@@ -126,4 +126,10 @@ pub enum ProcessState {
     Running,
     Finished,
     Stopped,
+}
+
+impl ProcessState {
+    pub fn is_running(&self) -> bool {
+        matches!(self, Self::Running)
+    }
 }

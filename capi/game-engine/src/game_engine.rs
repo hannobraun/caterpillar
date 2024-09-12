@@ -120,7 +120,7 @@ impl GameEngine {
             self.last_frame_start_s = Some(current_time_s);
         }
 
-        while self.process.can_step() {
+        while self.process.state().is_running() {
             let Some(instructions) = &self.instructions else {
                 return true;
             };
