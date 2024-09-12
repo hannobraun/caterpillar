@@ -99,8 +99,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 
     let mut signals = BTreeMap::new();
 
-    let mut process = Process::default();
-    process.reset([]);
+    let mut process = Process::new([]);
 
     while process.state().is_running() {
         process.step(&instructions);

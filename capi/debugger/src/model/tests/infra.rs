@@ -43,8 +43,7 @@ impl TestDebugger {
             )
             .instructions;
 
-        let mut process = Process::default();
-        process.reset([0, 0].map(Value::from));
+        let mut process = Process::new([0, 0].map(Value::from));
         while process.state().is_running() {
             process.step(instructions);
         }
