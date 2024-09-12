@@ -3,7 +3,7 @@ use std::panic;
 use capi_game_engine::game_engine::GameEngine;
 use capi_process::Effect;
 use capi_protocol::{
-    command::{CommandExt, CommandToRuntime, SerializedCommandToRuntime},
+    command::{Command, CommandExt, SerializedCommandToRuntime},
     updates::Updates,
 };
 
@@ -30,26 +30,26 @@ impl RuntimeState {
 
     pub fn update(&mut self, current_time_ms: f64, pixels: &mut [u8]) {
         for command in self.commands.drain(..) {
-            let command = CommandToRuntime::deserialize(command);
+            let command = Command::deserialize(command);
 
             match command {
-                CommandToRuntime::BreakpointClear { instruction } => {
+                Command::BreakpointClear { instruction } => {
                     self.game_engine
                         .process
                         .breakpoints_mut()
                         .clear_durable(&instruction);
                 }
-                CommandToRuntime::BreakpointSet { instruction } => {
+                Command::BreakpointSet { instruction } => {
                     self.game_engine
                         .process
                         .breakpoints_mut()
                         .set_durable(instruction);
                 }
-                CommandToRuntime::Continue => {
+                Command::Continue => {
                     self.game_engine.process.continue_(None);
                 }
-                CommandToRuntime::Reset => self.game_engine.reset(),
-                CommandToRuntime::Step => {
+                Command::Reset => self.game_engine.reset(),
+                Command::Step => {
                     if let Some(Effect::Breakpoint) =
                         self.game_engine.process.effects().inspect_first()
                     {
@@ -66,7 +66,7 @@ impl RuntimeState {
                         // silently being ignored here.
                     }
                 }
-                CommandToRuntime::Stop => {
+                Command::Stop => {
                     self.game_engine.process.stop();
                 }
             }

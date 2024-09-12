@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use capi_game_engine::memory::Memory;
 use capi_process::{Breakpoints, ProcessState, Value};
 use capi_protocol::{
-    command::CommandToRuntime,
+    command::Command,
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
 };
@@ -49,7 +49,7 @@ impl PersistentState {
     pub fn on_user_action(
         &mut self,
         action: UserAction,
-    ) -> anyhow::Result<Option<CommandToRuntime>> {
+    ) -> anyhow::Result<Option<Command>> {
         let command = match action {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self
@@ -67,7 +67,7 @@ impl PersistentState {
 
                 self.breakpoints.clear_durable(&address);
 
-                Some(CommandToRuntime::BreakpointClear {
+                Some(Command::BreakpointClear {
                     instruction: address,
                 })
             }
@@ -87,14 +87,14 @@ impl PersistentState {
 
                 self.breakpoints.set_durable(address);
 
-                Some(CommandToRuntime::BreakpointSet {
+                Some(Command::BreakpointSet {
                     instruction: address,
                 })
             }
-            UserAction::Continue => Some(CommandToRuntime::Continue),
-            UserAction::Reset => Some(CommandToRuntime::Reset),
-            UserAction::Step => Some(CommandToRuntime::Step),
-            UserAction::Stop => Some(CommandToRuntime::Stop),
+            UserAction::Continue => Some(Command::Continue),
+            UserAction::Reset => Some(Command::Reset),
+            UserAction::Step => Some(Command::Step),
+            UserAction::Stop => Some(Command::Stop),
         };
 
         Ok(command)
