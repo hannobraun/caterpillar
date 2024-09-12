@@ -38,6 +38,11 @@ impl Effects {
     pub fn handle_first(&mut self) -> Option<Effect> {
         self.queue.pop_front()
     }
+
+    /// # Iterate over all effects in the queue
+    pub fn queue(&self) -> impl Iterator<Item = Effect> + '_ {
+        self.queue.iter().copied()
+    }
 }
 
 /// # An effect that interrupts evaluation
