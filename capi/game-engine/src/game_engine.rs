@@ -48,7 +48,6 @@ impl GameEngine {
         }
 
         self.process.on_command(command);
-        
     }
 
     /// # Top off the game engine's random numbers

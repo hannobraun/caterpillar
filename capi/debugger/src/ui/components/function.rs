@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{
-        UserAction, Branch, DebugFragment, DebugFragmentData, DebugFragmentKind,
+        Branch, DebugFragment, DebugFragmentData, DebugFragmentKind, UserAction,
     },
     ui::{actions::send_action, ActionsTx},
 };
