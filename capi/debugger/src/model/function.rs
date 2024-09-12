@@ -19,10 +19,9 @@ impl DebugFunction {
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
+        effects: &[Effect],
         process: &Process,
     ) -> Self {
-        let effects: Vec<Effect> = process.effects().queue().collect();
-
         let name = function.name;
         let branches = function
             .branches
@@ -34,7 +33,7 @@ impl DebugFunction {
                     fragments,
                     source_map,
                     breakpoints,
-                    &effects,
+                    effects,
                     process,
                 )
             })

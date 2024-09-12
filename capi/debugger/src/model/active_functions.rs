@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_process::{Breakpoints, InstructionAddress, Process};
+use capi_process::{Breakpoints, Effect, InstructionAddress, Process};
 use capi_protocol::{runtime_state::RuntimeState, updates::Code};
 
 use super::DebugFunction;
@@ -53,6 +53,8 @@ impl ActiveFunctions {
             };
         };
 
+        let effects: Vec<Effect> = process.effects().queue().collect();
+
         let mut active_instructions: VecDeque<InstructionAddress> =
             active_instructions.clone().into();
 
@@ -100,6 +102,7 @@ impl ActiveFunctions {
                     &code.fragments,
                     &code.source_map,
                     breakpoints,
+                    &effects,
                     process,
                 ),
             ));
@@ -177,6 +180,8 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     process: &Process,
 ) -> Option<String> {
+    let effects: Vec<Effect> = process.effects().queue().collect();
+
     let Some(function) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
@@ -209,6 +214,7 @@ fn reconstruct_function(
         &code.fragments,
         &code.source_map,
         breakpoints,
+        &effects,
         process,
     )));
 
