@@ -30,7 +30,7 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
-    pub inner: BTreeMap<FragmentId, Fragment>,
+    inner: BTreeMap<FragmentId, Fragment>,
 }
 
 impl FragmentMap {
