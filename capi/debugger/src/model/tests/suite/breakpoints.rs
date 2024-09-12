@@ -10,6 +10,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
             r"
                 main: { |size_x size_y|
                     nop
+                    brk
                 }
             ",
         )
