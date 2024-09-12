@@ -14,7 +14,7 @@ use tokio::{
 
 use crate::{
     code::{CodeManager, CodeRx},
-    model::{Action, PersistentState},
+    model::{UserAction, PersistentState},
     ui,
 };
 
@@ -108,7 +108,7 @@ fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
 }
 
 fn on_ui_action(
-    action: Action,
+    action: UserAction,
     state: &mut PersistentState,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {

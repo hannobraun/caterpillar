@@ -1,10 +1,10 @@
 use tokio::sync::mpsc;
 
-use crate::model::Action;
+use crate::model::UserAction;
 
-pub type ActionsTx = mpsc::UnboundedSender<Action>;
+pub type ActionsTx = mpsc::UnboundedSender<UserAction>;
 
-pub async fn send_action(action: Action, actions: ActionsTx) {
+pub async fn send_action(action: UserAction, actions: ActionsTx) {
     if let Err(err) = actions.send(action) {
         log::error!(
             "Sending a UI action failed, as the receive is no longer \

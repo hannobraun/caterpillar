@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{
-        Action, Branch, DebugFragment, DebugFragmentData, DebugFragmentKind,
+        UserAction, Branch, DebugFragment, DebugFragmentData, DebugFragmentKind,
     },
     ui::{actions::send_action, ActionsTx},
 };
@@ -205,9 +205,9 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            Action::BreakpointClear { fragment }
+            UserAction::BreakpointClear { fragment }
         } else {
-            Action::BreakpointSet { fragment }
+            UserAction::BreakpointSet { fragment }
         };
 
         leptos::spawn_local(send_action(action, actions.clone()));

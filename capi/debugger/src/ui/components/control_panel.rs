@@ -1,7 +1,7 @@
 use leptos::{component, view, IntoView};
 
 use crate::{
-    model::Action,
+    model::UserAction,
     ui::{actions::send_action, components::panel::Panel, ActionsTx},
 };
 
@@ -11,19 +11,19 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
         <Panel class="">
             <Button
                 label="Reset"
-                action=Action::Reset
+                action=UserAction::Reset
                 actions=actions.clone() />
             <Button
                 label="Stop"
-                action=Action::Stop
+                action=UserAction::Stop
                 actions=actions.clone() />
             <Button
                 label="Continue"
-                action=Action::Continue
+                action=UserAction::Continue
                 actions=actions.clone() />
             <Button
                 label="Step Into"
-                action=Action::Step
+                action=UserAction::Step
                 actions=actions />
         </Panel>
     }
@@ -32,7 +32,7 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
 #[component]
 fn Button(
     label: &'static str,
-    action: Action,
+    action: UserAction,
     actions: ActionsTx,
 ) -> impl IntoView {
     let on_click = move |_| {

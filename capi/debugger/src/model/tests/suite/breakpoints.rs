@@ -1,4 +1,4 @@
-use crate::model::{tests::infra::debugger, Action};
+use crate::model::{tests::infra::debugger, UserAction};
 
 #[test]
 fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
@@ -28,7 +28,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
-    debugger.on_user_action(Action::BreakpointSet { fragment: nop })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
     assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     Ok(())

@@ -7,7 +7,7 @@ use capi_protocol::{
     updates::{Code, UpdateFromRuntime},
 };
 
-use super::{Action, ActiveFunctions};
+use super::{ActiveFunctions, UserAction};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
@@ -48,10 +48,10 @@ impl PersistentState {
 
     pub fn on_ui_action(
         &mut self,
-        action: Action,
+        action: UserAction,
     ) -> anyhow::Result<Option<CommandToRuntime>> {
         let command = match action {
-            Action::BreakpointClear { fragment, .. } => {
+            UserAction::BreakpointClear { fragment, .. } => {
                 let code = self
                     .code
                     .as_ref()
@@ -71,7 +71,7 @@ impl PersistentState {
                     instruction: address,
                 })
             }
-            Action::BreakpointSet { fragment, .. } => {
+            UserAction::BreakpointSet { fragment, .. } => {
                 let code = self
                     .code
                     .as_ref()
@@ -91,10 +91,10 @@ impl PersistentState {
                     instruction: address,
                 })
             }
-            Action::Continue => Some(CommandToRuntime::Continue),
-            Action::Reset => Some(CommandToRuntime::Reset),
-            Action::Step => Some(CommandToRuntime::Step),
-            Action::Stop => Some(CommandToRuntime::Stop),
+            UserAction::Continue => Some(CommandToRuntime::Continue),
+            UserAction::Reset => Some(CommandToRuntime::Reset),
+            UserAction::Step => Some(CommandToRuntime::Step),
+            UserAction::Stop => Some(CommandToRuntime::Stop),
         };
 
         Ok(command)

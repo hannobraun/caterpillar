@@ -7,8 +7,8 @@ use capi_process::{Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
-    Action, ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
-    DebugFragmentKind, DebugFunction, PersistentState,
+    ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
+    DebugFragmentKind, DebugFunction, PersistentState, UserAction,
 };
 
 pub fn debugger() -> TestDebugger {
@@ -62,7 +62,7 @@ impl TestDebugger {
 
     pub fn on_user_action(
         &mut self,
-        action: Action,
+        action: UserAction,
     ) -> anyhow::Result<&mut Self> {
         self.state.on_ui_action(action)?;
         Ok(self)

@@ -9,7 +9,7 @@ mod state;
 mod tests;
 
 pub use self::{
-    action::Action,
+    action::UserAction,
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::Branch,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
