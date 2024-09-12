@@ -78,7 +78,7 @@ impl Fragments {
     }
 
     pub fn find_function_by_name(&self, name: &str) -> Option<FragmentId> {
-        self.inner.find_function_by_name(name)
+        self.inner.find_function_by_name(name).map(|(id, _)| id)
     }
 }
 
@@ -88,7 +88,10 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
-    pub fn find_function_by_name(&self, name: &str) -> Option<FragmentId> {
+    pub fn find_function_by_name(
+        &self,
+        name: &str,
+    ) -> Option<(FragmentId, &Function)> {
         self.inner
             .values()
             .filter_map(|fragment| match &fragment.kind {
@@ -100,7 +103,7 @@ impl FragmentMap {
             })
             .find_map(|(id, function)| {
                 if function.name.as_deref() == Some(name) {
-                    Some(id)
+                    Some((id, function))
                 } else {
                     None
                 }
