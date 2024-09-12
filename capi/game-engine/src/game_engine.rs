@@ -13,7 +13,6 @@ pub struct GameEngine {
 
     last_frame_start_s: Option<f64>,
     instructions: Option<Instructions>,
-    arguments: [Value; 2],
     memory: Memory,
     input: VecDeque<u8>,
     random: VecDeque<i32>,
@@ -28,7 +27,6 @@ impl GameEngine {
             process,
             last_frame_start_s: None,
             instructions: None,
-            arguments,
             memory: Memory::default(),
             input: VecDeque::new(),
             random: VecDeque::new(),
@@ -60,7 +58,7 @@ impl GameEngine {
             }
             Command::Reset => {
                 self.memory = Memory::default();
-                self.process.reset(self.arguments);
+                self.process.reset();
             }
             Command::Step => {
                 if let Some(Effect::Breakpoint) =

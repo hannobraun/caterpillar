@@ -8,6 +8,7 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process {
+    arguments: Vec<Value>,
     effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
@@ -16,12 +17,13 @@ pub struct Process {
 impl Process {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
         let mut self_ = Self {
+            arguments: arguments.into_iter().collect(),
             effects: Effects::default(),
             evaluator: Evaluator::default(),
             breakpoints: Breakpoints::default(),
         };
 
-        self_.reset(arguments);
+        self_.reset();
 
         self_
     }
@@ -64,23 +66,26 @@ impl Process {
         &mut self.breakpoints
     }
 
-    pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
+    pub fn reset(&mut self) {
         // All we need to preserve when we reset are the breakpoints. Anything
         // else needs to go back to start conditions.
         //
         // Doing it like this, as opposed to just resetting all other fields,
         // has the advantage that this code doesn't need to be changed in sync
         // with new fields being added.
+        let arguments = mem::take(&mut self.arguments);
         let breakpoints = mem::take(&mut self.breakpoints);
+
         *self = Self {
+            arguments,
             breakpoints,
 
             effects: Effects::default(),
             evaluator: Evaluator::default(),
         };
 
-        for argument in arguments {
-            self.evaluator.stack.push_operand(argument);
+        for argument in &self.arguments {
+            self.evaluator.stack.push_operand(*argument);
         }
     }
 
