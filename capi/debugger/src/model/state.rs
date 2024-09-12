@@ -51,12 +51,14 @@ impl PersistentState {
     }
 
     pub fn generate_transient_state(&self) -> TransientState {
+        let active_functions = ActiveFunctions::new(
+            self.code.as_ref(),
+            &self.breakpoints,
+            self.runtime_state.as_ref(),
+        );
+
         TransientState {
-            active_functions: ActiveFunctions::new(
-                self.code.as_ref(),
-                &self.breakpoints,
-                self.runtime_state.as_ref(),
-            ),
+            active_functions,
             operands: self
                 .process
                 .as_ref()
