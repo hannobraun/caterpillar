@@ -101,7 +101,6 @@ impl ActiveFunctions {
                     &code.source_map,
                     breakpoints,
                     effects,
-                    process,
                 ),
             ));
         }
@@ -177,7 +176,7 @@ fn reconstruct_function(
     code: &Code,
     breakpoints: &Breakpoints,
     effects: &[Effect],
-    process: &Process,
+    _: &Process,
 ) -> Option<String> {
     let Some(function) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
@@ -212,7 +211,6 @@ fn reconstruct_function(
         &code.source_map,
         breakpoints,
         effects,
-        process,
     )));
 
     expected_next_function

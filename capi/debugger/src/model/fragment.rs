@@ -4,7 +4,7 @@ use capi_compiler::{
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
-use capi_process::{Breakpoints, Effect, InstructionAddress, Process};
+use capi_process::{Breakpoints, Effect, InstructionAddress};
 
 use super::DebugFunction;
 
@@ -22,7 +22,6 @@ impl DebugFragment {
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
-        process: &Process,
     ) -> Option<Self> {
         let instructions = source_map.fragment_to_instructions(&fragment.id());
 
@@ -62,7 +61,6 @@ impl DebugFragment {
             source_map,
             breakpoints,
             effects,
-            process,
         )?;
 
         Some(Self { kind, data })
@@ -105,7 +103,6 @@ impl DebugFragmentKind {
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
-        process: &Process,
     ) -> Option<Self> {
         let FragmentKind::Payload { payload, .. } = fragment.kind else {
             return None;
@@ -140,7 +137,6 @@ impl DebugFragmentKind {
                     source_map,
                     breakpoints,
                     effects,
-                    process,
                 );
 
                 Self::Function { function }

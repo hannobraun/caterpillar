@@ -2,7 +2,7 @@ use capi_compiler::{
     fragments::{self, FragmentId, Fragments},
     source_map::SourceMap,
 };
-use capi_process::{Breakpoints, Effect, Process};
+use capi_process::{Breakpoints, Effect};
 
 use super::Branch;
 
@@ -20,7 +20,6 @@ impl DebugFunction {
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
-        process: &Process,
     ) -> Self {
         let name = function.name;
         let branches = function
@@ -34,7 +33,6 @@ impl DebugFunction {
                     source_map,
                     breakpoints,
                     effects,
-                    process,
                 )
             })
             .collect();
