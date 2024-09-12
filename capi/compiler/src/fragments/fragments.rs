@@ -95,11 +95,11 @@ impl FragmentMap {
                 FragmentKind::Payload {
                     payload: Payload::Function { function },
                     ..
-                } => Some((&function.name, fragment.id())),
+                } => Some((fragment.id(), function)),
                 _ => None,
             })
-            .find_map(|(n, id)| {
-                if n.as_deref() == Some(name) {
+            .find_map(|(id, function)| {
+                if function.name.as_deref() == Some(name) {
                     Some(id)
                 } else {
                     None
