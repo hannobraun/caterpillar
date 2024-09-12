@@ -39,7 +39,7 @@ where
         };
         let terminator_id = terminator.id();
 
-        fragments.inner.insert(terminator_id, terminator);
+        fragments.insert(terminator_id, terminator);
 
         terminator_id
     };
@@ -49,7 +49,7 @@ where
 
         next = fragment.id();
 
-        fragments.inner.insert(fragment.id(), fragment);
+        fragments.insert(fragment.id(), fragment);
     }
 
     next

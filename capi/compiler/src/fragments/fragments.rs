@@ -34,6 +34,10 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
+    pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
+        self.inner.insert(id, fragment);
+    }
+
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
         self.inner
             .values()
