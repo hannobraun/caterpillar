@@ -10,17 +10,12 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Process {
-    most_recent_step: Option<InstructionAddress>,
     effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }
 
 impl Process {
-    pub fn most_recent_step(&self) -> Option<InstructionAddress> {
-        self.most_recent_step
-    }
-
     pub fn state(&self) -> ProcessState {
         if self.effects().inspect_first().is_some() {
             ProcessState::Stopped
@@ -109,8 +104,6 @@ impl Process {
         if let Err(effect) = self.evaluator.step(instructions) {
             self.effects_mut().trigger(effect);
         }
-
-        self.most_recent_step = Some(next_instruction);
     }
 }
 
