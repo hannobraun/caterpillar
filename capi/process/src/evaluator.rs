@@ -23,10 +23,10 @@ impl Evaluator {
         self.stack
             .return_addresses()
             .map(|instruction| {
-                // All instructions addresses on the call stack point point to
-                // the _next_ instruction to execute in the respective frame.
-                // Let's make sure we get the correct address before translating
-                // it into a fragment.
+                // All return addresses point to the _next_ instruction to
+                // execute when returning from the frame. We want to return the
+                // _current_ active instructions though, so we have to correct
+                // that here.
                 instruction.previous()
             })
             .chain([self.next_instruction])
