@@ -17,6 +17,7 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
+    pub process: Option<Process>,
     pub state: PersistentState,
 }
 
@@ -55,6 +56,8 @@ impl TestDebugger {
         for update in updates.take_queued_updates() {
             self.state.on_update_from_runtime(update);
         }
+
+        self.process = Some(process);
 
         self
     }
