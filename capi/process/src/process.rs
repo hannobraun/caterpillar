@@ -24,15 +24,11 @@ impl Process {
     pub fn state(&self) -> ProcessState {
         if self.effects().inspect_first().is_some() {
             ProcessState::Stopped
-        } else if self.has_finished() {
+        } else if self.evaluator.stack.no_frames_left() {
             ProcessState::Finished
         } else {
             ProcessState::Running
         }
-    }
-
-    pub fn has_finished(&self) -> bool {
-        self.evaluator.stack.no_frames_left()
     }
 
     pub fn effects(&self) -> &Effects {
