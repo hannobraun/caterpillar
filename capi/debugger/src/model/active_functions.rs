@@ -47,7 +47,7 @@ impl ActiveFunctions {
                 };
             }
         };
-        let Some(process) = process else {
+        let Some(_) = process else {
             unreachable!("Already handled \"no process\" case above.");
         };
 
@@ -66,7 +66,6 @@ impl ActiveFunctions {
                     code,
                     breakpoints,
                     effects,
-                    process,
                 );
             }
         }
@@ -83,7 +82,6 @@ impl ActiveFunctions {
                         code,
                         breakpoints,
                         effects,
-                        process,
                     );
                 }
             } else {
@@ -176,7 +174,6 @@ fn reconstruct_function(
     code: &Code,
     breakpoints: &Breakpoints,
     effects: &[Effect],
-    _: &Process,
 ) -> Option<String> {
     let Some(function) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
