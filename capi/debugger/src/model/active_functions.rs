@@ -158,10 +158,15 @@ fn instruction_to_function(
         .fragments
         .find_named_function_by_fragment_in_body(&fragment_id)
     else {
+        let fragment = code.fragments.get(&fragment_id);
         panic!(
-            "Expecting code that is referenced on call stack to be part of a \
-            known function.",
-        )
+            "Active instruction `{instruction}` maps to active fragment \
+            `{fragment_id}`. Expecting that fragment to be part of the body of \
+            a named function, but it isn't.\n\
+            \n\
+            Here's the fragment in question:\n\
+            {fragment:#?}"
+        );
     };
 
     (function.clone(), fragment_id)
