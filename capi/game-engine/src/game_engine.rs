@@ -60,7 +60,10 @@ impl GameEngine {
             Command::Continue => {
                 self.process.continue_(None);
             }
-            Command::Reset => self.reset(),
+            Command::Reset => {
+                self.memory = Memory::default();
+                self.process.reset(self.arguments);
+            }
             Command::Step => {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects().inspect_first()
@@ -104,11 +107,6 @@ impl GameEngine {
         self.random.push_back(value);
 
         true
-    }
-
-    pub fn reset(&mut self) {
-        self.memory = Memory::default();
-        self.process.reset(self.arguments);
     }
 
     pub fn run_until_end_of_frame(
