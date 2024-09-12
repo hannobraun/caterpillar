@@ -124,7 +124,10 @@ pub trait ActiveFunctionsExt {
 impl ActiveFunctionsExt for ActiveFunctions {
     fn expect_entries(&self) -> Vec<ActiveFunctionsEntry> {
         let ActiveFunctions::Entries { entries } = self else {
-            panic!("Expected active functions to be displayed");
+            panic!(
+                "Expected active functions to display entries. Actual state:\n\
+                {self:#?}"
+            );
         };
 
         entries.clone()
