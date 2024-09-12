@@ -94,7 +94,7 @@ impl Process {
         }
     }
 
-    pub fn reset(&mut self) {
+    fn reset(&mut self) {
         // There are some fields we need to preserve over the reset. Anything
         // else needs to go back to start conditions.
         //
