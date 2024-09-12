@@ -62,17 +62,13 @@ impl Process {
         &self.breakpoints
     }
 
-    pub fn breakpoints_mut(&mut self) -> &mut Breakpoints {
-        &mut self.breakpoints
-    }
-
     pub fn on_command(&mut self, command: Command) {
         match command {
             Command::BreakpointClear { instruction } => {
-                self.breakpoints_mut().clear_durable(&instruction);
+                self.breakpoints.clear_durable(&instruction);
             }
             Command::BreakpointSet { instruction } => {
-                self.breakpoints_mut().set_durable(instruction);
+                self.breakpoints.set_durable(instruction);
             }
             Command::Continue => {
                 self.continue_(None);
