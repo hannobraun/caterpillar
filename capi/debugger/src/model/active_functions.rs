@@ -53,13 +53,13 @@ impl ActiveFunctions {
             };
         };
 
-        let mut call_stack: VecDeque<InstructionAddress> =
+        let mut active_instructions: VecDeque<InstructionAddress> =
             active_instructions.clone().into();
 
         let mut entries = VecDeque::new();
         let mut expected_next_function = Some("main".to_string());
 
-        if let Some(outer) = call_stack.front() {
+        if let Some(outer) = active_instructions.front() {
             let (outer, _) = instruction_to_function(outer, code);
             if outer.name != expected_next_function {
                 expected_next_function = reconstruct_function(
@@ -72,7 +72,7 @@ impl ActiveFunctions {
             }
         }
 
-        while let Some(instruction) = call_stack.pop_front() {
+        while let Some(instruction) = active_instructions.pop_front() {
             let (function, active_fragment) =
                 instruction_to_function(&instruction, code);
 
