@@ -111,3 +111,9 @@ impl Process {
         self.most_recent_step = Some(next_instruction);
     }
 }
+
+pub enum ProcessState {
+    Running,
+    Finished,
+    Stopped,
+}

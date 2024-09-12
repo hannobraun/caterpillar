@@ -14,7 +14,7 @@ pub use self::{
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,
-    process::Process,
+    process::{Process, ProcessState},
     stack::Stack,
     value::Value,
 };
