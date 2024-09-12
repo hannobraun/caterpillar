@@ -17,8 +17,14 @@ pub struct Process {
 
 impl Process {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
-        let mut self_ = Self::default();
+        let mut self_ = Self {
+            effects: Effects::default(),
+            evaluator: Evaluator::default(),
+            breakpoints: Breakpoints::default(),
+        };
+
         self_.reset(arguments);
+
         self_
     }
 
