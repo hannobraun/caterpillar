@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::{
     fragments::{
         Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
@@ -9,9 +7,7 @@ use crate::{
 };
 
 pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
-    let mut fragments = FragmentMap {
-        inner: BTreeMap::new(),
-    };
+    let mut fragments = FragmentMap::default();
 
     let root = compile_context(
         functions
