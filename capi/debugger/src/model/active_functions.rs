@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_process::{Breakpoints, Effect, InstructionAddress, Process};
+use capi_process::{Breakpoints, Effect, InstructionAddress};
 use capi_protocol::{runtime_state::RuntimeState, updates::Code};
 
 use super::DebugFunction;
@@ -17,7 +17,6 @@ impl ActiveFunctions {
         code: Option<&Code>,
         breakpoints: &Breakpoints,
         state: Option<&RuntimeState>,
-        process: Option<&Process>,
     ) -> Self {
         let Some(code) = code else {
             return Self::Message {
@@ -46,9 +45,6 @@ impl ActiveFunctions {
                     message: ActiveFunctionsMessage::NoProcess,
                 };
             }
-        };
-        let Some(_) = process else {
-            unreachable!("Already handled \"no process\" case above.");
         };
 
         let mut active_instructions: VecDeque<InstructionAddress> =
