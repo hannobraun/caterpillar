@@ -38,6 +38,7 @@ impl ActiveFunctions {
                 RuntimeState::Stopped {
                     effects,
                     active_instructions,
+                    current_operands: _,
                 } => (effects, active_instructions),
             },
             None => {

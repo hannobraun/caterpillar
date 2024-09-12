@@ -36,6 +36,11 @@ impl PersistentState {
                             .evaluator()
                             .active_instructions()
                             .collect(),
+                        current_operands: process
+                            .stack()
+                            .operands_in_current_stack_frame()
+                            .copied()
+                            .collect::<Vec<_>>(),
                     }
                 };
 

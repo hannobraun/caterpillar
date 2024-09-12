@@ -1,4 +1,4 @@
-use capi_process::{Effect, InstructionAddress};
+use capi_process::{Effect, InstructionAddress, Value};
 
 /// # The current state of the runtime
 #[derive(Clone, Debug)]
@@ -16,5 +16,8 @@ pub enum RuntimeState {
 
         /// # The active instructions
         active_instructions: Vec<InstructionAddress>,
+
+        /// # The operands in the current stack frame
+        current_operands: Vec<Value>,
     },
 }
