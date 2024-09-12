@@ -2,7 +2,7 @@ use capi_process::Effect;
 
 use crate::model::{
     tests::infra::{
-        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
+        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt, BranchExt,
         DebugFragmentExt, DebugFunctionExt, FunctionsExt,
     },
     ActiveFunctionsEntry,
@@ -93,12 +93,10 @@ fn stopped_at_code_within_block() {
         .expect_functions()
         .with_name("main")
         .only_branch()
-        .body
-        .remove(0)
+        .fragment(0)
         .expect_function()
         .only_branch()
-        .body
-        .remove(0);
+        .fragment(0);
     assert_eq!(fragment.data.effect, Some(Effect::Breakpoint));
 
     fragment.expect_call_to_intrinsic("brk");
