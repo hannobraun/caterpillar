@@ -98,6 +98,9 @@ intrinsics! {
     /// # Negate a signed 32-bit number
     "neg_s32", NegS32;
 
+    /// No operation
+    "nop", Nop;
+
     /// # Logical not
     "not", Not;
 

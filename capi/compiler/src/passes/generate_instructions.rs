@@ -372,6 +372,7 @@ fn intrinsic_to_instruction(
         Intrinsic::MulS32 => Instruction::MulS32,
         Intrinsic::MulU8Wrap => Instruction::MulU8Wrap,
         Intrinsic::NegS32 => Instruction::NegS32,
+        Intrinsic::Nop => Instruction::Nop,
         Intrinsic::Not => Instruction::LogicalNot,
         Intrinsic::RemainderS32 => Instruction::RemainderS32,
         Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
