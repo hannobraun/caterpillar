@@ -53,20 +53,14 @@ impl PersistentState {
     ) -> anyhow::Result<Option<CommandToRuntime>> {
         let command = match action {
             Action::BreakpointClear { fragment, address } => {
-                self.clear_durable_breakpoint(&fragment).expect(
-                "Failed to clear durable breakpoint from the UI. This is a bug \
-                in the Caterpillar debugger",
-            );
+                self.clear_durable_breakpoint(&fragment)?;
 
                 Some(CommandToRuntime::BreakpointClear {
                     instruction: address,
                 })
             }
             Action::BreakpointSet { fragment, address } => {
-                self.set_durable_breakpoint(&fragment).expect(
-                "Failed to set durable breakpoint from the UI. This is a bug \
-                in the Caterpillar debugger",
-            );
+                self.set_durable_breakpoint(&fragment)?;
 
                 Some(CommandToRuntime::BreakpointSet {
                     instruction: address,
