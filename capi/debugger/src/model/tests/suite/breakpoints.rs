@@ -4,7 +4,8 @@ use crate::model::tests::infra::debugger;
 fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     // Breakpoints that are set in the debugger state should be displayed.
 
-    let mut debugger = debugger()
+    let mut debugger = debugger();
+    debugger
         .provide_source_code(
             r"
                 main: { |size_x size_y|

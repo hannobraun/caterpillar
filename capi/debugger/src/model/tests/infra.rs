@@ -21,7 +21,7 @@ pub struct TestDebugger {
 }
 
 impl TestDebugger {
-    pub fn provide_source_code(mut self, source: &str) -> Self {
+    pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
@@ -34,7 +34,7 @@ impl TestDebugger {
         self
     }
 
-    pub fn run_process(mut self) -> Self {
+    pub fn run_process(&mut self) -> &mut Self {
         let instructions = &self.state.code
             .as_ref()
             .expect(
