@@ -3,7 +3,7 @@ use capi_compiler::{
     fragments::{FragmentId, Fragments},
 };
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
-use capi_process::{Process, Value};
+use capi_process::{Command, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
@@ -17,6 +17,7 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
+    pub queued_commands: Vec<Command>,
     pub process: Option<Process>,
     pub state: PersistentState,
 }
@@ -58,6 +59,7 @@ impl TestDebugger {
         }
 
         self.process = Some(process);
+        self.process_commands();
 
         self
     }
@@ -67,12 +69,20 @@ impl TestDebugger {
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
         if let Some(command) = self.state.on_user_action(action)? {
-            self.process
-                .as_mut()
-                .expect("Can't handle user action without process")
-                .on_command(command);
+            self.queued_commands.push(command);
         }
+
+        self.process_commands();
+
         Ok(self)
+    }
+
+    fn process_commands(&mut self) {
+        if let Some(process) = &mut self.process {
+            for command in self.queued_commands.drain(..) {
+                process.on_command(command);
+            }
+        }
     }
 
     pub fn expect_code(&self) -> &Fragments {
