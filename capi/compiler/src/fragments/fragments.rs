@@ -77,8 +77,11 @@ impl Fragments {
         }
     }
 
-    pub fn find_function_by_name(&self, name: &str) -> Option<FragmentId> {
-        self.inner.find_function_by_name(name).map(|(id, _)| id)
+    pub fn find_function_by_name(
+        &self,
+        name: &str,
+    ) -> Option<(FragmentId, &Function)> {
+        self.inner.find_function_by_name(name)
     }
 }
 
