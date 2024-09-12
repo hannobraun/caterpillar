@@ -31,10 +31,6 @@ impl Process {
         }
     }
 
-    pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.effects().inspect_first().is_none()
-    }
-
     pub fn has_finished(&self) -> bool {
         self.evaluator.stack.no_frames_left()
     }
