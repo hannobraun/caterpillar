@@ -1,5 +1,4 @@
 use anyhow::anyhow;
-use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
 use capi_process::{Breakpoints, ProcessState, Value};
 use capi_protocol::{
@@ -52,8 +51,21 @@ impl PersistentState {
         action: Action,
     ) -> anyhow::Result<Option<CommandToRuntime>> {
         let command = match action {
-            Action::BreakpointClear { fragment, address } => {
-                self.clear_durable_breakpoint(&fragment)?;
+            Action::BreakpointClear { fragment, .. } => {
+                let code = self
+                    .code
+                    .as_ref()
+                    .ok_or_else(|| anyhow!("Code is not available yet."))?;
+                let address = code
+                    .source_map
+                    .fragment_to_instructions(&fragment)
+                    .first()
+                    .copied()
+                    .ok_or_else(|| {
+                        anyhow!("Fragment does not map to instruction.")
+                    })?;
+
+                self.breakpoints.clear_durable(&address);
 
                 Some(CommandToRuntime::BreakpointClear {
                     instruction: address,
@@ -105,25 +117,6 @@ impl PersistentState {
             active_functions,
             operands,
         }
-    }
-
-    pub fn clear_durable_breakpoint(
-        &mut self,
-        fragment: &FragmentId,
-    ) -> anyhow::Result<()> {
-        let code = self
-            .code
-            .as_ref()
-            .ok_or_else(|| anyhow!("Code is not available yet."))?;
-        let address = code
-            .source_map
-            .fragment_to_instructions(fragment)
-            .first()
-            .ok_or_else(|| anyhow!("Fragment does not map to instruction."))?;
-
-        self.breakpoints.clear_durable(address);
-
-        Ok(())
     }
 }
 
