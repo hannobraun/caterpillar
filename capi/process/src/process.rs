@@ -29,7 +29,7 @@ impl Process {
     }
 
     pub fn state(&self) -> ProcessState {
-        if self.effects().inspect_first().is_some() {
+        if self.effects.inspect_first().is_some() {
             ProcessState::Stopped
         } else if self.evaluator.stack.no_frames_left() {
             ProcessState::Finished
@@ -77,8 +77,7 @@ impl Process {
                 self.reset();
             }
             Command::Step => {
-                if let Some(Effect::Breakpoint) = self.effects().inspect_first()
-                {
+                if let Some(Effect::Breakpoint) = self.effects.inspect_first() {
                     let and_stop_at = self.evaluator().next_instruction;
                     self.continue_(Some(and_stop_at))
                 } else {
@@ -118,7 +117,7 @@ impl Process {
     }
 
     fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Breakpoint) = self.effects().inspect_first() {
+        if let Some(Effect::Breakpoint) = self.effects.inspect_first() {
             if let Some(address) = and_stop_at {
                 self.breakpoints.set_ephemeral(address);
             }
