@@ -2,7 +2,10 @@ use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
 use capi_process::{Breakpoints, Process, Value};
-use capi_protocol::updates::{Code, UpdateFromRuntime};
+use capi_protocol::{
+    state::RuntimeState,
+    updates::{Code, UpdateFromRuntime},
+};
 
 use super::ActiveFunctions;
 
@@ -10,6 +13,7 @@ use super::ActiveFunctions;
 pub struct PersistentState {
     pub code: Option<Code>,
     pub breakpoints: Breakpoints,
+    pub runtime_state: Option<RuntimeState>,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
@@ -21,6 +25,21 @@ impl PersistentState {
                 self.memory = Some(memory);
             }
             UpdateFromRuntime::Process(process) => {
+                let runtime_state = if process.has_finished() {
+                    RuntimeState::Finished
+                } else if process.can_step() {
+                    RuntimeState::Running
+                } else {
+                    RuntimeState::Stopped {
+                        effects: process.effects().queue().collect(),
+                        active_instructions: process
+                            .evaluator()
+                            .active_instructions()
+                            .collect(),
+                    }
+                };
+
+                self.runtime_state = Some(runtime_state);
                 self.process = Some(process);
             }
         }
