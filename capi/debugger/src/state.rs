@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
-    command::{CommandToRuntime, SerializedCommandToRuntime},
+    command::SerializedCommandToRuntime,
     updates::{SerializedUpdate, UpdateFromRuntime},
 };
 use leptos::SignalSet;
@@ -112,32 +112,7 @@ fn on_ui_action(
     state: &mut PersistentState,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
-    let command = match action {
-        Action::BreakpointClear { fragment, address } => {
-            state.clear_durable_breakpoint(&fragment).expect(
-                "Failed to clear durable breakpoint from the UI. This is a bug \
-                in the Caterpillar debugger",
-            );
-
-            Some(CommandToRuntime::BreakpointClear {
-                instruction: address,
-            })
-        }
-        Action::BreakpointSet { fragment, address } => {
-            state.set_durable_breakpoint(&fragment).expect(
-                "Failed to set durable breakpoint from the UI. This is a bug \
-                in the Caterpillar debugger",
-            );
-
-            Some(CommandToRuntime::BreakpointSet {
-                instruction: address,
-            })
-        }
-        Action::Continue => Some(CommandToRuntime::Continue),
-        Action::Reset => Some(CommandToRuntime::Reset),
-        Action::Step => Some(CommandToRuntime::Step),
-        Action::Stop => Some(CommandToRuntime::Stop),
-    };
+    let command = state.on_ui_action(action);
 
     if let Some(command) = command {
         commands_to_runtime_tx.send(command.serialize()).unwrap();

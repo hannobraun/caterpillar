@@ -3,11 +3,12 @@ use capi_compiler::fragments::FragmentId;
 use capi_game_engine::memory::Memory;
 use capi_process::{Breakpoints, ProcessState, Value};
 use capi_protocol::{
+    command::CommandToRuntime,
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
 };
 
-use super::ActiveFunctions;
+use super::{Action, ActiveFunctions};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
@@ -43,6 +44,35 @@ impl PersistentState {
 
                 self.runtime_state = Some(runtime_state);
             }
+        }
+    }
+
+    pub fn on_ui_action(&mut self, action: Action) -> Option<CommandToRuntime> {
+        match action {
+            Action::BreakpointClear { fragment, address } => {
+                self.clear_durable_breakpoint(&fragment).expect(
+                "Failed to clear durable breakpoint from the UI. This is a bug \
+                in the Caterpillar debugger",
+            );
+
+                Some(CommandToRuntime::BreakpointClear {
+                    instruction: address,
+                })
+            }
+            Action::BreakpointSet { fragment, address } => {
+                self.set_durable_breakpoint(&fragment).expect(
+                "Failed to set durable breakpoint from the UI. This is a bug \
+                in the Caterpillar debugger",
+            );
+
+                Some(CommandToRuntime::BreakpointSet {
+                    instruction: address,
+                })
+            }
+            Action::Continue => Some(CommandToRuntime::Continue),
+            Action::Reset => Some(CommandToRuntime::Reset),
+            Action::Step => Some(CommandToRuntime::Step),
+            Action::Stop => Some(CommandToRuntime::Stop),
         }
     }
 
