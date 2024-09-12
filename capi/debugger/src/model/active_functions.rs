@@ -48,9 +48,7 @@ impl ActiveFunctions {
             }
         };
         let Some(process) = process else {
-            return Self::Message {
-                message: ActiveFunctionsMessage::NoProcess,
-            };
+            unreachable!("Already handled \"no process\" case above.");
         };
 
         let mut active_instructions: VecDeque<InstructionAddress> =
