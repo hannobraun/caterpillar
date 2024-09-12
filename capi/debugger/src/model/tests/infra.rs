@@ -66,7 +66,12 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        self.state.on_user_action(action)?;
+        if let Some(command) = self.state.on_user_action(action)? {
+            self.process
+                .as_mut()
+                .expect("Can't handle user action without process")
+                .on_command(command);
+        }
         Ok(self)
     }
 
