@@ -256,36 +256,8 @@ fn compile_fragment(
                     intrinsic,
                     is_tail_call,
                 } => {
-                    let instruction = match intrinsic {
-                        Intrinsic::AddS8 => Instruction::AddS8,
-                        Intrinsic::AddS32 => Instruction::AddS32,
-                        Intrinsic::AddU8 => Instruction::AddU8,
-                        Intrinsic::AddU8Wrap => Instruction::AddU8Wrap,
-                        Intrinsic::And => Instruction::LogicalAnd,
-                        Intrinsic::Brk => Instruction::TriggerEffect {
-                            effect: Effect::Breakpoint,
-                        },
-                        Intrinsic::Copy => Instruction::Copy,
-                        Intrinsic::DivS32 => Instruction::DivS32,
-                        Intrinsic::DivU8 => Instruction::DivU8,
-                        Intrinsic::Drop => Instruction::Drop,
-                        Intrinsic::Eq => Instruction::Eq,
-                        Intrinsic::Eval => Instruction::Eval {
-                            is_tail_call: *is_tail_call,
-                        },
-                        Intrinsic::GreaterS8 => Instruction::GreaterS8,
-                        Intrinsic::GreaterS32 => Instruction::GreaterS32,
-                        Intrinsic::GreaterU8 => Instruction::GreaterU8,
-                        Intrinsic::MulS32 => Instruction::MulS32,
-                        Intrinsic::MulU8Wrap => Instruction::MulU8Wrap,
-                        Intrinsic::NegS32 => Instruction::NegS32,
-                        Intrinsic::Not => Instruction::LogicalNot,
-                        Intrinsic::RemainderS32 => Instruction::RemainderS32,
-                        Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
-                        Intrinsic::SubS32 => Instruction::SubS32,
-                        Intrinsic::SubU8 => Instruction::SubU8,
-                        Intrinsic::SubU8Wrap => Instruction::SubU8Wrap,
-                    };
+                    let instruction =
+                        intrinsic_to_instruction(intrinsic, *is_tail_call);
 
                     Some(
                         output.generate_instruction(instruction, fragment.id()),
@@ -372,6 +344,40 @@ fn compile_fragment(
                 output.generate_instruction(Instruction::Return, fragment.id()),
             )
         }
+    }
+}
+
+fn intrinsic_to_instruction(
+    intrinsic: &Intrinsic,
+    is_tail_call: bool,
+) -> Instruction {
+    match intrinsic {
+        Intrinsic::AddS8 => Instruction::AddS8,
+        Intrinsic::AddS32 => Instruction::AddS32,
+        Intrinsic::AddU8 => Instruction::AddU8,
+        Intrinsic::AddU8Wrap => Instruction::AddU8Wrap,
+        Intrinsic::And => Instruction::LogicalAnd,
+        Intrinsic::Brk => Instruction::TriggerEffect {
+            effect: Effect::Breakpoint,
+        },
+        Intrinsic::Copy => Instruction::Copy,
+        Intrinsic::DivS32 => Instruction::DivS32,
+        Intrinsic::DivU8 => Instruction::DivU8,
+        Intrinsic::Drop => Instruction::Drop,
+        Intrinsic::Eq => Instruction::Eq,
+        Intrinsic::Eval => Instruction::Eval { is_tail_call },
+        Intrinsic::GreaterS8 => Instruction::GreaterS8,
+        Intrinsic::GreaterS32 => Instruction::GreaterS32,
+        Intrinsic::GreaterU8 => Instruction::GreaterU8,
+        Intrinsic::MulS32 => Instruction::MulS32,
+        Intrinsic::MulU8Wrap => Instruction::MulU8Wrap,
+        Intrinsic::NegS32 => Instruction::NegS32,
+        Intrinsic::Not => Instruction::LogicalNot,
+        Intrinsic::RemainderS32 => Instruction::RemainderS32,
+        Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
+        Intrinsic::SubS32 => Instruction::SubS32,
+        Intrinsic::SubU8 => Instruction::SubU8,
+        Intrinsic::SubU8Wrap => Instruction::SubU8Wrap,
     }
 }
 
