@@ -185,8 +185,6 @@ fn make_single_expression(
 
     let data_fragment = ron::to_string(&data.id)
         .expect("Expecting serialization of `FragmentId` to always work.");
-    let data_instruction =
-        data.first_instruction.map(|instruction| instruction.index);
     let data_breakpoint = data.has_durable_breakpoint;
 
     let error = data.effect.map(|effect| format!("{:?}", effect));
@@ -220,7 +218,6 @@ fn make_single_expression(
             <span
                 class=class_inner
                 data-fragment=data_fragment
-                data-instruction=data_instruction
                 data-breakpoint=data_breakpoint
                 on:click=toggle_breakpoint>
                 {expression}
