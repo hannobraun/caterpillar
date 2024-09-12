@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{Branch, DebugFragment, DebugFragmentData, DebugFragmentKind},
-    ui::{Action, ActionsTx},
+    ui::{actions::send_action, Action, ActionsTx},
 };
 
 #[component]
@@ -220,7 +220,7 @@ fn make_single_expression(
             Action::BreakpointSet { fragment, address }
         };
 
-        leptos::spawn_local(action.send_action(actions.clone()));
+        leptos::spawn_local(send_action(action, actions.clone()));
     };
 
     (
