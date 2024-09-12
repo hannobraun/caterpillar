@@ -24,7 +24,7 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::NoServer,
             };
         };
-        let active_instructions = match state {
+        let (effects, active_instructions) = match state {
             Some(state) => match state {
                 RuntimeState::Running => {
                     return Self::Message {
@@ -37,9 +37,9 @@ impl ActiveFunctions {
                     };
                 }
                 RuntimeState::Stopped {
-                    effects: _,
+                    effects,
                     active_instructions,
-                } => active_instructions,
+                } => (effects, active_instructions),
             },
             None => {
                 return Self::Message {
@@ -52,8 +52,6 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::NoProcess,
             };
         };
-
-        let effects: Vec<Effect> = process.effects().queue().collect();
 
         let mut active_instructions: VecDeque<InstructionAddress> =
             active_instructions.clone().into();
@@ -69,7 +67,7 @@ impl ActiveFunctions {
                     &mut entries,
                     code,
                     breakpoints,
-                    &effects,
+                    effects,
                     process,
                 );
             }
@@ -86,7 +84,7 @@ impl ActiveFunctions {
                         &mut entries,
                         code,
                         breakpoints,
-                        &effects,
+                        effects,
                         process,
                     );
                 }
@@ -104,7 +102,7 @@ impl ActiveFunctions {
                     &code.fragments,
                     &code.source_map,
                     breakpoints,
-                    &effects,
+                    effects,
                     process,
                 ),
             ));
