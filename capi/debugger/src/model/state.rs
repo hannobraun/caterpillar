@@ -47,8 +47,11 @@ impl PersistentState {
         }
     }
 
-    pub fn on_ui_action(&mut self, action: Action) -> Option<CommandToRuntime> {
-        match action {
+    pub fn on_ui_action(
+        &mut self,
+        action: Action,
+    ) -> anyhow::Result<Option<CommandToRuntime>> {
+        let command = match action {
             Action::BreakpointClear { fragment, address } => {
                 self.clear_durable_breakpoint(&fragment).expect(
                 "Failed to clear durable breakpoint from the UI. This is a bug \
@@ -73,7 +76,9 @@ impl PersistentState {
             Action::Reset => Some(CommandToRuntime::Reset),
             Action::Step => Some(CommandToRuntime::Step),
             Action::Stop => Some(CommandToRuntime::Stop),
-        }
+        };
+
+        Ok(command)
     }
 
     pub fn generate_transient_state(&self) -> TransientState {

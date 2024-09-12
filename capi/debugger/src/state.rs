@@ -112,7 +112,10 @@ fn on_ui_action(
     state: &mut PersistentState,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
 ) {
-    let command = state.on_ui_action(action);
+    let command = state.on_ui_action(action).expect(
+        "Failed to handle UI action. This is most likely a bug in the \
+        Caterpillar debugger:",
+    );
 
     if let Some(command) = command {
         commands_to_runtime_tx.send(command.serialize()).unwrap();
