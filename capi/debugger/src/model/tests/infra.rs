@@ -64,7 +64,7 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        self.state.on_ui_action(action)?;
+        self.state.on_user_action(action)?;
         Ok(self)
     }
 

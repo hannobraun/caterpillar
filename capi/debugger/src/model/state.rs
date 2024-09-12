@@ -46,7 +46,7 @@ impl PersistentState {
         }
     }
 
-    pub fn on_ui_action(
+    pub fn on_user_action(
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<Option<CommandToRuntime>> {
