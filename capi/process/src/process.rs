@@ -88,7 +88,7 @@ impl Process {
                 }
             }
             Command::Stop => {
-                self.effects_mut().trigger(Effect::Breakpoint);
+                self.effects.trigger(Effect::Breakpoint);
             }
         }
     }
@@ -122,7 +122,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(address);
             }
 
-            self.effects_mut().handle_first();
+            self.effects.handle_first();
         }
     }
 
@@ -137,12 +137,12 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.effects_mut().trigger(Effect::Breakpoint);
+            self.effects.trigger(Effect::Breakpoint);
             return;
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects_mut().trigger(effect);
+            self.effects.trigger(effect);
         }
     }
 }
