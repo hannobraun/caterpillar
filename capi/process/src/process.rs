@@ -84,7 +84,7 @@ impl Process {
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
         if let Some(Effect::Breakpoint) = self.effects.inspect_first() {
             if let Some(address) = and_stop_at {
-                self.breakpoints.set_ephemeral(address);
+                self.breakpoints_mut().set_ephemeral(address);
             }
 
             self.effects.handle_first();
