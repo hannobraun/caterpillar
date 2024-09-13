@@ -119,7 +119,7 @@ fn step_over_brk() {
             .active_functions
             .expect_entries()
             .expect_functions()
-            .expect_innermost("main")
+            .expect_leaf("main")
             .active_fragment()
             .data
             .id,
@@ -133,7 +133,7 @@ fn step_over_brk() {
             .active_functions
             .expect_entries()
             .expect_functions()
-            .expect_innermost("main")
+            .expect_leaf("main")
             .active_fragment()
             .data
             .id,
@@ -187,7 +187,7 @@ fn step_into_function() {
             .active_functions
             .expect_entries()
             .expect_functions()
-            .with_name("f")
+            .expect_leaf("f")
             .active_fragment()
             .data
             .id,
@@ -254,7 +254,7 @@ fn step_out_of_function() {
             .active_functions
             .expect_entries()
             .expect_functions()
-            .expect_innermost("main")
+            .expect_leaf("main")
             .active_fragment()
             .data
             .id,

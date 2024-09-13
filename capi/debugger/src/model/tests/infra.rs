@@ -176,12 +176,12 @@ impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
 }
 
 pub trait FunctionsExt {
-    fn expect_innermost(self, name: &str) -> DebugFunction;
+    fn expect_leaf(self, name: &str) -> DebugFunction;
     fn with_name(self, name: &str) -> DebugFunction;
 }
 
 impl FunctionsExt for Vec<DebugFunction> {
-    fn expect_innermost(mut self, name: &str) -> DebugFunction {
+    fn expect_leaf(mut self, name: &str) -> DebugFunction {
         let f = self.remove(0);
         assert_eq!(f.name.as_deref(), Some(name));
         f
