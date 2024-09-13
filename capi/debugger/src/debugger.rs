@@ -1,6 +1,6 @@
 use capi_process::Instructions;
 use capi_protocol::{
-    command::{CommandExt, SerializedCommandToRuntime},
+    command::CommandExt,
     updates::{SerializedUpdate, UpdateFromRuntime},
 };
 use leptos::SignalSet;
@@ -11,7 +11,7 @@ use tokio::{
 
 use crate::{
     code::{CodeFetcher, CodeRx, CodeTx},
-    commands::CommandsToRuntimeTx,
+    commands::{CommandsToRuntimeRx, CommandsToRuntimeTx},
     model::{PersistentState, UserAction},
     ui,
 };
@@ -19,8 +19,7 @@ use crate::{
 pub struct Debugger {
     pub code_rx: CodeRx,
     pub updates_from_runtime_tx: mpsc::UnboundedSender<SerializedUpdate>,
-    pub commands_to_runtime_rx:
-        mpsc::UnboundedReceiver<SerializedCommandToRuntime>,
+    pub commands_to_runtime_rx: CommandsToRuntimeRx,
 }
 
 impl Debugger {
