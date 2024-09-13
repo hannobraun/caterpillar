@@ -1,5 +1,6 @@
+use capi_game_engine::command::Command;
 use capi_process::Instructions;
-use capi_protocol::{updates::Code, Versioned};
+use capi_protocol::{command::CommandExt, updates::Code, Versioned};
 use gloo_net::http::{Request, Response};
 use tokio::sync::watch;
 
@@ -45,13 +46,19 @@ impl CodeFetcher {
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
-    _: &CommandsToRuntimeTx,
+    commands_to_runtime_tx: &CommandsToRuntimeTx,
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {
     let code = code?.text().await?;
     let code: Versioned<Code> = ron::from_str(&code)?;
 
     let instructions = state.on_new_code(code.inner);
+    let command = Command::UpdateCode {
+        instructions: instructions.clone(),
+    };
+    commands_to_runtime_tx.send(command.serialize()).expect(
+        "Command receiver lives in static variable, should never drop.",
+    );
 
     code_tx
         .send(instructions)
