@@ -25,21 +25,6 @@ impl PersistentState {
         instructions
     }
 
-    pub fn apply_breakpoints(&self, code: &Code) -> Instructions {
-        let mut instructions = code.instructions.clone();
-
-        for address in self.breakpoints.iter() {
-            instructions.replace(
-                address,
-                Instruction::TriggerEffect {
-                    effect: Effect::Breakpoint,
-                },
-            );
-        }
-
-        instructions
-    }
-
     pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
         match update {
             UpdateFromRuntime::Memory { memory } => {
@@ -120,6 +105,21 @@ impl PersistentState {
         };
 
         Ok(command)
+    }
+
+    pub fn apply_breakpoints(&self, code: &Code) -> Instructions {
+        let mut instructions = code.instructions.clone();
+
+        for address in self.breakpoints.iter() {
+            instructions.replace(
+                address,
+                Instruction::TriggerEffect {
+                    effect: Effect::Breakpoint,
+                },
+            );
+        }
+
+        instructions
     }
 
     pub fn generate_transient_state(&self) -> TransientState {
