@@ -59,7 +59,7 @@ impl PersistentState {
     ) -> anyhow::Result<(Vec<Command>, Option<Instructions>)> {
         let mut commands = Vec::new();
 
-        let command = match action {
+        match action {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self
                     .code
@@ -75,8 +75,6 @@ impl PersistentState {
                     })?;
 
                 self.breakpoints.clear_durable(&address);
-
-                None
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self
@@ -93,15 +91,12 @@ impl PersistentState {
                     })?;
 
                 self.breakpoints.set_durable(address);
-
-                None
             }
-            UserAction::Continue => Some(Command::Continue),
-            UserAction::Reset => Some(Command::Reset),
-            UserAction::Step => Some(Command::Step),
-            UserAction::Stop => Some(Command::Stop),
+            UserAction::Continue => commands.push(Command::Continue),
+            UserAction::Reset => commands.push(Command::Reset),
+            UserAction::Step => commands.push(Command::Step),
+            UserAction::Stop => commands.push(Command::Stop),
         };
-        commands.extend(command);
 
         let instructions =
             self.code.as_ref().map(|code| self.apply_breakpoints(code));
