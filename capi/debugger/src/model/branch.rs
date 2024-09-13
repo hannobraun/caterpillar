@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, FragmentId, Fragments},
+    fragments::{Branch, FragmentId, Fragments},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -15,7 +15,7 @@ pub struct DebugBranch {
 
 impl DebugBranch {
     pub fn new(
-        branch: fragments::Branch,
+        branch: Branch,
         active_fragment: Option<FragmentId>,
         fragments: &Fragments,
         source_map: &SourceMap,
