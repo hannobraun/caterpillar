@@ -44,7 +44,7 @@ impl TestDebugger {
         self.game_engine = Some(game_engine);
         self.process_commands();
 
-        let process = self
+        let game_engine = self
             .game_engine
             .as_mut()
             .expect("Just set `self.process` to `Some`");
@@ -57,14 +57,14 @@ impl TestDebugger {
             )
             .instructions;
 
-        while process.process.state().is_running() {
-            process.process.evaluate_next_instruction(instructions);
+        while game_engine.process.state().is_running() {
+            game_engine.process.evaluate_next_instruction(instructions);
         }
 
         let memory = Memory::default();
         let mut updates = Updates::default();
 
-        updates.queue_updates(&process.process, &memory);
+        updates.queue_updates(&game_engine.process, &memory);
         for update in updates.take_queued_updates() {
             self.state.on_update_from_runtime(update);
         }
