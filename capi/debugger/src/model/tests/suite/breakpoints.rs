@@ -86,6 +86,67 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
 
 #[test]
 #[should_panic] // https://github.com/hannobraun/caterpillar/issues/52
+fn step_over_brk() {
+    // When stopped at a `brk` intrinsic, we expect to be able to step over it.
+
+    let mut debugger = debugger();
+    debugger
+        .provide_source_code(
+            r"
+            main: { |size_x size_y|
+                brk
+                nop
+            }
+        ",
+        )
+        .run_program();
+
+    let (brk, nop) = {
+        let fragments = debugger.expect_code();
+        let mut body = fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments);
+
+        let brk = body.next().unwrap().id();
+        let nop = body.next().unwrap().id();
+
+        (brk, nop)
+    };
+
+    assert_eq!(
+        debugger
+            .state
+            .generate_transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_innermost("main")
+            .active_fragment()
+            .data
+            .id,
+        brk,
+    );
+
+    debugger.on_user_action(UserAction::Step).unwrap();
+    assert_eq!(
+        debugger
+            .state
+            .generate_transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_innermost("main")
+            .active_fragment()
+            .data
+            .id,
+        nop,
+    );
+}
+
+#[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/52
 fn step_into_function() {
     // When stopping at a function call and then stepping, we expect to land at
     // the first fragment in the function.
