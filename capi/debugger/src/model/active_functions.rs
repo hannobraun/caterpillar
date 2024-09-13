@@ -1,5 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
+use anyhow::anyhow;
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{Breakpoints, Effect, InstructionAddress};
 use capi_protocol::{runtime_state::RuntimeState, updates::Code};
@@ -143,6 +144,20 @@ impl ActiveFunctionsEntries {
 pub enum ActiveFunctionsEntry {
     Function(DebugFunction),
     Gap,
+}
+
+impl ActiveFunctionsEntry {
+    pub fn function(&self) -> anyhow::Result<&DebugFunction> {
+        let Self::Function(function) = self else {
+            return Err(anyhow!(
+                "Expected active functions entry to be function. Got \
+                instead:\n\
+                {self:#?}"
+            ));
+        };
+
+        Ok(function)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
