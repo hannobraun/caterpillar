@@ -50,9 +50,7 @@ async fn on_new_code(
     let code: Versioned<Code> = ron::from_str(&code)?;
 
     let instructions = state.on_new_code(code.inner);
-    let command = Command::UpdateCode {
-        instructions: instructions.clone(),
-    };
+    let command = Command::UpdateCode { instructions };
     commands_to_runtime_tx.send(command.serialize()).expect(
         "Command receiver lives in static variable, should never drop.",
     );
