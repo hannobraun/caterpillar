@@ -10,7 +10,7 @@ mod tests;
 
 pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
-    branch::Branch,
+    branch::DebugBranch,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
     state::{PersistentState, TransientState},

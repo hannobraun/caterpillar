@@ -4,12 +4,12 @@ use capi_compiler::{
 };
 use capi_process::{Breakpoints, Effect};
 
-use super::Branch;
+use super::DebugBranch;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFunction {
     pub name: Option<String>,
-    pub branches: Vec<Branch>,
+    pub branches: Vec<DebugBranch>,
 }
 
 impl DebugFunction {
@@ -26,7 +26,7 @@ impl DebugFunction {
             .branches
             .into_iter()
             .map(|branch| {
-                Branch::new(
+                DebugBranch::new(
                     branch,
                     active_fragment,
                     fragments,

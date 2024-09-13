@@ -10,7 +10,7 @@ use capi_process::Instructions;
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
-    ActiveFunctions, ActiveFunctionsEntry, Branch, DebugFragment,
+    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFragment,
     DebugFragmentKind, DebugFunction, PersistentState, UserAction,
 };
 
@@ -189,7 +189,7 @@ impl FunctionsExt for Vec<DebugFunction> {
 
 pub trait DebugFunctionExt {
     fn active_fragment(self) -> DebugFragment;
-    fn only_branch(self) -> Branch;
+    fn only_branch(self) -> DebugBranch;
 }
 
 impl DebugFunctionExt for DebugFunction {
@@ -205,7 +205,7 @@ impl DebugFunctionExt for DebugFunction {
             .expect("Expected to find an active fragment")
     }
 
-    fn only_branch(mut self) -> Branch {
+    fn only_branch(mut self) -> DebugBranch {
         let branch = self.branches.remove(0);
 
         assert!(
@@ -222,7 +222,7 @@ pub trait BranchExt {
     fn fragment(&self, i: usize) -> DebugFragment;
 }
 
-impl BranchExt for Branch {
+impl BranchExt for DebugBranch {
     fn fragment(&self, i: usize) -> DebugFragment {
         let Some(fragment) = self.body.get(i) else {
             panic!("{i}-th fragment in `{:?}` not available", self.body);

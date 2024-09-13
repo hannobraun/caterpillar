@@ -6,7 +6,8 @@ use leptos::{
 
 use crate::{
     model::{
-        Branch, DebugFragment, DebugFragmentData, DebugFragmentKind, UserAction,
+        DebugBranch, DebugFragment, DebugFragmentData, DebugFragmentKind,
+        UserAction,
     },
     ui::{actions::send_action, ActionsTx},
 };
@@ -14,7 +15,7 @@ use crate::{
 #[component]
 pub fn NamedFunction(
     name: String,
-    branches: Vec<Branch>,
+    branches: Vec<DebugBranch>,
     actions: ActionsTx,
 ) -> impl IntoView {
     view! {
@@ -30,7 +31,7 @@ pub fn NamedFunction(
 }
 
 #[component]
-fn Function(branches: Vec<Branch>, actions: ActionsTx) -> impl IntoView {
+fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
     let branches = branches
         .into_iter()
         .map(|branch| {

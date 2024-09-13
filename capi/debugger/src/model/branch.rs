@@ -8,12 +8,12 @@ use capi_process::{Breakpoints, Effect};
 use super::DebugFragment;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Branch {
+pub struct DebugBranch {
     pub parameters: Vec<String>,
     pub body: Vec<DebugFragment>,
 }
 
-impl Branch {
+impl DebugBranch {
     pub fn new(
         branch: fragments::Branch,
         active_fragment: Option<FragmentId>,
