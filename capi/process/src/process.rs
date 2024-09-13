@@ -25,7 +25,7 @@ impl Process {
             breakpoints: Breakpoints::default(),
         };
 
-        self_.reset(self_.arguments.clone());
+        self_.reset(arguments);
 
         self_
     }
