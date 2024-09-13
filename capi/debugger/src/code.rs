@@ -3,7 +3,7 @@ use capi_protocol::{updates::Code, Versioned};
 use gloo_net::http::{Request, Response};
 use tokio::sync::watch;
 
-use crate::model::PersistentState;
+use crate::{commands::CommandsToRuntimeTx, model::PersistentState};
 
 pub type CodeRx = watch::Receiver<Instructions>;
 pub type CodeTx = watch::Sender<Instructions>;
@@ -15,10 +15,12 @@ pub struct CodeFetcher {
 impl CodeFetcher {
     pub async fn new(
         code_tx: &CodeTx,
+        commands_to_runtime_tx: &CommandsToRuntimeTx,
         state: &mut PersistentState,
     ) -> anyhow::Result<Self> {
         let code = Request::get("/code").send().await;
-        let timestamp = on_new_code(code, code_tx, state).await?;
+        let timestamp =
+            on_new_code(code, code_tx, commands_to_runtime_tx, state).await?;
 
         Ok(Self { timestamp })
     }
@@ -26,13 +28,15 @@ impl CodeFetcher {
     pub async fn wait_for_new_code(
         &mut self,
         code_tx: &CodeTx,
+        commands_to_runtime_tx: &CommandsToRuntimeTx,
         state: &mut PersistentState,
     ) -> anyhow::Result<()> {
         let code = Request::get(&format!("/code/{}", self.timestamp))
             .send()
             .await;
 
-        self.timestamp = on_new_code(code, code_tx, state).await?;
+        self.timestamp =
+            on_new_code(code, code_tx, commands_to_runtime_tx, state).await?;
 
         Ok(())
     }
@@ -41,6 +45,7 @@ impl CodeFetcher {
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
     code_tx: &CodeTx,
+    _: &CommandsToRuntimeTx,
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {
     let code = code?.text().await?;
