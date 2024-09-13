@@ -42,7 +42,7 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
         self.next_instruction = self.next_instruction.next();
 
-        self.evaluate_instruction(current_instruction)?;
+        self.evaluate_instruction(current_instruction, self.next_instruction)?;
 
         Ok(())
     }
@@ -50,6 +50,7 @@ impl Evaluator {
     fn evaluate_instruction(
         &mut self,
         current_instruction: &Instruction,
+        next_instruction: InstructionAddress,
     ) -> Result<(), Effect> {
         let stack = &mut self.stack;
 
@@ -161,7 +162,7 @@ impl Evaluator {
                         if *is_tail_call {
                             stack.reuse_frame();
                         } else {
-                            stack.push_frame(self.next_instruction)?;
+                            stack.push_frame(next_instruction)?;
                         }
 
                         self.next_instruction = branch.start;
@@ -279,7 +280,7 @@ impl Evaluator {
                         if *is_tail_call {
                             stack.reuse_frame();
                         } else {
-                            stack.push_frame(self.next_instruction)?;
+                            stack.push_frame(next_instruction)?;
                         }
 
                         stack
