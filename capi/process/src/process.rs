@@ -8,7 +8,7 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process {
-    arguments: Vec<Value>,
+    pub arguments: Vec<Value>,
     effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
