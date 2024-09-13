@@ -20,6 +20,14 @@ pub struct PersistentState {
 
 impl PersistentState {
     pub fn on_new_code(&mut self, code: Code) -> Instructions {
+        let instructions = self.apply_breakpoints(&code);
+
+        self.code = Some(code);
+
+        instructions
+    }
+
+    pub fn apply_breakpoints(&self, code: &Code) -> Instructions {
         let mut instructions = code.instructions.clone();
 
         for address in self.breakpoints.iter() {
@@ -30,8 +38,6 @@ impl PersistentState {
                 },
             );
         }
-
-        self.code = Some(code);
 
         instructions
     }
