@@ -145,6 +145,11 @@ impl Process {
             self.effects.trigger(effect);
         }
     }
+
+    pub fn ignore_next_instruction(&mut self) {
+        self.evaluator.next_instruction =
+            self.evaluator.next_instruction.next();
+    }
 }
 
 pub enum ProcessState {
