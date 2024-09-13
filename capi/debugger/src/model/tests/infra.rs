@@ -34,9 +34,8 @@ impl TestDebugger {
             instructions,
             source_map,
         });
-        self.queued_commands.push(Command::UpdateCode {
-            instructions: instructions.clone(),
-        });
+        self.queued_commands
+            .push(Command::UpdateCode { instructions });
 
         self
     }
