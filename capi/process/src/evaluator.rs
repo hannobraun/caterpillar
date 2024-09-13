@@ -52,6 +52,7 @@ impl Evaluator {
         current_instruction: &Instruction,
         next_instruction: InstructionAddress,
     ) -> Result<(), Effect> {
+        let closures = &mut self.closures;
         let stack = &mut self.stack;
 
         match current_instruction {
@@ -246,9 +247,7 @@ impl Evaluator {
                     let index = stack.pop_operand()?;
                     let index = index.to_u32();
 
-                    self.closures
-                        .remove(&index)
-                        .ok_or(Effect::InvalidFunction)?
+                    closures.remove(&index).ok_or(Effect::InvalidFunction)?
                 };
 
                 for branch in &function.branches {
@@ -383,7 +382,7 @@ impl Evaluator {
                     self.next_closure += 1;
                     next_closure
                 };
-                self.closures.insert(
+                closures.insert(
                     index,
                     Function {
                         branches: branches.clone(),
