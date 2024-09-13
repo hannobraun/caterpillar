@@ -75,6 +75,10 @@ impl PersistentState {
                     })?;
 
                 self.breakpoints.clear_durable(&address);
+
+                commands.push(Command::UpdateCode {
+                    instructions: self.apply_breakpoints(code),
+                });
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self
@@ -91,6 +95,10 @@ impl PersistentState {
                     })?;
 
                 self.breakpoints.set_durable(address);
+
+                commands.push(Command::UpdateCode {
+                    instructions: self.apply_breakpoints(code),
+                });
             }
             UserAction::Continue => {
                 commands.push(Command::Continue);
