@@ -11,6 +11,7 @@ use super::DebugFragment;
 pub struct DebugBranch {
     pub parameters: Vec<String>,
     pub body: Vec<DebugFragment>,
+    pub is_active: bool,
 }
 
 impl DebugBranch {
@@ -48,6 +49,13 @@ impl DebugBranch {
             })
             .collect::<Vec<_>>();
 
-        Self { parameters, body }
+        let is_active =
+            body.iter().any(|fragment| fragment.data.state.is_active());
+
+        Self {
+            parameters,
+            body,
+            is_active,
+        }
     }
 }
