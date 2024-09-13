@@ -6,7 +6,7 @@ use capi_protocol::{
 };
 use tokio::sync::mpsc::error::TryRecvError;
 
-use crate::state::Debugger;
+use crate::debugger::Debugger;
 
 pub static STATE: Mutex<Option<Debugger>> = Mutex::new(None);
 

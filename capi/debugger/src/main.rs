@@ -1,7 +1,7 @@
 mod code;
+mod debugger;
 mod ffi;
 mod model;
-mod state;
 mod ui;
 
 fn main() {
