@@ -6,7 +6,6 @@ use capi_game_engine::{
     command::Command, game_engine::GameEngine, host::GameEngineHost,
     memory::Memory,
 };
-use capi_process::Instructions;
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
@@ -20,7 +19,6 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
-    pub instructions: Option<Instructions>,
     pub queued_commands: Vec<Command>,
     pub game_engine: Option<GameEngine>,
     pub state: PersistentState,
@@ -39,7 +37,6 @@ impl TestDebugger {
         self.queued_commands.push(Command::UpdateCode {
             instructions: instructions.clone(),
         });
-        self.instructions = Some(instructions);
 
         self
     }
@@ -73,13 +70,10 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        let (commands, instructions) = self.state.on_user_action(action)?;
+        let (commands, _) = self.state.on_user_action(action)?;
 
         for command in commands {
             self.queued_commands.push(command);
-        }
-        if let Some(instructions) = instructions {
-            self.instructions = Some(instructions);
         }
 
         self.process_commands();
