@@ -11,6 +11,7 @@ use crate::{
 pub struct GameEngine {
     pub process: Process,
 
+    arguments: [Value; 2],
     last_frame_start_s: Option<f64>,
     instructions: Option<Instructions>,
     memory: Memory,
@@ -24,6 +25,7 @@ impl GameEngine {
 
         Self {
             process: Process::new(arguments),
+            arguments,
             last_frame_start_s: None,
             instructions: None,
             memory: Memory::default(),
@@ -60,7 +62,7 @@ impl GameEngine {
                 self.process.continue_(None);
             }
             Command::Reset => {
-                self.process.reset(self.process.arguments.clone());
+                self.process.reset(self.arguments);
             }
             Command::Step => {
                 if let Some(Effect::Breakpoint) =
