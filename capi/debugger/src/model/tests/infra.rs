@@ -20,7 +20,7 @@ pub fn debugger() -> TestDebugger {
 #[derive(Default)]
 pub struct TestDebugger {
     pub queued_commands: Vec<Command>,
-    pub process: Option<GameEngine>,
+    pub game_engine: Option<GameEngine>,
     pub state: PersistentState,
 }
 
@@ -41,11 +41,11 @@ impl TestDebugger {
     pub fn run_process(&mut self) -> &mut Self {
         let game_engine = GameEngine::new();
 
-        self.process = Some(game_engine);
+        self.game_engine = Some(game_engine);
         self.process_commands();
 
         let process = self
-            .process
+            .game_engine
             .as_mut()
             .expect("Just set `self.process` to `Some`");
 
@@ -86,7 +86,7 @@ impl TestDebugger {
     }
 
     fn process_commands(&mut self) {
-        if let Some(process) = &mut self.process {
+        if let Some(process) = &mut self.game_engine {
             for command in self.queued_commands.drain(..) {
                 process.on_command(command);
             }
