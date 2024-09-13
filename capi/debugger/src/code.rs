@@ -45,7 +45,7 @@ impl CodeFetcher {
 
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
-    code_tx: &CodeTx,
+    _: &CodeTx,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {
@@ -59,10 +59,6 @@ async fn on_new_code(
     commands_to_runtime_tx.send(command.serialize()).expect(
         "Command receiver lives in static variable, should never drop.",
     );
-
-    code_tx
-        .send(instructions)
-        .expect("Code receiver lives in static variable, should never drop.");
 
     Ok(code.timestamp)
 }
