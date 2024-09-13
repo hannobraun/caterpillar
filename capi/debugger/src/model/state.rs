@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_process::{
     Breakpoints, Effect, Instruction, Instructions, ProcessState, Value,
@@ -62,14 +61,7 @@ impl PersistentState {
         match action {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = code
-                    .source_map
-                    .fragment_to_instructions(&fragment)
-                    .first()
-                    .copied()
-                    .ok_or_else(|| {
-                        anyhow!("Fragment does not map to instruction.")
-                    })?;
+                let address = self.code.fragment_to_instructions(&fragment)?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -79,14 +71,7 @@ impl PersistentState {
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = code
-                    .source_map
-                    .fragment_to_instructions(&fragment)
-                    .first()
-                    .copied()
-                    .ok_or_else(|| {
-                        anyhow!("Fragment does not map to instruction.")
-                    })?;
+                let address = self.code.fragment_to_instructions(&fragment)?;
 
                 self.breakpoints.set_durable(address);
 
