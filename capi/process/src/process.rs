@@ -84,7 +84,7 @@ impl Process {
                 if let Some(Effect::Breakpoint) =
                     self.effects_mut().inspect_first()
                 {
-                    let and_stop_at = self.evaluator.next_instruction;
+                    let and_stop_at = self.evaluator().next_instruction;
                     self.continue_(Some(and_stop_at))
                 } else {
                     // If we're not stopped at a breakpoint, we can't step.
