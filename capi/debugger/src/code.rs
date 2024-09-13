@@ -15,20 +15,18 @@ pub struct CodeFetcher {
 
 impl CodeFetcher {
     pub async fn new(
-        code_tx: &CodeTx,
         commands_to_runtime_tx: &CommandsToRuntimeTx,
         state: &mut PersistentState,
     ) -> anyhow::Result<Self> {
         let code = Request::get("/code").send().await;
         let timestamp =
-            on_new_code(code, code_tx, commands_to_runtime_tx, state).await?;
+            on_new_code(code, commands_to_runtime_tx, state).await?;
 
         Ok(Self { timestamp })
     }
 
     pub async fn wait_for_new_code(
         &mut self,
-        code_tx: &CodeTx,
         commands_to_runtime_tx: &CommandsToRuntimeTx,
         state: &mut PersistentState,
     ) -> anyhow::Result<()> {
@@ -37,7 +35,7 @@ impl CodeFetcher {
             .await;
 
         self.timestamp =
-            on_new_code(code, code_tx, commands_to_runtime_tx, state).await?;
+            on_new_code(code, commands_to_runtime_tx, state).await?;
 
         Ok(())
     }
@@ -45,7 +43,6 @@ impl CodeFetcher {
 
 async fn on_new_code(
     code: Result<Response, gloo_net::Error>,
-    _: &CodeTx,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {

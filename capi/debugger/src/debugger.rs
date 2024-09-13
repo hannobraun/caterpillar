@@ -38,19 +38,15 @@ impl Debugger {
             leptos::create_signal((persistent.clone(), transient));
 
         leptos::spawn_local(async move {
-            let mut code = CodeFetcher::new(
-                &code_tx,
-                &commands_to_runtime_tx,
-                &mut persistent,
-            )
-            .await
-            .unwrap();
+            let mut code =
+                CodeFetcher::new(&commands_to_runtime_tx, &mut persistent)
+                    .await
+                    .unwrap();
 
             loop {
                 select! {
                     result =
                         code.wait_for_new_code(
-                            &code_tx,
                             &commands_to_runtime_tx,
                             &mut persistent,
                         )
