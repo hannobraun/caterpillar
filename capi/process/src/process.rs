@@ -86,8 +86,8 @@ impl Process {
             evaluator: Evaluator::default(),
         };
 
-        for argument in &self.arguments {
-            self.evaluator.stack.push_operand(*argument);
+        for argument in arguments {
+            self.evaluator.stack.push_operand(argument);
         }
     }
 
