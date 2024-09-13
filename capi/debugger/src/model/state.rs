@@ -8,11 +8,11 @@ use capi_protocol::{
     updates::{Code, UpdateFromRuntime},
 };
 
-use super::{ActiveFunctions, UserAction};
+use super::{ActiveFunctions, DebugCode, UserAction};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
-    pub code: Option<Code>,
+    pub code: DebugCode,
     pub breakpoints: Breakpoints,
     pub runtime_state: Option<RuntimeState>,
     pub memory: Option<Memory>,

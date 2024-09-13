@@ -1,5 +1,6 @@
 mod active_functions;
 mod branch;
+mod code;
 mod fragment;
 mod function;
 mod state;
@@ -11,6 +12,7 @@ mod tests;
 pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
     branch::DebugBranch,
+    code::DebugCode,
     fragment::{DebugFragment, DebugFragmentData, DebugFragmentKind},
     function::DebugFunction,
     state::{PersistentState, TransientState},
