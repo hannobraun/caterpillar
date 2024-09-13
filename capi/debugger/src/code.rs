@@ -1,4 +1,3 @@
-use capi_game_engine::command::Command;
 use capi_process::Instructions;
 use capi_protocol::{command::CommandExt, updates::Code, Versioned};
 use gloo_net::http::{Request, Response};
@@ -49,8 +48,7 @@ async fn on_new_code(
     let code = code?.text().await?;
     let code: Versioned<Code> = ron::from_str(&code)?;
 
-    let instructions = state.on_new_code(code.inner);
-    let command = Command::UpdateCode { instructions };
+    let command = state.on_new_code(code.inner);
     commands_to_runtime_tx.send(command.serialize()).expect(
         "Command receiver lives in static variable, should never drop.",
     );

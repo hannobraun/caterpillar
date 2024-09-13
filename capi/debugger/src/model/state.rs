@@ -19,10 +19,10 @@ pub struct PersistentState {
 }
 
 impl PersistentState {
-    pub fn on_new_code(&mut self, code: Code) -> Instructions {
+    pub fn on_new_code(&mut self, code: Code) -> Command {
         let instructions = self.apply_breakpoints(&code);
         self.code = Some(code);
-        instructions
+        Command::UpdateCode { instructions }
     }
 
     pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {

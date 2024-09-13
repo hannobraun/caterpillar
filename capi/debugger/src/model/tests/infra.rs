@@ -29,12 +29,11 @@ impl TestDebugger {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        let instructions = self.state.on_new_code(Code {
+        let command = self.state.on_new_code(Code {
             fragments,
             instructions,
             source_map,
         });
-        let command = Command::UpdateCode { instructions };
         self.queued_commands.push(command);
 
         self
