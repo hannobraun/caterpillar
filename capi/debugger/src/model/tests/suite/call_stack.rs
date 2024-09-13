@@ -2,8 +2,8 @@ use capi_process::Effect;
 
 use crate::model::{
     tests::infra::{
-        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt, BranchExt,
-        DebugFragmentExt, DebugFunctionExt, FunctionsExt,
+        debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
+        DebugBranchExt, DebugFragmentExt, DebugFunctionExt, FunctionsExt,
     },
     ActiveFunctionsEntry,
 };

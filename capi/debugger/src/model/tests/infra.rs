@@ -217,12 +217,12 @@ impl DebugFunctionExt for DebugFunction {
     }
 }
 
-pub trait BranchExt {
+pub trait DebugBranchExt {
     #[allow(unused)] // currently unused, but might come in handy later
     fn fragment(&self, i: usize) -> DebugFragment;
 }
 
-impl BranchExt for DebugBranch {
+impl DebugBranchExt for DebugBranch {
     fn fragment(&self, i: usize) -> DebugFragment {
         let Some(fragment) = self.body.get(i) else {
             panic!("{i}-th fragment in `{:?}` not available", self.body);
