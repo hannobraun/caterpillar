@@ -109,7 +109,6 @@ impl ActiveFunctions {
         }
     }
 
-    #[cfg(test)]
     pub fn entries(&self) -> anyhow::Result<&ActiveFunctionsEntries> {
         let ActiveFunctions::Entries { entries } = &self else {
             return Err(anyhow!(

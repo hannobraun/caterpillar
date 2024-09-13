@@ -84,7 +84,6 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/52
 fn step_over_brk() {
     // When stopped at a `brk` intrinsic, we expect to be able to step over it.
 

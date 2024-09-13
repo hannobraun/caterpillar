@@ -55,7 +55,7 @@ impl PersistentState {
     pub fn on_user_action(
         &mut self,
         action: UserAction,
-        _: &TransientState,
+        transient: &TransientState,
     ) -> anyhow::Result<Vec<Command>> {
         let mut commands = Vec::new();
 
@@ -87,7 +87,42 @@ impl PersistentState {
                 commands.push(Command::Reset);
             }
             UserAction::StepInto => {
-                commands.push(Command::Step);
+                let branch = transient
+                    .active_functions
+                    .entries()?
+                    .leaf()
+                    .function()?
+                    .active_branch()?;
+
+                let origin = branch.active_fragment()?;
+                let Some(target) = branch.fragment_after(origin)? else {
+                    // No fragment after the active one in the current function,
+                    // meaning we have to step out of the function.
+                    //
+                    // This code doesn't support this yet. Falling back to the
+                    // previous behavior.
+
+                    commands.push(Command::Step);
+                    return Ok(commands);
+                };
+
+                let origin =
+                    self.code.fragment_to_instruction(&origin.data.id)?;
+                let target =
+                    self.code.fragment_to_instruction(&target.data.id)?;
+
+                self.breakpoints.set_ephemeral(target);
+                commands.push(Command::UpdateCode {
+                    instructions: self.apply_breakpoints(self.code.get()?),
+                });
+
+                let origin = self.code.instruction(&origin)?;
+                if let Instruction::TriggerEffect {
+                    effect: Effect::Breakpoint,
+                } = origin
+                {
+                    commands.push(Command::IgnoreNextInstruction);
+                }
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
