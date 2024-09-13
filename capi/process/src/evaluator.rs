@@ -29,6 +29,10 @@ impl Evaluator {
                 // that here.
                 instruction.previous()
             })
+            // This method is usually called when an effect has been triggered,
+            // and when that happens, the evaluator does not advance to the next
+            // instruction. Therefore, the next instruction does not require the
+            // same correction as the return addresses do above.
             .chain([self.next_instruction])
     }
 
