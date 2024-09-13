@@ -42,6 +42,15 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
         self.next_instruction = self.next_instruction.next();
 
+        self.evaluate_instruction(current_instruction)?;
+
+        Ok(())
+    }
+
+    fn evaluate_instruction(
+        &mut self,
+        current_instruction: &Instruction,
+    ) -> Result<(), Effect> {
         match current_instruction {
             Instruction::AddS8 => {
                 let b = self.stack.pop_operand()?;
