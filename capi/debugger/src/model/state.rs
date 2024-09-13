@@ -141,7 +141,7 @@ impl PersistentState {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TransientState {
     pub active_functions: ActiveFunctions,
     pub operands: Vec<Value>,
