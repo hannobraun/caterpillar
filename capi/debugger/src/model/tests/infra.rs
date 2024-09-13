@@ -86,9 +86,9 @@ impl TestDebugger {
     }
 
     fn process_commands(&mut self) {
-        if let Some(process) = &mut self.game_engine {
+        if let Some(game_engine) = &mut self.game_engine {
             for command in self.queued_commands.drain(..) {
-                process.on_command(command);
+                game_engine.on_command(command);
             }
         }
     }
