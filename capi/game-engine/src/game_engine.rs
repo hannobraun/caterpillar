@@ -125,8 +125,12 @@ impl GameEngine {
 
             if let Some(effect) = self.process.effects_mut().handle_first() {
                 match self.handle_effect(&effect, pixels) {
-                    Ok(EffectOutcome::Handled) => {}
+                    Ok(EffectOutcome::Handled) => {
+                        self.process.ignore_next_instruction();
+                    }
                     Ok(EffectOutcome::WasSubmit) => {
+                        self.process.ignore_next_instruction();
+
                         // The game is done rendering. This is our sign to break
                         // out of this loop.
                         //

@@ -113,6 +113,8 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
                 let channel: u32 = u32::from_le_bytes(channel.0);
 
                 *signals.entry(channel).or_default() += 1;
+
+                process.ignore_next_instruction();
             }
             Some(effect) => {
                 panic!(
