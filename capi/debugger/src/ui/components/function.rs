@@ -196,7 +196,7 @@ fn make_single_expression(
     let actions = if data.state.is_innermost_active_fragment() {
         Some(view! {
             <Button
-                label="Step Into"
+                label="Step In"
                 action=UserAction::StepInto
                 actions=actions_tx.clone() />
         })
