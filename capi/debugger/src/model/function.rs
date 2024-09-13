@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use capi_compiler::{
     fragments::{self, FragmentId, Fragments},
     source_map::SourceMap,
@@ -40,5 +41,16 @@ impl DebugFunction {
             .collect();
 
         Self { name, branches }
+    }
+
+    pub fn active_branch(&self) -> anyhow::Result<&DebugBranch> {
+        self.branches
+            .iter()
+            .find(|branch| branch.is_active)
+            .ok_or_else(|| {
+                anyhow!(
+                    "Expected to find active branch in function, but none is."
+                )
+            })
     }
 }
