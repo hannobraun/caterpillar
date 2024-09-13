@@ -128,6 +128,17 @@ pub struct ActiveFunctionsEntries {
     pub inner: Vec<ActiveFunctionsEntry>,
 }
 
+impl ActiveFunctionsEntries {
+    pub fn leaf(&self) -> &ActiveFunctionsEntry {
+        self.inner.first().expect(
+            "Empty active function entries should never get constructed. At \
+            the very least, the leaf function should be present. If that is \
+            not `main`, the `main` function should be present (possibly \
+            reconstructed) too.",
+        )
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctionsEntry {
     Function(DebugFunction),
