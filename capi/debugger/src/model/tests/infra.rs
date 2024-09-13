@@ -244,7 +244,6 @@ impl DebugFragmentExt for DebugFragment {
         let DebugFragmentKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
-
         assert_eq!(called_fn, name);
 
         self
@@ -254,7 +253,6 @@ impl DebugFragmentExt for DebugFragment {
         let DebugFragmentKind::CallToHostFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
-
         assert_eq!(called_host_fn, name);
 
         self
@@ -264,7 +262,6 @@ impl DebugFragmentExt for DebugFragment {
         let DebugFragmentKind::CallToIntrinsic { name } = &self.kind else {
             panic!("Expected call to function.");
         };
-
         assert_eq!(called_intrinsic, name);
 
         self
