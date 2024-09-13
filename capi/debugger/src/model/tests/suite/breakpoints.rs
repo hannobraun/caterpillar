@@ -20,7 +20,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
                 }
             ",
         )
-        .run_process();
+        .run_program();
 
     let fragments = debugger.expect_code();
     let nop = fragments
@@ -65,7 +65,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .id();
     debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
 
-    debugger.run_process();
+    debugger.run_program();
 
     assert_eq!(
         debugger

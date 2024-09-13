@@ -35,7 +35,7 @@ fn basic_call_stack() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -56,7 +56,7 @@ fn stopped_at_host_function() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -83,7 +83,7 @@ fn stopped_at_code_within_block() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -119,7 +119,7 @@ fn call_stack_reconstruction_missing_main() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -158,7 +158,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -200,7 +200,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
@@ -246,7 +246,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
                 }
             ",
         )
-        .run_process()
+        .run_program()
         .state
         .generate_transient_state();
 
