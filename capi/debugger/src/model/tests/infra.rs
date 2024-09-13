@@ -47,7 +47,7 @@ impl TestDebugger {
         let game_engine = self
             .game_engine
             .as_mut()
-            .expect("Just set `self.process` to `Some`");
+            .expect("Just set `self.game_engine` to `Some`");
 
         let instructions = &self.state.code
             .as_ref()
