@@ -81,7 +81,9 @@ impl Process {
                 self.reset();
             }
             Command::Step => {
-                if let Some(Effect::Breakpoint) = self.effects.inspect_first() {
+                if let Some(Effect::Breakpoint) =
+                    self.effects_mut().inspect_first()
+                {
                     let and_stop_at = self.evaluator.next_instruction;
                     self.continue_(Some(and_stop_at))
                 } else {
@@ -92,7 +94,7 @@ impl Process {
                 }
             }
             Command::Stop => {
-                self.effects.trigger(Effect::Breakpoint);
+                self.effects_mut().trigger(Effect::Breakpoint);
             }
         }
     }
