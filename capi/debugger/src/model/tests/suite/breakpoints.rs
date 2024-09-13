@@ -135,3 +135,67 @@ fn step_into_function() {
         f,
     );
 }
+
+#[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/24
+                // https://github.com/hannobraun/caterpillar/issues/52
+fn step_out_of_function() {
+    // When stopping at the last fragment in a function and then stepping, we
+    // expect to land at the fragment after the function call.
+
+    let mut debugger = debugger();
+    debugger.provide_source_code(
+        r"
+            main: { |size_x size_y|
+                f
+                nop
+            }
+
+            f: { ||
+                nop
+                # There's a return instruction at the end of the function, which
+                # we expect to step over.
+            }
+        ",
+    );
+
+    let fragments = debugger.expect_code();
+
+    let nop_in_main = fragments
+        .find_function_by_name("main")
+        .unwrap()
+        .expect_one_branch()
+        .iter(fragments)
+        .nth(1)
+        .unwrap()
+        .id();
+    let nop_in_f = fragments
+        .find_function_by_name("f")
+        .unwrap()
+        .expect_one_branch()
+        .iter(fragments)
+        .next()
+        .unwrap()
+        .id();
+
+    debugger
+        .on_user_action(UserAction::BreakpointSet { fragment: nop_in_f })
+        .unwrap();
+
+    debugger.run_program();
+    debugger.on_user_action(UserAction::Step).unwrap();
+
+    assert_eq!(
+        debugger
+            .state
+            .generate_transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_innermost("main")
+            .active_fragment()
+            .data
+            .id,
+        nop_in_main,
+    );
+}
