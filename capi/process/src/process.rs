@@ -16,8 +16,10 @@ pub struct Process {
 
 impl Process {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
+        let arguments: Vec<_> = arguments.into_iter().collect();
+
         let mut self_ = Self {
-            arguments: arguments.into_iter().collect(),
+            arguments: arguments.clone(),
             effects: Effects::default(),
             evaluator: Evaluator::default(),
             breakpoints: Breakpoints::default(),
