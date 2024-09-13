@@ -9,6 +9,7 @@ use crate::{
     memory::Memory,
 };
 
+#[derive(Debug)]
 pub struct GameEngine {
     pub process: Process,
 
