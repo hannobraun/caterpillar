@@ -77,8 +77,9 @@ impl Process {
         // with new fields being added.
         let breakpoints = mem::take(&mut self.breakpoints);
 
+        let arguments: Vec<_> = arguments.into_iter().collect();
         *self = Self {
-            arguments: arguments.into_iter().collect(),
+            arguments: arguments.clone(),
             breakpoints,
 
             effects: Effects::default(),
