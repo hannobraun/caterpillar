@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_process::{Breakpoints, ProcessState, Value};
+use capi_process::{Breakpoints, Instructions, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
@@ -17,8 +17,12 @@ pub struct PersistentState {
 }
 
 impl PersistentState {
-    pub fn on_new_code(&mut self, code: Code) {
+    pub fn on_new_code(&mut self, code: Code) -> Instructions {
+        let instructions = code.instructions.clone();
+
         self.code = Some(code);
+
+        instructions
     }
 
     pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
