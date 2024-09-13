@@ -1,7 +1,6 @@
 use std::panic;
 
-use capi_game_engine::game_engine::GameEngine;
-use capi_process::Command;
+use capi_game_engine::{command::Command, game_engine::GameEngine};
 use capi_protocol::{
     command::{CommandExt, SerializedCommandToRuntime},
     updates::Updates,

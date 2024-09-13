@@ -1,6 +1,6 @@
 use anyhow::anyhow;
-use capi_game_engine::memory::Memory;
-use capi_process::{Breakpoints, Command, ProcessState, Value};
+use capi_game_engine::{command::Command, memory::Memory};
+use capi_process::{Breakpoints, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},

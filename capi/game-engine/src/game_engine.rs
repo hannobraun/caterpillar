@@ -1,8 +1,9 @@
 use std::collections::VecDeque;
 
-use capi_process::{Command, Effect, Instructions, Process, Value};
+use capi_process::{Effect, Instructions, Process, Value};
 
 use crate::{
+    command::Command,
     display::{self, TILES_PER_AXIS},
     host::GameEngineEffect,
     memory::Memory,

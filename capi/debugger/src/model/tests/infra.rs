@@ -3,9 +3,9 @@ use capi_compiler::{
     fragments::{FragmentId, Fragments},
 };
 use capi_game_engine::{
-    game_engine::GameEngine, host::GameEngineHost, memory::Memory,
+    command::Command, game_engine::GameEngine, host::GameEngineHost,
+    memory::Memory,
 };
-use capi_process::Command;
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{

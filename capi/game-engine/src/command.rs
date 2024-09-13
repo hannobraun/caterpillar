@@ -1,4 +1,4 @@
-use crate::InstructionAddress;
+use capi_process::InstructionAddress;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {
