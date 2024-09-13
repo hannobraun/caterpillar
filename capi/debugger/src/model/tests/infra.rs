@@ -92,6 +92,9 @@ impl TestDebugger {
             for command in self.queued_commands.drain(..) {
                 game_engine.on_command(command);
             }
+
+            let mut pixels = [];
+            game_engine.run_until_end_of_frame(1., &mut pixels);
         }
     }
 
