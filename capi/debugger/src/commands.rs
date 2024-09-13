@@ -1,4 +1,5 @@
 use capi_protocol::command::SerializedCommandToRuntime;
-use tokio::sync::mpsc::UnboundedSender;
+use tokio::sync::mpsc;
 
-pub type CommandsToRuntimeTx = UnboundedSender<SerializedCommandToRuntime>;
+pub type CommandsToRuntimeTx =
+    mpsc::UnboundedSender<SerializedCommandToRuntime>;
