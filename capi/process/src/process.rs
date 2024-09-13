@@ -15,8 +15,6 @@ pub struct Process {
 
 impl Process {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
-        let arguments: Vec<_> = arguments.into_iter().collect();
-
         let mut self_ = Self {
             effects: Effects::default(),
             evaluator: Evaluator::default(),
@@ -75,7 +73,6 @@ impl Process {
         // with new fields being added.
         let breakpoints = mem::take(&mut self.breakpoints);
 
-        let arguments: Vec<_> = arguments.into_iter().collect();
         *self = Self {
             breakpoints,
 
