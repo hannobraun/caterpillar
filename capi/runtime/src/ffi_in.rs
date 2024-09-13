@@ -7,7 +7,7 @@ use capi_protocol::{
     CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
 };
 
-use crate::state::Runtime;
+use crate::runtime::Runtime;
 
 pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
