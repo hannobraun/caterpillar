@@ -68,10 +68,11 @@ impl GameEngine {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects_mut().inspect_first()
                 {
-                    let and_stop_at = self.process.evaluator().next_instruction;
                     if let Some(Effect::Breakpoint) =
                         self.process.effects().inspect_first()
                     {
+                        let and_stop_at =
+                            self.process.evaluator().next_instruction;
                         self.process
                             .breakpoints_mut()
                             .set_ephemeral(and_stop_at);
