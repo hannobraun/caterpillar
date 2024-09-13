@@ -46,10 +46,10 @@ async fn on_new_code(
     let code = code?.text().await?;
     let code: Versioned<Code> = ron::from_str(&code)?;
 
-    state.on_new_code(code.inner.clone());
+    let instructions = state.on_new_code(code.inner.clone());
 
     code_tx
-        .send(code.inner.instructions.clone())
+        .send(instructions)
         .expect("Code receiver should never drop.");
 
     Ok(code.timestamp)

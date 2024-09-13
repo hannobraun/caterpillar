@@ -13,7 +13,7 @@ use tokio::{
 };
 
 use crate::{
-    code::{CodeManager, CodeRx},
+    code::{CodeManager, CodeRx, CodeTx},
     model::{PersistentState, UserAction},
     ui,
 };
@@ -77,6 +77,7 @@ impl Debugger {
                             action,
                             &mut persistent,
                             &commands_to_runtime_tx,
+                            &code_tx,
                         );
                     }
                 }
@@ -111,13 +112,19 @@ fn on_ui_action(
     action: UserAction,
     state: &mut PersistentState,
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
+    code_tx: &CodeTx,
 ) {
-    let (command, _) = state.on_user_action(action).expect(
+    let (command, instructions) = state.on_user_action(action).expect(
         "Failed to handle UI action. This is most likely a bug in the \
         Caterpillar debugger:",
     );
 
     if let Some(command) = command {
         commands_to_runtime_tx.send(command.serialize()).unwrap();
+    }
+    if let Some(instructions) = instructions {
+        code_tx.send(instructions).expect(
+            "Code receiver lives in static variable, should never drop.",
+        );
     }
 }
