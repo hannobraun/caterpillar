@@ -6,9 +6,9 @@ use capi_protocol::{
 };
 use tokio::sync::mpsc::error::TryRecvError;
 
-use crate::state::DebuggerState;
+use crate::state::Debugger;
 
-pub static STATE: Mutex<Option<DebuggerState>> = Mutex::new(None);
+pub static STATE: Mutex<Option<Debugger>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());

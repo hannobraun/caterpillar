@@ -18,14 +18,14 @@ use crate::{
     ui,
 };
 
-pub struct DebuggerState {
+pub struct Debugger {
     pub code_rx: CodeRx,
     pub updates_from_runtime_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub commands_to_runtime_rx:
         mpsc::UnboundedReceiver<SerializedCommandToRuntime>,
 }
 
-impl DebuggerState {
+impl Debugger {
     pub fn new() -> Self {
         let (code_tx, code_rx) = watch::channel(Instructions::default());
         let (updates_from_runtime_tx, mut updates_from_runtime_rx) =
@@ -96,7 +96,7 @@ impl DebuggerState {
     }
 }
 
-impl Default for DebuggerState {
+impl Default for Debugger {
     fn default() -> Self {
         Self::new()
     }
