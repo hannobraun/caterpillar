@@ -1,30 +1,24 @@
-use capi_process::Instructions;
 use capi_protocol::{
     command::CommandExt,
     updates::{SerializedUpdate, UpdateFromRuntime},
 };
 use leptos::SignalSet;
-use tokio::{
-    select,
-    sync::{mpsc, watch},
-};
+use tokio::{select, sync::mpsc};
 
 use crate::{
-    code::{CodeFetcher, CodeRx},
+    code::CodeFetcher,
     commands::{CommandsToRuntimeRx, CommandsToRuntimeTx},
     model::{PersistentState, UserAction},
     ui,
 };
 
 pub struct Debugger {
-    pub code_rx: CodeRx,
     pub updates_from_runtime_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub commands_to_runtime_rx: CommandsToRuntimeRx,
 }
 
 impl Debugger {
     pub fn new() -> Self {
-        let (_, code_rx) = watch::channel(Instructions::default());
         let (updates_from_runtime_tx, mut updates_from_runtime_rx) =
             mpsc::unbounded_channel();
         let (commands_to_runtime_tx, commands_to_runtime_rx) =
@@ -92,7 +86,6 @@ impl Debugger {
 
         Self {
             updates_from_runtime_tx,
-            code_rx,
             commands_to_runtime_rx,
         }
     }

@@ -1,11 +1,7 @@
-use capi_process::Instructions;
 use capi_protocol::{command::CommandExt, updates::Code, Versioned};
 use gloo_net::http::{Request, Response};
-use tokio::sync::watch;
 
 use crate::{commands::CommandsToRuntimeTx, model::PersistentState};
-
-pub type CodeRx = watch::Receiver<Instructions>;
 
 pub struct CodeFetcher {
     pub timestamp: u64,

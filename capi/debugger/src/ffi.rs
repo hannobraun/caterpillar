@@ -47,21 +47,6 @@ static LAST_CODE_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 
 #[no_mangle]
 pub fn code_read() {
-    let mut state = STATE.lock().unwrap();
-    let state = state.get_or_insert_with(Default::default);
-
-    if state.code_rx.has_changed().ok().unwrap_or(false) {
-        let code = state.code_rx.borrow_and_update();
-        let code = ron::to_string(&*code).unwrap();
-
-        // Sound, because the reference is dropped before we call the method
-        // again or we give back control to the host.
-        let buffer = unsafe { CODE.access() };
-        buffer
-            .write_frame(code.len())
-            .copy_from_slice(code.as_bytes());
-    }
-
     // Sound, because the reference is dropped before we give back control to
     // the host.
     let buffer = unsafe { CODE.access() };
