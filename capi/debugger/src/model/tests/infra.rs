@@ -5,7 +5,7 @@ use capi_compiler::{
 use capi_game_engine::{
     game_engine::GameEngine, host::GameEngineHost, memory::Memory,
 };
-use capi_process::{Command, Process};
+use capi_process::Command;
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
@@ -20,7 +20,7 @@ pub fn debugger() -> TestDebugger {
 #[derive(Default)]
 pub struct TestDebugger {
     pub queued_commands: Vec<Command>,
-    pub process: Option<Process>,
+    pub process: Option<GameEngine>,
     pub state: PersistentState,
 }
 
@@ -41,7 +41,7 @@ impl TestDebugger {
     pub fn run_process(&mut self) -> &mut Self {
         let game_engine = GameEngine::new();
 
-        self.process = Some(game_engine.process);
+        self.process = Some(game_engine);
         self.process_commands();
 
         let process = self
@@ -57,14 +57,14 @@ impl TestDebugger {
             )
             .instructions;
 
-        while process.state().is_running() {
-            process.evaluate_next_instruction(instructions);
+        while process.process.state().is_running() {
+            process.process.evaluate_next_instruction(instructions);
         }
 
         let memory = Memory::default();
         let mut updates = Updates::default();
 
-        updates.queue_updates(process, &memory);
+        updates.queue_updates(&process.process, &memory);
         for update in updates.take_queued_updates() {
             self.state.on_update_from_runtime(update);
         }
