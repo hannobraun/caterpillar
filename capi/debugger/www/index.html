@@ -85,29 +85,6 @@
             while (runtime.push_random(Math.random())) { }
 
             while (true) {
-                debugger_.code_read();
-                const code_rx = new Uint8Array(
-                    debugger_.memory.buffer,
-                    debugger_.code_read_ptr(),
-                    debugger_.code_read_len(),
-                );
-
-                if (code_rx.byteLength > 0) {
-                    runtime.code_write(code_rx.byteLength);
-                    const code_tx = new Uint8Array(
-                        runtime.memory.buffer,
-                        runtime.code_write_ptr(),
-                        runtime.code_write_len(),
-                    );
-                    code_tx.set(code_rx);
-
-                    runtime.on_new_code();
-                }
-                else {
-                    break;
-                }
-            }
-            while (true) {
                 debugger_.commands_read();
                 const command_rx = new Uint8Array(
                     debugger_.memory.buffer,
