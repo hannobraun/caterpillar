@@ -34,8 +34,8 @@ impl TestDebugger {
             instructions,
             source_map,
         });
-        self.queued_commands
-            .push(Command::UpdateCode { instructions });
+        let command = Command::UpdateCode { instructions };
+        self.queued_commands.push(command);
 
         self
     }
