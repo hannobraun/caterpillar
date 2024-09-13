@@ -17,6 +17,10 @@ pub struct PersistentState {
 }
 
 impl PersistentState {
+    pub fn on_new_code(&mut self, code: Code) {
+        self.code = Some(code);
+    }
+
     pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
         match update {
             UpdateFromRuntime::Memory { memory } => {

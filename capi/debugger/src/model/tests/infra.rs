@@ -29,7 +29,7 @@ impl TestDebugger {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        self.state.code = Some(Code {
+        self.state.on_new_code(Code {
             fragments,
             instructions,
             source_map,
