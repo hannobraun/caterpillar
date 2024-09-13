@@ -241,7 +241,7 @@ pub trait DebugFragmentExt {
 
 impl DebugFragmentExt for DebugFragment {
     fn expect_call_to_function(self, called_fn: &str) {
-        let DebugFragmentKind::CallToFunction { name } = self.kind else {
+        let DebugFragmentKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
@@ -249,7 +249,7 @@ impl DebugFragmentExt for DebugFragment {
     }
 
     fn expect_call_to_host_function(self, called_host_fn: &str) {
-        let DebugFragmentKind::CallToHostFunction { name } = self.kind else {
+        let DebugFragmentKind::CallToHostFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
@@ -257,7 +257,7 @@ impl DebugFragmentExt for DebugFragment {
     }
 
     fn expect_call_to_intrinsic(self, called_intrinsic: &str) {
-        let DebugFragmentKind::CallToIntrinsic { name } = self.kind else {
+        let DebugFragmentKind::CallToIntrinsic { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
