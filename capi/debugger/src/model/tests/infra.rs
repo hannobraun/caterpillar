@@ -233,35 +233,41 @@ impl BranchExt for Branch {
 }
 
 pub trait DebugFragmentExt {
-    fn expect_call_to_function(self, called_fn: &str);
-    fn expect_call_to_host_function(self, called_host_fn: &str);
-    fn expect_call_to_intrinsic(self, called_intrinsic: &str);
+    fn expect_call_to_function(self, called_fn: &str) -> Self;
+    fn expect_call_to_host_function(self, called_host_fn: &str) -> Self;
+    fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self;
     fn expect_function(self) -> DebugFunction;
 }
 
 impl DebugFragmentExt for DebugFragment {
-    fn expect_call_to_function(self, called_fn: &str) {
+    fn expect_call_to_function(self, called_fn: &str) -> Self {
         let DebugFragmentKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
         assert_eq!(called_fn, name);
+
+        self
     }
 
-    fn expect_call_to_host_function(self, called_host_fn: &str) {
+    fn expect_call_to_host_function(self, called_host_fn: &str) -> Self {
         let DebugFragmentKind::CallToHostFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
         assert_eq!(called_host_fn, name);
+
+        self
     }
 
-    fn expect_call_to_intrinsic(self, called_intrinsic: &str) {
+    fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self {
         let DebugFragmentKind::CallToIntrinsic { name } = &self.kind else {
             panic!("Expected call to function.");
         };
 
         assert_eq!(called_intrinsic, name);
+
+        self
     }
 
     fn expect_function(self) -> DebugFunction {
