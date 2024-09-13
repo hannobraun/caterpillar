@@ -82,7 +82,17 @@ impl PersistentState {
                 });
             }
             UserAction::Continue => {
-                commands.push(Command::Continue);
+                let origin = transient
+                    .active_functions
+                    .entries()?
+                    .leaf()
+                    .function()?
+                    .active_branch()?
+                    .active_fragment()?
+                    .id();
+                let targets = Vec::new();
+
+                self.step_or_continue(&origin, targets, &mut commands)?;
             }
             UserAction::Reset => {
                 commands.push(Command::Reset);
