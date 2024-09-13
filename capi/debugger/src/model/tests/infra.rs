@@ -49,11 +49,13 @@ impl TestDebugger {
             .as_mut()
             .expect("Just set `self.game_engine` to `Some`");
 
-        let instructions = &self.state.code
+        let instructions = &self
+            .state
+            .code
             .as_ref()
             .expect(
-                "Must provide source code via `TestInfra::provide_source_code` \
-                before calling `TestInfra::run_process`.",
+                "Must provide source code via `provide_source_code` before \
+                calling `TestDebugger::run_program`.",
             )
             .instructions;
 
