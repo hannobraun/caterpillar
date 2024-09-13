@@ -42,21 +42,24 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
         self.next_instruction = self.next_instruction.next();
 
-        self.next_instruction = self
-            .evaluate_instruction(current_instruction, self.next_instruction)?;
+        self.next_instruction = Self::evaluate_instruction(
+            current_instruction,
+            self.next_instruction,
+            &mut self.closures,
+            &mut self.next_closure,
+            &mut self.stack,
+        )?;
 
         Ok(())
     }
 
     fn evaluate_instruction(
-        &mut self,
         current_instruction: &Instruction,
         next_instruction: InstructionAddress,
+        closures: &mut BTreeMap<u32, Function>,
+        next_closure: &mut u32,
+        stack: &mut Stack,
     ) -> Result<InstructionAddress, Effect> {
-        let closures = &mut self.closures;
-        let next_closure = &mut self.next_closure;
-        let stack = &mut self.stack;
-
         match current_instruction {
             Instruction::AddS8 => {
                 let b = stack.pop_operand()?;
