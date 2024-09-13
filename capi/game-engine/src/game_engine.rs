@@ -40,10 +40,6 @@ impl GameEngine {
         &self.memory
     }
 
-    pub fn on_new_instructions(&mut self, instructions: Instructions) {
-        self.instructions = Some(instructions);
-    }
-
     pub fn on_input(&mut self, value: u8) {
         self.input.push_back(value);
     }
