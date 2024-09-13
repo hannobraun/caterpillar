@@ -6,7 +6,6 @@ use tokio::sync::watch;
 use crate::{commands::CommandsToRuntimeTx, model::PersistentState};
 
 pub type CodeRx = watch::Receiver<Instructions>;
-pub type CodeTx = watch::Sender<Instructions>;
 
 pub struct CodeFetcher {
     pub timestamp: u64,

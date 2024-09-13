@@ -10,7 +10,7 @@ use tokio::{
 };
 
 use crate::{
-    code::{CodeFetcher, CodeRx, CodeTx},
+    code::{CodeFetcher, CodeRx},
     commands::{CommandsToRuntimeRx, CommandsToRuntimeTx},
     model::{PersistentState, UserAction},
     ui,
@@ -24,7 +24,7 @@ pub struct Debugger {
 
 impl Debugger {
     pub fn new() -> Self {
-        let (code_tx, code_rx) = watch::channel(Instructions::default());
+        let (_, code_rx) = watch::channel(Instructions::default());
         let (updates_from_runtime_tx, mut updates_from_runtime_rx) =
             mpsc::unbounded_channel();
         let (commands_to_runtime_tx, commands_to_runtime_rx) =
@@ -79,7 +79,6 @@ impl Debugger {
                             action,
                             &mut persistent,
                             &commands_to_runtime_tx,
-                            &code_tx,
                         );
                     }
                 }
@@ -114,7 +113,6 @@ fn on_ui_action(
     action: UserAction,
     state: &mut PersistentState,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
-    _: &CodeTx,
 ) {
     let (commands, _) = state.on_user_action(action).expect(
         "Failed to handle UI action. This is most likely a bug in the \
