@@ -8,13 +8,13 @@ use capi_protocol::{
 
 use crate::ffi_out::on_panic;
 
-pub struct RuntimeState {
+pub struct Runtime {
     pub game_engine: GameEngine,
     pub commands: Vec<SerializedCommandToRuntime>,
     pub updates: Updates,
 }
 
-impl RuntimeState {
+impl Runtime {
     pub fn new() -> Self {
         panic::set_hook(Box::new(|panic_info| {
             on_panic(&panic_info.to_string());
@@ -43,7 +43,7 @@ impl RuntimeState {
     }
 }
 
-impl Default for RuntimeState {
+impl Default for Runtime {
     fn default() -> Self {
         Self::new()
     }

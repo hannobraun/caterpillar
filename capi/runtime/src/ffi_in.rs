@@ -7,12 +7,12 @@ use capi_protocol::{
     CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
 };
 
-use crate::state::RuntimeState;
+use crate::state::Runtime;
 
 pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
-pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
+pub static STATE: Mutex<Option<Runtime>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
