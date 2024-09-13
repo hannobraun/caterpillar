@@ -55,7 +55,11 @@ impl GameEngine {
 
         match command {
             Command::Continue => {
-                self.process.continue_(None);
+                if let Some(Effect::Breakpoint) =
+                    self.process.effects_mut().inspect_first()
+                {
+                    self.process.effects_mut().handle_first();
+                }
             }
             Command::Reset => {
                 self.process.reset(self.arguments);
