@@ -55,14 +55,8 @@ impl TestDebugger {
             .as_mut()
             .expect("Just set `self.game_engine` to `Some`");
 
-        let instructions = self.instructions.as_ref().expect(
-            "Must provide source code via `provide_source_code` before calling \
-            `TestDebugger::run_program`.",
-        );
-
-        while game_engine.process.state().is_running() {
-            game_engine.process.evaluate_next_instruction(instructions);
-        }
+        let mut pixels = [];
+        game_engine.run_until_end_of_frame(1., &mut pixels);
 
         let memory = Memory::default();
         let mut updates = Updates::default();
