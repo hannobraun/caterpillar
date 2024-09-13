@@ -117,7 +117,7 @@ fn on_ui_action(
         Caterpillar debugger:",
     );
 
-    if let Some(command) = command {
+    if let (Some(command), _) = command {
         commands_to_runtime_tx.send(command.serialize()).unwrap();
     }
 }

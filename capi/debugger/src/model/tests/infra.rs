@@ -78,7 +78,7 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        if let Some(command) = self.state.on_user_action(action)? {
+        if let (Some(command), _) = self.state.on_user_action(action)? {
             self.queued_commands.push(command);
         }
 
