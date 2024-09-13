@@ -1,16 +1,10 @@
-use std::{str, sync::Mutex};
+use std::sync::Mutex;
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_game_engine::display::NUM_PIXEL_BYTES;
-use capi_process::Instructions;
-use capi_protocol::{
-    CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
-};
+use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 
 use crate::runtime::Runtime;
-
-pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
-    Shared::new(FramedBuffer::new());
 
 pub static STATE: Mutex<Option<Runtime>> = Mutex::new(None);
 
@@ -20,31 +14,6 @@ static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static PIXELS: Shared<[u8; NUM_PIXEL_BYTES]> =
     Shared::new([0; NUM_PIXEL_BYTES]);
-
-static LAST_CODE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
-
-#[no_mangle]
-pub fn code_write(len: usize) {
-    // Sound, because the reference is dropped before we give back control to
-    // the host.
-    let buffer = unsafe { CODE.access() };
-    let code = buffer.write_frame(len);
-
-    *LAST_CODE_WRITE.lock().unwrap() =
-        Some((code.as_ptr() as usize, code.len()));
-}
-
-#[no_mangle]
-pub fn code_write_ptr() -> usize {
-    let (ptr, _) = LAST_CODE_WRITE.lock().unwrap().unwrap();
-    ptr
-}
-
-#[no_mangle]
-pub fn code_write_len() -> usize {
-    let (_, len) = LAST_CODE_WRITE.lock().unwrap().unwrap();
-    len
-}
 
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
@@ -130,33 +99,6 @@ pub fn push_random(random: f64) -> bool {
     let random = min + random * (max - min);
 
     state.game_engine.push_random(random.floor() as _)
-}
-
-#[no_mangle]
-pub fn on_new_code() {
-    let mut state = STATE.lock().unwrap();
-    let state = state.get_or_insert_with(Default::default);
-
-    // Sound, as the reference is dropped before we give back control to the
-    // host.
-    let buffer = unsafe { CODE.access() };
-
-    let code = buffer.read_frame();
-    let code = str::from_utf8(code)
-        .expect("Expecting new code to be valid UTF-8 string");
-    let code: Instructions = match ron::from_str(code) {
-        Ok(code) => code,
-        Err(err) => {
-            panic!(
-                "Error receiving new code: `{err}`\n\"
-                \n\
-                New code:\n\
-                {code}"
-            );
-        }
-    };
-
-    state.game_engine.on_new_instructions(code);
 }
 
 #[no_mangle]
