@@ -31,6 +31,10 @@ impl Breakpoints {
         self.ephemeral.insert(instruction);
     }
 
+    pub fn clear_all_ephemeral(&mut self) {
+        self.ephemeral.clear();
+    }
+
     pub fn should_stop_at_and_clear_ephemeral(
         &mut self,
         instruction: &InstructionAddress,
@@ -50,7 +54,7 @@ impl Breakpoints {
             // We don't want those breakpoints to hang around, to stop execution
             // at some later point. Therefore, we clear all of them when a
             // single one is hit.
-            self.ephemeral.clear();
+            self.clear_all_ephemeral();
         }
 
         should_stop
