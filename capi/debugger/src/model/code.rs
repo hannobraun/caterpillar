@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
-use capi_process::InstructionAddress;
+use capi_process::{Instruction, InstructionAddress};
 use capi_protocol::updates::Code;
 
 #[derive(Clone, Debug, Default)]
@@ -25,5 +25,15 @@ impl DebugCode {
             .first()
             .copied()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))
+    }
+
+    pub fn instruction(
+        &self,
+        address: &InstructionAddress,
+    ) -> anyhow::Result<&Instruction> {
+        let code = self.get()?;
+        code.instructions.get(address).ok_or_else(|| {
+            anyhow!("Could not find instruction at `{address}`.")
+        })
     }
 }
