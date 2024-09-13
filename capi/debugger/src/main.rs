@@ -1,4 +1,5 @@
 mod code;
+mod commands;
 mod debugger;
 mod ffi;
 mod model;

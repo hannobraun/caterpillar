@@ -6,14 +6,12 @@ use capi_protocol::{
 use leptos::SignalSet;
 use tokio::{
     select,
-    sync::{
-        mpsc::{self, UnboundedSender},
-        watch,
-    },
+    sync::{mpsc, watch},
 };
 
 use crate::{
     code::{CodeFetcher, CodeRx, CodeTx},
+    commands::CommandsToRuntimeTx,
     model::{PersistentState, UserAction},
     ui,
 };
@@ -111,7 +109,7 @@ fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
 fn on_ui_action(
     action: UserAction,
     state: &mut PersistentState,
-    commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
+    commands_to_runtime_tx: &CommandsToRuntimeTx,
     code_tx: &CodeTx,
 ) {
     let (commands, instructions) = state.on_user_action(action).expect(
