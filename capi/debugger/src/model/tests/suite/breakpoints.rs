@@ -1,9 +1,10 @@
 use crate::model::{
+    active_functions::ActiveFunctionsMessage,
     tests::infra::{
         debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
         DebugFunctionExt, FunctionsExt,
     },
-    UserAction,
+    ActiveFunctions, UserAction,
 };
 
 #[test]
@@ -370,4 +371,46 @@ fn step_out_of_function() {
             .id(),
         nop_in_main,
     );
+}
+
+#[test]
+fn step_out_of_main_function() {
+    // When stopping out of the main function, the process should be finished
+    // afterwards.
+
+    let mut debugger = debugger();
+    debugger.provide_source_code(
+        r"
+            main: { |size_x size_y|
+                nop
+            }
+        ",
+    );
+
+    let nop = {
+        let fragments = debugger.expect_code();
+
+        fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .next()
+            .unwrap()
+            .id()
+    };
+
+    debugger
+        .on_user_action(UserAction::BreakpointSet { fragment: nop })
+        .unwrap();
+    debugger.run_program();
+
+    debugger.on_user_action(UserAction::StepIn).unwrap();
+
+    assert!(matches!(
+        dbg!(debugger.transient_state().active_functions),
+        ActiveFunctions::Message {
+            message: ActiveFunctionsMessage::ProcessFinished
+        }
+    ));
 }

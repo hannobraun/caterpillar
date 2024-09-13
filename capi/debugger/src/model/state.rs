@@ -122,14 +122,16 @@ impl PersistentState {
                                 &fragment.id(),
                             )?
                         else {
-                            // No fragment after the active one in the current
-                            // function, meaning we have to step out of the
-                            // function.
+                            // Can't find a next fragment _or_ a caller, which
+                            // means we must be at the top-level function.
                             //
-                            // This code doesn't support this yet. Falling back
-                            // to the previous behavior.
-
-                            commands.push(Command::Step);
+                            // Let's just tell the runtime to continue, so the
+                            // process finishes.
+                            self.step_or_continue(
+                                &origin.id(),
+                                vec![],
+                                &mut commands,
+                            )?;
                             return Ok(commands);
                         };
 
