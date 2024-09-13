@@ -1,9 +1,7 @@
 use std::sync::Mutex;
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
-use capi_protocol::{
-    CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
-};
+use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 use tokio::sync::mpsc::error::TryRecvError;
 
 use crate::debugger::Debugger;
@@ -11,8 +9,6 @@ use crate::debugger::Debugger;
 pub static STATE: Mutex<Option<Debugger>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
-    Shared::new(FramedBuffer::new());
-static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
@@ -40,31 +36,6 @@ pub fn updates_write_ptr() -> usize {
 #[no_mangle]
 pub fn updates_write_len() -> usize {
     let (_, len) = LAST_UPDATE_WRITE.lock().unwrap().unwrap();
-    len
-}
-
-static LAST_CODE_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
-
-#[no_mangle]
-pub fn code_read() {
-    // Sound, because the reference is dropped before we give back control to
-    // the host.
-    let buffer = unsafe { CODE.access() };
-    let code = buffer.read_frame();
-
-    *LAST_CODE_READ.lock().unwrap() =
-        Some((code.as_ptr() as usize, code.len()));
-}
-
-#[no_mangle]
-pub fn code_read_ptr() -> usize {
-    let (ptr, _) = LAST_CODE_READ.lock().unwrap().unwrap();
-    ptr
-}
-
-#[no_mangle]
-pub fn code_read_len() -> usize {
-    let (_, len) = LAST_CODE_READ.lock().unwrap().unwrap();
     len
 }
 
