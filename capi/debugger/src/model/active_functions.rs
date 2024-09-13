@@ -105,6 +105,20 @@ impl ActiveFunctions {
             entries: entries.into(),
         }
     }
+
+    #[cfg(test)]
+    pub fn entries(&self) -> anyhow::Result<&[ActiveFunctionsEntry]> {
+        use anyhow::anyhow;
+
+        let ActiveFunctions::Entries { entries } = &self else {
+            return Err(anyhow!(
+                "Active function entries not available. Available state:\n\
+                {self:#?}"
+            ));
+        };
+
+        Ok(entries)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
