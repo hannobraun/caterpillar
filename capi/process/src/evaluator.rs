@@ -378,9 +378,9 @@ impl Evaluator {
                     .collect();
 
                 let index = {
-                    let next_closure = self.next_closure;
+                    let index = self.next_closure;
                     self.next_closure += 1;
-                    next_closure
+                    index
                 };
                 closures.insert(
                     index,
