@@ -21,7 +21,7 @@ pub struct PersistentState {
 impl PersistentState {
     pub fn on_new_code(&mut self, code: Code) -> Command {
         let instructions = self.apply_breakpoints(&code);
-        self.code = Some(code);
+        self.code.inner = Some(code);
         Command::UpdateCode { instructions }
     }
 
@@ -63,6 +63,7 @@ impl PersistentState {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self
                     .code
+                    .inner
                     .as_ref()
                     .ok_or_else(|| anyhow!("Code is not available yet."))?;
                 let address = code
@@ -83,6 +84,7 @@ impl PersistentState {
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self
                     .code
+                    .inner
                     .as_ref()
                     .ok_or_else(|| anyhow!("Code is not available yet."))?;
                 let address = code
@@ -134,7 +136,7 @@ impl PersistentState {
 
     pub fn generate_transient_state(&self) -> TransientState {
         let active_functions = ActiveFunctions::new(
-            self.code.as_ref(),
+            self.code.inner.as_ref(),
             &self.breakpoints,
             self.runtime_state.as_ref(),
         );

@@ -88,7 +88,7 @@ impl TestDebugger {
     }
 
     pub fn expect_code(&self) -> &Fragments {
-        &self.state.code.as_ref().unwrap().fragments
+        &self.state.code.inner.as_ref().unwrap().fragments
     }
 
     pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {

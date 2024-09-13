@@ -1,3 +1,6 @@
 use capi_protocol::updates::Code;
 
-pub type DebugCode = Option<Code>;
+#[derive(Clone, Debug, Default)]
+pub struct DebugCode {
+    pub inner: Option<Code>,
+}
