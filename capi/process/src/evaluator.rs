@@ -51,10 +51,12 @@ impl Evaluator {
         &mut self,
         current_instruction: &Instruction,
     ) -> Result<(), Effect> {
+        let stack = &mut self.stack;
+
         match current_instruction {
             Instruction::AddS8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i8()?;
                 let b = b.to_i8()?;
@@ -63,11 +65,11 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::AddS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
@@ -76,11 +78,11 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::AddU8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
@@ -89,24 +91,24 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::AddU8Wrap => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
 
                 let c = a.wrapping_add(b);
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::Bind { name } => {
-                let value = self.stack.pop_operand()?;
-                self.stack.define_binding(name.clone(), value);
+                let value = stack.pop_operand()?;
+                stack.define_binding(name.clone(), value);
             }
             Instruction::BindingEvaluate { name } => {
-                let Some(bindings) = self.stack.bindings() else {
+                let Some(bindings) = stack.bindings() else {
                     unreachable!(
                         "Can't access bindings, but we're currently executing. \
                         An active stack frame, and therefore bindings, must \
@@ -121,10 +123,10 @@ impl Evaluator {
                         \n\
                         Current stack:\n\
                         {:#?}",
-                        self.stack,
+                        stack,
                     );
                 };
-                self.stack.push_operand(value);
+                stack.push_operand(value);
             }
             Instruction::CallFunction {
                 function,
@@ -137,7 +139,7 @@ impl Evaluator {
 
                     let mut member_matches = true;
                     for parameter in branch.parameters.iter().rev() {
-                        let operand = self.stack.pop_operand()?;
+                        let operand = stack.pop_operand()?;
                         used_operands.push(operand);
 
                         match parameter {
@@ -153,20 +155,20 @@ impl Evaluator {
 
                     if member_matches {
                         for value in argument_operands.into_iter().rev() {
-                            self.stack.push_operand(value);
+                            stack.push_operand(value);
                         }
 
                         if *is_tail_call {
-                            self.stack.reuse_frame();
+                            stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(self.next_instruction)?;
+                            stack.push_frame(self.next_instruction)?;
                         }
 
                         self.next_instruction = branch.start;
                         return Ok(());
                     } else {
                         for value in used_operands.into_iter().rev() {
-                            self.stack.push_operand(value);
+                            stack.push_operand(value);
                         }
                     }
                 }
@@ -174,22 +176,22 @@ impl Evaluator {
                 return Err(Effect::NoMatch);
             }
             Instruction::ConvertS32ToS8 => {
-                let v = self.stack.pop_operand()?;
+                let v = stack.pop_operand()?;
 
                 let v = v.to_i32();
                 let v: i8 = v.try_into()?;
 
-                self.stack.push_operand(v);
+                stack.push_operand(v);
             }
             Instruction::Copy => {
-                let a = self.stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
-                self.stack.push_operand(a);
-                self.stack.push_operand(a);
+                stack.push_operand(a);
+                stack.push_operand(a);
             }
             Instruction::DivS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
@@ -202,11 +204,11 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::DivU8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
@@ -219,18 +221,18 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::Drop => {
-                self.stack.pop_operand()?;
+                stack.pop_operand()?;
             }
             Instruction::Eq => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let c = if a.0 == b.0 { 1 } else { 0 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::Eval { is_tail_call } => {
                 // This duplicates code from other places, which is unfortunate,
@@ -240,7 +242,7 @@ impl Evaluator {
                 // this.
 
                 let function = {
-                    let index = self.stack.pop_operand()?;
+                    let index = stack.pop_operand()?;
                     let index = index.to_u32();
 
                     self.closures
@@ -255,7 +257,7 @@ impl Evaluator {
 
                     let mut member_matches = true;
                     for parameter in branch.parameters.iter().rev() {
-                        let operand = self.stack.pop_operand()?;
+                        let operand = stack.pop_operand()?;
                         used_operands.push(operand);
 
                         match parameter {
@@ -271,16 +273,16 @@ impl Evaluator {
 
                     if member_matches {
                         for value in argument_operands.into_iter().rev() {
-                            self.stack.push_operand(value);
+                            stack.push_operand(value);
                         }
 
                         if *is_tail_call {
-                            self.stack.reuse_frame();
+                            stack.reuse_frame();
                         } else {
-                            self.stack.push_frame(self.next_instruction)?;
+                            stack.push_frame(self.next_instruction)?;
                         }
 
-                        self.stack
+                        stack
                             .bindings_mut()
                             .expect(
                                 "Currently executing; stack frame must exist",
@@ -291,7 +293,7 @@ impl Evaluator {
                         return Ok(());
                     } else {
                         for value in used_operands.into_iter().rev() {
-                            self.stack.push_operand(value);
+                            stack.push_operand(value);
                         }
                     }
                 }
@@ -299,57 +301,57 @@ impl Evaluator {
                 return Err(Effect::NoMatch);
             }
             Instruction::GreaterS8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i8()?;
                 let b = b.to_i8()?;
 
                 let c = if a > b { 1 } else { 0 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::GreaterS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
 
                 let c = if a > b { 1 } else { 0 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::GreaterU8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
 
                 let c = if a > b { 1 } else { 0 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::LogicalAnd => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let c = if a.0 == [0; 4] || b.0 == [0; 4] { 0 } else { 1 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::LogicalNot => {
-                let a = self.stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let b = if a.0 == [0; 4] { 1 } else { 0 };
-                self.stack.push_operand(b);
+                stack.push_operand(b);
             }
             Instruction::MakeClosure {
                 branches,
                 environment,
             } => {
-                let Some(bindings) = self.stack.bindings() else {
+                let Some(bindings) = stack.bindings() else {
                     unreachable!(
                         "We're currently executing. A stack frame, and thus \
                         bindings, must exist."
@@ -388,11 +390,11 @@ impl Evaluator {
                     },
                 );
 
-                self.stack.push_operand(index);
+                stack.push_operand(index);
             }
             Instruction::MulS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
@@ -401,20 +403,20 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::MulU8Wrap => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
 
                 let c = a.wrapping_mul(b);
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::NegS32 => {
-                let a = self.stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
 
@@ -423,17 +425,17 @@ impl Evaluator {
                 }
                 let b = -a;
 
-                self.stack.push_operand(b);
+                stack.push_operand(b);
             }
             Instruction::Nop => {
                 // "no operation"
             }
             Instruction::Push { value } => {
-                self.stack.push_operand(*value);
+                stack.push_operand(*value);
             }
             Instruction::RemainderS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
@@ -443,17 +445,17 @@ impl Evaluator {
                 }
                 let c = a % b;
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::Return => {
-                if let Some(return_address) = self.stack.pop_frame() {
+                if let Some(return_address) = stack.pop_frame() {
                     self.next_instruction = return_address;
                     return Ok(());
                 }
             }
             Instruction::SubS32 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_i32();
                 let b = b.to_i32();
@@ -462,11 +464,11 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::SubU8 => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
@@ -475,17 +477,17 @@ impl Evaluator {
                     return Err(Effect::IntegerOverflow);
                 };
 
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::SubU8Wrap => {
-                let b = self.stack.pop_operand()?;
-                let a = self.stack.pop_operand()?;
+                let b = stack.pop_operand()?;
+                let a = stack.pop_operand()?;
 
                 let a = a.to_u8()?;
                 let b = b.to_u8()?;
 
                 let c = a.wrapping_sub(b);
-                self.stack.push_operand(c);
+                stack.push_operand(c);
             }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
