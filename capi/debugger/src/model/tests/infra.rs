@@ -2,8 +2,10 @@ use capi_compiler::{
     compile,
     fragments::{FragmentId, Fragments},
 };
-use capi_game_engine::{host::GameEngineHost, memory::Memory};
-use capi_process::{Command, Process, Value};
+use capi_game_engine::{
+    game_engine::GameEngine, host::GameEngineHost, memory::Memory,
+};
+use capi_process::{Command, Process};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
@@ -37,9 +39,9 @@ impl TestDebugger {
     }
 
     pub fn run_process(&mut self) -> &mut Self {
-        let process = Process::new([0, 0].map(Value::from));
+        let game_engine = GameEngine::new();
 
-        self.process = Some(process);
+        self.process = Some(game_engine.process);
         self.process_commands();
 
         let process = self
