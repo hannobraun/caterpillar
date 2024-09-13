@@ -68,6 +68,7 @@ impl TestDebugger {
         }
 
         self.process_commands();
+        self.process_updates();
         self.update_transient_state();
 
         Ok(self)
