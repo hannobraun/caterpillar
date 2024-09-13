@@ -111,8 +111,6 @@ impl ActiveFunctions {
 
     #[cfg(test)]
     pub fn entries(&self) -> anyhow::Result<&ActiveFunctionsEntries> {
-        use anyhow::anyhow;
-
         let ActiveFunctions::Entries { entries } = &self else {
             return Err(anyhow!(
                 "Active function entries not available. Available state:\n\
