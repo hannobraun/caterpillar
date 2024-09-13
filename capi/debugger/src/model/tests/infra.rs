@@ -52,15 +52,10 @@ impl TestDebugger {
             .as_mut()
             .expect("Just set `self.game_engine` to `Some`");
 
-        let instructions = &self
-            .state
-            .code
-            .as_ref()
-            .expect(
-                "Must provide source code via `provide_source_code` before \
-                calling `TestDebugger::run_program`.",
-            )
-            .instructions;
+        let instructions = self.instructions.as_ref().expect(
+            "Must provide source code via `provide_source_code` before calling \
+            `TestDebugger::run_program`.",
+        );
 
         while game_engine.process.state().is_running() {
             game_engine.process.evaluate_next_instruction(instructions);
