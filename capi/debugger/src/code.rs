@@ -50,7 +50,7 @@ async fn on_new_code(
 
     code_tx
         .send(instructions)
-        .expect("Code receiver should never drop.");
+        .expect("Code receiver lives in static variable, should never drop.");
 
     Ok(code.timestamp)
 }
