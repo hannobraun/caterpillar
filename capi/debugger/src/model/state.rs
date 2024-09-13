@@ -92,10 +92,18 @@ impl PersistentState {
 
                 self.breakpoints.set_durable(address);
             }
-            UserAction::Continue => commands.push(Command::Continue),
-            UserAction::Reset => commands.push(Command::Reset),
-            UserAction::Step => commands.push(Command::Step),
-            UserAction::Stop => commands.push(Command::Stop),
+            UserAction::Continue => {
+                commands.push(Command::Continue);
+            }
+            UserAction::Reset => {
+                commands.push(Command::Reset);
+            }
+            UserAction::Step => {
+                commands.push(Command::Step);
+            }
+            UserAction::Stop => {
+                commands.push(Command::Stop);
+            }
         };
 
         let instructions =
