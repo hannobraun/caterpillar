@@ -1,7 +1,9 @@
 use std::time::Instant;
 
 use capi_build_game::build_game_once;
-use capi_game_engine::{display::NUM_PIXEL_BYTES, game_engine::GameEngine};
+use capi_game_engine::{
+    command::Command, display::NUM_PIXEL_BYTES, game_engine::GameEngine,
+};
 use rand::random;
 
 #[tokio::main]
@@ -11,7 +13,9 @@ async fn main() -> anyhow::Result<()> {
     let mut pixels = [0; NUM_PIXEL_BYTES];
     let mut game_engine = GameEngine::new();
 
-    game_engine.on_new_instructions(code.instructions);
+    game_engine.on_command(Command::UpdateCode {
+        instructions: code.instructions,
+    });
 
     let start_of_game = Instant::now();
     let mut start_of_loop;
