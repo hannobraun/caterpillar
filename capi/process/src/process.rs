@@ -2,8 +2,8 @@ use std::mem;
 
 use crate::{
     breakpoints::Breakpoints, evaluator::Evaluator,
-    instructions::InstructionAddress, Command, Effect, Effects, Instructions,
-    Stack, Value,
+    instructions::InstructionAddress, Effect, Effects, Instructions, Stack,
+    Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -66,38 +66,6 @@ impl Process {
         &mut self.breakpoints
     }
 
-    pub fn on_command(&mut self, command: Command) {
-        match command {
-            Command::BreakpointClear { instruction } => {
-                self.breakpoints_mut().clear_durable(&instruction);
-            }
-            Command::BreakpointSet { instruction } => {
-                self.breakpoints_mut().set_durable(instruction);
-            }
-            Command::Continue => {
-                self.continue_(None);
-            }
-            Command::Reset => {
-                self.reset();
-            }
-            Command::Step => {
-                if let Some(Effect::Breakpoint) =
-                    self.effects_mut().inspect_first()
-                {
-                    let and_stop_at = self.evaluator().next_instruction;
-                    self.continue_(Some(and_stop_at))
-                } else {
-                    // If we're not stopped at a breakpoint, we can't step.
-                    // It would be better, if this resulted in an explicit
-                    // error that is sent to the debugger, instead of
-                    // silently being ignored here.
-                }
-            }
-            Command::Stop => {
-                self.effects_mut().trigger(Effect::Breakpoint);
-            }
-        }
-    }
 
     pub fn reset(&mut self) {
         // There are some fields we need to preserve over the reset. Anything

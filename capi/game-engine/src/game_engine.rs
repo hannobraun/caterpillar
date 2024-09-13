@@ -47,7 +47,36 @@ impl GameEngine {
             self.memory = Memory::default();
         }
 
-        self.process.on_command(command);
+        match command {
+            Command::BreakpointClear { instruction } => {
+                self.process.breakpoints_mut().clear_durable(&instruction);
+            }
+            Command::BreakpointSet { instruction } => {
+                self.process.breakpoints_mut().set_durable(instruction);
+            }
+            Command::Continue => {
+                self.process.continue_(None);
+            }
+            Command::Reset => {
+                self.process.reset();
+            }
+            Command::Step => {
+                if let Some(Effect::Breakpoint) =
+                    self.process.effects_mut().inspect_first()
+                {
+                    let and_stop_at = self.process.evaluator().next_instruction;
+                    self.process.continue_(Some(and_stop_at))
+                } else {
+                    // If we're not stopped at a breakpoint, we can't step.
+                    // It would be better, if this resulted in an explicit
+                    // error that is sent to the debugger, instead of
+                    // silently being ignored here.
+                }
+            }
+            Command::Stop => {
+                self.process.effects_mut().trigger(Effect::Breakpoint);
+            }
+        }
     }
 
     /// # Top off the game engine's random numbers
