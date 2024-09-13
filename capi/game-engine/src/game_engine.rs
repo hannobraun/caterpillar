@@ -20,8 +20,10 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> Self {
+        let arguments = [Value::from(TILES_PER_AXIS); 2];
+
         Self {
-            process: Process::new([Value::from(TILES_PER_AXIS); 2]),
+            process: Process::new(arguments),
             last_frame_start_s: None,
             instructions: None,
             memory: Memory::default(),
