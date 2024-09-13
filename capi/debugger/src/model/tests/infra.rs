@@ -68,7 +68,7 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        let (commands, _) = self.state.on_user_action(action)?;
+        let commands = self.state.on_user_action(action)?;
 
         for command in commands {
             self.queued_commands.push(command);

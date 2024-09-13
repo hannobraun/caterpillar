@@ -107,7 +107,7 @@ fn on_ui_action(
     state: &mut PersistentState,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
 ) {
-    let (commands, _) = state.on_user_action(action).expect(
+    let commands = state.on_user_action(action).expect(
         "Failed to handle UI action. This is most likely a bug in the \
         Caterpillar debugger:",
     );

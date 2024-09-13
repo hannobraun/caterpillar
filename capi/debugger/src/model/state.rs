@@ -56,7 +56,7 @@ impl PersistentState {
     pub fn on_user_action(
         &mut self,
         action: UserAction,
-    ) -> anyhow::Result<(Vec<Command>, Option<Instructions>)> {
+    ) -> anyhow::Result<Vec<Command>> {
         let mut commands = Vec::new();
 
         match action {
@@ -114,10 +114,7 @@ impl PersistentState {
             }
         };
 
-        let instructions =
-            self.code.as_ref().map(|code| self.apply_breakpoints(code));
-
-        Ok((commands, instructions))
+        Ok(commands)
     }
 
     pub fn apply_breakpoints(&self, code: &Code) -> Instructions {
