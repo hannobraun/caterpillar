@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use capi_compiler::{
     fragments::{Branch, FragmentId, Fragments},
     source_map::SourceMap,
@@ -57,5 +58,18 @@ impl DebugBranch {
             body,
             is_active,
         }
+    }
+
+    pub fn active_fragment(&self) -> anyhow::Result<&DebugFragment> {
+        self.body
+            .iter()
+            .find(|fragment| fragment.data.state.is_active())
+            .ok_or_else(|| {
+                anyhow!(
+                    "Expected active fragment in branch, bud could not find \
+                    any. Branch:\n\
+                    {self:#?}"
+                )
+            })
     }
 }
