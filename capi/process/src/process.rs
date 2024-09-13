@@ -23,7 +23,7 @@ impl Process {
             breakpoints: Breakpoints::default(),
         };
 
-        self_.reset();
+        self_.reset(self_.arguments.clone());
 
         self_
     }
@@ -66,19 +66,17 @@ impl Process {
         &mut self.breakpoints
     }
 
-
-    pub fn reset(&mut self) {
+    pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
         // There are some fields we need to preserve over the reset. Anything
         // else needs to go back to start conditions.
         //
         // Doing it like this, as opposed to just resetting all other fields,
         // has the advantage that this code doesn't need to be changed in sync
         // with new fields being added.
-        let arguments = mem::take(&mut self.arguments);
         let breakpoints = mem::take(&mut self.breakpoints);
 
         *self = Self {
-            arguments,
+            arguments: arguments.into_iter().collect(),
             breakpoints,
 
             effects: Effects::default(),

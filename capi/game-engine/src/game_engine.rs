@@ -58,7 +58,7 @@ impl GameEngine {
                 self.process.continue_(None);
             }
             Command::Reset => {
-                self.process.reset();
+                self.process.reset(self.process.arguments.clone());
             }
             Command::Step => {
                 if let Some(Effect::Breakpoint) =
