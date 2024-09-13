@@ -126,7 +126,7 @@ impl Process {
         }
     }
 
-    pub fn step(&mut self, instructions: &Instructions) {
+    pub fn evaluate_next_instruction(&mut self, instructions: &Instructions) {
         if !self.state().is_running() {
             return;
         }

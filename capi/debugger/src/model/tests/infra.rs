@@ -56,7 +56,7 @@ impl TestDebugger {
             .instructions;
 
         while process.state().is_running() {
-            process.step(instructions);
+            process.evaluate_next_instruction(instructions);
         }
 
         let memory = Memory::default();

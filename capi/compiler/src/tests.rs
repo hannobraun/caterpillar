@@ -102,7 +102,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let mut process = Process::new([]);
 
     while process.state().is_running() {
-        process.step(&instructions);
+        process.evaluate_next_instruction(&instructions);
 
         match process.effects_mut().handle_first() {
             Some(Effect::Host) => {
