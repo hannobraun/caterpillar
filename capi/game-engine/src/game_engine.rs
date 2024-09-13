@@ -69,7 +69,15 @@ impl GameEngine {
                     self.process.effects_mut().inspect_first()
                 {
                     let and_stop_at = self.process.evaluator().next_instruction;
-                    self.process.continue_(Some(and_stop_at))
+                    if let Some(Effect::Breakpoint) =
+                        self.process.effects().inspect_first()
+                    {
+                        self.process
+                            .breakpoints_mut()
+                            .set_ephemeral(and_stop_at);
+
+                        self.process.effects_mut().handle_first();
+                    }
                 } else {
                     // If we're not stopped at a breakpoint, we can't step.
                     // It would be better, if this resulted in an explicit

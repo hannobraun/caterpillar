@@ -1,9 +1,8 @@
 use std::mem;
 
 use crate::{
-    breakpoints::Breakpoints, evaluator::Evaluator,
-    instructions::InstructionAddress, Effect, Effects, Instructions, Stack,
-    Value,
+    breakpoints::Breakpoints, evaluator::Evaluator, Effect, Effects,
+    Instructions, Stack, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -78,16 +77,6 @@ impl Process {
 
         for argument in arguments {
             self.evaluator.stack.push_operand(argument);
-        }
-    }
-
-    pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Breakpoint) = self.effects().inspect_first() {
-            if let Some(address) = and_stop_at {
-                self.breakpoints_mut().set_ephemeral(address);
-            }
-
-            self.effects_mut().handle_first();
         }
     }
 
