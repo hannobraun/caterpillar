@@ -114,12 +114,12 @@ fn on_ui_action(
     commands_to_runtime_tx: &UnboundedSender<SerializedCommandToRuntime>,
     code_tx: &CodeTx,
 ) {
-    let (command, instructions) = state.on_user_action(action).expect(
+    let (commands, instructions) = state.on_user_action(action).expect(
         "Failed to handle UI action. This is most likely a bug in the \
         Caterpillar debugger:",
     );
 
-    if let Some(command) = command {
+    for command in commands {
         commands_to_runtime_tx.send(command.serialize()).unwrap();
     }
     if let Some(instructions) = instructions {
