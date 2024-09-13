@@ -62,7 +62,7 @@ impl PersistentState {
         match action {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instructions(&fragment)?;
+                let address = self.code.fragment_to_instruction(&fragment)?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -72,7 +72,7 @@ impl PersistentState {
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instructions(&fragment)?;
+                let address = self.code.fragment_to_instruction(&fragment)?;
 
                 self.breakpoints.set_durable(address);
 
