@@ -72,4 +72,27 @@ impl DebugBranch {
                 )
             })
     }
+
+    pub fn fragment_after(
+        &self,
+        fragment: &DebugFragment,
+    ) -> anyhow::Result<Option<&DebugFragment>> {
+        if !self.body.iter().any(|f| f == fragment) {
+            return Err(anyhow!(
+                "Expected fragment to be in branch, but could not find it. \
+                Fragment:\n\
+                {fragment:#?}\n\
+                Branch:\n\
+                {self:#?}"
+            ));
+        }
+
+        let mut fragments = self.body.iter().skip_while(|&f| f != fragment);
+
+        // This is the fragment we've been passed as an argument. Need to ignore
+        // it, to advance the iterator to the one we're actually looking for.
+        assert_eq!(fragments.next(), Some(fragment));
+
+        Ok(fragments.next())
+    }
 }
