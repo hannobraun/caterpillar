@@ -61,11 +61,7 @@ impl PersistentState {
 
         match action {
             UserAction::BreakpointClear { fragment, .. } => {
-                let code = self
-                    .code
-                    .inner
-                    .as_ref()
-                    .ok_or_else(|| anyhow!("Code is not available yet."))?;
+                let code = self.code.get()?;
                 let address = code
                     .source_map
                     .fragment_to_instructions(&fragment)
@@ -82,11 +78,7 @@ impl PersistentState {
                 });
             }
             UserAction::BreakpointSet { fragment, .. } => {
-                let code = self
-                    .code
-                    .inner
-                    .as_ref()
-                    .ok_or_else(|| anyhow!("Code is not available yet."))?;
+                let code = self.code.get()?;
                 let address = code
                     .source_map
                     .fragment_to_instructions(&fragment)
