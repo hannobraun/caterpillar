@@ -56,6 +56,10 @@ impl Process {
         &mut self.evaluator.stack
     }
 
+    pub fn breakpoints_mut(&mut self) -> &mut Breakpoints {
+        &mut self.breakpoints
+    }
+
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
         // There are some fields we need to preserve over the reset. Anything
         // else needs to go back to start conditions.
