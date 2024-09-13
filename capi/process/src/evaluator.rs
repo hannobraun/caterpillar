@@ -42,7 +42,8 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
         self.next_instruction = self.next_instruction.next();
 
-        self.evaluate_instruction(current_instruction, self.next_instruction)?;
+        self.next_instruction = self
+            .evaluate_instruction(current_instruction, self.next_instruction)?;
 
         Ok(())
     }
@@ -51,7 +52,7 @@ impl Evaluator {
         &mut self,
         current_instruction: &Instruction,
         next_instruction: InstructionAddress,
-    ) -> Result<(), Effect> {
+    ) -> Result<InstructionAddress, Effect> {
         let closures = &mut self.closures;
         let next_closure = &mut self.next_closure;
         let stack = &mut self.stack;
@@ -167,8 +168,7 @@ impl Evaluator {
                             stack.push_frame(next_instruction)?;
                         }
 
-                        self.next_instruction = branch.start;
-                        return Ok(());
+                        return Ok(branch.start);
                     } else {
                         for value in used_operands.into_iter().rev() {
                             stack.push_operand(value);
@@ -290,8 +290,7 @@ impl Evaluator {
                             )
                             .extend(function.environment);
 
-                        self.next_instruction = branch.start;
-                        return Ok(());
+                        return Ok(branch.start);
                     } else {
                         for value in used_operands.into_iter().rev() {
                             stack.push_operand(value);
@@ -450,8 +449,7 @@ impl Evaluator {
             }
             Instruction::Return => {
                 if let Some(return_address) = stack.pop_frame() {
-                    self.next_instruction = return_address;
-                    return Ok(());
+                    return Ok(return_address);
                 }
             }
             Instruction::SubS32 => {
@@ -495,7 +493,7 @@ impl Evaluator {
             }
         }
 
-        Ok(())
+        Ok(next_instruction)
     }
 }
 
