@@ -8,7 +8,6 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process {
-    pub arguments: Vec<Value>,
     effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
@@ -19,7 +18,6 @@ impl Process {
         let arguments: Vec<_> = arguments.into_iter().collect();
 
         let mut self_ = Self {
-            arguments: arguments.clone(),
             effects: Effects::default(),
             evaluator: Evaluator::default(),
             breakpoints: Breakpoints::default(),
@@ -79,7 +77,6 @@ impl Process {
 
         let arguments: Vec<_> = arguments.into_iter().collect();
         *self = Self {
-            arguments: arguments.clone(),
             breakpoints,
 
             effects: Effects::default(),
