@@ -247,12 +247,12 @@ fn step_into_function() {
     debugger.provide_source_code(
         r"
             main: { |size_x size_y|
-                1 2 3 f
+                1 2 3 4 f
             }
 
             # Add some arguments. In case the compiler decides to generate code
             # to handle those, this makes sure we step over that generated code.
-            f: { |1 2 3|
+            f: { |1 a 3 b|
                 nop
             }
         ",
@@ -265,7 +265,7 @@ fn step_into_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .nth(3)
+            .nth(4)
             .unwrap()
             .id()
     };
