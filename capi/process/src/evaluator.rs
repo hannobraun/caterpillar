@@ -53,6 +53,7 @@ impl Evaluator {
         next_instruction: InstructionAddress,
     ) -> Result<(), Effect> {
         let closures = &mut self.closures;
+        let next_closure = &mut self.next_closure;
         let stack = &mut self.stack;
 
         match current_instruction {
@@ -378,8 +379,8 @@ impl Evaluator {
                     .collect();
 
                 let index = {
-                    let index = self.next_closure;
-                    self.next_closure += 1;
+                    let index = *next_closure;
+                    *next_closure += 1;
                     index
                 };
                 closures.insert(
