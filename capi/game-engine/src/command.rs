@@ -4,6 +4,7 @@ use capi_process::Instructions;
 pub enum Command {
     UpdateCode { instructions: Instructions },
     Continue,
+    IgnoreNextInstruction,
     Reset,
     Step,
     Stop,

@@ -60,6 +60,9 @@ impl GameEngine {
                     self.process.effects_mut().handle_first();
                 }
             }
+            Command::IgnoreNextInstruction => {
+                self.process.ignore_next_instruction();
+            }
             Command::Reset => {
                 self.process.reset(self.arguments);
             }
