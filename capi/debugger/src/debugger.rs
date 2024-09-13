@@ -114,19 +114,14 @@ fn on_ui_action(
     action: UserAction,
     state: &mut PersistentState,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
-    code_tx: &CodeTx,
+    _: &CodeTx,
 ) {
-    let (commands, instructions) = state.on_user_action(action).expect(
+    let (commands, _) = state.on_user_action(action).expect(
         "Failed to handle UI action. This is most likely a bug in the \
         Caterpillar debugger:",
     );
 
     for command in commands {
         commands_to_runtime_tx.send(command.serialize()).unwrap();
-    }
-    if let Some(instructions) = instructions {
-        code_tx.send(instructions).expect(
-            "Code receiver lives in static variable, should never drop.",
-        );
     }
 }
