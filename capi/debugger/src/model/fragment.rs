@@ -95,6 +95,14 @@ pub enum DebugFragmentState {
 }
 
 impl DebugFragmentState {
+    /// # Indicate whether this is the innermost active fragment
+    ///
+    /// The innermost active fragment is the active fragment in the innermost
+    /// active function. The fragment where the process is currently stopped at.
+    pub fn is_innermost_active_fragment(&self) -> bool {
+        matches!(self, Self::InnermostActiveFragment)
+    }
+
     /// # Indicate whether the fragment is active
     ///
     /// A fragment is active, either if the process is currently stopped here,

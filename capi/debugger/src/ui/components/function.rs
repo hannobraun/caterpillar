@@ -12,6 +12,8 @@ use crate::{
     ui::{actions::send_action, ActionsTx},
 };
 
+use super::button::Button;
+
 #[component]
 pub fn NamedFunction(
     name: String,
@@ -191,7 +193,16 @@ fn make_single_expression(
         .expect("Expecting serialization of `FragmentId` to always work.");
     let data_breakpoint = data.has_durable_breakpoint;
 
-    let actions = None;
+    let actions = if data.state.is_innermost_active_fragment() {
+        Some(view! {
+            <Button
+                label="Step Into"
+                action=UserAction::Step
+                actions=actions_tx.clone() />
+        })
+    } else {
+        None
+    };
 
     let error = data.effect.map(|effect| format!("{:?}", effect));
 
