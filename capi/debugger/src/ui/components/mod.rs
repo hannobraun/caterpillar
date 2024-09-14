@@ -1,4 +1,5 @@
 pub mod active_functions;
+pub mod button;
 pub mod control_panel;
 pub mod debugger;
 pub mod function;
