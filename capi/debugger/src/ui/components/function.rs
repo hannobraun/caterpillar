@@ -170,7 +170,7 @@ fn make_single_expression(
     expression: String,
     data: DebugFragmentData,
     class_outer: &mut String,
-    actions: ActionsTx,
+    actions_tx: ActionsTx,
 ) -> (View, Option<()>, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
@@ -214,7 +214,7 @@ fn make_single_expression(
             UserAction::BreakpointSet { fragment }
         };
 
-        leptos::spawn_local(send_action(action, actions.clone()));
+        leptos::spawn_local(send_action(action, actions_tx.clone()));
     };
 
     (
