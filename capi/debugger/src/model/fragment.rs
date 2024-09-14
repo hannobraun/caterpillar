@@ -52,7 +52,7 @@ impl DebugFragment {
 
         let data = DebugFragmentData {
             id: fragment.id(),
-            is_active: state.is_active(),
+            state,
             has_durable_breakpoint,
             effect,
         };
@@ -74,12 +74,8 @@ pub struct DebugFragmentData {
     /// # The fragment ID
     pub id: FragmentId,
 
-    /// # Indicate whether the fragment is active
-    ///
-    /// A fragment is active, either if the process is currently stopped here,
-    /// or if it calls an active function (which is a function that contains an
-    /// active fragment).
-    pub is_active: bool,
+    /// # The static of the fragment
+    pub state: DebugFragmentState,
 
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,

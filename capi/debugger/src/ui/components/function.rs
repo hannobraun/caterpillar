@@ -183,7 +183,7 @@ fn make_single_expression(
             _ => class_inner.push_str(" bg-red-300"),
         }
     }
-    if data.is_active {
+    if data.state.is_active() {
         class_inner.push_str(" font-bold");
     }
 
