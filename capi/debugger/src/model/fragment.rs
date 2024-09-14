@@ -18,6 +18,7 @@ impl DebugFragment {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
+        is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -59,6 +60,7 @@ impl DebugFragment {
         let kind = DebugFragmentKind::new(
             fragment,
             active_fragment,
+            is_in_innermost_active_function,
             fragments,
             source_map,
             breakpoints,
@@ -114,6 +116,7 @@ impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
+        is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -148,6 +151,7 @@ impl DebugFragmentKind {
                 let function = DebugFunction::new(
                     function,
                     active_fragment,
+                    is_in_innermost_active_function,
                     fragments,
                     source_map,
                     breakpoints,

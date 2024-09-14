@@ -16,6 +16,7 @@ impl DebugFunction {
     pub fn new(
         function: fragments::Function,
         active_fragment: Option<FragmentId>,
+        is_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -29,6 +30,7 @@ impl DebugFunction {
                 DebugBranch::new(
                     branch,
                     active_fragment,
+                    is_innermost_active_function,
                     fragments,
                     source_map,
                     breakpoints,
