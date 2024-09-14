@@ -25,7 +25,11 @@ impl DebugFragment {
         effects: &[Effect],
     ) -> Option<Self> {
         let state = if Some(fragment.id()) == active_fragment {
-            DebugFragmentState::Active
+            if is_in_innermost_active_function {
+                DebugFragmentState::InnermostActiveFragment
+            } else {
+                DebugFragmentState::ActiveCaller
+            }
         } else {
             DebugFragmentState::NotActive
         };
@@ -85,7 +89,8 @@ pub struct DebugFragmentData {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentState {
-    Active,
+    InnermostActiveFragment,
+    ActiveCaller,
     NotActive,
 }
 
@@ -96,7 +101,7 @@ impl DebugFragmentState {
     /// or if it calls an active function (which is a function that contains an
     /// active fragment).
     pub fn is_active(&self) -> bool {
-        matches!(self, Self::Active)
+        matches!(self, Self::InnermostActiveFragment | Self::ActiveCaller)
     }
 }
 
