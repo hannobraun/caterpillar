@@ -191,6 +191,8 @@ fn make_single_expression(
         .expect("Expecting serialization of `FragmentId` to always work.");
     let data_breakpoint = data.has_durable_breakpoint;
 
+    let actions = None;
+
     let error = data.effect.map(|effect| format!("{:?}", effect));
 
     let toggle_breakpoint = move |event: MouseEvent| {
@@ -228,7 +230,7 @@ fn make_single_expression(
             </span>
         }
         .into_view(),
-        None,
+        actions,
         Some(view! {
             <span class="mx-2 font-bold text-red-800">
                 {error}
