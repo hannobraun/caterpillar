@@ -171,7 +171,7 @@ fn make_single_expression(
     data: DebugFragmentData,
     class_outer: &mut String,
     actions_tx: ActionsTx,
-) -> (View, Option<()>, Option<HtmlElement<Span>>) {
+) -> (View, Option<View>, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
