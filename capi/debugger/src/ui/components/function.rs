@@ -89,7 +89,7 @@ fn Branch(
 pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (fragment, error) = match fragment.kind {
+    let (fragment, actions, error) = match fragment.kind {
         DebugFragmentKind::CallToFunction { name } => make_single_expression(
             name,
             fragment.data,
@@ -120,6 +120,7 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
                 }
                 .into_view(),
                 None,
+                None,
             )
         }
         DebugFragmentKind::Function { function } => (
@@ -129,6 +130,7 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
                     actions=actions />
             }
             .into_view(),
+            None,
             None,
         ),
         DebugFragmentKind::ResolvedBinding { name } => make_single_expression(
@@ -158,6 +160,7 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
             <span class=class_outer>
                 {fragment}
             </span>
+            {actions}
             {error}
         </span>
     }
@@ -168,7 +171,7 @@ fn make_single_expression(
     data: DebugFragmentData,
     class_outer: &mut String,
     actions: ActionsTx,
-) -> (View, Option<HtmlElement<Span>>) {
+) -> (View, Option<()>, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
@@ -225,6 +228,7 @@ fn make_single_expression(
             </span>
         }
         .into_view(),
+        None,
         Some(view! {
             <span class="mx-2 font-bold text-red-800">
                 {error}
