@@ -70,10 +70,11 @@ pub struct DebugFragmentData {
     /// # The fragment ID
     pub id: FragmentId,
 
-    /// # Indicate whether the expression is active
+    /// # Indicate whether the fragment is active
     ///
-    /// An expression is active, either if it is currently being executed, or if
-    /// it calls an active function.
+    /// A fragment is active, either if the process is currently stopped here,
+    /// or if it calls an active function (which is a function that contains an
+    /// active fragment).
     pub is_active: bool,
 
     pub has_durable_breakpoint: bool,
