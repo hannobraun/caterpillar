@@ -23,7 +23,7 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
             <Button
                 label="Continue"
                 action=UserAction::Continue
-                actions=actions.clone() />
+                actions=actions />
         </Panel>
     }
 }
