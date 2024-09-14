@@ -24,10 +24,6 @@ pub fn ControlPanel(actions: ActionsTx) -> impl IntoView {
                 label="Continue"
                 action=UserAction::Continue
                 actions=actions.clone() />
-            <Button
-                label="Step Into"
-                action=UserAction::Step
-                actions=actions />
         </Panel>
     }
 }
