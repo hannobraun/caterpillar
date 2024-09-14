@@ -23,7 +23,11 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let is_active = Some(fragment.id()) == active_fragment;
+        let state = if Some(fragment.id()) == active_fragment {
+            DebugFragmentState::Active
+        } else {
+            DebugFragmentState::NotActive
+        };
 
         let has_durable_breakpoint = source_map
             .fragment_to_instructions(&fragment.id())
@@ -39,7 +43,7 @@ impl DebugFragment {
             // active function you're looking at. The developer might step
             // through some functions, hit the effect, but might not want to
             // actually step into the function where the effect comes from.
-            if is_active {
+            if state.is_active() {
                 Some(*effect)
             } else {
                 None
@@ -48,7 +52,7 @@ impl DebugFragment {
 
         let data = DebugFragmentData {
             id: fragment.id(),
-            is_active,
+            is_active: state.is_active(),
             has_durable_breakpoint,
             effect,
         };
@@ -79,6 +83,18 @@ pub struct DebugFragmentData {
 
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum DebugFragmentState {
+    Active,
+    NotActive,
+}
+
+impl DebugFragmentState {
+    pub fn is_active(&self) -> bool {
+        matches!(self, Self::Active)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
