@@ -133,6 +133,12 @@ impl PersistentState {
                 });
 
                 let origin = self.code.instruction(&origin)?;
+
+                // If instruction we're trying to step away from was compiled
+                // from a `brk` instruction, or something equivalent, that won't
+                // ever do anything except trigger another breakpoint. We need
+                // to tell the process to ignore it, if we're going to step
+                // over it.
                 if let Instruction::TriggerEffect {
                     effect: Effect::Breakpoint,
                 } = origin
