@@ -102,7 +102,7 @@ impl TestDebugger {
         &self.persistent.code.inner.as_ref().unwrap().fragments
     }
 
-    pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {
+    pub fn expect_fragment(&mut self, id: &FragmentId) -> DebugFragment {
         let Some(fragment) = self
             .transient_state()
             .active_functions
