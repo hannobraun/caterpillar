@@ -10,7 +10,8 @@ use capi_protocol::updates::{Code, Updates};
 
 use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFragment,
-    DebugFragmentKind, DebugFunction, PersistentState, UserAction,
+    DebugFragmentKind, DebugFunction, PersistentState, TransientState,
+    UserAction,
 };
 
 pub fn debugger() -> TestDebugger {
@@ -115,6 +116,10 @@ impl TestDebugger {
         };
 
         fragment
+    }
+
+    pub fn transient_state(&self) -> TransientState {
+        self.persistent.generate_transient_state()
     }
 }
 

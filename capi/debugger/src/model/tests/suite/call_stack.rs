@@ -36,8 +36,7 @@ fn basic_call_stack() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -57,8 +56,7 @@ fn stopped_at_host_function() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     transient
         .active_functions
@@ -84,8 +82,7 @@ fn stopped_at_code_within_block() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let fragment = transient
         .active_functions
@@ -120,8 +117,7 @@ fn call_stack_reconstruction_missing_main() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
@@ -159,8 +155,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
@@ -201,8 +196,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(
@@ -247,8 +241,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             ",
         )
         .run_program()
-        .persistent
-        .generate_transient_state();
+        .transient_state();
 
     let entries = transient.active_functions.expect_entries();
     assert!(matches!(

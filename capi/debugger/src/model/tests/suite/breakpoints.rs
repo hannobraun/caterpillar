@@ -69,8 +69,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
 
     assert_eq!(
         debugger
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
@@ -117,8 +116,7 @@ fn step_over_brk() {
 
     assert_eq!(
         debugger
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
@@ -132,8 +130,7 @@ fn step_over_brk() {
     debugger.on_user_action(UserAction::StepInto).unwrap();
     assert_eq!(
         debugger
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
@@ -187,8 +184,7 @@ fn step_into_function() {
 
     assert_eq!(
         debugger
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
@@ -255,8 +251,7 @@ fn step_out_of_function() {
 
     assert_eq!(
         debugger
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
