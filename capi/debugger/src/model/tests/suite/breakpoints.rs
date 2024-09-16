@@ -223,24 +223,28 @@ fn step_out_of_function() {
         ",
     );
 
-    let fragments = debugger.expect_code();
+    let (nop_in_main, nop_in_f) = {
+        let fragments = debugger.expect_code();
 
-    let nop_in_main = fragments
-        .find_function_by_name("main")
-        .unwrap()
-        .expect_one_branch()
-        .iter(fragments)
-        .nth(1)
-        .unwrap()
-        .id();
-    let nop_in_f = fragments
-        .find_function_by_name("f")
-        .unwrap()
-        .expect_one_branch()
-        .iter(fragments)
-        .next()
-        .unwrap()
-        .id();
+        let nop_in_main = fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .nth(1)
+            .unwrap()
+            .id();
+        let nop_in_f = fragments
+            .find_function_by_name("f")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .next()
+            .unwrap()
+            .id();
+
+        (nop_in_main, nop_in_f)
+    };
 
     debugger
         .on_user_action(UserAction::BreakpointSet { fragment: nop_in_f })
