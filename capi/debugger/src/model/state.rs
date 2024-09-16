@@ -7,7 +7,7 @@ use capi_protocol::{
     updates::{Code, UpdateFromRuntime},
 };
 
-use super::{ActiveFunctions, DebugCode, UserAction};
+use super::{ActiveFunctions, DebugCode, DebugFragmentKind, UserAction};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
@@ -95,15 +95,31 @@ impl PersistentState {
                     .active_branch()?;
 
                 let origin = branch.active_fragment()?;
-                let Some(target) = branch.fragment_after(origin)? else {
-                    // No fragment after the active one in the current function,
-                    // meaning we have to step out of the function.
-                    //
-                    // This code doesn't support this yet. Falling back to the
-                    // previous behavior.
+                let target = {
+                    let mut fragment = origin.clone();
 
-                    commands.push(Command::Step);
-                    return Ok(commands);
+                    loop {
+                        let Some(after) = branch.fragment_after(&fragment)?
+                        else {
+                            // No fragment after the active one in the current
+                            // function, meaning we have to step out of the
+                            // function.
+                            //
+                            // This code doesn't support this yet. Falling back
+                            // to the previous behavior.
+
+                            commands.push(Command::Step);
+                            return Ok(commands);
+                        };
+
+                        if let DebugFragmentKind::Comment { .. } = after.kind {
+                            // Can't step to comments! Need to ignore them.
+                            fragment = after.clone();
+                            continue;
+                        }
+
+                        break after;
+                    }
                 };
 
                 let origin =
