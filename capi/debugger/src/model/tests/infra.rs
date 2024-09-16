@@ -20,9 +20,9 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
-    pub queued_commands: Vec<Command>,
-    pub game_engine: Option<GameEngine>,
-    pub persistent: PersistentState,
+    queued_commands: Vec<Command>,
+    game_engine: Option<GameEngine>,
+    persistent: PersistentState,
 }
 
 impl TestDebugger {
