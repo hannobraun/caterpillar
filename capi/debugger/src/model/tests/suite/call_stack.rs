@@ -36,7 +36,7 @@ fn basic_call_stack() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let names = transient.active_functions.names();
@@ -57,7 +57,7 @@ fn stopped_at_host_function() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     transient
@@ -84,7 +84,7 @@ fn stopped_at_code_within_block() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let fragment = transient
@@ -120,7 +120,7 @@ fn call_stack_reconstruction_missing_main() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let names = transient.active_functions.names();
@@ -159,7 +159,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let names = transient.active_functions.names();
@@ -201,7 +201,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let entries = transient.active_functions.expect_entries();
@@ -247,7 +247,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             ",
         )
         .run_program()
-        .state
+        .persistent
         .generate_transient_state();
 
     let entries = transient.active_functions.expect_entries();

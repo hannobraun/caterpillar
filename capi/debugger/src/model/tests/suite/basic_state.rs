@@ -8,7 +8,7 @@ fn no_server() {
     // If `RemoteProcess` has received no updates at all, the active functions
     // view should display that no server is available.
 
-    let transient = debugger().state.generate_transient_state();
+    let transient = debugger().persistent.generate_transient_state();
 
     assert_eq!(
         transient.active_functions,
@@ -25,7 +25,7 @@ fn no_process() {
 
     let transient = debugger()
         .provide_source_code("")
-        .state
+        .persistent
         .generate_transient_state();
 
     assert_eq!(

@@ -21,7 +21,7 @@ pub fn debugger() -> TestDebugger {
 pub struct TestDebugger {
     pub queued_commands: Vec<Command>,
     pub game_engine: Option<GameEngine>,
-    pub state: PersistentState,
+    pub persistent: PersistentState,
 }
 
 impl TestDebugger {
@@ -29,7 +29,7 @@ impl TestDebugger {
         let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(source);
 
-        let command = self.state.on_new_code(Code {
+        let command = self.persistent.on_new_code(Code {
             fragments,
             instructions,
             source_map,
@@ -58,7 +58,7 @@ impl TestDebugger {
 
         updates.queue_updates(&game_engine.process, &memory);
         for update in updates.take_queued_updates() {
-            self.state.on_update_from_runtime(update);
+            self.persistent.on_update_from_runtime(update);
         }
 
         self
@@ -68,7 +68,7 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        let commands = self.state.on_user_action(action)?;
+        let commands = self.persistent.on_user_action(action)?;
 
         for command in commands {
             self.queued_commands.push(command);
@@ -88,12 +88,12 @@ impl TestDebugger {
     }
 
     pub fn expect_code(&self) -> &Fragments {
-        &self.state.code.inner.as_ref().unwrap().fragments
+        &self.persistent.code.inner.as_ref().unwrap().fragments
     }
 
     pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {
         let Some(fragment) = self
-            .state
+            .persistent
             .generate_transient_state()
             .active_functions
             .expect_entries()
