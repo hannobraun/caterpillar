@@ -74,7 +74,8 @@ impl TestDebugger {
         &mut self,
         action: UserAction,
     ) -> anyhow::Result<&mut Self> {
-        let commands = self.persistent.on_user_action(action)?;
+        let transient = self.transient_state();
+        let commands = self.persistent.on_user_action(action, &transient)?;
 
         for command in commands {
             self.queued_commands.push(command);

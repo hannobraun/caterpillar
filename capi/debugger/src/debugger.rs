@@ -107,10 +107,10 @@ fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
 fn on_ui_action(
     action: UserAction,
     persistent: &mut PersistentState,
-    _: &TransientState,
+    transient: &TransientState,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
 ) {
-    let commands = persistent.on_user_action(action).expect(
+    let commands = persistent.on_user_action(action, transient).expect(
         "Failed to handle UI action. This is most likely a bug in the \
         Caterpillar debugger:",
     );

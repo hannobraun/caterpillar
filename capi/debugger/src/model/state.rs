@@ -55,6 +55,7 @@ impl PersistentState {
     pub fn on_user_action(
         &mut self,
         action: UserAction,
+        _: &TransientState,
     ) -> anyhow::Result<Vec<Command>> {
         let mut commands = Vec::new();
 
