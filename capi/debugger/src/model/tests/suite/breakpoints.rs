@@ -203,6 +203,21 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .id,
         b,
     );
+    assert!(
+        debugger
+            .transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_branch()?
+            .body
+            .iter()
+            .find(|fragment| fragment.data.id == a)
+            .unwrap()
+            .data
+            .has_durable_breakpoint
+    );
 
     // Step to `c`, over the ephemeral breakpoint.
     debugger.on_user_action(UserAction::StepInto)?;

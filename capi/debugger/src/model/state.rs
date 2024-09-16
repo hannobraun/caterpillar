@@ -156,6 +156,15 @@ impl PersistentState {
                         },
                         Command::ClearBreakpointAndEvaluateNextInstruction,
                     ]);
+
+                    // Now that we're past it, we can but the breakpoint back.
+                    self.breakpoints.set_durable(origin);
+
+                    // And of course we need to send updated code to the runtime
+                    // again, or we risk it running beyond the breakpoint.
+                    commands.push(Command::UpdateCode {
+                        instructions: self.apply_breakpoints(self.code.get()?),
+                    });
                 }
 
                 self.breakpoints.clear_all_ephemeral();
