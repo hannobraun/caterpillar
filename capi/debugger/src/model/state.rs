@@ -143,6 +143,25 @@ impl PersistentState {
                     // it, if we're going to step over it.
                     commands.push(Command::IgnoreNextInstruction);
                 }
+
+                if self.breakpoints.durable_at(&origin) {
+                    // We are currently stopped at a durable breakpoint. That's
+                    // going to require some special handling.
+                    //
+                    // First, clear the breakpoint temporarily.
+                    self.breakpoints.clear_durable(&origin);
+
+                    // Now that the breakpoint is cleared, send updated code to
+                    // the runtime and tell it to step beyond where the
+                    // breakpoint was.
+                    commands.extend([
+                        Command::UpdateCode {
+                            instructions: self
+                                .apply_breakpoints(self.code.get()?),
+                        },
+                        Command::ClearBreakpointAndEvaluateNextInstruction,
+                    ]);
+                }
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
