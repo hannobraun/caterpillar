@@ -42,6 +42,16 @@ impl Fragment {
             FragmentKind::Terminator => None,
         }
     }
+
+    pub fn is_comment(&self) -> bool {
+        matches!(
+            self.kind,
+            FragmentKind::Payload {
+                payload: Payload::Comment { .. },
+                ..
+            },
+        )
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
