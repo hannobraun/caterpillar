@@ -109,7 +109,7 @@ impl ActiveFunctions {
     }
 
     #[cfg(test)]
-    pub fn entries(&self) -> anyhow::Result<&[ActiveFunctionsEntry]> {
+    pub fn entries(&self) -> anyhow::Result<&ActiveFunctionsEntries> {
         use anyhow::anyhow;
 
         let ActiveFunctions::Entries { entries } = &self else {
@@ -119,7 +119,7 @@ impl ActiveFunctions {
             ));
         };
 
-        Ok(&entries.inner)
+        Ok(entries)
     }
 }
 

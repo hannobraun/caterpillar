@@ -142,7 +142,7 @@ pub trait ActiveFunctionsExt {
 
 impl ActiveFunctionsExt for ActiveFunctions {
     fn expect_entries(&self) -> Vec<ActiveFunctionsEntry> {
-        self.entries().unwrap().to_vec()
+        self.entries().unwrap().inner.to_vec()
     }
 
     fn names(&self) -> Vec<String> {
