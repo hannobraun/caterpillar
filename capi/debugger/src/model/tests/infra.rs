@@ -129,9 +129,8 @@ impl TestDebugger {
 
     pub fn transient_state(&mut self) -> TransientState {
         self.transient
-            .as_ref()
-            .cloned()
-            .unwrap_or_else(|| self.persistent.generate_transient_state())
+            .get_or_insert_with(|| self.persistent.generate_transient_state())
+            .clone()
     }
 }
 
