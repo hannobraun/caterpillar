@@ -53,6 +53,27 @@ impl GameEngine {
             Command::UpdateCode { instructions } => {
                 self.instructions = Some(instructions);
             }
+            Command::ClearBreakpointAndEvaluateNextInstruction => {
+                if let Some(Effect::Breakpoint) =
+                    self.process.effects().inspect_first()
+                {
+                    self.process.effects_mut().handle_first();
+                } else {
+                    // This shouldn't happen, unless there's a bug in the
+                    // debugger. There's no point in panicking here though.
+                    //
+                    // We should signal this back to the debugger, so it can
+                    // display a prominent message to the user. But right now,
+                    // we don't have a good way to do so.
+                }
+
+                if let Some(instructions) = &self.instructions {
+                    self.process.evaluate_next_instruction(instructions);
+                } else {
+                    // Same as above: This should only happen if the debugger is
+                    // buggy.
+                }
+            }
             Command::Continue => {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects_mut().inspect_first()
