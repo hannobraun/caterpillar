@@ -166,15 +166,18 @@ fn step_into_function() {
         ",
     );
 
-    let fragments = debugger.expect_code();
-    let f = fragments
-        .find_function_by_name("main")
-        .unwrap()
-        .expect_one_branch()
-        .iter(fragments)
-        .nth(3)
-        .unwrap()
-        .id();
+    let f = {
+        let fragments = debugger.expect_code();
+        fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .nth(3)
+            .unwrap()
+            .id()
+    };
+
     debugger
         .on_user_action(UserAction::BreakpointSet { fragment: f })
         .unwrap();
