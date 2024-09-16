@@ -50,15 +50,6 @@ impl TestDebugger {
 
         self.game_engine = Some(game_engine);
         self.process_commands();
-
-        let game_engine = self
-            .game_engine
-            .as_mut()
-            .expect("Just set `self.game_engine` to `Some`");
-
-        let mut pixels = [];
-        game_engine.run_until_end_of_frame(1., &mut pixels);
-
         self.process_updates();
         self.update_transient_state();
 
