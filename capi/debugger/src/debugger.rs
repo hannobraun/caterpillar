@@ -26,13 +26,12 @@ impl Debugger {
         let (actions_tx, mut actions_rx) = mpsc::unbounded_channel();
 
         let mut persistent = PersistentState::default();
-        let transient = persistent.generate_transient_state();
+        let mut transient = persistent.generate_transient_state();
 
         let (state_read, state_write) =
             leptos::create_signal((persistent.clone(), transient.clone()));
 
         leptos::spawn_local(async move {
-            let mut transient = transient;
             let mut code =
                 CodeFetcher::new(&commands_to_runtime_tx, &mut persistent)
                     .await
