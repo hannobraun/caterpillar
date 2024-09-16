@@ -79,7 +79,7 @@ impl Debugger {
                 }
 
                 transient = persistent.generate_transient_state();
-                state_write.set((persistent.clone(), transient));
+                state_write.set((persistent.clone(), transient.clone()));
             }
         });
 
