@@ -23,6 +23,7 @@ pub struct TestDebugger {
     queued_commands: Vec<Command>,
     game_engine: Option<GameEngine>,
     persistent: PersistentState,
+    transient: Option<TransientState>,
 }
 
 impl TestDebugger {
@@ -36,6 +37,8 @@ impl TestDebugger {
             source_map,
         });
         self.queued_commands.push(command);
+
+        self.update_transient_state();
 
         self
     }
@@ -62,6 +65,8 @@ impl TestDebugger {
             self.persistent.on_update_from_runtime(update);
         }
 
+        self.update_transient_state();
+
         self
     }
 
@@ -76,6 +81,7 @@ impl TestDebugger {
         }
 
         self.process_commands();
+        self.update_transient_state();
 
         Ok(self)
     }
@@ -86,6 +92,10 @@ impl TestDebugger {
                 game_engine.on_command(command);
             }
         }
+    }
+
+    fn update_transient_state(&mut self) {
+        self.transient = Some(self.persistent.generate_transient_state());
     }
 
     pub fn expect_code(&self) -> &Fragments {
@@ -119,7 +129,10 @@ impl TestDebugger {
     }
 
     pub fn transient_state(&self) -> TransientState {
-        self.persistent.generate_transient_state()
+        self.transient
+            .as_ref()
+            .cloned()
+            .unwrap_or_else(|| self.persistent.generate_transient_state())
     }
 }
 
