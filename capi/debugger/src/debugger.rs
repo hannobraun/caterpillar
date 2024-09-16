@@ -29,9 +29,10 @@ impl Debugger {
         let transient = persistent.generate_transient_state();
 
         let (state_read, state_write) =
-            leptos::create_signal((persistent.clone(), transient));
+            leptos::create_signal((persistent.clone(), transient.clone()));
 
         leptos::spawn_local(async move {
+            let mut transient;
             let mut code =
                 CodeFetcher::new(&commands_to_runtime_tx, &mut persistent)
                     .await
@@ -77,7 +78,7 @@ impl Debugger {
                     }
                 }
 
-                let transient = persistent.generate_transient_state();
+                transient = persistent.generate_transient_state();
                 state_write.set((persistent.clone(), transient));
             }
         });
