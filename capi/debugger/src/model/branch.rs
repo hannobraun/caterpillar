@@ -46,7 +46,7 @@ impl DebugBranch {
                     effects,
                 )
             })
-            .collect();
+            .collect::<Vec<_>>();
 
         Self { parameters, body }
     }
