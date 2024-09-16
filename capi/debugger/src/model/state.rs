@@ -158,10 +158,14 @@ impl PersistentState {
                     ]);
                 }
 
+                self.breakpoints.clear_all_ephemeral();
                 self.breakpoints.set_ephemeral(target);
-                commands.push(Command::UpdateCode {
-                    instructions: self.apply_breakpoints(self.code.get()?),
-                });
+                commands.extend([
+                    Command::UpdateCode {
+                        instructions: self.apply_breakpoints(self.code.get()?),
+                    },
+                    Command::Continue,
+                ]);
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
