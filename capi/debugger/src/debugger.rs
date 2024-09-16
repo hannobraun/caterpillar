@@ -8,7 +8,7 @@ use tokio::{select, sync::mpsc};
 use crate::{
     code::CodeFetcher,
     commands::{CommandsToRuntimeRx, CommandsToRuntimeTx},
-    model::{PersistentState, UserAction},
+    model::{PersistentState, TransientState, UserAction},
     ui,
 };
 
@@ -32,7 +32,7 @@ impl Debugger {
             leptos::create_signal((persistent.clone(), transient.clone()));
 
         leptos::spawn_local(async move {
-            let mut transient;
+            let mut transient = transient;
             let mut code =
                 CodeFetcher::new(&commands_to_runtime_tx, &mut persistent)
                     .await
@@ -73,6 +73,7 @@ impl Debugger {
                         on_ui_action(
                             action,
                             &mut persistent,
+                            &transient,
                             &commands_to_runtime_tx,
                         );
                     }
@@ -106,6 +107,7 @@ fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
 fn on_ui_action(
     action: UserAction,
     persistent: &mut PersistentState,
+    _: &TransientState,
     commands_to_runtime_tx: &CommandsToRuntimeTx,
 ) {
     let commands = persistent.on_user_action(action).expect(
