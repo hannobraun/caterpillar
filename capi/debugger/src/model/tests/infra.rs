@@ -127,7 +127,7 @@ impl TestDebugger {
         fragment
     }
 
-    pub fn transient_state(&self) -> TransientState {
+    pub fn transient_state(&mut self) -> TransientState {
         self.transient
             .as_ref()
             .cloned()
