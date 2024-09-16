@@ -20,6 +20,7 @@ pub fn debugger() -> TestDebugger {
 
 #[derive(Default)]
 pub struct TestDebugger {
+    current_time: f64,
     queued_commands: Vec<Command>,
     memory: Memory,
     updates: Updates,
@@ -79,7 +80,8 @@ impl TestDebugger {
             }
 
             let mut pixels = [];
-            game_engine.run_until_end_of_frame(1., &mut pixels);
+            game_engine.run_until_end_of_frame(self.current_time, &mut pixels);
+            self.current_time += 1.;
         }
     }
 
