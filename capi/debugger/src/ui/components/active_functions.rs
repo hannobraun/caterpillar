@@ -16,6 +16,7 @@ pub fn ActiveFunctions(
     let active_functions = match active_functions {
         ActiveFunctions::Entries { entries } => {
             let functions = entries
+                .inner
                 .into_iter()
                 .map(|entry| {
                     let function = match entry {

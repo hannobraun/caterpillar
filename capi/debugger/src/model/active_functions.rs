@@ -8,7 +8,7 @@ use super::DebugFunction;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
-    Entries { entries: Vec<ActiveFunctionsEntry> },
+    Entries { entries: ActiveFunctionsEntries },
     Message { message: ActiveFunctionsMessage },
 }
 
@@ -102,7 +102,9 @@ impl ActiveFunctions {
         }
 
         Self::Entries {
-            entries: entries.into(),
+            entries: ActiveFunctionsEntries {
+                inner: entries.into(),
+            },
         }
     }
 
@@ -117,8 +119,13 @@ impl ActiveFunctions {
             ));
         };
 
-        Ok(entries)
+        Ok(&entries.inner)
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ActiveFunctionsEntries {
+    pub inner: Vec<ActiveFunctionsEntry>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
