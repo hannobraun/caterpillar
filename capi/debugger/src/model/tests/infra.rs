@@ -22,6 +22,7 @@ pub fn debugger() -> TestDebugger {
 pub struct TestDebugger {
     queued_commands: Vec<Command>,
     memory: Memory,
+    updates: Updates,
     game_engine: Option<GameEngine>,
     persistent: PersistentState,
     transient: Option<TransientState>,
@@ -58,10 +59,9 @@ impl TestDebugger {
         let mut pixels = [];
         game_engine.run_until_end_of_frame(1., &mut pixels);
 
-        let mut updates = Updates::default();
-
-        updates.queue_updates(&game_engine.process, &self.memory);
-        for update in updates.take_queued_updates() {
+        self.updates
+            .queue_updates(&game_engine.process, &self.memory);
+        for update in self.updates.take_queued_updates() {
             self.persistent.on_update_from_runtime(update);
         }
 
