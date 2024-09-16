@@ -59,12 +59,7 @@ impl TestDebugger {
         let mut pixels = [];
         game_engine.run_until_end_of_frame(1., &mut pixels);
 
-        self.updates
-            .queue_updates(&game_engine.process, &self.memory);
-        for update in self.updates.take_queued_updates() {
-            self.persistent.on_update_from_runtime(update);
-        }
-
+        self.process_updates();
         self.update_transient_state();
 
         self
@@ -95,6 +90,16 @@ impl TestDebugger {
 
             let mut pixels = [];
             game_engine.run_until_end_of_frame(1., &mut pixels);
+        }
+    }
+
+    fn process_updates(&mut self) {
+        if let Some(game_engine) = &self.game_engine {
+            self.updates
+                .queue_updates(&game_engine.process, &self.memory);
+            for update in self.updates.take_queued_updates() {
+                self.persistent.on_update_from_runtime(update);
+            }
         }
     }
 
