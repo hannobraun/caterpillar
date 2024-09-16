@@ -18,7 +18,7 @@ pub fn debugger() -> TestDebugger {
     TestDebugger::default()
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct TestDebugger {
     current_time: f64,
     queued_commands: Vec<Command>,
