@@ -127,11 +127,6 @@ impl PersistentState {
                 let target =
                     self.code.fragment_to_instruction(&target.data.id)?;
 
-                self.breakpoints.set_ephemeral(target);
-                commands.push(Command::UpdateCode {
-                    instructions: self.apply_breakpoints(self.code.get()?),
-                });
-
                 if let Instruction::TriggerEffect {
                     effect: Effect::Breakpoint,
                 } = self.code.instruction(&origin)?
@@ -162,6 +157,11 @@ impl PersistentState {
                         Command::ClearBreakpointAndEvaluateNextInstruction,
                     ]);
                 }
+
+                self.breakpoints.set_ephemeral(target);
+                commands.push(Command::UpdateCode {
+                    instructions: self.apply_breakpoints(self.code.get()?),
+                });
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
