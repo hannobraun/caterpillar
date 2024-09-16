@@ -46,9 +46,7 @@ impl TestDebugger {
     }
 
     pub fn run_program(&mut self) -> &mut Self {
-        let game_engine = GameEngine::new();
-
-        self.game_engine = Some(game_engine);
+        self.game_engine = Some(GameEngine::new());
         self.process_commands();
         self.process_updates();
         self.update_transient_state();
