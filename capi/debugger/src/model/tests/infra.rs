@@ -104,8 +104,7 @@ impl TestDebugger {
 
     pub fn expect_fragment(&self, id: &FragmentId) -> DebugFragment {
         let Some(fragment) = self
-            .persistent
-            .generate_transient_state()
+            .transient_state()
             .active_functions
             .expect_entries()
             .expect_functions()
