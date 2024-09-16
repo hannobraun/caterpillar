@@ -129,7 +129,7 @@ fn step_over_brk() {
         brk,
     );
 
-    debugger.on_user_action(UserAction::Step).unwrap();
+    debugger.on_user_action(UserAction::StepInto).unwrap();
     assert_eq!(
         debugger
             .state
@@ -183,7 +183,7 @@ fn step_into_function() {
         .unwrap();
 
     debugger.run_program();
-    debugger.on_user_action(UserAction::Step).unwrap();
+    debugger.on_user_action(UserAction::StepInto).unwrap();
 
     assert_eq!(
         debugger
@@ -251,7 +251,7 @@ fn step_out_of_function() {
         .unwrap();
 
     debugger.run_program();
-    debugger.on_user_action(UserAction::Step).unwrap();
+    debugger.on_user_action(UserAction::StepInto).unwrap();
 
     assert_eq!(
         debugger

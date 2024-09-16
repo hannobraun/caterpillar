@@ -85,7 +85,7 @@ impl PersistentState {
             UserAction::Reset => {
                 commands.push(Command::Reset);
             }
-            UserAction::Step => {
+            UserAction::StepInto => {
                 commands.push(Command::Step);
             }
             UserAction::Stop => {

@@ -6,6 +6,6 @@ pub enum UserAction {
     BreakpointSet { fragment: FragmentId },
     Continue,
     Reset,
-    Step,
+    StepInto,
     Stop,
 }
