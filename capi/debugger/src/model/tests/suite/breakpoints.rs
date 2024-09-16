@@ -142,6 +142,87 @@ fn step_over_brk() {
 }
 
 #[test]
+fn step_over_breakpoints() -> anyhow::Result<()> {
+    // Stepping should step over breakpoints, regardless of whether those are
+    // durable or ephemeral.
+
+    let mut debugger = debugger();
+    debugger.provide_source_code(
+        r"
+            main: { |size_x size_y|
+                nop # a
+                nop # b
+                nop # c
+            }
+        ",
+    );
+
+    let (a, b, c) = {
+        let fragments = debugger.expect_code();
+        let mut body = fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments);
+
+        let a = body.find(|fragment| !fragment.is_comment()).unwrap().id();
+        let b = body.find(|fragment| !fragment.is_comment()).unwrap().id();
+        let c = body.find(|fragment| !fragment.is_comment()).unwrap().id();
+
+        (a, b, c)
+    };
+
+    // Set a durable breakpoint at `a`. The program should stop there.
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: a })?;
+    debugger.run_program();
+    assert_eq!(
+        debugger
+            .transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_fragment()
+            .data
+            .id,
+        a,
+    );
+
+    // Step to `b`, over the durable breakpoint. This sets an ephemeral
+    // breakpoint there.
+    debugger.on_user_action(UserAction::StepInto)?;
+    assert_eq!(
+        debugger
+            .transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_fragment()
+            .data
+            .id,
+        b,
+    );
+
+    // Step to `c`, over the ephemeral breakpoint.
+    debugger.on_user_action(UserAction::StepInto)?;
+    assert_eq!(
+        debugger
+            .transient_state()
+            .active_functions
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_fragment()
+            .data
+            .id,
+        c,
+    );
+
+    Ok(())
+}
+
+#[test]
 #[should_panic] // https://github.com/hannobraun/caterpillar/issues/52
 fn step_into_function() {
     // When stopping at a function call and then stepping, we expect to land at
