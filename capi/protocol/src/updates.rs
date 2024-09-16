@@ -2,7 +2,7 @@ use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
 use capi_process::{Instructions, Process};
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
@@ -49,7 +49,7 @@ impl Updates {
 }
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum UpdateFromRuntime {
     Process(Process),
     Memory { memory: Memory },
