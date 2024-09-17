@@ -98,7 +98,7 @@ impl PersistentState {
 
                 let origin = branch.active_fragment()?;
                 let target = {
-                    let mut fragment = origin.clone();
+                    let mut fragment = origin.data.fragment.clone();
 
                     loop {
                         let Some(after) =
@@ -117,7 +117,7 @@ impl PersistentState {
 
                         if let DebugFragmentKind::Comment { .. } = after.kind {
                             // Can't step to comments! Need to ignore them.
-                            fragment = after.clone();
+                            fragment = after.data.fragment.clone();
                             continue;
                         }
 
