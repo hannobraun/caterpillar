@@ -243,7 +243,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/52
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/24
+                // https://github.com/hannobraun/caterpillar/issues/51
 fn step_into_function() {
     // When stopping at a function call and then stepping, we expect to land at
     // the first fragment in the function.
