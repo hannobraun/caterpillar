@@ -141,12 +141,13 @@ impl ActiveFunctionsEntries {
         branch: &'r DebugBranch,
         fragment: &FragmentId,
     ) -> anyhow::Result<Option<&'r DebugFragment>> {
-        let Some(after) = branch.fragment_after(fragment)? else {
-            // Finding caller is not supported yet.
-            return Ok(None);
-        };
-
-        Ok(Some(after))
+        match branch.fragment_after(fragment)? {
+            Some(after) => Ok(Some(after)),
+            None => {
+                // Finding caller is not supported yet.
+                Ok(None)
+            }
+        }
     }
 }
 
