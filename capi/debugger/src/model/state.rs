@@ -97,7 +97,15 @@ impl PersistentState {
                     .active_branch()?;
 
                 let origin = branch.active_fragment()?;
-                let targets = {
+                let targets = if let Some(function) =
+                    origin.data.fragment.as_call_to_function(&code.fragments)
+                {
+                    function
+                        .branches
+                        .iter()
+                        .map(|branch| branch.start)
+                        .collect()
+                } else {
                     let mut fragment = origin.clone();
 
                     loop {
