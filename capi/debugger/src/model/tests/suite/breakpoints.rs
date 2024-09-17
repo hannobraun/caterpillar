@@ -257,8 +257,12 @@ fn step_into_function() {
 
             # Add some arguments. In case the compiler decides to generate code
             # to handle those, this makes sure we step over that generated code.
-            f: { |1 a|
-                nop
+            f: {
+                |1 a|
+                    nop # a
+
+                |2 b|
+                    nop # b
             }
         ",
     );
