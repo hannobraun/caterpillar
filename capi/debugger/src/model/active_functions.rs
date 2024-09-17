@@ -136,13 +136,13 @@ impl ActiveFunctionsEntries {
         )
     }
 
-    pub fn find_next_fragment_or_caller<'r>(
+    pub fn find_next_fragment_or_caller(
         &self,
-        branch: &'r DebugBranch,
+        branch: &DebugBranch,
         fragment: &FragmentId,
-    ) -> anyhow::Result<Option<&'r DebugFragment>> {
+    ) -> anyhow::Result<Option<DebugFragment>> {
         match branch.fragment_after(fragment)? {
-            Some(after) => Ok(Some(after)),
+            Some(after) => Ok(Some(after.clone())),
             None => {
                 // Finding caller is not supported yet.
                 Ok(None)
