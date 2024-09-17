@@ -48,10 +48,7 @@ impl Process {
     }
 
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
-        *self = Self {
-            effects: Effects::default(),
-            evaluator: Evaluator::default(),
-        };
+        *self = Self::default();
 
         for argument in arguments {
             self.evaluator.stack.push_operand(argument);
