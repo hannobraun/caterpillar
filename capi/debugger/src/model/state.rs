@@ -122,10 +122,8 @@ impl PersistentState {
                     }
                 };
 
-                let origin =
-                    self.code.fragment_to_instruction(&origin.data.id)?;
-                let target =
-                    self.code.fragment_to_instruction(&target.data.id)?;
+                let origin = self.code.fragment_to_instruction(&origin.id())?;
+                let target = self.code.fragment_to_instruction(&target.id())?;
 
                 if let Instruction::TriggerEffect {
                     effect: Effect::Breakpoint,

@@ -114,7 +114,7 @@ impl TestDebugger {
             .find_map(|function| {
                 function.branches.iter().find_map(|branch| {
                     branch.body.iter().find_map(|fragment| {
-                        if fragment.data.id == *id {
+                        if fragment.id() == *id {
                             Some(fragment.clone())
                         } else {
                             None

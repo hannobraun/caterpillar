@@ -74,6 +74,10 @@ impl DebugFragment {
 
         Some(Self { kind, data })
     }
+
+    pub fn id(&self) -> FragmentId {
+        self.data.fragment.id()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

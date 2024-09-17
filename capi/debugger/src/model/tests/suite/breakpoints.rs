@@ -75,8 +75,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .expect_functions()
             .with_name("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         nop,
     );
 
@@ -121,8 +120,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         brk,
     );
 
@@ -135,8 +133,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         nop,
     );
 
@@ -185,8 +182,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         a,
     );
 
@@ -201,8 +197,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         b,
     );
     assert!(
@@ -215,7 +210,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.data.id == a)
+            .find(|fragment| fragment.id() == a)
             .unwrap()
             .data
             .has_durable_breakpoint
@@ -231,8 +226,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         c,
     );
 
@@ -287,8 +281,7 @@ fn step_into_function() {
             .expect_functions()
             .expect_leaf("f")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         f,
     );
 }
@@ -354,8 +347,7 @@ fn step_out_of_function() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .data
-            .id,
+            .id(),
         nop_in_main,
     );
 }
