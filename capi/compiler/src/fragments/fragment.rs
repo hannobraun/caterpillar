@@ -44,13 +44,15 @@ impl Fragment {
     }
 
     pub fn is_comment(&self) -> bool {
-        matches!(
-            self.kind,
-            FragmentKind::Payload {
-                payload: Payload::Comment { .. },
-                ..
-            },
-        )
+        let FragmentKind::Payload {
+            payload: Payload::Comment { .. },
+            ..
+        } = self.kind
+        else {
+            return false;
+        };
+
+        true
     }
 }
 
