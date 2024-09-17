@@ -121,7 +121,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after];
+                        break vec![after.id()];
                     }
                 };
 
@@ -170,9 +170,7 @@ impl PersistentState {
 
                 let targets = targets
                     .into_iter()
-                    .map(|target| {
-                        self.code.fragment_to_instruction(&target.id())
-                    })
+                    .map(|target| self.code.fragment_to_instruction(&target))
                     .collect::<Result<Vec<_>, _>>()?;
                 for target in targets {
                     self.breakpoints.set_ephemeral(target);
