@@ -97,7 +97,7 @@ impl PersistentState {
                     .active_branch()?;
 
                 let origin = branch.active_fragment()?;
-                let target = {
+                let targets = {
                     let mut fragment = origin.data.fragment.clone();
 
                     loop {
@@ -121,7 +121,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break after;
+                        break vec![after];
                     }
                 };
 
@@ -168,8 +168,12 @@ impl PersistentState {
 
                 self.breakpoints.clear_all_ephemeral();
 
-                let targets =
-                    [self.code.fragment_to_instruction(&target.id())?];
+                let targets = targets
+                    .into_iter()
+                    .map(|target| {
+                        self.code.fragment_to_instruction(&target.id())
+                    })
+                    .collect::<Result<Vec<_>, _>>()?;
                 for target in targets {
                     self.breakpoints.set_ephemeral(target);
                 }
