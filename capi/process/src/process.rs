@@ -11,9 +11,7 @@ pub struct Process {
 impl Process {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
         let mut self_ = Self::default();
-
         self_.reset(arguments);
-
         self_
     }
 
