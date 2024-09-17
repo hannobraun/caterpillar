@@ -1,15 +1,9 @@
-use std::mem;
-
-use crate::{
-    breakpoints::Breakpoints, evaluator::Evaluator, Effect, Effects,
-    Instructions, Stack, Value,
-};
+use crate::{evaluator::Evaluator, Effects, Instructions, Stack, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process {
     effects: Effects,
     evaluator: Evaluator,
-    breakpoints: Breakpoints,
 }
 
 impl Process {
@@ -17,7 +11,6 @@ impl Process {
         let mut self_ = Self {
             effects: Effects::default(),
             evaluator: Evaluator::default(),
-            breakpoints: Breakpoints::default(),
         };
 
         self_.reset(arguments);
@@ -55,22 +48,8 @@ impl Process {
         &mut self.evaluator.stack
     }
 
-    pub fn breakpoints_mut(&mut self) -> &mut Breakpoints {
-        &mut self.breakpoints
-    }
-
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
-        // There are some fields we need to preserve over the reset. Anything
-        // else needs to go back to start conditions.
-        //
-        // Doing it like this, as opposed to just resetting all other fields,
-        // has the advantage that this code doesn't need to be changed in sync
-        // with new fields being added.
-        let breakpoints = mem::take(&mut self.breakpoints);
-
         *self = Self {
-            breakpoints,
-
             effects: Effects::default(),
             evaluator: Evaluator::default(),
         };
@@ -82,16 +61,6 @@ impl Process {
 
     pub fn evaluate_next_instruction(&mut self, instructions: &Instructions) {
         if !self.state().is_running() {
-            return;
-        }
-
-        let next_instruction = self.evaluator.next_instruction;
-
-        if self
-            .breakpoints
-            .should_stop_at_and_clear_ephemeral(&next_instruction)
-        {
-            self.effects.trigger(Effect::Breakpoint);
             return;
         }
 
