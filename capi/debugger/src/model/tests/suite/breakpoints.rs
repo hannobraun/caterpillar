@@ -91,11 +91,11 @@ fn step_over_brk() -> anyhow::Result<()> {
     debugger
         .provide_source_code(
             r"
-            main: { |size_x size_y|
-                brk
-                nop
-            }
-        ",
+                main: { |size_x size_y|
+                    brk
+                    nop
+                }
+            ",
         )
         .run_program();
 
