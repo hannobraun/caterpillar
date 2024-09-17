@@ -150,6 +150,7 @@ impl FragmentMap {
 ///
 /// This type bundles the found function and its ID. It [`Deref`]s to
 /// `Function`.
+#[derive(Debug)]
 pub struct FoundFunction<'r> {
     pub id: FragmentId,
     pub function: &'r Function,
