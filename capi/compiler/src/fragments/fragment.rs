@@ -1,4 +1,6 @@
-use super::{hash::FragmentHash, FragmentId, Payload};
+use super::{
+    hash::FragmentHash, FoundFunction, FragmentId, FragmentMap, Payload,
+};
 
 /// # A content-addressed piece of code
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -41,6 +43,26 @@ impl Fragment {
             FragmentKind::Payload { next, .. } => Some(*next),
             FragmentKind::Terminator => None,
         }
+    }
+
+    pub fn as_call_to_function<'r>(
+        &self,
+        fragments: &'r FragmentMap,
+    ) -> Option<FoundFunction<'r>> {
+        let FragmentKind::Payload {
+            payload: Payload::CallToFunction { name, .. },
+            ..
+        } = &self.kind
+        else {
+            return None;
+        };
+
+        let function = fragments.find_function_by_name(name).expect(
+            "Got function name from fragment that calls it; expecting it to \
+            exist.",
+        );
+
+        Some(function)
     }
 
     pub fn as_comment(&self) -> Option<&String> {
