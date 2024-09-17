@@ -126,7 +126,8 @@ impl PersistentState {
                 };
 
                 let origin = self.code.fragment_to_instruction(&origin.id())?;
-                let target = self.code.fragment_to_instruction(&target.id())?;
+                let targets =
+                    [self.code.fragment_to_instruction(&target.id())?];
 
                 if let Instruction::TriggerEffect {
                     effect: Effect::Breakpoint,
@@ -168,7 +169,9 @@ impl PersistentState {
                 }
 
                 self.breakpoints.clear_all_ephemeral();
-                self.breakpoints.set_ephemeral(target);
+                for target in targets {
+                    self.breakpoints.set_ephemeral(target);
+                }
                 commands.extend([
                     Command::UpdateCode {
                         instructions: self.apply_breakpoints(code),
