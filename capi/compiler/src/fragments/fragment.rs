@@ -47,7 +47,7 @@ impl Fragment {
         let FragmentKind::Payload {
             payload: Payload::Comment { .. },
             ..
-        } = self.kind
+        } = &self.kind
         else {
             return false;
         };
