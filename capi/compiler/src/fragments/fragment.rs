@@ -43,7 +43,7 @@ impl Fragment {
         }
     }
 
-    pub fn is_comment(&self) -> Option<&String> {
+    pub fn as_comment(&self) -> Option<&String> {
         let FragmentKind::Payload {
             payload: Payload::Comment { text },
             ..

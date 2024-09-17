@@ -165,15 +165,15 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .iter(fragments);
 
         let a = body
-            .find(|fragment| fragment.is_comment().is_none())
+            .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
             .id();
         let b = body
-            .find(|fragment| fragment.is_comment().is_none())
+            .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
             .id();
         let c = body
-            .find(|fragment| fragment.is_comment().is_none())
+            .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
             .id();
 
