@@ -86,7 +86,7 @@ impl PersistentState {
             UserAction::Reset => {
                 commands.push(Command::Reset);
             }
-            UserAction::StepInto => {
+            UserAction::StepIn => {
                 let code = self.code.get()?;
 
                 let branch = transient

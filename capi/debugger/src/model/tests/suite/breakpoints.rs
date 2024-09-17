@@ -124,7 +124,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         brk,
     );
 
-    debugger.on_user_action(UserAction::StepInto)?;
+    debugger.on_user_action(UserAction::StepIn)?;
     assert_eq!(
         debugger
             .transient_state()
@@ -197,7 +197,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
 
     // Step to `b`, over the durable breakpoint. This sets an ephemeral
     // breakpoint there.
-    debugger.on_user_action(UserAction::StepInto)?;
+    debugger.on_user_action(UserAction::StepIn)?;
     assert_eq!(
         debugger
             .transient_state()
@@ -226,7 +226,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     );
 
     // Step to `c`, over the ephemeral breakpoint.
-    debugger.on_user_action(UserAction::StepInto)?;
+    debugger.on_user_action(UserAction::StepIn)?;
     assert_eq!(
         debugger
             .transient_state()
@@ -293,7 +293,7 @@ fn step_into_function() {
         .unwrap();
 
     debugger.run_program();
-    debugger.on_user_action(UserAction::StepInto).unwrap();
+    debugger.on_user_action(UserAction::StepIn).unwrap();
 
     assert_eq!(
         debugger
@@ -359,7 +359,7 @@ fn step_out_of_function() {
         .unwrap();
 
     debugger.run_program();
-    debugger.on_user_action(UserAction::StepInto).unwrap();
+    debugger.on_user_action(UserAction::StepIn).unwrap();
 
     assert_eq!(
         debugger

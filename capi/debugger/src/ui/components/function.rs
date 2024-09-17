@@ -197,7 +197,7 @@ fn make_single_expression(
         Some(view! {
             <Button
                 label="Step In"
-                action=UserAction::StepInto
+                action=UserAction::StepIn
                 actions=actions_tx.clone() />
         })
     } else {
