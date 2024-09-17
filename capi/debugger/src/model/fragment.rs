@@ -57,6 +57,7 @@ impl DebugFragment {
 
         let data = DebugFragmentData {
             id: fragment.id(),
+            fragment: fragment.clone(),
             state,
             has_durable_breakpoint,
             effect,
@@ -79,6 +80,9 @@ impl DebugFragment {
 pub struct DebugFragmentData {
     /// # The fragment ID
     pub id: FragmentId,
+
+    /// # The fragment that the `DebugFragment` was built from
+    pub fragment: Fragment,
 
     /// # The static of the fragment
     pub state: DebugFragmentState,
