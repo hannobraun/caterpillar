@@ -1,3 +1,4 @@
+use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_process::{
     Breakpoints, Effect, Instruction, Instructions, ProcessState, Value,
@@ -133,63 +134,7 @@ impl PersistentState {
                     }
                 };
 
-                let origin = self.code.fragment_to_instruction(&origin.id())?;
-
-                if let Instruction::TriggerEffect {
-                    effect: Effect::Breakpoint,
-                } = self.code.instruction(&origin)?
-                {
-                    // The instruction we're trying to step away from was
-                    // compiled from a `brk` instruction, or something
-                    // equivalent. That won't ever do anything except trigger
-                    // another breakpoint. We need to tell the process to ignore
-                    // it, if we're going to step over it.
-                    commands.push(Command::IgnoreNextInstruction);
-                }
-
-                if self.breakpoints.durable_at(&origin) {
-                    // We are currently stopped at a durable breakpoint. That's
-                    // going to require some special handling.
-                    //
-                    // First, clear the breakpoint temporarily.
-                    self.breakpoints.clear_durable(&origin);
-
-                    // Now that the breakpoint is cleared, send updated code to
-                    // the runtime and tell it to step beyond where the
-                    // breakpoint was.
-                    commands.extend([
-                        Command::UpdateCode {
-                            instructions: self.apply_breakpoints(code),
-                        },
-                        Command::ClearBreakpointAndEvaluateNextInstruction,
-                    ]);
-
-                    // Now that we're past it, we can but the breakpoint back.
-                    self.breakpoints.set_durable(origin);
-
-                    // And of course we need to send updated code to the runtime
-                    // again, or we risk it running beyond the breakpoint.
-                    commands.push(Command::UpdateCode {
-                        instructions: self.apply_breakpoints(code),
-                    });
-                }
-
-                self.breakpoints.clear_all_ephemeral();
-
-                let targets = targets
-                    .into_iter()
-                    .map(|target| self.code.fragment_to_instruction(&target))
-                    .collect::<Result<Vec<_>, _>>()?;
-                for target in targets {
-                    self.breakpoints.set_ephemeral(target);
-                }
-
-                commands.extend([
-                    Command::UpdateCode {
-                        instructions: self.apply_breakpoints(code),
-                    },
-                    Command::Continue,
-                ]);
+                self.step_or_continue(&origin.id(), targets, &mut commands)?;
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
@@ -231,6 +176,73 @@ impl PersistentState {
             active_functions,
             operands,
         }
+    }
+
+    fn step_or_continue(
+        &mut self,
+        origin: &FragmentId,
+        targets: Vec<FragmentId>,
+        commands: &mut Vec<Command>,
+    ) -> anyhow::Result<()> {
+        let code = self.code.get()?;
+
+        let origin = self.code.fragment_to_instruction(origin)?;
+
+        if let Instruction::TriggerEffect {
+            effect: Effect::Breakpoint,
+        } = self.code.instruction(&origin)?
+        {
+            // The instruction we're trying to step away from was compiled from
+            // a `brk` instruction, or something equivalent. That won't ever do
+            // anything except trigger another breakpoint. We need to tell the
+            // process to ignore it, if we're going to step over it.
+            commands.push(Command::IgnoreNextInstruction);
+        }
+
+        if self.breakpoints.durable_at(&origin) {
+            // We are currently stopped at a durable breakpoint. That's going to
+            // require some special handling.
+            //
+            // First, clear the breakpoint temporarily.
+            self.breakpoints.clear_durable(&origin);
+
+            // Now that the breakpoint is cleared, send updated code to the
+            // runtime and tell it to step beyond where the breakpoint was.
+            commands.extend([
+                Command::UpdateCode {
+                    instructions: self.apply_breakpoints(code),
+                },
+                Command::ClearBreakpointAndEvaluateNextInstruction,
+            ]);
+
+            // Now that we're past it, we can but the breakpoint back.
+            self.breakpoints.set_durable(origin);
+
+            // And of course we need to send updated code to the runtime again,
+            // or we risk it running beyond the breakpoint.
+            commands.push(Command::UpdateCode {
+                instructions: self.apply_breakpoints(code),
+            });
+        }
+
+        self.breakpoints.clear_all_ephemeral();
+
+        let targets = targets
+            .into_iter()
+            .map(|target| self.code.fragment_to_instruction(&target))
+            .collect::<Result<Vec<_>, _>>()?;
+        for target in targets {
+            self.breakpoints.set_ephemeral(target);
+        }
+
+        commands.extend([
+            Command::UpdateCode {
+                instructions: self.apply_breakpoints(code),
+            },
+            Command::Continue,
+        ]);
+
+        Ok(())
     }
 }
 
