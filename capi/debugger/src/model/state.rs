@@ -100,12 +100,8 @@ impl PersistentState {
             UserAction::StepIn => {
                 let code = self.code.get()?;
 
-                let branch = transient
-                    .active_functions
-                    .entries()?
-                    .leaf()
-                    .function()?
-                    .active_branch()?;
+                let entries = transient.active_functions.entries()?;
+                let branch = entries.leaf().function()?.active_branch()?;
 
                 let origin = branch.active_fragment()?;
                 let targets = if let Some(function) =
