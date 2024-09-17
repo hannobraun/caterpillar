@@ -268,16 +268,26 @@ fn step_into_function() {
         ",
     );
 
-    let f = {
+    let (f, a) = {
         let fragments = debugger.expect_code();
-        fragments
+
+        let f = fragments
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
             .nth(2)
             .unwrap()
-            .id()
+            .id();
+        let a = fragments
+            .find_function_by_name("f")
+            .unwrap()
+            .branches
+            .first()
+            .unwrap()
+            .start;
+
+        (f, a)
     };
 
     debugger
@@ -296,7 +306,7 @@ fn step_into_function() {
             .expect_leaf("f")
             .active_fragment()
             .id(),
-        f,
+        a,
     );
 }
 
