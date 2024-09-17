@@ -87,6 +87,8 @@ impl PersistentState {
                 commands.push(Command::Reset);
             }
             UserAction::StepInto => {
+                let code = self.code.get()?;
+
                 let branch = transient
                     .active_functions
                     .entries()?
@@ -149,8 +151,7 @@ impl PersistentState {
                     // breakpoint was.
                     commands.extend([
                         Command::UpdateCode {
-                            instructions: self
-                                .apply_breakpoints(self.code.get()?),
+                            instructions: self.apply_breakpoints(code),
                         },
                         Command::ClearBreakpointAndEvaluateNextInstruction,
                     ]);
@@ -161,7 +162,7 @@ impl PersistentState {
                     // And of course we need to send updated code to the runtime
                     // again, or we risk it running beyond the breakpoint.
                     commands.push(Command::UpdateCode {
-                        instructions: self.apply_breakpoints(self.code.get()?),
+                        instructions: self.apply_breakpoints(code),
                     });
                 }
 
@@ -169,7 +170,7 @@ impl PersistentState {
                 self.breakpoints.set_ephemeral(target);
                 commands.extend([
                     Command::UpdateCode {
-                        instructions: self.apply_breakpoints(self.code.get()?),
+                        instructions: self.apply_breakpoints(code),
                     },
                     Command::Continue,
                 ]);
