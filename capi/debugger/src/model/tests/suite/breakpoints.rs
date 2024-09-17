@@ -84,7 +84,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
 }
 
 #[test]
-fn step_over_brk() {
+fn step_over_brk() -> anyhow::Result<()> {
     // When stopped at a `brk` intrinsic, we expect to be able to step over it.
 
     let mut debugger = debugger();
@@ -126,7 +126,7 @@ fn step_over_brk() {
         brk,
     );
 
-    debugger.on_user_action(UserAction::StepInto).unwrap();
+    debugger.on_user_action(UserAction::StepInto)?;
     assert_eq!(
         debugger
             .transient_state()
@@ -139,6 +139,8 @@ fn step_over_brk() {
             .id,
         nop,
     );
+
+    Ok(())
 }
 
 #[test]
