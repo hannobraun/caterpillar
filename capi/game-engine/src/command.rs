@@ -7,6 +7,5 @@ pub enum Command {
     Continue,
     IgnoreNextInstruction,
     Reset,
-    Step,
     Stop,
 }
