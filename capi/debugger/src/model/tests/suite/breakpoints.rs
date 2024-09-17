@@ -275,7 +275,7 @@ fn step_into_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .nth(4)
+            .nth(2)
             .unwrap()
             .id()
     };
