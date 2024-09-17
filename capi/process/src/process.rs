@@ -1,6 +1,8 @@
 use crate::{evaluator::Evaluator, Effects, Instructions, Stack, Value};
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Process {
     effects: Effects,
     evaluator: Evaluator,
