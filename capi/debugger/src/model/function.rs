@@ -3,9 +3,9 @@ use capi_compiler::{
     fragments::{self, FragmentId, Fragments},
     source_map::SourceMap,
 };
-use capi_process::{Breakpoints, Effect};
+use capi_process::Effect;
 
-use super::DebugBranch;
+use super::{Breakpoints, DebugBranch};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFunction {

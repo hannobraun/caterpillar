@@ -2,10 +2,10 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_process::{Breakpoints, Effect, InstructionAddress};
+use capi_process::{Effect, InstructionAddress};
 use capi_protocol::{runtime_state::RuntimeState, updates::Code};
 
-use super::{DebugBranch, DebugFragment, DebugFunction};
+use super::{Breakpoints, DebugBranch, DebugFragment, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {

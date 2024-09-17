@@ -4,9 +4,9 @@ use capi_compiler::{
     source_map::SourceMap,
     syntax::Pattern,
 };
-use capi_process::{Breakpoints, Effect};
+use capi_process::Effect;
 
-use super::DebugFragment;
+use super::{Breakpoints, DebugFragment};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugBranch {

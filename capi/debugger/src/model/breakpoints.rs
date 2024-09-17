@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::instructions::InstructionAddress;
+use capi_process::InstructionAddress;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {

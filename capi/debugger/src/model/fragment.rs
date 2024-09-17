@@ -4,9 +4,9 @@ use capi_compiler::{
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
-use capi_process::{Breakpoints, Effect};
+use capi_process::Effect;
 
-use super::DebugFunction;
+use super::{Breakpoints, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragment {

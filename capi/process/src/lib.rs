@@ -1,4 +1,3 @@
-mod breakpoints;
 mod effects;
 mod evaluator;
 mod function;
@@ -9,7 +8,6 @@ mod stack;
 mod value;
 
 pub use self::{
-    breakpoints::Breakpoints,
     effects::{Effect, Effects},
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},

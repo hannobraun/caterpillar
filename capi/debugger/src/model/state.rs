@@ -1,14 +1,14 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_process::{
-    Breakpoints, Effect, Instruction, Instructions, ProcessState, Value,
-};
+use capi_process::{Effect, Instruction, Instructions, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
 };
 
-use super::{ActiveFunctions, DebugCode, DebugFragmentKind, UserAction};
+use super::{
+    ActiveFunctions, Breakpoints, DebugCode, DebugFragmentKind, UserAction,
+};
 
 #[derive(Clone, Debug, Default)]
 pub struct PersistentState {
