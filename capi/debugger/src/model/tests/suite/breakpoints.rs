@@ -164,9 +164,18 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_one_branch()
             .iter(fragments);
 
-        let a = body.find(|fragment| !fragment.is_comment()).unwrap().id();
-        let b = body.find(|fragment| !fragment.is_comment()).unwrap().id();
-        let c = body.find(|fragment| !fragment.is_comment()).unwrap().id();
+        let a = body
+            .find(|fragment| fragment.is_comment().is_none())
+            .unwrap()
+            .id();
+        let b = body
+            .find(|fragment| fragment.is_comment().is_none())
+            .unwrap()
+            .id();
+        let c = body
+            .find(|fragment| fragment.is_comment().is_none())
+            .unwrap()
+            .id();
 
         (a, b, c)
     };

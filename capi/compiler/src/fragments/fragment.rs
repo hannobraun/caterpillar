@@ -43,16 +43,16 @@ impl Fragment {
         }
     }
 
-    pub fn is_comment(&self) -> bool {
+    pub fn is_comment(&self) -> Option<&String> {
         let FragmentKind::Payload {
-            payload: Payload::Comment { .. },
+            payload: Payload::Comment { text },
             ..
         } = &self.kind
         else {
-            return false;
+            return None;
         };
 
-        true
+        Some(text)
     }
 }
 
