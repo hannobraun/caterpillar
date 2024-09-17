@@ -309,8 +309,6 @@ fn step_into_function() {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/24
-                // https://github.com/hannobraun/caterpillar/issues/52
 fn step_out_of_function() {
     // When stopping at the last fragment in a function and then stepping, we
     // expect to land at the fragment after the function call.

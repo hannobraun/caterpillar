@@ -144,8 +144,34 @@ impl ActiveFunctionsEntries {
         match branch.fragment_after(fragment)? {
             Some(after) => Ok(Some(after.clone())),
             None => {
-                // Finding caller is not supported yet.
-                Ok(None)
+                let caller_branch = self
+                    .inner
+                    .iter()
+                    .filter_map(|entry| match entry {
+                        ActiveFunctionsEntry::Function(function) => {
+                            Some(function)
+                        }
+                        ActiveFunctionsEntry::Gap => None,
+                    })
+                    .filter_map(|function| match function.active_branch() {
+                        Ok(branch) => Some(branch),
+                        Err(_) => None,
+                    })
+                    .find(|branch| {
+                        !branch.body.iter().any(|f| f.id() == *fragment)
+                    });
+
+                let Some(caller_branch) = caller_branch else {
+                    return Ok(None);
+                };
+
+                let caller = caller_branch.active_fragment()?;
+                dbg!(caller);
+
+                Ok(self.find_next_fragment_or_caller(
+                    caller_branch,
+                    &caller.id(),
+                )?)
             }
         }
     }
