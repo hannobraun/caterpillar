@@ -9,7 +9,7 @@ mod payload;
 
 pub use self::{
     fragment::{Fragment, FragmentKind},
-    fragments::{FragmentMap, Fragments},
+    fragments::{FoundFunction, FragmentMap, Fragments},
     function::{Branch, Function, Parameters},
     id::FragmentId,
     payload::Payload,
