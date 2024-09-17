@@ -5,7 +5,7 @@ use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
 use capi_process::{Breakpoints, Effect, InstructionAddress};
 use capi_protocol::{runtime_state::RuntimeState, updates::Code};
 
-use super::DebugFunction;
+use super::{DebugBranch, DebugFragment, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
@@ -134,6 +134,19 @@ impl ActiveFunctionsEntries {
             not `main`, the `main` function should be present (possibly \
             reconstructed) too.",
         )
+    }
+
+    pub fn find_next_fragment_or_caller<'r>(
+        &self,
+        branch: &'r DebugBranch,
+        fragment: &FragmentId,
+    ) -> anyhow::Result<Option<&'r DebugFragment>> {
+        let Some(after) = branch.fragment_after(fragment)? else {
+            // Finding caller is not supported yet.
+            return Ok(None);
+        };
+
+        Ok(Some(after))
     }
 }
 

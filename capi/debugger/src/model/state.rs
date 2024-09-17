@@ -116,8 +116,11 @@ impl PersistentState {
                     let mut fragment = origin.clone();
 
                     loop {
-                        let Some(after) =
-                            branch.fragment_after(&fragment.id())?
+                        let Some(after) = entries
+                            .find_next_fragment_or_caller(
+                                branch,
+                                &fragment.id(),
+                            )?
                         else {
                             // No fragment after the active one in the current
                             // function, meaning we have to step out of the
