@@ -414,3 +414,60 @@ fn step_out_of_main_function() {
         }
     ));
 }
+
+#[test]
+fn step_over_function_call() {
+    // When using "Step Over" while stopped at a function call, we expect to
+    // step over it.
+
+    let mut debugger = debugger();
+    debugger.provide_source_code(
+        r"
+            main: { |size_x size_y|
+                f
+                nop
+            }
+
+            f: { ||
+                nop
+            }
+        ",
+    );
+
+    let (f, nop) = {
+        let fragments = debugger.expect_code();
+        let mut body = fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments);
+
+        let f = body
+            .find(|fragment| fragment.as_comment().is_none())
+            .unwrap()
+            .id();
+        let nop = body
+            .find(|fragment| fragment.as_comment().is_none())
+            .unwrap()
+            .id();
+
+        (f, nop)
+    };
+
+    debugger
+        .on_user_action(UserAction::BreakpointSet { fragment: f })
+        .unwrap();
+    debugger.run_program();
+
+    debugger.on_user_action(UserAction::StepOver).unwrap();
+
+    assert_eq!(
+        dbg!(debugger.transient_state().active_functions)
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_fragment()
+            .id(),
+        nop,
+    );
+}
