@@ -200,6 +200,10 @@ fn make_single_expression(
                     label="Step In"
                     action=UserAction::StepIn
                     actions=actions_tx.clone() />
+                <Button
+                    label="Step Over"
+                    action=UserAction::StepOver
+                    actions=actions_tx.clone() />
             </span>
         })
     } else {
