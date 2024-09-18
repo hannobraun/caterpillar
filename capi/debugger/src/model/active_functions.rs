@@ -141,39 +141,31 @@ impl ActiveFunctionsEntries {
         branch: &DebugBranch,
         fragment: &FragmentId,
     ) -> anyhow::Result<Option<DebugFragment>> {
-        match branch.fragment_after(fragment)? {
-            Some(after) => Ok(Some(after.clone())),
-            None => {
-                let caller_branch = self
-                    .inner
-                    .iter()
-                    .filter_map(|entry| match entry {
-                        ActiveFunctionsEntry::Function(function) => {
-                            Some(function)
-                        }
-                        ActiveFunctionsEntry::Gap => None,
-                    })
-                    .filter_map(|function| match function.active_branch() {
-                        Ok(branch) => Some(branch),
-                        Err(_) => None,
-                    })
-                    .find(|branch| {
-                        !branch.body.iter().any(|f| f.id() == *fragment)
-                    });
-
-                let Some(caller_branch) = caller_branch else {
-                    return Ok(None);
-                };
-
-                let caller = caller_branch.active_fragment()?;
-                dbg!(caller);
-
-                Ok(self.find_next_fragment_or_caller(
-                    caller_branch,
-                    &caller.id(),
-                )?)
-            }
+        if let Some(after) = branch.fragment_after(fragment)? {
+            return Ok(Some(after.clone()));
         }
+
+        let caller_branch = self
+            .inner
+            .iter()
+            .filter_map(|entry| match entry {
+                ActiveFunctionsEntry::Function(function) => Some(function),
+                ActiveFunctionsEntry::Gap => None,
+            })
+            .filter_map(|function| match function.active_branch() {
+                Ok(branch) => Some(branch),
+                Err(_) => None,
+            })
+            .find(|branch| !branch.body.iter().any(|f| f.id() == *fragment));
+
+        let Some(caller_branch) = caller_branch else {
+            return Ok(None);
+        };
+
+        let caller = caller_branch.active_fragment()?;
+        dbg!(caller);
+
+        self.find_next_fragment_or_caller(caller_branch, &caller.id())
     }
 }
 
