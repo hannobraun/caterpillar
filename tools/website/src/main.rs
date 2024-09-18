@@ -27,9 +27,15 @@ fn main() -> anyhow::Result<()> {
         fs::copy(source_path, target_path)?;
     }
 
+    serve(target_dir.path())?;
+
+    Ok(())
+}
+
+fn serve(path: &Path) -> anyhow::Result<()> {
     let exit_status = Command::new("deno")
         .args(["task", "start"])
-        .current_dir(target_dir.path())
+        .current_dir(path)
         .status()?;
 
     if !exit_status.success() {
