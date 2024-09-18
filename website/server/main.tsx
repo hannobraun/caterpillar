@@ -1,11 +1,11 @@
 import * as http from "@std/http";
 
-import * as content from "./server/content.ts";
-import * as response from "./server/response.ts";
+import * as content from "./content.ts";
+import * as response from "./response.ts";
 import {
     dailyThoughtsPage,
     singleDailyThoughtPage,
-} from "./server/templates.tsx";
+} from "./templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);

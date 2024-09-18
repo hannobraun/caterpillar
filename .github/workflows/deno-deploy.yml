@@ -21,5 +21,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: caterpillar
-          entrypoint: main.tsx
+          entrypoint: server/main.tsx
           root: website-output
