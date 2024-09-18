@@ -136,7 +136,7 @@ impl ActiveFunctionsEntries {
         )
     }
 
-    pub fn find_next_fragment_or_caller(
+    pub fn find_next_fragment_or_next_after_caller(
         &self,
         branch: &DebugBranch,
         fragment: &FragmentId,
@@ -164,7 +164,10 @@ impl ActiveFunctionsEntries {
 
         let caller = caller_branch.active_fragment()?;
 
-        self.find_next_fragment_or_caller(caller_branch, &caller.id())
+        self.find_next_fragment_or_next_after_caller(
+            caller_branch,
+            &caller.id(),
+        )
     }
 }
 

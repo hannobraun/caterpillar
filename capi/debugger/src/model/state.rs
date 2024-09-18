@@ -117,7 +117,7 @@ impl PersistentState {
 
                     loop {
                         let Some(after) = entries
-                            .find_next_fragment_or_caller(
+                            .find_next_fragment_or_next_after_caller(
                                 branch,
                                 &fragment.id(),
                             )?
@@ -158,7 +158,7 @@ impl PersistentState {
 
                     loop {
                         let Some(after) = entries
-                            .find_next_fragment_or_caller(
+                            .find_next_fragment_or_next_after_caller(
                                 branch,
                                 &fragment.id(),
                             )?
