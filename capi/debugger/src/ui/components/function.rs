@@ -201,6 +201,10 @@ fn make_single_expression(
                     action=UserAction::StepIn
                     actions=actions_tx.clone() />
                 <Button
+                    label="Step Out"
+                    action=UserAction::StepOut
+                    actions=actions_tx.clone() />
+                <Button
                     label="Step Over"
                     action=UserAction::StepOver
                     actions=actions_tx.clone() />
