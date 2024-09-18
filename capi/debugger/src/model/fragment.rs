@@ -40,15 +40,7 @@ impl DebugFragment {
             .any(|instruction| breakpoints.durable_at(instruction));
 
         let effect = effects.first().and_then(|effect| {
-            // This displays the effect on _any_ active fragment in _any_ active
-            // function, not just the fragment that actually triggered the
-            // effect.
-            //
-            // This makes sense, as the effect is relevant, regardless of which
-            // active function you're looking at. The developer might step
-            // through some functions, hit the effect, but might not want to
-            // actually step into the function where the effect comes from.
-            if state.is_active() {
+            if state.is_innermost_active_fragment() {
                 Some(*effect)
             } else {
                 None
