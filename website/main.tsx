@@ -51,7 +51,7 @@ Deno.serve(async (request) => {
     );
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
         const date = dailyDateWithNoSlash[1];
-        const path = `daily/${date}.md`;
+        const path = `content/daily/${date}.md`;
         const md = await Deno.readTextFile(path);
 
         const dates = await content.listDailyThoughts();
