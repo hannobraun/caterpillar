@@ -173,7 +173,7 @@ fn make_single_expression(
     data: DebugFragmentData,
     class_outer: &mut String,
     actions_tx: ActionsTx,
-) -> (View, Option<View>, Option<HtmlElement<Span>>) {
+) -> (View, Option<HtmlElement<Span>>, Option<HtmlElement<Span>>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
@@ -195,10 +195,12 @@ fn make_single_expression(
 
     let actions = if data.state.is_innermost_active_fragment() {
         Some(view! {
-            <Button
-                label="Step In"
-                action=UserAction::StepIn
-                actions=actions_tx.clone() />
+            <span>
+                <Button
+                    label="Step In"
+                    action=UserAction::StepIn
+                    actions=actions_tx.clone() />
+            </span>
         })
     } else {
         None
