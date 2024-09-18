@@ -1,15 +1,25 @@
 use std::{fs, path::Path, process::Command};
 
 use anyhow::anyhow;
+use clap::Parser;
 use tempfile::TempDir;
 use walkdir::WalkDir;
 
 fn main() -> anyhow::Result<()> {
-    let source_dir = Path::new("website");
-    let target_dir = TempDir::new()?;
+    let args = Args::parse();
 
-    build(source_dir, target_dir.path())?;
-    serve(target_dir.path())?;
+    let source_dir = Path::new("website");
+
+    if args.build {
+        let target_dir = Path::new("website-output");
+
+        build(source_dir, target_dir)?;
+    } else {
+        let target_dir = TempDir::new()?;
+
+        build(source_dir, target_dir.path())?;
+        serve(target_dir.path())?;
+    }
 
     Ok(())
 }
@@ -51,4 +61,10 @@ fn serve(path: &Path) -> anyhow::Result<()> {
     }
 
     Ok(())
+}
+
+#[derive(clap::Parser)]
+pub struct Args {
+    #[arg(short, long)]
+    pub build: bool,
 }
