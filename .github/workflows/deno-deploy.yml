@@ -13,10 +13,13 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+      
+      - name: Run website builder
+        run: cargo run -p website -- --build
 
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: caterpillar
           entrypoint: main.tsx
-          root: website
+          root: website-output
