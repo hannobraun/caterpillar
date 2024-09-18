@@ -310,7 +310,7 @@ fn step_into_function() {
 }
 
 #[test]
-fn step_out_of_function() {
+fn step_out_of_function_if_at_last_fragment() {
     // When stopping at the last fragment in a function and then stepping, we
     // expect to land at the fragment after the function call.
 
