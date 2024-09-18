@@ -163,7 +163,6 @@ impl ActiveFunctionsEntries {
         };
 
         let caller = caller_branch.active_fragment()?;
-        dbg!(caller);
 
         self.find_next_fragment_or_caller(caller_branch, &caller.id())
     }
