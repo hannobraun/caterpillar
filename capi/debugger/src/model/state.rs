@@ -147,6 +147,46 @@ impl PersistentState {
 
                 self.step_or_continue(&origin.id(), targets, &mut commands)?;
             }
+            UserAction::StepOut => {
+                let entries = transient.active_functions.entries()?;
+                let origin = entries
+                    .leaf()
+                    .function()?
+                    .active_branch()?
+                    .active_fragment()?;
+
+                let targets = {
+                    let mut fragment = origin.clone();
+
+                    loop {
+                        let Some(after) = entries
+                            .find_next_fragment_after_caller(&fragment.id())?
+                        else {
+                            // Can't find a next fragment _or_ a caller, which
+                            // means we must be at the top-level function.
+                            //
+                            // Let's just tell the runtime to continue, so the
+                            // process finishes.
+                            self.step_or_continue(
+                                &origin.id(),
+                                vec![],
+                                &mut commands,
+                            )?;
+                            return Ok(commands);
+                        };
+
+                        if let DebugFragmentKind::Comment { .. } = after.kind {
+                            // Can't step to comments! Need to ignore them.
+                            fragment = after.clone();
+                            continue;
+                        }
+
+                        break vec![after.id()];
+                    }
+                };
+
+                self.step_or_continue(&origin.id(), targets, &mut commands)?;
+            }
             UserAction::StepOver => {
                 let entries = transient.active_functions.entries()?;
                 let branch = entries.leaf().function()?.active_branch()?;

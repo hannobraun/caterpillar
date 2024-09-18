@@ -471,3 +471,64 @@ fn step_over_function_call() {
         nop,
     );
 }
+
+#[test]
+fn step_out_of_function() {
+    // When using "Step Out" within a function, we expect to step into the
+    // calling function.
+
+    let mut debugger = debugger();
+    debugger.provide_source_code(
+        r"
+            main: { |size_x size_y|
+                f
+                nop # b
+            }
+
+            f: { ||
+                nop # a
+                nop
+            }
+        ",
+    );
+
+    let (a, b) = {
+        let fragments = debugger.expect_code();
+
+        let a = fragments
+            .find_function_by_name("f")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .next()
+            .unwrap()
+            .id();
+        let b = fragments
+            .find_function_by_name("main")
+            .unwrap()
+            .expect_one_branch()
+            .iter(fragments)
+            .nth(1)
+            .unwrap()
+            .id();
+
+        (a, b)
+    };
+
+    debugger
+        .on_user_action(UserAction::BreakpointSet { fragment: a })
+        .unwrap();
+    debugger.run_program();
+
+    debugger.on_user_action(UserAction::StepOut).unwrap();
+
+    assert_eq!(
+        dbg!(debugger.transient_state().active_functions)
+            .expect_entries()
+            .expect_functions()
+            .expect_leaf("main")
+            .active_fragment()
+            .id(),
+        b,
+    );
+}

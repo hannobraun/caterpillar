@@ -1,5 +1,6 @@
 use capi_compiler::fragments::FragmentId;
 
+#[allow(dead_code)]
 #[derive(Clone)]
 pub enum UserAction {
     BreakpointClear { fragment: FragmentId },
@@ -7,6 +8,7 @@ pub enum UserAction {
     Continue,
     Reset,
     StepIn,
+    StepOut,
     StepOver,
     Stop,
 }
