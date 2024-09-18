@@ -145,6 +145,13 @@ impl ActiveFunctionsEntries {
             return Ok(Some(after.clone()));
         }
 
+        self.find_next_fragment_after_caller(fragment)
+    }
+
+    pub fn find_next_fragment_after_caller(
+        &self,
+        fragment: &FragmentId,
+    ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
             .iter()
