@@ -288,9 +288,7 @@ impl PersistentState {
             Command::ClearBreakpointAndEvaluateNextInstruction,
         ]);
 
-        // But we also need to reverse the change that we've made. Since we
-        // re-apply the breakpoints based on the original code, we don't
-        // need to explicitly revert any code replacements.
+        // In case we removed a durable breakpoint, we need to reverse that.
         if removed_breakpoint {
             self.breakpoints.set_durable(origin);
         }
