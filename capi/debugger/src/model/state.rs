@@ -262,7 +262,6 @@ impl PersistentState {
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;
-
         let code = self.code.get()?;
 
         self.breakpoints.clear_all_ephemeral();
