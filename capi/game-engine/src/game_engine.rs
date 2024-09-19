@@ -74,7 +74,7 @@ impl GameEngine {
                     // buggy.
                 }
             }
-            Command::Continue => {
+            Command::ClearBreakpointAndContinue => {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects_mut().inspect_first()
                 {

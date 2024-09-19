@@ -325,7 +325,7 @@ impl PersistentState {
             Command::UpdateCode {
                 instructions: self.apply_breakpoints(code),
             },
-            Command::Continue,
+            Command::ClearBreakpointAndContinue,
         ]);
 
         Ok(())

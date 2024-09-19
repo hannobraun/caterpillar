@@ -4,7 +4,7 @@ use capi_process::Instructions;
 pub enum Command {
     UpdateCode { instructions: Instructions },
     ClearBreakpointAndEvaluateNextInstruction,
-    Continue,
+    ClearBreakpointAndContinue,
     Reset,
     Stop,
 }
