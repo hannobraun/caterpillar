@@ -25,12 +25,11 @@ impl GameEngine {
     pub fn new() -> Self {
         let arguments = [Value::from(TILES_PER_AXIS); 2];
 
+        let mut runtime = Runtime::default();
+        runtime.reset(arguments);
+
         Self {
-            runtime: {
-                let mut runtime = Runtime::default();
-                runtime.reset(arguments);
-                runtime
-            },
+            runtime,
             arguments,
             last_frame_start_s: None,
             instructions: None,
