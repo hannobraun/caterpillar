@@ -271,7 +271,7 @@ impl PersistentState {
             effect: Effect::Breakpoint,
         } = self.code.instruction(&origin)?
         {
-            self.step_over_instruction(&origin, code, commands);
+            self.step_over_instruction(&origin, code, commands)?;
         }
 
         if self.breakpoints.durable_at(&origin) {
@@ -325,7 +325,7 @@ impl PersistentState {
         origin: &InstructionAddress,
         code: &Code,
         commands: &mut Vec<Command>,
-    ) {
+    ) -> anyhow::Result<()> {
         // The instruction we are about to step over might be a `brk`, which
         // won't ever do anything except trigger another breakpoint.
         //
@@ -346,6 +346,8 @@ impl PersistentState {
         commands.push(Command::UpdateCode {
             instructions: self.apply_breakpoints(code),
         });
+
+        Ok(())
     }
 
     fn apply_breakpoints(&self, code: &Code) -> Instructions {
