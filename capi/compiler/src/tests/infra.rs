@@ -29,8 +29,9 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
             Some(effect) => {
                 panic!(
                     "Unexpected effect: {effect}\n\
-                    Runtime: {runtime:#?}\n\
+                    Runtime: {:#?}\n\
                     Instructions: {instructions:#?}",
+                    runtime,
                 );
             }
             None => {}
