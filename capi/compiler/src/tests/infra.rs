@@ -8,7 +8,8 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let (_, instructions, _) = compile::<TestHost>(source);
 
     let mut runtime = runtime();
-    runtime.run_until_finished(&instructions);
+    runtime.instructions = Some(instructions);
+    runtime.run_until_finished();
 
     runtime.signals
 }
@@ -21,13 +22,16 @@ pub fn runtime() -> TestRuntime {
 pub struct TestRuntime {
     runtime: Runtime,
     signals: BTreeMap<u32, u32>,
+    instructions: Option<Instructions>,
 }
 
 impl TestRuntime {
-    pub fn run_until_finished(
-        &mut self,
-        instructions: &Instructions,
-    ) -> &mut Self {
+    pub fn run_until_finished(&mut self) -> &mut Self {
+        let instructions = self
+            .instructions
+            .as_ref()
+            .expect("Must call `update_code` before running.");
+
         while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(instructions);
 
