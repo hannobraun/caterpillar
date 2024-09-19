@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_protocol::{runtime_state::HostState, updates::Code};
+use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFragment, DebugFunction};

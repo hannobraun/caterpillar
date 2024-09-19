@@ -1,5 +1,5 @@
 pub mod command;
-pub mod runtime_state;
+pub mod host_state;
 pub mod updates;
 
 /// The size of the updates buffer

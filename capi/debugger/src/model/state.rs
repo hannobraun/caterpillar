@@ -1,7 +1,7 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
-    runtime_state::HostState,
+    host_state::HostState,
     updates::{Code, UpdateFromHost},
 };
 use capi_runtime::{Effect, Instruction, Instructions, ProcessState, Value};
