@@ -5,7 +5,6 @@ pub enum Command {
     UpdateCode { instructions: Instructions },
     ClearBreakpointAndEvaluateNextInstruction,
     Continue,
-    IgnoreNextInstruction,
     Reset,
     Stop,
 }
