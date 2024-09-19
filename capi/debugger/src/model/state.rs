@@ -31,7 +31,7 @@ impl PersistentState {
                 self.memory = Some(memory);
             }
             UpdateFromHost::Runtime { runtime } => {
-                let runtime_state = match runtime.state() {
+                let state = match runtime.state() {
                     RuntimeState::Running => HostState::Running,
                     RuntimeState::Finished => HostState::Finished,
                     RuntimeState::Stopped => HostState::Stopped {
@@ -48,7 +48,7 @@ impl PersistentState {
                     },
                 };
 
-                self.host_state = Some(runtime_state);
+                self.host_state = Some(state);
             }
         }
     }
