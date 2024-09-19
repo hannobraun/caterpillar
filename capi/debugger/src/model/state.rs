@@ -236,21 +236,6 @@ impl PersistentState {
         Ok(commands)
     }
 
-    fn apply_breakpoints(&self, code: &Code) -> Instructions {
-        let mut instructions = code.instructions.clone();
-
-        for address in self.breakpoints.iter() {
-            instructions.replace(
-                address,
-                Instruction::TriggerEffect {
-                    effect: Effect::Breakpoint,
-                },
-            );
-        }
-
-        instructions
-    }
-
     pub fn generate_transient_state(&self) -> TransientState {
         let active_functions = ActiveFunctions::new(
             self.code.inner.as_ref(),
@@ -335,6 +320,21 @@ impl PersistentState {
         ]);
 
         Ok(())
+    }
+
+    fn apply_breakpoints(&self, code: &Code) -> Instructions {
+        let mut instructions = code.instructions.clone();
+
+        for address in self.breakpoints.iter() {
+            instructions.replace(
+                address,
+                Instruction::TriggerEffect {
+                    effect: Effect::Breakpoint,
+                },
+            );
+        }
+
+        instructions
     }
 }
 
