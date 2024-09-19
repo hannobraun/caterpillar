@@ -310,7 +310,10 @@ impl PersistentState {
             instructions.replace(&origin, Instruction::Nop);
         }
 
-        // Everything's prepared to send the required commands now.
+        // Apply all changes to the code and move on to the next instruction.
+        // The latter might be redundant with the continue below. But that
+        // should be just that, redundant. It shouldn't lead to a different
+        // result.
         commands.extend([
             Command::UpdateCode { instructions },
             Command::ClearBreakpointAndEvaluateNextInstruction,
