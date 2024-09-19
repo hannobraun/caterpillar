@@ -294,9 +294,6 @@ impl PersistentState {
         if removed_breakpoint {
             self.breakpoints.set_durable(origin);
         }
-        commands.push(Command::UpdateCode {
-            instructions: self.apply_breakpoints(code),
-        });
 
         self.breakpoints.clear_all_ephemeral();
 
