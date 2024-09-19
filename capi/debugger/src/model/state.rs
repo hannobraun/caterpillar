@@ -297,9 +297,9 @@ impl PersistentState {
 
         let targets = targets
             .into_iter()
-            .map(|target| self.code.fragment_to_instruction(&target))
-            .collect::<Result<Vec<_>, _>>()?;
+            .map(|target| self.code.fragment_to_instruction(&target));
         for target in targets {
+            let target = target?;
             self.breakpoints.set_ephemeral(target);
         }
 
