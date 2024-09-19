@@ -6,10 +6,10 @@ members = [
     "capi/debugger",
     "capi/ffi",
     "capi/game-engine",
+    "capi/host",
     "capi/launcher",
     "capi/process",
     "capi/protocol",
-    "capi/runtime",
     "capi/server",
     "capi/watch",
 
