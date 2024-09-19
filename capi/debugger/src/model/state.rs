@@ -269,7 +269,7 @@ impl PersistentState {
             effect: Effect::Breakpoint,
         } = self.code.instruction(&origin)?
         {
-            self.step_over_instruction(&origin, commands)?;
+            self.step_over_instruction(origin, commands)?;
         }
 
         let code = self.code.get()?;
@@ -322,7 +322,7 @@ impl PersistentState {
 
     fn step_over_instruction(
         &mut self,
-        origin: &InstructionAddress,
+        origin: InstructionAddress,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let code = self.code.get()?;
@@ -333,7 +333,7 @@ impl PersistentState {
         // Let's address this possibility by replacing the instruction with a
         // `nop` before attempting to step over it.
         let mut instructions = self.apply_breakpoints(code);
-        instructions.replace(origin, Instruction::Nop);
+        instructions.replace(&origin, Instruction::Nop);
 
         // Everything's prepared to send the required commands now.
         commands.extend([
