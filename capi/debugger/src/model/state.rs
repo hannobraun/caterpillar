@@ -1,8 +1,6 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_process::{
-    Effect, Instruction, InstructionAddress, Instructions, ProcessState, Value,
-};
+use capi_process::{Effect, Instruction, Instructions, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
@@ -265,35 +263,6 @@ impl PersistentState {
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;
 
-        self.step_over_instruction(origin, commands)?;
-
-        let code = self.code.get()?;
-
-        self.breakpoints.clear_all_ephemeral();
-
-        let targets = targets
-            .into_iter()
-            .map(|target| self.code.fragment_to_instruction(&target))
-            .collect::<Result<Vec<_>, _>>()?;
-        for target in targets {
-            self.breakpoints.set_ephemeral(target);
-        }
-
-        commands.extend([
-            Command::UpdateCode {
-                instructions: self.apply_breakpoints(code),
-            },
-            Command::Continue,
-        ]);
-
-        Ok(())
-    }
-
-    fn step_over_instruction(
-        &mut self,
-        origin: InstructionAddress,
-        commands: &mut Vec<Command>,
-    ) -> anyhow::Result<()> {
         let code = self.code.get()?;
 
         // We might have a durable breakpoint at the instruction we're trying to
@@ -328,6 +297,25 @@ impl PersistentState {
         commands.push(Command::UpdateCode {
             instructions: self.apply_breakpoints(code),
         });
+
+        let code = self.code.get()?;
+
+        self.breakpoints.clear_all_ephemeral();
+
+        let targets = targets
+            .into_iter()
+            .map(|target| self.code.fragment_to_instruction(&target))
+            .collect::<Result<Vec<_>, _>>()?;
+        for target in targets {
+            self.breakpoints.set_ephemeral(target);
+        }
+
+        commands.extend([
+            Command::UpdateCode {
+                instructions: self.apply_breakpoints(code),
+            },
+            Command::Continue,
+        ]);
 
         Ok(())
     }
