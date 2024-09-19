@@ -333,7 +333,12 @@ impl PersistentState {
         // Let's address this possibility by replacing the instruction with a
         // `nop` before attempting to step over it.
         let mut instructions = self.apply_breakpoints(code);
-        instructions.replace(&origin, Instruction::Nop);
+        if let Instruction::TriggerEffect {
+            effect: Effect::Breakpoint,
+        } = self.code.instruction(&origin)?
+        {
+            instructions.replace(&origin, Instruction::Nop);
+        }
 
         // Everything's prepared to send the required commands now.
         commands.extend([
