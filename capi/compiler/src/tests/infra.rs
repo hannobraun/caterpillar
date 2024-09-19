@@ -7,11 +7,10 @@ use crate::{compile, host::Host};
 pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let (_, instructions, _) = compile::<TestHost>(source);
 
-    let mut signals = BTreeMap::new();
+    let mut runtime = runtime();
+    runtime.run_until_finished(&instructions);
 
-    runtime().run_until_finished(&instructions, &mut signals);
-
-    signals
+    runtime.signals
 }
 
 pub fn runtime() -> TestRuntime {
@@ -21,13 +20,13 @@ pub fn runtime() -> TestRuntime {
 #[derive(Default)]
 pub struct TestRuntime {
     runtime: Runtime,
+    signals: BTreeMap<u32, u32>,
 }
 
 impl TestRuntime {
     pub fn run_until_finished(
         &mut self,
         instructions: &Instructions,
-        signals: &mut BTreeMap<u32, u32>,
     ) -> &mut Self {
         while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(instructions);
@@ -42,7 +41,7 @@ impl TestRuntime {
                         self.runtime.stack_mut().pop_operand().unwrap();
                     let channel: u32 = u32::from_le_bytes(channel.0);
 
-                    *signals.entry(channel).or_default() += 1;
+                    *self.signals.entry(channel).or_default() += 1;
 
                     self.runtime.ignore_next_instruction();
                 }
