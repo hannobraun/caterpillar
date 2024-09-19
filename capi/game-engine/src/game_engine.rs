@@ -50,9 +50,6 @@ impl GameEngine {
         }
 
         match command {
-            Command::UpdateCode { instructions } => {
-                self.instructions = Some(instructions);
-            }
             Command::ClearBreakpointAndContinue => {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects_mut().inspect_first()
@@ -86,6 +83,9 @@ impl GameEngine {
             }
             Command::Stop => {
                 self.process.effects_mut().trigger(Effect::Breakpoint);
+            }
+            Command::UpdateCode { instructions } => {
+                self.instructions = Some(instructions);
             }
         }
     }
