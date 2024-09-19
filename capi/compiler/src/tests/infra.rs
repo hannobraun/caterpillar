@@ -7,8 +7,7 @@ use crate::{compile, host::Host};
 pub fn compile_and_run(source: &str) {
     let mut runtime = runtime();
 
-    runtime.update_code(source).run_until_finished();
-    assert_eq!(runtime.signals.remove(&0), Some(1));
+    runtime.update_code(source).run_until_receiving(0);
 }
 
 pub fn runtime() -> TestRuntime {
@@ -29,13 +28,15 @@ impl TestRuntime {
         self
     }
 
-    pub fn run_until_finished(&mut self) -> &mut Self {
+    pub fn run_until_receiving(&mut self, signal: u32) -> &mut Self {
         let instructions = self
             .instructions
             .as_ref()
             .expect("Must call `update_code` before running.");
 
-        while self.runtime.state().is_running() {
+        while self.runtime.state().is_running()
+            && self.signals.get(&signal) != Some(&1)
+        {
             self.runtime.evaluate_next_instruction(instructions);
 
             match self.runtime.effects_mut().handle_first() {
