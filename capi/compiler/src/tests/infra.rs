@@ -11,27 +11,27 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 
     let mut runtime = runtime();
 
-    while runtime.state().is_running() {
-        runtime.evaluate_next_instruction(&instructions);
+    while runtime.inner.state().is_running() {
+        runtime.inner.evaluate_next_instruction(&instructions);
 
-        match runtime.effects_mut().handle_first() {
+        match runtime.inner.effects_mut().handle_first() {
             Some(Effect::Host) => {
-                let effect = runtime.stack_mut().pop_operand().unwrap();
+                let effect = runtime.inner.stack_mut().pop_operand().unwrap();
                 assert_eq!(effect.to_u32(), 0);
 
-                let channel = runtime.stack_mut().pop_operand().unwrap();
+                let channel = runtime.inner.stack_mut().pop_operand().unwrap();
                 let channel: u32 = u32::from_le_bytes(channel.0);
 
                 *signals.entry(channel).or_default() += 1;
 
-                runtime.ignore_next_instruction();
+                runtime.inner.ignore_next_instruction();
             }
             Some(effect) => {
                 panic!(
                     "Unexpected effect: {effect}\n\
                     Runtime: {:#?}\n\
                     Instructions: {instructions:#?}",
-                    runtime,
+                    runtime.inner,
                 );
             }
             None => {}
@@ -41,8 +41,13 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     signals
 }
 
-pub fn runtime() -> Runtime {
-    Runtime::default()
+pub fn runtime() -> TestRuntime {
+    TestRuntime::default()
+}
+
+#[derive(Default)]
+pub struct TestRuntime {
+    inner: Runtime,
 }
 
 #[derive(Debug)]
