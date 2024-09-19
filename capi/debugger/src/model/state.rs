@@ -327,11 +327,11 @@ impl PersistentState {
     ) -> anyhow::Result<()> {
         let code = self.code.get()?;
 
-        // The instruction we are about to step over might be a `brk`, which
-        // won't ever do anything except trigger another breakpoint.
+        // If the instruction we are about to step over is a `brk`, that won't
+        // ever do anything except trigger another breakpoint.
         //
-        // Let's address this possibility by replacing the instruction with a
-        // `nop` before attempting to step over it.
+        // In that case, we need to replace the instruction with a `nop` before
+        // attempting to step over it.
         let mut instructions = self.apply_breakpoints(code);
         if let Instruction::TriggerEffect {
             effect: Effect::Breakpoint,
@@ -348,7 +348,7 @@ impl PersistentState {
 
         // But we also need to reverse the change that we've made. Since we
         // re-apply the breakpoints based on the original code, we don't
-        // need to do another replacement to get rid of the `nop`.
+        // need to explicitly revert any code replacements.
         commands.push(Command::UpdateCode {
             instructions: self.apply_breakpoints(code),
         });
