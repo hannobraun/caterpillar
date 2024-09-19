@@ -4,10 +4,6 @@ use capi_runtime::{Effect, Instructions, Runtime};
 
 use crate::{compile, host::Host};
 
-pub fn compile_and_run(source: &str) {
-    runtime().update_code(source).run_until_receiving(0);
-}
-
 pub fn runtime() -> TestRuntime {
     TestRuntime::default()
 }

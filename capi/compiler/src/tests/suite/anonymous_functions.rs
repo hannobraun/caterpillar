@@ -1,4 +1,4 @@
-use crate::tests::infra::compile_and_run;
+use crate::tests::infra::runtime;
 
 #[test]
 fn anonymous_function_eval() {
@@ -9,7 +9,7 @@ fn anonymous_function_eval() {
         }
     ";
 
-    compile_and_run(source);
+    runtime().update_code(source).run_until_receiving(0);
 }
 
 #[test]
@@ -23,7 +23,7 @@ fn anonymous_function_parameter() {
         }
     ";
 
-    compile_and_run(source);
+    runtime().update_code(source).run_until_receiving(0);
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn anonymous_function_parameter_shadowing() {
         }
     ";
 
-    compile_and_run(source);
+    runtime().update_code(source).run_until_receiving(0);
 }
 
 #[test]
@@ -63,5 +63,5 @@ fn anonymous_function_captured_binding() {
         }
     ";
 
-    compile_and_run(source);
+    runtime().update_code(source).run_until_receiving(0);
 }
