@@ -26,7 +26,11 @@ impl GameEngine {
         let arguments = [Value::from(TILES_PER_AXIS); 2];
 
         Self {
-            runtime: Runtime::new(arguments),
+            runtime: {
+                let mut self_ = Runtime::default();
+                self_.reset(arguments);
+                self_
+            },
             arguments,
             last_frame_start_s: None,
             instructions: None,

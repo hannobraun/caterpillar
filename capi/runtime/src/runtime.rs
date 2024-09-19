@@ -9,12 +9,6 @@ pub struct Runtime {
 }
 
 impl Runtime {
-    pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
-        let mut self_ = Self::default();
-        self_.reset(arguments);
-        self_
-    }
-
     pub fn state(&self) -> RuntimeState {
         if self.effects.inspect_first().is_some() {
             RuntimeState::Stopped
