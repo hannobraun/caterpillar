@@ -5,11 +5,9 @@ use capi_runtime::{Effect, Instructions, Runtime};
 use crate::{compile, host::Host};
 
 pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
-    let (_, instructions, _) = compile::<TestHost>(source);
-
     let mut runtime = runtime();
-    runtime.instructions = Some(instructions);
-    runtime.run_until_finished();
+
+    runtime.update_code(source).run_until_finished();
 
     runtime.signals
 }
@@ -26,6 +24,12 @@ pub struct TestRuntime {
 }
 
 impl TestRuntime {
+    pub fn update_code(&mut self, source: &str) -> &mut Self {
+        let (_, instructions, _) = compile::<TestHost>(source);
+        self.instructions = Some(instructions);
+        self
+    }
+
     pub fn run_until_finished(&mut self) -> &mut Self {
         let instructions = self
             .instructions
