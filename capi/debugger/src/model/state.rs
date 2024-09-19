@@ -236,7 +236,7 @@ impl PersistentState {
         Ok(commands)
     }
 
-    pub fn apply_breakpoints(&self, code: &Code) -> Instructions {
+    fn apply_breakpoints(&self, code: &Code) -> Instructions {
         let mut instructions = code.instructions.clone();
 
         for address in self.breakpoints.iter() {
