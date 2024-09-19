@@ -1,6 +1,8 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_process::{Effect, Instruction, Instructions, ProcessState, Value};
+use capi_process::{
+    Effect, Instruction, InstructionAddress, Instructions, ProcessState, Value,
+};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
@@ -269,34 +271,7 @@ impl PersistentState {
             effect: Effect::Breakpoint,
         } = self.code.instruction(&origin)?
         {
-            // The instruction we're trying to step away from was compiled from
-            // a `brk` instruction, or something equivalent. That won't ever do
-            // anything except trigger another breakpoint.
-            //
-            // To handle this, let's first add a breakpoint at the next
-            // instruction, to prepare for stepping over the `brk`.
-            //
-            // The next instruction address we're creating here should always be
-            // valid. Even if the `brk` is the last fragment in a function,
-            // there's always going to be a return instruction, at least.
-            let mut instructions = self.apply_breakpoints(code);
-
-            // Now we can temporarily replace the `brk` with a `nop`, which we
-            // can step over.
-            instructions.replace(&origin, Instruction::Nop);
-
-            // Everything's prepared to send the required commands now.
-            commands.extend([
-                Command::UpdateCode { instructions },
-                Command::ClearBreakpointAndEvaluateNextInstruction,
-            ]);
-
-            // But we also need to reverse the change that we've made. Since we
-            // re-apply the breakpoints based on the original code, we don't
-            // need to do another replacement to get rid of the `nop`.
-            commands.push(Command::UpdateCode {
-                instructions: self.apply_breakpoints(code),
-            });
+            self.step_over_instruction(&origin, code, commands);
         }
 
         if self.breakpoints.durable_at(&origin) {
@@ -343,6 +318,34 @@ impl PersistentState {
         ]);
 
         Ok(())
+    }
+
+    fn step_over_instruction(
+        &self,
+        origin: &InstructionAddress,
+        code: &Code,
+        commands: &mut Vec<Command>,
+    ) {
+        // The instruction we are about to step over might be a `brk`, which
+        // won't ever do anything except trigger another breakpoint.
+        //
+        // Let's address this possibility by replacing the instruction with a
+        // `nop` before attempting to step over it.
+        let mut instructions = self.apply_breakpoints(code);
+        instructions.replace(origin, Instruction::Nop);
+
+        // Everything's prepared to send the required commands now.
+        commands.extend([
+            Command::UpdateCode { instructions },
+            Command::ClearBreakpointAndEvaluateNextInstruction,
+        ]);
+
+        // But we also need to reverse the change that we've made. Since we
+        // re-apply the breakpoints based on the original code, we don't
+        // need to do another replacement to get rid of the `nop`.
+        commands.push(Command::UpdateCode {
+            instructions: self.apply_breakpoints(code),
+        });
     }
 
     fn apply_breakpoints(&self, code: &Code) -> Instructions {
