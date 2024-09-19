@@ -13,7 +13,7 @@ path = "../compiler"
 path = "../game-engine"
 
 [dependencies.capi-runtime]
-path = "../process"
+path = "../runtime"
 
 [dependencies.serde]
 version = "*"

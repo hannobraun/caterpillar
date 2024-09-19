@@ -12,4 +12,4 @@ serde-big-array = "*"
 path = "../compiler"
 
 [dependencies.capi-runtime]
-path = "../process"
+path = "../runtime"

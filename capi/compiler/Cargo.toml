@@ -8,7 +8,7 @@ version = "*"
 features = ["serde"]
 
 [dependencies.capi-runtime]
-path = "../process"
+path = "../runtime"
 
 [dependencies.serde]
 version = "*"

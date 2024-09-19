@@ -24,7 +24,7 @@ path = "../ffi"
 path = "../protocol"
 
 [dependencies.capi-runtime]
-path = "../process"
+path = "../runtime"
 
 [dependencies.leptos]
 version = "*"
