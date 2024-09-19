@@ -17,8 +17,8 @@ impl Breakpoints {
         self.durable.insert(instruction);
     }
 
-    pub fn clear_durable(&mut self, instruction: &InstructionAddress) {
-        self.durable.remove(instruction);
+    pub fn clear_durable(&mut self, instruction: &InstructionAddress) -> bool {
+        self.durable.remove(instruction)
     }
 
     pub fn set_ephemeral(&mut self, instruction: InstructionAddress) {
