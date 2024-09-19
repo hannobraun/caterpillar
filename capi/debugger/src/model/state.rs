@@ -271,9 +271,32 @@ impl PersistentState {
         {
             // The instruction we're trying to step away from was compiled from
             // a `brk` instruction, or something equivalent. That won't ever do
-            // anything except trigger another breakpoint. We need to tell the
-            // process to ignore it, if we're going to step over it.
-            commands.push(Command::IgnoreNextInstruction);
+            // anything except trigger another breakpoint.
+            //
+            // To handle this, let's first add a breakpoint at the next
+            // instruction, to prepare for stepping over the `brk`.
+            //
+            // The next instruction address we're creating here should always be
+            // valid. Even if the `brk` is the last fragment in a function,
+            // there's always going to be a return instruction, at least.
+            let mut instructions = self.apply_breakpoints(code);
+
+            // Now we can temporarily replace the `brk` with a `nop`, which we
+            // can step over.
+            instructions.replace(origin, Instruction::Nop);
+
+            // Everything's prepared to send the required commands now.
+            commands.extend([
+                Command::UpdateCode { instructions },
+                Command::ClearBreakpointAndEvaluateNextInstruction,
+            ]);
+
+            // But we also need to reverse the change that we've made. Since we
+            // re-apply the breakpoints based on the original code, we don't
+            // need to do another replacement to get rid of the `nop`.
+            commands.push(Command::UpdateCode {
+                instructions: self.apply_breakpoints(code),
+            });
         }
 
         if self.breakpoints.durable_at(&origin) {
