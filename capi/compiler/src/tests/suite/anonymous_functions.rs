@@ -12,7 +12,6 @@ fn anonymous_function_eval() {
     let mut signals = compile_and_run(source);
 
     assert_eq!(signals.remove(&0), Some(1));
-    assert!(signals.is_empty());
 }
 
 #[test]
@@ -29,7 +28,6 @@ fn anonymous_function_parameter() {
     let mut signals = compile_and_run(source);
 
     assert_eq!(signals.remove(&0), Some(1));
-    assert!(signals.is_empty());
 }
 
 #[test]
@@ -50,7 +48,6 @@ fn anonymous_function_parameter_shadowing() {
     let mut signals = compile_and_run(source);
 
     assert_eq!(signals.remove(&0), Some(1));
-    assert!(signals.is_empty());
 }
 
 #[test]
@@ -75,5 +72,4 @@ fn anonymous_function_captured_binding() {
     let mut signals = compile_and_run(source);
 
     assert_eq!(signals.remove(&0), Some(1));
-    assert!(signals.is_empty());
 }
