@@ -265,6 +265,12 @@ impl PersistentState {
 
         let code = self.code.get()?;
 
+        self.breakpoints.clear_all_ephemeral();
+        for target in targets {
+            let target = self.code.fragment_to_instruction(&target)?;
+            self.breakpoints.set_ephemeral(target);
+        }
+
         // We might have a durable breakpoint at the instruction we're trying to
         // step over. We need to remove that before we can proceed.
         let removed_breakpoint = self.breakpoints.clear_durable(&origin);
@@ -293,12 +299,6 @@ impl PersistentState {
         // In case we removed a durable breakpoint, we need to reverse that.
         if removed_breakpoint {
             self.breakpoints.set_durable(origin);
-        }
-
-        self.breakpoints.clear_all_ephemeral();
-        for target in targets {
-            let target = self.code.fragment_to_instruction(&target)?;
-            self.breakpoints.set_ephemeral(target);
         }
 
         commands.extend([
