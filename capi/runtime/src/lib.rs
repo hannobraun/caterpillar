@@ -3,7 +3,7 @@ mod evaluator;
 mod function;
 mod instructions;
 mod operands;
-mod process;
+mod runtime;
 mod stack;
 mod value;
 
@@ -12,7 +12,7 @@ pub use self::{
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,
-    process::{Runtime, RuntimeState},
+    runtime::{Runtime, RuntimeState},
     stack::Stack,
     value::Value,
 };
