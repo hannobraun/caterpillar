@@ -298,8 +298,6 @@ impl PersistentState {
             instructions: self.apply_breakpoints(code),
         });
 
-        let code = self.code.get()?;
-
         self.breakpoints.clear_all_ephemeral();
 
         let targets = targets
