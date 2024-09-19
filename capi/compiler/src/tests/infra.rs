@@ -9,7 +9,7 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 
     let mut signals = BTreeMap::new();
 
-    let mut runtime = Runtime::new([]);
+    let mut runtime = Runtime::default();
 
     while runtime.state().is_running() {
         runtime.evaluate_next_instruction(&instructions);
