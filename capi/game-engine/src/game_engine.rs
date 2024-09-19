@@ -53,6 +53,13 @@ impl GameEngine {
             Command::UpdateCode { instructions } => {
                 self.instructions = Some(instructions);
             }
+            Command::ClearBreakpointAndContinue => {
+                if let Some(Effect::Breakpoint) =
+                    self.process.effects_mut().inspect_first()
+                {
+                    self.process.effects_mut().handle_first();
+                }
+            }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
                     self.process.effects().inspect_first()
@@ -72,13 +79,6 @@ impl GameEngine {
                 } else {
                     // Same as above: This should only happen if the debugger is
                     // buggy.
-                }
-            }
-            Command::ClearBreakpointAndContinue => {
-                if let Some(Effect::Breakpoint) =
-                    self.process.effects_mut().inspect_first()
-                {
-                    self.process.effects_mut().handle_first();
                 }
             }
             Command::Reset => {
