@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::fragments::FragmentId;
-use capi_process::{Instruction, InstructionAddress};
 use capi_protocol::updates::Code;
+use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
 pub struct DebugCode {

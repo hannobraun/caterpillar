@@ -1,6 +1,6 @@
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
-use capi_process::{Instructions, Process};
+use capi_runtime::{Instructions, Process};
 
 #[derive(Debug, Default)]
 pub struct Updates {

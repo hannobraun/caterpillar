@@ -357,7 +357,7 @@ name = "capi-compiler"
 version = "0.1.0"
 dependencies = [
  "blake3",
- "capi-process",
+ "capi-runtime",
  "serde",
 ]
 
@@ -369,8 +369,8 @@ dependencies = [
  "capi-compiler",
  "capi-ffi",
  "capi-game-engine",
- "capi-process",
  "capi-protocol",
+ "capi-runtime",
  "console_error_panic_hook",
  "console_log",
  "gloo-net",
@@ -389,7 +389,7 @@ name = "capi-game-engine"
 version = "0.1.0"
 dependencies = [
  "capi-compiler",
- "capi-process",
+ "capi-runtime",
  "num_enum",
  "serde",
  "serde-big-array",
@@ -402,8 +402,8 @@ dependencies = [
  "anyhow",
  "capi-ffi",
  "capi-game-engine",
- "capi-process",
  "capi-protocol",
+ "capi-runtime",
  "ron",
 ]
 
@@ -419,22 +419,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "capi-process"
-version = "0.1.0"
-dependencies = [
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "capi-protocol"
 version = "0.1.0"
 dependencies = [
  "capi-compiler",
  "capi-game-engine",
- "capi-process",
+ "capi-runtime",
  "ron",
  "serde",
+]
+
+[[package]]
+name = "capi-runtime"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "thiserror",
 ]
 
 [[package]]

@@ -11,5 +11,5 @@ serde-big-array = "*"
 [dependencies.capi-compiler]
 path = "../compiler"
 
-[dependencies.capi-process]
+[dependencies.capi-runtime]
 path = "../process"

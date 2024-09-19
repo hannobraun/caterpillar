@@ -4,7 +4,7 @@ use capi_compiler::{
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
-use capi_process::Effect;
+use capi_runtime::Effect;
 
 use super::{Breakpoints, DebugFunction};
 

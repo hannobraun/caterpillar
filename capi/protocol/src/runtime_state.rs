@@ -1,4 +1,4 @@
-use capi_process::{Effect, InstructionAddress, Value};
+use capi_runtime::{Effect, InstructionAddress, Value};
 
 /// # The current state of the runtime
 #[derive(Clone, Debug)]

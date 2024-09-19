@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{Effect, Instructions, Process, Value};
+use capi_runtime::{Effect, Instructions, Process, Value};
 
 use crate::{
     command::Command,

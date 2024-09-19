@@ -4,7 +4,7 @@ use capi_compiler::{
     source_map::SourceMap,
     syntax::Pattern,
 };
-use capi_process::Effect;
+use capi_runtime::Effect;
 
 use super::{Breakpoints, DebugFragment};
 

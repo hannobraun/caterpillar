@@ -1,4 +1,4 @@
-use capi_process::Instructions;
+use capi_runtime::Instructions;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {

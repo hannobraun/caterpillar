@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::InstructionAddress;
+use capi_runtime::InstructionAddress;
 
 use crate::fragments::FragmentId;
 

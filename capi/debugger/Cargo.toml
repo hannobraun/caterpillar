@@ -20,7 +20,7 @@ path = "../game-engine"
 [dependencies.capi-ffi]
 path = "../ffi"
 
-[dependencies.capi-process]
+[dependencies.capi-runtime]
 path = "../process"
 
 [dependencies.capi-protocol]

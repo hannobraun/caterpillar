@@ -1,10 +1,10 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_process::{Effect, Instruction, Instructions, ProcessState, Value};
 use capi_protocol::{
     runtime_state::RuntimeState,
     updates::{Code, UpdateFromRuntime},
 };
+use capi_runtime::{Effect, Instruction, Instructions, ProcessState, Value};
 
 use super::{
     ActiveFunctions, Breakpoints, DebugCode, DebugFragmentKind, UserAction,

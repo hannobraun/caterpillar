@@ -140,7 +140,7 @@ fn compile_expression(
 
 #[cfg(test)]
 mod tests {
-    use capi_process::Value;
+    use capi_runtime::Value;
 
     use crate::{
         fragments::{Fragment, FragmentKind, Fragments, Function, Payload},

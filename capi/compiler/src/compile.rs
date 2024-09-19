@@ -1,4 +1,4 @@
-use capi_process::Instructions;
+use capi_runtime::Instructions;
 
 use crate::{
     fragments::Fragments,

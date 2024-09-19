@@ -3,7 +3,7 @@ use capi_compiler::{
     fragments::{self, FragmentId, Fragments},
     source_map::SourceMap,
 };
-use capi_process::Effect;
+use capi_runtime::Effect;
 
 use super::{Breakpoints, DebugBranch};
 

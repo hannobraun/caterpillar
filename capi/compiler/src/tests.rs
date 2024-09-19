@@ -12,7 +12,7 @@
 
 use std::collections::BTreeMap;
 
-use capi_process::{Effect, Process};
+use capi_runtime::{Effect, Process};
 
 use crate::{compile, host::Host};
 

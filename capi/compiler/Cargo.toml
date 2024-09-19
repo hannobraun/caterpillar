@@ -7,7 +7,7 @@ edition = "2021"
 version = "*"
 features = ["serde"]
 
-[dependencies.capi-process]
+[dependencies.capi-runtime]
 path = "../process"
 
 [dependencies.serde]

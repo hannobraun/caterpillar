@@ -12,7 +12,7 @@ path = "../compiler"
 [dependencies.capi-game-engine]
 path = "../game-engine"
 
-[dependencies.capi-process]
+[dependencies.capi-runtime]
 path = "../process"
 
 [dependencies.serde]

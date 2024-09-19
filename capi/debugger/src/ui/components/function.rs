@@ -1,4 +1,4 @@
-use capi_process::Effect;
+use capi_runtime::Effect;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
     web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,

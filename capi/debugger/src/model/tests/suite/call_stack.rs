@@ -1,4 +1,4 @@
-use capi_process::Effect;
+use capi_runtime::Effect;
 
 use crate::model::{
     tests::infra::{

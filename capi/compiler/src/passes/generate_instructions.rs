@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
+use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
@@ -80,17 +80,17 @@ pub fn generate_instructions(
                 .or_default()
                 .push((branch.parameters.clone(), address));
 
-            branches.push(capi_process::Branch {
+            branches.push(capi_runtime::Branch {
                 parameters: branch
                     .parameters
                     .inner
                     .into_iter()
                     .map(|pattern| match pattern {
                         Pattern::Identifier { name } => {
-                            capi_process::Pattern::Identifier { name }
+                            capi_runtime::Pattern::Identifier { name }
                         }
                         Pattern::Literal { value } => {
-                            capi_process::Pattern::Literal { value }
+                            capi_runtime::Pattern::Literal { value }
                         }
                     })
                     .collect(),
@@ -135,7 +135,7 @@ pub fn generate_instructions(
             );
             continue;
         };
-        let function = capi_process::Function {
+        let function = capi_runtime::Function {
             branches: function
                 .iter()
                 .map(|(parameters, address)| {
@@ -145,15 +145,15 @@ pub fn generate_instructions(
                         .cloned()
                         .map(|pattern| match pattern {
                             Pattern::Identifier { name } => {
-                                capi_process::Pattern::Identifier { name }
+                                capi_runtime::Pattern::Identifier { name }
                             }
                             Pattern::Literal { value } => {
-                                capi_process::Pattern::Literal { value }
+                                capi_runtime::Pattern::Literal { value }
                             }
                         })
                         .collect();
 
-                    capi_process::Branch {
+                    capi_runtime::Branch {
                         parameters,
                         start: *address,
                     }
