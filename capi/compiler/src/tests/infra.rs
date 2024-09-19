@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use capi_runtime::{Effect, Instructions, Runtime};
 
 use crate::{compile, host::Host};
@@ -11,7 +9,6 @@ pub fn runtime() -> TestRuntime {
 #[derive(Default)]
 pub struct TestRuntime {
     runtime: Runtime,
-    signals: BTreeMap<u32, u32>,
     instructions: Option<Instructions>,
 }
 
@@ -28,9 +25,7 @@ impl TestRuntime {
             .as_ref()
             .expect("Must call `update_code` before running.");
 
-        while self.runtime.state().is_running()
-            && self.signals.get(&expected_channel) != Some(&1)
-        {
+        while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(instructions);
 
             match self.runtime.effects_mut().handle_first() {
@@ -43,9 +38,16 @@ impl TestRuntime {
                         self.runtime.stack_mut().pop_operand().unwrap();
                     let channel: u32 = u32::from_le_bytes(channel.0);
 
-                    *self.signals.entry(channel).or_default() += 1;
-
-                    self.runtime.ignore_next_instruction();
+                    if channel == expected_channel {
+                        self.runtime.ignore_next_instruction();
+                        break;
+                    } else {
+                        panic!(
+                            "Received unexpected signal on channel \
+                            `{channel}`. Expected to receive signal on channel \
+                            `{expected_channel}`."
+                        );
+                    }
                 }
                 Some(effect) => {
                     panic!(
@@ -58,8 +60,6 @@ impl TestRuntime {
                 None => {}
             }
         }
-
-        assert_eq!(self.signals.get(&expected_channel), Some(&1));
 
         self
     }
