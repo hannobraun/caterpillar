@@ -4,7 +4,7 @@ use chrono::Local;
 
 fn main() -> anyhow::Result<()> {
     let date = Local::now().format("%Y-%m-%d");
-    let path = format!("website/daily/{date}.md");
+    let path = format!("website/content/daily/{date}.md");
 
     File::create_new(&path)?;
     println!();
