@@ -20,7 +20,7 @@ pub fn runtime() -> TestRuntime {
 
 #[derive(Default)]
 pub struct TestRuntime {
-    inner: Runtime,
+    runtime: Runtime,
 }
 
 impl TestRuntime {
@@ -29,27 +29,29 @@ impl TestRuntime {
         instructions: &Instructions,
         signals: &mut BTreeMap<u32, u32>,
     ) -> &mut Self {
-        while self.inner.state().is_running() {
-            self.inner.evaluate_next_instruction(instructions);
+        while self.runtime.state().is_running() {
+            self.runtime.evaluate_next_instruction(instructions);
 
-            match self.inner.effects_mut().handle_first() {
+            match self.runtime.effects_mut().handle_first() {
                 Some(Effect::Host) => {
-                    let effect = self.inner.stack_mut().pop_operand().unwrap();
+                    let effect =
+                        self.runtime.stack_mut().pop_operand().unwrap();
                     assert_eq!(effect.to_u32(), 0);
 
-                    let channel = self.inner.stack_mut().pop_operand().unwrap();
+                    let channel =
+                        self.runtime.stack_mut().pop_operand().unwrap();
                     let channel: u32 = u32::from_le_bytes(channel.0);
 
                     *signals.entry(channel).or_default() += 1;
 
-                    self.inner.ignore_next_instruction();
+                    self.runtime.ignore_next_instruction();
                 }
                 Some(effect) => {
                     panic!(
                         "Unexpected effect: {effect}\n\
                         Runtime: {:#?}\n\
                         Instructions: {instructions:#?}",
-                        self.inner,
+                        self.runtime,
                     );
                 }
                 None => {}
