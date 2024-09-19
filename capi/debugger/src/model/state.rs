@@ -321,7 +321,7 @@ impl PersistentState {
     }
 
     fn step_over_instruction(
-        &self,
+        &mut self,
         origin: &InstructionAddress,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
