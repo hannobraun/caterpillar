@@ -279,6 +279,8 @@ impl PersistentState {
             effect: Effect::Breakpoint,
         } = self.code.instruction(&origin)?
         {
+            // We don't need to explicitly revert this replacement later, as
+            // we'll re-apply breakpoints based on the original code.
             instructions.replace(&origin, Instruction::Nop);
         }
 
