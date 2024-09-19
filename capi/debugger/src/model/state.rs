@@ -265,16 +265,7 @@ impl PersistentState {
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;
 
-        if let Instruction::TriggerEffect {
-            effect: Effect::Breakpoint,
-        } = self.code.instruction(&origin)?
-        {
-            self.step_over_instruction(origin, commands)?;
-        }
-
-        if self.breakpoints.durable_at(&origin) {
-            self.step_over_instruction(origin, commands)?;
-        }
+        self.step_over_instruction(origin, commands)?;
 
         let code = self.code.get()?;
 
