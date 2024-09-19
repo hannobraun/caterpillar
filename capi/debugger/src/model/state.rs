@@ -288,7 +288,8 @@ impl PersistentState {
 
         // We might have a durable breakpoint at the instruction we're trying to
         // step over. We need to remove that before we can proceed.
-        let removed_breakpoint = self.breakpoints.clear_durable(&origin);
+        let durable_breakpoint_at_origin =
+            self.breakpoints.clear_durable(&origin);
 
         // We're done setting and clearing breakpoints, for now. Let's apply
         // them to the current code, to get instructions we can send to the
@@ -316,7 +317,7 @@ impl PersistentState {
         ]);
 
         // In case we removed a durable breakpoint, we need to reverse that.
-        if removed_breakpoint {
+        if durable_breakpoint_at_origin {
             self.breakpoints.set_durable(origin);
         }
 
