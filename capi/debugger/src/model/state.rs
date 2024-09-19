@@ -264,7 +264,23 @@ impl PersistentState {
         let origin = self.code.fragment_to_instruction(origin)?;
         let code = self.code.get()?;
 
+        // Whatever happens next, any ephemeral breakpoints that were used to
+        // get us here are obsolete. Let's get rid of them.
+        //
+        // Since stepping or continuing happens when the runtime is stopped,
+        // this might remove an ephemeral breakpoint at the current instruction.
+        // (It might not, if we're stopped because of a `brk` or a durable
+        // breakpoint.)
+        //
+        // This might also remove ephemeral breakpoints in other places, like
+        // sibling branches. When stepping into branches, the debugger doesn't
+        // know where we'll end up, so it sets ephemeral breakpoints in all of
+        // the branches.
         self.breakpoints.clear_all_ephemeral();
+
+        // And of course, if we have any targets we want to stop at (we might
+        // not, if we're continuing instead of stepping), we need to set
+        // ephemeral breakpoints there.
         for target in targets {
             let target = self.code.fragment_to_instruction(&target)?;
             self.breakpoints.set_ephemeral(target);
@@ -274,12 +290,16 @@ impl PersistentState {
         // step over. We need to remove that before we can proceed.
         let removed_breakpoint = self.breakpoints.clear_durable(&origin);
 
+        // We're done setting and clearing breakpoints, for now. Let's apply
+        // them to the current code, to get instructions we can send to the
+        // runtime.
+        let mut instructions = self.apply_breakpoints(code);
+
         // If the instruction we are about to step over is a `brk`, that won't
         // ever do anything except trigger another breakpoint.
         //
         // In that case, we need to replace the instruction with a `nop` before
         // attempting to step over it.
-        let mut instructions = self.apply_breakpoints(code);
         if let Instruction::TriggerEffect {
             effect: Effect::Breakpoint,
         } = self.code.instruction(&origin)?
