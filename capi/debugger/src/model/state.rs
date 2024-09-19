@@ -324,6 +324,8 @@ impl PersistentState {
             self.breakpoints.set_durable(origin);
         }
 
+        // And finally, we can provide the latest code to the runtime, then send
+        // it on its way.
         commands.extend([
             Command::UpdateCode {
                 instructions: self.apply_breakpoints(code),
