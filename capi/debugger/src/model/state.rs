@@ -272,33 +272,11 @@ impl PersistentState {
             self.step_over_instruction(origin, commands)?;
         }
 
-        let code = self.code.get()?;
-
         if self.breakpoints.durable_at(&origin) {
-            // We are currently stopped at a durable breakpoint. That's going to
-            // require some special handling.
-            //
-            // First, clear the breakpoint temporarily.
-            self.breakpoints.clear_durable(&origin);
-
-            // Now that the breakpoint is cleared, send updated code to the
-            // runtime and tell it to step beyond where the breakpoint was.
-            commands.extend([
-                Command::UpdateCode {
-                    instructions: self.apply_breakpoints(code),
-                },
-                Command::ClearBreakpointAndEvaluateNextInstruction,
-            ]);
-
-            // Now that we're past it, we can but the breakpoint back.
-            self.breakpoints.set_durable(origin);
-
-            // And of course we need to send updated code to the runtime again,
-            // or we risk it running beyond the breakpoint.
-            commands.push(Command::UpdateCode {
-                instructions: self.apply_breakpoints(code),
-            });
+            self.step_over_instruction(origin, commands)?;
         }
+
+        let code = self.code.get()?;
 
         self.breakpoints.clear_all_ephemeral();
 
@@ -327,6 +305,10 @@ impl PersistentState {
     ) -> anyhow::Result<()> {
         let code = self.code.get()?;
 
+        // We might have a durable breakpoint at the instruction we're trying to
+        // step over. We need to remove that before we can proceed.
+        let removed_breakpoint = self.breakpoints.clear_durable(&origin);
+
         // If the instruction we are about to step over is a `brk`, that won't
         // ever do anything except trigger another breakpoint.
         //
@@ -349,6 +331,9 @@ impl PersistentState {
         // But we also need to reverse the change that we've made. Since we
         // re-apply the breakpoints based on the original code, we don't
         // need to explicitly revert any code replacements.
+        if removed_breakpoint {
+            self.breakpoints.set_durable(origin);
+        }
         commands.push(Command::UpdateCode {
             instructions: self.apply_breakpoints(code),
         });
