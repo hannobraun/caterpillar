@@ -22,14 +22,14 @@ impl TestRuntime {
         self
     }
 
-    pub fn run_until_receiving(&mut self, signal: u32) -> &mut Self {
+    pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
         let instructions = self
             .instructions
             .as_ref()
             .expect("Must call `update_code` before running.");
 
         while self.runtime.state().is_running()
-            && self.signals.get(&signal) != Some(&1)
+            && self.signals.get(&expected_channel) != Some(&1)
         {
             self.runtime.evaluate_next_instruction(instructions);
 
@@ -59,7 +59,7 @@ impl TestRuntime {
             }
         }
 
-        assert_eq!(self.signals.get(&signal), Some(&1));
+        assert_eq!(self.signals.get(&expected_channel), Some(&1));
 
         self
     }
