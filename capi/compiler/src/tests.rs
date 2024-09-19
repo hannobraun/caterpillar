@@ -1,4 +1,4 @@
-//! # End-to-end testing for `capi-compiler` and `capi-process`
+//! # End-to-end testing for `capi-compiler` and `capi-runtime`
 
 use std::collections::BTreeMap;
 
