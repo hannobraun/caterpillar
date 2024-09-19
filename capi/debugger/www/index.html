@@ -17,7 +17,7 @@
     <script type="module">
         let panicHappened = false;
 
-        const module = fetch("/capi_runtime.wasm");
+        const module = fetch("/capi_host.wasm");
         const { instance } = await WebAssembly.instantiateStreaming(module, {
             env: {
                 on_panic: (ptr, len) => {

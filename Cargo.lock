@@ -396,6 +396,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-host"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "capi-ffi",
+ "capi-game-engine",
+ "capi-process",
+ "capi-protocol",
+ "ron",
+]
+
+[[package]]
 name = "capi-launcher"
 version = "0.1.0"
 dependencies = [
@@ -423,18 +435,6 @@ dependencies = [
  "capi-process",
  "ron",
  "serde",
-]
-
-[[package]]
-name = "capi-runtime"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "capi-ffi",
- "capi-game-engine",
- "capi-process",
- "capi-protocol",
- "ron",
 ]
 
 [[package]]

@@ -57,7 +57,7 @@ async fn build_once(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
-    let packages = [("capi-runtime", Some("cdylib")), ("capi-debugger", None)];
+    let packages = [("capi-host", Some("cdylib")), ("capi-debugger", None)];
 
     for (package, crate_type) in packages {
         let mut command = Command::new("cargo");
@@ -84,7 +84,7 @@ async fn build_once(
 
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
-    copy(target, new_output_dir.path(), "capi_runtime.wasm").await?;
+    copy(target, new_output_dir.path(), "capi_host.wasm").await?;
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
 
