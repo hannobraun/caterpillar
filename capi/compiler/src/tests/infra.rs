@@ -65,6 +65,8 @@ impl TestRuntime {
             }
         }
 
+        assert_eq!(self.signals.get(&signal), Some(&1));
+
         self
     }
 }
