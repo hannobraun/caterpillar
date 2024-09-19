@@ -263,8 +263,6 @@ impl PersistentState {
         targets: Vec<FragmentId>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
-        let code = self.code.get()?;
-
         let origin = self.code.fragment_to_instruction(origin)?;
 
         if let Instruction::TriggerEffect {
@@ -273,6 +271,8 @@ impl PersistentState {
         {
             self.step_over_instruction(&origin, commands)?;
         }
+
+        let code = self.code.get()?;
 
         if self.breakpoints.durable_at(&origin) {
             // We are currently stopped at a durable breakpoint. That's going to
