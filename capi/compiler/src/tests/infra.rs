@@ -8,7 +8,7 @@ pub fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
     let mut runtime = runtime();
 
     runtime.update_code(source).run_until_finished();
-
+    assert_eq!(runtime.signals.remove(&0), Some(1));
     runtime.signals
 }
 
