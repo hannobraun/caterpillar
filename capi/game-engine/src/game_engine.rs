@@ -27,9 +27,9 @@ impl GameEngine {
 
         Self {
             runtime: {
-                let mut self_ = Runtime::default();
-                self_.reset(arguments);
-                self_
+                let mut runtime = Runtime::default();
+                runtime.reset(arguments);
+                runtime
             },
             arguments,
             last_frame_start_s: None,
