@@ -283,7 +283,7 @@ impl PersistentState {
 
             // Now we can temporarily replace the `brk` with a `nop`, which we
             // can step over.
-            instructions.replace(origin, Instruction::Nop);
+            instructions.replace(&origin, Instruction::Nop);
 
             // Everything's prepared to send the required commands now.
             commands.extend([
@@ -350,7 +350,7 @@ impl PersistentState {
 
         for address in self.breakpoints.iter() {
             instructions.replace(
-                address,
+                &address,
                 Instruction::TriggerEffect {
                     effect: Effect::Breakpoint,
                 },

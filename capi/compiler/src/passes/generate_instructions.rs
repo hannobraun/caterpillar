@@ -100,7 +100,7 @@ pub fn generate_instructions(
 
         if let Some(address) = address {
             output.instructions.replace(
-                address,
+                &address,
                 Instruction::MakeClosure {
                     branches,
                     environment: function.environment,
@@ -163,7 +163,7 @@ pub fn generate_instructions(
         };
 
         output.instructions.replace(
-            call.address,
+            &call.address,
             Instruction::CallFunction {
                 function,
                 is_tail_call: call.is_tail_call,
