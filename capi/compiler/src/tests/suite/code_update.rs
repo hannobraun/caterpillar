@@ -94,3 +94,37 @@ fn add_additional_instructions_after_current_instruction() {
         )
         .run_until_receiving(1);
 }
+
+#[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
+fn add_additional_instructions_before_current_instruction() {
+    // If the new code adds new instructions before the current instruction, we
+    // expect those to not disturb the flow of execution.
+
+    let mut runtime = runtime();
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    1 send
+                    2 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(1);
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    0 send
+                    1 send
+                    2 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(2);
+}
