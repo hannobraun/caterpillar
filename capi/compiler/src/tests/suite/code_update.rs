@@ -63,3 +63,34 @@ fn replace_block_of_instructions() {
         )
         .run_until_receiving(2);
 }
+
+#[test]
+fn add_additional_instructions_after_current_instruction() {
+    // If the new code adds new instructions after the current instruction, we
+    // expect those to be executed next.
+
+    let mut runtime = runtime();
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    0 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(0);
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    0 send
+                    1 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(1);
+}
