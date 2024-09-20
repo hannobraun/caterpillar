@@ -2,7 +2,7 @@ use crate::tests::infra::runtime;
 
 #[test]
 fn replace_single_instruction() {
-    // When the new code only replaces a single instruction in the old one, we
+    // If the new code only replaces a single instruction in the old one, we
     // expect the new instruction to be used from then on.
 
     let mut runtime = runtime();
@@ -34,8 +34,8 @@ fn replace_single_instruction() {
 
 #[test]
 fn replace_block_of_instructions() {
-    // When the new code replaces a block of multiple neighboring instructions,
-    // we expect the new instructions to be used from then on.
+    // If the new code replaces a block of multiple neighboring instructions, we
+    // expect the new instructions to be used from then on.
 
     let mut runtime = runtime();
 
