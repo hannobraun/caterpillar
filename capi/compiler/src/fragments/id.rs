@@ -7,12 +7,6 @@ pub struct FragmentId {
     pub(super) hash: [u8; 32],
 }
 
-impl FragmentId {
-    pub(super) fn new(hash: [u8; 32]) -> Self {
-        Self { hash }
-    }
-}
-
 impl Ord for FragmentId {
     fn cmp(&self, other: &Self) -> Ordering {
         self.hash.cmp(&other.hash)
