@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, fmt};
+use std::cmp::Ordering;
 
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -22,11 +22,5 @@ impl Ord for FragmentId {
 impl PartialOrd for FragmentId {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
-    }
-}
-
-impl fmt::Display for FragmentId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.hash)
     }
 }
