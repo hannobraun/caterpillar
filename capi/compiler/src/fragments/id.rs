@@ -1,7 +1,14 @@
 use std::cmp::Ordering;
 
 #[derive(
-    Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
 )]
 pub struct FragmentId {
     pub(super) hash: [u8; 32],

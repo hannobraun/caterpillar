@@ -4,7 +4,15 @@ use crate::syntax::Pattern;
 
 use super::{Fragment, FragmentId, FragmentMap};
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Function {
     /// # The name of this function, if available
     ///
@@ -62,7 +70,15 @@ impl Function {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Branch {
     pub parameters: Parameters,
     pub start: FragmentId,
@@ -78,7 +94,15 @@ impl Branch {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Parameters {
     pub inner: Vec<Pattern>,
 }

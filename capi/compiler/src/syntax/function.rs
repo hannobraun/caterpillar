@@ -30,7 +30,15 @@ pub struct Branch {
     pub body: Vec<Expression>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub enum Pattern {
     Identifier { name: String },
     Literal { value: Value },

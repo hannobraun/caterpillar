@@ -3,7 +3,15 @@ use super::{
 };
 
 /// # A content-addressed piece of code
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Fragment {
     /// # This fragment's parent
     ///
@@ -81,7 +89,15 @@ impl Fragment {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub enum FragmentKind {
     /// # This fragment carries a payload
     Payload {

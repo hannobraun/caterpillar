@@ -91,7 +91,7 @@ use super::{
 ///
 /// [`udigest`]: https://crates.io/crates/udigest
 /// [`digest`]: https://crates.io/crates/digest
-pub(super) trait FragmentHash {
+pub(super) trait FragmentHash: udigest::Digestable {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
 

@@ -4,7 +4,15 @@ use crate::intrinsics::Intrinsic;
 
 use super::Function;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub enum Payload {
     /// # A call to a user-defined function
     ///

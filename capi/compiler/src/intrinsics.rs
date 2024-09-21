@@ -13,7 +13,13 @@ macro_rules! intrinsics {
         /// When encountering a call to an intrinsic, the compiler will directly
         /// translate that into the appropriate instructions.
         #[derive(
-            Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+            Clone,
+            Debug,
+            Eq,
+            PartialEq,
+            serde::Deserialize,
+            serde::Serialize,
+            udigest::Digestable,
         )]
         pub enum Intrinsic {
             $($variant,)*
