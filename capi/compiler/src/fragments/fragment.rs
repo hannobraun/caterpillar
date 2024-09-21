@@ -1,6 +1,4 @@
-use super::{
-    hash::FragmentHash, FoundFunction, FragmentId, FragmentMap, Payload,
-};
+use super::{FoundFunction, FragmentId, FragmentMap, Payload};
 
 /// # A content-addressed piece of code
 #[derive(
@@ -41,12 +39,8 @@ pub struct Fragment {
 
 impl Fragment {
     pub fn id(&self) -> FragmentId {
-        let mut hasher = blake3::Hasher::new();
-        self.hash(&mut hasher);
-
-        FragmentId {
-            hash: hasher.finalize().into(),
-        }
+        let hash = udigest::hash::<blake3::Hasher>(self).into();
+        FragmentId { hash }
     }
 
     pub fn next(&self) -> Option<FragmentId> {
