@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies.blake3]
 version = "*"
-features = ["serde"]
+features = ["serde", "traits-preview"]
 
 [dependencies.capi-runtime]
 path = "../runtime"
