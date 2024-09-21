@@ -35,6 +35,7 @@ impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
         self.hash(&mut hasher);
+
         FragmentId {
             hash: hasher.finalize().into(),
         }
