@@ -247,8 +247,8 @@ fn instruction_to_function(
         let fragment = code.fragments.get(&fragment_id);
         panic!(
             "Active instruction `{instruction}` maps to active fragment \
-            `{fragment_id}`. Expecting that fragment to be part of the body of \
-            a named function, but it isn't.\n\
+            `{fragment_id:?}`. Expecting that fragment to be part of the body \
+            of a named function, but it isn't.\n\
             \n\
             Here's the fragment in question:\n\
             {fragment:#?}"
