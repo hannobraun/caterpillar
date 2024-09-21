@@ -128,3 +128,36 @@ fn add_additional_instructions_before_current_instruction() {
         )
         .run_until_receiving(2);
 }
+
+#[test]
+fn remove_instructions_after_current_instruction() {
+    // If the new code removes n instruction after the current instruction, we
+    // expect those to not be executed.
+
+    let mut runtime = runtime();
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    0 send
+                    1 send
+                    2 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(0);
+
+    runtime
+        .update_code(
+            r"
+                main: { ||
+                    0 send
+                    2 send
+                    main
+                }
+            ",
+        )
+        .run_until_receiving(2);
+}
