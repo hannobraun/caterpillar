@@ -200,7 +200,7 @@ impl FragmentHash for FragmentId {
         let Self { hash } = self;
 
         hasher.update(b"hash");
-        hasher.update(hash.as_bytes());
+        hasher.update(hash);
     }
 }
 

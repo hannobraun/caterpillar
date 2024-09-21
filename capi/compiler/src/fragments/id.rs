@@ -4,18 +4,18 @@ use std::cmp::Ordering;
     Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct FragmentId {
-    pub(super) hash: blake3::Hash,
+    pub(super) hash: [u8; 32],
 }
 
 impl FragmentId {
     pub(super) fn new(hash: blake3::Hash) -> Self {
-        Self { hash }
+        Self { hash: hash.into() }
     }
 }
 
 impl Ord for FragmentId {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.hash.as_bytes().cmp(other.hash.as_bytes())
+        self.hash.cmp(&other.hash)
     }
 }
 
