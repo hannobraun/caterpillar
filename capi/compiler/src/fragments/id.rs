@@ -8,8 +8,8 @@ pub struct FragmentId {
 }
 
 impl FragmentId {
-    pub(super) fn new(hash: blake3::Hash) -> Self {
-        Self { hash: hash.into() }
+    pub(super) fn new(hash: [u8; 32]) -> Self {
+        Self { hash }
     }
 }
 
