@@ -123,7 +123,7 @@ impl TestDebugger {
                 })
             })
         else {
-            panic!("Expected to find fragment with ID `{id}`");
+            panic!("Expected to find fragment with ID `{id:?}`");
         };
 
         fragment
