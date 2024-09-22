@@ -30,24 +30,24 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
-    inner: BTreeMap<Hash<Fragment>, Fragment>,
+    fragments_by_hash: BTreeMap<Hash<Fragment>, Fragment>,
 }
 
 impl FragmentMap {
     pub fn insert(&mut self, fragment: Fragment) {
-        self.inner.insert(fragment.hash(), fragment);
+        self.fragments_by_hash.insert(fragment.hash(), fragment);
     }
 
     pub fn remove(&mut self, hash: &Hash<Fragment>) -> Option<Fragment> {
-        self.inner.remove(hash)
+        self.fragments_by_hash.remove(hash)
     }
 
     pub fn get(&self, hash: &Hash<Fragment>) -> Option<&Fragment> {
-        self.inner.get(hash)
+        self.fragments_by_hash.get(hash)
     }
 
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.inner
+        self.fragments_by_hash
             .values()
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Function { function } => {
@@ -79,7 +79,7 @@ impl FragmentMap {
         let mut current_fragment = *fragment_in_body;
 
         loop {
-            let previous = self.inner.values().find(|fragment| {
+            let previous = self.fragments_by_hash.values().find(|fragment| {
                 fragment.location.next == Some(current_fragment)
             });
 
@@ -92,7 +92,7 @@ impl FragmentMap {
             // If there's no previous fragment, this might be the first fragment
             // in a branch of a function.
             let function = self
-                .inner
+                .fragments_by_hash
                 .values()
                 .filter_map(|fragment| match &fragment.kind {
                     FragmentKind::Function { function } => {
@@ -137,7 +137,7 @@ impl FragmentMap {
 
         iter::from_fn(move || {
             let id = next.take()?;
-            let fragment = self.inner.get(&id)?;
+            let fragment = self.fragments_by_hash.get(&id)?;
 
             next = fragment.location.next;
 
