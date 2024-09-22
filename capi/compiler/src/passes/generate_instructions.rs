@@ -42,7 +42,7 @@ pub fn generate_instructions(
     compile_context(fragments.root, &fragments, &mut output, &mut queue);
 
     while let Some(unit) = queue.pop_front() {
-        let CompileUnit {
+        let FunctionToCompile {
             fragment,
             function,
             address,
@@ -179,7 +179,7 @@ fn compile_context(
     start: FragmentId,
     fragments: &FragmentMap,
     output: &mut Output,
-    queue: &mut VecDeque<CompileUnit>,
+    queue: &mut VecDeque<FunctionToCompile>,
 ) -> InstructionAddress {
     let mut first_instruction = None;
 
@@ -204,7 +204,7 @@ fn compile_fragment(
     fragment: &Fragment,
     fragments: &FragmentMap,
     output: &mut Output,
-    queue: &mut VecDeque<CompileUnit>,
+    queue: &mut VecDeque<FunctionToCompile>,
 ) -> Option<InstructionAddress> {
     match &fragment.kind {
         FragmentKind::CallToFunction { name, is_tail_call } => {
@@ -284,7 +284,7 @@ fn compile_fragment(
             // And to make it happen later, we need to put what we already have
             // into a queue. Once whatever's currently being compiled is out of
             // the way, we can process that.
-            queue.push_front(CompileUnit {
+            queue.push_front(FunctionToCompile {
                 fragment: id,
                 function: function.clone(),
                 address,
@@ -425,7 +425,7 @@ struct Functions {
     by_hash: BTreeMap<Hash<Fragment>, Vec<(Parameters, InstructionAddress)>>,
 }
 
-struct CompileUnit {
+struct FunctionToCompile {
     fragment: FragmentId,
     function: Function,
     address: Option<InstructionAddress>,
