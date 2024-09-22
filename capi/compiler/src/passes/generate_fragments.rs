@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
         Branch, Fragment, FragmentId, FragmentKind, FragmentLocation,
-        FragmentMap, Fragments, Function, Parameters, Payload,
+        FragmentMap, Fragments, Function, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -79,13 +79,11 @@ fn compile_function(
             parent,
             next: Some(next),
         },
-        kind: FragmentKind::Payload {
-            payload: Payload::Function {
-                function: Function {
-                    name: function.name,
-                    branches,
-                    environment: function.environment,
-                },
+        kind: FragmentKind::Function {
+            function: Function {
+                name: function.name,
+                branches,
+                environment: function.environment,
             },
         },
     }
@@ -98,7 +96,7 @@ fn compile_expression(
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let payload = match expression {
-        syntax::Expression::Comment { text } => Payload::Comment { text },
+        syntax::Expression::Comment { text } => FragmentKind::Comment { text },
         syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
         }
@@ -113,25 +111,27 @@ fn compile_expression(
 
             match target {
                 Some(IdentifierTarget::Binding) => {
-                    Payload::ResolvedBinding { name }
+                    FragmentKind::ResolvedBinding { name }
                 }
-                Some(IdentifierTarget::Function) => Payload::CallToFunction {
-                    name,
-                    is_tail_call: is_in_tail_position,
-                },
+                Some(IdentifierTarget::Function) => {
+                    FragmentKind::CallToFunction {
+                        name,
+                        is_tail_call: is_in_tail_position,
+                    }
+                }
                 Some(IdentifierTarget::HostFunction { effect_number }) => {
-                    Payload::CallToHostFunction { effect_number }
+                    FragmentKind::CallToHostFunction { effect_number }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    Payload::CallToIntrinsic {
+                    FragmentKind::CallToIntrinsic {
                         intrinsic,
                         is_tail_call: is_in_tail_position,
                     }
                 }
-                None => Payload::UnresolvedIdentifier { name },
+                None => FragmentKind::UnresolvedIdentifier { name },
             }
         }
-        syntax::Expression::Value(value) => Payload::Value(value),
+        syntax::Expression::Value(value) => FragmentKind::Value(value),
     };
 
     Fragment {
@@ -139,7 +139,7 @@ fn compile_expression(
             parent,
             next: Some(next),
         },
-        kind: FragmentKind::Payload { payload },
+        kind: payload,
     }
 }
 
@@ -150,7 +150,6 @@ mod tests {
     use crate::{
         fragments::{
             Fragment, FragmentKind, FragmentLocation, Fragments, Function,
-            Payload,
         },
         syntax::{self, Script},
     };
@@ -175,12 +174,8 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
-                FragmentKind::Payload {
-                    payload:
-                        Payload::Function {
-                            function: Function { mut branches, .. },
-                        },
-                    ..
+                FragmentKind::Function {
+                    function: Function { mut branches, .. },
                 },
             ..
         } = root
@@ -191,16 +186,16 @@ mod tests {
         let body = fragments
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.kind {
-                FragmentKind::Payload { payload, .. } => Some(payload.clone()),
                 FragmentKind::Terminator => None,
+                payload => Some(payload.clone()),
             })
             .collect::<Vec<_>>();
 
         assert_eq!(
             body,
             [
-                Payload::Value(Value(1i32.to_le_bytes())),
-                Payload::Value(Value(1i32.to_le_bytes())),
+                FragmentKind::Value(Value(1i32.to_le_bytes())),
+                FragmentKind::Value(Value(1i32.to_le_bytes())),
             ]
         );
     }
@@ -218,12 +213,8 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
-                FragmentKind::Payload {
-                    payload:
-                        Payload::Function {
-                            function: Function { mut branches, .. },
-                        },
-                    ..
+                FragmentKind::Function {
+                    function: Function { mut branches, .. },
                 },
             ..
         } = root
@@ -256,12 +247,8 @@ mod tests {
         let Fragment {
             location: FragmentLocation { next, .. },
             kind:
-                FragmentKind::Payload {
-                    payload:
-                        Payload::Function {
-                            function: Function { mut branches, .. },
-                        },
-                    ..
+                FragmentKind::Function {
+                    function: Function { mut branches, .. },
                 },
         } = root
         else {
@@ -272,11 +259,7 @@ mod tests {
             fragments.iter_from(branch.start).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
-                kind:
-                    FragmentKind::Payload {
-                        payload: Payload::Function { function },
-                        ..
-                    },
+                kind: FragmentKind::Function { function },
                 ..
             } = branch_fragments[0]
             else {

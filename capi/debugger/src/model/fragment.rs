@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentId, FragmentKind, Fragments, Payload},
+    fragments::{Fragment, FragmentId, FragmentKind, Fragments},
     host::Host,
     source_map::SourceMap,
 };
@@ -131,15 +131,13 @@ impl DebugFragmentKind {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let FragmentKind::Payload { payload, .. } = fragment.kind else {
-            return None;
-        };
+        let payload = fragment.kind;
 
         let kind = match payload {
-            Payload::CallToFunction { name, .. } => {
+            FragmentKind::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
             }
-            Payload::CallToHostFunction { effect_number } => {
+            FragmentKind::CallToHostFunction { effect_number } => {
                 let name = GameEngineHost::effect_number_to_function_name(
                     effect_number,
                 )
@@ -148,15 +146,15 @@ impl DebugFragmentKind {
 
                 Self::CallToHostFunction { name }
             }
-            Payload::CallToIntrinsic { intrinsic, .. } => {
+            FragmentKind::CallToIntrinsic { intrinsic, .. } => {
                 Self::CallToIntrinsic {
                     name: intrinsic.to_string(),
                 }
             }
-            Payload::Comment { text } => Self::Comment {
+            FragmentKind::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
-            Payload::Function { function } => {
+            FragmentKind::Function { function } => {
                 let function = DebugFunction::new(
                     function,
                     active_fragment,
@@ -169,13 +167,18 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
-            Payload::ResolvedBinding { name } => Self::ResolvedBinding { name },
-            Payload::UnresolvedIdentifier { name } => {
+            FragmentKind::ResolvedBinding { name } => {
+                Self::ResolvedBinding { name }
+            }
+            FragmentKind::UnresolvedIdentifier { name } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Payload::Value(value) => Self::Value {
+            FragmentKind::Value(value) => Self::Value {
                 as_string: value.to_string(),
             },
+            FragmentKind::Terminator => {
+                return None;
+            }
         };
 
         Some(kind)

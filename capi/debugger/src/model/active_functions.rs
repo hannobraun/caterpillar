@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
+use capi_compiler::fragments::{self, FragmentId, FragmentKind};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -310,11 +310,7 @@ fn call_id_to_function_name(id: FragmentId, code: &Code) -> Option<String> {
         .get(&id)
         .expect("Fragment referenced by active function must exist.");
 
-    let FragmentKind::Payload {
-        payload: Payload::CallToFunction { name, .. },
-        ..
-    } = &fragment.kind
-    else {
+    let FragmentKind::CallToFunction { name, .. } = &fragment.kind else {
         return None;
     };
 

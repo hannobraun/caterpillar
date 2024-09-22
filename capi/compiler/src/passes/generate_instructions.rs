@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 use crate::{
     fragments::{
         Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
-        Parameters, Payload,
+        Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -205,119 +205,109 @@ fn compile_fragment(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     match &fragment.kind {
-        FragmentKind::Payload { payload, .. } => {
-            match payload {
-                Payload::CallToFunction { name, is_tail_call } => {
-                    // We know that this expression refers to a user-defined
-                    // function, but we might not have compiled that function
-                    // yet.
-                    //
-                    // For now, just generate a placeholder that we can replace
-                    // with the call later.
-                    let address = output.generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::CompilerBug,
-                        },
-                        fragment.id(),
-                    );
+        FragmentKind::CallToFunction { name, is_tail_call } => {
+            // We know that this expression refers to a user-defined function,
+            // but we might not have compiled that function yet.
+            //
+            // For now, just generate a placeholder that we can replace with the
+            // call later.
+            let address = output.generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::CompilerBug,
+                },
+                fragment.id(),
+            );
 
-                    // We can't leave it at that, however. We need to make sure
-                    // this placeholder actually gets replaced later, and we're
-                    // doing that by adding it to this list.
-                    if let Some(function) =
-                        fragments.find_function_by_name(name)
-                    {
-                        output.placeholders.push(CallToFunction {
-                            name: name.clone(),
-                            id: function.id,
-                            address,
-                            is_tail_call: *is_tail_call,
-                        });
-                    }
-
-                    Some(address)
-                }
-                Payload::CallToHostFunction { effect_number } => {
-                    let address = output.generate_instruction(
-                        Instruction::Push {
-                            value: (*effect_number).into(),
-                        },
-                        fragment.id(),
-                    );
-                    output.generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::Host,
-                        },
-                        fragment.id(),
-                    );
-                    Some(address)
-                }
-                Payload::CallToIntrinsic {
-                    intrinsic,
-                    is_tail_call,
-                } => {
-                    let instruction =
-                        intrinsic_to_instruction(intrinsic, *is_tail_call);
-
-                    Some(
-                        output.generate_instruction(instruction, fragment.id()),
-                    )
-                }
-                Payload::Comment { .. } => None,
-                Payload::Function { function } => {
-                    let address = if function.name.is_none() {
-                        // If this is an anonymous function, we need to emit an
-                        // instruction that allocates it, and takes care of its
-                        // environment.
-                        //
-                        // But we haven't compiled the anonymous function yet,
-                        // so we don't have the required information to do that.
-                        // For now, let's create a placeholder for that
-                        // instruction.
-                        //
-                        // Once the function gets compiled, we'll replace the
-                        // placeholder with the real instruction.
-                        Some(output.generate_instruction(
-                            Instruction::TriggerEffect {
-                                effect: Effect::CompilerBug,
-                            },
-                            fragment.id(),
-                        ))
-                    } else {
-                        None
-                    };
-
-                    // And to make it happen later, we need to put what we
-                    // already have into a queue. Once whatever's currently
-                    // being compiled is out of the way, we can process that.
-                    queue.push_front(CompileUnit {
-                        id: fragment.id(),
-                        function: function.clone(),
-                        address,
-                    });
-
-                    address
-                }
-                Payload::ResolvedBinding { name } => {
-                    Some(output.generate_instruction(
-                        Instruction::BindingEvaluate { name: name.clone() },
-                        fragment.id(),
-                    ))
-                }
-                Payload::UnresolvedIdentifier { name: _ } => {
-                    Some(output.generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::BuildError,
-                        },
-                        fragment.id(),
-                    ))
-                }
-                Payload::Value(value) => Some(output.generate_instruction(
-                    Instruction::Push { value: *value },
-                    fragment.id(),
-                )),
+            // We can't leave it at that, however. We need to make sure this
+            // placeholder actually gets replaced later, and we're doing that by
+            // adding it to this list.
+            if let Some(function) = fragments.find_function_by_name(name) {
+                output.placeholders.push(CallToFunction {
+                    name: name.clone(),
+                    id: function.id,
+                    address,
+                    is_tail_call: *is_tail_call,
+                });
             }
+
+            Some(address)
         }
+        FragmentKind::CallToHostFunction { effect_number } => {
+            let address = output.generate_instruction(
+                Instruction::Push {
+                    value: (*effect_number).into(),
+                },
+                fragment.id(),
+            );
+            output.generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::Host,
+                },
+                fragment.id(),
+            );
+            Some(address)
+        }
+        FragmentKind::CallToIntrinsic {
+            intrinsic,
+            is_tail_call,
+        } => {
+            let instruction =
+                intrinsic_to_instruction(intrinsic, *is_tail_call);
+
+            Some(output.generate_instruction(instruction, fragment.id()))
+        }
+        FragmentKind::Comment { .. } => None,
+        FragmentKind::Function { function } => {
+            let address = if function.name.is_none() {
+                // If this is an anonymous function, we need to emit an
+                // instruction that allocates it, and takes care of its
+                // environment.
+                //
+                // But we haven't compiled the anonymous function yet, so we
+                // don't have the required information to do that. For now,
+                // let's create a placeholder for that instruction.
+                //
+                // Once the function gets compiled, we'll replace the
+                // placeholder with the real instruction.
+                Some(output.generate_instruction(
+                    Instruction::TriggerEffect {
+                        effect: Effect::CompilerBug,
+                    },
+                    fragment.id(),
+                ))
+            } else {
+                None
+            };
+
+            // And to make it happen later, we need to put what we already have
+            // into a queue. Once whatever's currently being compiled is out of
+            // the way, we can process that.
+            queue.push_front(CompileUnit {
+                id: fragment.id(),
+                function: function.clone(),
+                address,
+            });
+
+            address
+        }
+        FragmentKind::ResolvedBinding { name } => {
+            Some(output.generate_instruction(
+                Instruction::BindingEvaluate { name: name.clone() },
+                fragment.id(),
+            ))
+        }
+        FragmentKind::UnresolvedIdentifier { name: _ } => {
+            Some(output.generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::BuildError,
+                },
+                fragment.id(),
+            ))
+        }
+        FragmentKind::Value(value) => Some(output.generate_instruction(
+            Instruction::Push { value: *value },
+            fragment.id(),
+        )),
         FragmentKind::Terminator => {
             // Unconditionally generating a return instruction, like we do here,
             // is probably redundant. If the previous fragment was a tail call,
