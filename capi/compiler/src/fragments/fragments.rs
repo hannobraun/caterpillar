@@ -36,11 +36,10 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
-    pub fn insert(&mut self, fragment: Fragment) {
-        self.locations_by_hash
-            .insert(fragment.location.hash(), fragment.location);
+    pub fn insert(&mut self, location: FragmentLocation, fragment: Fragment) {
+        self.locations_by_hash.insert(location.hash(), location);
         self.fragments_by_location
-            .insert(fragment.location, fragment.clone());
+            .insert(location, fragment.clone());
         self.fragments_by_hash.insert(fragment.hash(), fragment);
     }
 

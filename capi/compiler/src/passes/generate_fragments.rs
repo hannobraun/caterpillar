@@ -39,7 +39,7 @@ where
         };
         let terminator_id = terminator.hash();
 
-        fragments.insert(terminator);
+        fragments.insert(terminator.location, terminator);
 
         terminator_id
     };
@@ -49,7 +49,7 @@ where
 
         next = fragment.hash();
 
-        fragments.insert(fragment);
+        fragments.insert(fragment.location, fragment);
     }
 
     next
