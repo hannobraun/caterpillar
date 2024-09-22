@@ -515,8 +515,7 @@ fn step_out_of_function() {
             .iter(fragments)
             .map(|(id, _)| id)
             .nth(1)
-            .unwrap()
-            .this;
+            .unwrap();
 
         (a, b)
     };
@@ -534,7 +533,8 @@ fn step_out_of_function() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
+            .data
+            .id,
         b,
     );
 }
