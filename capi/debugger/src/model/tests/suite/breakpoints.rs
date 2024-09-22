@@ -74,9 +74,9 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .iter(fragments)
         .map(|(id, _)| id)
         .next()
-        .unwrap()
-        .this;
-    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
+        .unwrap();
+    debugger
+        .on_user_action(UserAction::BreakpointSet { fragment: nop.this })?;
 
     debugger.run_program();
 
@@ -89,7 +89,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .with_name("main")
             .active_fragment()
             .hash(),
-        nop,
+        nop.this,
     );
 
     Ok(())
