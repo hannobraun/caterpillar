@@ -35,6 +35,8 @@ pub struct Branch {
     Debug,
     Eq,
     PartialEq,
+    Ord,
+    PartialOrd,
     serde::Deserialize,
     serde::Serialize,
     udigest::Digestable,
