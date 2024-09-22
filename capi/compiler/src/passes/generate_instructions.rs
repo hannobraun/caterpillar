@@ -32,7 +32,7 @@ pub fn generate_instructions(
     if let Some(function) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
             name: "main".to_string(),
-            id: function.hash,
+            function: function.hash,
             address: call_to_main,
             is_tail_call: true,
         });
@@ -117,7 +117,7 @@ pub fn generate_instructions(
     }
 
     for call in output.placeholders {
-        let Some(function) = functions.by_id.get(&call.id) else {
+        let Some(function) = functions.by_id.get(&call.function) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -224,7 +224,7 @@ fn compile_fragment(
             if let Some(function) = fragments.find_function_by_name(name) {
                 output.placeholders.push(CallToFunction {
                     name: name.clone(),
-                    id: function.hash,
+                    function: function.hash,
                     address,
                     is_tail_call: *is_tail_call,
                 });
@@ -416,7 +416,7 @@ impl Output {
 
 pub struct CallToFunction {
     pub name: String,
-    pub id: Hash<Fragment>,
+    pub function: Hash<Fragment>,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
