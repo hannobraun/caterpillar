@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, Fragment, Fragments, Hash},
+    fragments::{Branch, Fragment, FragmentId, Fragments, Hash},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -75,13 +75,9 @@ impl DebugBranch {
 
     pub fn fragment_after(
         &self,
-        hash: &Hash<Fragment>,
+        hash: &FragmentId,
     ) -> anyhow::Result<Option<&DebugFragment>> {
-        if !self
-            .body
-            .iter()
-            .any(|fragment| fragment.data.id.this == *hash)
-        {
+        if !self.body.iter().any(|fragment| fragment.data.id == *hash) {
             return Err(anyhow!(
                 "Expected fragment to be in branch, but could not find it. \
                 Fragment:\n\
@@ -94,15 +90,12 @@ impl DebugBranch {
         let mut fragments = self
             .body
             .iter()
-            .skip_while(|fragment| fragment.data.id.this != *hash);
+            .skip_while(|fragment| fragment.data.id != *hash);
 
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
         assert_eq!(
-            fragments
-                .next()
-                .map(|fragment| fragment.data.id.this)
-                .as_ref(),
+            fragments.next().map(|fragment| fragment.data.id).as_ref(),
             Some(hash)
         );
 

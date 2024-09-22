@@ -141,7 +141,7 @@ impl ActiveFunctionsEntries {
         branch: &DebugBranch,
         fragment: &FragmentId,
     ) -> anyhow::Result<Option<DebugFragment>> {
-        if let Some(after) = branch.fragment_after(&fragment.this)? {
+        if let Some(after) = branch.fragment_after(fragment)? {
             return Ok(Some(after.clone()));
         }
 
