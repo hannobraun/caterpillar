@@ -25,7 +25,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
 fn compile_context<E>(
     expressions: E,
-    parent: Option<Hash<Fragment>>,
+    parent: Option<FragmentId>,
     fragments: &mut FragmentMap,
 ) -> Hash<Fragment>
 where
@@ -34,12 +34,12 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent,
+            parent: parent.map(|id| id.here),
             next: None,
             kind: FragmentKind::Terminator,
         };
         let id = FragmentId {
-            parent,
+            parent: parent.map(|id| id.here),
             next: None,
             here: terminator.hash(),
         };
@@ -50,7 +50,12 @@ where
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(expression, parent, next, fragments);
+        let fragment = compile_expression(
+            expression,
+            parent.map(|id| id.here),
+            next,
+            fragments,
+        );
         let id = FragmentId {
             parent: fragment.parent,
             next: Some(next.hash()),
@@ -74,7 +79,7 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(branch.body, Some(next.here), fragments);
+        let start = compile_context(branch.body, Some(next), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
