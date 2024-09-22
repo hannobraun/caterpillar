@@ -29,10 +29,10 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .expect_one_branch()
         .iter(fragments)
-        .map(|(_, fragment)| fragment)
+        .map(|(id, _)| id)
         .next()
         .unwrap()
-        .hash();
+        .this;
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
