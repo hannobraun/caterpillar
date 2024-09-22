@@ -74,7 +74,9 @@ impl PersistentState {
                     .function()?
                     .active_branch()?
                     .active_fragment()?
-                    .hash();
+                    .data
+                    .id
+                    .this;
                 let targets = Vec::new();
 
                 self.step_or_continue(&origin, targets, &mut commands)?;
