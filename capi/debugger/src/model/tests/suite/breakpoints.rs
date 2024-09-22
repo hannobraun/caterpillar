@@ -286,10 +286,10 @@ fn step_into_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .nth(2)
             .unwrap()
-            .hash();
+            .this;
         let a = fragments
             .find_function_by_name("f")
             .unwrap()
