@@ -263,7 +263,6 @@ mod tests {
                         },
                     ..
                 },
-            ..
         } = root
         else {
             unreachable!("`f` must be the root element.");
