@@ -358,10 +358,10 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .next()
             .unwrap()
-            .hash();
+            .this;
 
         (nop_in_main, nop_in_f)
     };
