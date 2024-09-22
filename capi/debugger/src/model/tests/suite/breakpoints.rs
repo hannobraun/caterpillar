@@ -76,7 +76,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .expect_functions()
             .with_name("main")
             .active_fragment()
-            .id(),
+            .hash(),
         nop,
     );
 
@@ -121,7 +121,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         brk,
     );
 
@@ -134,7 +134,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         nop,
     );
 
@@ -192,7 +192,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         a,
     );
 
@@ -207,7 +207,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         b,
     );
     assert!(
@@ -220,7 +220,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.id() == a)
+            .find(|fragment| fragment.hash() == a)
             .unwrap()
             .data
             .has_durable_breakpoint
@@ -236,7 +236,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         c,
     );
 
@@ -304,7 +304,7 @@ fn step_into_function() {
             .expect_functions()
             .expect_leaf("f")
             .active_fragment()
-            .id(),
+            .hash(),
         a,
     );
 }
@@ -368,7 +368,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         nop_in_main,
     );
 }
@@ -467,7 +467,7 @@ fn step_over_function_call() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         nop,
     );
 }
@@ -528,7 +528,7 @@ fn step_out_of_function() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .id(),
+            .hash(),
         b,
     );
 }

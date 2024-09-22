@@ -72,7 +72,7 @@ impl PersistentState {
                     .function()?
                     .active_branch()?
                     .active_fragment()?
-                    .id();
+                    .hash();
                 let targets = Vec::new();
 
                 self.step_or_continue(&origin, targets, &mut commands)?;
@@ -102,7 +102,7 @@ impl PersistentState {
                         let Some(after) = entries
                             .find_next_fragment_or_next_after_caller(
                                 branch,
-                                &fragment.id(),
+                                &fragment.hash(),
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
@@ -111,7 +111,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.id(),
+                                &origin.hash(),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -124,11 +124,11 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.id()];
+                        break vec![after.hash()];
                     }
                 };
 
-                self.step_or_continue(&origin.id(), targets, &mut commands)?;
+                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
             }
             UserAction::StepOut => {
                 let entries = transient.active_functions.entries()?;
@@ -143,7 +143,9 @@ impl PersistentState {
 
                     loop {
                         let Some(after) = entries
-                            .find_next_fragment_after_caller(&fragment.id())?
+                            .find_next_fragment_after_caller(
+                                &fragment.hash(),
+                            )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
                             // means we must be at the top-level function.
@@ -151,7 +153,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.id(),
+                                &origin.hash(),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -164,11 +166,11 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.id()];
+                        break vec![after.hash()];
                     }
                 };
 
-                self.step_or_continue(&origin.id(), targets, &mut commands)?;
+                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
             }
             UserAction::StepOver => {
                 let entries = transient.active_functions.entries()?;
@@ -183,7 +185,7 @@ impl PersistentState {
                         let Some(after) = entries
                             .find_next_fragment_or_next_after_caller(
                                 branch,
-                                &fragment.id(),
+                                &fragment.hash(),
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
@@ -192,7 +194,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.id(),
+                                &origin.hash(),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -205,11 +207,11 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.id()];
+                        break vec![after.hash()];
                     }
                 };
 
-                self.step_or_continue(&origin.id(), targets, &mut commands)?;
+                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);

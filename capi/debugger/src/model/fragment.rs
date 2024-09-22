@@ -66,7 +66,7 @@ impl DebugFragment {
         Some(Self { kind, data })
     }
 
-    pub fn id(&self) -> Hash<Fragment> {
+    pub fn hash(&self) -> Hash<Fragment> {
         self.data.fragment.id()
     }
 }

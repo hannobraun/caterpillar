@@ -77,7 +77,7 @@ impl DebugBranch {
         &self,
         id: &Hash<Fragment>,
     ) -> anyhow::Result<Option<&DebugFragment>> {
-        if !self.body.iter().any(|fragment| fragment.id() == *id) {
+        if !self.body.iter().any(|fragment| fragment.hash() == *id) {
             return Err(anyhow!(
                 "Expected fragment to be in branch, but could not find it. \
                 Fragment:\n\
@@ -87,13 +87,15 @@ impl DebugBranch {
             ));
         }
 
-        let mut fragments =
-            self.body.iter().skip_while(|fragment| fragment.id() != *id);
+        let mut fragments = self
+            .body
+            .iter()
+            .skip_while(|fragment| fragment.hash() != *id);
 
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
         assert_eq!(
-            fragments.next().map(|fragment| fragment.id()).as_ref(),
+            fragments.next().map(|fragment| fragment.hash()).as_ref(),
             Some(id)
         );
 

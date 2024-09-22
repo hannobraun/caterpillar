@@ -163,7 +163,7 @@ impl ActiveFunctionsEntries {
                 Ok(branch) => Some(branch),
                 Err(_) => None,
             })
-            .find(|branch| !branch.body.iter().any(|f| f.id() == *fragment));
+            .find(|branch| !branch.body.iter().any(|f| f.hash() == *fragment));
 
         let Some(caller_branch) = caller_branch else {
             return Ok(None);
@@ -173,7 +173,7 @@ impl ActiveFunctionsEntries {
 
         self.find_next_fragment_or_next_after_caller(
             caller_branch,
-            &caller.id(),
+            &caller.hash(),
         )
     }
 }
