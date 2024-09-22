@@ -56,6 +56,7 @@ impl Fragment {
 /// # The location of a fragment within the code
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,
