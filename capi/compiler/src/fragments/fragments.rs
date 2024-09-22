@@ -55,9 +55,9 @@ impl FragmentMap {
                 }
                 _ => None,
             })
-            .find_map(|(id, function)| {
+            .find_map(|(hash, function)| {
                 if function.name.as_deref() == Some(name) {
-                    Some(FoundFunction { hash: id, function })
+                    Some(FoundFunction { hash, function })
                 } else {
                     None
                 }
