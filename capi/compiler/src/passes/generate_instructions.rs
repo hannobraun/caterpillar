@@ -43,7 +43,7 @@ pub fn generate_instructions(
 
     while let Some(unit) = queue.pop_front() {
         let CompileUnit {
-            hash,
+            fragment: hash,
             function,
             address,
         } = unit;
@@ -285,7 +285,7 @@ fn compile_fragment(
             // into a queue. Once whatever's currently being compiled is out of
             // the way, we can process that.
             queue.push_front(CompileUnit {
-                hash: id,
+                fragment: id,
                 function: function.clone(),
                 address,
             });
@@ -426,7 +426,7 @@ struct Functions {
 }
 
 struct CompileUnit {
-    hash: FragmentId,
+    fragment: FragmentId,
     function: Function,
     address: Option<InstructionAddress>,
 }
