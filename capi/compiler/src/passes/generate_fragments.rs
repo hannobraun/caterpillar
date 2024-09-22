@@ -42,7 +42,7 @@ where
 
         fragments.insert(
             FragmentLocation {
-                parent: terminator.parent,
+                parent,
                 next: terminator.next,
                 here: terminator.hash(),
             },
