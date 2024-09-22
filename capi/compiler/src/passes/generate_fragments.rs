@@ -1,6 +1,6 @@
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentId, FragmentMap, Fragments, Function, Hash,
+        Branch, Fragment, FragmentId, FragmentMap, Fragments, Function,
         Parameters,
     },
     syntax::{self, IdentifierTarget},
@@ -34,11 +34,7 @@ where
 {
     let mut next = {
         let terminator = Fragment::Terminator;
-        let id = FragmentId {
-            parent: parent.map(|id| id.hash()),
-            next: None,
-            this: Hash::new(&terminator),
-        };
+        let id = FragmentId::new(parent.as_ref(), None, &terminator);
 
         fragments.insert(id, terminator);
 
@@ -47,11 +43,7 @@ where
 
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, next, fragments);
-        let id = FragmentId {
-            parent: parent.map(|id| id.hash()),
-            next: Some(next.hash()),
-            this: Hash::new(&fragment),
-        };
+        let id = FragmentId::new(parent.as_ref(), Some(&next), &fragment);
 
         fragments.insert(id, fragment);
 

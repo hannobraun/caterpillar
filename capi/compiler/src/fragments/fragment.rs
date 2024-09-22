@@ -193,6 +193,18 @@ pub struct FragmentId {
 }
 
 impl FragmentId {
+    pub fn new(
+        parent: Option<&FragmentId>,
+        next: Option<&FragmentId>,
+        this: &Fragment,
+    ) -> Self {
+        Self {
+            parent: parent.map(|id| id.hash()),
+            next: next.map(|id| id.hash()),
+            this: Hash::new(this),
+        }
+    }
+
     /// # Compute the hash of this location
     pub(crate) fn hash(&self) -> Hash<Self> {
         Hash::new(self)
