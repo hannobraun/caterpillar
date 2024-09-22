@@ -111,9 +111,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .iter(fragments)
             .map(|(_, fragment)| fragment);
 
-        let [brk, nop] = array::from_fn(|_| body.next().unwrap().hash());
-
-        [brk, nop]
+        array::from_fn(|_| body.next().unwrap().hash())
     };
 
     assert_eq!(
