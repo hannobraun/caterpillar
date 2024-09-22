@@ -215,7 +215,7 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                fragment.id(),
+                fragment.hash(),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -237,13 +237,13 @@ fn compile_fragment(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                fragment.id(),
+                fragment.hash(),
             );
             output.generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                fragment.id(),
+                fragment.hash(),
             );
             Some(address)
         }
@@ -254,7 +254,7 @@ fn compile_fragment(
             let instruction =
                 intrinsic_to_instruction(intrinsic, *is_tail_call);
 
-            Some(output.generate_instruction(instruction, fragment.id()))
+            Some(output.generate_instruction(instruction, fragment.hash()))
         }
         FragmentKind::Comment { .. } => None,
         FragmentKind::Function { function } => {
@@ -273,7 +273,7 @@ fn compile_fragment(
                     Instruction::TriggerEffect {
                         effect: Effect::CompilerBug,
                     },
-                    fragment.id(),
+                    fragment.hash(),
                 ))
             } else {
                 None
@@ -283,7 +283,7 @@ fn compile_fragment(
             // into a queue. Once whatever's currently being compiled is out of
             // the way, we can process that.
             queue.push_front(CompileUnit {
-                id: fragment.id(),
+                id: fragment.hash(),
                 function: function.clone(),
                 address,
             });
@@ -293,7 +293,7 @@ fn compile_fragment(
         FragmentKind::ResolvedBinding { name } => {
             Some(output.generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
-                fragment.id(),
+                fragment.hash(),
             ))
         }
         FragmentKind::UnresolvedIdentifier { name: _ } => {
@@ -301,12 +301,12 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                fragment.id(),
+                fragment.hash(),
             ))
         }
         FragmentKind::Value(value) => Some(output.generate_instruction(
             Instruction::Push { value: *value },
-            fragment.id(),
+            fragment.hash(),
         )),
         FragmentKind::Terminator => {
             // Unconditionally generating a return instruction, like we do here,
@@ -331,7 +331,8 @@ fn compile_fragment(
             //   this change blindly. It will probably make the code more
             //   complicated, so it needs to be justified.
             Some(
-                output.generate_instruction(Instruction::Return, fragment.id()),
+                output
+                    .generate_instruction(Instruction::Return, fragment.hash()),
             )
         }
     }

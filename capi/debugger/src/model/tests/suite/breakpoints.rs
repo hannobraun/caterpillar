@@ -31,7 +31,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .iter(fragments)
         .next()
         .unwrap()
-        .id();
+        .hash();
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
@@ -63,7 +63,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .iter(fragments)
         .next()
         .unwrap()
-        .id();
+        .hash();
     debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
 
     debugger.run_program();
@@ -107,8 +107,8 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_one_branch()
             .iter(fragments);
 
-        let brk = body.next().unwrap().id();
-        let nop = body.next().unwrap().id();
+        let brk = body.next().unwrap().hash();
+        let nop = body.next().unwrap().hash();
 
         (brk, nop)
     };
@@ -168,15 +168,15 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         let a = body
             .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
-            .id();
+            .hash();
         let b = body
             .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
-            .id();
+            .hash();
         let c = body
             .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
-            .id();
+            .hash();
 
         (a, b, c)
     };
@@ -277,7 +277,7 @@ fn step_into_function() {
             .iter(fragments)
             .nth(2)
             .unwrap()
-            .id();
+            .hash();
         let a = fragments
             .find_function_by_name("f")
             .unwrap()
@@ -340,7 +340,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .iter(fragments)
             .nth(1)
             .unwrap()
-            .id();
+            .hash();
         let nop_in_f = fragments
             .find_function_by_name("f")
             .unwrap()
@@ -348,7 +348,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .iter(fragments)
             .next()
             .unwrap()
-            .id();
+            .hash();
 
         (nop_in_main, nop_in_f)
     };
@@ -397,7 +397,7 @@ fn step_out_of_main_function() {
             .iter(fragments)
             .next()
             .unwrap()
-            .id()
+            .hash()
     };
 
     debugger
@@ -445,11 +445,11 @@ fn step_over_function_call() {
         let f = body
             .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
-            .id();
+            .hash();
         let nop = body
             .find(|fragment| fragment.as_comment().is_none())
             .unwrap()
-            .id();
+            .hash();
 
         (f, nop)
     };
@@ -502,7 +502,7 @@ fn step_out_of_function() {
             .iter(fragments)
             .next()
             .unwrap()
-            .id();
+            .hash();
         let b = fragments
             .find_function_by_name("main")
             .unwrap()
@@ -510,7 +510,7 @@ fn step_out_of_function() {
             .iter(fragments)
             .nth(1)
             .unwrap()
-            .id();
+            .hash();
 
         (a, b)
     };

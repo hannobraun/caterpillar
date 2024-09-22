@@ -276,7 +276,7 @@ fn reconstruct_function(
             for fragment in code.fragments.iter_from(branch.start) {
                 match fragment.kind {
                     FragmentKind::Terminator => {}
-                    _ => tail_call = Some(fragment.id()),
+                    _ => tail_call = Some(fragment.hash()),
                 }
             }
 

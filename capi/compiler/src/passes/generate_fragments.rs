@@ -37,7 +37,7 @@ where
             location: FragmentLocation { parent, next: None },
             kind: FragmentKind::Terminator,
         };
-        let terminator_id = terminator.id();
+        let terminator_id = terminator.hash();
 
         fragments.insert(terminator_id, terminator);
 
@@ -47,9 +47,9 @@ where
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, parent, next, fragments);
 
-        next = fragment.id();
+        next = fragment.hash();
 
-        fragments.insert(fragment.id(), fragment);
+        fragments.insert(fragment.hash(), fragment);
     }
 
     next
@@ -272,7 +272,7 @@ mod tests {
         assert_eq!(branch_fragments[0].location.parent, next);
         assert_eq!(
             block_fragments[0].location.parent,
-            Some(branch_fragments[1].id())
+            Some(branch_fragments[1].hash())
         );
     }
 

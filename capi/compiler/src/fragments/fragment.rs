@@ -26,7 +26,7 @@ pub struct Fragment {
 }
 
 impl Fragment {
-    pub fn id(&self) -> Hash<Self> {
+    pub fn hash(&self) -> Hash<Self> {
         let hash = udigest::hash::<blake3::Hasher>(self).into();
         Hash {
             hash,

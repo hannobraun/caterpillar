@@ -51,7 +51,7 @@ impl FragmentMap {
             .values()
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Function { function } => {
-                    Some((fragment.id(), function))
+                    Some((fragment.hash(), function))
                 }
                 _ => None,
             })
@@ -86,7 +86,7 @@ impl FragmentMap {
 
             if let Some(previous) = previous {
                 // There's a previous fragment. Continue the search there.
-                fragment_id = previous.id();
+                fragment_id = previous.hash();
                 continue;
             }
 
@@ -97,7 +97,7 @@ impl FragmentMap {
                 .values()
                 .filter_map(|fragment| match &fragment.kind {
                     FragmentKind::Function { function } => {
-                        Some((fragment.id(), function))
+                        Some((fragment.hash(), function))
                     }
                     _ => None,
                 })

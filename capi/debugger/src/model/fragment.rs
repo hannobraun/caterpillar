@@ -24,7 +24,7 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let state = if Some(fragment.id()) == active_fragment {
+        let state = if Some(fragment.hash()) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
             } else {
@@ -35,7 +35,7 @@ impl DebugFragment {
         };
 
         let has_durable_breakpoint = source_map
-            .fragment_to_instructions(&fragment.id())
+            .fragment_to_instructions(&fragment.hash())
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
@@ -67,7 +67,7 @@ impl DebugFragment {
     }
 
     pub fn hash(&self) -> Hash<Fragment> {
-        self.data.fragment.id()
+        self.data.fragment.hash()
     }
 }
 
