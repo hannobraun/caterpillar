@@ -15,6 +15,19 @@ pub struct Hash<T> {
     pub(super) _t: PhantomData<T>,
 }
 
+impl<T> Hash<T> {
+    pub fn new(value: &T) -> Self
+    where
+        T: udigest::Digestable,
+    {
+        let hash = udigest::hash::<blake3::Hasher>(value).into();
+        Self {
+            hash,
+            _t: PhantomData,
+        }
+    }
+}
+
 impl<T> Clone for Hash<T> {
     fn clone(&self) -> Self {
         *self

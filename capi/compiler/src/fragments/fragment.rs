@@ -1,5 +1,3 @@
-use std::marker::PhantomData;
-
 use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
@@ -27,11 +25,7 @@ pub struct Fragment {
 
 impl Fragment {
     pub fn hash(&self) -> Hash<Self> {
-        let hash = udigest::hash::<blake3::Hasher>(self).into();
-        Hash {
-            hash,
-            _t: PhantomData,
-        }
+        Hash::new(self)
     }
 
     pub fn as_call_to_function<'r>(
