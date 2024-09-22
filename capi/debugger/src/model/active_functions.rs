@@ -305,12 +305,12 @@ fn reconstruct_function(
 }
 
 fn call_fragment_to_function_name(
-    id: Hash<Fragment>,
+    call_fragment: Hash<Fragment>,
     code: &Code,
 ) -> Option<String> {
     let fragment = code
         .fragments
-        .get(&id)
+        .get(&call_fragment)
         .expect("Fragment referenced by active function must exist.");
 
     let FragmentKind::CallToFunction { name, .. } = &fragment.kind else {
