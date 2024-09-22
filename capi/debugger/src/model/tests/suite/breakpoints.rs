@@ -181,9 +181,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .iter(fragments);
 
         array::from_fn(|_| {
-            body.find_map(|(_, fragment)| {
+            body.find_map(|(id, fragment)| {
                 if fragment.as_comment().is_none() {
-                    Some(fragment.hash())
+                    Some(id.this)
                 } else {
                     None
                 }
