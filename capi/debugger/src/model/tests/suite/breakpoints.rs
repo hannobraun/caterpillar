@@ -216,8 +216,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        b.this,
+            .data
+            .id,
+        b,
     );
     assert!(
         debugger
@@ -245,8 +246,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        c.this,
+            .data
+            .id,
+        c,
     );
 
     Ok(())
