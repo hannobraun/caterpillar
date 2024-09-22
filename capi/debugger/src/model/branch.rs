@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, FragmentId, Fragments},
+    fragments::{Branch, Fragments, Hash},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -18,7 +18,7 @@ pub struct DebugBranch {
 impl DebugBranch {
     pub fn new(
         branch: Branch,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<Hash>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
@@ -75,7 +75,7 @@ impl DebugBranch {
 
     pub fn fragment_after(
         &self,
-        id: &FragmentId,
+        id: &Hash,
     ) -> anyhow::Result<Option<&DebugFragment>> {
         if !self.body.iter().any(|fragment| fragment.id() == *id) {
             return Err(anyhow!(

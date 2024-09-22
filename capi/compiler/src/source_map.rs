@@ -2,21 +2,21 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::fragments::FragmentId;
+use crate::fragments::Hash;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentId>,
-    fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
+    instruction_to_fragment: BTreeMap<InstructionAddress, Hash>,
+    fragment_to_instructions: BTreeMap<Hash, Vec<InstructionAddress>>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
         instruction: InstructionAddress,
-        fragment: FragmentId,
+        fragment: Hash,
     ) {
         self.instruction_to_fragment.insert(instruction, fragment);
         self.fragment_to_instructions
@@ -32,7 +32,7 @@ impl SourceMap {
     pub fn instruction_to_fragment(
         &self,
         instruction: &InstructionAddress,
-    ) -> Option<FragmentId> {
+    ) -> Option<Hash> {
         self.instruction_to_fragment.get(instruction).cloned()
     }
 
@@ -42,7 +42,7 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        fragment: &FragmentId,
+        fragment: &Hash,
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 

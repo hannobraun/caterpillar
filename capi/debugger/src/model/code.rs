@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::fragments::FragmentId;
+use capi_compiler::fragments::Hash;
 use capi_protocol::updates::Code;
 use capi_runtime::{Instruction, InstructionAddress};
 
@@ -17,7 +17,7 @@ impl DebugCode {
 
     pub fn fragment_to_instruction(
         &self,
-        fragment: &FragmentId,
+        fragment: &Hash,
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map

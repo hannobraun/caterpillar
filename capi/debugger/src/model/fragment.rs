@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentId, FragmentKind, Fragments},
+    fragments::{Fragment, FragmentKind, Fragments, Hash},
     host::Host,
     source_map::SourceMap,
 };
@@ -17,7 +17,7 @@ pub struct DebugFragment {
 impl DebugFragment {
     pub fn new(
         fragment: Fragment,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<Hash>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
@@ -66,7 +66,7 @@ impl DebugFragment {
         Some(Self { kind, data })
     }
 
-    pub fn id(&self) -> FragmentId {
+    pub fn id(&self) -> Hash {
         self.data.fragment.id()
     }
 }
@@ -124,7 +124,7 @@ pub enum DebugFragmentKind {
 impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<Hash>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,

@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
+        Fragment, FragmentKind, FragmentMap, Fragments, Function, Hash,
         Parameters,
     },
     intrinsics::Intrinsic,
@@ -175,7 +175,7 @@ pub fn generate_instructions(
 }
 
 fn compile_context(
-    start: FragmentId,
+    start: Hash,
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
@@ -383,7 +383,7 @@ impl Output {
     fn generate_instruction(
         &mut self,
         instruction: Instruction,
-        fragment_id: FragmentId,
+        fragment_id: Hash,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
         self.source_map.define_mapping(addr, fragment_id);
@@ -393,7 +393,7 @@ impl Output {
     fn generate_binding<'r, N>(
         &mut self,
         names: N,
-        fragment_id: FragmentId,
+        fragment_id: Hash,
     ) -> Option<InstructionAddress>
     where
         N: IntoIterator<Item = &'r String>,
@@ -415,18 +415,18 @@ impl Output {
 
 pub struct CallToFunction {
     pub name: String,
-    pub id: FragmentId,
+    pub id: Hash,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
 
 #[derive(Default)]
 struct Functions {
-    by_id: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
+    by_id: BTreeMap<Hash, Vec<(Parameters, InstructionAddress)>>,
 }
 
 struct CompileUnit {
-    id: FragmentId,
+    id: Hash,
     function: Function,
     address: Option<InstructionAddress>,
 }

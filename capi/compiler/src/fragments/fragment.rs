@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
 
-use super::{FoundFunction, FragmentId, FragmentMap, Function};
+use super::{FoundFunction, FragmentMap, Function, Hash};
 
 /// # A content-addressed piece of code
 #[derive(
@@ -22,9 +22,9 @@ pub struct Fragment {
 }
 
 impl Fragment {
-    pub fn id(&self) -> FragmentId {
+    pub fn id(&self) -> Hash {
         let hash = udigest::hash::<blake3::Hasher>(self).into();
-        FragmentId { hash }
+        Hash { hash }
     }
 
     pub fn as_call_to_function<'r>(
@@ -84,7 +84,7 @@ pub struct FragmentLocation {
     /// Function fragments always have a `next` fragment that can be used in
     /// this way. This is that reason that terminators exist, to make sure of
     /// that.
-    pub parent: Option<FragmentId>,
+    pub parent: Option<Hash>,
 
     /// # The next fragment within the fragment's context
     ///
@@ -94,7 +94,7 @@ pub struct FragmentLocation {
     /// or a terminator.
     ///
     /// Might be `None`, if the fragment is a terminator.
-    pub next: Option<FragmentId>,
+    pub next: Option<Hash>,
 }
 
 #[derive(

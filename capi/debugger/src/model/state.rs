@@ -1,4 +1,4 @@
-use capi_compiler::fragments::FragmentId;
+use capi_compiler::fragments::Hash;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
     host_state::HostState,
@@ -240,8 +240,8 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        origin: &FragmentId,
-        targets: Vec<FragmentId>,
+        origin: &Hash,
+        targets: Vec<Hash>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;

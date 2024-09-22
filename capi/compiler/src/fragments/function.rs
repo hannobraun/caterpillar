@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::syntax::Pattern;
 
-use super::{Fragment, FragmentId, FragmentMap};
+use super::{Fragment, Hash, FragmentMap};
 
 #[derive(
     Clone,
@@ -81,7 +81,7 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Parameters,
-    pub start: FragmentId,
+    pub start: Hash,
 }
 
 impl Branch {
