@@ -275,10 +275,10 @@ fn reconstruct_function(
         if let Some(branch) = function.branches.first() {
             let mut tail_call = None;
 
-            for (_, fragment) in code.fragments.iter_from(branch.start) {
+            for (id, fragment) in code.fragments.iter_from(branch.start) {
                 match fragment.kind {
                     FragmentKind::Terminator => {}
-                    _ => tail_call = Some(fragment.hash()),
+                    _ => tail_call = Some(id.this),
                 }
             }
 
