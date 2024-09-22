@@ -386,7 +386,7 @@ impl Output {
         fragment: FragmentId,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
-        self.source_map.define_mapping(addr, fragment.this);
+        self.source_map.define_mapping(addr, fragment);
         addr
     }
 

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::fragments::{Fragment, Hash};
+use crate::fragments::{Fragment, FragmentId, Hash};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -16,11 +16,12 @@ impl SourceMap {
     pub fn define_mapping(
         &mut self,
         instruction: InstructionAddress,
-        fragment: Hash<Fragment>,
+        fragment: FragmentId,
     ) {
-        self.instruction_to_fragment.insert(instruction, fragment);
+        self.instruction_to_fragment
+            .insert(instruction, fragment.this);
         self.fragment_to_instructions
-            .entry(fragment)
+            .entry(fragment.this)
             .or_default()
             .push(instruction);
     }
