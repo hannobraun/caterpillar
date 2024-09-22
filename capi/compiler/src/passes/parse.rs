@@ -92,7 +92,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                     value: value.into(),
                 });
             }
-            Token::BranchHeadBoundary => {
+            Token::BranchBodyStart => {
                 break;
             }
             token => {

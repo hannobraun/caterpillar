@@ -10,7 +10,7 @@ fn replace_single_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     main
@@ -22,7 +22,7 @@ fn replace_single_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     2 send
                     main
@@ -42,7 +42,7 @@ fn replace_block_of_instructions() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     main
@@ -54,7 +54,7 @@ fn replace_block_of_instructions() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     1 send
                     2 send
                     main
@@ -74,7 +74,7 @@ fn add_additional_instructions_after_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     main
                 }
@@ -85,7 +85,7 @@ fn add_additional_instructions_after_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     main
@@ -106,7 +106,7 @@ fn add_additional_instructions_before_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     1 send
                     2 send
                     main
@@ -118,7 +118,7 @@ fn add_additional_instructions_before_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     2 send
@@ -139,7 +139,7 @@ fn remove_instructions_after_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     2 send
@@ -152,7 +152,7 @@ fn remove_instructions_after_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     2 send
                     main
@@ -173,7 +173,7 @@ fn remove_instructions_before_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     0 send
                     1 send
                     2 send
@@ -187,7 +187,7 @@ fn remove_instructions_before_current_instruction() {
     runtime
         .update_code(
             r"
-                main: { \ |
+                main: { \ ->
                     1 send
                     2 send
                     main
