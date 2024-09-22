@@ -185,10 +185,7 @@ mod tests {
         let branch = branches.remove(0);
         let body = fragments
             .iter_from(branch.start)
-            .filter_map(|fragment| match &fragment.kind {
-                FragmentKind::Terminator => None,
-                payload => Some(payload.clone()),
-            })
+            .map(|fragment| fragment.kind.clone())
             .collect::<Vec<_>>();
 
         assert_eq!(
@@ -196,6 +193,7 @@ mod tests {
             [
                 FragmentKind::Value(Value(1i32.to_le_bytes())),
                 FragmentKind::Value(Value(1i32.to_le_bytes())),
+                FragmentKind::Terminator,
             ]
         );
     }
