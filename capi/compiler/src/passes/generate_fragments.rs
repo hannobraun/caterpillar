@@ -95,7 +95,7 @@ fn compile_expression(
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
-    let payload = match expression {
+    let fragment = match expression {
         syntax::Expression::Comment { text } => FragmentKind::Comment { text },
         syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
@@ -139,7 +139,7 @@ fn compile_expression(
             parent,
             next: Some(next),
         },
-        kind: payload,
+        kind: fragment,
     }
 }
 
