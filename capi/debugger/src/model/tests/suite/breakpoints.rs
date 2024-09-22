@@ -170,7 +170,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         ",
     );
 
-    let (a, b, c) = {
+    let [a, b, c] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .find_function_by_name("main")
@@ -192,7 +192,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .unwrap()
             .hash();
 
-        (a, b, c)
+        [a, b, c]
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
