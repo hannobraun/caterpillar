@@ -109,9 +109,9 @@ fn step_over_brk() -> anyhow::Result<()> {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment);
+            .map(|(id, _)| id);
 
-        array::from_fn(|_| body.next().unwrap().hash())
+        array::from_fn(|_| body.next().unwrap().this)
     };
 
     assert_eq!(
