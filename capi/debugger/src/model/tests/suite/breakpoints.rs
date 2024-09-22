@@ -181,13 +181,11 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .iter(fragments)
             .map(|(_, fragment)| fragment);
 
-        let [a, b, c] = array::from_fn(|_| {
+        array::from_fn(|_| {
             body.find(|fragment| fragment.as_comment().is_none())
                 .unwrap()
                 .hash()
-        });
-
-        [a, b, c]
+        })
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
