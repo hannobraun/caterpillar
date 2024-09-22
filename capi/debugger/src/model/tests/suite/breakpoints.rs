@@ -457,7 +457,7 @@ fn step_over_function_call() {
             .expect_one_branch()
             .iter(fragments);
 
-        let [f, nop] = array::from_fn(|_| {
+        array::from_fn(|_| {
             body.find_map(|(id, fragment)| {
                 if fragment.as_comment().is_none() {
                     Some(id)
@@ -466,9 +466,7 @@ fn step_over_function_call() {
                 }
             })
             .unwrap()
-        });
-
-        [f, nop]
+        })
     };
 
     debugger
