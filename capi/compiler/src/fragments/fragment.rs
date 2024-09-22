@@ -52,7 +52,10 @@ impl Fragment {
     }
 }
 
-/// # The location of a fragment within the code
+/// # A unique identifier for a fragment
+///
+/// A fragment is identified by its contents, but also by its position within
+/// the code.
 #[derive(
     Clone,
     Copy,
@@ -69,7 +72,7 @@ pub struct FragmentId {
     /// # The fragment's parent
     ///
     /// Refers to the fragment's parent fragment. If the fragment resides in the
-    /// root context, then is has no parent.
+    /// root context, then it has no parent.
     ///
     /// All other fragments have a parent. By convention, this is the fragment
     /// _after_ the function that the fragment resides in (i.e. the `next`
@@ -91,15 +94,15 @@ pub struct FragmentId {
 
     /// # The next fragment within the fragment's context
     ///
-    /// Every fragment resides in a context, either a function or the root
-    /// context. Every payload-carrying fragment has a fragment that follows it
+    /// Every fragment resides in a context, either the root context or a
+    /// function. Every payload-carrying fragment has a fragment that follows it
     /// within that context, which is either another payload-carrying fragment,
     /// or a terminator.
     ///
     /// Might be `None`, if the fragment is a terminator.
     pub next: Option<Hash<FragmentId>>,
 
-    /// # The fragment at this location
+    /// # The fragment itself
     pub this: Hash<Fragment>,
 }
 
