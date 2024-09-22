@@ -51,10 +51,6 @@ impl Fragment {
         FragmentId { hash }
     }
 
-    pub fn next(&self) -> Option<FragmentId> {
-        self.next
-    }
-
     pub fn as_call_to_function<'r>(
         &self,
         fragments: &'r FragmentMap,
