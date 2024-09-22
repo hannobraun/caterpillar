@@ -458,14 +458,11 @@ fn step_over_function_call() {
             .iter(fragments)
             .map(|(_, fragment)| fragment);
 
-        let f = body
-            .find(|fragment| fragment.as_comment().is_none())
-            .unwrap()
-            .hash();
-        let nop = body
-            .find(|fragment| fragment.as_comment().is_none())
-            .unwrap()
-            .hash();
+        let [f, nop] = array::from_fn(|_| {
+            body.find(|fragment| fragment.as_comment().is_none())
+                .unwrap()
+                .hash()
+        });
 
         [f, nop]
     };
