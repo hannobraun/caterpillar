@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentId, FragmentKind, Fragments, Hash},
+    fragments::{Fragment, FragmentId, FragmentKind, Fragments},
     host::Host,
     source_map::SourceMap,
 };
@@ -19,14 +19,14 @@ impl DebugFragment {
     pub fn new(
         id: FragmentId,
         fragment: Fragment,
-        active_fragment: Option<Hash<Fragment>>,
+        active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let state = if Some(id.this) == active_fragment {
+        let state = if Some(id) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
             } else {
@@ -126,7 +126,7 @@ pub enum DebugFragmentKind {
 impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
-        active_fragment: Option<Hash<Fragment>>,
+        active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,

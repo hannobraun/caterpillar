@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, Fragment, FragmentId, Fragments, Hash},
+    fragments::{Branch, FragmentId, Fragments},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -18,7 +18,7 @@ pub struct DebugBranch {
 impl DebugBranch {
     pub fn new(
         branch: Branch,
-        active_fragment: Option<Hash<Fragment>>,
+        active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,

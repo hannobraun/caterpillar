@@ -92,7 +92,7 @@ impl ActiveFunctions {
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
                     function,
-                    Some(active_fragment.this),
+                    Some(active_fragment),
                     active_instructions.is_empty(),
                     &code.fragments,
                     &code.source_map,
@@ -293,7 +293,7 @@ fn reconstruct_function(
 
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
-        tail_call.map(|id| id.this),
+        tail_call,
         false,
         &code.fragments,
         &code.source_map,
