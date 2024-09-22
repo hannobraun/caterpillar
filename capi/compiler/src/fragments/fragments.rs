@@ -100,7 +100,7 @@ impl FragmentMap {
             // If there's no previous fragment, this might be the first fragment
             // in a branch of a function.
             let function = self
-                .fragments_by_hash
+                .fragments_by_id
                 .values()
                 .filter_map(|fragment| match &fragment.kind {
                     FragmentKind::Function { function } => {
