@@ -103,9 +103,7 @@ impl FragmentMap {
                 .fragments_by_id
                 .iter()
                 .filter_map(|(id, fragment)| match &fragment.kind {
-                    FragmentKind::Function { function } => {
-                        Some((id.this, function))
-                    }
+                    FragmentKind::Function { function } => Some((id, function)),
                     _ => None,
                 })
                 .find_map(|(hash, function)| {
@@ -113,7 +111,7 @@ impl FragmentMap {
                         .branches
                         .iter()
                         .find(|branch| branch.start.this == current_fragment)?;
-                    Some((hash, function, branch))
+                    Some((hash.this, function, branch))
                 });
 
             if let Some((hash, function, branch)) = function {
