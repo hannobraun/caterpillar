@@ -194,7 +194,7 @@ pub struct FragmentId {
 
 impl FragmentId {
     /// # Compute the hash of this location
-    pub fn hash(&self) -> Hash<Self> {
+    pub(crate) fn hash(&self) -> Hash<Self> {
         Hash::new(self)
     }
 }
