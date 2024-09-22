@@ -32,12 +32,12 @@ impl DerefMut for Fragments {
 pub struct FragmentMap {
     fragments_by_hash: BTreeMap<Hash<Fragment>, Fragment>,
     fragments_by_id: BTreeMap<FragmentId, Fragment>,
-    locations_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
+    ids_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
 }
 
 impl FragmentMap {
     pub fn insert(&mut self, location: FragmentId, fragment: Fragment) {
-        self.locations_by_hash.insert(location.hash(), location);
+        self.ids_by_hash.insert(location.hash(), location);
         self.fragments_by_id.insert(location, fragment.clone());
         self.fragments_by_hash.insert(fragment.hash(), fragment);
     }
