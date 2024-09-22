@@ -43,7 +43,7 @@ pub fn generate_instructions(
 
     while let Some(unit) = queue.pop_front() {
         let CompileUnit {
-            hash: id,
+            hash,
             function,
             address,
         } = unit;
@@ -64,7 +64,7 @@ pub fn generate_instructions(
                         }
                     }
                 });
-            let bindings_address = output.generate_binding(parameters, id);
+            let bindings_address = output.generate_binding(parameters, hash);
 
             let context_address = compile_context(
                 branch.start,
@@ -76,7 +76,7 @@ pub fn generate_instructions(
             let address = bindings_address.unwrap_or(context_address);
             functions
                 .by_hash
-                .entry(id)
+                .entry(hash)
                 .or_default()
                 .push((branch.parameters.clone(), address));
 
