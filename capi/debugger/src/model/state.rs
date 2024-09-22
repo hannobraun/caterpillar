@@ -115,7 +115,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.hash(),
+                                &origin.data.id.this,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -132,7 +132,11 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
+                self.step_or_continue(
+                    &origin.data.id.this,
+                    targets,
+                    &mut commands,
+                )?;
             }
             UserAction::StepOut => {
                 let entries = transient.active_functions.entries()?;
@@ -157,7 +161,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.hash(),
+                                &origin.data.id.this,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -174,7 +178,11 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
+                self.step_or_continue(
+                    &origin.data.id.this,
+                    targets,
+                    &mut commands,
+                )?;
             }
             UserAction::StepOver => {
                 let entries = transient.active_functions.entries()?;
@@ -198,7 +206,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.hash(),
+                                &origin.data.id.this,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -215,7 +223,11 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(&origin.hash(), targets, &mut commands)?;
+                self.step_or_continue(
+                    &origin.data.id.this,
+                    targets,
+                    &mut commands,
+                )?;
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
