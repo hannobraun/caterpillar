@@ -85,7 +85,7 @@ fn compile_function(
             parameters: Parameters {
                 inner: branch.parameters,
             },
-            start: start.this,
+            start,
         });
     }
 
@@ -193,7 +193,7 @@ mod tests {
         };
         let branch = branches.remove(0);
         let body = fragments
-            .iter_from(branch.start)
+            .iter_from(branch.start.this)
             .map(|fragment| fragment.kind.clone())
             .collect::<Vec<_>>();
 
@@ -229,7 +229,8 @@ mod tests {
             unreachable!("`f` must be the root element.");
         };
         let branch = branches.remove(0);
-        let last_fragment = fragments.iter_from(branch.start).last().unwrap();
+        let last_fragment =
+            fragments.iter_from(branch.start.this).last().unwrap();
         assert_eq!(last_fragment.kind, FragmentKind::Terminator);
     }
 
@@ -264,7 +265,7 @@ mod tests {
         };
         let branch = branches.remove(0);
         let branch_fragments =
-            fragments.iter_from(branch.start).collect::<Vec<_>>();
+            fragments.iter_from(branch.start.this).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
                 kind: FragmentKind::Function { function },
@@ -276,7 +277,7 @@ mod tests {
 
             let branch = function.branches.first().unwrap();
 
-            fragments.iter_from(branch.start).collect::<Vec<_>>()
+            fragments.iter_from(branch.start.this).collect::<Vec<_>>()
         };
 
         assert_eq!(branch_fragments[0].parent, next);

@@ -305,7 +305,7 @@ fn step_into_function() {
             .expect_leaf("f")
             .active_fragment()
             .hash(),
-        a,
+        a.this,
     );
 }
 

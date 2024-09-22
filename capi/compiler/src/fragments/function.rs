@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::syntax::Pattern;
 
-use super::{Fragment, FragmentMap, Hash};
+use super::{Fragment, FragmentId, FragmentMap};
 
 #[derive(
     Clone,
@@ -85,7 +85,7 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Parameters,
-    pub start: Hash<Fragment>,
+    pub start: FragmentId,
 }
 
 impl Branch {
@@ -94,7 +94,7 @@ impl Branch {
         &self,
         fragments: &'r FragmentMap,
     ) -> impl Iterator<Item = &'r Fragment> {
-        fragments.iter_from(self.start)
+        fragments.iter_from(self.start.this)
     }
 }
 

@@ -35,7 +35,7 @@ impl DebugBranch {
             })
             .collect();
         let body = fragments
-            .iter_from(branch.start)
+            .iter_from(branch.start.this)
             .cloned()
             .filter_map(|fragment| {
                 DebugFragment::new(

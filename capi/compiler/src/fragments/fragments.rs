@@ -111,7 +111,7 @@ impl FragmentMap {
                     let branch = function
                         .branches
                         .iter()
-                        .find(|branch| branch.start == current_fragment)?;
+                        .find(|branch| branch.start.this == current_fragment)?;
                     Some((hash, function, branch))
                 });
 
