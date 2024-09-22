@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::fragments::{Fragment, Hash};
+use capi_compiler::fragments::FragmentId;
 use capi_protocol::updates::Code;
 use capi_runtime::{Instruction, InstructionAddress};
 
@@ -17,11 +17,11 @@ impl DebugCode {
 
     pub fn fragment_to_instruction(
         &self,
-        fragment: &Hash<Fragment>,
+        fragment: &FragmentId,
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map
-            .fragment_to_instructions(fragment)
+            .fragment_to_instructions(&fragment.this)
             .first()
             .copied()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))

@@ -46,8 +46,7 @@ impl PersistentState {
         match action {
             UserAction::BreakpointClear { fragment, .. } => {
                 let code = self.code.get()?;
-                let address =
-                    self.code.fragment_to_instruction(&fragment.this)?;
+                let address = self.code.fragment_to_instruction(&fragment)?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -57,8 +56,7 @@ impl PersistentState {
             }
             UserAction::BreakpointSet { fragment, .. } => {
                 let code = self.code.get()?;
-                let address =
-                    self.code.fragment_to_instruction(&fragment.this)?;
+                let address = self.code.fragment_to_instruction(&fragment)?;
 
                 self.breakpoints.set_durable(address);
 
@@ -249,7 +247,7 @@ impl PersistentState {
         targets: Vec<FragmentId>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
-        let origin = self.code.fragment_to_instruction(&origin.this)?;
+        let origin = self.code.fragment_to_instruction(origin)?;
         let code = self.code.get()?;
 
         // Whatever happens next, any ephemeral breakpoints that were used to
@@ -270,7 +268,7 @@ impl PersistentState {
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
         for target in targets {
-            let target = self.code.fragment_to_instruction(&target.this)?;
+            let target = self.code.fragment_to_instruction(&target)?;
             self.breakpoints.set_ephemeral(target);
         }
 
