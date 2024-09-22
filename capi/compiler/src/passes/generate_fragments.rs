@@ -39,15 +39,13 @@ where
             kind: FragmentKind::Terminator,
         };
         let terminator_hash = terminator.hash();
+        let location = FragmentLocation {
+            parent,
+            next: None,
+            here: terminator.hash(),
+        };
 
-        fragments.insert(
-            FragmentLocation {
-                parent,
-                next: None,
-                here: terminator.hash(),
-            },
-            terminator,
-        );
+        fragments.insert(location, terminator);
 
         terminator_hash
     };
