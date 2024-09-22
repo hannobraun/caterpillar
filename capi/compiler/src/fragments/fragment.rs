@@ -100,7 +100,7 @@ pub struct FragmentId {
     pub next: Option<Hash<FragmentId>>,
 
     /// # The fragment at this location
-    pub here: Hash<Fragment>,
+    pub this: Hash<Fragment>,
 }
 
 impl FragmentId {

@@ -34,14 +34,14 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent: parent.map(|id| id.here),
+            parent: parent.map(|id| id.this),
             next: None,
             kind: FragmentKind::Terminator,
         };
         let id = FragmentId {
-            parent: parent.map(|id| id.here),
+            parent: parent.map(|id| id.this),
             next: None,
-            here: terminator.hash(),
+            this: terminator.hash(),
         };
 
         fragments.insert(id, terminator);
@@ -52,14 +52,14 @@ where
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(
             expression,
-            parent.map(|id| id.here),
+            parent.map(|id| id.this),
             next,
             fragments,
         );
         let id = FragmentId {
             parent: fragment.parent,
             next: Some(next.hash()),
-            here: fragment.hash(),
+            this: fragment.hash(),
         };
 
         fragments.insert(id, fragment);
@@ -67,7 +67,7 @@ where
         next = id;
     }
 
-    next.here
+    next.this
 }
 
 fn compile_function(
@@ -91,7 +91,7 @@ fn compile_function(
 
     Fragment {
         parent,
-        next: Some(next.here),
+        next: Some(next.this),
         kind: FragmentKind::Function {
             function: Function {
                 name: function.name,
@@ -149,7 +149,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        next: Some(next.here),
+        next: Some(next.this),
         kind: fragment,
     }
 }
