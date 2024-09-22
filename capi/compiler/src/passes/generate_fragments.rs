@@ -179,7 +179,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root.this)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
@@ -216,7 +216,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root.this)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
@@ -249,7 +249,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root.this)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             next,
