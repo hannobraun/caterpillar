@@ -1,4 +1,4 @@
-use capi_compiler::fragments::{Fragment, Hash};
+use capi_compiler::fragments::{Fragment, FragmentId, Hash};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
     host_state::HostState,
@@ -75,8 +75,7 @@ impl PersistentState {
                     .active_branch()?
                     .active_fragment()?
                     .data
-                    .id
-                    .this;
+                    .id;
                 let targets = Vec::new();
 
                 self.step_or_continue(&origin, targets, &mut commands)?;
@@ -115,7 +114,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.data.id.this,
+                                &origin.data.id,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -132,11 +131,7 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(
-                    &origin.data.id.this,
-                    targets,
-                    &mut commands,
-                )?;
+                self.step_or_continue(&origin.data.id, targets, &mut commands)?;
             }
             UserAction::StepOut => {
                 let entries = transient.active_functions.entries()?;
@@ -161,7 +156,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.data.id.this,
+                                &origin.data.id,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -178,11 +173,7 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(
-                    &origin.data.id.this,
-                    targets,
-                    &mut commands,
-                )?;
+                self.step_or_continue(&origin.data.id, targets, &mut commands)?;
             }
             UserAction::StepOver => {
                 let entries = transient.active_functions.entries()?;
@@ -206,7 +197,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &origin.data.id.this,
+                                &origin.data.id,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -223,11 +214,7 @@ impl PersistentState {
                     }
                 };
 
-                self.step_or_continue(
-                    &origin.data.id.this,
-                    targets,
-                    &mut commands,
-                )?;
+                self.step_or_continue(&origin.data.id, targets, &mut commands)?;
             }
             UserAction::Stop => {
                 commands.push(Command::Stop);
@@ -258,11 +245,11 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        origin: &Hash<Fragment>,
+        origin: &FragmentId,
         targets: Vec<Hash<Fragment>>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
-        let origin = self.code.fragment_to_instruction(origin)?;
+        let origin = self.code.fragment_to_instruction(&origin.this)?;
         let code = self.code.get()?;
 
         // Whatever happens next, any ephemeral breakpoints that were used to
