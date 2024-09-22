@@ -108,17 +108,20 @@ impl FragmentMap {
                     Some((hash, function, branch))
                 });
 
-            if let Some((id, function, branch)) = function {
+            if let Some((hash, function, branch)) = function {
                 // We have found a function!
 
                 if function.name.is_some() {
                     // It's a named function! Exactly what we've been looking
                     // for.
-                    return Some((FoundFunction { id, function }, branch));
+                    return Some((
+                        FoundFunction { id: hash, function },
+                        branch,
+                    ));
                 } else {
                     // An anonymous function. Let's continue our search in the
                     // context where it was defined.
-                    current_fragment = id;
+                    current_fragment = hash;
                     continue;
                 }
             }
