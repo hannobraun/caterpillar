@@ -131,9 +131,7 @@ impl DebugFragmentKind {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let payload = fragment.kind;
-
-        let kind = match payload {
+        let kind = match fragment.kind {
             FragmentKind::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
             }
