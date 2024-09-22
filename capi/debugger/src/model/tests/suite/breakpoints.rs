@@ -343,8 +343,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .iter(fragments)
             .map(|(id, _)| id)
             .nth(1)
-            .unwrap()
-            .this;
+            .unwrap();
         let nop_in_f = fragments
             .find_function_by_name("f")
             .unwrap()
@@ -372,7 +371,8 @@ fn step_out_of_function_if_at_last_fragment() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
+            .data
+            .id,
         nop_in_main,
     );
 }
