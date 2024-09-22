@@ -4,7 +4,6 @@ pub fn tokenize(source: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r"{", Token::FunctionStart),
         (r"}", Token::FunctionEnd),
-        (r"|", Token::BranchHeadBoundary),
         (r"\", Token::BranchStart),
         (r"->", Token::BranchBodyStart),
     ];
@@ -65,7 +64,6 @@ pub enum Token {
     FunctionName { name: String },
     FunctionStart,
     FunctionEnd,
-    BranchHeadBoundary,
 
     BranchStart,
     BranchBodyStart,
