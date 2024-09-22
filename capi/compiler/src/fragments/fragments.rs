@@ -53,7 +53,7 @@ impl FragmentMap {
     }
 
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.fragments_by_hash
+        self.fragments_by_id
             .values()
             .filter_map(|fragment| match &fragment.kind {
                 FragmentKind::Function { function } => {
