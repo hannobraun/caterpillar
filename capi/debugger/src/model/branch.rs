@@ -94,7 +94,7 @@ impl DebugBranch {
         let mut fragments = self
             .body
             .iter()
-            .skip_while(|fragment| fragment.hash() != *hash);
+            .skip_while(|fragment| fragment.data.id.this != *hash);
 
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
