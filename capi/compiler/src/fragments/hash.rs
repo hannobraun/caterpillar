@@ -11,8 +11,8 @@ use std::marker::PhantomData;
     udigest::Digestable,
 )]
 pub struct Hash<T> {
-    pub(super) hash: [u8; 32],
-    pub(super) _t: PhantomData<T>,
+    hash: [u8; 32],
+    _t: PhantomData<T>,
 }
 
 impl<T> Hash<T> {
