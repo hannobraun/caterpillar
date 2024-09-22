@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentKind, FragmentMap, Fragments, Function, Hash,
-        Parameters,
+        Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
+        Hash, Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -39,7 +39,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    compile_context(fragments.root.this, &fragments, &mut output, &mut queue);
+    compile_context(fragments.root, &fragments, &mut output, &mut queue);
 
     while let Some(unit) = queue.pop_front() {
         let CompileUnit {
@@ -67,7 +67,7 @@ pub fn generate_instructions(
             let bindings_address = output.generate_binding(parameters, hash);
 
             let context_address = compile_context(
-                branch.start.this,
+                branch.start,
                 &fragments,
                 &mut output,
                 &mut queue,
@@ -175,14 +175,14 @@ pub fn generate_instructions(
 }
 
 fn compile_context(
-    start: Hash<Fragment>,
+    start: FragmentId,
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
 ) -> InstructionAddress {
     let mut first_instruction = None;
 
-    for fragment in fragments.iter_from(start) {
+    for fragment in fragments.iter_from(start.this) {
         let addr = compile_fragment(fragment, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
