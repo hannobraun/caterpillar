@@ -34,7 +34,6 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            next: None,
             kind: FragmentKind::Terminator,
         };
         let id = FragmentId {
@@ -83,7 +82,6 @@ fn compile_function(
     }
 
     Fragment {
-        next: Some(next.this),
         kind: FragmentKind::Function {
             function: Function {
                 name: function.name,
@@ -138,8 +136,5 @@ fn compile_expression(
         syntax::Expression::Value(value) => FragmentKind::Value(value),
     };
 
-    Fragment {
-        next: Some(next.this),
-        kind: fragment,
-    }
+    Fragment { kind: fragment }
 }
