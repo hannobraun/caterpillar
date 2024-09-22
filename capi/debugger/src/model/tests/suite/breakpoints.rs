@@ -182,9 +182,14 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .map(|(_, fragment)| fragment);
 
         array::from_fn(|_| {
-            body.find(|fragment| fragment.as_comment().is_none())
-                .unwrap()
-                .hash()
+            body.find_map(|fragment| {
+                if fragment.as_comment().is_none() {
+                    Some(fragment.hash())
+                } else {
+                    None
+                }
+            })
+            .unwrap()
         })
     };
 
