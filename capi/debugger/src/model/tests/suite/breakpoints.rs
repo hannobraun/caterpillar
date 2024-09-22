@@ -360,14 +360,15 @@ fn step_out_of_function_if_at_last_fragment() {
             .iter(fragments)
             .map(|(id, _)| id)
             .next()
-            .unwrap()
-            .this;
+            .unwrap();
 
         (nop_in_main, nop_in_f)
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: nop_in_f })
+        .on_user_action(UserAction::BreakpointSet {
+            fragment: nop_in_f.this,
+        })
         .unwrap();
 
     debugger.run_program();
