@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
         Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
-        Function, Hash, Parameters,
+        Function, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -49,12 +49,7 @@ where
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(
-            expression,
-            parent.map(|id| id.this),
-            next,
-            fragments,
-        );
+        let fragment = compile_expression(expression, next, fragments);
         let id = FragmentId {
             parent: parent.map(|id| id.hash()),
             next: Some(next.hash()),
@@ -71,7 +66,6 @@ where
 
 fn compile_function(
     function: syntax::Function,
-    _: Option<Hash<Fragment>>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -102,14 +96,13 @@ fn compile_function(
 
 fn compile_expression(
     expression: syntax::Expression,
-    parent: Option<Hash<Fragment>>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let fragment = match expression {
         syntax::Expression::Comment { text } => FragmentKind::Comment { text },
         syntax::Expression::Function { function } => {
-            return compile_function(function, parent, next, fragments);
+            return compile_function(function, next, fragments);
         }
         syntax::Expression::Identifier {
             name,
