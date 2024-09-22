@@ -56,7 +56,7 @@ impl FragmentMap {
         self.fragments_by_id
             .iter()
             .filter_map(|(id, fragment)| match &fragment.kind {
-                FragmentKind::Function { function } => Some((id, function)),
+                FragmentKind::Function { function } => Some((*id, function)),
                 _ => None,
             })
             .find_map(|(id, function)| {
