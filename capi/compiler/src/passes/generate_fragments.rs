@@ -39,7 +39,7 @@ where
             kind: FragmentKind::Terminator,
         };
         let id = FragmentId {
-            parent: parent.map(|id| id.this),
+            parent: parent.map(|id| id.hash()),
             next: None,
             this: terminator.hash(),
         };
@@ -57,7 +57,7 @@ where
             fragments,
         );
         let id = FragmentId {
-            parent: parent.map(|id| id.this),
+            parent: parent.map(|id| id.hash()),
             next: Some(next.hash()),
             this: fragment.hash(),
         };
