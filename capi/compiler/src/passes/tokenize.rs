@@ -6,6 +6,7 @@ pub fn tokenize(source: &str) -> Vec<Token> {
         (r"}", Token::FunctionEnd),
         (r"|", Token::BranchHeadBoundary),
         (r"\", Token::BranchStart),
+        (r"->", Token::BranchBodyStart),
     ];
 
     let mut state = State::Initial;
@@ -67,6 +68,7 @@ pub enum Token {
     BranchHeadBoundary,
 
     BranchStart,
+    BranchBodyStart,
 
     Identifier { name: String },
     IntegerLiteral { value: i32 },
