@@ -4,7 +4,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{Branch, Fragment, FragmentId, Function, Hash};
+use super::{hash::Hash, Branch, Fragment, FragmentId, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {

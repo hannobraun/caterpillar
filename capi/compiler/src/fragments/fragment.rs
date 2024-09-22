@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
 
-use super::{FoundFunction, FragmentMap, Function, Hash};
+use super::{hash::Hash, FoundFunction, FragmentMap, Function};
 
 /// # A content-addressed piece of code
 #[derive(
