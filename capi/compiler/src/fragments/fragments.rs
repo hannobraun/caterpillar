@@ -56,14 +56,15 @@ impl FragmentMap {
         self.fragments_by_id
             .iter()
             .filter_map(|(id, fragment)| match &fragment.kind {
-                FragmentKind::Function { function } => {
-                    Some((id.this, function))
-                }
+                FragmentKind::Function { function } => Some((id, function)),
                 _ => None,
             })
             .find_map(|(hash, function)| {
                 if function.name.as_deref() == Some(name) {
-                    Some(FoundFunction { hash, function })
+                    Some(FoundFunction {
+                        hash: hash.this,
+                        function,
+                    })
                 } else {
                     None
                 }
