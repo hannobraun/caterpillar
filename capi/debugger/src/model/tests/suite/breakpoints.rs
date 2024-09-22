@@ -341,10 +341,10 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .nth(1)
             .unwrap()
-            .hash();
+            .this;
         let nop_in_f = fragments
             .find_function_by_name("f")
             .unwrap()
