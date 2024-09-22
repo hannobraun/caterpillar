@@ -17,7 +17,7 @@ pub struct DebugFragment {
 impl DebugFragment {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        _: FragmentId,
+        id: FragmentId,
         fragment: Fragment,
         active_fragment: Option<Hash<Fragment>>,
         is_in_innermost_active_function: bool,
@@ -50,6 +50,7 @@ impl DebugFragment {
         });
 
         let data = DebugFragmentData {
+            id,
             fragment: fragment.clone(),
             state,
             has_durable_breakpoint,
@@ -75,6 +76,9 @@ impl DebugFragment {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragmentData {
+    /// # The ID of the fragment that the `DebugFragment` was built from
+    pub id: FragmentId,
+
     /// # The fragment that the `DebugFragment` was built from
     pub fragment: Fragment,
 
