@@ -34,15 +34,16 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            location: FragmentLocation { parent, next: None },
+            parent,
+            next: None,
             kind: FragmentKind::Terminator,
         };
         let terminator_id = terminator.hash();
 
         fragments.insert(
             FragmentLocation {
-                parent: terminator.location.parent,
-                next: terminator.location.next,
+                parent: terminator.parent,
+                next: terminator.next,
             },
             terminator,
         );
@@ -57,8 +58,8 @@ where
 
         fragments.insert(
             FragmentLocation {
-                parent: fragment.location.parent,
-                next: fragment.location.next,
+                parent: fragment.parent,
+                next: fragment.next,
             },
             fragment,
         );
@@ -87,10 +88,8 @@ fn compile_function(
     }
 
     Fragment {
-        location: FragmentLocation {
-            parent,
-            next: Some(next),
-        },
+        parent,
+        next: Some(next),
         kind: FragmentKind::Function {
             function: Function {
                 name: function.name,
@@ -147,10 +146,8 @@ fn compile_expression(
     };
 
     Fragment {
-        location: FragmentLocation {
-            parent,
-            next: Some(next),
-        },
+        parent,
+        next: Some(next),
         kind: fragment,
     }
 }
@@ -160,9 +157,7 @@ mod tests {
     use capi_runtime::Value;
 
     use crate::{
-        fragments::{
-            Fragment, FragmentKind, FragmentLocation, Fragments, Function,
-        },
+        fragments::{Fragment, FragmentKind, Fragments, Function},
         syntax::{self, Script},
     };
 
@@ -255,11 +250,12 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            location: FragmentLocation { next, .. },
+            next,
             kind:
                 FragmentKind::Function {
                     function: Function { mut branches, .. },
                 },
+            ..
         } = root
         else {
             unreachable!("`f` must be the root element.");
@@ -281,11 +277,8 @@ mod tests {
             fragments.iter_from(branch.start).collect::<Vec<_>>()
         };
 
-        assert_eq!(branch_fragments[0].location.parent, next);
-        assert_eq!(
-            block_fragments[0].location.parent,
-            Some(branch_fragments[1].hash())
-        );
+        assert_eq!(branch_fragments[0].parent, next);
+        assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].hash()));
     }
 
     fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {

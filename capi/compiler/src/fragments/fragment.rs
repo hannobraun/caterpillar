@@ -17,9 +17,8 @@ use super::{FoundFunction, FragmentMap, Function, Hash};
     udigest::Digestable,
 )]
 pub struct Fragment {
-    /// # The location of the fragment within the code
-    pub location: FragmentLocation,
-
+    pub parent: Option<Hash<Fragment>>,
+    pub next: Option<Hash<Fragment>>,
     pub kind: FragmentKind,
 }
 

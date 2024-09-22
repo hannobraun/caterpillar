@@ -84,9 +84,10 @@ impl FragmentMap {
         let mut current_fragment = *fragment_in_body;
 
         loop {
-            let previous = self.fragments_by_hash.values().find(|fragment| {
-                fragment.location.next == Some(current_fragment)
-            });
+            let previous = self
+                .fragments_by_hash
+                .values()
+                .find(|fragment| fragment.next == Some(current_fragment));
 
             if let Some(previous) = previous {
                 // There's a previous fragment. Continue the search there.
@@ -144,7 +145,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.fragments_by_hash.get(&id)?;
 
-            next = fragment.location.next;
+            next = fragment.next;
 
             Some(fragment)
         })
