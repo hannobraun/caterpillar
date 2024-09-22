@@ -30,7 +30,6 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
-    fragments_by_hash: BTreeMap<Hash<Fragment>, Fragment>,
     fragments_by_id: BTreeMap<FragmentId, Fragment>,
     ids_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
 }
@@ -39,13 +38,11 @@ impl FragmentMap {
     pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
         self.ids_by_hash.insert(id.hash(), id);
         self.fragments_by_id.insert(id, fragment.clone());
-        self.fragments_by_hash.insert(fragment.hash(), fragment);
     }
 
     pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
         self.ids_by_hash.remove(&id.hash());
-        self.fragments_by_id.remove(id);
-        self.fragments_by_hash.remove(&id.this)
+        self.fragments_by_id.remove(id)
     }
 
     pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
