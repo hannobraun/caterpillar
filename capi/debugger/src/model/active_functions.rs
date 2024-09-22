@@ -278,7 +278,7 @@ fn reconstruct_function(
             for (id, fragment) in code.fragments.iter_from(branch.start) {
                 match fragment.kind {
                     FragmentKind::Terminator => {}
-                    _ => tail_call = Some(id.this),
+                    _ => tail_call = Some(id),
                 }
             }
 
@@ -290,12 +290,13 @@ fn reconstruct_function(
         None
     };
 
-    let expected_next_function = tail_call
-        .and_then(|tail_call| call_fragment_to_function_name(tail_call, code));
+    let expected_next_function = tail_call.and_then(|tail_call| {
+        call_fragment_to_function_name(tail_call.this, code)
+    });
 
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
-        tail_call,
+        tail_call.map(|id| id.this),
         false,
         &code.fragments,
         &code.source_map,
