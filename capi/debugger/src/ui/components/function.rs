@@ -1,4 +1,3 @@
-use capi_compiler::fragments::FragmentId;
 use capi_runtime::Effect;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
@@ -221,7 +220,7 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let fragment: FragmentId = {
+        let fragment = {
             let Some(fragment) = element.get_attribute("data-fragment") else {
                 // This happens, if the user clicks on a comment.
                 return;
