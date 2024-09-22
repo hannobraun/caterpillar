@@ -38,7 +38,6 @@ where
             next: None,
             kind: FragmentKind::Terminator,
         };
-        let terminator_hash = terminator.hash();
         let location = FragmentLocation {
             parent,
             next: None,
@@ -47,23 +46,24 @@ where
 
         fragments.insert(location, terminator);
 
-        terminator_hash
+        location
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(expression, parent, next, fragments);
+        let fragment =
+            compile_expression(expression, parent, next.here, fragments);
         let location = FragmentLocation {
             parent: fragment.parent,
             next: fragment.next,
             here: fragment.hash(),
         };
 
-        next = fragment.hash();
+        next = location;
 
         fragments.insert(location, fragment);
     }
 
-    next
+    next.here
 }
 
 fn compile_function(
