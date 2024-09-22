@@ -101,8 +101,8 @@ impl FragmentMap {
             // in a branch of a function.
             let function = self
                 .fragments_by_id
-                .values()
-                .filter_map(|fragment| match &fragment.kind {
+                .iter()
+                .filter_map(|(_, fragment)| match &fragment.kind {
                     FragmentKind::Function { function } => {
                         Some((fragment.hash(), function))
                     }
