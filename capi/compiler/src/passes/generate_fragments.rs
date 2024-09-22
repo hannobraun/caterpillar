@@ -35,6 +35,7 @@ where
     let mut next = {
         let terminator = Fragment {
             parent,
+            next: None,
             kind: FragmentKind::Terminator,
         };
         let terminator_id = terminator.id();
@@ -76,6 +77,7 @@ fn compile_function(
 
     Fragment {
         parent,
+        next: Some(next),
         kind: FragmentKind::Payload {
             payload: Payload::Function {
                 function: Function {
@@ -84,7 +86,6 @@ fn compile_function(
                     environment: function.environment,
                 },
             },
-            next,
         },
     }
 }
@@ -134,7 +135,8 @@ fn compile_expression(
 
     Fragment {
         parent,
-        kind: FragmentKind::Payload { payload, next },
+        next: Some(next),
+        kind: FragmentKind::Payload { payload },
     }
 }
 
@@ -246,13 +248,13 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
+            next,
             kind:
                 FragmentKind::Payload {
                     payload:
                         Payload::Function {
                             function: Function { mut branches, .. },
                         },
-                    next,
                     ..
                 },
             ..
@@ -281,7 +283,7 @@ mod tests {
             fragments.iter_from(branch.start).collect::<Vec<_>>()
         };
 
-        assert_eq!(branch_fragments[0].parent, Some(next));
+        assert_eq!(branch_fragments[0].parent, next);
         assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].id()));
     }
 

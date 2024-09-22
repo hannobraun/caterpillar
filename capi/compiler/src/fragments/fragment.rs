@@ -34,6 +34,14 @@ pub struct Fragment {
     /// that.
     pub parent: Option<FragmentId>,
 
+    /// # The next fragment after this one
+    ///
+    /// Every fragment resides in a context, either a function or the root
+    /// context. Every payload-carrying fragment has a fragment that follows it
+    /// within that context, which is either another payload-carrying fragment,
+    /// or a terminator.
+    pub next: Option<FragmentId>,
+
     pub kind: FragmentKind,
 }
 
@@ -44,10 +52,7 @@ impl Fragment {
     }
 
     pub fn next(&self) -> Option<FragmentId> {
-        match &self.kind {
-            FragmentKind::Payload { next, .. } => Some(*next),
-            FragmentKind::Terminator => None,
-        }
+        self.next
     }
 
     pub fn as_call_to_function<'r>(
@@ -97,14 +102,6 @@ pub enum FragmentKind {
     Payload {
         /// # The payload that the fragment carries
         payload: Payload,
-
-        /// # The next fragment after this one
-        ///
-        /// Every fragment resides in a context, either a function or the root
-        /// context. Every payload-carrying fragment has a fragment that follows
-        /// it within that context, which is either another payload-carrying
-        /// fragment, or a terminator.
-        next: FragmentId,
     },
 
     /// # This fragment is a terminator
