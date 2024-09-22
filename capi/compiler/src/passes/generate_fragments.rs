@@ -50,8 +50,7 @@ where
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment =
-            compile_expression(expression, parent, next.here, fragments);
+        let fragment = compile_expression(expression, parent, next, fragments);
         let id = FragmentId {
             parent: fragment.parent,
             next: Some(next.hash()),
@@ -101,13 +100,13 @@ fn compile_function(
 fn compile_expression(
     expression: syntax::Expression,
     parent: Option<Hash<Fragment>>,
-    next: Hash<Fragment>,
+    next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let fragment = match expression {
         syntax::Expression::Comment { text } => FragmentKind::Comment { text },
         syntax::Expression::Function { function } => {
-            return compile_function(function, parent, next, fragments);
+            return compile_function(function, parent, next.here, fragments);
         }
         syntax::Expression::Identifier {
             name,
@@ -145,7 +144,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        next: Some(next),
+        next: Some(next.here),
         kind: fragment,
     }
 }
