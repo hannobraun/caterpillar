@@ -221,7 +221,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.hash() == a.this)
+            .find(|fragment| fragment.data.id == a)
             .unwrap()
             .data
             .has_durable_breakpoint
