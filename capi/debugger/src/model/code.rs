@@ -21,7 +21,7 @@ impl DebugCode {
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map
-            .fragment_to_instructions(&fragment.this)
+            .fragment_to_instructions(fragment)
             .first()
             .copied()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))

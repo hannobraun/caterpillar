@@ -45,12 +45,12 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        fragment: &Hash<Fragment>,
+        fragment: &FragmentId,
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
         self.fragment_to_instructions
-            .get(fragment)
+            .get(&fragment.this)
             .unwrap_or(&EMPTY)
     }
 }
