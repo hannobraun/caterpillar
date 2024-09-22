@@ -4,7 +4,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Hash};
+use super::{Branch, Fragment, FragmentId, Function, Hash};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -52,8 +52,8 @@ impl FragmentMap {
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
         self.fragments_by_id
             .iter()
-            .filter_map(|(id, fragment)| match &fragment.kind {
-                FragmentKind::Function { function } => Some((*id, function)),
+            .filter_map(|(id, fragment)| match &fragment {
+                Fragment::Function { function } => Some((*id, function)),
                 _ => None,
             })
             .find_map(|(id, function)| {
@@ -96,8 +96,8 @@ impl FragmentMap {
             let function = self
                 .fragments_by_id
                 .iter()
-                .filter_map(|(id, fragment)| match &fragment.kind {
-                    FragmentKind::Function { function } => Some((id, function)),
+                .filter_map(|(id, fragment)| match &fragment {
+                    Fragment::Function { function } => Some((id, function)),
                     _ => None,
                 })
                 .find_map(|(id, function)| {

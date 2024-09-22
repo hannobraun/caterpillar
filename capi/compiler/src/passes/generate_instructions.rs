@@ -4,8 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentId, FragmentKind, FragmentMap, Fragments, Function,
-        Parameters,
+        Fragment, FragmentId, FragmentMap, Fragments, Function, Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -206,8 +205,8 @@ fn compile_fragment(
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> Option<InstructionAddress> {
-    match &fragment.kind {
-        FragmentKind::CallToFunction { name, is_tail_call } => {
+    match &fragment {
+        Fragment::CallToFunction { name, is_tail_call } => {
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.
             //
@@ -234,7 +233,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        FragmentKind::CallToHostFunction { effect_number } => {
+        Fragment::CallToHostFunction { effect_number } => {
             let address = output.generate_instruction(
                 Instruction::Push {
                     value: (*effect_number).into(),
@@ -249,7 +248,7 @@ fn compile_fragment(
             );
             Some(address)
         }
-        FragmentKind::CallToIntrinsic {
+        Fragment::CallToIntrinsic {
             intrinsic,
             is_tail_call,
         } => {
@@ -258,8 +257,8 @@ fn compile_fragment(
 
             Some(output.generate_instruction(instruction, id))
         }
-        FragmentKind::Comment { .. } => None,
-        FragmentKind::Function { function } => {
+        Fragment::Comment { .. } => None,
+        Fragment::Function { function } => {
             let address = if function.name.is_none() {
                 // If this is an anonymous function, we need to emit an
                 // instruction that allocates it, and takes care of its
@@ -292,13 +291,13 @@ fn compile_fragment(
 
             address
         }
-        FragmentKind::ResolvedBinding { name } => {
+        Fragment::ResolvedBinding { name } => {
             Some(output.generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
                 id,
             ))
         }
-        FragmentKind::UnresolvedIdentifier { name: _ } => {
+        Fragment::UnresolvedIdentifier { name: _ } => {
             Some(output.generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
@@ -306,11 +305,11 @@ fn compile_fragment(
                 id,
             ))
         }
-        FragmentKind::Value(value) => Some(
+        Fragment::Value(value) => Some(
             output
                 .generate_instruction(Instruction::Push { value: *value }, id),
         ),
-        FragmentKind::Terminator => {
+        Fragment::Terminator => {
             // Unconditionally generating a return instruction, like we do here,
             // is probably redundant. If the previous fragment was a tail call,
             // it didn't create a new stack frame.

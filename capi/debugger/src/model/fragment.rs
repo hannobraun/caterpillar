@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentId, FragmentKind, Fragments},
+    fragments::{Fragment, FragmentId, Fragments},
     host::Host,
     source_map::SourceMap,
 };
@@ -133,11 +133,11 @@ impl DebugFragmentKind {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let kind = match fragment.kind {
-            FragmentKind::CallToFunction { name, .. } => {
+        let kind = match fragment {
+            Fragment::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
             }
-            FragmentKind::CallToHostFunction { effect_number } => {
+            Fragment::CallToHostFunction { effect_number } => {
                 let name = GameEngineHost::effect_number_to_function_name(
                     effect_number,
                 )
@@ -146,15 +146,15 @@ impl DebugFragmentKind {
 
                 Self::CallToHostFunction { name }
             }
-            FragmentKind::CallToIntrinsic { intrinsic, .. } => {
+            Fragment::CallToIntrinsic { intrinsic, .. } => {
                 Self::CallToIntrinsic {
                     name: intrinsic.to_string(),
                 }
             }
-            FragmentKind::Comment { text } => Self::Comment {
+            Fragment::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
-            FragmentKind::Function { function } => {
+            Fragment::Function { function } => {
                 let function = DebugFunction::new(
                     function,
                     active_fragment,
@@ -167,16 +167,16 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
-            FragmentKind::ResolvedBinding { name } => {
+            Fragment::ResolvedBinding { name } => {
                 Self::ResolvedBinding { name }
             }
-            FragmentKind::UnresolvedIdentifier { name } => {
+            Fragment::UnresolvedIdentifier { name } => {
                 Self::UnresolvedIdentifier { name }
             }
-            FragmentKind::Value(value) => Self::Value {
+            Fragment::Value(value) => Self::Value {
                 as_string: value.to_string(),
             },
-            FragmentKind::Terminator => {
+            Fragment::Terminator => {
                 return None;
             }
         };

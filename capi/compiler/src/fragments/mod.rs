@@ -6,7 +6,7 @@ mod function;
 mod hash;
 
 pub use self::{
-    fragment::{Fragment, FragmentId, FragmentKind},
+    fragment::{Fragment, FragmentId},
     fragments::{FoundFunction, FragmentMap, Fragments},
     function::{Branch, Function, Parameters},
     hash::Hash,

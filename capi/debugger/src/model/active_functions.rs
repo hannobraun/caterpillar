@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, FragmentId, FragmentKind};
+use capi_compiler::fragments::{self, Fragment, FragmentId};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -274,8 +274,8 @@ fn reconstruct_function(
             let mut tail_call = None;
 
             for (id, fragment) in code.fragments.iter_from(branch.start) {
-                match fragment.kind {
-                    FragmentKind::Terminator => {}
+                match fragment {
+                    Fragment::Terminator => {}
                     _ => tail_call = Some(id),
                 }
             }
@@ -313,7 +313,7 @@ fn call_fragment_to_function_name(
         .get(call_fragment)
         .expect("Fragment referenced by active function must exist.");
 
-    let FragmentKind::CallToFunction { name, .. } = &fragment.kind else {
+    let Fragment::CallToFunction { name, .. } = &fragment else {
         return None;
     };
 

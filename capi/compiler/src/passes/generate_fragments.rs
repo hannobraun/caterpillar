@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
-        Function, Hash, Parameters,
+        Branch, Fragment, FragmentId, FragmentMap, Fragments, Function, Hash,
+        Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -33,9 +33,7 @@ where
     E::IntoIter: DoubleEndedIterator,
 {
     let mut next = {
-        let terminator = Fragment {
-            kind: FragmentKind::Terminator,
-        };
+        let terminator = Fragment::Terminator;
         let id = FragmentId {
             parent,
             next: None,
@@ -81,13 +79,11 @@ fn compile_function(
         });
     }
 
-    Fragment {
-        kind: FragmentKind::Function {
-            function: Function {
-                name: function.name,
-                branches,
-                environment: function.environment,
-            },
+    Fragment::Function {
+        function: Function {
+            name: function.name,
+            branches,
+            environment: function.environment,
         },
     }
 }
@@ -97,10 +93,10 @@ fn compile_expression(
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
-    let fragment = match expression {
-        syntax::Expression::Comment { text } => FragmentKind::Comment { text },
+    match expression {
+        syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            return compile_function(function, next, fragments);
+            compile_function(function, next, fragments)
         }
         syntax::Expression::Identifier {
             name,
@@ -113,28 +109,24 @@ fn compile_expression(
 
             match target {
                 Some(IdentifierTarget::Binding) => {
-                    FragmentKind::ResolvedBinding { name }
+                    Fragment::ResolvedBinding { name }
                 }
-                Some(IdentifierTarget::Function) => {
-                    FragmentKind::CallToFunction {
-                        name,
-                        is_tail_call: is_in_tail_position,
-                    }
-                }
+                Some(IdentifierTarget::Function) => Fragment::CallToFunction {
+                    name,
+                    is_tail_call: is_in_tail_position,
+                },
                 Some(IdentifierTarget::HostFunction { effect_number }) => {
-                    FragmentKind::CallToHostFunction { effect_number }
+                    Fragment::CallToHostFunction { effect_number }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    FragmentKind::CallToIntrinsic {
+                    Fragment::CallToIntrinsic {
                         intrinsic,
                         is_tail_call: is_in_tail_position,
                     }
                 }
-                None => FragmentKind::UnresolvedIdentifier { name },
+                None => Fragment::UnresolvedIdentifier { name },
             }
         }
-        syntax::Expression::Value(value) => FragmentKind::Value(value),
-    };
-
-    Fragment { kind: fragment }
+        syntax::Expression::Value(value) => Fragment::Value(value),
+    }
 }
