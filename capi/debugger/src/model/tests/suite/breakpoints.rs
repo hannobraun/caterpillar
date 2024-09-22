@@ -183,7 +183,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         array::from_fn(|_| {
             body.find_map(|(id, fragment)| {
                 if fragment.as_comment().is_none() {
-                    Some(id.this)
+                    Some(id)
                 } else {
                     None
                 }
@@ -193,7 +193,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
-    debugger.on_user_action(UserAction::BreakpointSet { fragment: a })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: a.this })?;
     debugger.run_program();
     assert_eq!(
         debugger
@@ -204,7 +204,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        a,
+        a.this,
     );
 
     // Step to `b`, over the durable breakpoint. This sets an ephemeral
@@ -219,7 +219,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        b,
+        b.this,
     );
     assert!(
         debugger
@@ -231,7 +231,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.hash() == a)
+            .find(|fragment| fragment.hash() == a.this)
             .unwrap()
             .data
             .has_durable_breakpoint
@@ -248,7 +248,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        c,
+        c.this,
     );
 
     Ok(())
