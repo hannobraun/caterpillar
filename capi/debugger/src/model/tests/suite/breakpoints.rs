@@ -111,8 +111,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .iter(fragments)
             .map(|(_, fragment)| fragment);
 
-        let brk = body.next().unwrap().hash();
-        let nop = body.next().unwrap().hash();
+        let [brk, nop] = array::from_fn(|_| body.next().unwrap().hash());
 
         [brk, nop]
     };
