@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
-        Branch, Fragment, Hash, FragmentKind, FragmentLocation,
-        FragmentMap, Fragments, Function, Parameters,
+        Branch, Fragment, FragmentKind, FragmentLocation, FragmentMap,
+        Fragments, Function, Hash, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };

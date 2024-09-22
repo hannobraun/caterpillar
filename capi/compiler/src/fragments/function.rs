@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::syntax::Pattern;
 
-use super::{Fragment, Hash, FragmentMap};
+use super::{Fragment, FragmentMap, Hash};
 
 #[derive(
     Clone,

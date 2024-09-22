@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{self, Hash, Fragments},
+    fragments::{self, Fragments, Hash},
     source_map::SourceMap,
 };
 use capi_runtime::Effect;
