@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
         Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
-        Function, Parameters,
+        Function, Hash, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -25,7 +25,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
 fn compile_context<E>(
     expressions: E,
-    parent: Option<FragmentId>,
+    parent: Option<Hash<FragmentId>>,
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
@@ -38,7 +38,7 @@ where
             kind: FragmentKind::Terminator,
         };
         let id = FragmentId {
-            parent: parent.map(|id| id.hash()),
+            parent,
             next: None,
             this: terminator.hash(),
         };
@@ -51,7 +51,7 @@ where
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, next, fragments);
         let id = FragmentId {
-            parent: parent.map(|id| id.hash()),
+            parent,
             next: Some(next.hash()),
             this: fragment.hash(),
         };
@@ -72,7 +72,7 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(branch.body, Some(next), fragments);
+        let start = compile_context(branch.body, Some(next.hash()), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
