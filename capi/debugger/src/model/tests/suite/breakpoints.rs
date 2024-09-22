@@ -460,7 +460,7 @@ fn step_over_function_call() {
         let [f, nop] = array::from_fn(|_| {
             body.find_map(|(id, fragment)| {
                 if fragment.as_comment().is_none() {
-                    Some(id.this)
+                    Some(id)
                 } else {
                     None
                 }
@@ -472,7 +472,7 @@ fn step_over_function_call() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f })
+        .on_user_action(UserAction::BreakpointSet { fragment: f.this })
         .unwrap();
     debugger.run_program();
 
@@ -485,7 +485,7 @@ fn step_over_function_call() {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        nop,
+        nop.this,
     );
 }
 
