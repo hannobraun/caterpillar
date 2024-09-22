@@ -1,4 +1,4 @@
-use capi_compiler::fragments::{Fragment, FragmentId, Hash};
+use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
     host_state::HostState,
@@ -96,7 +96,7 @@ impl PersistentState {
                     function
                         .branches
                         .iter()
-                        .map(|branch| branch.start.this)
+                        .map(|branch| branch.start)
                         .collect()
                 } else {
                     let mut fragment = origin.clone();
@@ -127,7 +127,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id.this];
+                        break vec![after.data.id];
                     }
                 };
 
@@ -169,7 +169,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id.this];
+                        break vec![after.data.id];
                     }
                 };
 
@@ -210,7 +210,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id.this];
+                        break vec![after.data.id];
                     }
                 };
 
@@ -246,7 +246,7 @@ impl PersistentState {
     fn step_or_continue(
         &mut self,
         origin: &FragmentId,
-        targets: Vec<Hash<Fragment>>,
+        targets: Vec<FragmentId>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(&origin.this)?;
@@ -270,7 +270,7 @@ impl PersistentState {
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
         for target in targets {
-            let target = self.code.fragment_to_instruction(&target)?;
+            let target = self.code.fragment_to_instruction(&target.this)?;
             self.breakpoints.set_ephemeral(target);
         }
 
