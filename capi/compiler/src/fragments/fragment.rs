@@ -98,6 +98,9 @@ pub struct FragmentLocation {
     ///
     /// Might be `None`, if the fragment is a terminator.
     pub next: Option<Hash<Fragment>>,
+
+    /// # The fragment at this location
+    pub here: Hash<Fragment>,
 }
 
 impl FragmentLocation {

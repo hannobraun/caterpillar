@@ -44,6 +44,7 @@ where
             FragmentLocation {
                 parent: terminator.parent,
                 next: terminator.next,
+                here: terminator.hash(),
             },
             terminator,
         );
@@ -60,6 +61,7 @@ where
             FragmentLocation {
                 parent: fragment.parent,
                 next: fragment.next,
+                here: fragment.hash(),
             },
             fragment,
         );
