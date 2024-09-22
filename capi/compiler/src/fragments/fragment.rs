@@ -67,13 +67,13 @@ impl Fragment {
     udigest::Digestable,
 )]
 pub struct FragmentLocation {
-    /// # This fragment's parent
+    /// # The fragment's parent
     ///
-    /// Refers to the fragment that is the parent of this fragment. If this
-    /// fragment resides in the root context, then is has no parent.
+    /// Refers to the fragment's parent fragment. If the fragment resides in the
+    /// root context, then is has no parent.
     ///
     /// All other fragments have a parent. By convention, this is the fragment
-    /// _after_ the function that this fragment resides in (i.e. the `next`
+    /// _after_ the function that the fragment resides in (i.e. the `next`
     /// fragment of that function).
     ///
     /// This must be so, because by the time that a fragment is constructed, the
@@ -90,12 +90,14 @@ pub struct FragmentLocation {
     /// that.
     pub parent: Option<FragmentId>,
 
-    /// # The next fragment after this one
+    /// # The next fragment within the fragment's context
     ///
     /// Every fragment resides in a context, either a function or the root
     /// context. Every payload-carrying fragment has a fragment that follows it
     /// within that context, which is either another payload-carrying fragment,
     /// or a terminator.
+    ///
+    /// Might be `None`, if the fragment is a terminator.
     pub next: Option<FragmentId>,
 }
 
