@@ -1,3 +1,4 @@
+use capi_compiler::fragments::FragmentId;
 use capi_runtime::Effect;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
@@ -189,7 +190,7 @@ fn make_single_expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_fragment = ron::to_string(&data.fragment.hash())
+    let data_fragment = ron::to_string(&data.id)
         .expect("Expecting serialization of `FragmentId` to always work.");
     let data_breakpoint = data.has_durable_breakpoint;
 
@@ -220,7 +221,7 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let fragment = {
+        let fragment: FragmentId = {
             let Some(fragment) = element.get_attribute("data-fragment") else {
                 // This happens, if the user clicks on a comment.
                 return;
@@ -232,9 +233,13 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            UserAction::BreakpointClear { fragment }
+            UserAction::BreakpointClear {
+                fragment: fragment.this,
+            }
         } else {
-            UserAction::BreakpointSet { fragment }
+            UserAction::BreakpointSet {
+                fragment: fragment.this,
+            }
         };
 
         leptos::spawn_local(send_action(action, actions_tx.clone()));
