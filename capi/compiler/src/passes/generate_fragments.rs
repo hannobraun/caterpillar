@@ -39,7 +39,13 @@ where
         };
         let terminator_id = terminator.hash();
 
-        fragments.insert(terminator.location, terminator);
+        fragments.insert(
+            FragmentLocation {
+                parent: terminator.location.parent,
+                next: terminator.location.next,
+            },
+            terminator,
+        );
 
         terminator_id
     };
