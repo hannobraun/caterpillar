@@ -18,7 +18,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     );
 
     Fragments {
-        root: root.this,
+        root,
         inner: fragments,
     }
 }
@@ -179,7 +179,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root)
+            .remove(&fragments.root.this)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
@@ -216,7 +216,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root)
+            .remove(&fragments.root.this)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             kind:
@@ -249,7 +249,7 @@ mod tests {
 
         let root = fragments
             .inner
-            .remove(&fragments.root)
+            .remove(&fragments.root.this)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             next,

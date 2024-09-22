@@ -9,7 +9,7 @@ use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Hash};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     /// The root fragment that indirectly points to all other fragments
-    pub root: Hash<Fragment>,
+    pub root: FragmentId,
 
     pub inner: FragmentMap,
 }
