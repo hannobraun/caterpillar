@@ -449,7 +449,7 @@ fn step_over_function_call() {
         ",
     );
 
-    let (f, nop) = {
+    let [f, nop] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .find_function_by_name("main")
@@ -467,7 +467,7 @@ fn step_over_function_call() {
             .unwrap()
             .hash();
 
-        (f, nop)
+        [f, nop]
     };
 
     debugger
