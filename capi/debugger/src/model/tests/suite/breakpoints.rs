@@ -72,10 +72,10 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .expect_one_branch()
         .iter(fragments)
-        .map(|(_, fragment)| fragment)
+        .map(|(id, _)| id)
         .next()
         .unwrap()
-        .hash();
+        .this;
     debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
 
     debugger.run_program();
