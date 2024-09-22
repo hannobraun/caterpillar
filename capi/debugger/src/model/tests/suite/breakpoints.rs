@@ -29,6 +29,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .expect_one_branch()
         .iter(fragments)
+        .map(|(_, fragment)| fragment)
         .next()
         .unwrap()
         .hash();
@@ -61,6 +62,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .expect_one_branch()
         .iter(fragments)
+        .map(|(_, fragment)| fragment)
         .next()
         .unwrap()
         .hash();
@@ -105,7 +107,8 @@ fn step_over_brk() -> anyhow::Result<()> {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments);
+            .iter(fragments)
+            .map(|(_, fragment)| fragment);
 
         let brk = body.next().unwrap().hash();
         let nop = body.next().unwrap().hash();
@@ -163,7 +166,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments);
+            .iter(fragments)
+            .map(|(_, fragment)| fragment);
 
         let a = body
             .find(|fragment| fragment.as_comment().is_none())
@@ -275,6 +279,7 @@ fn step_into_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .nth(2)
             .unwrap()
             .hash();
@@ -338,6 +343,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .nth(1)
             .unwrap()
             .hash();
@@ -346,6 +352,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .next()
             .unwrap()
             .hash();
@@ -395,6 +402,7 @@ fn step_out_of_main_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .next()
             .unwrap()
             .hash()
@@ -440,7 +448,8 @@ fn step_over_function_call() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments);
+            .iter(fragments)
+            .map(|(_, fragment)| fragment);
 
         let f = body
             .find(|fragment| fragment.as_comment().is_none())
@@ -500,6 +509,7 @@ fn step_out_of_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .next()
             .unwrap()
             .hash();
@@ -508,6 +518,7 @@ fn step_out_of_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
+            .map(|(_, fragment)| fragment)
             .nth(1)
             .unwrap()
             .hash();

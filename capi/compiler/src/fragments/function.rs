@@ -93,10 +93,8 @@ impl Branch {
     pub fn iter<'r>(
         &self,
         fragments: &'r FragmentMap,
-    ) -> impl Iterator<Item = &'r Fragment> {
-        fragments
-            .iter_from(self.start)
-            .map(|(_, fragment)| fragment)
+    ) -> impl Iterator<Item = (FragmentId, &'r Fragment)> {
+        fragments.iter_from(self.start)
     }
 }
 
