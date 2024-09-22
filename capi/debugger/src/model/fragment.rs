@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentKind, Fragments, Hash},
+    fragments::{Fragment, FragmentId, FragmentKind, Fragments, Hash},
     host::Host,
     source_map::SourceMap,
 };
@@ -15,7 +15,9 @@ pub struct DebugFragment {
 }
 
 impl DebugFragment {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
+        _: FragmentId,
         fragment: Fragment,
         active_fragment: Option<Hash<Fragment>>,
         is_in_innermost_active_function: bool,
