@@ -288,8 +288,7 @@ fn step_into_function() {
             .iter(fragments)
             .map(|(id, _)| id)
             .nth(2)
-            .unwrap()
-            .this;
+            .unwrap();
         let a = fragments
             .find_function_by_name("f")
             .unwrap()
@@ -302,7 +301,7 @@ fn step_into_function() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f })
+        .on_user_action(UserAction::BreakpointSet { fragment: f.this })
         .unwrap();
 
     debugger.run_program();
