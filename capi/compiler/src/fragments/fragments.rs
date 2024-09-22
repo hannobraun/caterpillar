@@ -38,8 +38,8 @@ impl FragmentMap {
         self.inner.insert(fragment.hash(), fragment);
     }
 
-    pub fn remove(&mut self, id: &Hash<Fragment>) -> Option<Fragment> {
-        self.inner.remove(id)
+    pub fn remove(&mut self, hash: &Hash<Fragment>) -> Option<Fragment> {
+        self.inner.remove(hash)
     }
 
     pub fn get(&self, id: &Hash<Fragment>) -> Option<&Fragment> {
