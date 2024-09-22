@@ -515,10 +515,10 @@ fn step_out_of_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .next()
             .unwrap()
-            .hash();
+            .this;
         let b = fragments
             .find_function_by_name("main")
             .unwrap()
