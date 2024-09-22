@@ -52,15 +52,15 @@ where
     for expression in expressions.into_iter().rev() {
         let fragment =
             compile_expression(expression, parent, next.here, fragments);
-        let location = FragmentId {
+        let id = FragmentId {
             parent: fragment.parent,
             next: Some(next.hash()),
             here: fragment.hash(),
         };
 
-        fragments.insert(location, fragment);
+        fragments.insert(id, fragment);
 
-        next = location;
+        next = id;
     }
 
     next.here
