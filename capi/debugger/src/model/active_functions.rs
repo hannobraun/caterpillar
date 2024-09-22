@@ -1,9 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{
-    self, Fragment, FragmentId, FragmentKind, Hash,
-};
+use capi_compiler::fragments::{self, FragmentId, FragmentKind};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -147,12 +145,12 @@ impl ActiveFunctionsEntries {
             return Ok(Some(after.clone()));
         }
 
-        self.find_next_fragment_after_caller(&fragment.this)
+        self.find_next_fragment_after_caller(fragment)
     }
 
     pub fn find_next_fragment_after_caller(
         &self,
-        fragment: &Hash<Fragment>,
+        fragment: &FragmentId,
     ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
@@ -165,9 +163,7 @@ impl ActiveFunctionsEntries {
                 Ok(branch) => Some(branch),
                 Err(_) => None,
             })
-            .find(|branch| {
-                !branch.body.iter().any(|f| f.data.id.this == *fragment)
-            });
+            .find(|branch| !branch.body.iter().any(|f| f.data.id == *fragment));
 
         let Some(caller_branch) = caller_branch else {
             return Ok(None);
