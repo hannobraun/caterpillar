@@ -70,7 +70,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
 
 fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     match tokens.peek()? {
-        Token::BranchHeadBoundary => {
+        Token::BranchStart => {
             tokens.take();
         }
         Token::FunctionEnd => {
@@ -110,7 +110,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                         .map(|function| Expression::Function { function }),
                 );
             }
-            Token::BranchHeadBoundary | Token::FunctionEnd => {
+            Token::BranchStart | Token::FunctionEnd => {
                 break;
             }
             _ => match tokens.take()? {
