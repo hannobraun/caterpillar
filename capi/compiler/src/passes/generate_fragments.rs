@@ -18,7 +18,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     );
 
     Fragments {
-        root,
+        root: root.this,
         inner: fragments,
     }
 }
@@ -27,7 +27,7 @@ fn compile_context<E>(
     expressions: E,
     parent: Option<FragmentId>,
     fragments: &mut FragmentMap,
-) -> Hash<Fragment>
+) -> FragmentId
 where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
@@ -67,7 +67,7 @@ where
         next = id;
     }
 
-    next.this
+    next
 }
 
 fn compile_function(
@@ -85,7 +85,7 @@ fn compile_function(
             parameters: Parameters {
                 inner: branch.parameters,
             },
-            start,
+            start: start.this,
         });
     }
 
