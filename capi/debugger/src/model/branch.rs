@@ -77,7 +77,11 @@ impl DebugBranch {
         &self,
         hash: &Hash<Fragment>,
     ) -> anyhow::Result<Option<&DebugFragment>> {
-        if !self.body.iter().any(|fragment| fragment.hash() == *hash) {
+        if !self
+            .body
+            .iter()
+            .any(|fragment| fragment.data.id.this == *hash)
+        {
             return Err(anyhow!(
                 "Expected fragment to be in branch, but could not find it. \
                 Fragment:\n\
