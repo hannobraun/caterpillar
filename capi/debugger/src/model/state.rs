@@ -127,7 +127,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.hash()];
+                        break vec![after.data.id.this];
                     }
                 };
 
@@ -169,7 +169,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.hash()];
+                        break vec![after.data.id.this];
                     }
                 };
 
@@ -210,7 +210,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.hash()];
+                        break vec![after.data.id.this];
                     }
                 };
 
