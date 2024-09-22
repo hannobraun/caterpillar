@@ -122,8 +122,9 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        brk.this,
+            .data
+            .id,
+        brk,
     );
 
     debugger.on_user_action(UserAction::StepIn)?;
@@ -135,8 +136,9 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        nop.this,
+            .data
+            .id,
+        nop,
     );
 
     Ok(())
