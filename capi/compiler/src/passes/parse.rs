@@ -81,25 +81,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    let mut parameters = Vec::new();
-    while let Some(token) = tokens.take() {
-        match token {
-            Token::Identifier { name } => {
-                parameters.push(Pattern::Identifier { name });
-            }
-            Token::IntegerLiteral { value } => {
-                parameters.push(Pattern::Literal {
-                    value: value.into(),
-                });
-            }
-            Token::BranchBodyStart => {
-                break;
-            }
-            token => {
-                panic!("Unexpected token: {token:?}");
-            }
-        }
-    }
+    let parameters = parse_branch_parameters(tokens);
 
     let mut body = Vec::new();
     while let Some(token) = tokens.peek() {
@@ -135,6 +117,31 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     }
 
     Some(Branch { parameters, body })
+}
+
+fn parse_branch_parameters(tokens: &mut Tokens) -> Vec<Pattern> {
+    let mut parameters = Vec::new();
+
+    while let Some(token) = tokens.take() {
+        match token {
+            Token::Identifier { name } => {
+                parameters.push(Pattern::Identifier { name });
+            }
+            Token::IntegerLiteral { value } => {
+                parameters.push(Pattern::Literal {
+                    value: value.into(),
+                });
+            }
+            Token::BranchBodyStart => {
+                break;
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
+    }
+
+    parameters
 }
 
 struct Tokens {
