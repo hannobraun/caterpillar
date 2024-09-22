@@ -141,13 +141,13 @@ impl ActiveFunctionsEntries {
     pub fn find_next_fragment_or_next_after_caller(
         &self,
         branch: &DebugBranch,
-        fragment: &Hash<Fragment>,
+        fragment: &FragmentId,
     ) -> anyhow::Result<Option<DebugFragment>> {
-        if let Some(after) = branch.fragment_after(fragment)? {
+        if let Some(after) = branch.fragment_after(&fragment.this)? {
             return Ok(Some(after.clone()));
         }
 
-        self.find_next_fragment_after_caller(fragment)
+        self.find_next_fragment_after_caller(&fragment.this)
     }
 
     pub fn find_next_fragment_after_caller(
@@ -175,7 +175,7 @@ impl ActiveFunctionsEntries {
 
         self.find_next_fragment_or_next_after_caller(
             caller_branch,
-            &caller.data.id.this,
+            &caller.data.id,
         )
     }
 }
