@@ -4,7 +4,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{Branch, Fragment, FragmentKind, FragmentLocation, Function, Hash};
+use super::{Branch, Fragment, FragmentId, FragmentKind, Function, Hash};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -31,12 +31,12 @@ impl DerefMut for Fragments {
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
     fragments_by_hash: BTreeMap<Hash<Fragment>, Fragment>,
-    fragments_by_location: BTreeMap<FragmentLocation, Fragment>,
-    locations_by_hash: BTreeMap<Hash<FragmentLocation>, FragmentLocation>,
+    fragments_by_location: BTreeMap<FragmentId, Fragment>,
+    locations_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
 }
 
 impl FragmentMap {
-    pub fn insert(&mut self, location: FragmentLocation, fragment: Fragment) {
+    pub fn insert(&mut self, location: FragmentId, fragment: Fragment) {
         self.locations_by_hash.insert(location.hash(), location);
         self.fragments_by_location
             .insert(location, fragment.clone());

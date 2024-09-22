@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentKind, FragmentLocation, FragmentMap,
-        Fragments, Function, Hash, Parameters,
+        Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
+        Function, Hash, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -38,7 +38,7 @@ where
             next: None,
             kind: FragmentKind::Terminator,
         };
-        let location = FragmentLocation {
+        let location = FragmentId {
             parent,
             next: None,
             here: terminator.hash(),
@@ -52,7 +52,7 @@ where
     for expression in expressions.into_iter().rev() {
         let fragment =
             compile_expression(expression, parent, next.here, fragments);
-        let location = FragmentLocation {
+        let location = FragmentId {
             parent: fragment.parent,
             next: Some(next.hash()),
             here: fragment.hash(),

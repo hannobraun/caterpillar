@@ -65,7 +65,7 @@ impl Fragment {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct FragmentLocation {
+pub struct FragmentId {
     /// # The fragment's parent
     ///
     /// Refers to the fragment's parent fragment. If the fragment resides in the
@@ -97,13 +97,13 @@ pub struct FragmentLocation {
     /// or a terminator.
     ///
     /// Might be `None`, if the fragment is a terminator.
-    pub next: Option<Hash<FragmentLocation>>,
+    pub next: Option<Hash<FragmentId>>,
 
     /// # The fragment at this location
     pub here: Hash<Fragment>,
 }
 
-impl FragmentLocation {
+impl FragmentId {
     /// # Compute the hash of this location
     pub fn hash(&self) -> Hash<Self> {
         Hash::new(self)
