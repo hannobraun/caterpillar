@@ -38,15 +38,15 @@ where
             next: None,
             kind: FragmentKind::Terminator,
         };
-        let location = FragmentId {
+        let id = FragmentId {
             parent,
             next: None,
             here: terminator.hash(),
         };
 
-        fragments.insert(location, terminator);
+        fragments.insert(id, terminator);
 
-        location
+        id
     };
 
     for expression in expressions.into_iter().rev() {
