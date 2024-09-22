@@ -159,21 +159,18 @@ mod tests {
     use capi_runtime::Value;
 
     use crate::{
+        compile::tokenize_and_parse,
         fragments::{Fragment, FragmentKind, Fragments, Function},
-        syntax::{self, Script},
+        syntax,
     };
 
     #[test]
     fn duplicate_payload() {
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.v(1).v(1);
-                },
-            )
-        });
+        let script = tokenize_and_parse(
+            r"
+                f: { \ -> 1 1 }
+            ",
+        );
 
         let mut fragments = generate_fragments(script.functions);
 
@@ -209,8 +206,11 @@ mod tests {
 
     #[test]
     fn terminator() {
-        let mut script = Script::default();
-        script.function("f", |b| b.branch(|p| p, |_| {}));
+        let script = tokenize_and_parse(
+            r"
+                f: { \ -> }
+            ",
+        );
 
         let mut fragments = generate_fragments(script.functions);
 
@@ -236,15 +236,13 @@ mod tests {
 
     #[test]
     fn block_parent() {
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.fun(|b| b.branch(|b| b, |_| {}));
-                },
-            )
-        });
+        let script = tokenize_and_parse(
+            r"
+                f: { \ ->
+                    { \ -> }
+                }
+            ",
+        );
 
         let mut fragments = generate_fragments(script.functions);
 
