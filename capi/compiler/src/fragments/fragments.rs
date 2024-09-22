@@ -140,13 +140,15 @@ impl FragmentMap {
         &self,
         start: FragmentId,
     ) -> impl Iterator<Item = &Fragment> {
-        let mut next = Some(start.this);
+        let mut next = Some(start);
 
         iter::from_fn(move || {
             let id = next.take()?;
-            let fragment = self.fragments_by_hash.get(&id)?;
+            let fragment = self.fragments_by_id.get(&id)?;
 
-            next = fragment.next;
+            next = id.next.and_then(|hash_of_id| {
+                self.ids_by_hash.get(&hash_of_id).copied()
+            });
 
             Some(fragment)
         })
