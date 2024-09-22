@@ -76,17 +76,16 @@ impl FragmentMap {
         &self,
         fragment_in_body: &Hash<Fragment>,
     ) -> Option<(FoundFunction, &Branch)> {
-        let mut fragment_id = *fragment_in_body;
+        let mut current_fragment = *fragment_in_body;
 
         loop {
-            let previous = self
-                .inner
-                .values()
-                .find(|fragment| fragment.location.next == Some(fragment_id));
+            let previous = self.inner.values().find(|fragment| {
+                fragment.location.next == Some(current_fragment)
+            });
 
             if let Some(previous) = previous {
                 // There's a previous fragment. Continue the search there.
-                fragment_id = previous.hash();
+                current_fragment = previous.hash();
                 continue;
             }
 
@@ -105,7 +104,7 @@ impl FragmentMap {
                     let branch = function
                         .branches
                         .iter()
-                        .find(|branch| branch.start == fragment_id)?;
+                        .find(|branch| branch.start == current_fragment)?;
                     Some((id, function, branch))
                 });
 
@@ -119,7 +118,7 @@ impl FragmentMap {
                 } else {
                     // An anonymous function. Let's continue our search in the
                     // context where it was defined.
-                    fragment_id = id;
+                    current_fragment = id;
                     continue;
                 }
             }
