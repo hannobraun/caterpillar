@@ -55,7 +55,13 @@ where
 
         next = fragment.hash();
 
-        fragments.insert(fragment.location, fragment);
+        fragments.insert(
+            FragmentLocation {
+                parent: fragment.location.parent,
+                next: fragment.location.next,
+            },
+            fragment,
+        );
     }
 
     next
