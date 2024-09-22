@@ -34,8 +34,8 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
-    pub fn insert(&mut self, id: Hash<Fragment>, fragment: Fragment) {
-        self.inner.insert(id, fragment);
+    pub fn insert(&mut self, fragment: Fragment) {
+        self.inner.insert(fragment.hash(), fragment);
     }
 
     pub fn remove(&mut self, id: &Hash<Fragment>) -> Option<Fragment> {
