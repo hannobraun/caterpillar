@@ -102,7 +102,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         )
         .run_program();
 
-    let (brk, nop) = {
+    let [brk, nop] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .find_function_by_name("main")
@@ -114,7 +114,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         let brk = body.next().unwrap().hash();
         let nop = body.next().unwrap().hash();
 
-        (brk, nop)
+        [brk, nop]
     };
 
     assert_eq!(
