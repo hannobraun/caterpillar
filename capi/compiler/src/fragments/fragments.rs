@@ -139,7 +139,7 @@ impl FragmentMap {
     pub fn iter_from(
         &self,
         start: FragmentId,
-    ) -> impl Iterator<Item = &Fragment> {
+    ) -> impl Iterator<Item = (FragmentId, &Fragment)> {
         let mut next = Some(start);
 
         iter::from_fn(move || {
@@ -150,7 +150,7 @@ impl FragmentMap {
                 self.ids_by_hash.get(&hash_of_id).copied()
             });
 
-            Some(fragment)
+            Some((id, fragment))
         })
     }
 }
