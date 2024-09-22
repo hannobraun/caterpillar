@@ -87,7 +87,7 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                call_id_to_function_name(active_fragment, code);
+                call_fragment_to_function_name(active_fragment, code);
 
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
@@ -289,7 +289,7 @@ fn reconstruct_function(
     };
 
     let expected_next_function = tail_call
-        .and_then(|tail_call| call_id_to_function_name(tail_call, code));
+        .and_then(|tail_call| call_fragment_to_function_name(tail_call, code));
 
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
@@ -304,7 +304,10 @@ fn reconstruct_function(
     expected_next_function
 }
 
-fn call_id_to_function_name(id: Hash<Fragment>, code: &Code) -> Option<String> {
+fn call_fragment_to_function_name(
+    id: Hash<Fragment>,
+    code: &Code,
+) -> Option<String> {
     let fragment = code
         .fragments
         .get(&id)
