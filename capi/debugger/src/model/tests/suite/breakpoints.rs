@@ -513,10 +513,10 @@ fn step_out_of_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .nth(1)
             .unwrap()
-            .hash();
+            .this;
 
         (a, b)
     };
