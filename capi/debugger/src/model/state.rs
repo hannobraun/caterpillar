@@ -186,7 +186,7 @@ impl PersistentState {
                         let Some(after) = entries
                             .find_next_fragment_or_next_after_caller(
                                 branch,
-                                &fragment.hash(),
+                                &fragment.data.id.this,
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
