@@ -48,8 +48,8 @@ impl FragmentMap {
         self.fragments_by_hash.remove(&id.this)
     }
 
-    pub fn get(&self, hash: &Hash<Fragment>) -> Option<&Fragment> {
-        self.fragments_by_hash.get(hash)
+    pub fn get(&self, hash: &FragmentId) -> Option<&Fragment> {
+        self.fragments_by_id.get(hash)
     }
 
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {

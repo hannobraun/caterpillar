@@ -246,7 +246,7 @@ fn instruction_to_function(
         .fragments
         .find_named_function_by_fragment_in_body(&fragment_id)
     else {
-        let fragment = code.fragments.get(&fragment_id.this);
+        let fragment = code.fragments.get(&fragment_id);
         panic!(
             "Active instruction `{instruction}` maps to active fragment \
             `{fragment_id:?}`. Expecting that fragment to be part of the body \
@@ -312,7 +312,7 @@ fn call_fragment_to_function_name(
 ) -> Option<String> {
     let fragment = code
         .fragments
-        .get(&call_fragment.this)
+        .get(call_fragment)
         .expect("Fragment referenced by active function must exist.");
 
     let FragmentKind::CallToFunction { name, .. } = &fragment.kind else {
