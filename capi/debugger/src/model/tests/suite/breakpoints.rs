@@ -78,8 +78,9 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .expect_functions()
             .with_name("main")
             .active_fragment()
-            .hash(),
-        nop.this,
+            .data
+            .id,
+        nop,
     );
 
     Ok(())
@@ -191,8 +192,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        a.this,
+            .data
+            .id,
+        a,
     );
 
     // Step to `b`, over the durable breakpoint. This sets an ephemeral
@@ -305,8 +307,9 @@ fn step_into_function() {
             .expect_functions()
             .expect_leaf("f")
             .active_fragment()
-            .hash(),
-        a.this,
+            .data
+            .id,
+        a,
     );
 }
 
@@ -469,8 +472,9 @@ fn step_over_function_call() {
             .expect_functions()
             .expect_leaf("main")
             .active_fragment()
-            .hash(),
-        nop.this,
+            .data
+            .id,
+        nop,
     );
 }
 
