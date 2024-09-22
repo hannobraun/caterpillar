@@ -9,7 +9,7 @@ use crate::fragments::{Fragment, FragmentId, Hash};
 )]
 pub struct SourceMap {
     instruction_to_fragment: BTreeMap<InstructionAddress, FragmentId>,
-    fragment_to_instructions: BTreeMap<Hash<Fragment>, Vec<InstructionAddress>>,
+    fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
 }
 
 impl SourceMap {
@@ -20,7 +20,7 @@ impl SourceMap {
     ) {
         self.instruction_to_fragment.insert(instruction, fragment);
         self.fragment_to_instructions
-            .entry(fragment.this)
+            .entry(fragment)
             .or_default()
             .push(instruction);
     }
@@ -50,7 +50,7 @@ impl SourceMap {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
         self.fragment_to_instructions
-            .get(&fragment.this)
+            .get(fragment)
             .unwrap_or(&EMPTY)
     }
 }
