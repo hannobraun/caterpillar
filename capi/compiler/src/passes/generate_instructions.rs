@@ -76,7 +76,7 @@ pub fn generate_instructions(
 
             let address = bindings_address.unwrap_or(context_address);
             functions
-                .by_hash
+                .by_fragment
                 .entry(fragment)
                 .or_default()
                 .push((branch.parameters.clone(), address));
@@ -118,7 +118,7 @@ pub fn generate_instructions(
     }
 
     for call in output.placeholders {
-        let Some(function) = functions.by_hash.get(&call.function) else {
+        let Some(function) = functions.by_fragment.get(&call.function) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -422,7 +422,7 @@ pub struct CallToFunction {
 
 #[derive(Default)]
 struct Functions {
-    by_hash: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
+    by_fragment: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 }
 
 struct FunctionToCompile {
