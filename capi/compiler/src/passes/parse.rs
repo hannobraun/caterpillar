@@ -82,8 +82,39 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     }
 
     let parameters = parse_branch_parameters(tokens);
+    let body = parse_branch_body(tokens)?;
 
+    Some(Branch { parameters, body })
+}
+
+fn parse_branch_parameters(tokens: &mut Tokens) -> Vec<Pattern> {
+    let mut parameters = Vec::new();
+
+    while let Some(token) = tokens.take() {
+        match token {
+            Token::Identifier { name } => {
+                parameters.push(Pattern::Identifier { name });
+            }
+            Token::IntegerLiteral { value } => {
+                parameters.push(Pattern::Literal {
+                    value: value.into(),
+                });
+            }
+            Token::BranchBodyStart => {
+                break;
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
+    }
+
+    parameters
+}
+
+fn parse_branch_body(tokens: &mut Tokens) -> Option<Vec<Expression>> {
     let mut body = Vec::new();
+
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
@@ -116,32 +147,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    Some(Branch { parameters, body })
-}
-
-fn parse_branch_parameters(tokens: &mut Tokens) -> Vec<Pattern> {
-    let mut parameters = Vec::new();
-
-    while let Some(token) = tokens.take() {
-        match token {
-            Token::Identifier { name } => {
-                parameters.push(Pattern::Identifier { name });
-            }
-            Token::IntegerLiteral { value } => {
-                parameters.push(Pattern::Literal {
-                    value: value.into(),
-                });
-            }
-            Token::BranchBodyStart => {
-                break;
-            }
-            token => {
-                panic!("Unexpected token: {token:?}");
-            }
-        }
-    }
-
-    parameters
+    Some(body)
 }
 
 struct Tokens {
