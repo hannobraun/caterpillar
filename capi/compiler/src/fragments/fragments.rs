@@ -83,7 +83,7 @@ impl FragmentMap {
             let previous = self
                 .inner
                 .values()
-                .find(|fragment| fragment.next == Some(fragment_id));
+                .find(|fragment| fragment.location.next == Some(fragment_id));
 
             if let Some(previous) = previous {
                 // There's a previous fragment. Continue the search there.
@@ -139,7 +139,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.inner.get(&id)?;
 
-            next = fragment.next;
+            next = fragment.location.next;
 
             Some(fragment)
         })

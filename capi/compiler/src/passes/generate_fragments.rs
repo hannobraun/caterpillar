@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentId, FragmentKind, FragmentMap, Fragments,
-        Function, Parameters, Payload,
+        Branch, Fragment, FragmentId, FragmentKind, FragmentLocation,
+        FragmentMap, Fragments, Function, Parameters, Payload,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -34,8 +34,7 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent,
-            next: None,
+            location: FragmentLocation { parent, next: None },
             kind: FragmentKind::Terminator,
         };
         let terminator_id = terminator.id();
@@ -76,8 +75,10 @@ fn compile_function(
     }
 
     Fragment {
-        parent,
-        next: Some(next),
+        location: FragmentLocation {
+            parent,
+            next: Some(next),
+        },
         kind: FragmentKind::Payload {
             payload: Payload::Function {
                 function: Function {
@@ -134,8 +135,10 @@ fn compile_expression(
     };
 
     Fragment {
-        parent,
-        next: Some(next),
+        location: FragmentLocation {
+            parent,
+            next: Some(next),
+        },
         kind: FragmentKind::Payload { payload },
     }
 }
@@ -145,7 +148,10 @@ mod tests {
     use capi_runtime::Value;
 
     use crate::{
-        fragments::{Fragment, FragmentKind, Fragments, Function, Payload},
+        fragments::{
+            Fragment, FragmentKind, FragmentLocation, Fragments, Function,
+            Payload,
+        },
         syntax::{self, Script},
     };
 
@@ -248,7 +254,7 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            next,
+            location: FragmentLocation { next, .. },
             kind:
                 FragmentKind::Payload {
                     payload:
@@ -283,8 +289,11 @@ mod tests {
             fragments.iter_from(branch.start).collect::<Vec<_>>()
         };
 
-        assert_eq!(branch_fragments[0].parent, next);
-        assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].id()));
+        assert_eq!(branch_fragments[0].location.parent, next);
+        assert_eq!(
+            block_fragments[0].location.parent,
+            Some(branch_fragments[1].id())
+        );
     }
 
     fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {

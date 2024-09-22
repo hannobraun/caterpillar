@@ -11,36 +11,8 @@ use super::{FoundFunction, FragmentId, FragmentMap, Payload};
     udigest::Digestable,
 )]
 pub struct Fragment {
-    /// # This fragment's parent
-    ///
-    /// Refers to the fragment that is the parent of this fragment. If this
-    /// fragment resides in the root context, then is has no parent.
-    ///
-    /// All other fragments have a parent. By convention, this is the fragment
-    /// _after_ the function that this fragment resides in (i.e. the `next`
-    /// fragment of that function).
-    ///
-    /// This must be so, because by the time that a fragment is constructed, the
-    /// function fragment for the function it resides in, or any fragments
-    /// preceding that, are not constructed yet. Thus, they do not have an ID
-    /// that can be used to refer to them.
-    ///
-    /// Any _succeeding_ fragments, on the other hand, are already constructed.
-    /// Therefore, the `next` fragment of the function fragment can stand in as
-    /// the parent.
-    ///
-    /// Function fragments always have a `next` fragment that can be used in
-    /// this way. This is that reason that terminators exist, to make sure of
-    /// that.
-    pub parent: Option<FragmentId>,
-
-    /// # The next fragment after this one
-    ///
-    /// Every fragment resides in a context, either a function or the root
-    /// context. Every payload-carrying fragment has a fragment that follows it
-    /// within that context, which is either another payload-carrying fragment,
-    /// or a terminator.
-    pub next: Option<FragmentId>,
+    /// # The location of the fragment within the code
+    pub location: FragmentLocation,
 
     pub kind: FragmentKind,
 }
@@ -82,6 +54,49 @@ impl Fragment {
 
         Some(text)
     }
+}
+
+/// # The location of a fragment within the code
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct FragmentLocation {
+    /// # This fragment's parent
+    ///
+    /// Refers to the fragment that is the parent of this fragment. If this
+    /// fragment resides in the root context, then is has no parent.
+    ///
+    /// All other fragments have a parent. By convention, this is the fragment
+    /// _after_ the function that this fragment resides in (i.e. the `next`
+    /// fragment of that function).
+    ///
+    /// This must be so, because by the time that a fragment is constructed, the
+    /// function fragment for the function it resides in, or any fragments
+    /// preceding that, are not constructed yet. Thus, they do not have an ID
+    /// that can be used to refer to them.
+    ///
+    /// Any _succeeding_ fragments, on the other hand, are already constructed.
+    /// Therefore, the `next` fragment of the function fragment can stand in as
+    /// the parent.
+    ///
+    /// Function fragments always have a `next` fragment that can be used in
+    /// this way. This is that reason that terminators exist, to make sure of
+    /// that.
+    pub parent: Option<FragmentId>,
+
+    /// # The next fragment after this one
+    ///
+    /// Every fragment resides in a context, either a function or the root
+    /// context. Every payload-carrying fragment has a fragment that follows it
+    /// within that context, which is either another payload-carrying fragment,
+    /// or a terminator.
+    pub next: Option<FragmentId>,
 }
 
 #[derive(
