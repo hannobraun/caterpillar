@@ -59,10 +59,10 @@ impl FragmentMap {
                 FragmentKind::Function { function } => Some((id, function)),
                 _ => None,
             })
-            .find_map(|(hash, function)| {
+            .find_map(|(id, function)| {
                 if function.name.as_deref() == Some(name) {
                     Some(FoundFunction {
-                        hash: hash.this,
+                        hash: id.this,
                         function,
                     })
                 } else {
