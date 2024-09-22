@@ -58,9 +58,9 @@ where
             here: fragment.hash(),
         };
 
-        next = location;
-
         fragments.insert(location, fragment);
+
+        next = location;
     }
 
     next.here
