@@ -37,7 +37,7 @@ where
         let id = FragmentId {
             parent,
             next: None,
-            this: terminator.hash(),
+            this: Hash::new(&terminator),
         };
 
         fragments.insert(id, terminator);
@@ -50,7 +50,7 @@ where
         let id = FragmentId {
             parent,
             next: Some(next.hash()),
-            this: fragment.hash(),
+            this: Hash::new(&fragment),
         };
 
         fragments.insert(id, fragment);

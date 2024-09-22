@@ -113,10 +113,6 @@ pub enum Fragment {
 }
 
 impl Fragment {
-    pub fn hash(&self) -> Hash<Self> {
-        Hash::new(self)
-    }
-
     pub fn as_call_to_function<'r>(
         &self,
         fragments: &'r FragmentMap,
