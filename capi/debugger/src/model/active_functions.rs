@@ -165,7 +165,9 @@ impl ActiveFunctionsEntries {
                 Ok(branch) => Some(branch),
                 Err(_) => None,
             })
-            .find(|branch| !branch.body.iter().any(|f| f.hash() == *fragment));
+            .find(|branch| {
+                !branch.body.iter().any(|f| f.data.id.this == *fragment)
+            });
 
         let Some(caller_branch) = caller_branch else {
             return Ok(None);
