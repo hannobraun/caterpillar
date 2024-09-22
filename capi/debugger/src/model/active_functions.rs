@@ -1,7 +1,9 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, Fragment, FragmentKind, Hash};
+use capi_compiler::fragments::{
+    self, Fragment, FragmentId, FragmentKind, Hash,
+};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -87,12 +89,12 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                call_fragment_to_function_name(active_fragment, code);
+                call_fragment_to_function_name(active_fragment.this, code);
 
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
                     function,
-                    Some(active_fragment),
+                    Some(active_fragment.this),
                     active_instructions.is_empty(),
                     &code.fragments,
                     &code.source_map,
@@ -230,7 +232,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_function(
     instruction: &InstructionAddress,
     code: &Code,
-) -> (fragments::Function, Hash<Fragment>) {
+) -> (fragments::Function, FragmentId) {
     let Some(fragment_id) =
         code.source_map.instruction_to_fragment(instruction)
     else {
@@ -255,7 +257,7 @@ fn instruction_to_function(
         );
     };
 
-    (function.clone(), fragment_id.this)
+    (function.clone(), fragment_id)
 }
 
 fn reconstruct_function(
