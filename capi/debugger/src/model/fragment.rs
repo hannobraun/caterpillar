@@ -68,10 +68,6 @@ impl DebugFragment {
 
         Some(Self { kind, data })
     }
-
-    pub fn hash(&self) -> Hash<Fragment> {
-        self.data.fragment.hash()
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

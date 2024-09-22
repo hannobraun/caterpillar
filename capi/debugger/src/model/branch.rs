@@ -99,7 +99,10 @@ impl DebugBranch {
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
         assert_eq!(
-            fragments.next().map(|fragment| fragment.hash()).as_ref(),
+            fragments
+                .next()
+                .map(|fragment| fragment.data.id.this)
+                .as_ref(),
             Some(hash)
         );
 
