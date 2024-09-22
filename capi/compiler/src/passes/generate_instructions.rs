@@ -384,10 +384,10 @@ impl Output {
     fn generate_instruction(
         &mut self,
         instruction: Instruction,
-        fragment_id: Hash<Fragment>,
+        fragment: Hash<Fragment>,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
-        self.source_map.define_mapping(addr, fragment_id);
+        self.source_map.define_mapping(addr, fragment);
         addr
     }
 
