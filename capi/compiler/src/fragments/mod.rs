@@ -4,9 +4,11 @@ mod fragment;
 mod fragments;
 mod function;
 mod hash;
+mod map;
 
 pub use self::{
     fragment::{Fragment, FragmentId},
-    fragments::{FoundFunction, FragmentMap, Fragments},
+    fragments::Fragments,
     function::{Branch, Function, Parameters},
+    map::{FoundFunction, FragmentMap},
 };
