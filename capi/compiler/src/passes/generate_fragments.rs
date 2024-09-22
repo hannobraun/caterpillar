@@ -34,7 +34,6 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent: parent.map(|id| id.this),
             next: None,
             kind: FragmentKind::Terminator,
         };
@@ -72,7 +71,7 @@ where
 
 fn compile_function(
     function: syntax::Function,
-    parent: Option<Hash<Fragment>>,
+    _: Option<Hash<Fragment>>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -90,7 +89,6 @@ fn compile_function(
     }
 
     Fragment {
-        parent,
         next: Some(next.this),
         kind: FragmentKind::Function {
             function: Function {
@@ -148,7 +146,6 @@ fn compile_expression(
     };
 
     Fragment {
-        parent,
         next: Some(next.this),
         kind: fragment,
     }
