@@ -43,6 +43,8 @@ impl FragmentMap {
     }
 
     pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
+        self.ids_by_hash.remove(&id.hash());
+        self.fragments_by_id.remove(id);
         self.fragments_by_hash.remove(&id.this)
     }
 
