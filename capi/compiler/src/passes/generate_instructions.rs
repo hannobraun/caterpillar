@@ -64,7 +64,8 @@ pub fn generate_instructions(
                         }
                     }
                 });
-            let bindings_address = output.generate_binding(parameters, hash);
+            let bindings_address =
+                output.generate_binding(parameters, hash.this);
 
             let context_address = compile_context(
                 branch.start,
@@ -76,7 +77,7 @@ pub fn generate_instructions(
             let address = bindings_address.unwrap_or(context_address);
             functions
                 .by_hash
-                .entry(hash)
+                .entry(hash.this)
                 .or_default()
                 .push((branch.parameters.clone(), address));
 
@@ -284,7 +285,7 @@ fn compile_fragment(
             // into a queue. Once whatever's currently being compiled is out of
             // the way, we can process that.
             queue.push_front(CompileUnit {
-                hash: id.this,
+                hash: id,
                 function: function.clone(),
                 address,
             });
@@ -425,7 +426,7 @@ struct Functions {
 }
 
 struct CompileUnit {
-    hash: Hash<Fragment>,
+    hash: FragmentId,
     function: Function,
     address: Option<InstructionAddress>,
 }
