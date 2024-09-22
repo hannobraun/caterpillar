@@ -2,9 +2,9 @@ use std::mem;
 
 pub fn tokenize(source: &str) -> Vec<Token> {
     let eager_tokens = vec![
-        ("{", Token::FunctionStart),
-        ("}", Token::FunctionEnd),
-        ("|", Token::BranchHeadBoundary),
+        (r"{", Token::FunctionStart),
+        (r"}", Token::FunctionEnd),
+        (r"|", Token::BranchHeadBoundary),
     ];
 
     let mut state = State::Initial;
