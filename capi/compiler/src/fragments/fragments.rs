@@ -42,8 +42,8 @@ impl FragmentMap {
         self.inner.remove(hash)
     }
 
-    pub fn get(&self, id: &Hash<Fragment>) -> Option<&Fragment> {
-        self.inner.get(id)
+    pub fn get(&self, hash: &Hash<Fragment>) -> Option<&Fragment> {
+        self.inner.get(hash)
     }
 
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
