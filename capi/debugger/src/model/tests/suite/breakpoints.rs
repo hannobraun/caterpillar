@@ -42,8 +42,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
             .has_durable_breakpoint
     );
 
-    debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: nop.this })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
     assert!(
         debugger
             .expect_fragment(&nop.this)
@@ -77,8 +76,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .map(|(id, _)| id)
         .next()
         .unwrap();
-    debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: nop.this })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop })?;
 
     debugger.run_program();
 
@@ -193,7 +191,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
-    debugger.on_user_action(UserAction::BreakpointSet { fragment: a.this })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: a })?;
     debugger.run_program();
     assert_eq!(
         debugger
@@ -301,7 +299,7 @@ fn step_into_function() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f.this })
+        .on_user_action(UserAction::BreakpointSet { fragment: f })
         .unwrap();
 
     debugger.run_program();
@@ -366,9 +364,7 @@ fn step_out_of_function_if_at_last_fragment() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet {
-            fragment: nop_in_f.this,
-        })
+        .on_user_action(UserAction::BreakpointSet { fragment: nop_in_f })
         .unwrap();
 
     debugger.run_program();
@@ -412,7 +408,6 @@ fn step_out_of_main_function() {
             .map(|(id, _)| id)
             .next()
             .unwrap()
-            .this
     };
 
     debugger
@@ -470,7 +465,7 @@ fn step_over_function_call() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f.this })
+        .on_user_action(UserAction::BreakpointSet { fragment: f })
         .unwrap();
     debugger.run_program();
 
@@ -517,8 +512,7 @@ fn step_out_of_function() {
             .iter(fragments)
             .map(|(id, _)| id)
             .next()
-            .unwrap()
-            .this;
+            .unwrap();
         let b = fragments
             .find_function_by_name("main")
             .unwrap()

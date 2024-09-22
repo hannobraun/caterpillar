@@ -235,9 +235,7 @@ fn make_single_expression(
         let action = if element.has_attribute("data-breakpoint") {
             UserAction::BreakpointClear { fragment }
         } else {
-            UserAction::BreakpointSet {
-                fragment: fragment.this,
-            }
+            UserAction::BreakpointSet { fragment }
         };
 
         leptos::spawn_local(send_action(action, actions_tx.clone()));

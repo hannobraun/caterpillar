@@ -1,9 +1,9 @@
-use capi_compiler::fragments::{Fragment, FragmentId, Hash};
+use capi_compiler::fragments::FragmentId;
 
 #[derive(Clone)]
 pub enum UserAction {
     BreakpointClear { fragment: FragmentId },
-    BreakpointSet { fragment: Hash<Fragment> },
+    BreakpointSet { fragment: FragmentId },
     Continue,
     Reset,
     StepIn,
