@@ -68,13 +68,13 @@ where
 fn compile_function(
     function: syntax::Function,
     parent: Option<Hash<Fragment>>,
-    next: Hash<Fragment>,
+    next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(branch.body, Some(next), fragments);
+        let start = compile_context(branch.body, Some(next.here), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
@@ -86,7 +86,7 @@ fn compile_function(
 
     Fragment {
         parent,
-        next: Some(next),
+        next: Some(next.here),
         kind: FragmentKind::Function {
             function: Function {
                 name: function.name,
@@ -106,7 +106,7 @@ fn compile_expression(
     let fragment = match expression {
         syntax::Expression::Comment { text } => FragmentKind::Comment { text },
         syntax::Expression::Function { function } => {
-            return compile_function(function, parent, next.here, fragments);
+            return compile_function(function, parent, next, fragments);
         }
         syntax::Expression::Identifier {
             name,
