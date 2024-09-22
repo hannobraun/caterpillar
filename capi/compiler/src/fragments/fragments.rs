@@ -84,7 +84,7 @@ impl FragmentMap {
 
         loop {
             let previous = self
-                .fragments_by_hash
+                .fragments_by_id
                 .values()
                 .find(|fragment| fragment.next == Some(current_fragment));
 
