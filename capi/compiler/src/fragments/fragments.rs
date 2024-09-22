@@ -114,7 +114,7 @@ impl FragmentMap {
                     Some((id, function, branch))
                 });
 
-            if let Some((hash, function, branch)) = function {
+            if let Some((id, function, branch)) = function {
                 // We have found a function!
 
                 if function.name.is_some() {
@@ -122,7 +122,7 @@ impl FragmentMap {
                     // for.
                     return Some((
                         FoundFunction {
-                            hash: hash.this,
+                            hash: id.this,
                             function,
                         },
                         branch,
@@ -130,7 +130,7 @@ impl FragmentMap {
                 } else {
                     // An anonymous function. Let's continue our search in the
                     // context where it was defined.
-                    current_fragment = hash.this;
+                    current_fragment = id.this;
                     continue;
                 }
             }
