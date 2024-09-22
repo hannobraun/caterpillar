@@ -1,3 +1,5 @@
+use std::array;
+
 use crate::model::{
     active_functions::ActiveFunctionsMessage,
     tests::infra::{
@@ -179,18 +181,11 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .iter(fragments)
             .map(|(_, fragment)| fragment);
 
-        let a = body
-            .find(|fragment| fragment.as_comment().is_none())
-            .unwrap()
-            .hash();
-        let b = body
-            .find(|fragment| fragment.as_comment().is_none())
-            .unwrap()
-            .hash();
-        let c = body
-            .find(|fragment| fragment.as_comment().is_none())
-            .unwrap()
-            .hash();
+        let [a, b, c] = array::from_fn(|_| {
+            body.find(|fragment| fragment.as_comment().is_none())
+                .unwrap()
+                .hash()
+        });
 
         [a, b, c]
     };
