@@ -101,6 +101,13 @@ pub struct FragmentLocation {
     pub next: Option<Hash<Fragment>>,
 }
 
+impl FragmentLocation {
+    /// # Compute the hash of this location
+    pub fn hash(&self) -> Hash<Self> {
+        Hash::new(self)
+    }
+}
+
 #[derive(
     Clone,
     Debug,
