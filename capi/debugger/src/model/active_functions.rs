@@ -175,7 +175,7 @@ impl ActiveFunctionsEntries {
 
         self.find_next_fragment_or_next_after_caller(
             caller_branch,
-            &caller.hash(),
+            &caller.data.id.this,
         )
     }
 }
