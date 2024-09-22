@@ -233,9 +233,7 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            UserAction::BreakpointClear {
-                fragment: fragment.this,
-            }
+            UserAction::BreakpointClear { fragment }
         } else {
             UserAction::BreakpointSet {
                 fragment: fragment.this,
