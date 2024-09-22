@@ -54,7 +54,7 @@ where
             compile_expression(expression, parent, next.here, fragments);
         let location = FragmentLocation {
             parent: fragment.parent,
-            next: Some(next.here),
+            next: Some(next.hash()),
             here: fragment.hash(),
         };
 
