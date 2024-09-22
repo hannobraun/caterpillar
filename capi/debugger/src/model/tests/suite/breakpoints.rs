@@ -409,10 +409,10 @@ fn step_out_of_main_function() {
             .unwrap()
             .expect_one_branch()
             .iter(fragments)
-            .map(|(_, fragment)| fragment)
+            .map(|(id, _)| id)
             .next()
             .unwrap()
-            .hash()
+            .this
     };
 
     debugger
