@@ -26,7 +26,7 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Option<Self> {
-        let state = if Some(fragment.hash()) == active_fragment {
+        let state = if Some(id.this) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
             } else {
