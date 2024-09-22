@@ -111,7 +111,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .iter(fragments)
             .map(|(id, _)| id);
 
-        array::from_fn(|_| body.next().unwrap().this)
+        array::from_fn(|_| body.next().unwrap())
     };
 
     assert_eq!(
@@ -123,7 +123,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        brk,
+        brk.this,
     );
 
     debugger.on_user_action(UserAction::StepIn)?;
@@ -136,7 +136,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .hash(),
-        nop,
+        nop.this,
     );
 
     Ok(())
