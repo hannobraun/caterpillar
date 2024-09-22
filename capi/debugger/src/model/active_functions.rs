@@ -242,7 +242,7 @@ fn instruction_to_function(
 
     let Some((function, _)) = code
         .fragments
-        .find_named_function_by_fragment_in_body(&fragment_id.this)
+        .find_named_function_by_fragment_in_body(&fragment_id)
     else {
         let fragment = code.fragments.get(&fragment_id.this);
         panic!(

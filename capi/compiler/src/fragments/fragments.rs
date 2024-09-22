@@ -78,9 +78,9 @@ impl FragmentMap {
     /// fragment was found.
     pub fn find_named_function_by_fragment_in_body(
         &self,
-        fragment_in_body: &Hash<Fragment>,
+        fragment_in_body: &FragmentId,
     ) -> Option<(FoundFunction, &Branch)> {
-        let mut current_fragment = *fragment_in_body;
+        let mut current_fragment = fragment_in_body.this;
 
         loop {
             let previous = self
