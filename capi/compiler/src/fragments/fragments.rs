@@ -88,9 +88,9 @@ impl FragmentMap {
                 .iter()
                 .find(|(_, fragment)| fragment.next == Some(current_fragment));
 
-            if let Some((_, previous)) = previous {
+            if let Some((id, _)) = previous {
                 // There's a previous fragment. Continue the search there.
-                current_fragment = previous.hash();
+                current_fragment = id.this;
                 continue;
             }
 
