@@ -102,9 +102,9 @@ impl FragmentMap {
             let function = self
                 .fragments_by_id
                 .iter()
-                .filter_map(|(_, fragment)| match &fragment.kind {
+                .filter_map(|(id, fragment)| match &fragment.kind {
                     FragmentKind::Function { function } => {
-                        Some((fragment.hash(), function))
+                        Some((id.this, function))
                     }
                     _ => None,
                 })
