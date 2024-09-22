@@ -1,9 +1,9 @@
-use capi_compiler::fragments::Hash;
+use capi_compiler::fragments::{Fragment, Hash};
 
 #[derive(Clone)]
 pub enum UserAction {
-    BreakpointClear { fragment: Hash },
-    BreakpointSet { fragment: Hash },
+    BreakpointClear { fragment: Hash<Fragment> },
+    BreakpointSet { fragment: Hash<Fragment> },
     Continue,
     Reset,
     StepIn,

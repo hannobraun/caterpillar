@@ -85,7 +85,7 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Parameters,
-    pub start: Hash,
+    pub start: Hash<Fragment>,
 }
 
 impl Branch {

@@ -9,7 +9,7 @@ use super::{Branch, Fragment, FragmentKind, Function, Hash};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     /// The root fragment that indirectly points to all other fragments
-    pub root: Hash,
+    pub root: Hash<Fragment>,
 
     pub inner: FragmentMap,
 }
@@ -30,19 +30,19 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
-    inner: BTreeMap<Hash, Fragment>,
+    inner: BTreeMap<Hash<Fragment>, Fragment>,
 }
 
 impl FragmentMap {
-    pub fn insert(&mut self, id: Hash, fragment: Fragment) {
+    pub fn insert(&mut self, id: Hash<Fragment>, fragment: Fragment) {
         self.inner.insert(id, fragment);
     }
 
-    pub fn remove(&mut self, id: &Hash) -> Option<Fragment> {
+    pub fn remove(&mut self, id: &Hash<Fragment>) -> Option<Fragment> {
         self.inner.remove(id)
     }
 
-    pub fn get(&self, id: &Hash) -> Option<&Fragment> {
+    pub fn get(&self, id: &Hash<Fragment>) -> Option<&Fragment> {
         self.inner.get(id)
     }
 
@@ -74,7 +74,7 @@ impl FragmentMap {
     /// fragment was found.
     pub fn find_named_function_by_fragment_in_body(
         &self,
-        fragment_id: &Hash,
+        fragment_id: &Hash<Fragment>,
     ) -> Option<(FoundFunction, &Branch)> {
         let mut fragment_id = *fragment_id;
 
@@ -130,7 +130,10 @@ impl FragmentMap {
         }
     }
 
-    pub fn iter_from(&self, id: Hash) -> impl Iterator<Item = &Fragment> {
+    pub fn iter_from(
+        &self,
+        id: Hash<Fragment>,
+    ) -> impl Iterator<Item = &Fragment> {
         let mut next = Some(id);
 
         iter::from_fn(move || {
@@ -150,7 +153,7 @@ impl FragmentMap {
 /// `Function`.
 #[derive(Debug)]
 pub struct FoundFunction<'r> {
-    pub id: Hash,
+    pub id: Hash<Fragment>,
     pub function: &'r Function,
 }
 

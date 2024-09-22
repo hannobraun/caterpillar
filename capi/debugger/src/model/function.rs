@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{self, Fragments, Hash},
+    fragments::{self, Fragment, Fragments, Hash},
     source_map::SourceMap,
 };
 use capi_runtime::Effect;
@@ -16,7 +16,7 @@ pub struct DebugFunction {
 impl DebugFunction {
     pub fn new(
         function: fragments::Function,
-        active_fragment: Option<Hash>,
+        active_fragment: Option<Hash<Fragment>>,
         is_innermost_active_function: bool,
         fragments: &Fragments,
         source_map: &SourceMap,

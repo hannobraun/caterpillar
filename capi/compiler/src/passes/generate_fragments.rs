@@ -25,9 +25,9 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
 fn compile_context<E>(
     expressions: E,
-    parent: Option<Hash>,
+    parent: Option<Hash<Fragment>>,
     fragments: &mut FragmentMap,
-) -> Hash
+) -> Hash<Fragment>
 where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
@@ -57,8 +57,8 @@ where
 
 fn compile_function(
     function: syntax::Function,
-    parent: Option<Hash>,
-    next: Hash,
+    parent: Option<Hash<Fragment>>,
+    next: Hash<Fragment>,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let mut branches = Vec::new();
@@ -91,8 +91,8 @@ fn compile_function(
 
 fn compile_expression(
     expression: syntax::Expression,
-    parent: Option<Hash>,
-    next: Hash,
+    parent: Option<Hash<Fragment>>,
+    next: Hash<Fragment>,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let fragment = match expression {

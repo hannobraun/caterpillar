@@ -1,6 +1,6 @@
+use std::marker::PhantomData;
+
 #[derive(
-    Clone,
-    Copy,
     Debug,
     Eq,
     PartialEq,
@@ -10,6 +10,15 @@
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct Hash {
+pub struct Hash<T> {
     pub(super) hash: [u8; 32],
+    pub(super) _t: PhantomData<T>,
 }
+
+impl<T> Clone for Hash<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl<T> Copy for Hash<T> {}

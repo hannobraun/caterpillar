@@ -1,6 +1,6 @@
 use capi_compiler::{
     compile,
-    fragments::{Fragments, Hash},
+    fragments::{Fragment, Fragments, Hash},
 };
 use capi_game_engine::{
     command::Command, game_engine::GameEngine, host::GameEngineHost,
@@ -104,7 +104,7 @@ impl TestDebugger {
         &self.persistent.code.inner.as_ref().unwrap().fragments
     }
 
-    pub fn expect_fragment(&mut self, id: &Hash) -> DebugFragment {
+    pub fn expect_fragment(&mut self, id: &Hash<Fragment>) -> DebugFragment {
         let Some(fragment) = self
             .transient_state()
             .active_functions

@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
@@ -24,9 +26,12 @@ pub struct Fragment {
 }
 
 impl Fragment {
-    pub fn id(&self) -> Hash {
+    pub fn id(&self) -> Hash<Self> {
         let hash = udigest::hash::<blake3::Hasher>(self).into();
-        Hash { hash }
+        Hash {
+            hash,
+            _t: PhantomData,
+        }
     }
 
     pub fn as_call_to_function<'r>(
@@ -88,7 +93,7 @@ pub struct FragmentLocation {
     /// Function fragments always have a `next` fragment that can be used in
     /// this way. This is that reason that terminators exist, to make sure of
     /// that.
-    pub parent: Option<Hash>,
+    pub parent: Option<Hash<Fragment>>,
 
     /// # The next fragment within the fragment's context
     ///
@@ -98,7 +103,7 @@ pub struct FragmentLocation {
     /// or a terminator.
     ///
     /// Might be `None`, if the fragment is a terminator.
-    pub next: Option<Hash>,
+    pub next: Option<Hash<Fragment>>,
 }
 
 #[derive(

@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, FragmentKind, Hash};
+use capi_compiler::fragments::{self, Fragment, FragmentKind, Hash};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -139,7 +139,7 @@ impl ActiveFunctionsEntries {
     pub fn find_next_fragment_or_next_after_caller(
         &self,
         branch: &DebugBranch,
-        fragment: &Hash,
+        fragment: &Hash<Fragment>,
     ) -> anyhow::Result<Option<DebugFragment>> {
         if let Some(after) = branch.fragment_after(fragment)? {
             return Ok(Some(after.clone()));
@@ -150,7 +150,7 @@ impl ActiveFunctionsEntries {
 
     pub fn find_next_fragment_after_caller(
         &self,
-        fragment: &Hash,
+        fragment: &Hash<Fragment>,
     ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
@@ -230,7 +230,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_function(
     instruction: &InstructionAddress,
     code: &Code,
-) -> (fragments::Function, Hash) {
+) -> (fragments::Function, Hash<Fragment>) {
     let Some(fragment_id) =
         code.source_map.instruction_to_fragment(instruction)
     else {
@@ -304,7 +304,7 @@ fn reconstruct_function(
     expected_next_function
 }
 
-fn call_id_to_function_name(id: Hash, code: &Code) -> Option<String> {
+fn call_id_to_function_name(id: Hash<Fragment>, code: &Code) -> Option<String> {
     let fragment = code
         .fragments
         .get(&id)
