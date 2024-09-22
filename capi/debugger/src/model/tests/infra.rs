@@ -104,7 +104,7 @@ impl TestDebugger {
         &self.persistent.code.inner.as_ref().unwrap().fragments
     }
 
-    pub fn expect_fragment(&mut self, hash: &FragmentId) -> DebugFragment {
+    pub fn expect_fragment(&mut self, id: &FragmentId) -> DebugFragment {
         let Some(fragment) = self
             .transient_state()
             .active_functions
@@ -114,7 +114,7 @@ impl TestDebugger {
             .find_map(|function| {
                 function.branches.iter().find_map(|branch| {
                     branch.body.iter().find_map(|fragment| {
-                        if fragment.hash() == hash.this {
+                        if fragment.hash() == id.this {
                             Some(fragment.clone())
                         } else {
                             None
@@ -123,7 +123,7 @@ impl TestDebugger {
                 })
             })
         else {
-            panic!("Expected to find fragment with ID `{hash:?}`");
+            panic!("Expected to find fragment with ID `{id:?}`");
         };
 
         fragment
