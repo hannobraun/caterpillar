@@ -19,7 +19,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
     Fragments {
         root,
-        inner: fragments,
+        map: fragments,
     }
 }
 
