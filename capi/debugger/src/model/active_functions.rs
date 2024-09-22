@@ -242,9 +242,9 @@ fn instruction_to_function(
 
     let Some((function, _)) = code
         .fragments
-        .find_named_function_by_fragment_in_body(&fragment_id)
+        .find_named_function_by_fragment_in_body(&fragment_id.this)
     else {
-        let fragment = code.fragments.get(&fragment_id);
+        let fragment = code.fragments.get(&fragment_id.this);
         panic!(
             "Active instruction `{instruction}` maps to active fragment \
             `{fragment_id:?}`. Expecting that fragment to be part of the body \
@@ -255,7 +255,7 @@ fn instruction_to_function(
         );
     };
 
-    (function.clone(), fragment_id)
+    (function.clone(), fragment_id.this)
 }
 
 fn reconstruct_function(
