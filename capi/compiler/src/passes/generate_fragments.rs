@@ -38,7 +38,7 @@ where
             next: None,
             kind: FragmentKind::Terminator,
         };
-        let terminator_id = terminator.hash();
+        let terminator_hash = terminator.hash();
 
         fragments.insert(
             FragmentLocation {
@@ -48,7 +48,7 @@ where
             terminator,
         );
 
-        terminator_id
+        terminator_hash
     };
 
     for expression in expressions.into_iter().rev() {
