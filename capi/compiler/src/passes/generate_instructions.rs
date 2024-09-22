@@ -32,7 +32,7 @@ pub fn generate_instructions(
     if let Some(function) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
             name: "main".to_string(),
-            id: function.id,
+            id: function.hash,
             address: call_to_main,
             is_tail_call: true,
         });
@@ -224,7 +224,7 @@ fn compile_fragment(
             if let Some(function) = fragments.find_function_by_name(name) {
                 output.placeholders.push(CallToFunction {
                     name: name.clone(),
-                    id: function.id,
+                    id: function.hash,
                     address,
                     is_tail_call: *is_tail_call,
                 });

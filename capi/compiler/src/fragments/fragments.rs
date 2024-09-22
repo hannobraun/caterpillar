@@ -57,7 +57,7 @@ impl FragmentMap {
             })
             .find_map(|(id, function)| {
                 if function.name.as_deref() == Some(name) {
-                    Some(FoundFunction { id, function })
+                    Some(FoundFunction { hash: id, function })
                 } else {
                     None
                 }
@@ -114,10 +114,7 @@ impl FragmentMap {
                 if function.name.is_some() {
                     // It's a named function! Exactly what we've been looking
                     // for.
-                    return Some((
-                        FoundFunction { id: hash, function },
-                        branch,
-                    ));
+                    return Some((FoundFunction { hash, function }, branch));
                 } else {
                     // An anonymous function. Let's continue our search in the
                     // context where it was defined.
@@ -155,7 +152,7 @@ impl FragmentMap {
 /// `Function`.
 #[derive(Debug)]
 pub struct FoundFunction<'r> {
-    pub id: Hash<Fragment>,
+    pub hash: Hash<Fragment>,
     pub function: &'r Function,
 }
 
