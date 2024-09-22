@@ -37,10 +37,9 @@ impl DebugBranch {
         let body = fragments
             .iter_from(branch.start)
             .map(|(_, fragment)| fragment)
-            .cloned()
             .filter_map(|fragment| {
                 DebugFragment::new(
-                    fragment,
+                    fragment.clone(),
                     active_fragment,
                     is_in_innermost_active_function,
                     fragments,
