@@ -6,6 +6,8 @@ use std::fmt;
     Debug,
     Eq,
     PartialEq,
+    Ord,
+    PartialOrd,
     serde::Deserialize,
     serde::Serialize,
     udigest::Digestable,
