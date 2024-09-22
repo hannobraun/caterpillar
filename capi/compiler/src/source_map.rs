@@ -8,7 +8,7 @@ use crate::fragments::{Fragment, FragmentId, Hash};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<InstructionAddress, Hash<Fragment>>,
+    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentId>,
     fragment_to_instructions: BTreeMap<Hash<Fragment>, Vec<InstructionAddress>>,
 }
 
@@ -18,8 +18,7 @@ impl SourceMap {
         instruction: InstructionAddress,
         fragment: FragmentId,
     ) {
-        self.instruction_to_fragment
-            .insert(instruction, fragment.this);
+        self.instruction_to_fragment.insert(instruction, fragment);
         self.fragment_to_instructions
             .entry(fragment.this)
             .or_default()
@@ -34,7 +33,10 @@ impl SourceMap {
         &self,
         instruction: &InstructionAddress,
     ) -> Option<Hash<Fragment>> {
-        self.instruction_to_fragment.get(instruction).cloned()
+        self.instruction_to_fragment
+            .get(instruction)
+            .cloned()
+            .map(|id| id.this)
     }
 
     /// Get the address of the instruction that the given fragment maps to
