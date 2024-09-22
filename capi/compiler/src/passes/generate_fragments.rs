@@ -57,7 +57,7 @@ where
             fragments,
         );
         let id = FragmentId {
-            parent: fragment.parent,
+            parent: parent.map(|id| id.this),
             next: Some(next.hash()),
             this: fragment.hash(),
         };
