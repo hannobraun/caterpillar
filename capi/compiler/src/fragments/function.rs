@@ -94,7 +94,7 @@ impl Branch {
         &self,
         fragments: &'r FragmentMap,
     ) -> impl Iterator<Item = &'r Fragment> {
-        fragments.iter_from(self.start.this)
+        fragments.iter_from(self.start)
     }
 }
 

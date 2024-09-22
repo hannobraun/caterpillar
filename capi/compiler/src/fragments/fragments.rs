@@ -138,9 +138,9 @@ impl FragmentMap {
 
     pub fn iter_from(
         &self,
-        start: Hash<Fragment>,
+        start: FragmentId,
     ) -> impl Iterator<Item = &Fragment> {
-        let mut next = Some(start);
+        let mut next = Some(start.this);
 
         iter::from_fn(move || {
             let id = next.take()?;
