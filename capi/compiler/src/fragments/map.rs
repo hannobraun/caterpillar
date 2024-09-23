@@ -208,7 +208,7 @@ impl FragmentId {
     }
 
     /// # Compute the hash of this location
-    pub(super) fn hash(&self) -> Hash<Self> {
+    fn hash(&self) -> Hash<Self> {
         Hash::new(self)
     }
 }
