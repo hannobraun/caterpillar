@@ -212,6 +212,22 @@ impl FragmentId {
             .as_ref()
             .and_then(|parent| fragments.ids_by_hash.get(parent))
     }
+
+    /// # The next fragment within the fragment's context
+    ///
+    /// Every fragment resides in a context, either the root context or a
+    /// function. Every fragment that isn't a terminator has a fragment that
+    /// follows it within that context.
+    ///
+    /// Might be `None`, if the fragment is a terminator.
+    pub fn next<'r>(
+        &self,
+        fragments: &'r FragmentMap,
+    ) -> Option<&'r FragmentId> {
+        self.next
+            .as_ref()
+            .and_then(|next| fragments.ids_by_hash.get(next))
+    }
 }
 
 #[derive(
