@@ -66,6 +66,9 @@ mod tests {
 
     #[test]
     fn tail_call_in_anonymous_function() {
+        // The compiler pass that determines tail positions should step into
+        // nested functions.
+
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
