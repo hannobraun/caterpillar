@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter, ops::Deref};
 
-use super::{hash::Hash, Branch, Fragment, FragmentId, Function};
+use super::{hash::Hash, Branch, Fragment, Function};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
@@ -137,5 +137,78 @@ impl Deref for FoundFunction<'_> {
 
     fn deref(&self) -> &Self::Target {
         self.function
+    }
+}
+
+/// # A unique identifier for a fragment
+///
+/// A fragment is identified by its contents, but also by its position within
+/// the code.
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct FragmentId {
+    /// # The fragment's parent
+    ///
+    /// Refers to the fragment's parent fragment. If the fragment resides in the
+    /// root context, then it has no parent.
+    ///
+    /// All other fragments have a parent. By convention, this is the fragment
+    /// _after_ the function that the fragment resides in (i.e. the `next`
+    /// fragment of that function).
+    ///
+    /// This must be so, because by the time that a fragment is constructed, the
+    /// function fragment for the function it resides in, or any fragments
+    /// preceding that, are not constructed yet. Thus, they do not have an ID
+    /// that can be used to refer to them.
+    ///
+    /// Any _succeeding_ fragments, on the other hand, are already constructed.
+    /// Therefore, the `next` fragment of the function fragment can stand in as
+    /// the parent.
+    ///
+    /// Function fragments always have a `next` fragment that can be used in
+    /// this way. This is that reason that terminators exist, to make sure of
+    /// that.
+    pub parent: Option<Hash<FragmentId>>,
+
+    /// # The next fragment within the fragment's context
+    ///
+    /// Every fragment resides in a context, either the root context or a
+    /// function. Every payload-carrying fragment has a fragment that follows it
+    /// within that context, which is either another payload-carrying fragment,
+    /// or a terminator.
+    ///
+    /// Might be `None`, if the fragment is a terminator.
+    pub next: Option<Hash<FragmentId>>,
+
+    /// # The fragment itself
+    pub this: Hash<Fragment>,
+}
+
+impl FragmentId {
+    pub fn new(
+        parent: Option<&FragmentId>,
+        next: Option<&FragmentId>,
+        this: &Fragment,
+    ) -> Self {
+        Self {
+            parent: parent.map(|id| id.hash()),
+            next: next.map(|id| id.hash()),
+            this: Hash::new(this),
+        }
+    }
+
+    /// # Compute the hash of this location
+    pub(super) fn hash(&self) -> Hash<Self> {
+        Hash::new(self)
     }
 }

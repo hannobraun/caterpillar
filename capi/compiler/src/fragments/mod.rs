@@ -7,8 +7,8 @@ mod hash;
 mod map;
 
 pub use self::{
-    fragment::{Fragment, FragmentId},
+    fragment::Fragment,
     fragments::Fragments,
     function::{Branch, Function, Parameters},
-    map::{FoundFunction, FragmentMap},
+    map::{FoundFunction, FragmentId, FragmentMap},
 };
