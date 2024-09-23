@@ -214,6 +214,13 @@ impl FragmentId {
             .as_ref()
             .and_then(|next| fragments.ids_by_hash.get(next))
     }
+
+    /// # Access the fragment identified by this `FragmentId`
+    pub fn this<'r>(&self, fragments: &'r FragmentMap) -> &'r Fragment {
+        fragments
+            .get(self)
+            .expect("Fragment identified by ID must exist.")
+    }
 }
 
 #[derive(
