@@ -65,7 +65,7 @@ mod tests {
     }
 
     #[test]
-    fn last_in_block() {
+    fn tail_call_in_anonymous_function() {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
