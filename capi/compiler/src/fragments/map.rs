@@ -169,56 +169,6 @@ impl FragmentId {
             this: Hash::new(this),
         }
     }
-
-    /// # Access the parent fragment
-    ///
-    /// If the fragment resides in the root context, then it has no parent.
-    /// Fragments in all other contexts have a parent. By convention, this is
-    /// the fragment _after_ the function that the fragment resides in.
-    ///
-    /// This must be so, because by the time that a fragment is constructed, the
-    /// function fragment for the function it resides in, or any fragments
-    /// preceding that, are not constructed yet. Thus, they do not have an ID
-    /// that can be used to refer to them.
-    ///
-    /// Any _succeeding_ fragments, on the other hand, are already constructed.
-    /// Therefore, the `next` fragment of the function fragment can stand in as
-    /// the parent.
-    ///
-    /// Function fragments always have a `next` fragment that can be used in
-    /// this way. This is the reason that terminators exist, to make sure of
-    /// that.
-    pub fn parent<'r>(
-        &self,
-        fragments: &'r FragmentMap,
-    ) -> Option<&'r FragmentId> {
-        self.parent
-            .as_ref()
-            .and_then(|parent| fragments.ids_by_hash.get(parent))
-    }
-
-    /// # The next fragment within the fragment's context
-    ///
-    /// Every fragment resides in a context, either the root context or a
-    /// function. Every fragment that isn't a terminator has a fragment that
-    /// follows it within that context.
-    ///
-    /// Might be `None`, if the fragment is a terminator.
-    pub fn next<'r>(
-        &self,
-        fragments: &'r FragmentMap,
-    ) -> Option<&'r FragmentId> {
-        self.next
-            .as_ref()
-            .and_then(|next| fragments.ids_by_hash.get(next))
-    }
-
-    /// # Access the fragment identified by this `FragmentId`
-    pub fn this<'r>(&self, fragments: &'r FragmentMap) -> &'r Fragment {
-        fragments
-            .get(self)
-            .expect("Fragment identified by ID must exist.")
-    }
 }
 
 #[derive(
