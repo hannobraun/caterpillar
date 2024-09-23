@@ -206,6 +206,15 @@ impl FragmentId {
             this: Hash::new(this),
         }
     }
+
+    pub fn parent<'r>(
+        &self,
+        fragments: &'r FragmentMap,
+    ) -> Option<&'r FragmentId> {
+        self.parent
+            .as_ref()
+            .and_then(|parent| fragments.ids_by_hash.get(parent))
+    }
 }
 
 #[derive(
