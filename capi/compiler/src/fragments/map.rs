@@ -207,6 +207,7 @@ impl FragmentId {
         }
     }
 
+    /// # Access the parent fragment
     pub fn parent<'r>(
         &self,
         fragments: &'r FragmentMap,
