@@ -10,12 +10,12 @@ pub struct FragmentMap {
 
 impl FragmentMap {
     pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
-        self.ids_by_hash.insert(id.hash(), id);
+        self.ids_by_hash.insert(Hash::new(&id), id);
         self.fragments_by_id.insert(id, fragment.clone());
     }
 
     pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
-        self.ids_by_hash.remove(&id.hash());
+        self.ids_by_hash.remove(&Hash::new(id));
         self.fragments_by_id.remove(id)
     }
 
@@ -57,7 +57,7 @@ impl FragmentMap {
             let previous = self
                 .ids_by_hash
                 .values()
-                .find(|id| id.next == Some(current_fragment.hash()));
+                .find(|id| id.next == Some(Hash::new(&current_fragment)));
 
             if let Some(id) = previous {
                 // There's a previous fragment. Continue the search there.
@@ -201,14 +201,9 @@ impl FragmentId {
         this: &Fragment,
     ) -> Self {
         Self {
-            parent: parent.map(|id| id.hash()),
-            next: next.map(|id| id.hash()),
+            parent: parent.map(Hash::new),
+            next: next.map(Hash::new),
             this: Hash::new(this),
         }
-    }
-
-    /// # Compute the hash of this location
-    fn hash(&self) -> Hash<Self> {
-        Hash::new(self)
     }
 }
