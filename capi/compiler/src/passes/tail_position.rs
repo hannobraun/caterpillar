@@ -2,9 +2,13 @@ use crate::syntax::{Expression, Function};
 
 pub fn determine_tail_positions(functions: &mut Vec<Function>) {
     for function in functions {
-        for branch in &mut function.branches {
-            analyze_branch(&mut branch.body);
-        }
+        analyze_function(function);
+    }
+}
+
+fn analyze_function(function: &mut Function) {
+    for branch in &mut function.branches {
+        analyze_branch(&mut branch.body);
     }
 }
 
@@ -27,9 +31,7 @@ fn analyze_branch(block: &mut [Expression]) {
 
     for expression in block {
         if let Expression::Function { function } = expression {
-            for branch in &mut function.branches {
-                analyze_branch(&mut branch.body);
-            }
+            analyze_function(function);
         }
     }
 }
