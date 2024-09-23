@@ -102,6 +102,9 @@ mod tests {
 
     #[test]
     fn comment_after_tail_call() {
+        // A comment being located after a tail call should not confuse the
+        // analysis.
+
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
