@@ -153,16 +153,7 @@ impl Deref for FoundFunction<'_> {
 )]
 pub struct FragmentId {
     parent: Option<Hash<FragmentId>>,
-
-    /// # The next fragment within the fragment's context
-    ///
-    /// Every fragment resides in a context, either the root context or a
-    /// function. Every payload-carrying fragment has a fragment that follows it
-    /// within that context, which is either another payload-carrying fragment,
-    /// or a terminator.
-    ///
-    /// Might be `None`, if the fragment is a terminator.
-    pub next: Option<Hash<FragmentId>>,
+    next: Option<Hash<FragmentId>>,
 
     /// # The fragment itself
     pub this: Hash<Fragment>,
