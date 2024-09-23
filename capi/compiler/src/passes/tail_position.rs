@@ -38,7 +38,7 @@ fn analyze_branch(body: &mut [Expression]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::syntax::{Expression, Script};
+    use crate::{compile::tokenize_and_parse, syntax::Expression};
 
     use super::determine_tail_positions;
 
@@ -47,15 +47,15 @@ mod tests {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("not_tail").ident("tail");
-                },
-            )
-        });
+        let mut script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        not_tail
+                        tail
+                }
+            ",
+        );
 
         determine_tail_positions(&mut script.functions);
 
@@ -69,24 +69,20 @@ mod tests {
         // The compiler pass that determines tail positions should step into
         // nested functions.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("a")
-                        .fun(|b| {
-                            b.branch(
-                                |b| b,
-                                |s| {
-                                    s.ident("not_tail").ident("tail");
-                                },
-                            )
-                        })
-                        .ident("b");
-                },
-            )
-        });
+        let mut script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        a
+                        {
+                            \ ->
+                                not_tail
+                                tail
+                        }
+                        b
+                }
+            ",
+        );
 
         determine_tail_positions(&mut script.functions);
 
@@ -105,15 +101,16 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("not_tail").ident("tail").c("This is a comment.");
-                },
-            )
-        });
+        let mut script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        not_tail
+                        tail
+                        # This is a comment.
+                }
+            ",
+        );
 
         determine_tail_positions(&mut script.functions);
 
