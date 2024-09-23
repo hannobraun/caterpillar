@@ -140,7 +140,7 @@ mod tests {
         compile::tokenize_and_parse,
         host::Host,
         intrinsics::Intrinsic,
-        syntax::{Branch, Expression, IdentifierTarget, Script},
+        syntax::{Branch, Expression, Function, IdentifierTarget},
     };
 
     #[test]
@@ -161,7 +161,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script);
+        let mut functions = resolve_identifiers(script.functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -188,7 +188,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script);
+        let mut functions = resolve_identifiers(script.functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -217,7 +217,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script);
+        let mut functions = resolve_identifiers(script.functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -249,7 +249,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script);
+        let mut functions = resolve_identifiers(script.functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -261,8 +261,7 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(script: Script) -> Vec<Branch> {
-        let mut functions = script.functions;
+    fn resolve_identifiers(mut functions: Vec<Function>) -> Vec<Branch> {
         super::resolve_identifiers::<TestHost>(&mut functions);
 
         functions
