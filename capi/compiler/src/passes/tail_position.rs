@@ -47,7 +47,7 @@ mod tests {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
-        let mut script = tokenize_and_parse(
+        let script = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -56,10 +56,11 @@ mod tests {
                 }
             ",
         );
+        let mut functions = script.functions;
 
-        determine_tail_positions(&mut script.functions);
+        determine_tail_positions(&mut functions);
 
-        let branch = script.functions.remove(0).branches.remove(0);
+        let branch = functions.remove(0).branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -69,7 +70,7 @@ mod tests {
         // The compiler pass that determines tail positions should step into
         // nested functions.
 
-        let mut script = tokenize_and_parse(
+        let script = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -83,10 +84,11 @@ mod tests {
                 }
             ",
         );
+        let mut functions = script.functions;
 
-        determine_tail_positions(&mut script.functions);
+        determine_tail_positions(&mut functions);
 
-        let mut function = script.functions.remove(0);
+        let mut function = functions.remove(0);
         let mut branch = function.branches.remove(0);
         let Expression::Function { function } = branch.body.remove(1) else {
             panic!("Expected block.");
@@ -101,7 +103,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let mut script = tokenize_and_parse(
+        let script = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -111,10 +113,11 @@ mod tests {
                 }
             ",
         );
+        let mut functions = script.functions;
 
-        determine_tail_positions(&mut script.functions);
+        determine_tail_positions(&mut functions);
 
-        let mut function = script.functions.remove(0);
+        let mut function = functions.remove(0);
         let branch = function.branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
