@@ -261,11 +261,11 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(mut script: Script) -> Vec<Branch> {
-        super::resolve_identifiers::<TestHost>(&mut script.functions);
+    fn resolve_identifiers(script: Script) -> Vec<Branch> {
+        let mut functions = script.functions;
+        super::resolve_identifiers::<TestHost>(&mut functions);
 
-        script
-            .functions
+        functions
             .into_iter()
             .flat_map(|function| function.branches)
             .collect()
