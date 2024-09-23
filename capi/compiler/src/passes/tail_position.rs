@@ -43,7 +43,7 @@ mod tests {
     use super::determine_tail_positions;
 
     #[test]
-    fn last_in_function() {
+    fn last_in_named_function() {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
