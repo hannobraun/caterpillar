@@ -101,7 +101,7 @@ mod tests {
     }
 
     #[test]
-    fn ignore_comments() {
+    fn comment_after_tail_call() {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
