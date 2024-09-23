@@ -14,11 +14,6 @@ impl FragmentMap {
         self.fragments_by_id.insert(id, fragment.clone());
     }
 
-    pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
-        self.ids_by_hash.remove(&Hash::new(id));
-        self.fragments_by_id.remove(id)
-    }
-
     pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
         self.fragments_by_id.get(id)
     }
