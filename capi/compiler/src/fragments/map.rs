@@ -181,13 +181,13 @@ impl FragmentId {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct Hash<T> {
+struct Hash<T> {
     hash: [u8; 32],
     _t: PhantomData<T>,
 }
 
 impl<T> Hash<T> {
-    pub fn new(value: &T) -> Self
+    fn new(value: &T) -> Self
     where
         T: udigest::Digestable,
     {
