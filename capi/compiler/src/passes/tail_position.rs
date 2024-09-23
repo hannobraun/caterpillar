@@ -47,7 +47,7 @@ mod tests {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
-        let script = tokenize_and_parse(
+        let mut functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -56,7 +56,6 @@ mod tests {
                 }
             ",
         );
-        let mut functions = script.functions;
 
         determine_tail_positions(&mut functions);
 
@@ -70,7 +69,7 @@ mod tests {
         // The compiler pass that determines tail positions should step into
         // nested functions.
 
-        let script = tokenize_and_parse(
+        let mut functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -84,7 +83,6 @@ mod tests {
                 }
             ",
         );
-        let mut functions = script.functions;
 
         determine_tail_positions(&mut functions);
 
@@ -103,7 +101,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let script = tokenize_and_parse(
+        let mut functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -113,7 +111,6 @@ mod tests {
                 }
             ",
         );
-        let mut functions = script.functions;
 
         determine_tail_positions(&mut functions);
 

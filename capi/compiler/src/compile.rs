@@ -8,17 +8,16 @@ use crate::{
         parse, resolve_identifiers, tokenize,
     },
     source_map::SourceMap,
-    syntax::Script,
+    syntax::Function,
 };
 
-pub fn tokenize_and_parse(source: &str) -> Script {
+pub fn tokenize_and_parse(source: &str) -> Vec<Function> {
     let tokens = tokenize(source);
-    parse(tokens)
+    parse(tokens).functions
 }
 
 pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
-    let script = tokenize_and_parse(source);
-    let mut functions = script.functions;
+    let mut functions = tokenize_and_parse(source);
     determine_tail_positions(&mut functions);
     resolve_identifiers::<H>(&mut functions);
     let fragments = generate_fragments(functions);

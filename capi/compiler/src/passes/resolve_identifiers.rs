@@ -148,7 +148,7 @@ mod tests {
         // Bindings that are defined in a scope that is a lexical child of the
         // current scope, should not be resolved.
 
-        let script = tokenize_and_parse(
+        let functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -161,7 +161,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script.functions);
+        let mut functions = resolve_identifiers(functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -179,7 +179,7 @@ mod tests {
         // We set up a special test host below, that provides the function that
         // is referenced here.
 
-        let script = tokenize_and_parse(
+        let functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -188,7 +188,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script.functions);
+        let mut functions = resolve_identifiers(functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -208,7 +208,7 @@ mod tests {
         // host or user, but the compiler. They are translated into a series of
         // instructions at compile-time.
 
-        let script = tokenize_and_parse(
+        let functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -217,7 +217,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script.functions);
+        let mut functions = resolve_identifiers(functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -236,7 +236,7 @@ mod tests {
         // User-defined functions can be resolved by checking for the existence
         // of a matching function in the code.
 
-        let script = tokenize_and_parse(
+        let functions = tokenize_and_parse(
             r"
                 f: {
                     \ ->
@@ -249,7 +249,7 @@ mod tests {
             ",
         );
 
-        let mut functions = resolve_identifiers(script.functions);
+        let mut functions = resolve_identifiers(functions);
 
         assert_eq!(
             functions.remove(0).body.last(),
