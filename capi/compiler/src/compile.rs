@@ -13,7 +13,7 @@ use crate::{
 
 pub fn tokenize_and_parse(source: &str) -> Vec<Function> {
     let tokens = tokenize(source);
-    parse(tokens).functions
+    parse(tokens)
 }
 
 pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {

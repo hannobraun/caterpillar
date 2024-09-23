@@ -1,10 +1,10 @@
 use std::collections::{BTreeSet, VecDeque};
 
-use crate::syntax::{Branch, Expression, Function, Pattern, Script};
+use crate::syntax::{Branch, Expression, Function, Pattern};
 
 use super::tokenize::Token;
 
-pub fn parse(tokens: Vec<Token>) -> Script {
+pub fn parse(tokens: Vec<Token>) -> Vec<Function> {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
@@ -14,7 +14,7 @@ pub fn parse(tokens: Vec<Token>) -> Script {
         functions.push(function);
     }
 
-    Script { functions }
+    functions
 }
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
