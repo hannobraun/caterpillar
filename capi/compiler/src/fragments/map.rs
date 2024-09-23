@@ -178,7 +178,7 @@ pub struct FragmentId {
     /// Function fragments always have a `next` fragment that can be used in
     /// this way. This is that reason that terminators exist, to make sure of
     /// that.
-    pub parent: Option<Hash<FragmentId>>,
+    parent: Option<Hash<FragmentId>>,
 
     /// # The next fragment within the fragment's context
     ///
