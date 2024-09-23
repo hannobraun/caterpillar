@@ -12,8 +12,8 @@ fn analyze_function(function: &mut Function) {
     }
 }
 
-fn analyze_branch(block: &mut [Expression]) {
-    for expression in block.iter_mut().rev() {
+fn analyze_branch(body: &mut [Expression]) {
+    for expression in body.iter_mut().rev() {
         if let Expression::Comment { .. } = expression {
             continue;
         }
@@ -29,7 +29,7 @@ fn analyze_branch(block: &mut [Expression]) {
         break;
     }
 
-    for expression in block {
+    for expression in body {
         if let Expression::Function { function } = expression {
             analyze_function(function);
         }
