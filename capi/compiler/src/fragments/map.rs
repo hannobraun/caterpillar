@@ -154,9 +154,7 @@ impl Deref for FoundFunction<'_> {
 pub struct FragmentId {
     parent: Option<Hash<FragmentId>>,
     next: Option<Hash<FragmentId>>,
-
-    /// # The fragment itself
-    pub this: Hash<Fragment>,
+    this: Hash<Fragment>,
 }
 
 impl FragmentId {
