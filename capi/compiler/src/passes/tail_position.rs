@@ -43,7 +43,7 @@ mod tests {
     use super::determine_tail_positions;
 
     #[test]
-    fn last_in_named_function() {
+    fn tail_call_in_named_function() {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
