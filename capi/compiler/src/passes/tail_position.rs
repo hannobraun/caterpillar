@@ -59,8 +59,7 @@ mod tests {
 
         determine_tail_positions(&mut script.functions);
 
-        let mut function = script.functions.remove(0);
-        let branch = function.branches.remove(0);
+        let branch = script.functions.remove(0).branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
