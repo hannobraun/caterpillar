@@ -8,13 +8,13 @@ pub fn parse(tokens: Vec<Token>) -> Script {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
-    let mut script = Script::default();
+    let mut functions = Vec::new();
 
     while let Some(function) = parse_named_function(&mut tokens) {
-        script.functions.push(function);
+        functions.push(function);
     }
 
-    script
+    Script { functions }
 }
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
