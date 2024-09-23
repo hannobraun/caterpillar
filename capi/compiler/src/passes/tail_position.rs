@@ -44,6 +44,9 @@ mod tests {
 
     #[test]
     fn last_in_named_function() {
+        // The last expression in a function should be marked as being in tail
+        // position. Others should not be.
+
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
