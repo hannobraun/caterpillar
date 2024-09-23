@@ -137,6 +137,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
+        compile::tokenize_and_parse,
         host::Host,
         intrinsics::Intrinsic,
         syntax::{Branch, Expression, IdentifierTarget, Script},
@@ -147,17 +148,18 @@ mod tests {
         // Bindings that are defined in a scope that is a lexical child of the
         // current scope, should not be resolved.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.v(0)
-                        .fun(|b| b.branch(|b| b.ident("value"), |_| {}))
-                        .ident("value");
-                },
-            )
-        });
+        let script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        0
+                        {
+                            \ value ->
+                        }
+                        value
+                }
+            ",
+        );
 
         let mut functions = resolve_identifiers(script);
 
@@ -177,15 +179,14 @@ mod tests {
         // We set up a special test host below, that provides the function that
         // is referenced here.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("host_fn");
-                },
-            )
-        });
+        let script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        host_fn
+                }
+            ",
+        );
 
         let mut functions = resolve_identifiers(script);
 
@@ -207,15 +208,14 @@ mod tests {
         // host or user, but the compiler. They are translated into a series of
         // instructions at compile-time.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("eval");
-                },
-            )
-        });
+        let script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        eval
+                }
+            ",
+        );
 
         let mut functions = resolve_identifiers(script);
 
@@ -236,16 +236,18 @@ mod tests {
         // User-defined functions can be resolved by checking for the existence
         // of a matching function in the code.
 
-        let mut script = Script::default();
-        script.function("f", |b| {
-            b.branch(
-                |p| p,
-                |s| {
-                    s.ident("user_fn");
-                },
-            )
-        });
-        script.function("user_fn", |b| b.branch(|p| p, |_| {}));
+        let script = tokenize_and_parse(
+            r"
+                f: {
+                    \ ->
+                        user_fn
+                }
+
+                user_fn: {
+                    \ ->
+                }
+            ",
+        );
 
         let mut functions = resolve_identifiers(script);
 
