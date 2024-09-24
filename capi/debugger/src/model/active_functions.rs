@@ -273,7 +273,7 @@ fn reconstruct_function(
         if let Some(branch) = function.branches.first() {
             let mut tail_call = None;
 
-            for (id, fragment) in branch.iter(&code.fragments) {
+            for (id, fragment) in branch.body(&code.fragments) {
                 match fragment {
                     Fragment::Terminator => {}
                     _ => tail_call = Some(id),

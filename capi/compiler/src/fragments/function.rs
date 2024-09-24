@@ -90,7 +90,7 @@ pub struct Branch {
 
 impl Branch {
     /// # Iterate over the fragments in this branch
-    pub fn iter<'r>(
+    pub fn body<'r>(
         &self,
         fragments: &'r FragmentMap,
     ) -> impl Iterator<Item = (FragmentId, &'r Fragment)> {

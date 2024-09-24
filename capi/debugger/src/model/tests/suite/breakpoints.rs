@@ -30,7 +30,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .find_function_by_name("main")
         .unwrap()
         .expect_one_branch()
-        .iter(fragments)
+        .body(fragments)
         .map(|(id, _)| id)
         .next()
         .unwrap();
@@ -62,7 +62,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .find_function_by_name("main")
         .unwrap()
         .expect_one_branch()
-        .iter(fragments)
+        .body(fragments)
         .map(|(id, _)| id)
         .next()
         .unwrap();
@@ -108,7 +108,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id);
 
         array::from_fn(|_| body.next().unwrap())
@@ -166,7 +166,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments);
+            .body(fragments);
 
         array::from_fn(|_| {
             body.find_map(|(id, fragment)| {
@@ -276,7 +276,7 @@ fn step_into_function() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .nth(2)
             .unwrap();
@@ -340,7 +340,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .nth(1)
             .unwrap();
@@ -348,7 +348,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .find_function_by_name("f")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .next()
             .unwrap();
@@ -398,7 +398,7 @@ fn step_out_of_main_function() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .next()
             .unwrap()
@@ -444,7 +444,7 @@ fn step_over_function_call() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments);
+            .body(fragments);
 
         array::from_fn(|_| {
             body.find_map(|(id, fragment)| {
@@ -504,7 +504,7 @@ fn step_out_of_function() {
             .find_function_by_name("f")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .next()
             .unwrap();
@@ -512,7 +512,7 @@ fn step_out_of_function() {
             .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
-            .iter(fragments)
+            .body(fragments)
             .map(|(id, _)| id)
             .nth(1)
             .unwrap();
