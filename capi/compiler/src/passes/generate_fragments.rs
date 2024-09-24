@@ -51,7 +51,7 @@ where
         start = Some(*id);
     }
 
-    for (fragment, id) in new_fragments.into_iter().rev() {
+    for (fragment, id) in new_fragments {
         fragments.insert(id, fragment);
     }
 
