@@ -37,7 +37,7 @@ where
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(expression, next, fragments);
+        let fragment = compile_expression(expression, fragments);
         let id = FragmentId::new(Some(&next), &fragment);
 
         fragments.insert(id, fragment);
@@ -76,7 +76,6 @@ fn compile_function(
 
 fn compile_expression(
     expression: syntax::Expression,
-    _: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     match expression {
