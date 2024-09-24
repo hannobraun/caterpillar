@@ -3,6 +3,7 @@ use crate::{
         Branch, Fragment, FragmentId, FragmentMap, Fragments, Function,
         Parameters,
     },
+    hash::Hash,
     syntax::{self, IdentifierTarget},
 };
 
@@ -32,12 +33,17 @@ where
 {
     let new_fragments = expressions
         .into_iter()
-        .map(|expression| compile_expression(expression, fragments))
+        .map(|expression| {
+            let fragment = compile_expression(expression, fragments);
+            let hash = Hash::new(&fragment);
+
+            (fragment, hash)
+        })
         .collect::<Vec<_>>();
 
     let mut next = None;
 
-    for fragment in new_fragments.into_iter().rev() {
+    for (fragment, _) in new_fragments.into_iter().rev() {
         let id = FragmentId::new(next.as_ref(), &fragment);
         fragments.insert(id, fragment);
         next = Some(id);
