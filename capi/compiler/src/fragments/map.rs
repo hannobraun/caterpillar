@@ -12,6 +12,12 @@ pub struct FragmentMap {
 
 impl FragmentMap {
     pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
+        assert_eq!(
+            id.content,
+            Hash::new(&fragment),
+            "`Fragment` must match the `FragmentId` it is inserted under.",
+        );
+
         self.ids_by_hash.insert(Hash::new(&id), id);
         self.fragments_by_id.insert(id, fragment.clone());
     }
