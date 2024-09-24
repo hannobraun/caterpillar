@@ -41,15 +41,15 @@ where
         })
         .collect::<Vec<_>>();
 
-    let mut next = None;
+    let mut start = None;
 
     for (fragment, _) in new_fragments.into_iter().rev() {
-        let id = FragmentId::new(next.as_ref(), &fragment);
+        let id = FragmentId::new(start.as_ref(), &fragment);
         fragments.insert(id, fragment);
-        next = Some(id);
+        start = Some(id);
     }
 
-    next
+    start
 }
 
 fn compile_expression(
