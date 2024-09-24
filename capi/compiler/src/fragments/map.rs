@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter, ops::Deref};
 
-use crate::hash::{Hash, NextNeighbor};
+use crate::hash::{Hash, NextNeighbor, PrevNeighbor};
 
 use super::{Branch, Fragment, Function};
 
@@ -160,6 +160,7 @@ impl Deref for FoundFunction<'_> {
 )]
 pub struct FragmentId {
     pub next_id: Option<Hash<FragmentId>>,
+    pub prev: Option<Hash<PrevNeighbor>>,
     pub next: Option<Hash<NextNeighbor>>,
     pub content: Hash<Fragment>,
 }
