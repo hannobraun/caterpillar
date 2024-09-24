@@ -30,25 +30,18 @@ where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
-    let mut next = {
-        let terminator = Fragment::Terminator;
-        let id = FragmentId::new(None, &terminator);
-
-        fragments.insert(id, terminator);
-
-        id
-    };
+    let mut next = None;
 
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, fragments);
-        let id = FragmentId::new(Some(&next), &fragment);
+        let id = FragmentId::new(next.as_ref(), &fragment);
 
         fragments.insert(id, fragment);
 
-        next = id;
+        next = Some(id);
     }
 
-    Some(next)
+    next
 }
 
 fn compile_function(
