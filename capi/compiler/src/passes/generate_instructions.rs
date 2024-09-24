@@ -182,7 +182,7 @@ fn compile_context(
 ) -> InstructionAddress {
     let mut first_instruction = None;
 
-    for (id, fragment) in fragments.iter_from(start) {
+    for (id, fragment) in fragments.iter_from(Some(start)) {
         let addr = compile_fragment(id, fragment, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
