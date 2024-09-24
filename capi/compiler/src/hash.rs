@@ -1,5 +1,7 @@
 use std::marker::PhantomData;
 
+use crate::fragments::Fragment;
+
 #[derive(
     Debug,
     Eq,
@@ -35,3 +37,20 @@ impl<T> Clone for Hash<T> {
 }
 
 impl<T> Copy for Hash<T> {}
+
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct Neighbor {
+    pub ulterior_neighbor: Option<Hash<Neighbor>>,
+    pub content: Hash<Fragment>,
+}
