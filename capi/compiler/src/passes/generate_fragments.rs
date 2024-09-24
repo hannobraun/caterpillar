@@ -25,7 +25,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
 fn compile_context<E>(
     expressions: E,
-    parent: Option<FragmentId>,
+    _: Option<FragmentId>,
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
@@ -34,7 +34,7 @@ where
 {
     let mut next = {
         let terminator = Fragment::Terminator;
-        let id = FragmentId::new(parent.as_ref(), None, &terminator);
+        let id = FragmentId::new(None, &terminator);
 
         fragments.insert(id, terminator);
 
@@ -43,7 +43,7 @@ where
 
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, next, fragments);
-        let id = FragmentId::new(parent.as_ref(), Some(&next), &fragment);
+        let id = FragmentId::new(Some(&next), &fragment);
 
         fragments.insert(id, fragment);
 
