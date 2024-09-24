@@ -145,23 +145,6 @@ pub enum Fragment {
 
     /// # A literal value
     Value(Value),
-
-    /// # A terminator
-    ///
-    /// Terminators carry no payload. Every context (which can either be a
-    /// function, or the top-level context) is concluded with a terminator.
-    ///
-    /// Every fragment that is not in the root context (which means it is in a
-    /// function) has a parent. Per convention, this is the fragment _after_ the
-    /// fragment that represents the function literal.
-    ///
-    /// (It can't be the function fragment itself, as that is going to get a
-    /// hash that depends on the fragments within it. Using it as the parent
-    /// would create a circular dependency when doing the hashing.)
-    ///
-    /// Making sure that every context has a terminator, means that there is
-    /// always a parent available for every fragment.
-    Terminator,
 }
 
 impl Fragment {

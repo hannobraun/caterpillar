@@ -333,7 +333,6 @@ fn compile_fragment(
             Instruction::Push { value: *value },
             Some(id),
         )),
-        Fragment::Terminator => None,
     }
 }
 

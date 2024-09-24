@@ -176,9 +176,6 @@ impl DebugFragmentKind {
             Fragment::Value(value) => Self::Value {
                 as_string: value.to_string(),
             },
-            Fragment::Terminator => {
-                return None;
-            }
         };
 
         Some(kind)
