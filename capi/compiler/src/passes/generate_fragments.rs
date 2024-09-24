@@ -50,7 +50,6 @@ where
 
 fn compile_function(
     function: syntax::Function,
-    _: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let mut branches = Vec::new();
@@ -77,13 +76,13 @@ fn compile_function(
 
 fn compile_expression(
     expression: syntax::Expression,
-    next: FragmentId,
+    _: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            compile_function(function, next, fragments)
+            compile_function(function, fragments)
         }
         syntax::Expression::Identifier {
             name,
