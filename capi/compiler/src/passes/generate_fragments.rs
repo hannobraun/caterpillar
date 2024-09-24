@@ -35,7 +35,10 @@ where
         .into_iter()
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
-            let hash = Hash::new(&fragment);
+            let hash = FragmentId {
+                next: None,
+                content: Hash::new(&fragment),
+            };
 
             (fragment, hash)
         })
