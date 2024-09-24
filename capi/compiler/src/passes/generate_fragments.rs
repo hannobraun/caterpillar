@@ -39,9 +39,7 @@ where
 
     for fragment in new_fragments.into_iter().rev() {
         let id = FragmentId::new(next.as_ref(), &fragment);
-
         fragments.insert(id, fragment);
-
         next = Some(id);
     }
 
