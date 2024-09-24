@@ -156,10 +156,10 @@ pub struct FragmentId {
 }
 
 impl FragmentId {
-    pub fn new(next: Option<&FragmentId>, this: &Fragment) -> Self {
+    pub fn new(next: Option<&FragmentId>, content: &Fragment) -> Self {
         Self {
             next: next.map(Hash::new),
-            content: Hash::new(this),
+            content: Hash::new(content),
         }
     }
 }
