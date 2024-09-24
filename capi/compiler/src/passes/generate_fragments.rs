@@ -35,12 +35,12 @@ where
         .into_iter()
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
-            let hash = FragmentId {
+            let id = FragmentId {
                 next: None,
                 content: Hash::new(&fragment),
             };
 
-            (fragment, hash)
+            (fragment, id)
         })
         .collect::<Vec<_>>();
 
