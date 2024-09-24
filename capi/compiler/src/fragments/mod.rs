@@ -3,6 +3,7 @@
 mod fragment;
 mod fragments;
 mod function;
+mod hash;
 mod map;
 
 pub use self::{
