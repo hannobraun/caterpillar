@@ -85,6 +85,10 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Parameters,
+
+    /// # The first fragment of the branch's body
+    ///
+    /// Can be `None`, if the branch body is empty.
     pub start: Option<FragmentId>,
 }
 
