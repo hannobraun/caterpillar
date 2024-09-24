@@ -5,7 +5,7 @@ use super::{FragmentId, FragmentMap};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     /// The root fragment that indirectly points to all other fragments
-    pub root: FragmentId,
+    pub root: Option<FragmentId>,
 
     pub map: FragmentMap,
 }

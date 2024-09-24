@@ -38,7 +38,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    compile_context(Some(fragments.root), &fragments, &mut output, &mut queue);
+    compile_context(fragments.root, &fragments, &mut output, &mut queue);
 
     while let Some(unit) = queue.pop_front() {
         let FunctionToCompile {
