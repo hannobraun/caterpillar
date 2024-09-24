@@ -13,7 +13,6 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
         functions
             .into_iter()
             .map(|function| syntax::Expression::Function { function }),
-        None,
         &mut fragments,
     );
 
@@ -23,11 +22,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     }
 }
 
-fn compile_context<E>(
-    expressions: E,
-    _: Option<FragmentId>,
-    fragments: &mut FragmentMap,
-) -> FragmentId
+fn compile_context<E>(expressions: E, fragments: &mut FragmentMap) -> FragmentId
 where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
@@ -55,13 +50,13 @@ where
 
 fn compile_function(
     function: syntax::Function,
-    next: FragmentId,
+    _: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(branch.body, Some(next), fragments);
+        let start = compile_context(branch.body, fragments);
 
         branches.push(Branch {
             parameters: Parameters {
