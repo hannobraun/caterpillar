@@ -25,7 +25,7 @@ impl DebugFragment {
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
-    ) -> Option<Self> {
+    ) -> Self {
         let state = if Some(id) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
@@ -66,7 +66,7 @@ impl DebugFragment {
             effects,
         );
 
-        Some(Self { kind, data })
+        Self { kind, data }
     }
 }
 

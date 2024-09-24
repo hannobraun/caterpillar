@@ -27,7 +27,7 @@ impl DebugBranch {
     ) -> Self {
         let body = branch
             .body(fragments)
-            .filter_map(|(id, fragment)| {
+            .map(|(id, fragment)| {
                 DebugFragment::new(
                     id,
                     fragment.clone(),
