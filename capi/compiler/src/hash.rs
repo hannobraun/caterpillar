@@ -50,21 +50,7 @@ impl<T> Copy for Hash<T> {}
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct Neighbor {
-    pub ulterior_neighbor: Option<Hash<Neighbor>>,
+pub struct NextNeighbor {
+    pub ulterior_neighbor: Option<Hash<NextNeighbor>>,
     pub content: Hash<Fragment>,
 }
-
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct NextNeighbor(pub Neighbor);
