@@ -187,6 +187,30 @@ fn compile_context(
         first_instruction = first_instruction.or(addr);
     }
 
+    // Unconditionally generating a return instruction, like we do here, is
+    // probably redundant. If the previous fragment was a tail call, it didn't
+    // create a new stack frame.
+    //
+    // In this case, I think that the return at the end of the called function
+    // returns to the current function's caller, and we never get to the return
+    // we generated here. It's just a junk instruction that has no effect,
+    // except to make the code bigger.
+    //
+    // I don't think it's worth fixing right now, for the following reasons:
+    //
+    // - Tail call elimination still partially happens at runtime. The
+    //   plan is to move it to compile-time completely. Adding other
+    //   optimizations (like omitting this return instruction) will make
+    //   this transition more complicated, for little gain in the
+    //   meantime.
+    // - There's no infrastructure in place to measure the impact of
+    //   compiler optimizations. I'd rather have that, instead of making
+    //   this change blindly. It will probably make the code more
+    //   complicated, so it needs to be justified.
+    let addr_of_return =
+        Some(output.generate_instruction(Instruction::Return, None));
+    first_instruction = first_instruction.or(addr_of_return);
+
     let Some(first_instruction) = first_instruction else {
         unreachable!(
             "Must have generated at least one instruction for the block: the \
@@ -309,30 +333,7 @@ fn compile_fragment(
             Instruction::Push { value: *value },
             Some(id),
         )),
-        Fragment::Terminator => {
-            // Unconditionally generating a return instruction, like we do here,
-            // is probably redundant. If the previous fragment was a tail call,
-            // it didn't create a new stack frame.
-            //
-            // In this case, I think that the return at the end of the called
-            // function returns to the current function's caller, and we never
-            // get to the return we generated here. It's just a junk instruction
-            // that has no effect, except to make the code bigger.
-            //
-            // I don't think it's worth fixing right now, for the following
-            // reasons:
-            //
-            // - Tail call elimination still partially happens at runtime. The
-            //   plan is to move it to compile-time completely. Adding other
-            //   optimizations (like omitting this return instruction) will make
-            //   this transition more complicated, for little gain in the
-            //   meantime.
-            // - There's no infrastructure in place to measure the impact of
-            //   compiler optimizations. I'd rather have that, instead of making
-            //   this change blindly. It will probably make the code more
-            //   complicated, so it needs to be justified.
-            Some(output.generate_instruction(Instruction::Return, Some(id)))
-        }
+        Fragment::Terminator => None,
     }
 }
 
