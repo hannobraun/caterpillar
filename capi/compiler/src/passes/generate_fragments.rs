@@ -44,32 +44,6 @@ where
     next
 }
 
-fn compile_function(
-    function: syntax::Function,
-    fragments: &mut FragmentMap,
-) -> Fragment {
-    let mut branches = Vec::new();
-
-    for branch in function.branches {
-        let start = compile_context(branch.body, fragments);
-
-        branches.push(Branch {
-            parameters: Parameters {
-                inner: branch.parameters,
-            },
-            start,
-        });
-    }
-
-    Fragment::Function {
-        function: Function {
-            name: function.name,
-            branches,
-            environment: function.environment,
-        },
-    }
-}
-
 fn compile_expression(
     expression: syntax::Expression,
     fragments: &mut FragmentMap,
@@ -109,5 +83,31 @@ fn compile_expression(
             }
         }
         syntax::Expression::Value(value) => Fragment::Value(value),
+    }
+}
+
+fn compile_function(
+    function: syntax::Function,
+    fragments: &mut FragmentMap,
+) -> Fragment {
+    let mut branches = Vec::new();
+
+    for branch in function.branches {
+        let start = compile_context(branch.body, fragments);
+
+        branches.push(Branch {
+            parameters: Parameters {
+                inner: branch.parameters,
+            },
+            start,
+        });
+    }
+
+    Fragment::Function {
+        function: Function {
+            name: function.name,
+            branches,
+            environment: function.environment,
+        },
     }
 }
