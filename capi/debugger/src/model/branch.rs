@@ -25,8 +25,8 @@ impl DebugBranch {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Self {
-        let body = fragments
-            .iter_from(branch.start)
+        let body = branch
+            .body(fragments)
             .filter_map(|(id, fragment)| {
                 DebugFragment::new(
                     id,
