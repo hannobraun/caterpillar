@@ -216,7 +216,7 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                id,
+                Some(id),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -238,13 +238,13 @@ fn compile_fragment(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                id,
+                Some(id),
             );
             output.generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                id,
+                Some(id),
             );
             Some(address)
         }
@@ -255,7 +255,7 @@ fn compile_fragment(
             let instruction =
                 intrinsic_to_instruction(intrinsic, *is_tail_call);
 
-            Some(output.generate_instruction(instruction, id))
+            Some(output.generate_instruction(instruction, Some(id)))
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
@@ -274,7 +274,7 @@ fn compile_fragment(
                     Instruction::TriggerEffect {
                         effect: Effect::CompilerBug,
                     },
-                    id,
+                    Some(id),
                 ))
             } else {
                 None
@@ -294,7 +294,7 @@ fn compile_fragment(
         Fragment::ResolvedBinding { name } => {
             Some(output.generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
-                id,
+                Some(id),
             ))
         }
         Fragment::UnresolvedIdentifier { name: _ } => {
@@ -302,13 +302,13 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                id,
+                Some(id),
             ))
         }
-        Fragment::Value(value) => Some(
-            output
-                .generate_instruction(Instruction::Push { value: *value }, id),
-        ),
+        Fragment::Value(value) => Some(output.generate_instruction(
+            Instruction::Push { value: *value },
+            Some(id),
+        )),
         Fragment::Terminator => {
             // Unconditionally generating a return instruction, like we do here,
             // is probably redundant. If the previous fragment was a tail call,
@@ -331,7 +331,7 @@ fn compile_fragment(
             //   compiler optimizations. I'd rather have that, instead of making
             //   this change blindly. It will probably make the code more
             //   complicated, so it needs to be justified.
-            Some(output.generate_instruction(Instruction::Return, id))
+            Some(output.generate_instruction(Instruction::Return, Some(id)))
         }
     }
 }
@@ -382,10 +382,12 @@ impl Output {
     fn generate_instruction(
         &mut self,
         instruction: Instruction,
-        fragment: FragmentId,
+        fragment: Option<FragmentId>,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
-        self.source_map.define_mapping(addr, fragment);
+        if let Some(fragment) = fragment {
+            self.source_map.define_mapping(addr, fragment);
+        }
         addr
     }
 
@@ -403,7 +405,7 @@ impl Output {
         for name in names.into_iter().rev() {
             let address = self.generate_instruction(
                 Instruction::Bind { name: name.clone() },
-                fragment,
+                Some(fragment),
             );
             first_address = first_address.or(Some(address));
         }
