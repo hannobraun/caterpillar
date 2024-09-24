@@ -128,9 +128,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.fragments_by_id.get(&id)?;
 
-            next = id.next_id.and_then(|hash_of_id| {
-                self.ids_by_hash.get(&hash_of_id).copied()
-            });
+            next = self.previous_to_next.get(&id).copied();
 
             Some((id, fragment))
         })
