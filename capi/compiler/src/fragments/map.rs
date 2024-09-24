@@ -152,19 +152,17 @@ impl Deref for FoundFunction<'_> {
     udigest::Digestable,
 )]
 pub struct FragmentId {
-    parent: Option<Hash<FragmentId>>,
     next: Option<Hash<FragmentId>>,
     this: Hash<Fragment>,
 }
 
 impl FragmentId {
     pub fn new(
-        parent: Option<&FragmentId>,
+        _: Option<&FragmentId>,
         next: Option<&FragmentId>,
         this: &Fragment,
     ) -> Self {
         Self {
-            parent: parent.map(Hash::new),
             next: next.map(Hash::new),
             this: Hash::new(this),
         }
