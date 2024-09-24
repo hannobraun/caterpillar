@@ -159,8 +159,8 @@ impl Deref for FoundFunction<'_> {
     udigest::Digestable,
 )]
 pub struct FragmentId {
-    next: Option<Hash<FragmentId>>,
-    content: Hash<Fragment>,
+    pub next: Option<Hash<FragmentId>>,
+    pub content: Hash<Fragment>,
 }
 
 impl FragmentId {
