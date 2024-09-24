@@ -74,8 +74,8 @@ where
         start = Some(*id);
     }
 
-    for (fragment, id) in new_fragments {
-        fragments.insert(id, fragment);
+    for (fragment, id) in new_fragments.iter() {
+        fragments.insert(*id, fragment.clone());
     }
 
     start
