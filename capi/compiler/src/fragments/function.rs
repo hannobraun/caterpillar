@@ -85,7 +85,7 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Parameters,
-    pub start: FragmentId,
+    pub start: Option<FragmentId>,
 }
 
 impl Branch {
@@ -94,7 +94,7 @@ impl Branch {
         &self,
         fragments: &'r FragmentMap,
     ) -> impl Iterator<Item = (FragmentId, &'r Fragment)> {
-        fragments.iter_from(Some(self.start))
+        fragments.iter_from(self.start)
     }
 }
 

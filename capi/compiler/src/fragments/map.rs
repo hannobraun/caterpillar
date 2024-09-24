@@ -70,10 +70,9 @@ impl FragmentMap {
                     _ => None,
                 })
                 .find_map(|(id, function)| {
-                    let branch = function
-                        .branches
-                        .iter()
-                        .find(|branch| branch.start == current_fragment)?;
+                    let branch = function.branches.iter().find(|branch| {
+                        branch.start == Some(current_fragment)
+                    })?;
                     Some((*id, function, branch))
                 });
 

@@ -94,7 +94,7 @@ impl PersistentState {
                     function
                         .branches
                         .iter()
-                        .map(|branch| branch.start)
+                        .filter_map(|branch| branch.start)
                         .collect()
                 } else {
                     let mut fragment = origin.clone();

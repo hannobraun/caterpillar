@@ -67,7 +67,7 @@ pub fn generate_instructions(
                 output.generate_binding(parameters, fragment);
 
             let context_address = compile_context(
-                Some(branch.start),
+                branch.start,
                 &fragments,
                 &mut output,
                 &mut queue,

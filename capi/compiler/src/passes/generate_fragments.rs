@@ -61,7 +61,7 @@ fn compile_function(
             parameters: Parameters {
                 inner: branch.parameters,
             },
-            start,
+            start: Some(start),
         });
     }
 

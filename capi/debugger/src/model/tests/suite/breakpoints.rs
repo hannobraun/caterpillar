@@ -286,7 +286,8 @@ fn step_into_function() {
             .branches
             .first()
             .unwrap()
-            .start;
+            .start
+            .unwrap();
 
         (f, a)
     };
