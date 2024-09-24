@@ -74,8 +74,14 @@ where
         start = Some(*id);
     }
 
-    for (fragment, id) in new_fragments.iter() {
-        fragments.insert(*id, fragment.clone());
+    for (i, (fragment, id)) in new_fragments.iter().enumerate() {
+        let previous = if i == 0 {
+            None
+        } else {
+            new_fragments.get(i - 1).map(|(_, id)| *id)
+        };
+
+        fragments.insert(*id, fragment.clone(), previous);
     }
 
     start

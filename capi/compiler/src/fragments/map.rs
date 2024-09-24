@@ -8,10 +8,17 @@ use super::{Branch, Fragment, Function};
 pub struct FragmentMap {
     fragments_by_id: BTreeMap<FragmentId, Fragment>,
     ids_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
+
+    next_to_previous: BTreeMap<FragmentId, FragmentId>,
 }
 
 impl FragmentMap {
-    pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
+    pub fn insert(
+        &mut self,
+        id: FragmentId,
+        fragment: Fragment,
+        previous: Option<FragmentId>,
+    ) {
         assert_eq!(
             id.content,
             Hash::new(&fragment),
@@ -20,6 +27,10 @@ impl FragmentMap {
 
         self.fragments_by_id.insert(id, fragment.clone());
         self.ids_by_hash.insert(Hash::new(&id), id);
+
+        if let Some(previous) = previous {
+            self.next_to_previous.insert(id, previous);
+        }
     }
 
     pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
