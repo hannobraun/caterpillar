@@ -37,6 +37,7 @@ where
             let fragment = compile_expression(expression, fragments);
             let id = FragmentId {
                 next_id: None,
+                next: None,
                 content: Hash::new(&fragment),
             };
 
