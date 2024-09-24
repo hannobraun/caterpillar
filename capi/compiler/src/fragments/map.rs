@@ -7,8 +7,6 @@ use super::{Branch, Fragment, Function};
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
     fragments_by_id: BTreeMap<FragmentId, Fragment>,
-    ids_by_hash: BTreeMap<Hash<FragmentId>, FragmentId>,
-
     previous_to_next: BTreeMap<FragmentId, FragmentId>,
     next_to_previous: BTreeMap<FragmentId, FragmentId>,
 }
@@ -28,7 +26,6 @@ impl FragmentMap {
         );
 
         self.fragments_by_id.insert(id, fragment.clone());
-        self.ids_by_hash.insert(Hash::new(&id), id);
 
         if let Some(previous) = previous {
             self.next_to_previous.insert(id, previous);
