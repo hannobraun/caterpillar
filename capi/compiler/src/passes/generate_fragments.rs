@@ -46,8 +46,8 @@ where
 
     let mut start = None;
 
-    for (fragment, _) in new_fragments.into_iter().rev() {
-        let id = FragmentId::new(start.as_ref(), &fragment);
+    for (fragment, mut id) in new_fragments.into_iter().rev() {
+        id.next = start.as_ref().map(Hash::new);
         fragments.insert(id, fragment);
         start = Some(id);
     }
