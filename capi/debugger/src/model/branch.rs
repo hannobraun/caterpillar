@@ -25,15 +25,6 @@ impl DebugBranch {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Self {
-        let parameters = branch
-            .parameters
-            .inner
-            .into_iter()
-            .map(|pattern| match pattern {
-                Pattern::Identifier { name } => name,
-                Pattern::Literal { value } => format!("{value:?}"),
-            })
-            .collect();
         let body = fragments
             .iter_from(branch.start)
             .filter_map(|(id, fragment)| {
@@ -49,6 +40,15 @@ impl DebugBranch {
                 )
             })
             .collect::<Vec<_>>();
+        let parameters = branch
+            .parameters
+            .inner
+            .into_iter()
+            .map(|pattern| match pattern {
+                Pattern::Identifier { name } => name,
+                Pattern::Literal { value } => format!("{value:?}"),
+            })
+            .collect();
 
         let is_active =
             body.iter().any(|fragment| fragment.data.state.is_active());
