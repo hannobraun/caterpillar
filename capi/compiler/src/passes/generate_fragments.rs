@@ -3,7 +3,7 @@ use crate::{
         Branch, Fragment, FragmentId, FragmentMap, Fragments, Function,
         Parameters,
     },
-    hash::{Hash, NextNeighbor},
+    hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
 };
 
@@ -45,6 +45,18 @@ where
             (fragment, id)
         })
         .collect::<Vec<_>>();
+
+    let mut prev = None;
+
+    for (_, id) in &mut new_fragments {
+        let prev_hash = prev.as_ref().map(Hash::new);
+
+        id.prev = prev_hash;
+        prev = Some(PrevNeighbor {
+            ulterior_neighbor: prev_hash,
+            content: id.content,
+        });
+    }
 
     let mut start = None;
     let mut next = None;
