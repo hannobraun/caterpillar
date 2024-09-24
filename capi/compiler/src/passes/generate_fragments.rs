@@ -80,8 +80,9 @@ where
         } else {
             new_fragments.get(i - 1).map(|(_, id)| *id)
         };
+        let next = new_fragments.get(i + 1).map(|(_, id)| *id);
 
-        fragments.insert(*id, fragment.clone(), previous);
+        fragments.insert(*id, fragment.clone(), previous, next);
     }
 
     start
