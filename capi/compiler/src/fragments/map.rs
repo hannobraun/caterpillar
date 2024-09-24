@@ -164,9 +164,9 @@ pub struct FragmentId {
 }
 
 impl FragmentId {
-    pub fn new(next: Option<&FragmentId>, content: &Fragment) -> Self {
+    pub fn new(next_id: Option<&FragmentId>, content: &Fragment) -> Self {
         Self {
-            next_id: next.map(Hash::new),
+            next_id: next_id.map(Hash::new),
             content: Hash::new(content),
         }
     }
