@@ -152,14 +152,14 @@ impl Deref for FoundFunction<'_> {
 )]
 pub struct FragmentId {
     next: Option<Hash<FragmentId>>,
-    this: Hash<Fragment>,
+    content: Hash<Fragment>,
 }
 
 impl FragmentId {
     pub fn new(next: Option<&FragmentId>, this: &Fragment) -> Self {
         Self {
             next: next.map(Hash::new),
-            this: Hash::new(this),
+            content: Hash::new(this),
         }
     }
 }
