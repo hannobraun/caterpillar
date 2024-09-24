@@ -1,6 +1,8 @@
 use std::{collections::BTreeMap, iter, ops::Deref};
 
-use super::{hash::Hash, Branch, Fragment, Function};
+use crate::hash::Hash;
+
+use super::{Branch, Fragment, Function};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {

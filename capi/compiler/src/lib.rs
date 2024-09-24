@@ -5,6 +5,7 @@ pub mod source_map;
 pub mod syntax;
 
 mod compile;
+mod hash;
 mod passes;
 
 #[cfg(test)]
