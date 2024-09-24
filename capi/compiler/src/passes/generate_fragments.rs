@@ -30,10 +30,14 @@ where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
+    let new_fragments = expressions
+        .into_iter()
+        .map(|expression| compile_expression(expression, fragments))
+        .collect::<Vec<_>>();
+
     let mut next = None;
 
-    for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(expression, fragments);
+    for fragment in new_fragments.into_iter().rev() {
         let id = FragmentId::new(next.as_ref(), &fragment);
 
         fragments.insert(id, fragment);
