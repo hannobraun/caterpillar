@@ -60,7 +60,7 @@ impl FragmentMap {
             let previous = self
                 .ids_by_hash
                 .values()
-                .find(|id| id.next == Some(Hash::new(&current_fragment)));
+                .find(|id| id.next_id == Some(Hash::new(&current_fragment)));
 
             if let Some(id) = previous {
                 // There's a previous fragment. Continue the search there.
@@ -115,7 +115,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.fragments_by_id.get(&id)?;
 
-            next = id.next.and_then(|hash_of_id| {
+            next = id.next_id.and_then(|hash_of_id| {
                 self.ids_by_hash.get(&hash_of_id).copied()
             });
 
@@ -159,14 +159,14 @@ impl Deref for FoundFunction<'_> {
     udigest::Digestable,
 )]
 pub struct FragmentId {
-    pub next: Option<Hash<FragmentId>>,
+    pub next_id: Option<Hash<FragmentId>>,
     pub content: Hash<Fragment>,
 }
 
 impl FragmentId {
     pub fn new(next: Option<&FragmentId>, content: &Fragment) -> Self {
         Self {
-            next: next.map(Hash::new),
+            next_id: next.map(Hash::new),
             content: Hash::new(content),
         }
     }

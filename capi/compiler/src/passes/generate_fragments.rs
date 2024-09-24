@@ -36,7 +36,7 @@ where
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
             let id = FragmentId {
-                next: None,
+                next_id: None,
                 content: Hash::new(&fragment),
             };
 
@@ -47,7 +47,7 @@ where
     let mut start = None;
 
     for (_, id) in new_fragments.iter_mut().rev() {
-        id.next = start.as_ref().map(Hash::new);
+        id.next_id = start.as_ref().map(Hash::new);
         start = Some(*id);
     }
 
