@@ -31,7 +31,7 @@ where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
-    let new_fragments = expressions
+    let mut new_fragments = expressions
         .into_iter()
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
@@ -46,10 +46,13 @@ where
 
     let mut start = None;
 
-    for (fragment, mut id) in new_fragments.into_iter().rev() {
+    for (_, id) in new_fragments.iter_mut().rev() {
         id.next = start.as_ref().map(Hash::new);
+        start = Some(*id);
+    }
+
+    for (fragment, id) in new_fragments.into_iter().rev() {
         fragments.insert(id, fragment);
-        start = Some(id);
     }
 
     start
