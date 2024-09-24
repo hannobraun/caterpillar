@@ -38,7 +38,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    compile_context(fragments.root, &fragments, &mut output, &mut queue);
+    compile_context(Some(fragments.root), &fragments, &mut output, &mut queue);
 
     while let Some(unit) = queue.pop_front() {
         let FunctionToCompile {
@@ -67,7 +67,7 @@ pub fn generate_instructions(
                 output.generate_binding(parameters, fragment);
 
             let context_address = compile_context(
-                branch.start,
+                Some(branch.start),
                 &fragments,
                 &mut output,
                 &mut queue,
@@ -175,14 +175,14 @@ pub fn generate_instructions(
 }
 
 fn compile_context(
-    start: FragmentId,
+    start: Option<FragmentId>,
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> InstructionAddress {
     let mut first_instruction = None;
 
-    for (id, fragment) in fragments.iter_from(Some(start)) {
+    for (id, fragment) in fragments.iter_from(start) {
         let addr = compile_fragment(id, fragment, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
