@@ -64,7 +64,7 @@ impl DebugFragment {
             source_map,
             breakpoints,
             effects,
-        )?;
+        );
 
         Some(Self { kind, data })
     }
@@ -132,8 +132,8 @@ impl DebugFragmentKind {
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
-    ) -> Option<Self> {
-        let kind = match fragment {
+    ) -> Self {
+        match fragment {
             Fragment::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
             }
@@ -176,8 +176,6 @@ impl DebugFragmentKind {
             Fragment::Value(value) => Self::Value {
                 as_string: value.to_string(),
             },
-        };
-
-        Some(kind)
+        }
     }
 }
