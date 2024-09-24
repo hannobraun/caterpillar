@@ -36,7 +36,6 @@ where
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
             let id = FragmentId {
-                next_id: None,
                 prev: None,
                 next: None,
                 content: Hash::new(&fragment),
@@ -70,7 +69,6 @@ where
             content: id.content,
         });
 
-        id.next_id = start.as_ref().map(Hash::new);
         start = Some(*id);
     }
 
