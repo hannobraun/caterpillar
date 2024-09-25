@@ -108,10 +108,19 @@ fn compile_expression(
                 Some(IdentifierTarget::Binding) => {
                     Fragment::ResolvedBinding { name }
                 }
-                Some(IdentifierTarget::Function) => Fragment::CallToFunction {
-                    name,
-                    is_tail_call: is_in_tail_position,
-                },
+                Some(IdentifierTarget::Function {
+                    is_known_to_be_recursive,
+                }) => {
+                    // We ignore this right now. But once function calls refer
+                    // to the called function by fragment ID, and no longer by
+                    // name, we need this information.
+                    let _ = is_known_to_be_recursive;
+
+                    Fragment::CallToFunction {
+                        name,
+                        is_tail_call: is_in_tail_position,
+                    }
+                }
                 Some(IdentifierTarget::HostFunction { effect_number }) => {
                     Fragment::CallToHostFunction { effect_number }
                 }

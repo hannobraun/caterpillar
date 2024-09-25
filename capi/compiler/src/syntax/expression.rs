@@ -45,7 +45,21 @@ pub enum Expression {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum IdentifierTarget {
     Binding,
-    Function,
-    HostFunction { effect_number: u8 },
-    Intrinsic { intrinsic: Intrinsic },
+    Function {
+        /// # Indicate whether the call is known to be recursive
+        ///
+        /// This covers both self-recursive calls (a function calls itself), as
+        /// well as mutually recursive calls (a function calls another function
+        /// that directly or indirectly calls the original function).
+        ///
+        /// This starts as `false`, until the respective compiler pass has has
+        /// run.
+        is_known_to_be_recursive: bool,
+    },
+    HostFunction {
+        effect_number: u8,
+    },
+    Intrinsic {
+        intrinsic: Intrinsic,
+    },
 }
