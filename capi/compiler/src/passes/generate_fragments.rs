@@ -7,13 +7,15 @@ use crate::{
     syntax::{self, IdentifierTarget},
 };
 
-pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
+pub fn generate_fragments(functions: Vec<syntax::Cluster>) -> Fragments {
     let mut fragments = FragmentMap::default();
 
     let root = compile_context(
         functions
             .into_iter()
-            .map(|function| syntax::Expression::Function { function }),
+            .flat_map(|cluster| cluster.into_functions())
+            .map(|function| syntax::Expression::Function { function })
+            .collect::<Vec<_>>(),
         &mut fragments,
     );
 
