@@ -98,6 +98,16 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
             &mut class_outer,
             actions,
         ),
+        DebugFragmentKind::CallToFunctionRecursive => (
+            view! {
+                <span>
+                    "Recursive function call. Displaying this is not supported yet."
+                </span>
+            }
+            .into_view(),
+            None,
+            None,
+        ),
         DebugFragmentKind::CallToHostFunction { name } => {
             make_single_expression(
                 name,

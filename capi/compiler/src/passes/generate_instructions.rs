@@ -257,6 +257,13 @@ fn compile_fragment(
 
             Some(address)
         }
+        Fragment::CallToFunctionRecursive { index } => {
+            let _ = index;
+            todo!(
+                "Earlier compiler pass emitted recursive function call, but \
+                this is not supported yet. "
+            );
+        }
         Fragment::CallToHostFunction { effect_number } => {
             let address = output.generate_instruction(
                 Instruction::Push {

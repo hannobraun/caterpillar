@@ -114,6 +114,7 @@ impl DebugFragmentState {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
     CallToFunction { name: String },
+    CallToFunctionRecursive,
     CallToHostFunction { name: String },
     CallToIntrinsic { name: String },
     Comment { text: String },
@@ -136,6 +137,9 @@ impl DebugFragmentKind {
         match fragment {
             Fragment::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
+            }
+            Fragment::CallToFunctionRecursive { .. } => {
+                Self::CallToFunctionRecursive
             }
             Fragment::CallToHostFunction { effect_number } => {
                 let name = GameEngineHost::effect_number_to_function_name(

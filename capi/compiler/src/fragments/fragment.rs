@@ -75,6 +75,33 @@ pub enum Fragment {
         is_tail_call: bool,
     },
 
+    /// # A recursive call to a user-defined function
+    ///
+    /// This call can either be directly recursive (a function is calling
+    /// itself), or mutually recursive (the function is calling another function
+    /// that directly or indirectly calls the original function).
+    CallToFunctionRecursive {
+        /// # The index of the called function within its cluster
+        ///
+        /// During compilation, functions are grouped into clusters. A cluster
+        /// either contains a single functions, or a group of mutually recursive
+        /// function. All mutually recursive functions are part of a single
+        /// cluster.
+        ///
+        /// If this is a function calling itself, the index is always `0`. If
+        /// the calling function is part of a cluster of mutually recursive
+        /// functions, the index identifies the called function within the
+        /// cluster.
+        ///
+        /// ## Implementation Note
+        ///
+        /// As of this writing, this enum variant is never created, nor are
+        /// functions being grouped into clusters. The above documentation
+        /// should be seen as aspirational, putting this code into the context
+        /// of the ongoing development.
+        index: u32,
+    },
+
     /// # A call to a function defined by the host
     ///
     /// Host functions present as functions to the user. But contrary to regular
