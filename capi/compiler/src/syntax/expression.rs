@@ -46,13 +46,13 @@ pub enum Expression {
 pub enum IdentifierTarget {
     Binding,
     Function {
-        /// # Indicate whether the call is known to be recursive
+        /// # Index of function within cluster, if this is a recursive call
         ///
         /// This covers both self-recursive calls (a function calls itself), as
         /// well as mutually recursive calls (a function calls another function
         /// that directly or indirectly calls the original function).
         ///
-        /// This starts as `false`, until the respective compiler pass has has
+        /// This starts as `None`, until the respective compiler pass has has
         /// run.
         is_known_to_be_recursive_call_to_index: Option<u32>,
     },
