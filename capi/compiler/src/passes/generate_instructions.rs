@@ -31,7 +31,6 @@ pub fn generate_instructions(
     output.instructions.push(Instruction::Return);
     if let Some(function) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
-            name: "main".to_string(),
             function: function.id,
             address: call_to_main,
             is_tail_call: true,
@@ -135,12 +134,6 @@ pub fn generate_instructions(
             // great, as it doesn't provide any context to the user. But while
             // we don't have any way to make panics more descriptive, it'll have
             // to do.
-            assert_eq!(
-                &call.name, "main",
-                "Replacement found for function that doesn't exist, but only \
-                the replacement for the `main` function is generated without \
-                encountering that first.",
-            );
             continue;
         };
         let function = capi_runtime::Function {
@@ -259,7 +252,6 @@ fn compile_fragment(
             // adding it to this list.
             if let Some(function) = fragments.find_function_by_name(name) {
                 output.placeholders.push(CallToFunction {
-                    name: name.clone(),
                     function: function.id,
                     address,
                     is_tail_call: *is_tail_call,
@@ -433,7 +425,6 @@ impl Output {
 }
 
 pub struct CallToFunction {
-    pub name: String,
     pub function: FragmentId,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
