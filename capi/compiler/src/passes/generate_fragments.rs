@@ -40,6 +40,13 @@ where
         .map(|expression| compile_expression(expression, fragments))
         .collect::<Vec<_>>();
 
+    address_context(context, fragments)
+}
+
+fn address_context(
+    context: Vec<Fragment>,
+    fragments: &mut FragmentMap,
+) -> Option<FragmentId> {
     let mut ids = context
         .iter()
         .map(|fragment| FragmentId {
