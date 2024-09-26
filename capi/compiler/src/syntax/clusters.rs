@@ -5,6 +5,7 @@ pub struct Clusters {
     /// # All named functions, in the original order they were defined in
     pub functions: Vec<Function>,
 
+    /// # The named functions, grouped into clusters
     pub clusters: Vec<Cluster>,
 }
 
