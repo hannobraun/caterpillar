@@ -45,6 +45,7 @@ pub enum Expression {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum IdentifierTarget {
     Binding,
+
     Function {
         /// # Index of function within cluster, if this is a recursive call
         ///
@@ -56,9 +57,11 @@ pub enum IdentifierTarget {
         /// run.
         is_known_to_be_recursive_call_to_index: Option<u32>,
     },
+
     HostFunction {
         effect_number: u8,
     },
+
     Intrinsic {
         intrinsic: Intrinsic,
     },
