@@ -14,9 +14,9 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     let mut compiled_functions = clusters
         .clusters
-        .into_iter()
-        .flat_map(|cluster| cluster.functions)
-        .map(|index| {
+        .iter()
+        .flat_map(|cluster| &cluster.functions)
+        .map(|&index| {
             let function = clusters.functions[index].clone();
             let fragment = compile_function(function, &mut fragments);
             (index, fragment)
