@@ -13,9 +13,8 @@ pub fn generate_fragments(functions: Clusters) -> Fragments {
 
     let root = compile_context(
         functions
-            .clusters
+            .functions
             .into_iter()
-            .flat_map(|cluster| cluster.functions)
             .map(|function| syntax::Expression::Function { function })
             .collect::<Vec<_>>(),
         &mut fragments,
