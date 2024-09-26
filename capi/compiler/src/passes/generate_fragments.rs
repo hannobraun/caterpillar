@@ -8,7 +8,7 @@ use crate::{
 };
 
 pub fn generate_fragments(functions: Clusters) -> Fragments {
-    let clusters = Vec::new();
+    let compiled_clusters = Vec::new();
     let mut fragments = FragmentMap::default();
 
     let mut compiled_functions = functions
@@ -34,7 +34,7 @@ pub fn generate_fragments(functions: Clusters) -> Fragments {
 
     Fragments {
         root,
-        clusters,
+        clusters: compiled_clusters,
         map: fragments,
     }
 }
