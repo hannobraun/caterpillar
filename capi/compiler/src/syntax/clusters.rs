@@ -1,5 +1,10 @@
 use super::Function;
 
+/// # All functions in the code, grouped by clusters
+pub struct Clusters {
+    pub clusters: Vec<Cluster>,
+}
+
 /// # A cluster of functions
 ///
 /// During compilation, all functions are grouped into clusters. A cluster can
