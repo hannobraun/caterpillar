@@ -61,7 +61,6 @@ where
         });
     }
 
-    let mut start = None;
     let mut next = None;
 
     for (_, id) in new_fragments.iter_mut().rev() {
@@ -72,8 +71,6 @@ where
             ulterior_neighbor: next_hash,
             content: id.content,
         });
-
-        start = Some(*id);
     }
 
     for (i, (fragment, id)) in new_fragments.iter().enumerate() {
@@ -87,7 +84,7 @@ where
         fragments.insert(*id, fragment.clone(), previous, next);
     }
 
-    start
+    new_fragments.first().map(|(_, id)| id).copied()
 }
 
 fn compile_expression(
