@@ -8,7 +8,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .functions
             .iter()
             .copied()
-            .filter_map(|i| clusters.functions[i].name.clone())
+            .filter_map(|index| clusters.functions[index].name.clone())
             .collect::<BTreeSet<_>>();
 
         for &index in &cluster.functions {
