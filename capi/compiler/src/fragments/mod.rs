@@ -7,7 +7,7 @@ mod map;
 
 pub use self::{
     fragment::Fragment,
-    fragments::Fragments,
+    fragments::{Cluster, Fragments},
     functions::{Branch, Function, Parameters},
     map::{FoundFunction, FragmentId, FragmentMap},
 };
