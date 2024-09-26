@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 
 use crate::syntax::{Clusters, Expression, IdentifierTarget};
 
@@ -8,8 +8,13 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .functions
             .iter()
             .copied()
-            .filter_map(|index| clusters.functions[index].name.clone())
-            .collect::<BTreeSet<_>>();
+            .filter_map(|index| {
+                clusters.functions[index]
+                    .name
+                    .clone()
+                    .map(|name| (name, index))
+            })
+            .collect::<BTreeMap<_, _>>();
 
         for &index in &cluster.functions {
             let function = &mut clusters.functions[index];
@@ -25,7 +30,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         ..
                     } = expression
                     {
-                        if function_names_in_cluster.contains(name) {
+                        if function_names_in_cluster.contains_key(name) {
                             *is_known_to_be_recursive = true;
                         }
                     }
