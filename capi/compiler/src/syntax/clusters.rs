@@ -16,6 +16,9 @@ pub struct Clusters {
 /// All mutually recursive functions are grouped into a single clusters with the
 /// other functions in their recursive group.
 pub struct Cluster {
-    /// # The functions in the cluster
+    /// # Indices that refer to the functions in the cluster
+    ///
+    /// The indices refer to the functions in their original order within the
+    /// list of all named functions.
     pub functions: Vec<usize>,
 }
