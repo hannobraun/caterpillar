@@ -11,15 +11,3 @@ pub struct Cluster {
     /// # The functions in the cluster
     pub functions: Vec<Function>,
 }
-
-impl Cluster {
-    /// # Create a new cluster
-    pub fn new(functions: Vec<Function>) -> Self {
-        Self { functions }
-    }
-
-    /// # Access the functions in the cluster
-    pub fn into_functions(self) -> impl Iterator<Item = Function> {
-        self.functions.into_iter()
-    }
-}
