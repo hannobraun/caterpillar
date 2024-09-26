@@ -260,8 +260,12 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToFunctionRecursive { index } => {
+        Fragment::CallToFunctionRecursive {
+            index,
+            is_tail_call,
+        } => {
             let _ = index;
+            let _ = is_tail_call;
             todo!(
                 "Earlier compiler pass emitted recursive function call, but \
                 this is not supported yet. "

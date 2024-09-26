@@ -100,6 +100,12 @@ pub enum Fragment {
         /// should be seen as aspirational, putting this code into the context
         /// of the ongoing development.
         index: u32,
+
+        /// # Indicate whether the call is in tail position
+        ///
+        /// This is relevant as function calls might necessitate tail call
+        /// elimination.
+        is_tail_call: bool,
     },
 
     /// # A call to a function defined by the host
