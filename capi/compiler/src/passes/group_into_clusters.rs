@@ -7,6 +7,6 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Vec<Cluster> {
         .into_iter()
         .map(|function| [function])
         .map(Vec::from)
-        .map(Cluster::new)
+        .map(|functions| Cluster { functions })
         .collect()
 }

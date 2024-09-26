@@ -13,7 +13,7 @@ pub fn generate_fragments(functions: Vec<syntax::Cluster>) -> Fragments {
     let root = compile_context(
         functions
             .into_iter()
-            .flat_map(|cluster| cluster.into_functions())
+            .flat_map(|cluster| cluster.functions)
             .map(|function| syntax::Expression::Function { function })
             .collect::<Vec<_>>(),
         &mut fragments,

@@ -8,7 +8,8 @@ use super::Function;
 /// All mutually recursive functions are grouped into a single clusters with the
 /// other functions in their recursive group.
 pub struct Cluster {
-    functions: Vec<Function>,
+    /// # The functions in the cluster
+    pub functions: Vec<Function>,
 }
 
 impl Cluster {
