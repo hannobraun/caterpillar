@@ -2,12 +2,12 @@
 
 mod fragment;
 mod fragments;
-mod function;
+mod functions;
 mod map;
 
 pub use self::{
     fragment::Fragment,
     fragments::Fragments,
-    function::{Branch, Function, Parameters},
+    functions::{Branch, Function, Parameters},
     map::{FoundFunction, FragmentId, FragmentMap},
 };
