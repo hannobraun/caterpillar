@@ -1,7 +1,7 @@
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentId, FragmentMap, Fragments, Function,
-        Parameters,
+        Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
+        Function, Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
@@ -32,7 +32,20 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         &mut fragments,
     );
 
-    let compiled_clusters = Vec::new();
+    let mut compiled_clusters = Vec::new();
+
+    for cluster in clusters.clusters {
+        let mut compiled_cluster = Cluster {
+            functions: Vec::new(),
+        };
+
+        for index in cluster.functions {
+            let id = function_ids[index];
+            compiled_cluster.functions.push(id);
+        }
+
+        compiled_clusters.push(compiled_cluster);
+    }
 
     Fragments {
         root,
