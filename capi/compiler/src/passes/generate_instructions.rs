@@ -4,7 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentId, FragmentMap, Fragments, Function, Parameters,
+        Cluster, Fragment, FragmentId, FragmentMap, Fragments, Function,
+        Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -38,7 +39,13 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    compile_context(fragments.root, &fragments, &mut output, &mut queue);
+    compile_context(
+        fragments.root,
+        &fragments.clusters,
+        &fragments,
+        &mut output,
+        &mut queue,
+    );
 
     while let Some(unit) = queue.pop_front() {
         let FunctionToCompile {
@@ -68,6 +75,7 @@ pub fn generate_instructions(
 
             let context_address = compile_context(
                 branch.start,
+                &fragments.clusters,
                 &fragments,
                 &mut output,
                 &mut queue,
@@ -176,6 +184,7 @@ pub fn generate_instructions(
 
 fn compile_context(
     start: Option<FragmentId>,
+    clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
@@ -183,7 +192,8 @@ fn compile_context(
     let mut first_instruction = None;
 
     for (id, fragment) in fragments.iter_from(start) {
-        let addr = compile_fragment(id, fragment, fragments, output, queue);
+        let addr =
+            compile_fragment(id, fragment, clusters, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
 
@@ -225,6 +235,7 @@ fn compile_context(
 fn compile_fragment(
     id: FragmentId,
     fragment: &Fragment,
+    _: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
