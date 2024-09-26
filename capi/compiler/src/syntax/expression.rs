@@ -54,7 +54,7 @@ pub enum IdentifierTarget {
         ///
         /// This starts as `false`, until the respective compiler pass has has
         /// run.
-        is_known_to_be_recursive: bool,
+        is_known_to_be_recursive_call_to_index: Option<u32>,
     },
     HostFunction {
         effect_number: u8,

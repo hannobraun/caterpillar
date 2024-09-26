@@ -121,7 +121,7 @@ fn resolve_in_branch<H: Host>(
                 }
                 if known_named_functions.contains(name) {
                     *target = Some(IdentifierTarget::Function {
-                        is_known_to_be_recursive: false,
+                        is_known_to_be_recursive_call_to_index: None,
                     });
                 }
             }
@@ -258,7 +258,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
                 target: Some(IdentifierTarget::Function {
-                    is_known_to_be_recursive: false
+                    is_known_to_be_recursive_call_to_index: None
                 }),
                 is_known_to_be_in_tail_position: false,
             })

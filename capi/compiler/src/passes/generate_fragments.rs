@@ -144,7 +144,8 @@ fn compile_expression(
                     Fragment::ResolvedBinding { name }
                 }
                 Some(IdentifierTarget::Function {
-                    is_known_to_be_recursive,
+                    is_known_to_be_recursive_call_to_index:
+                        is_known_to_be_recursive,
                 }) => {
                     // We ignore this right now. But once function calls refer
                     // to the called function by fragment ID, and no longer by

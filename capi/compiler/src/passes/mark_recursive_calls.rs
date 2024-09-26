@@ -25,13 +25,19 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         name,
                         target:
                             Some(IdentifierTarget::Function {
-                                is_known_to_be_recursive,
+                                is_known_to_be_recursive_call_to_index,
                             }),
                         ..
                     } = expression
                     {
-                        if function_names_in_cluster.contains_key(name) {
-                            *is_known_to_be_recursive = true;
+                        if let Some(index) = function_names_in_cluster.get(name)
+                        {
+                            let index: u32 = (*index)
+                                .try_into()
+                                .expect("Expecting to run on 32-bit platform.");
+
+                            *is_known_to_be_recursive_call_to_index =
+                                Some(index);
                         }
                     }
                 }
