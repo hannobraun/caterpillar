@@ -7,17 +7,17 @@ use crate::{
     syntax::{self, Clusters, IdentifierTarget},
 };
 
-pub fn generate_fragments(functions: Clusters) -> Fragments {
+pub fn generate_fragments(clusters: Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
 
     let compiled_clusters = Vec::new();
 
-    let mut compiled_functions = functions
+    let mut compiled_functions = clusters
         .clusters
         .into_iter()
         .flat_map(|cluster| cluster.functions)
         .map(|index| {
-            let function = functions.functions[index].clone();
+            let function = clusters.functions[index].clone();
             let fragment = compile_function(function, &mut fragments);
             (index, fragment)
         })
