@@ -4,7 +4,7 @@ use crate::syntax::{Clusters, Expression, IdentifierTarget};
 
 pub fn mark_recursive_calls(clusters: &mut Clusters) {
     for cluster in &mut clusters.clusters {
-        let function_names_in_cluster = cluster
+        let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
             .copied()
@@ -30,7 +30,8 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         ..
                     } = expression
                     {
-                        if let Some(index) = function_names_in_cluster.get(name)
+                        if let Some(index) =
+                            indices_in_cluster_by_function_name.get(name)
                         {
                             let index: u32 = (*index)
                                 .try_into()
