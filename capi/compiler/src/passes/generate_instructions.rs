@@ -42,7 +42,7 @@ pub fn generate_instructions(
     compile_context(
         fragments.root,
         &fragments.clusters,
-        &fragments,
+        &fragments.map,
         &mut output,
         &mut queue,
     );
@@ -76,7 +76,7 @@ pub fn generate_instructions(
             let context_address = compile_context(
                 branch.start,
                 &fragments.clusters,
-                &fragments,
+                &fragments.map,
                 &mut output,
                 &mut queue,
             );
