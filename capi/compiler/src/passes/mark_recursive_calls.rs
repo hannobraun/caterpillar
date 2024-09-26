@@ -7,10 +7,13 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
         let function_names_in_cluster = cluster
             .functions
             .iter()
-            .filter_map(|function| function.name.clone())
+            .copied()
+            .filter_map(|i| clusters.functions[i].name.clone())
             .collect::<BTreeSet<_>>();
 
-        for function in &mut cluster.functions {
+        for &index in &cluster.functions {
+            let function = &mut clusters.functions[index];
+
             for branch in &mut function.branches {
                 for expression in &mut branch.body {
                     if let Expression::Identifier {

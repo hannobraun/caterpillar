@@ -17,5 +17,5 @@ pub struct Clusters {
 /// other functions in their recursive group.
 pub struct Cluster {
     /// # The functions in the cluster
-    pub functions: Vec<Function>,
+    pub functions: Vec<usize>,
 }
