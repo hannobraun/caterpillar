@@ -49,6 +49,8 @@ where
         })
         .collect::<Vec<_>>();
 
+    let ids = new_fragments.iter().map(|(_, id)| *id).collect::<Vec<_>>();
+
     let mut prev = None;
 
     for (_, id) in &mut new_fragments {
@@ -77,9 +79,9 @@ where
         let previous = if i == 0 {
             None
         } else {
-            new_fragments.get(i - 1).map(|(_, id)| *id)
+            ids.get(i - 1).copied()
         };
-        let next = new_fragments.get(i + 1).map(|(_, id)| *id);
+        let next = ids.get(i + 1).copied();
 
         fragments.insert(*id, fragment.clone(), previous, next);
     }
