@@ -9,6 +9,9 @@ pub struct Fragments {
     /// This indirectly points to all existing fragments.
     pub root: Option<FragmentId>,
 
+    /// # The function clusters
+    pub clusters: Vec<Cluster>,
+
     pub map: FragmentMap,
 }
 
@@ -24,4 +27,9 @@ impl DerefMut for Fragments {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.map
     }
+}
+
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+pub struct Cluster {
+    pub functions: Vec<FragmentId>,
 }

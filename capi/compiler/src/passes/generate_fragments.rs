@@ -21,6 +21,7 @@ pub fn generate_fragments(functions: Vec<syntax::Cluster>) -> Fragments {
 
     Fragments {
         root,
+        clusters: Vec::new(),
         map: fragments,
     }
 }
