@@ -1,9 +1,9 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::{Cluster, Expression, IdentifierTarget};
+use crate::syntax::{Clusters, Expression, IdentifierTarget};
 
-pub fn mark_recursive_calls(clusters: &mut Vec<Cluster>) {
-    for cluster in clusters {
+pub fn mark_recursive_calls(clusters: &mut Clusters) {
+    for cluster in &mut clusters.clusters {
         let function_names_in_cluster = cluster
             .functions
             .iter()

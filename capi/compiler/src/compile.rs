@@ -22,7 +22,7 @@ pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
     determine_tail_positions(&mut functions);
     resolve_identifiers::<H>(&mut functions);
     let mut clusters = group_into_clusters(functions);
-    mark_recursive_calls(&mut clusters.clusters);
+    mark_recursive_calls(&mut clusters);
     let fragments = generate_fragments(clusters.clusters);
     let (instructions, source_map) = generate_instructions(fragments.clone());
 
