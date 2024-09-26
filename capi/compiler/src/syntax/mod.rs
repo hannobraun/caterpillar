@@ -1,9 +1,9 @@
-mod cluster;
+mod clusters;
 mod expression;
 mod function;
 
 pub use self::{
-    cluster::Cluster,
+    clusters::{Cluster, Clusters},
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function, Pattern},
 };
