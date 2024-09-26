@@ -11,7 +11,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         .map(|functions| Cluster { functions })
         .collect();
     Clusters {
-        functions: functions.clone(),
+        functions,
         clusters,
     }
 }
