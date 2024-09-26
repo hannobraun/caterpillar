@@ -35,12 +35,12 @@ where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
-    let new_fragments = expressions
+    let context = expressions
         .into_iter()
         .map(|expression| compile_expression(expression, fragments))
         .collect::<Vec<_>>();
 
-    let mut ids = new_fragments
+    let mut ids = context
         .iter()
         .map(|fragment| FragmentId {
             prev: None,
@@ -73,7 +73,7 @@ where
         });
     }
 
-    for (i, (fragment, id)) in new_fragments.iter().zip(&ids).enumerate() {
+    for (i, (fragment, id)) in context.iter().zip(&ids).enumerate() {
         let previous = if i == 0 {
             None
         } else {
