@@ -40,21 +40,21 @@ where
         .map(|expression| compile_expression(expression, fragments))
         .collect::<Vec<_>>();
 
-    address_context(context, fragments)
+    address_context(context, &mut Vec::new(), fragments)
 }
 
 fn address_context(
     context: Vec<Fragment>,
+    ids: &mut Vec<FragmentId>,
     fragments: &mut FragmentMap,
 ) -> Option<FragmentId> {
-    let mut ids = context
-        .iter()
-        .map(|fragment| FragmentId {
+    for fragment in &context {
+        ids.push(FragmentId {
             prev: None,
             next: None,
             content: Hash::new(fragment),
-        })
-        .collect::<Vec<_>>();
+        });
+    }
 
     let mut prev = None;
 
@@ -80,7 +80,7 @@ fn address_context(
         });
     }
 
-    for (i, (fragment, id)) in context.iter().zip(&ids).enumerate() {
+    for (i, (fragment, id)) in context.iter().zip(&*ids).enumerate() {
         let previous = if i == 0 {
             None
         } else {
