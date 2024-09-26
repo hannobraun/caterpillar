@@ -37,19 +37,17 @@ where
 {
     let new_fragments = expressions
         .into_iter()
-        .map(|expression| {
-            let fragment = compile_expression(expression, fragments);
-            let id = FragmentId {
-                prev: None,
-                next: None,
-                content: Hash::new(&fragment),
-            };
-
-            (fragment, id)
-        })
+        .map(|expression| compile_expression(expression, fragments))
         .collect::<Vec<_>>();
 
-    let mut ids = new_fragments.iter().map(|(_, id)| *id).collect::<Vec<_>>();
+    let mut ids = new_fragments
+        .iter()
+        .map(|fragment| FragmentId {
+            prev: None,
+            next: None,
+            content: Hash::new(fragment),
+        })
+        .collect::<Vec<_>>();
 
     let mut prev = None;
 
@@ -75,7 +73,7 @@ where
         });
     }
 
-    for (i, ((fragment, _), id)) in new_fragments.iter().zip(&ids).enumerate() {
+    for (i, (fragment, id)) in new_fragments.iter().zip(&ids).enumerate() {
         let previous = if i == 0 {
             None
         } else {
