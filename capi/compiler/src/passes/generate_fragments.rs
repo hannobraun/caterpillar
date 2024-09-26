@@ -58,7 +58,7 @@ fn address_context(
 
     let mut prev = None;
 
-    for id in &mut ids {
+    for id in ids.iter_mut() {
         let prev_hash = prev.as_ref().map(Hash::new);
 
         id.prev = prev_hash;
