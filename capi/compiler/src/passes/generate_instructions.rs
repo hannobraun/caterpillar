@@ -228,7 +228,7 @@ fn compile_context(
 fn compile_fragment(
     id: FragmentId,
     fragment: &Fragment,
-    _: &[Cluster],
+    clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
@@ -264,12 +264,50 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let _ = index;
-            let _ = is_tail_call;
-            todo!(
-                "Earlier compiler pass emitted recursive function call, but \
-                this is not supported yet. "
+            let index: usize = (*index).try_into().expect(
+                "Expecting to run on a platform where `u32` can convert to \
+                `usize`.",
             );
+
+            let (calling_function, _) = fragments
+                .find_named_function_by_fragment_in_body(&id)
+                .expect(
+                    "Fragment ID is of a function call; must be located in a \
+                    function.",
+                );
+            let cluster = clusters
+                .iter()
+                .find(|cluster| {
+                    cluster
+                        .functions
+                        .iter()
+                        .any(|id| *id == calling_function.id)
+                })
+                .expect("Expecting every function to be in a cluster.");
+            let called_function = cluster.functions[index];
+
+            // We know that this expression refers to a user-defined function,
+            // but we might not have compiled that function yet.
+            //
+            // For now, just generate a placeholder that we can replace with the
+            // call later.
+            let address = output.generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::CompilerBug,
+                },
+                Some(id),
+            );
+
+            // We can't leave it at that, however. We need to make sure this
+            // placeholder actually gets replaced later, and we're doing that by
+            // adding it to this list.
+            output.placeholders.push(CallToFunction {
+                function: called_function,
+                address,
+                is_tail_call: *is_tail_call,
+            });
+
+            Some(address)
         }
         Fragment::CallToHostFunction { effect_number } => {
             let address = output.generate_instruction(
