@@ -4,10 +4,10 @@ use crate::{
         Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
-    syntax::{self, Clusters, IdentifierTarget},
+    syntax::{self, IdentifierTarget},
 };
 
-pub fn generate_fragments(clusters: Clusters) -> Fragments {
+pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
 
     let compiled_clusters = Vec::new();
