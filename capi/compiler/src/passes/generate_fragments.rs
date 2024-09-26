@@ -11,12 +11,24 @@ pub fn generate_fragments(functions: Clusters) -> Fragments {
     let clusters = Vec::new();
     let mut fragments = FragmentMap::default();
 
-    let root = compile_context(
-        functions
-            .functions
+    let mut compiled_functions = functions
+        .clusters
+        .into_iter()
+        .flat_map(|cluster| cluster.functions)
+        .map(|index| {
+            let function = functions.functions[index].clone();
+            let fragment = compile_function(function, &mut fragments);
+            (index, fragment)
+        })
+        .collect::<Vec<_>>();
+    compiled_functions.sort_by_key(|(index, _)| *index);
+
+    let root = address_context(
+        compiled_functions
             .into_iter()
-            .map(|function| syntax::Expression::Function { function })
-            .collect::<Vec<_>>(),
+            .map(|(_, fragment)| fragment)
+            .collect(),
+        &mut Vec::new(),
         &mut fragments,
     );
 
