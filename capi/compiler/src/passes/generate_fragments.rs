@@ -24,12 +24,13 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .collect::<Vec<_>>();
     compiled_functions.sort_by_key(|(index, _)| *index);
 
+    let mut function_ids = Vec::new();
     let root = address_context(
         compiled_functions
             .into_iter()
             .map(|(_, fragment)| fragment)
             .collect(),
-        &mut Vec::new(),
+        &mut function_ids,
         &mut fragments,
     );
 
