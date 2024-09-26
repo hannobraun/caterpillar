@@ -35,7 +35,7 @@ where
     E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
-    let mut new_fragments = expressions
+    let new_fragments = expressions
         .into_iter()
         .map(|expression| {
             let fragment = compile_expression(expression, fragments);
@@ -49,11 +49,11 @@ where
         })
         .collect::<Vec<_>>();
 
-    let ids = new_fragments.iter().map(|(_, id)| *id).collect::<Vec<_>>();
+    let mut ids = new_fragments.iter().map(|(_, id)| *id).collect::<Vec<_>>();
 
     let mut prev = None;
 
-    for (_, id) in &mut new_fragments {
+    for id in &mut ids {
         let prev_hash = prev.as_ref().map(Hash::new);
 
         id.prev = prev_hash;
@@ -65,7 +65,7 @@ where
 
     let mut next = None;
 
-    for (_, id) in new_fragments.iter_mut().rev() {
+    for id in ids.iter_mut().rev() {
         let next_hash = next.as_ref().map(Hash::new);
 
         id.next = next_hash;
@@ -75,7 +75,7 @@ where
         });
     }
 
-    for (i, (fragment, id)) in new_fragments.iter().enumerate() {
+    for (i, ((fragment, _), id)) in new_fragments.iter().zip(&ids).enumerate() {
         let previous = if i == 0 {
             None
         } else {
@@ -86,7 +86,7 @@ where
         fragments.insert(*id, fragment.clone(), previous, next);
     }
 
-    new_fragments.first().map(|(_, id)| id).copied()
+    ids.first().copied()
 }
 
 fn compile_expression(
