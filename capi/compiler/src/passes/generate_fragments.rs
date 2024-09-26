@@ -146,14 +146,21 @@ fn compile_expression(
                 Some(IdentifierTarget::Function {
                     is_known_to_be_recursive_call_to_index,
                 }) => {
-                    // We ignore this right now. But once function calls refer
-                    // to the called function by fragment ID, and no longer by
-                    // name, we need this information.
-                    let _ = is_known_to_be_recursive_call_to_index;
+                    // By the time we make it to this compiler pass, all calls
+                    // that are recursive should be known to be so.
+                    let is_recursive_call_to_index =
+                        is_known_to_be_recursive_call_to_index;
 
-                    Fragment::CallToFunction {
-                        name,
-                        is_tail_call: is_in_tail_position,
+                    if let Some(index) = is_recursive_call_to_index {
+                        Fragment::CallToFunctionRecursive {
+                            index,
+                            is_tail_call: is_in_tail_position,
+                        }
+                    } else {
+                        Fragment::CallToFunction {
+                            name,
+                            is_tail_call: is_in_tail_position,
+                        }
                     }
                 }
                 Some(IdentifierTarget::HostFunction { effect_number }) => {
