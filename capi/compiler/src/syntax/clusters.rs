@@ -2,6 +2,9 @@ use super::Function;
 
 /// # All functions in the code, grouped by clusters
 pub struct Clusters {
+    /// # All named functions, in the original order they were defined in
+    pub functions: Vec<Function>,
+
     pub clusters: Vec<Cluster>,
 }
 

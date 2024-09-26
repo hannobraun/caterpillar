@@ -4,6 +4,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     // This is just a placeholder implementation, while support for clusters is
     // still being implemented.
     Clusters {
+        functions: functions.clone(),
         clusters: functions
             .into_iter()
             .map(|function| [function])
