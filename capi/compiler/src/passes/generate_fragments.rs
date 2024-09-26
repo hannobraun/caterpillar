@@ -4,15 +4,16 @@ use crate::{
         Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
-    syntax::{self, IdentifierTarget},
+    syntax::{self, Clusters, IdentifierTarget},
 };
 
-pub fn generate_fragments(functions: Vec<syntax::Cluster>) -> Fragments {
+pub fn generate_fragments(functions: Clusters) -> Fragments {
     let clusters = Vec::new();
     let mut fragments = FragmentMap::default();
 
     let root = compile_context(
         functions
+            .clusters
             .into_iter()
             .flat_map(|cluster| cluster.functions)
             .map(|function| syntax::Expression::Function { function })
