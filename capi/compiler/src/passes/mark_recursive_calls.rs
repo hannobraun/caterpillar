@@ -37,16 +37,6 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         if let Some(index) =
                             indices_in_cluster_by_function_name.get(name)
                         {
-                            // We're converting between index types here, which
-                            // is an obvious bug.
-                            //
-                            // It has been made obvious by the recent type
-                            // safety improvements in `Clusters`. As for the
-                            // bug, a failing test for it already exists below.
-                            //
-                            // This is just an artifact of my incremental
-                            // approach to fixing this bug. It should be
-                            // addressed shortly.
                             let index = FunctionIndexInCluster(index.0);
 
                             *is_known_to_be_recursive_call_to_index =
