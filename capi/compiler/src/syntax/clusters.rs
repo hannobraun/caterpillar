@@ -23,7 +23,7 @@ pub struct Cluster {
     ///
     /// The indices refer to the functions in their original order within the
     /// list of all named functions.
-    pub functions: BTreeMap<usize, usize>,
+    pub functions: BTreeMap<usize, NamedFunctionIndex>,
 }
 
 /// # An index into the list of all named functions

@@ -9,7 +9,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .values()
             .copied()
             .filter_map(|index| {
-                clusters.functions[&index]
+                clusters.functions[&index.0]
                     .name
                     .clone()
                     .map(|name| (name, index))
@@ -19,7 +19,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
         for index in cluster.functions.values() {
             let function = clusters
                 .functions
-                .get_mut(index)
+                .get_mut(&index.0)
                 .expect("Functions referred to from clusters must exist.");
 
             for branch in &mut function.branches {
@@ -36,7 +36,8 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         if let Some(index) =
                             indices_in_cluster_by_function_name.get(name)
                         {
-                            let index: u32 = (*index)
+                            let index: u32 = index
+                                .0
                                 .try_into()
                                 .expect("Expecting to run on 32-bit platform.");
 
