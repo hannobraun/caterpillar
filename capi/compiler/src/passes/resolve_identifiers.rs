@@ -150,7 +150,7 @@ mod tests {
         // Bindings that are defined in a scope that is a lexical child of the
         // current scope, should not be resolved.
 
-        let functions = tokenize_and_parse(
+        let functions = code(
             r"
                 f: {
                     \ ->
@@ -181,7 +181,7 @@ mod tests {
         // We set up a special test host below, that provides the function that
         // is referenced here.
 
-        let functions = tokenize_and_parse(
+        let functions = code(
             r"
                 f: {
                     \ ->
@@ -210,7 +210,7 @@ mod tests {
         // host or user, but the compiler. They are translated into a series of
         // instructions at compile-time.
 
-        let functions = tokenize_and_parse(
+        let functions = code(
             r"
                 f: {
                     \ ->
@@ -238,7 +238,7 @@ mod tests {
         // User-defined functions can be resolved by checking for the existence
         // of a matching function in the code.
 
-        let functions = tokenize_and_parse(
+        let functions = code(
             r"
                 f: {
                     \ ->
@@ -292,7 +292,7 @@ mod tests {
         }
     }
 
-    fn tokenize_and_parse(source: &str) -> Vec<Function> {
+    fn code(source: &str) -> Vec<Function> {
         let tokens = tokenize(source);
         parse(tokens)
     }
