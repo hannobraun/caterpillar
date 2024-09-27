@@ -1,4 +1,4 @@
-use std::iter;
+use std::{collections::BTreeMap, iter};
 
 use crate::syntax::{Cluster, Clusters, Function};
 
@@ -7,7 +7,9 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     // still being implemented.
     let clusters = iter::successors(Some(0), |i| Some(i + 1))
         .take(functions.len())
-        .map(|i| Cluster { functions: vec![i] })
+        .map(|i| Cluster {
+            functions: BTreeMap::from([(0, i)]),
+        })
         .collect();
     let functions = functions.into_iter().enumerate().collect();
     Clusters {

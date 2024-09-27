@@ -13,7 +13,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut compiled_functions = clusters
         .clusters
         .iter()
-        .flat_map(|cluster| &cluster.functions)
+        .flat_map(|cluster| cluster.functions.values())
         .map(|index| {
             let function = clusters.functions[index].clone();
             let fragment = compile_function(function, &mut fragments);
@@ -39,7 +39,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             functions: Vec::new(),
         };
 
-        for index in cluster.functions {
+        for index in cluster.functions.into_values() {
             let id = function_ids[index];
             compiled_cluster.functions.push(id);
         }

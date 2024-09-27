@@ -6,7 +6,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
     for cluster in &mut clusters.clusters {
         let indices_in_cluster_by_function_name = cluster
             .functions
-            .iter()
+            .values()
             .copied()
             .filter_map(|index| {
                 clusters.functions[&index]
@@ -16,7 +16,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             })
             .collect::<BTreeMap<_, _>>();
 
-        for index in &cluster.functions {
+        for index in cluster.functions.values() {
             let function = clusters
                 .functions
                 .get_mut(index)
