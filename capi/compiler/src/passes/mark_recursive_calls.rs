@@ -36,13 +36,8 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                         if let Some(index) =
                             indices_in_cluster_by_function_name.get(name)
                         {
-                            let index: u32 = index
-                                .0
-                                .try_into()
-                                .expect("Expecting to run on 32-bit platform.");
-
                             *is_known_to_be_recursive_call_to_index =
-                                Some(index);
+                                Some(index.0);
                         }
                     }
                 }
