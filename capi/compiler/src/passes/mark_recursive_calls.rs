@@ -17,7 +17,10 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .collect::<BTreeMap<_, _>>();
 
         for &index in &cluster.functions {
-            let function = &mut clusters.functions[index];
+            let function = clusters
+                .functions
+                .get_mut(index)
+                .expect("Functions referred to from clusters must exist.");
 
             for branch in &mut function.branches {
                 for expression in &mut branch.body {
