@@ -18,10 +18,10 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             })
             .collect::<BTreeMap<_, _>>();
 
-        for index in cluster.functions.values() {
+        for named_function_index in cluster.functions.values() {
             let function = clusters
                 .functions
-                .get_mut(index)
+                .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
             for branch in &mut function.branches {
