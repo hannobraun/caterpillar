@@ -38,7 +38,10 @@ fn analyze_branch(body: &mut [Expression]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::{compile::tokenize_and_parse, syntax::Expression};
+    use crate::{
+        passes::{parse, tokenize},
+        syntax::{Expression, Function},
+    };
 
     use super::determine_tail_positions;
 
@@ -118,6 +121,11 @@ mod tests {
         let branch = function.branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
+    }
+
+    pub fn tokenize_and_parse(source: &str) -> Vec<Function> {
+        let tokens = tokenize(source);
+        parse(tokens)
     }
 
     trait ToIdentifiers {
