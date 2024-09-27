@@ -1,6 +1,8 @@
 use std::{collections::BTreeMap, iter};
 
-use crate::syntax::{Cluster, Clusters, Function, NamedFunctionIndex};
+use crate::syntax::{
+    Cluster, Clusters, Function, FunctionIndexInCluster, NamedFunctionIndex,
+};
 
 pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     // This is just a placeholder implementation, while support for clusters is
@@ -8,7 +10,10 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     let clusters = iter::successors(Some(0), |i| Some(i + 1))
         .take(functions.len())
         .map(|i| Cluster {
-            functions: BTreeMap::from([(0, NamedFunctionIndex(i))]),
+            functions: BTreeMap::from([(
+                FunctionIndexInCluster(0),
+                NamedFunctionIndex(i),
+            )]),
         })
         .collect();
     let functions = {
