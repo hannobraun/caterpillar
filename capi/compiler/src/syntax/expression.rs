@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
 
-use super::Function;
+use super::{Function, FunctionIndexInCluster};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
@@ -55,7 +55,7 @@ pub enum IdentifierTarget {
         ///
         /// This starts as `None`, until the respective compiler pass has has
         /// run.
-        is_known_to_be_recursive_call_to_index: Option<u32>,
+        is_known_to_be_recursive_call_to_index: Option<FunctionIndexInCluster>,
     },
 
     HostFunction {
