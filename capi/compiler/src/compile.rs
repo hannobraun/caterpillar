@@ -9,16 +9,11 @@ use crate::{
         tokenize,
     },
     source_map::SourceMap,
-    syntax::Function,
 };
 
-pub fn tokenize_and_parse(source: &str) -> Vec<Function> {
-    let tokens = tokenize(source);
-    parse(tokens)
-}
-
 pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
-    let mut functions = tokenize_and_parse(source);
+    let tokens = tokenize(source);
+    let mut functions = parse(tokens);
     determine_tail_positions(&mut functions);
     resolve_identifiers::<H>(&mut functions);
     let mut clusters = group_into_clusters(functions);
