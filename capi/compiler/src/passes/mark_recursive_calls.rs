@@ -8,12 +8,12 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
     for cluster in &mut clusters.clusters {
         let indices_in_cluster_by_function_name = cluster
             .functions
-            .values()
-            .filter_map(|named_function_index| {
+            .iter()
+            .filter_map(|(function_index_in_cluster, named_function_index)| {
                 clusters.functions[named_function_index]
                     .name
                     .clone()
-                    .map(|name| (name, named_function_index))
+                    .map(|name| (name, function_index_in_cluster))
             })
             .collect::<BTreeMap<_, _>>();
 
@@ -68,7 +68,6 @@ mod tests {
     };
 
     #[test]
-    #[should_panic] // known bug; not tracked as an issue yet
     fn self_recursive_functions() {
         let clusters = mark_recursive_calls(
             r"
