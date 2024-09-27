@@ -43,5 +43,6 @@ pub struct NamedFunctionIndex(pub u32);
     PartialOrd,
     serde::Deserialize,
     serde::Serialize,
+    udigest::Digestable,
 )]
 pub struct FunctionIndexInCluster(pub u32);
