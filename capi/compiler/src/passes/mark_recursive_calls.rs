@@ -10,11 +10,11 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .functions
             .values()
             .copied()
-            .filter_map(|index| {
-                clusters.functions[&index]
+            .filter_map(|named_function_index| {
+                clusters.functions[&named_function_index]
                     .name
                     .clone()
-                    .map(|name| (name, index))
+                    .map(|name| (name, named_function_index))
             })
             .collect::<BTreeMap<_, _>>();
 
