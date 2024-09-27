@@ -9,6 +9,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         .take(functions.len())
         .map(|i| Cluster { functions: vec![i] })
         .collect();
+    let functions = functions.into_iter().enumerate().collect();
     Clusters {
         functions,
         clusters,

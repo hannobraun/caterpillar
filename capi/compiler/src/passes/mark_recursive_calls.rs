@@ -9,14 +9,14 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .iter()
             .copied()
             .filter_map(|index| {
-                clusters.functions[index]
+                clusters.functions[&index]
                     .name
                     .clone()
                     .map(|name| (name, index))
             })
             .collect::<BTreeMap<_, _>>();
 
-        for &index in &cluster.functions {
+        for index in &cluster.functions {
             let function = clusters
                 .functions
                 .get_mut(index)
