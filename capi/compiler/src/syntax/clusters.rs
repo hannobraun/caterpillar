@@ -5,7 +5,7 @@ use super::Function;
 /// # All functions in the code, grouped by clusters
 pub struct Clusters {
     /// # All named functions, in the original order they were defined in
-    pub functions: BTreeMap<usize, Function>,
+    pub functions: BTreeMap<NamedFunctionIndex, Function>,
 
     /// # The named functions, grouped into clusters
     pub clusters: Vec<Cluster>,

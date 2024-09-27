@@ -11,7 +11,11 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
             functions: BTreeMap::from([(0, NamedFunctionIndex(i))]),
         })
         .collect();
-    let functions = functions.into_iter().enumerate().collect();
+    let functions = functions
+        .into_iter()
+        .enumerate()
+        .map(|(index, function)| (NamedFunctionIndex(index), function))
+        .collect();
     Clusters {
         functions,
         clusters,
