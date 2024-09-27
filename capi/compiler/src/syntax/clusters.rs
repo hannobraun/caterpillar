@@ -33,5 +33,15 @@ pub struct Cluster {
 pub struct NamedFunctionIndex(pub u32);
 
 /// # An index into the list of functions in a cluster
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct FunctionIndexInCluster(pub u32);
