@@ -31,3 +31,7 @@ pub struct Cluster {
 /// Assumes named functions are ordered as they appear in the source code.
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NamedFunctionIndex(pub u32);
+
+/// # An index into the list of functions in a cluster
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+pub struct FunctionIndexInCluster(pub u32);
