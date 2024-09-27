@@ -4,9 +4,7 @@ use capi_runtime::Value;
 
 use super::Expression;
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Function {
     /// The name of the function, if available
     ///
@@ -24,7 +22,7 @@ pub struct Function {
     pub environment: BTreeSet<String>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,

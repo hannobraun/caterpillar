@@ -4,7 +4,7 @@ use crate::intrinsics::Intrinsic;
 
 use super::Function;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Comment {
         text: String,
@@ -42,7 +42,7 @@ pub enum Expression {
     Value(Value),
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum IdentifierTarget {
     Binding,
 
