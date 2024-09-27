@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::intrinsics::Intrinsic;
+use crate::{intrinsics::Intrinsic, syntax::FunctionIndexInCluster};
 
 use super::{FoundFunction, FragmentMap, Function};
 
@@ -99,7 +99,7 @@ pub enum Fragment {
         /// functions being grouped into clusters. The above documentation
         /// should be seen as aspirational, putting this code into the context
         /// of the ongoing development.
-        index: u32,
+        index: FunctionIndexInCluster,
 
         /// # Indicate whether the call is in tail position
         ///

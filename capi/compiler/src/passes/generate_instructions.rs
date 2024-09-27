@@ -264,7 +264,7 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let index: usize = (*index).try_into().expect(
+            let index: usize = index.0.try_into().expect(
                 "Expecting to run on a platform where `u32` can convert to \
                 `usize`.",
             );

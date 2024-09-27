@@ -157,7 +157,7 @@ fn compile_expression(
 
                     if let Some(index) = is_recursive_call_to_index {
                         Fragment::CallToFunctionRecursive {
-                            index: index.0,
+                            index,
                             is_tail_call: is_in_tail_position,
                         }
                     } else {
