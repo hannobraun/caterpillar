@@ -139,9 +139,9 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        compile::tokenize_and_parse,
         host::Host,
         intrinsics::Intrinsic,
+        passes::{parse, tokenize},
         syntax::{Branch, Expression, Function, IdentifierTarget},
     };
 
@@ -290,5 +290,10 @@ mod tests {
                 _ => None,
             }
         }
+    }
+
+    fn tokenize_and_parse(source: &str) -> Vec<Function> {
+        let tokens = tokenize(source);
+        parse(tokens)
     }
 }
