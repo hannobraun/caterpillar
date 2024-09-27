@@ -9,7 +9,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
-            .filter_map(|(function_index_in_cluster, named_function_index)| {
+            .filter_map(|(&function_index_in_cluster, named_function_index)| {
                 clusters.functions[named_function_index]
                     .name
                     .clone()
