@@ -150,7 +150,7 @@ mod tests {
         // Bindings that are defined in a scope that is a lexical child of the
         // current scope, should not be resolved.
 
-        let functions = code(
+        let mut functions = resolve_identifiers(code(
             r"
                 f: {
                     \ ->
@@ -161,9 +161,7 @@ mod tests {
                         value
                 }
             ",
-        );
-
-        let mut functions = resolve_identifiers(functions);
+        ));
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -181,16 +179,14 @@ mod tests {
         // We set up a special test host below, that provides the function that
         // is referenced here.
 
-        let functions = code(
+        let mut functions = resolve_identifiers(code(
             r"
                 f: {
                     \ ->
                         host_fn
                 }
             ",
-        );
-
-        let mut functions = resolve_identifiers(functions);
+        ));
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -210,16 +206,14 @@ mod tests {
         // host or user, but the compiler. They are translated into a series of
         // instructions at compile-time.
 
-        let functions = code(
+        let mut functions = resolve_identifiers(code(
             r"
                 f: {
                     \ ->
                         eval
                 }
             ",
-        );
-
-        let mut functions = resolve_identifiers(functions);
+        ));
 
         assert_eq!(
             functions.remove(0).body.last(),
@@ -238,7 +232,7 @@ mod tests {
         // User-defined functions can be resolved by checking for the existence
         // of a matching function in the code.
 
-        let functions = code(
+        let mut functions = resolve_identifiers(code(
             r"
                 f: {
                     \ ->
@@ -249,9 +243,7 @@ mod tests {
                     \ ->
                 }
             ",
-        );
-
-        let mut functions = resolve_identifiers(functions);
+        ));
 
         assert_eq!(
             functions.remove(0).body.last(),
