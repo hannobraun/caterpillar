@@ -233,9 +233,17 @@ fn instruction_to_function(
 ) -> (fragments::Function, FragmentId) {
     let Some(fragment_id) = code.source_map.instruction_to_fragment(address)
     else {
+        let instructions = &code.instructions;
+        let instruction = instructions.get(address);
+
         panic!(
             "Expecting all instructions referenced on call stack to map to a \
-            fragment, but instruction at address `{address}` does not."
+            fragment, but instruction at address `{address}` does not.\n\
+            \n\
+            Instruction that does not map to a fragment: `{instruction:?}`\n\
+            \n\
+            All instructions:\n\
+            {instructions:#?}"
         );
     };
 
