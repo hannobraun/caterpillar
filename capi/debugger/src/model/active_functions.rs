@@ -243,7 +243,7 @@ fn instruction_to_function(
             Instruction that does not map to a fragment: `{instruction:?}`\n\
             \n\
             All instructions:\n\
-            {instructions:#?}"
+            {instructions}"
         );
     };
 
