@@ -236,7 +236,7 @@ fn instruction_to_function(
     else {
         panic!(
             "Expecting all instructions referenced on call stack to map to a \
-            fragment, but instruction `{instruction}` does not."
+            fragment, but instruction at address `{instruction}` does not."
         );
     };
 
