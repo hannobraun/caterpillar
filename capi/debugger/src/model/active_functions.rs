@@ -228,15 +228,14 @@ impl fmt::Display for ActiveFunctionsMessage {
 }
 
 fn instruction_to_function(
-    instruction: &InstructionAddress,
+    address: &InstructionAddress,
     code: &Code,
 ) -> (fragments::Function, FragmentId) {
-    let Some(fragment_id) =
-        code.source_map.instruction_to_fragment(instruction)
+    let Some(fragment_id) = code.source_map.instruction_to_fragment(address)
     else {
         panic!(
             "Expecting all instructions referenced on call stack to map to a \
-            fragment, but instruction at address `{instruction}` does not."
+            fragment, but instruction at address `{address}` does not."
         );
     };
 
@@ -246,7 +245,7 @@ fn instruction_to_function(
     else {
         let fragment = code.fragments.get(&fragment_id);
         panic!(
-            "Active instruction `{instruction}` maps to active fragment \
+            "Active instruction `{address}` maps to active fragment \
             `{fragment_id:?}`. Expecting that fragment to be part of the body \
             of a named function, but it isn't.\n\
             \n\
