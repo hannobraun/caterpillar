@@ -45,9 +45,10 @@ pub enum Fragment {
         /// This references references the called function by name. It should
         /// instead reference it using an `id: FragmentId` field.
         ///
-        /// This would have the advantage of versioning this call. It could
-        /// refer to any available version of the function, which is a useful
-        /// feature to have for many reasons.
+        /// This would have the advantage of versioning this call, allowing it
+        /// to refer to any available version of the function. This is going to
+        /// be useful to have. It would also make function calls easier to
+        /// process when generating code.
         ///
         /// Unfortunately, this is not easy. There are two main hurdles, as
         /// best I can tell:
