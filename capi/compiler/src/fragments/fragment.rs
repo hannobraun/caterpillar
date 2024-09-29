@@ -96,10 +96,9 @@ pub enum Fragment {
         ///
         /// ## Implementation Note
         ///
-        /// As of this writing, this enum variant is never created, nor are
-        /// functions being grouped into clusters. The above documentation
-        /// should be seen as aspirational, putting this code into the context
-        /// of the ongoing development.
+        /// As of this writing, this enum variant is only created for
+        /// self-recursive calls. While this is still the case, this field
+        /// should always be `0`.
         index: FunctionIndexInCluster,
 
         /// # Indicate whether the call is in tail position
