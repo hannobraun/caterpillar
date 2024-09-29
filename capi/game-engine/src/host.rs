@@ -49,7 +49,7 @@ impl Host for GameEngineHost {
 /// it.
 ///
 /// Without a type system, piping any values that represent I/O resources
-/// through host functions is only complexity for no real gain. And without a
+/// through host functions is only complexity for no gain. And without a
 /// _linear_ type system, there's no way to guarantee any sane semantics around
 /// such functions anyway.
 #[derive(
