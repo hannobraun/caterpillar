@@ -43,13 +43,6 @@ pub struct Function {
     ///
     /// All functions in Caterpillar are closures that can use values from
     /// parent scopes. The names of those values are stored here.
-    ///
-    /// ## Implementation Note
-    ///
-    /// Right now, this is always empty for named functions, and only used for
-    /// anonymous ones. This is just a snapshot of the current situation,
-    /// however, and will most likely change as the language becomes less
-    /// limited.
     pub environment: BTreeSet<String>,
 }
 
