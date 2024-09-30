@@ -108,7 +108,7 @@ pub fn generate_instructions(
         if let Some(address) = address {
             output.instructions.replace(
                 &address,
-                Instruction::MakeClosure {
+                Instruction::MakeAnonymousFunction {
                     branches,
                     environment: function.environment,
                 },

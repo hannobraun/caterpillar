@@ -352,7 +352,7 @@ fn evaluate_instruction(
             let b = if a.0 == [0; 4] { 1 } else { 0 };
             stack.push_operand(b);
         }
-        Instruction::MakeClosure {
+        Instruction::MakeAnonymousFunction {
             branches,
             environment,
         } => {

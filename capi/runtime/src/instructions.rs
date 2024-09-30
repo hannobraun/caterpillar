@@ -270,7 +270,7 @@ pub enum Instruction {
     /// When this is the case, special handling at runtime will no longer be
     /// required. Then all logic specific to anonymous functions can live in the
     /// compiler, and this instruction can be removed.
-    MakeClosure {
+    MakeAnonymousFunction {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,
     },
