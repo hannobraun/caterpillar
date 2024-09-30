@@ -167,7 +167,7 @@ fn compile_function(
     let mut branches = Vec::new();
     let mut instruction_range = None;
 
-    for branch in function.branches {
+    for branch in &function.branches {
         let parameters = branch.parameters.inner.iter().filter_map(|pattern| {
             match pattern {
                 Pattern::Identifier { name } => Some(name),
