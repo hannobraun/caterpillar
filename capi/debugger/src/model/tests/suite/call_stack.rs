@@ -68,7 +68,7 @@ fn stopped_at_host_function() {
 }
 
 #[test]
-fn stopped_at_code_within_block() {
+fn stopped_in_anonymous_function() {
     // If execution is stopped within a block, the function that contains that
     // block should appear as an active function, and the current instruction
     // should be visible.
