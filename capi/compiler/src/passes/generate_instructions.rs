@@ -114,7 +114,7 @@ fn compile_context(
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
-) -> InstructionAddress {
+) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
     for (id, fragment) in fragments.iter_from(start) {
@@ -146,7 +146,9 @@ fn compile_context(
     let last_instruction =
         output.generate_instruction(Instruction::Return, None);
 
-    first_instruction.unwrap_or(last_instruction)
+    let first_instruction = first_instruction.unwrap_or(last_instruction);
+
+    [first_instruction, last_instruction]
 }
 
 fn compile_function(
@@ -179,7 +181,7 @@ fn compile_function(
         });
         let bindings_address = output.generate_binding(parameters, fragment);
 
-        let context_address = compile_context(
+        let [context_address, _] = compile_context(
             branch.start,
             &fragments.clusters,
             &fragments.map,
