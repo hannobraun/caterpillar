@@ -5,7 +5,7 @@ use crate::model::{
         debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
         DebugBranchExt, DebugFragmentExt, DebugFunctionExt, FunctionsExt,
     },
-    ActiveFunctionsEntry,
+    ActiveFunctionsEntry, UserAction,
 };
 
 #[test]
@@ -253,4 +253,47 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             ActiveFunctionsEntry::Function(_),
         ]
     ));
+}
+
+#[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/55
+fn instruction_on_call_stack_with_no_associated_fragment() {
+    // If a host function has just been executed, it is possible that the
+    // currently active instruction is a return instruction, if that is located
+    // right after the call to the host function.
+    //
+    // Since a return is not associated with a fragment, the debugger must not
+    // rely on that being the case. Everything should work normally in this
+    // case.
+    //
+    // Note that as of this writing, there is an explicit test about host
+    // functions on the stack. But that is stopped _at_ the host function, not
+    // right after it. So it doesn't test the same thing.
+
+    let mut debugger = debugger();
+    debugger
+        .provide_source_code(
+            r"
+                main: { \ size_x size_y ->
+                    submit
+                    main
+                }
+
+                submit: { \ ->
+                    submit_frame # this is the call to the host function
+                }
+            ",
+        )
+        .run_program();
+
+    // This will stop the program after the `submit_frame`, since that is the
+    // only time when the game engine reacts to commands.
+    debugger.on_user_action(UserAction::Stop).unwrap();
+
+    let _ = debugger.transient_state();
+
+    // Nothing else to do. We're not currently handling this case well[1], so
+    // unless we panicked, everything's good, as far as this test is concerned.
+    //
+    // [1] https://github.com/hannobraun/caterpillar/issues/53
 }
