@@ -189,12 +189,12 @@ fn compile_function(
             queue,
         );
 
-        let address = bindings_address.unwrap_or(context_address);
+        let first_address = bindings_address.unwrap_or(context_address);
         functions
             .by_fragment
             .entry(fragment)
             .or_default()
-            .push((branch.parameters.clone(), address));
+            .push((branch.parameters.clone(), first_address));
 
         branches.push(capi_runtime::Branch {
             parameters: branch
@@ -210,7 +210,7 @@ fn compile_function(
                     }
                 })
                 .collect(),
-            start: address,
+            start: first_address,
         });
     }
 
