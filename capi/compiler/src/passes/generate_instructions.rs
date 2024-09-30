@@ -211,18 +211,9 @@ fn compile_context(
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
     let last_instruction =
-        Some(output.generate_instruction(Instruction::Return, None));
-    first_instruction = first_instruction.or(last_instruction);
+        output.generate_instruction(Instruction::Return, None);
 
-    let Some(first_instruction) = first_instruction else {
-        unreachable!(
-            "Must have generated at least one instruction for the block: the \
-            return instruction. If this has not happened, the fragments have \
-            somehow been missing a terminator."
-        );
-    };
-
-    first_instruction
+    first_instruction.unwrap_or(last_instruction)
 }
 
 fn compile_fragment(
