@@ -150,7 +150,7 @@ fn compile_context(
 }
 
 fn compile_function(
-    unit: FunctionToCompile,
+    function_to_compile: FunctionToCompile,
     fragments: &Fragments,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
@@ -160,7 +160,7 @@ fn compile_function(
         fragment,
         function,
         address_of_instruction_to_make_anon_function,
-    } = unit;
+    } = function_to_compile;
 
     let mut branches = Vec::new();
 
