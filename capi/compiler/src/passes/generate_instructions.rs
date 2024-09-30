@@ -210,9 +210,9 @@ fn compile_context(
     //   compiler optimizations. I'd rather have that, instead of making
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
-    let addr_of_return =
+    let last_instruction =
         Some(output.generate_instruction(Instruction::Return, None));
-    first_instruction = first_instruction.or(addr_of_return);
+    first_instruction = first_instruction.or(last_instruction);
 
     let Some(first_instruction) = first_instruction else {
         unreachable!(
