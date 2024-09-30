@@ -50,7 +50,7 @@ pub fn generate_instructions(
         let FunctionToCompile {
             fragment,
             function,
-            address,
+            address_of_instruction_to_make_anon_function: address,
         } = unit;
 
         let mut branches = Vec::new();
@@ -353,7 +353,7 @@ fn compile_fragment(
             queue.push_front(FunctionToCompile {
                 fragment: id,
                 function: function.clone(),
-                address,
+                address_of_instruction_to_make_anon_function: address,
             });
 
             address
@@ -471,5 +471,5 @@ struct Functions {
 struct FunctionToCompile {
     fragment: FragmentId,
     function: Function,
-    address: Option<InstructionAddress>,
+    address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
 }
