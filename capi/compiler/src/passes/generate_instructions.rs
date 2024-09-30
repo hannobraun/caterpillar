@@ -50,7 +50,7 @@ pub fn generate_instructions(
         let FunctionToCompile {
             fragment,
             function,
-            address_of_instruction_to_make_anon_function: address,
+            address_of_instruction_to_make_anon_function,
         } = unit;
 
         let mut branches = Vec::new();
@@ -105,7 +105,7 @@ pub fn generate_instructions(
             });
         }
 
-        if let Some(address) = address {
+        if let Some(address) = address_of_instruction_to_make_anon_function {
             output.instructions.replace(
                 &address,
                 Instruction::MakeAnonymousFunction {
