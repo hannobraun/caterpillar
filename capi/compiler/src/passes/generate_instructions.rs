@@ -46,9 +46,9 @@ pub fn generate_instructions(
         &mut queue,
     );
 
-    while let Some(unit) = queue.pop_front() {
+    while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
-            unit,
+            function_to_compile,
             &fragments,
             &mut output,
             &mut queue,
