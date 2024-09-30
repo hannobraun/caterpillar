@@ -47,80 +47,13 @@ pub fn generate_instructions(
     );
 
     while let Some(unit) = queue.pop_front() {
-        let FunctionToCompile {
-            fragment,
-            function,
-            address_of_instruction_to_make_anon_function,
-        } = unit;
-
-        let mut branches = Vec::new();
-
-        for branch in function.branches {
-            let parameters =
-                branch.parameters.inner.iter().filter_map(|pattern| {
-                    match pattern {
-                        Pattern::Identifier { name } => Some(name),
-                        Pattern::Literal { .. } => {
-                            // Literal patterns are only relevant when
-                            // selecting the branch to execute. They no
-                            // longer have meaning once the function
-                            // actually starts executing.
-                            None
-                        }
-                    }
-                });
-            let bindings_address =
-                output.generate_binding(parameters, fragment);
-
-            let context_address = compile_context(
-                branch.start,
-                &fragments.clusters,
-                &fragments.map,
-                &mut output,
-                &mut queue,
-            );
-
-            let address = bindings_address.unwrap_or(context_address);
-            functions
-                .by_fragment
-                .entry(fragment)
-                .or_default()
-                .push((branch.parameters.clone(), address));
-
-            branches.push(capi_runtime::Branch {
-                parameters: branch
-                    .parameters
-                    .inner
-                    .into_iter()
-                    .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => {
-                            capi_runtime::Pattern::Identifier { name }
-                        }
-                        Pattern::Literal { value } => {
-                            capi_runtime::Pattern::Literal { value }
-                        }
-                    })
-                    .collect(),
-                start: address,
-            });
-        }
-
-        if let Some(address) = address_of_instruction_to_make_anon_function {
-            output.instructions.replace(
-                &address,
-                Instruction::MakeAnonymousFunction {
-                    branches,
-                    environment: function.environment,
-                },
-            );
-        } else {
-            assert!(
-                function.environment.is_empty(),
-                "We were not provided an address where to put a \"make \
-                closure \" instruction, and yet the function has an \
-                environment. This is a bug.",
-            );
-        }
+        compile_function(
+            unit,
+            &fragments,
+            &mut output,
+            &mut queue,
+            &mut functions,
+        );
     }
 
     for call in output.placeholders {
@@ -214,6 +147,87 @@ fn compile_context(
         output.generate_instruction(Instruction::Return, None);
 
     first_instruction.unwrap_or(last_instruction)
+}
+
+fn compile_function(
+    unit: FunctionToCompile,
+    fragments: &Fragments,
+    output: &mut Output,
+    queue: &mut VecDeque<FunctionToCompile>,
+    functions: &mut Functions,
+) {
+    let FunctionToCompile {
+        fragment,
+        function,
+        address_of_instruction_to_make_anon_function,
+    } = unit;
+
+    let mut branches = Vec::new();
+
+    for branch in function.branches {
+        let parameters = branch.parameters.inner.iter().filter_map(|pattern| {
+            match pattern {
+                Pattern::Identifier { name } => Some(name),
+                Pattern::Literal { .. } => {
+                    // Literal patterns are only relevant when
+                    // selecting the branch to execute. They no
+                    // longer have meaning once the function
+                    // actually starts executing.
+                    None
+                }
+            }
+        });
+        let bindings_address = output.generate_binding(parameters, fragment);
+
+        let context_address = compile_context(
+            branch.start,
+            &fragments.clusters,
+            &fragments.map,
+            output,
+            queue,
+        );
+
+        let address = bindings_address.unwrap_or(context_address);
+        functions
+            .by_fragment
+            .entry(fragment)
+            .or_default()
+            .push((branch.parameters.clone(), address));
+
+        branches.push(capi_runtime::Branch {
+            parameters: branch
+                .parameters
+                .inner
+                .into_iter()
+                .map(|pattern| match pattern {
+                    Pattern::Identifier { name } => {
+                        capi_runtime::Pattern::Identifier { name }
+                    }
+                    Pattern::Literal { value } => {
+                        capi_runtime::Pattern::Literal { value }
+                    }
+                })
+                .collect(),
+            start: address,
+        });
+    }
+
+    if let Some(address) = address_of_instruction_to_make_anon_function {
+        output.instructions.replace(
+            &address,
+            Instruction::MakeAnonymousFunction {
+                branches,
+                environment: function.environment,
+            },
+        );
+    } else {
+        assert!(
+            function.environment.is_empty(),
+            "We were not provided an address where to put a \"make \
+                closure \" instruction, and yet the function has an \
+                environment. This is a bug.",
+        );
+    }
 }
 
 fn compile_fragment(
