@@ -201,7 +201,8 @@ fn compile_function(
             parameters: branch
                 .parameters
                 .inner
-                .into_iter()
+                .iter()
+                .cloned()
                 .map(|pattern| match pattern {
                     Pattern::Identifier { name } => {
                         capi_runtime::Pattern::Identifier { name }
