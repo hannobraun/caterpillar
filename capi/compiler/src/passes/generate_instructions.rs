@@ -165,6 +165,7 @@ fn compile_function(
     } = function_to_compile;
 
     let mut branches = Vec::new();
+    let mut instruction_range = None;
 
     for branch in function.branches {
         let parameters = branch.parameters.inner.iter().filter_map(|pattern| {
@@ -181,7 +182,7 @@ fn compile_function(
         });
         let bindings_address = output.generate_binding(parameters, fragment);
 
-        let [context_address, _] = compile_context(
+        let [context_address, last_address] = compile_context(
             branch.start,
             &fragments.clusters,
             &fragments.map,
@@ -212,6 +213,13 @@ fn compile_function(
                 .collect(),
             start: first_address,
         });
+
+        instruction_range = {
+            let [first_in_function, _last_in_function] =
+                instruction_range.unwrap_or([first_address, last_address]);
+
+            Some([first_in_function, last_address])
+        };
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {
