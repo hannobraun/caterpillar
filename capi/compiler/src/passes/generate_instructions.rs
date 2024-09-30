@@ -326,26 +326,27 @@ fn compile_fragment(
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
-            let address = if function.name.is_none() {
-                // If this is an anonymous function, we need to emit an
-                // instruction that allocates it, and takes care of its
-                // environment.
-                //
-                // But we haven't compiled the anonymous function yet, so we
-                // don't have the required information to do that. For now,
-                // let's create a placeholder for that instruction.
-                //
-                // Once the function gets compiled, we'll replace the
-                // placeholder with the real instruction.
-                Some(output.generate_instruction(
-                    Instruction::TriggerEffect {
-                        effect: Effect::CompilerBug,
-                    },
-                    Some(id),
-                ))
-            } else {
-                None
-            };
+            let address_of_instruction_to_make_anon_function =
+                if function.name.is_none() {
+                    // If this is an anonymous function, we need to emit an
+                    // instruction that allocates it, and takes care of its
+                    // environment.
+                    //
+                    // But we haven't compiled the anonymous function yet, so we
+                    // don't have the required information to do that. For now,
+                    // let's create a placeholder for that instruction.
+                    //
+                    // Once the function gets compiled, we'll replace the
+                    // placeholder with the real instruction.
+                    Some(output.generate_instruction(
+                        Instruction::TriggerEffect {
+                            effect: Effect::CompilerBug,
+                        },
+                        Some(id),
+                    ))
+                } else {
+                    None
+                };
 
             // And to make it happen later, we need to put what we already have
             // into a queue. Once whatever's currently being compiled is out of
@@ -353,10 +354,10 @@ fn compile_fragment(
             queue.push_front(FunctionToCompile {
                 fragment: id,
                 function: function.clone(),
-                address_of_instruction_to_make_anon_function: address,
+                address_of_instruction_to_make_anon_function,
             });
 
-            address
+            address_of_instruction_to_make_anon_function
         }
         Fragment::ResolvedBinding { name } => {
             Some(output.generate_instruction(
