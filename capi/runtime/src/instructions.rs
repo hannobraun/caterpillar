@@ -250,6 +250,26 @@ pub enum Instruction {
     /// # Logical not
     LogicalNot,
 
+    /// # Create an anonymous function
+    ///
+    /// ## Implementation Note
+    ///
+    /// Anonymous functions and their environment are currently allocated in a
+    /// special map within the evaluator. This instruction is required to make
+    /// that work.
+    ///
+    /// But this situation is undesirable. Anonymous functions should not be
+    /// boxed. They should just be regular values, with everything needed to
+    /// make them work allocated on the stack.
+    ///
+    /// Right now, this is not feasible, because the language is untyped and
+    /// every value is a 32-bit word. Once we have static typing and the ability
+    /// to create composite values, anonymous functions should be represented
+    /// using those.
+    ///
+    /// When this is the case, special handling at runtime will no longer be
+    /// required. Then all logic specific to anonymous functions can live in the
+    /// compiler, and this instruction can be removed.
     MakeClosure {
         branches: Vec<Branch>,
         environment: BTreeSet<String>,
