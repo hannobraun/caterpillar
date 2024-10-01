@@ -98,7 +98,7 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
             &mut class_outer,
             actions,
         ),
-        DebugFragmentKind::CallToFunctionRecursive => (
+        DebugFragmentKind::CallToFunctionRecursive { .. } => (
             view! {
                 <span>
                     "Recursive function call. Displaying this is not supported yet."
