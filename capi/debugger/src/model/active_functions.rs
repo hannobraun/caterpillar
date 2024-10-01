@@ -239,7 +239,7 @@ fn instruction_to_named_function(
     let function = if function.name.is_none() {
         let (function, _) = code
             .fragments
-            .find_named_function_by_fragment_in_body(&function_id)
+            .find_named_function_by_fragment_in_body(function_id)
             .expect(
                 "Anonymous function must be defined within a named function, \
                 directly or indirectly.",
