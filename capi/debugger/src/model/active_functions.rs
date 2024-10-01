@@ -258,7 +258,8 @@ fn instruction_to_named_function(
             "Expecting all instructions referenced on call stack to map to a \
             fragment, but instruction at address `{address}` does not.\n\
             \n\
-            Instruction that does not map to a fragment: `{instruction:?}`\n\
+            Instruction that does not map to a fragment:\n\
+            `{instruction:?}`\n\
             \n\
             All instructions:\n\
             {instructions}"
