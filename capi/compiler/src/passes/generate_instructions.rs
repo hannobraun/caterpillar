@@ -224,9 +224,11 @@ fn compile_function(
     }
 
     if let Some(instruction_range) = instruction_range {
-        output
-            .source_map
-            .define_instruction_range(function.clone(), instruction_range);
+        output.source_map.define_instruction_range(
+            function.clone(),
+            fragment,
+            instruction_range,
+        );
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {
