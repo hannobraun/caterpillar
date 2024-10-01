@@ -56,7 +56,7 @@ impl ActiveFunctions {
         let mut expected_next_function = Some("main".to_string());
 
         if let Some(outer) = active_instructions.front() {
-            let (outer, _) = instruction_to_named_function(outer, code);
+            let outer = instruction_to_named_function(outer, code);
             if outer.name != expected_next_function {
                 expected_next_function = reconstruct_function(
                     "main",
@@ -69,8 +69,28 @@ impl ActiveFunctions {
         }
 
         while let Some(address) = active_instructions.pop_front() {
-            let (function, active_fragment) =
-                instruction_to_named_function(&address, code);
+            let function = instruction_to_named_function(&address, code);
+            let active_fragment = {
+                let Some(fragment_id) =
+                    code.source_map.instruction_to_fragment(&address)
+                else {
+                    let instructions = &code.instructions;
+                    let instruction = instructions.get(&address);
+
+                    panic!(
+                        "Expecting all instructions referenced on call stack \
+                        to map to a fragment, but instruction at address \
+                        `{address}` does not.\n\
+                        \n\
+                        Instruction that does not map to a fragment:\n\
+                        `{instruction:?}`\n\
+                        \n\
+                        All instructions:\n\
+                        {instructions}"
+                    );
+                };
+                fragment_id
+            };
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {
@@ -230,7 +250,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
-) -> (fragments::Function, FragmentId) {
+) -> fragments::Function {
     let (function, function_id) =
         code.source_map.instruction_to_function(address).expect(
             "Expecting instructions on call stack to all map to a function.",
@@ -249,24 +269,7 @@ fn instruction_to_named_function(
         function
     };
 
-    let Some(fragment_id) = code.source_map.instruction_to_fragment(address)
-    else {
-        let instructions = &code.instructions;
-        let instruction = instructions.get(address);
-
-        panic!(
-            "Expecting all instructions referenced on call stack to map to a \
-            fragment, but instruction at address `{address}` does not.\n\
-            \n\
-            Instruction that does not map to a fragment:\n\
-            `{instruction:?}`\n\
-            \n\
-            All instructions:\n\
-            {instructions}"
-        );
-    };
-
-    (function.clone(), fragment_id)
+    function.clone()
 }
 
 fn reconstruct_function(
