@@ -68,9 +68,9 @@ impl ActiveFunctions {
             }
         }
 
-        while let Some(instruction) = active_instructions.pop_front() {
+        while let Some(address) = active_instructions.pop_front() {
             let (function, active_fragment) =
-                instruction_to_named_function(&instruction, code);
+                instruction_to_named_function(&address, code);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {
