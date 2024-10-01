@@ -56,7 +56,7 @@ impl ActiveFunctions {
         let mut expected_next_function = Some("main".to_string());
 
         if let Some(outer) = active_instructions.front() {
-            let (outer, _) = instruction_to_function(outer, code);
+            let (outer, _) = instruction_to_named_function(outer, code);
             if outer.name != expected_next_function {
                 expected_next_function = reconstruct_function(
                     "main",
@@ -70,7 +70,7 @@ impl ActiveFunctions {
 
         while let Some(instruction) = active_instructions.pop_front() {
             let (function, active_fragment) =
-                instruction_to_function(&instruction, code);
+                instruction_to_named_function(&instruction, code);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {
@@ -227,7 +227,7 @@ impl fmt::Display for ActiveFunctionsMessage {
     }
 }
 
-fn instruction_to_function(
+fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
 ) -> (fragments::Function, FragmentId) {
