@@ -70,27 +70,8 @@ impl ActiveFunctions {
 
         while let Some(address) = active_instructions.pop_front() {
             let function = instruction_to_named_function(&address, code);
-            let active_fragment = {
-                let Some(fragment_id) =
-                    code.source_map.instruction_to_fragment(&address)
-                else {
-                    let instructions = &code.instructions;
-                    let instruction = instructions.get(&address);
-
-                    panic!(
-                        "Expecting all instructions referenced on call stack \
-                        to map to a fragment, but instruction at address \
-                        `{address}` does not.\n\
-                        \n\
-                        Instruction that does not map to a fragment:\n\
-                        `{instruction:?}`\n\
-                        \n\
-                        All instructions:\n\
-                        {instructions}"
-                    );
-                };
-                fragment_id
-            };
+            let active_fragment =
+                code.source_map.instruction_to_fragment(&address);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {
@@ -107,12 +88,14 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                call_fragment_to_function_name(&active_fragment, code);
+                active_fragment.and_then(|active_fragment| {
+                    call_fragment_to_function_name(&active_fragment, code)
+                });
 
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
                     function,
-                    Some(active_fragment),
+                    active_fragment,
                     active_instructions.is_empty(),
                     &code.fragments,
                     &code.source_map,
