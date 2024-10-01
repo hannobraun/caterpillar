@@ -231,6 +231,24 @@ fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
 ) -> (fragments::Function, FragmentId) {
+    let (function, function_id) =
+        code.source_map.instruction_to_function(address).expect(
+            "Expecting instructions on call stack to all map to a function.",
+        );
+
+    let function = if function.name.is_none() {
+        let (function, _) = code
+            .fragments
+            .find_named_function_by_fragment_in_body(&function_id)
+            .expect(
+                "Anonymous function must be defined within a named function, \
+                directly or indirectly.",
+            );
+        function.function
+    } else {
+        function
+    };
+
     let Some(fragment_id) = code.source_map.instruction_to_fragment(address)
     else {
         let instructions = &code.instructions;
@@ -244,21 +262,6 @@ fn instruction_to_named_function(
             \n\
             All instructions:\n\
             {instructions}"
-        );
-    };
-
-    let Some((function, _)) = code
-        .fragments
-        .find_named_function_by_fragment_in_body(&fragment_id)
-    else {
-        let fragment = code.fragments.get(&fragment_id);
-        panic!(
-            "Active instruction `{address}` maps to active fragment \
-            `{fragment_id:?}`. Expecting that fragment to be part of the body \
-            of a named function, but it isn't.\n\
-            \n\
-            Here's the fragment in question:\n\
-            {fragment:#?}"
         );
     };
 
