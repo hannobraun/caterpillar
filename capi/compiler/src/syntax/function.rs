@@ -25,8 +25,9 @@ pub struct Function {
 
     /// # The index of this function within its cluster
     ///
-    /// This starts out as `None`, but is later defined by the compiler pass
-    /// that groups functions into clusters.
+    /// This starts out as `None`. For named functions, it is later defined by
+    /// the compiler pass that groups functions into clusters. It stays `None`
+    /// for anonymous functions.
     pub index_in_cluster: Option<FunctionIndexInCluster>,
 }
 
