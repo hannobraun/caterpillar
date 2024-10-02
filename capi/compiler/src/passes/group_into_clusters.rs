@@ -15,11 +15,15 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         .collect::<BTreeMap<_, _>>();
     let clusters = functions
         .keys()
-        .map(|named_function_index| Cluster {
-            functions: BTreeMap::from([(
-                FunctionIndexInCluster(0),
-                *named_function_index,
-            )]),
+        .map(|named_function_index| {
+            let function_index_in_cluster = FunctionIndexInCluster(0);
+
+            Cluster {
+                functions: BTreeMap::from([(
+                    function_index_in_cluster,
+                    *named_function_index,
+                )]),
+            }
         })
         .collect();
 
