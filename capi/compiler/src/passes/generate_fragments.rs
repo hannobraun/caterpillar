@@ -39,7 +39,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             functions: Vec::new(),
         };
 
-        for named_function_index in cluster.functions.into_values() {
+        for (_, named_function_index) in cluster.functions {
             let id = {
                 let index: usize = named_function_index
                     .0
