@@ -4,7 +4,7 @@ use capi_runtime::Value;
 
 use super::Expression;
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Function {
     /// The name of the function, if available
     ///
