@@ -185,7 +185,7 @@ impl Fragment {
         &self,
         fragments: &'r FragmentMap,
     ) -> Option<FoundFunction<'r>> {
-        let Fragment::CallToFunction { name, .. } = &self else {
+        let Fragment::CallToFunction { name, .. } = self else {
             return None;
         };
 
@@ -198,7 +198,7 @@ impl Fragment {
     }
 
     pub fn as_comment(&self) -> Option<&String> {
-        let Fragment::Comment { text } = &self else {
+        let Fragment::Comment { text } = self else {
             return None;
         };
 
