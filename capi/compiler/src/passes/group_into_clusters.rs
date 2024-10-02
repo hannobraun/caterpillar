@@ -1,7 +1,8 @@
 use std::{collections::BTreeMap, iter};
 
-use crate::syntax::{
-    Cluster, Clusters, Function, FunctionIndexInCluster, NamedFunctionIndex,
+use crate::{
+    fragments::FunctionIndexInCluster,
+    syntax::{Cluster, Clusters, Function, NamedFunctionIndex},
 };
 
 pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {

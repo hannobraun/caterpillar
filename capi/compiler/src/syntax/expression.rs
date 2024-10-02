@@ -1,8 +1,8 @@
 use capi_runtime::Value;
 
-use crate::intrinsics::Intrinsic;
+use crate::{fragments::FunctionIndexInCluster, intrinsics::Intrinsic};
 
-use super::{Function, FunctionIndexInCluster};
+use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {

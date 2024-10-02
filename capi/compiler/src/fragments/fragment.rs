@@ -1,8 +1,8 @@
 use capi_runtime::Value;
 
-use crate::{intrinsics::Intrinsic, syntax::FunctionIndexInCluster};
+use crate::intrinsics::Intrinsic;
 
-use super::{FoundFunction, FragmentMap, Function};
+use super::{FoundFunction, FragmentMap, Function, FunctionIndexInCluster};
 
 /// # A pre-compiled piece of code
 ///
