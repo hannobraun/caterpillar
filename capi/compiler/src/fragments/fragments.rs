@@ -18,6 +18,22 @@ pub struct Fragments {
     pub map: FragmentMap,
 }
 
+impl Fragments {
+    /// # Find a cluster, by the ID of a function within it
+    ///
+    /// Returns `None`, if the provided `FragmentId` does not refer to a named
+    /// function. All named functions are grouped into clusters, so this should
+    /// always return `Some` otherwise.
+    pub fn find_cluster_by_function_id(
+        &self,
+        function_id: &FragmentId,
+    ) -> Option<&Cluster> {
+        self.clusters.iter().find(|cluster| {
+            cluster.functions.values().any(|id| id == function_id)
+        })
+    }
+}
+
 impl Deref for Fragments {
     type Target = FragmentMap;
 
