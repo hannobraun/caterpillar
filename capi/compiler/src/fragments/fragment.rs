@@ -204,4 +204,15 @@ impl Fragment {
 
         Some(text)
     }
+
+    /// # Convert the fragment to a `Function`
+    ///
+    /// Return `None`, if this is a different kind of fragment.
+    pub fn as_function(&self) -> Option<&Function> {
+        let Fragment::Function { function } = self else {
+            return None;
+        };
+
+        Some(function)
+    }
 }
