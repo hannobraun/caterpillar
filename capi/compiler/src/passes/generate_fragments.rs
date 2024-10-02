@@ -39,9 +39,9 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             functions: Vec::new(),
         };
 
-        for index in cluster.functions.into_values() {
+        for named_function_index in cluster.functions.into_values() {
             let id = {
-                let index: usize = index
+                let index: usize = named_function_index
                     .0
                     .try_into()
                     .expect("Expecting `usize` to be at least 32-bit.");
