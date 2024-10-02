@@ -57,6 +57,7 @@ impl DebugFragment {
             effect,
         };
         let kind = DebugFragmentKind::new(
+            id,
             fragment,
             active_fragment,
             is_in_innermost_active_function,
@@ -125,7 +126,9 @@ pub enum DebugFragmentKind {
 }
 
 impl DebugFragmentKind {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
+        _id: FragmentId,
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
