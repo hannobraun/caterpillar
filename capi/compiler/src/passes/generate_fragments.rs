@@ -214,6 +214,7 @@ fn compile_function(
             name: function.name,
             branches,
             environment: function.environment,
+            index_in_cluster: function.index_in_cluster,
         },
     }
 }
