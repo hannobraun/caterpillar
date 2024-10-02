@@ -115,7 +115,7 @@ impl DebugFragmentState {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
     CallToFunction { name: String },
-    CallToFunctionRecursive,
+    CallToFunctionRecursive { name: String },
     CallToHostFunction { name: String },
     CallToIntrinsic { name: String },
     Comment { text: String },
@@ -141,8 +141,43 @@ impl DebugFragmentKind {
             Fragment::CallToFunction { name, .. } => {
                 Self::CallToFunction { name }
             }
-            Fragment::CallToFunctionRecursive { .. } => {
-                Self::CallToFunctionRecursive
+            Fragment::CallToFunctionRecursive { index, .. } => {
+                let (calling_function, _) = fragments
+                    .find_named_function_by_fragment_in_body(&_id)
+                    .expect(
+                        "Any fragments displayed in the debugger are part of \
+                        named functions. Expecting to find the one that this \
+                        fragment's ID refers to.",
+                    );
+                let cluster = fragments
+                    .find_cluster_by_function_id(&calling_function.id)
+                    .expect(
+                        "Only named functions can call themselves, and all \
+                        named functions are grouped into clusters. Expecting \
+                        to find a cluster when providing a named function's \
+                        ID.",
+                    );
+                let called_function_id = cluster.functions.get(&index).expect(
+                    "The index of a recursive call must be valid within the \
+                    calling function's cluster.",
+                );
+                let called_function = fragments
+                    .get(called_function_id)
+                    .expect(
+                        "Expecting to find fragment referred to from a \
+                        cluster.",
+                    )
+                    .as_function()
+                    .expect(
+                        "Got fragment ID through function call; must refer to \
+                        a function.",
+                    );
+                let name = called_function.name.clone().expect(
+                    "Calling anonymous functions recursively is not possible. \
+                    Target of recursive function call must have a name.",
+                );
+
+                Self::CallToFunctionRecursive { name }
             }
             Fragment::CallToHostFunction { effect_number } => {
                 let name = GameEngineHost::effect_number_to_function_name(
