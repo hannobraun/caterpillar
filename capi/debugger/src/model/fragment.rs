@@ -128,7 +128,7 @@ pub enum DebugFragmentKind {
 impl DebugFragmentKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        _id: FragmentId,
+        id: FragmentId,
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
@@ -143,7 +143,7 @@ impl DebugFragmentKind {
             }
             Fragment::CallToFunctionRecursive { index, .. } => {
                 let (calling_function, _) = fragments
-                    .find_named_function_by_fragment_in_body(&_id)
+                    .find_named_function_by_fragment_in_body(&id)
                     .expect(
                         "Any fragments displayed in the debugger are part of \
                         named functions. Expecting to find the one that this \
