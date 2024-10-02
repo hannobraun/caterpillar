@@ -40,11 +40,14 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         };
 
         for index in cluster.functions.into_values() {
-            let index: usize = index
-                .0
-                .try_into()
-                .expect("Expecting `usize` to be at least 32-bit.");
-            let id = function_ids[index];
+            let id = {
+                let index: usize = index
+                    .0
+                    .try_into()
+                    .expect("Expecting `usize` to be at least 32-bit.");
+
+                function_ids[index]
+            };
             compiled_cluster.functions.push(id);
         }
 
