@@ -65,6 +65,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         name: None,
         branches,
         environment: BTreeSet::new(),
+        index_in_cluster: None,
     })
 }
 

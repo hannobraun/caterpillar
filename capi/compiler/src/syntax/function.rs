@@ -2,6 +2,8 @@ use std::collections::BTreeSet;
 
 use capi_runtime::Value;
 
+use crate::fragments::FunctionIndexInCluster;
+
 use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -20,6 +22,12 @@ pub struct Function {
     /// The environment is empty on construction, until it is filled in during
     /// the resolve pass.
     pub environment: BTreeSet<String>,
+
+    /// # The index of this function within its cluster
+    ///
+    /// This starts out as `None`, but is later defined by the compiler pass
+    /// that groups functions into clusters.
+    pub index_in_cluster: Option<FunctionIndexInCluster>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
