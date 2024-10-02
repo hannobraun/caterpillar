@@ -288,11 +288,6 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let index: usize = index.0.try_into().expect(
-                "Expecting to run on a platform where `u32` can convert to \
-                `usize`.",
-            );
-
             let (calling_function, _) = fragments
                 .find_named_function_by_fragment_in_body(&id)
                 .expect(
@@ -304,7 +299,7 @@ fn compile_fragment(
                 .find(|cluster| {
                     cluster
                         .functions
-                        .iter()
+                        .values()
                         .any(|id| *id == calling_function.id)
                 })
                 .expect("Expecting every function to be in a cluster.");

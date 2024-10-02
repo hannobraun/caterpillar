@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     fragments::{
         Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
@@ -36,10 +38,12 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     for cluster in clusters.clusters {
         let mut compiled_cluster = Cluster {
-            functions: Vec::new(),
+            functions: BTreeMap::new(),
         };
 
-        for (_, named_function_index) in cluster.functions {
+        for (function_index_in_cluster, named_function_index) in
+            cluster.functions
+        {
             let id = {
                 let index: usize = named_function_index
                     .0
@@ -48,7 +52,9 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
                 function_ids[index]
             };
-            compiled_cluster.functions.push(id);
+            compiled_cluster
+                .functions
+                .insert(function_index_in_cluster, id);
         }
 
         compiled_clusters.push(compiled_cluster);
