@@ -3,6 +3,9 @@ name = "capi-compiler"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies]
+petgraph = "*"
+
 [dependencies.blake3]
 version = "*"
 features = ["serde", "traits-preview"]
