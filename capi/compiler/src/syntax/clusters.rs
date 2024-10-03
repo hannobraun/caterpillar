@@ -5,6 +5,7 @@ use crate::fragments::FunctionIndexInCluster;
 use super::Function;
 
 /// # All functions in the code, grouped by clusters
+#[derive(Debug)]
 pub struct Clusters {
     /// # All named functions, in the original order they were defined in
     pub functions: BTreeMap<NamedFunctionIndex, Function>,
@@ -20,6 +21,7 @@ pub struct Clusters {
 ///
 /// All mutually recursive functions are grouped into a single clusters with the
 /// other functions in their recursive group.
+#[derive(Debug)]
 pub struct Cluster {
     /// # Indices that refer to the functions in the cluster
     ///
@@ -31,5 +33,5 @@ pub struct Cluster {
 /// # An index into the list of all named functions
 ///
 /// Assumes named functions are ordered as they appear in the source code.
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NamedFunctionIndex(pub u32);
