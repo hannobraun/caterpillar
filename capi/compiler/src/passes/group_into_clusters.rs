@@ -34,3 +34,82 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         clusters,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::collections::BTreeMap;
+
+    use crate::{
+        fragments::FunctionIndexInCluster,
+        host::NoHost,
+        passes::{parse, resolve_identifiers, tokenize},
+        syntax::{Cluster, Clusters, NamedFunctionIndex},
+    };
+
+    #[test]
+    fn no_recursion() {
+        let clusters = group_into_clusters(
+            r"
+                main: {
+                    \ ->
+                        f
+                }
+
+                f: {
+                    \ ->
+                        nop
+                }
+            ",
+        );
+
+        assert_eq!(
+            clusters.clusters,
+            [
+                (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
+                (FunctionIndexInCluster(0), NamedFunctionIndex(1))
+            ]
+            .into_iter()
+            .map(|indices| Cluster {
+                functions: BTreeMap::from([indices])
+            })
+            .collect::<Vec<_>>(),
+        );
+    }
+
+    #[test]
+    fn self_recursion() {
+        let clusters = group_into_clusters(
+            r"
+                main: {
+                    \ ->
+                        f
+                }
+
+                f: {
+                    \ ->
+                        f
+                }
+            ",
+        );
+
+        assert_eq!(
+            clusters.clusters,
+            [
+                (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
+                (FunctionIndexInCluster(0), NamedFunctionIndex(1))
+            ]
+            .into_iter()
+            .map(|indices| Cluster {
+                functions: BTreeMap::from([indices])
+            })
+            .collect::<Vec<_>>(),
+        );
+    }
+
+    fn group_into_clusters(source: &str) -> Clusters {
+        let tokens = tokenize(source);
+        let mut functions = parse(tokens);
+        resolve_identifiers::<NoHost>(&mut functions);
+        super::group_into_clusters(functions)
+    }
+}
