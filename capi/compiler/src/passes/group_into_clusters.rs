@@ -49,7 +49,8 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         }
     }
 
-    let clustered_call_graph = condensation(call_graph, true);
+    let make_acyclic = true;
+    let clustered_call_graph = condensation(call_graph, make_acyclic);
     let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
         .expect(
             "The previous operation should have made the call graph acyclic. \
