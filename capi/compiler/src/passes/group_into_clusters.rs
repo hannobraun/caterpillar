@@ -1,31 +1,64 @@
 use std::{collections::BTreeMap, iter};
 
+use petgraph::{algo::condensation, Graph};
+
 use crate::{
     fragments::FunctionIndexInCluster,
-    syntax::{Cluster, Clusters, Function, NamedFunctionIndex},
+    syntax::{
+        Cluster, Clusters, Expression, Function, IdentifierTarget,
+        NamedFunctionIndex,
+    },
 };
 
 pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
-    let mut functions = iter::successors(Some(0), |i| Some(i + 1))
+    let functions = iter::successors(Some(0), |i| Some(i + 1))
         .map(NamedFunctionIndex)
         .zip(functions)
         .collect::<BTreeMap<_, _>>();
 
-    // This is just a placeholder implementation, while support for clusters is
-    // still being implemented.
-    let clusters = functions
-        .iter_mut()
-        .map(|(named_function_index, function)| {
-            let function_index_in_cluster = FunctionIndexInCluster(0);
+    let mut call_graph = Graph::new();
+    let mut function_graph_index_by_name = BTreeMap::new();
 
-            function.index_in_cluster = Some(function_index_in_cluster);
+    for (named_function_index, function) in functions.iter() {
+        let name = function
+            .name
+            .as_ref()
+            .expect("Top-level function must have a name");
+        let index = call_graph.add_node((function, *named_function_index));
+        function_graph_index_by_name.insert(name, index);
+    }
 
-            Cluster {
-                functions: BTreeMap::from([(
-                    function_index_in_cluster,
-                    *named_function_index,
-                )]),
+    for &caller_index in function_graph_index_by_name.values() {
+        let (function, _) = call_graph[caller_index];
+
+        for branch in &function.branches {
+            for expression in &branch.body {
+                if let Expression::Identifier {
+                    name,
+                    target: Some(IdentifierTarget::Function { .. }),
+                    ..
+                } = expression
+                {
+                    let callee_index = function_graph_index_by_name[name];
+                    call_graph.add_edge(caller_index, callee_index, ());
+                }
             }
+        }
+    }
+
+    let clusters = condensation(call_graph, true)
+        .node_weights()
+        .map(|functions| {
+            let named_function_indices = functions
+                .iter()
+                .map(|(_, named_function_index)| named_function_index)
+                .copied();
+            let functions = iter::successors(Some(0), |i| Some(i + 1))
+                .map(FunctionIndexInCluster)
+                .zip(named_function_indices)
+                .collect();
+
+            Cluster { functions }
         })
         .collect();
 
@@ -107,7 +140,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // known limitation
     fn mutual_recursion() {
         let clusters = group_into_clusters(
             r"
