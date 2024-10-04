@@ -1,6 +1,9 @@
 use std::{collections::BTreeMap, iter};
 
-use petgraph::{algo::condensation, Graph};
+use petgraph::{
+    algo::{condensation, toposort},
+    Graph,
+};
 
 use crate::{
     fragments::FunctionIndexInCluster,
@@ -46,10 +49,16 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         }
     }
 
-    let clusters = condensation(call_graph, true)
-        .node_weights()
-        .map(|functions| {
-            let named_function_indices = functions
+    let clustered_call_graph = condensation(call_graph, true);
+    let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
+        .expect(
+            "The previous operation should have made the call graph acyclic. \
+            Hence, topologically sorting the graph should not fail.",
+        );
+    let clusters = clustered_and_sorted_call_graph
+        .into_iter()
+        .map(|graph_index| {
+            let named_function_indices = clustered_call_graph[graph_index]
                 .iter()
                 .map(|(_, named_function_index)| named_function_index)
                 .copied();
@@ -70,7 +79,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::{BTreeMap, BTreeSet};
+    use std::collections::BTreeMap;
 
     use crate::{
         fragments::FunctionIndexInCluster,
@@ -96,7 +105,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
+            clusters.clusters,
             [
                 (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
                 (FunctionIndexInCluster(0), NamedFunctionIndex(1)),
@@ -105,7 +114,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: BTreeMap::from([indices]),
             })
-            .collect::<BTreeSet<_>>(),
+            .collect::<Vec<_>>(),
         );
     }
 
@@ -126,7 +135,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
+            clusters.clusters,
             [
                 (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
                 (FunctionIndexInCluster(0), NamedFunctionIndex(1))
@@ -135,7 +144,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: BTreeMap::from([indices])
             })
-            .collect::<BTreeSet<_>>(),
+            .collect::<Vec<_>>(),
         );
     }
 
@@ -161,7 +170,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
+            clusters.clusters,
             [
                 [(FunctionIndexInCluster(0), NamedFunctionIndex(0))].as_slice(),
                 [
@@ -174,7 +183,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
             })
-            .collect::<BTreeSet<_>>(),
+            .collect::<Vec<_>>(),
         );
     }
 
