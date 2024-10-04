@@ -37,7 +37,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
+    use std::collections::{BTreeMap, BTreeSet};
 
     use crate::{
         fragments::FunctionIndexInCluster,
@@ -63,16 +63,16 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
             [
                 (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
-                (FunctionIndexInCluster(0), NamedFunctionIndex(1))
+                (FunctionIndexInCluster(0), NamedFunctionIndex(1)),
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: BTreeMap::from([indices])
+                functions: BTreeMap::from([indices]),
             })
-            .collect::<Vec<_>>(),
+            .collect::<BTreeSet<_>>(),
         );
     }
 
@@ -93,7 +93,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
             [
                 (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
                 (FunctionIndexInCluster(0), NamedFunctionIndex(1))
@@ -102,7 +102,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: BTreeMap::from([indices])
             })
-            .collect::<Vec<_>>(),
+            .collect::<BTreeSet<_>>(),
         );
     }
 
@@ -129,7 +129,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters.clusters.into_iter().collect::<BTreeSet<_>>(),
             [
                 [(FunctionIndexInCluster(0), NamedFunctionIndex(0))].as_slice(),
                 [
@@ -142,7 +142,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
             })
-            .collect::<Vec<_>>(),
+            .collect::<BTreeSet<_>>(),
         );
     }
 
