@@ -106,6 +106,46 @@ mod tests {
         );
     }
 
+    #[test]
+    #[should_panic] // known limitation
+    fn mutual_recursion() {
+        let clusters = group_into_clusters(
+            r"
+                main: {
+                    \ ->
+                        f
+                }
+
+                f: {
+                    \ ->
+                        g
+                }
+
+                g: {
+                    \ ->
+                        f
+                }
+            ",
+        );
+
+        assert_eq!(
+            clusters.clusters,
+            [
+                [(FunctionIndexInCluster(0), NamedFunctionIndex(0))].as_slice(),
+                [
+                    (FunctionIndexInCluster(0), NamedFunctionIndex(1)),
+                    (FunctionIndexInCluster(1), NamedFunctionIndex(2))
+                ]
+                .as_slice(),
+            ]
+            .into_iter()
+            .map(|indices| Cluster {
+                functions: indices.iter().copied().collect(),
+            })
+            .collect::<Vec<_>>(),
+        );
+    }
+
     fn group_into_clusters(source: &str) -> Clusters {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
