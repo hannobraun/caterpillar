@@ -21,7 +21,7 @@ pub struct Clusters {
 ///
 /// All mutually recursive functions are grouped into a single clusters with the
 /// other functions in their recursive group.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Cluster {
     /// # Indices that refer to the functions in the cluster
     ///
