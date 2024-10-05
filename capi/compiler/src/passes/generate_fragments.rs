@@ -67,22 +67,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     }
 }
 
-fn compile_context<E>(
-    expressions: E,
-    fragments: &mut FragmentMap,
-) -> Option<FragmentId>
-where
-    E: IntoIterator<Item = syntax::Expression>,
-    E::IntoIter: DoubleEndedIterator,
-{
-    let context = expressions
-        .into_iter()
-        .map(|expression| compile_expression(expression, fragments))
-        .collect::<Vec<_>>();
-
-    address_context(context, &mut Vec::new(), fragments)
-}
-
 fn address_context(
     context: Vec<Fragment>,
     ids: &mut Vec<FragmentId>,
@@ -199,7 +183,12 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(branch.body, fragments);
+        let body = branch
+            .body
+            .into_iter()
+            .map(|expression| compile_expression(expression, fragments))
+            .collect::<Vec<_>>();
+        let start = address_context(body, &mut Vec::new(), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
