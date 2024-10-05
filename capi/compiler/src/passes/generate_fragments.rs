@@ -12,7 +12,7 @@ use crate::{
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
 
-    let mut compiled_functions = clusters
+    let compiled_functions = clusters
         .clusters
         .iter()
         .flat_map(|cluster| cluster.functions.values())
@@ -22,7 +22,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             (index, fragment)
         })
         .collect::<Vec<_>>();
-    compiled_functions.sort_by_key(|(index, _)| *index);
 
     let mut function_ids = Vec::new();
     let root = address_context(
