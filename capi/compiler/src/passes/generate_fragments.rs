@@ -67,6 +67,38 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     }
 }
 
+fn compile_function(
+    function: syntax::Function,
+    fragments: &mut FragmentMap,
+) -> Fragment {
+    let mut branches = Vec::new();
+
+    for branch in function.branches {
+        let body = branch
+            .body
+            .into_iter()
+            .map(|expression| compile_expression(expression, fragments))
+            .collect::<Vec<_>>();
+        let start = address_context(body, &mut Vec::new(), fragments);
+
+        branches.push(Branch {
+            parameters: Parameters {
+                inner: branch.parameters,
+            },
+            start,
+        });
+    }
+
+    Fragment::Function {
+        function: Function {
+            name: function.name,
+            branches,
+            environment: function.environment,
+            index_in_cluster: function.index_in_cluster,
+        },
+    }
+}
+
 fn address_context(
     context: Vec<Fragment>,
     ids: &mut Vec<FragmentId>,
@@ -173,37 +205,5 @@ fn compile_expression(
             }
         }
         syntax::Expression::Value(value) => Fragment::Value(value),
-    }
-}
-
-fn compile_function(
-    function: syntax::Function,
-    fragments: &mut FragmentMap,
-) -> Fragment {
-    let mut branches = Vec::new();
-
-    for branch in function.branches {
-        let body = branch
-            .body
-            .into_iter()
-            .map(|expression| compile_expression(expression, fragments))
-            .collect::<Vec<_>>();
-        let start = address_context(body, &mut Vec::new(), fragments);
-
-        branches.push(Branch {
-            parameters: Parameters {
-                inner: branch.parameters,
-            },
-            start,
-        });
-    }
-
-    Fragment::Function {
-        function: Function {
-            name: function.name,
-            branches,
-            environment: function.environment,
-            index_in_cluster: function.index_in_cluster,
-        },
     }
 }
