@@ -168,6 +168,13 @@ impl Deref for FoundFunction<'_> {
 )]
 pub struct FragmentId {
     pub prev: Option<Hash<PrevNeighbor>>,
+
+    /// # The hash of the next fragment
+    ///
+    /// This refers to the fragment that will be executed after the one that
+    /// this `FragmentId` identifies.
     pub next: Option<Hash<NextNeighbor>>,
+
+    /// # The hash of this fragment's content
     pub content: Hash<Fragment>,
 }
