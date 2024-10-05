@@ -15,6 +15,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let compiled_functions = clusters
         .clusters
         .iter()
+        .rev()
         .flat_map(|cluster| cluster.functions.values())
         .map(|index| {
             let function = clusters.functions[index].clone();
