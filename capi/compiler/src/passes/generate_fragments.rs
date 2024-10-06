@@ -37,6 +37,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             .collect(),
         &mut function_ids,
         &mut fragments,
+        &mut fragments_by_location,
     );
 
     let mut compiled_clusters = Vec::new();
@@ -88,7 +89,12 @@ fn compile_function(
                 compile_expression(expression, fragments, fragments_by_location)
             })
             .collect::<Vec<_>>();
-        let start = address_context(body, &mut Vec::new(), fragments);
+        let start = address_context(
+            body,
+            &mut Vec::new(),
+            fragments,
+            fragments_by_location,
+        );
 
         branches.push(Branch {
             parameters: Parameters {
@@ -112,6 +118,7 @@ fn address_context(
     context: Vec<Fragment>,
     ids: &mut Vec<FragmentId>,
     fragments: &mut FragmentMap,
+    _: &mut FragmentsByLocation,
 ) -> Option<FragmentId> {
     for fragment in &context {
         ids.push(FragmentId {
