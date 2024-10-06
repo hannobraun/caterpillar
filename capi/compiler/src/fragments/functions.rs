@@ -71,7 +71,9 @@ impl Function {
             "Expected function to have exactly one branch."
         );
 
-        &self.branches[0]
+        self.branches
+            .first()
+            .expect("Just checked that there is exactly one branch.")
     }
 }
 
