@@ -11,7 +11,7 @@ use crate::{
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
-    let fragments_by_location = FragmentsByLocation {};
+    let mut fragments_by_location = FragmentsByLocation {};
 
     let compiled_functions = clusters
         .clusters
@@ -20,7 +20,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .flat_map(|cluster| cluster.functions.values())
         .map(|index| {
             let function = clusters.functions[index].clone();
-            let fragment = compile_function(function, &mut fragments);
+            let fragment = compile_function(
+                function,
+                &mut fragments,
+                &mut fragments_by_location,
+            );
             (index, fragment)
         })
         .collect::<Vec<_>>();
@@ -72,6 +76,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 fn compile_function(
     function: syntax::Function,
     fragments: &mut FragmentMap,
+    fragments_by_location: &mut FragmentsByLocation,
 ) -> Fragment {
     let mut branches = Vec::new();
 
@@ -79,7 +84,9 @@ fn compile_function(
         let body = branch
             .body
             .into_iter()
-            .map(|expression| compile_expression(expression, fragments))
+            .map(|expression| {
+                compile_expression(expression, fragments, fragments_by_location)
+            })
             .collect::<Vec<_>>();
         let start = address_context(body, &mut Vec::new(), fragments);
 
@@ -155,11 +162,12 @@ fn address_context(
 fn compile_expression(
     expression: syntax::Expression,
     fragments: &mut FragmentMap,
+    fragments_by_location: &mut FragmentsByLocation,
 ) -> Fragment {
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            compile_function(function, fragments)
+            compile_function(function, fragments, fragments_by_location)
         }
         syntax::Expression::Identifier {
             name,
