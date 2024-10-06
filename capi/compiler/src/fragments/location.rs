@@ -29,3 +29,17 @@ impl FragmentsByLocation {
 /// # The index of a named function in the root context
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NamedFunctionIndex(pub u32);
+
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct FragmentIndexInBranchBody(pub u32);

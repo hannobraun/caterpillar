@@ -10,6 +10,8 @@ pub use self::{
     fragment::Fragment,
     fragments::{Cluster, Fragments, FunctionIndexInCluster},
     functions::{Branch, Function, Parameters},
-    location::{FragmentsByLocation, NamedFunctionIndex},
+    location::{
+        FragmentIndexInBranchBody, FragmentsByLocation, NamedFunctionIndex,
+    },
     map::{FoundFunction, FragmentId, FragmentMap},
 };
