@@ -25,3 +25,9 @@ impl FragmentsByLocation {
         }
     }
 }
+
+/// # An index into the list of all named functions
+///
+/// Assumes named functions are ordered as they appear in the source code.
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct NamedFunctionIndex(pub u32);

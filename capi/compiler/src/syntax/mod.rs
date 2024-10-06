@@ -3,7 +3,7 @@ mod expression;
 mod function;
 
 pub use self::{
-    clusters::{Cluster, Clusters, NamedFunctionIndex},
+    clusters::{Cluster, Clusters},
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function, Pattern},
 };

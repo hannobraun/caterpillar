@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::fragments::FunctionIndexInCluster;
+use crate::fragments::{FunctionIndexInCluster, NamedFunctionIndex};
 
 use super::Function;
 
@@ -29,9 +29,3 @@ pub struct Cluster {
     /// list of all named functions.
     pub functions: BTreeMap<FunctionIndexInCluster, NamedFunctionIndex>,
 }
-
-/// # An index into the list of all named functions
-///
-/// Assumes named functions are ordered as they appear in the source code.
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct NamedFunctionIndex(pub u32);
