@@ -11,6 +11,7 @@ use crate::{
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
+    let fragments_by_location = FragmentsByLocation {};
 
     let compiled_functions = clusters
         .clusters
@@ -64,7 +65,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         root,
         clusters: compiled_clusters,
         map: fragments,
-        by_location: FragmentsByLocation {},
+        by_location: fragments_by_location,
     }
 }
 
