@@ -284,7 +284,8 @@ fn step_into_function() {
             .find_function_by_name("f")
             .unwrap()
             .branches
-            .first()
+            .first_key_value()
+            .map(|(_index, branch)| branch)
             .unwrap()
             .start
             .unwrap();

@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::syntax::Pattern;
 
 use super::{
-    Fragment, FragmentId, FragmentIndexInBranchBody, FragmentMap,
+    BranchIndex, Fragment, FragmentId, FragmentIndexInBranchBody, FragmentMap,
     FunctionIndexInCluster,
 };
 
@@ -40,7 +40,7 @@ pub struct Function {
     /// A function is made up of one or more branches. When a function is
     /// called, its arguments are matched against the parameters of each branch,
     /// until one branch matches. This branch is then evaluated.
-    pub branches: Vec<Branch>,
+    pub branches: BTreeMap<BranchIndex, Branch>,
 
     /// # Values captured by the function from a parent scope
     ///
@@ -72,7 +72,8 @@ impl Function {
         );
 
         self.branches
-            .first()
+            .first_key_value()
+            .map(|(_index, branch)| branch)
             .expect("Just checked that there is exactly one branch.")
     }
 }

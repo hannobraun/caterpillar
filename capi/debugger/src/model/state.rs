@@ -93,7 +93,7 @@ impl PersistentState {
                 {
                     function
                         .branches
-                        .iter()
+                        .values()
                         .filter_map(|branch| branch.start)
                         .collect()
                 } else {

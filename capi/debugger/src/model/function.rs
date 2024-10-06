@@ -26,7 +26,7 @@ impl DebugFunction {
         let name = function.name;
         let branches = function
             .branches
-            .into_iter()
+            .into_values()
             .map(|branch| {
                 DebugBranch::new(
                     branch,
