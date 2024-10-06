@@ -267,17 +267,15 @@ fn reconstruct_function(
     };
 
     let tail_call = if function.branches.len() == 1 {
-        if let Some(branch) = function.branches.first() {
-            let mut tail_call = None;
+        let branch = function.expect_one_branch();
 
-            for (id, _) in branch.body(&code.fragments) {
-                tail_call = Some(id);
-            }
+        let mut tail_call = None;
 
-            tail_call
-        } else {
-            None
+        for (id, _) in branch.body(&code.fragments) {
+            tail_call = Some(id);
         }
+
+        tail_call
     } else {
         None
     };
