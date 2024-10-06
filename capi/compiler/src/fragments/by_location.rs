@@ -1,7 +1,7 @@
 use super::FragmentId;
 
 /// # Code fragments, tracked by their location
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentsByLocation {}
 
 impl FragmentsByLocation {

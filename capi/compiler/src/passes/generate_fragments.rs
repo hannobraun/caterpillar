@@ -11,7 +11,7 @@ use crate::{
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
-    let mut fragments_by_location = FragmentsByLocation {};
+    let mut fragments_by_location = FragmentsByLocation::default();
 
     let compiled_functions = clusters
         .clusters
