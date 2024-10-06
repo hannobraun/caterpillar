@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::{
     fragments::{
         Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
-        Function, Parameters,
+        FragmentsByLocation, Function, Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
@@ -64,6 +64,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         root,
         clusters: compiled_clusters,
         map: fragments,
+        by_location: FragmentsByLocation {},
     }
 }
 

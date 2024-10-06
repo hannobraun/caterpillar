@@ -3,7 +3,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{FragmentId, FragmentMap};
+use super::{FragmentId, FragmentMap, FragmentsByLocation};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -16,6 +16,14 @@ pub struct Fragments {
     pub clusters: Vec<Cluster>,
 
     pub map: FragmentMap,
+
+    /// # All code fragments, tracked by their location
+    ///
+    /// ## Implementation Note
+    ///
+    /// This is a placeholder. The refactoring to fill it out is currently in
+    /// progress.
+    pub by_location: FragmentsByLocation,
 }
 
 impl Fragments {
