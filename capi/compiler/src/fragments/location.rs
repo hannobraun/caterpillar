@@ -26,6 +26,11 @@ impl FragmentsByLocation {
     }
 }
 
+pub struct FragmentLocation {
+    pub function_index_in_root_context: FunctionIndexInRootContext,
+    pub fragment_indices: Vec<(BranchIndex, FragmentIndexInBranchBody)>,
+}
+
 /// # The index of a named function in the root context
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct FunctionIndexInRootContext(pub u32);
