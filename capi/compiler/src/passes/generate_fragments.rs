@@ -130,7 +130,7 @@ fn address_context(
     context: &Vec<Fragment>,
     ids: &mut Vec<FragmentId>,
     fragments: &mut FragmentMap,
-    fragments_by_location: &mut FragmentsByLocation,
+    _: &mut FragmentsByLocation,
 ) -> Option<FragmentId> {
     for fragment in context {
         ids.push(FragmentId {
@@ -173,7 +173,6 @@ fn address_context(
         let next = ids.get(i + 1).copied();
 
         fragments.insert(*id, fragment.clone(), previous, next);
-        fragments_by_location.insert(*id, previous, next);
     }
 
     ids.first().copied()
