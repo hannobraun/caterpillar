@@ -101,6 +101,7 @@ fn compile_function(
                 inner: branch.parameters,
             },
             start,
+            body,
         });
     }
 

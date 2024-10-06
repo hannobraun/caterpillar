@@ -90,6 +90,9 @@ pub struct Branch {
     ///
     /// Can be `None`, if the branch body is empty.
     pub start: Option<FragmentId>,
+
+    /// # The body of the branch
+    pub body: Vec<Fragment>,
 }
 
 impl Branch {
