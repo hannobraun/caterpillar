@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::fragments::{FunctionIndexInCluster, NamedFunctionIndex};
+use crate::fragments::{FunctionIndexInCluster, FunctionIndexInRootContext};
 
 use super::Function;
 
@@ -8,7 +8,7 @@ use super::Function;
 #[derive(Debug)]
 pub struct Clusters {
     /// # All named functions, in the original order they were defined in
-    pub functions: BTreeMap<NamedFunctionIndex, Function>,
+    pub functions: BTreeMap<FunctionIndexInRootContext, Function>,
 
     /// # The named functions, grouped into clusters
     pub clusters: Vec<Cluster>,
@@ -27,5 +27,5 @@ pub struct Cluster {
     ///
     /// The indices refer to the functions in their original order within the
     /// list of all named functions.
-    pub functions: BTreeMap<FunctionIndexInCluster, NamedFunctionIndex>,
+    pub functions: BTreeMap<FunctionIndexInCluster, FunctionIndexInRootContext>,
 }

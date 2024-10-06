@@ -6,13 +6,13 @@ use petgraph::{
 };
 
 use crate::{
-    fragments::{FunctionIndexInCluster, NamedFunctionIndex},
+    fragments::{FunctionIndexInCluster, FunctionIndexInRootContext},
     syntax::{Cluster, Clusters, Expression, Function, IdentifierTarget},
 };
 
 pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     let functions = iter::successors(Some(0), |i| Some(i + 1))
-        .map(NamedFunctionIndex)
+        .map(FunctionIndexInRootContext)
         .zip(functions)
         .collect::<BTreeMap<_, _>>();
 
@@ -80,7 +80,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{FunctionIndexInCluster, NamedFunctionIndex},
+        fragments::{FunctionIndexInCluster, FunctionIndexInRootContext},
         host::NoHost,
         passes::{parse, resolve_identifiers, tokenize},
         syntax::{Cluster, Clusters},
@@ -105,8 +105,8 @@ mod tests {
         assert_eq!(
             clusters.clusters,
             [
-                (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
-                (FunctionIndexInCluster(0), NamedFunctionIndex(1)),
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -135,8 +135,8 @@ mod tests {
         assert_eq!(
             clusters.clusters,
             [
-                (FunctionIndexInCluster(0), NamedFunctionIndex(0)),
-                (FunctionIndexInCluster(0), NamedFunctionIndex(1))
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1))
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -170,10 +170,11 @@ mod tests {
         assert_eq!(
             clusters.clusters,
             [
-                [(FunctionIndexInCluster(0), NamedFunctionIndex(0))].as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
+                    .as_slice(),
                 [
-                    (FunctionIndexInCluster(0), NamedFunctionIndex(1)),
-                    (FunctionIndexInCluster(1), NamedFunctionIndex(2))
+                    (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
+                    (FunctionIndexInCluster(1), FunctionIndexInRootContext(2))
                 ]
                 .as_slice(),
             ]

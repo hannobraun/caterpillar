@@ -28,7 +28,7 @@ impl FragmentsByLocation {
 
 /// # The index of a named function in the root context
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct NamedFunctionIndex(pub u32);
+pub struct FunctionIndexInRootContext(pub u32);
 
 #[derive(
     Clone,
