@@ -1,8 +1,11 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::syntax::Pattern;
 
-use super::{Fragment, FragmentId, FragmentMap, FunctionIndexInCluster};
+use super::{
+    Fragment, FragmentId, FragmentIndexInBranchBody, FragmentMap,
+    FunctionIndexInCluster,
+};
 
 #[derive(
     Clone,
@@ -92,7 +95,7 @@ pub struct Branch {
     pub start: Option<FragmentId>,
 
     /// # The body of the branch
-    pub body: Vec<Fragment>,
+    pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
 }
 
 impl Branch {

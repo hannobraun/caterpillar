@@ -1,9 +1,9 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, iter};
 
 use crate::{
     fragments::{
-        Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
-        FragmentsByLocation, Function, Parameters,
+        Branch, Cluster, Fragment, FragmentId, FragmentIndexInBranchBody,
+        FragmentMap, Fragments, FragmentsByLocation, Function, Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
@@ -95,6 +95,11 @@ fn compile_function(
             fragments,
             fragments_by_location,
         );
+
+        let body = iter::successors(Some(0), |i| Some(i + 1))
+            .map(FragmentIndexInBranchBody)
+            .zip(body)
+            .collect();
 
         branches.push(Branch {
             parameters: Parameters {
