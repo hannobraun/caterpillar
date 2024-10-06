@@ -11,7 +11,7 @@ pub use self::{
     fragments::{Cluster, Fragments, FunctionIndexInCluster},
     functions::{Branch, Function, Parameters},
     location::{
-        FragmentIndexInBranchBody, FragmentsByLocation,
+        BranchIndex, FragmentIndexInBranchBody, FragmentsByLocation,
         FunctionIndexInRootContext,
     },
     map::{FoundFunction, FragmentId, FragmentMap},
