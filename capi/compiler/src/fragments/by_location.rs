@@ -1,8 +1,13 @@
+use std::collections::BTreeMap;
+
 use super::FragmentId;
 
 /// # Code fragments, tracked by their location
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct FragmentsByLocation {}
+pub struct FragmentsByLocation {
+    previous_to_next: BTreeMap<FragmentId, FragmentId>,
+    next_to_previous: BTreeMap<FragmentId, FragmentId>,
+}
 
 impl FragmentsByLocation {
     /// # Insert a fragment
@@ -12,9 +17,11 @@ impl FragmentsByLocation {
         previous: Option<FragmentId>,
         next: Option<FragmentId>,
     ) {
-        // This is just a placeholder so far.
-        let _ = id;
-        let _ = previous;
-        let _ = next;
+        if let Some(previous) = previous {
+            self.next_to_previous.insert(id, previous);
+        }
+        if let Some(next) = next {
+            self.previous_to_next.insert(id, next);
+        }
     }
 }
