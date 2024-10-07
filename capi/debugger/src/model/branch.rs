@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, FragmentId, Fragments},
+    fragments::{Branch, BranchIndex, FragmentId, Fragments},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -16,8 +16,10 @@ pub struct DebugBranch {
 }
 
 impl DebugBranch {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         branch: Branch,
+        _: BranchIndex,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         fragments: &Fragments,

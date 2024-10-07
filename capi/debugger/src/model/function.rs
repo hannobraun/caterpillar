@@ -26,10 +26,11 @@ impl DebugFunction {
         let name = function.name;
         let branches = function
             .branches
-            .into_values()
-            .map(|branch| {
+            .into_iter()
+            .map(|(index, branch)| {
                 DebugBranch::new(
                     branch,
+                    index,
                     active_fragment,
                     is_innermost_active_function,
                     fragments,
