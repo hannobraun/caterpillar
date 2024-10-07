@@ -32,7 +32,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     let mut function_ids = Vec::new();
     let root = address_context(
-        &functions.into_values().collect(),
+        &functions.values().cloned().collect(),
         &mut function_ids,
         &mut fragments,
         &mut fragments_by_location,
