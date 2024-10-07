@@ -1,6 +1,14 @@
+use std::rc::Rc;
+
 pub struct FragmentLocation {
-    pub function_index_in_root_context: FunctionIndexInRootContext,
-    pub fragment_indices: Vec<(BranchIndex, FragmentIndexInBranchBody)>,
+    pub parent: Rc<FunctionLocation>,
+    pub branch: BranchIndex,
+    pub index: FragmentIndexInBranchBody,
+}
+
+pub enum FunctionLocation {
+    NamedFunction { index: FunctionIndexInRootContext },
+    AnonymousFunction { location: FragmentLocation },
 }
 
 /// # The index of a named function in the root context
