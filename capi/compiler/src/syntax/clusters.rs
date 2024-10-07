@@ -21,7 +21,16 @@ pub struct Clusters {
 ///
 /// All mutually recursive functions are grouped into a single clusters with the
 /// other functions in their recursive group.
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct Cluster {
     /// # Indices that refer to the functions in the cluster
     ///
