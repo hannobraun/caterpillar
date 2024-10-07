@@ -8,7 +8,17 @@ pub struct FragmentLocation {
 }
 
 /// # The index of a named function in the root context
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct FunctionIndexInRootContext(pub u32);
 
 #[derive(
