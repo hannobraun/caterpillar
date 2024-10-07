@@ -3,7 +3,9 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{FragmentId, FragmentMap, FragmentsByLocation};
+use super::{
+    FragmentId, FragmentMap, FragmentsByLocation, Function, FunctionIndexInRootContext
+};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -11,6 +13,9 @@ pub struct Fragments {
     ///
     /// This indirectly points to all existing fragments.
     pub root: Option<FragmentId>,
+
+    /// # The named functions in the root context
+    pub functions: BTreeMap<FunctionIndexInRootContext, Function>,
 
     /// # The function clusters
     pub clusters: Vec<Cluster>,
