@@ -17,6 +17,7 @@ pub struct FragmentLocation {
 )]
 pub struct FunctionIndexInRootContext(pub u32);
 
+/// # The index of a branch within a function
 #[derive(
     Clone,
     Copy,
@@ -31,6 +32,7 @@ pub struct FunctionIndexInRootContext(pub u32);
 )]
 pub struct BranchIndex(pub u32);
 
+/// # The index of a fragment in a branch body
 #[derive(
     Clone,
     Copy,
