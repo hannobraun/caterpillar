@@ -73,7 +73,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         functions,
         clusters: compiled_clusters,
         map: fragments,
-        by_location: fragments_by_location,
     }
 }
 
