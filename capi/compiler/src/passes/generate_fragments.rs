@@ -38,7 +38,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     let mut compiled_clusters = Vec::new();
 
-    for cluster in clusters.clusters {
+    for cluster in clusters.clusters.clone() {
         let mut compiled_cluster = Cluster {
             functions: BTreeMap::new(),
         };
@@ -66,6 +66,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         root,
         functions,
         clusters: compiled_clusters,
+        clusters2: clusters.clusters,
         map: fragments,
     }
 }
