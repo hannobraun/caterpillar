@@ -32,7 +32,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     let mut function_ids = Vec::new();
     let root = address_context(
-        &functions.values().cloned().collect(),
+        &functions
+            .values()
+            .cloned()
+            .map(|function| Fragment::Function { function })
+            .collect(),
         &mut function_ids,
         &mut fragments,
         &mut fragments_by_location,
@@ -76,7 +80,7 @@ fn compile_function(
     function: syntax::Function,
     fragments: &mut FragmentMap,
     fragments_by_location: &mut FragmentsByLocation,
-) -> Fragment {
+) -> Function {
     let mut branches = Vec::new();
 
     for branch in function.branches {
@@ -113,13 +117,11 @@ fn compile_function(
         .zip(branches)
         .collect();
 
-    Fragment::Function {
-        function: Function {
-            name: function.name,
-            branches,
-            environment: function.environment,
-            index_in_cluster: function.index_in_cluster,
-        },
+    Function {
+        name: function.name,
+        branches,
+        environment: function.environment,
+        index_in_cluster: function.index_in_cluster,
     }
 }
 
@@ -183,7 +185,9 @@ fn compile_expression(
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            compile_function(function, fragments, fragments_by_location)
+            let function =
+                compile_function(function, fragments, fragments_by_location);
+            Fragment::Function { function }
         }
         syntax::Expression::Identifier {
             name,
