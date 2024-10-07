@@ -242,9 +242,9 @@ fn compile_function(
     } else {
         assert!(
             function.environment.is_empty(),
-            "We were not provided an address where to put a \"make \
-                closure \" instruction, and yet the function has an \
-                environment. This is a bug.",
+            "We were not provided an address where to put a \"make anonymous \
+            function\" instruction, and yet the function has an environment. \
+            This is a bug.",
         );
     }
 }
