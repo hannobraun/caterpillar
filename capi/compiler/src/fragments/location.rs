@@ -17,6 +17,21 @@ pub struct FragmentLocation {
 )]
 pub struct FunctionIndexInRootContext(pub u32);
 
+/// # An index into the list of functions in a cluster
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct FunctionIndexInCluster(pub u32);
+
 /// # The index of a branch within a function
 #[derive(
     Clone,

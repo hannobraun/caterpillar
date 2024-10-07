@@ -3,7 +3,10 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use super::{FragmentId, FragmentMap, Function, FunctionIndexInRootContext};
+use super::{
+    FragmentId, FragmentMap, Function, FunctionIndexInCluster,
+    FunctionIndexInRootContext,
+};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -55,18 +58,3 @@ impl DerefMut for Fragments {
 pub struct Cluster {
     pub functions: BTreeMap<FunctionIndexInCluster, FragmentId>,
 }
-
-/// # An index into the list of functions in a cluster
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct FunctionIndexInCluster(pub u32);

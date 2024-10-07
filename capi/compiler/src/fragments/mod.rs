@@ -8,11 +8,11 @@ mod map;
 
 pub use self::{
     fragment::Fragment,
-    fragments::{Cluster, Fragments, FunctionIndexInCluster},
+    fragments::{Cluster, Fragments},
     functions::{Branch, Function, Parameters},
     location::{
         BranchIndex, FragmentIndexInBranchBody, FragmentLocation,
-        FunctionIndexInRootContext,
+        FunctionIndexInCluster, FunctionIndexInRootContext,
     },
     map::{FoundFunction, FragmentId, FragmentMap},
 };
