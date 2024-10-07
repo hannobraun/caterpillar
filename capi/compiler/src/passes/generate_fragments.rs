@@ -14,7 +14,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
     let mut fragments_by_location = FragmentsByLocation::default();
 
-    let compiled_functions = clusters
+    let functions = clusters
         .clusters
         .iter()
         .rev()
@@ -32,7 +32,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     let mut function_ids = Vec::new();
     let root = address_context(
-        &compiled_functions
+        &functions
             .into_iter()
             .map(|(_, fragment)| fragment)
             .collect(),
