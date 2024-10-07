@@ -3,8 +3,8 @@ use std::{collections::BTreeMap, iter};
 use crate::{
     fragments::{
         Branch, BranchIndex, Cluster, Fragment, FragmentId,
-        FragmentIndexInBranchBody, FragmentMap, Fragments, FragmentsByLocation,
-        Function, Parameters,
+        FragmentIndexInBranchBody, FragmentMap, Fragments, Function,
+        Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
@@ -12,7 +12,6 @@ use crate::{
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut fragments = FragmentMap::default();
-    let mut fragments_by_location = FragmentsByLocation::default();
 
     let functions = clusters
         .clusters
@@ -21,11 +20,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
             let function = clusters.functions[&index].clone();
-            let fragment = compile_function(
-                function,
-                &mut fragments,
-                &mut fragments_by_location,
-            );
+            let fragment = compile_function(function, &mut fragments);
             (index, fragment)
         })
         .collect::<BTreeMap<_, _>>();
@@ -78,7 +73,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 fn compile_function(
     function: syntax::Function,
     fragments: &mut FragmentMap,
-    fragments_by_location: &mut FragmentsByLocation,
 ) -> Function {
     let mut branches = Vec::new();
 
@@ -86,9 +80,7 @@ fn compile_function(
         let body = branch
             .body
             .into_iter()
-            .map(|expression| {
-                compile_expression(expression, fragments, fragments_by_location)
-            })
+            .map(|expression| compile_expression(expression, fragments))
             .collect::<Vec<_>>();
         let start = address_context(&body, &mut Vec::new(), fragments);
 
@@ -173,13 +165,11 @@ fn address_context(
 fn compile_expression(
     expression: syntax::Expression,
     fragments: &mut FragmentMap,
-    fragments_by_location: &mut FragmentsByLocation,
 ) -> Fragment {
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            let function =
-                compile_function(function, fragments, fragments_by_location);
+            let function = compile_function(function, fragments);
             Fragment::Function { function }
         }
         syntax::Expression::Identifier {
