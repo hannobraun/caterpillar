@@ -12,7 +12,7 @@ pub use self::{
     functions::{Branch, Function, Parameters},
     location::{
         BranchIndex, FragmentIndexInBranchBody, FragmentLocation,
-        FragmentsByLocation, FunctionIndexInRootContext,
+        FunctionIndexInRootContext,
     },
     map::{FoundFunction, FragmentId, FragmentMap},
 };

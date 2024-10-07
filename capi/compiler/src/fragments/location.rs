@@ -1,7 +1,3 @@
-/// # Code fragments, tracked by their location
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct FragmentsByLocation {}
-
 pub struct FragmentLocation {
     pub function_index_in_root_context: FunctionIndexInRootContext,
     pub fragment_indices: Vec<(BranchIndex, FragmentIndexInBranchBody)>,
