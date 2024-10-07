@@ -28,14 +28,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             );
             (index, fragment)
         })
-        .collect::<Vec<_>>();
+        .collect::<BTreeMap<_, _>>();
 
     let mut function_ids = Vec::new();
     let root = address_context(
-        &functions
-            .into_iter()
-            .map(|(_, fragment)| fragment)
-            .collect(),
+        &functions.into_values().collect(),
         &mut function_ids,
         &mut fragments,
         &mut fragments_by_location,
