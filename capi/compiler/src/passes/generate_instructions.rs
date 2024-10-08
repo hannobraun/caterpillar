@@ -220,7 +220,9 @@ fn compile_branch(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for (id, fragment) in fragments.iter_from(branch.start) {
+    for ((_index, fragment), (id, _)) in
+        branch.body.iter().zip(fragments.iter_from(branch.start))
+    {
         let addr =
             compile_fragment(id, fragment, clusters, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
