@@ -143,7 +143,7 @@ fn compile_function(
         });
         let bindings_address = output.generate_binding(parameters, fragment);
 
-        let [context_address, last_address] = compile_branch(
+        let [branch_address, last_address] = compile_branch(
             branch.start,
             &fragments.clusters,
             &fragments.map,
@@ -151,7 +151,7 @@ fn compile_function(
             queue,
         );
 
-        let first_address = bindings_address.unwrap_or(context_address);
+        let first_address = bindings_address.unwrap_or(branch_address);
         functions
             .by_fragment
             .entry(fragment)
