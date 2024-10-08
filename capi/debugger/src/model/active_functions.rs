@@ -56,7 +56,7 @@ impl ActiveFunctions {
         let mut expected_next_function = Some("main".to_string());
 
         if let Some(outer) = active_instructions.front() {
-            let outer = instruction_to_named_function(outer, code);
+            let (outer, _) = instruction_to_named_function(outer, code);
             if outer.name != expected_next_function {
                 expected_next_function = reconstruct_function(
                     "main",
@@ -69,7 +69,8 @@ impl ActiveFunctions {
         }
 
         while let Some(address) = active_instructions.pop_front() {
-            let named_function = instruction_to_named_function(&address, code);
+            let (named_function, _) =
+                instruction_to_named_function(&address, code);
             let active_fragment = code
                 .source_map
                 .instruction_to_fragment(&address)
@@ -235,7 +236,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
-) -> fragments::Function {
+) -> (fragments::Function, FunctionLocation) {
     let location = code.source_map.instruction_to_function(address).expect(
         "Expecting instructions on call stack to all map to a function.",
     );
@@ -255,7 +256,7 @@ fn instruction_to_named_function(
                     )
                     .clone();
 
-                return function;
+                return (function, current_location);
             }
             FunctionLocation::AnonymousFunction { location } => {
                 current_location = *location.parent.parent;
