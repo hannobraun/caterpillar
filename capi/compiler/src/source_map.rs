@@ -8,7 +8,8 @@ use crate::fragments::{FragmentId, FragmentLocation, Function};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentId>,
+    instruction_to_fragment:
+        BTreeMap<InstructionAddress, (FragmentId, FragmentLocation)>,
     fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
     function_to_instruction_range:
         BTreeMap<Function, (FragmentId, [InstructionAddress; 2])>,
@@ -18,9 +19,11 @@ impl SourceMap {
     pub fn define_mapping(
         &mut self,
         instruction: InstructionAddress,
-        (fragment, _): (FragmentId, FragmentLocation),
+        fragment: (FragmentId, FragmentLocation),
     ) {
-        self.instruction_to_fragment.insert(instruction, fragment);
+        self.instruction_to_fragment
+            .insert(instruction, fragment.clone());
+        let (fragment, _) = fragment;
         self.fragment_to_instructions
             .entry(fragment)
             .or_default()
@@ -46,7 +49,10 @@ impl SourceMap {
         &self,
         instruction: &InstructionAddress,
     ) -> Option<FragmentId> {
-        self.instruction_to_fragment.get(instruction).cloned()
+        self.instruction_to_fragment
+            .get(instruction)
+            .map(|(id, _)| id)
+            .cloned()
     }
 
     /// Get the address of the instruction that the given fragment maps to
