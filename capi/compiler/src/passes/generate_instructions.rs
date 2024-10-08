@@ -112,49 +112,6 @@ pub fn generate_instructions(
     (output.instructions, output.source_map)
 }
 
-fn compile_branch(
-    start: Option<FragmentId>,
-    clusters: &[Cluster],
-    fragments: &FragmentMap,
-    output: &mut Output,
-    queue: &mut VecDeque<FunctionToCompile>,
-) -> [InstructionAddress; 2] {
-    let mut first_instruction = None;
-
-    for (id, fragment) in fragments.iter_from(start) {
-        let addr =
-            compile_fragment(id, fragment, clusters, fragments, output, queue);
-        first_instruction = first_instruction.or(addr);
-    }
-
-    // Unconditionally generating a return instruction, like we do here, is
-    // redundant. If the previous fragment was a tail call, it didn't create a
-    // new stack frame.
-    //
-    // In this case, the return instruction at the end of the called function
-    // returns to the current function's caller, and we never get to the return
-    // we generated here. It's just a junk instruction that has no effect,
-    // except to make the code bigger.
-    //
-    // I don't think it's worth fixing right now, for the following reasons:
-    //
-    // - Tail call elimination still partially happens at runtime. The
-    //   plan is to move it to compile-time completely. Adding other
-    //   optimizations (like omitting this return instruction) will make
-    //   this transition more complicated, for little gain in the
-    //   meantime.
-    // - There's no infrastructure in place to measure the impact of
-    //   compiler optimizations. I'd rather have that, instead of making
-    //   this change blindly. It will probably make the code more
-    //   complicated, so it needs to be justified.
-    let last_instruction =
-        output.generate_instruction(Instruction::Return, None);
-
-    let first_instruction = first_instruction.unwrap_or(last_instruction);
-
-    [first_instruction, last_instruction]
-}
-
 fn compile_function(
     function_to_compile: FunctionToCompile,
     fragments: &Fragments,
@@ -251,6 +208,49 @@ fn compile_function(
             This is a bug.",
         );
     }
+}
+
+fn compile_branch(
+    start: Option<FragmentId>,
+    clusters: &[Cluster],
+    fragments: &FragmentMap,
+    output: &mut Output,
+    queue: &mut VecDeque<FunctionToCompile>,
+) -> [InstructionAddress; 2] {
+    let mut first_instruction = None;
+
+    for (id, fragment) in fragments.iter_from(start) {
+        let addr =
+            compile_fragment(id, fragment, clusters, fragments, output, queue);
+        first_instruction = first_instruction.or(addr);
+    }
+
+    // Unconditionally generating a return instruction, like we do here, is
+    // redundant. If the previous fragment was a tail call, it didn't create a
+    // new stack frame.
+    //
+    // In this case, the return instruction at the end of the called function
+    // returns to the current function's caller, and we never get to the return
+    // we generated here. It's just a junk instruction that has no effect,
+    // except to make the code bigger.
+    //
+    // I don't think it's worth fixing right now, for the following reasons:
+    //
+    // - Tail call elimination still partially happens at runtime. The
+    //   plan is to move it to compile-time completely. Adding other
+    //   optimizations (like omitting this return instruction) will make
+    //   this transition more complicated, for little gain in the
+    //   meantime.
+    // - There's no infrastructure in place to measure the impact of
+    //   compiler optimizations. I'd rather have that, instead of making
+    //   this change blindly. It will probably make the code more
+    //   complicated, so it needs to be justified.
+    let last_instruction =
+        output.generate_instruction(Instruction::Return, None);
+
+    let first_instruction = first_instruction.unwrap_or(last_instruction);
+
+    [first_instruction, last_instruction]
 }
 
 fn compile_fragment(
