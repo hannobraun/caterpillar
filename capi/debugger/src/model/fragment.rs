@@ -1,5 +1,8 @@
 use capi_compiler::{
-    fragments::{Cluster, Fragment, FragmentId, Fragments},
+    fragments::{
+        Cluster, Fragment, FragmentId, FragmentLocation, Fragments,
+        FunctionLocation,
+    },
     host::Host,
     source_map::SourceMap,
 };
@@ -19,6 +22,7 @@ impl DebugFragment {
     pub fn new(
         id: FragmentId,
         fragment: Fragment,
+        location: FragmentLocation,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
@@ -59,6 +63,7 @@ impl DebugFragment {
         };
         let kind = DebugFragmentKind::new(
             fragment,
+            location,
             active_fragment,
             is_in_innermost_active_function,
             cluster,
@@ -130,6 +135,7 @@ impl DebugFragmentKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         fragment: Fragment,
+        location: FragmentLocation,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
@@ -188,6 +194,7 @@ impl DebugFragmentKind {
             Fragment::Function { function } => {
                 let function = DebugFunction::new(
                     function,
+                    FunctionLocation::AnonymousFunction { location },
                     active_fragment,
                     is_in_innermost_active_function,
                     cluster,

@@ -1,6 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{self, Cluster, FragmentId, Fragments},
+    fragments::{
+        self, BranchLocation, Cluster, FragmentId, Fragments, FunctionLocation,
+    },
     source_map::SourceMap,
 };
 use capi_runtime::Effect;
@@ -17,6 +19,7 @@ impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         function: fragments::Function,
+        location: FunctionLocation,
         active_fragment: Option<FragmentId>,
         is_innermost_active_function: bool,
         cluster: &Cluster,
@@ -32,7 +35,10 @@ impl DebugFunction {
             .map(|(index, branch)| {
                 DebugBranch::new(
                     branch,
-                    index,
+                    BranchLocation {
+                        parent: Box::new(location.clone()),
+                        index,
+                    },
                     active_fragment,
                     is_innermost_active_function,
                     cluster,

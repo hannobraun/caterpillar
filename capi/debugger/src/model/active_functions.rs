@@ -104,6 +104,9 @@ impl ActiveFunctions {
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
                     named_function,
+                    FunctionLocation::NamedFunction {
+                        index: function_index_in_root_context,
+                    },
                     active_fragment,
                     active_instructions.is_empty(),
                     cluster,
@@ -307,6 +310,7 @@ fn reconstruct_function(
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
+        FunctionLocation::NamedFunction { index: *index },
         tail_call,
         false,
         cluster,

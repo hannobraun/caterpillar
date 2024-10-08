@@ -1,6 +1,9 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, BranchIndex, Cluster, FragmentId, Fragments},
+    fragments::{
+        Branch, BranchLocation, Cluster, FragmentId, FragmentLocation,
+        Fragments,
+    },
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -19,7 +22,7 @@ impl DebugBranch {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         branch: Branch,
-        _: BranchIndex,
+        location: BranchLocation,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
@@ -33,9 +36,14 @@ impl DebugBranch {
             .iter()
             .zip(branch.body(fragments))
             .map(|((_index, fragment), (id, _))| {
+                let location = FragmentLocation {
+                    parent: Box::new(location.clone()),
+                    index: *_index,
+                };
                 DebugFragment::new(
                     id,
                     fragment.clone(),
+                    location,
                     active_fragment,
                     is_in_innermost_active_function,
                     cluster,
