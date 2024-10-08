@@ -285,7 +285,6 @@ fn compile_branch(
     [first_instruction, last_instruction]
 }
 
-#[allow(clippy::too_many_arguments)]
 fn compile_fragment(
     id: FragmentId,
     fragment: &Fragment,
