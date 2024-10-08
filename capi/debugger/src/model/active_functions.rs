@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, Fragment, FragmentId};
+use capi_compiler::fragments::{self, Fragment, FragmentId, FunctionLocation};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -236,25 +236,33 @@ fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
 ) -> fragments::Function {
-    let (function, function_id, _location) =
+    let (_, _, _location) =
         code.source_map.instruction_to_function(address).expect(
             "Expecting instructions on call stack to all map to a function.",
         );
 
-    let function = if function.name.is_none() {
-        let (function, _) = code
-            .fragments
-            .find_named_function_by_fragment_in_body(function_id)
-            .expect(
-                "Anonymous function must be defined within a named function, \
-                directly or indirectly.",
-            );
-        function.function
-    } else {
-        function
-    };
+    let mut current_location = _location.clone();
 
-    function.clone()
+    loop {
+        match current_location {
+            FunctionLocation::NamedFunction { index } => {
+                let function = code
+                    .fragments
+                    .functions
+                    .get(&index)
+                    .expect(
+                        "Function location in source map should refer to \
+                        function.",
+                    )
+                    .clone();
+
+                return function;
+            }
+            FunctionLocation::AnonymousFunction { location } => {
+                current_location = *location.parent.parent;
+            }
+        }
+    }
 }
 
 fn reconstruct_function(
