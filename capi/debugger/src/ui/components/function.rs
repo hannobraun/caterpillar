@@ -1,3 +1,4 @@
+use capi_compiler::fragments::{FragmentId, FragmentLocation};
 use capi_runtime::Effect;
 use leptos::{
     component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
@@ -197,7 +198,7 @@ fn make_single_expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_fragment = ron::to_string(&data.id)
+    let data_fragment = ron::to_string(&(data.id, data.location))
         .expect("Expecting serialization of `FragmentId` to always work.");
     let data_breakpoint = data.has_durable_breakpoint;
 
@@ -228,7 +229,7 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let fragment = {
+        let (fragment, _): (FragmentId, FragmentLocation) = {
             let Some(fragment) = element.get_attribute("data-fragment") else {
                 // This happens, if the user clicks on a comment.
                 return;
