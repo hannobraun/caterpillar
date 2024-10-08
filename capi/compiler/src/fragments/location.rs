@@ -1,9 +1,13 @@
 use std::rc::Rc;
 
 pub struct FragmentLocation {
+    pub parent: BranchLocation,
+    pub index: FragmentIndexInBranchBody,
+}
+
+pub struct BranchLocation {
     pub parent: Rc<FunctionLocation>,
     pub branch: BranchIndex,
-    pub index: FragmentIndexInBranchBody,
 }
 
 pub enum FunctionLocation {
