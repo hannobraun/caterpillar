@@ -6,11 +6,13 @@ pub struct FragmentLocation {
     pub index: FragmentIndexInBranchBody,
 }
 
+#[derive(Clone)]
 pub struct BranchLocation {
     pub parent: Rc<FunctionLocation>,
     pub index: BranchIndex,
 }
 
+#[derive(Clone)]
 pub enum FunctionLocation {
     NamedFunction { index: FunctionIndexInRootContext },
     AnonymousFunction { location: FragmentLocation },
