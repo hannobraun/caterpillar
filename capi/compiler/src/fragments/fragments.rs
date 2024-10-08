@@ -4,8 +4,8 @@ use std::{
 };
 
 use super::{
-    FragmentId, FragmentMap, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext, FunctionLocation,
+    search::FoundFunction, FragmentId, FragmentMap, Function,
+    FunctionIndexInCluster, FunctionIndexInRootContext, FunctionLocation,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -64,15 +64,12 @@ impl Fragments {
     /// There is currently a function with a similar name on `FragmentMap`. Once
     /// the ongoing refactoring on fragment addressing has finished, that
     /// function can be removed, and this one can take over its name.
-    pub fn find_function_by_name2(
-        &self,
-        name: &str,
-    ) -> Option<(&Function, FunctionLocation)> {
+    pub fn find_function_by_name2(&self, name: &str) -> Option<FoundFunction> {
         self.functions.iter().find_map(|(index, function)| {
             if function.name.as_deref() == Some(name) {
                 let location =
                     FunctionLocation::NamedFunction { index: *index };
-                Some((function, location))
+                Some(FoundFunction { function, location })
             } else {
                 None
             }
