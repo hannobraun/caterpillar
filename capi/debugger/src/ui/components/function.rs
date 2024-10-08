@@ -229,7 +229,7 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let (fragment, _): (FragmentId, FragmentLocation) = {
+        let fragment: (FragmentId, FragmentLocation) = {
             let Some(fragment) = element.get_attribute("data-fragment") else {
                 // This happens, if the user clicks on a comment.
                 return;
@@ -241,8 +241,10 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
+            let (fragment, _) = fragment;
             UserAction::BreakpointClear { fragment }
         } else {
+            let (fragment, _) = fragment;
             UserAction::BreakpointSet { fragment }
         };
 
