@@ -70,8 +70,10 @@ impl ActiveFunctions {
 
         while let Some(address) = active_instructions.pop_front() {
             let function = instruction_to_named_function(&address, code);
-            let active_fragment =
-                code.source_map.instruction_to_fragment(&address);
+            let active_fragment = code
+                .source_map
+                .instruction_to_fragment(&address)
+                .map(|(id, _)| id);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != function.name.as_ref() {

@@ -48,11 +48,8 @@ impl SourceMap {
     pub fn instruction_to_fragment(
         &self,
         instruction: &InstructionAddress,
-    ) -> Option<FragmentId> {
-        self.instruction_to_fragment
-            .get(instruction)
-            .map(|(id, _)| id)
-            .cloned()
+    ) -> Option<(FragmentId, FragmentLocation)> {
+        self.instruction_to_fragment.get(instruction).cloned()
     }
 
     /// Get the address of the instruction that the given fragment maps to
