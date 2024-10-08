@@ -294,7 +294,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    clusters: &[Cluster],
+    _: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
@@ -332,21 +332,6 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let (calling_function, _) = fragments
-                .find_named_function_by_fragment_in_body(&id)
-                .expect(
-                    "Fragment ID is of a function call; must be located in a \
-                    function.",
-                );
-            let cluster = clusters
-                .iter()
-                .find(|cluster| {
-                    cluster
-                        .functions
-                        .values()
-                        .any(|id| *id == calling_function.id)
-                })
-                .expect("Expecting every function to be in a cluster.");
             let called_function = cluster.functions[index];
 
             // We know that this expression refers to a user-defined function,
