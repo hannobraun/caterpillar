@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{self, FragmentId, Fragments},
+    fragments::{self, Cluster, FragmentId, Fragments},
     source_map::SourceMap,
 };
 use capi_runtime::Effect;
@@ -14,10 +14,12 @@ pub struct DebugFunction {
 }
 
 impl DebugFunction {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         function: fragments::Function,
         active_fragment: Option<FragmentId>,
         is_innermost_active_function: bool,
+        cluster: &Cluster,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -33,6 +35,7 @@ impl DebugFunction {
                     index,
                     active_fragment,
                     is_innermost_active_function,
+                    cluster,
                     fragments,
                     source_map,
                     breakpoints,

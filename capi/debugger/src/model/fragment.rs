@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentId, Fragments},
+    fragments::{Cluster, Fragment, FragmentId, Fragments},
     host::Host,
     source_map::SourceMap,
 };
@@ -21,6 +21,7 @@ impl DebugFragment {
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
+        cluster: &Cluster,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -61,6 +62,7 @@ impl DebugFragment {
             fragment,
             active_fragment,
             is_in_innermost_active_function,
+            cluster,
             fragments,
             source_map,
             breakpoints,
@@ -132,6 +134,7 @@ impl DebugFragmentKind {
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
+        cluster: &Cluster,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -204,6 +207,7 @@ impl DebugFragmentKind {
                     function,
                     active_fragment,
                     is_in_innermost_active_function,
+                    cluster,
                     fragments,
                     source_map,
                     breakpoints,

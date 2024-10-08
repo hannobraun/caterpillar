@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, BranchIndex, FragmentId, Fragments},
+    fragments::{Branch, BranchIndex, Cluster, FragmentId, Fragments},
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -22,6 +22,7 @@ impl DebugBranch {
         _: BranchIndex,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
+        cluster: &Cluster,
         fragments: &Fragments,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -35,6 +36,7 @@ impl DebugBranch {
                     fragment.clone(),
                     active_fragment,
                     is_in_innermost_active_function,
+                    cluster,
                     fragments,
                     source_map,
                     breakpoints,
