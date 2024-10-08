@@ -43,20 +43,21 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             functions: BTreeMap::new(),
         };
 
-        for (function_index_in_cluster, named_function_index) in
+        for (function_index_in_cluster, function_index_in_root_context) in
             cluster.functions
         {
             let id = {
-                let index: usize = named_function_index
+                let index: usize = function_index_in_root_context
                     .0
                     .try_into()
                     .expect("Expecting `usize` to be at least 32-bit.");
 
                 function_ids[index]
             };
-            compiled_cluster
-                .functions
-                .insert(function_index_in_cluster, (id, named_function_index));
+            compiled_cluster.functions.insert(
+                function_index_in_cluster,
+                (id, function_index_in_root_context),
+            );
         }
 
         compiled_clusters.push(compiled_cluster);
