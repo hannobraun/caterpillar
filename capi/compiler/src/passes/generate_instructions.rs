@@ -151,10 +151,10 @@ fn compile_function(
 
         let [branch_address, last_address] = compile_branch(
             branch,
-            Rc::new(BranchLocation {
+            BranchLocation {
                 parent: location.clone(),
                 index,
-            }),
+            },
             &fragments.clusters,
             &fragments.map,
             output,
@@ -222,12 +222,14 @@ fn compile_function(
 
 fn compile_branch(
     branch: &Branch,
-    location: Rc<BranchLocation>,
+    location: BranchLocation,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> [InstructionAddress; 2] {
+    let location = Rc::new(location);
+
     let mut first_instruction = None;
 
     for ((&index, fragment), (id, _)) in
