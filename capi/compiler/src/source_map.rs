@@ -13,10 +13,8 @@ pub struct SourceMap {
     instruction_to_fragment:
         BTreeMap<InstructionAddress, (FragmentId, FragmentLocation)>,
     fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
-    function_to_instruction_range: BTreeMap<
-        Function,
-        (FragmentId, FunctionLocation, [InstructionAddress; 2]),
-    >,
+    function_to_instruction_range:
+        BTreeMap<Function, (FunctionLocation, [InstructionAddress; 2])>,
 }
 
 impl SourceMap {
@@ -39,11 +37,11 @@ impl SourceMap {
         &mut self,
         function: Function,
         location: FunctionLocation,
-        function_id: FragmentId,
+        _: FragmentId,
         range: [InstructionAddress; 2],
     ) {
         self.function_to_instruction_range
-            .insert(function, (function_id, location, range));
+            .insert(function, (location, range));
     }
 
     /// Get the ID of the fragment that the given instruction maps to
@@ -81,7 +79,7 @@ impl SourceMap {
         instruction: &InstructionAddress,
     ) -> Option<&FunctionLocation> {
         self.function_to_instruction_range.iter().find_map(
-            |(_, (_, location, [min, max]))| {
+            |(_, (location, [min, max]))| {
                 if instruction.index >= min.index
                     && instruction.index <= max.index
                 {
