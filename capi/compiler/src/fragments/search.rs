@@ -5,7 +5,7 @@
 
 use std::ops::Deref;
 
-use super::{Function, FunctionLocation};
+use super::{Branch, BranchLocation, Function, FunctionLocation};
 
 /// # A function that was found by a search
 pub struct FoundFunction<'r> {
@@ -21,5 +21,22 @@ impl Deref for FoundFunction<'_> {
 
     fn deref(&self) -> &Self::Target {
         self.function
+    }
+}
+
+/// # A branch that was found by a search
+pub struct FoundBranch<'r> {
+    /// # The branch that was found
+    pub branch: &'r Branch,
+
+    /// # The location of the branch that was found
+    pub location: BranchLocation,
+}
+
+impl Deref for FoundBranch<'_> {
+    type Target = Branch;
+
+    fn deref(&self) -> &Self::Target {
+        self.branch
     }
 }
