@@ -40,7 +40,7 @@ impl Fragments {
     }
 
     /// # Find the cluster containing the function with the provided index
-    pub fn find_cluster_by_function_index(
+    pub fn find_cluster_by_named_function(
         &self,
         location: &FunctionLocation,
     ) -> Option<&Cluster> {
