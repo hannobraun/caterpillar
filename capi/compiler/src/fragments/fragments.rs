@@ -3,8 +3,6 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use crate::syntax;
-
 use super::{
     FragmentId, FragmentMap, Function, FunctionIndexInCluster,
     FunctionIndexInRootContext,
@@ -22,19 +20,6 @@ pub struct Fragments {
 
     /// # The function clusters
     pub clusters: Vec<Cluster>,
-
-    /// # The named functions, collected by clusters with recursive calls within
-    ///
-    /// ## Implementation Note
-    ///
-    /// As of this writing, there is an ongoing effort to simplify the code
-    /// representation. This field is part of that effort. In contrast to the
-    /// `clusters` field, it doesn't refer to functions by ID, but by per index
-    /// into the `functions` field.
-    ///
-    /// If this simplification effort is successful, the `clusters` field is
-    /// going to be removed, and the name of this field can take over its name.
-    pub clusters2: Vec<syntax::Cluster>,
 
     pub map: FragmentMap,
 }
