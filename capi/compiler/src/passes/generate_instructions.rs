@@ -42,10 +42,23 @@ pub fn generate_instructions(
         .iter()
         .zip(fragments.iter_from(fragments.root))
     {
+        let cluster = fragments
+            .clusters
+            .iter()
+            .find(|cluster| {
+                cluster
+                    .functions
+                    .values()
+                    .copied()
+                    .any(|id| id == function_id)
+            })
+            .expect("All named functions are part of a cluster.");
+
         queue.push_front(FunctionToCompile {
             fragment: function_id,
             function: function.clone(),
             location: FunctionLocation::NamedFunction { index },
+            cluster: cluster.clone(),
             address_of_instruction_to_make_anon_function: None,
         });
     }
@@ -123,6 +136,7 @@ fn compile_function(
         fragment,
         function,
         location,
+        cluster,
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
@@ -150,6 +164,7 @@ fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
+            &cluster,
             &fragments.clusters,
             &fragments.map,
             output,
@@ -218,6 +233,7 @@ fn compile_function(
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
+    cluster: &Cluster,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
@@ -235,6 +251,7 @@ fn compile_branch(
                 parent: Box::new(location.clone()),
                 index,
             },
+            cluster,
             clusters,
             fragments,
             output,
@@ -271,10 +288,12 @@ fn compile_branch(
     [first_instruction, last_instruction]
 }
 
+#[allow(clippy::too_many_arguments)]
 fn compile_fragment(
     id: FragmentId,
     fragment: &Fragment,
     location: FragmentLocation,
+    cluster: &Cluster,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
@@ -408,6 +427,7 @@ fn compile_fragment(
                 fragment: id,
                 function: function.clone(),
                 location: FunctionLocation::AnonymousFunction { location },
+                cluster: cluster.clone(),
                 address_of_instruction_to_make_anon_function,
             });
 
@@ -526,5 +546,6 @@ struct FunctionToCompile {
     fragment: FragmentId,
     function: Function,
     location: FunctionLocation,
+    cluster: Cluster,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
 }
