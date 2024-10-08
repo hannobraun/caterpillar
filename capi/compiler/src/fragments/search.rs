@@ -11,5 +11,5 @@ pub struct FoundFunction<'r> {
     pub function: &'r Function,
 
     /// # The location of the function that was found
-    pub location: &'r FunctionLocation,
+    pub location: FunctionLocation,
 }
