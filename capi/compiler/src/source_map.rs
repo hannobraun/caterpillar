@@ -33,10 +33,10 @@ impl SourceMap {
     /// # Define which instructions map to the given function
     pub fn define_instruction_range(
         &mut self,
-        location: FunctionLocation,
+        function: FunctionLocation,
         range: [InstructionAddress; 2],
     ) {
-        self.function_to_instruction_range.insert(location, range);
+        self.function_to_instruction_range.insert(function, range);
     }
 
     /// Get the ID of the fragment that the given instruction maps to
