@@ -58,6 +58,17 @@ pub struct FoundBranch {
 }
 
 impl FoundBranch {
+    /// # Iterate over the fragments in the branch's body
+    pub fn fragments(&self) -> impl Iterator<Item = FoundFragment> + '_ {
+        self.body.iter().map(|(&index, fragment)| FoundFragment {
+            fragment: fragment.clone(),
+            location: FragmentLocation {
+                parent: Box::new(self.location.clone()),
+                index,
+            },
+        })
+    }
+
     /// # Find the n-th fragment in the branch's body
     ///
     /// Returns `None`, if the branch has too few fragments.
