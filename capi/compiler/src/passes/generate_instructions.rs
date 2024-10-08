@@ -123,6 +123,7 @@ fn compile_function(
         fragment,
         function,
         address_of_instruction_to_make_anon_function,
+        ..
     } = function_to_compile;
 
     let mut branches = Vec::new();
