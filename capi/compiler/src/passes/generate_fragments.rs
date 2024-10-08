@@ -56,7 +56,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             };
             compiled_cluster
                 .functions
-                .insert(function_index_in_cluster, id);
+                .insert(function_index_in_cluster, (id, named_function_index));
         }
 
         compiled_clusters.push(compiled_cluster);

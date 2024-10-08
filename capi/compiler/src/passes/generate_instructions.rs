@@ -317,7 +317,7 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let called_function = cluster.functions[index];
+            let (called_function, _) = cluster.functions[index];
 
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.

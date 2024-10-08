@@ -157,7 +157,10 @@ impl DebugFragmentKind {
                         to find a cluster when providing a named function's \
                         ID.",
                     );
-                let called_function_id = cluster.functions.get(&index).expect(
+                let (called_function_id, _) = cluster
+                    .functions
+                    .get(&index)
+                    .expect(
                     "The index of a recursive call must be valid within the \
                     calling function's cluster.",
                 );

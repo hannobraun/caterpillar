@@ -50,7 +50,7 @@ impl Fragments {
         function_id: &FragmentId,
     ) -> Option<&Cluster> {
         self.clusters.iter().find(|cluster| {
-            cluster.functions.values().any(|id| id == function_id)
+            cluster.functions.values().any(|(id, _)| id == function_id)
         })
     }
 }
@@ -71,5 +71,8 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Cluster {
-    pub functions: BTreeMap<FunctionIndexInCluster, FragmentId>,
+    pub functions: BTreeMap<
+        FunctionIndexInCluster,
+        (FragmentId, FunctionIndexInRootContext),
+    >,
 }
