@@ -2,7 +2,9 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::fragments::{FragmentId, FragmentLocation, Function};
+use crate::fragments::{
+    FragmentId, FragmentLocation, Function, FunctionLocation,
+};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -11,8 +13,10 @@ pub struct SourceMap {
     instruction_to_fragment:
         BTreeMap<InstructionAddress, (FragmentId, FragmentLocation)>,
     fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
-    function_to_instruction_range:
-        BTreeMap<Function, (FragmentId, [InstructionAddress; 2])>,
+    function_to_instruction_range: BTreeMap<
+        Function,
+        (FragmentId, FunctionLocation, [InstructionAddress; 2]),
+    >,
 }
 
 impl SourceMap {
@@ -34,11 +38,12 @@ impl SourceMap {
     pub fn define_instruction_range(
         &mut self,
         function: Function,
+        location: FunctionLocation,
         function_id: FragmentId,
         range: [InstructionAddress; 2],
     ) {
         self.function_to_instruction_range
-            .insert(function, (function_id, range));
+            .insert(function, (function_id, location, range));
     }
 
     /// Get the ID of the fragment that the given instruction maps to
@@ -76,7 +81,7 @@ impl SourceMap {
         instruction: &InstructionAddress,
     ) -> Option<(&Function, &FragmentId)> {
         self.function_to_instruction_range.iter().find_map(
-            |(function, (function_id, [min, max]))| {
+            |(function, (function_id, _, [min, max]))| {
                 if instruction.index >= min.index
                     && instruction.index <= max.index
                 {
