@@ -39,7 +39,11 @@ impl Fragments {
         })
     }
 
-    /// # Find the cluster containing the function with the provided index
+    /// # Find the cluster containing a given function
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if the provided location does not refer to a named function.
     pub fn find_cluster_by_named_function(
         &self,
         location: &FunctionLocation,
