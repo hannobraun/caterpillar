@@ -66,7 +66,7 @@ impl FoundBranch {
             .iter()
             .nth(n)
             .map(|(&index, fragment)| FoundFragment {
-                fragment,
+                fragment: fragment.clone(),
                 location: FragmentLocation {
                     parent: Box::new(self.location.clone()),
                     index,
@@ -84,18 +84,18 @@ impl Deref for FoundBranch {
 }
 
 /// # A fragment that was found by a search
-pub struct FoundFragment<'r> {
+pub struct FoundFragment {
     /// # The fragment that was found
-    pub fragment: &'r Fragment,
+    pub fragment: Fragment,
 
     /// # The location of the fragment that was found
     pub location: FragmentLocation,
 }
 
-impl Deref for FoundFragment<'_> {
+impl Deref for FoundFragment {
     type Target = Fragment;
 
     fn deref(&self) -> &Self::Target {
-        self.fragment
+        &self.fragment
     }
 }
