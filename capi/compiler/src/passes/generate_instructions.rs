@@ -112,7 +112,7 @@ pub fn generate_instructions(
     (output.instructions, output.source_map)
 }
 
-fn compile_context(
+fn compile_branch(
     start: Option<FragmentId>,
     clusters: &[Cluster],
     fragments: &FragmentMap,
@@ -186,7 +186,7 @@ fn compile_function(
         });
         let bindings_address = output.generate_binding(parameters, fragment);
 
-        let [context_address, last_address] = compile_context(
+        let [context_address, last_address] = compile_branch(
             branch.start,
             &fragments.clusters,
             &fragments.map,
