@@ -490,7 +490,7 @@ impl Output {
         fragment: Option<(FragmentId, FragmentLocation)>,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
-        if let Some((fragment, _)) = fragment {
+        if let Some(fragment) = fragment {
             self.source_map.define_mapping(addr, fragment);
         }
         addr
