@@ -43,15 +43,7 @@ pub fn generate_instructions(
         .zip(fragments.iter_from(fragments.root))
     {
         let cluster = fragments
-            .clusters
-            .iter()
-            .find(|cluster| {
-                cluster
-                    .functions
-                    .values()
-                    .copied()
-                    .any(|id| id == function_id)
-            })
+            .find_cluster_by_function_id(&function_id)
             .expect("All named functions are part of a cluster.");
 
         queue.push_front(FunctionToCompile {
