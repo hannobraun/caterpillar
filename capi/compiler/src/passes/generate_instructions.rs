@@ -147,7 +147,7 @@ fn compile_function(
                 }
             }
         });
-        let bindings_address = output.generate_binding(parameters, fragment);
+        let bindings_address = output.generate_binding(parameters);
 
         let [branch_address, last_address] = compile_branch(
             branch,
@@ -499,7 +499,6 @@ impl Output {
     fn generate_binding<'r, N>(
         &mut self,
         names: N,
-        fragment: FragmentId,
     ) -> Option<InstructionAddress>
     where
         N: IntoIterator<Item = &'r String>,
@@ -510,7 +509,7 @@ impl Output {
         for name in names.into_iter().rev() {
             let address = self.generate_instruction(
                 Instruction::Bind { name: name.clone() },
-                Some(fragment),
+                None,
             );
             first_address = first_address.or(Some(address));
         }
