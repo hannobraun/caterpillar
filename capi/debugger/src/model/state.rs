@@ -71,18 +71,17 @@ impl PersistentState {
                 });
             }
             UserAction::Continue => {
-                let origin = transient
+                let origin = &transient
                     .active_functions
                     .entries()?
                     .leaf()
                     .function()?
                     .active_branch()?
                     .active_fragment()?
-                    .data
-                    .id;
+                    .data;
                 let targets = Vec::new();
 
-                self.step_or_continue(&origin, targets, &mut commands)?;
+                self.step_or_continue(&origin.id, targets, &mut commands)?;
             }
             UserAction::Reset => {
                 commands.push(Command::Reset);
