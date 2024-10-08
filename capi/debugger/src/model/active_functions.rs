@@ -306,13 +306,15 @@ fn reconstruct_function(
     let expected_next_function = tail_call
         .and_then(|tail_call| call_fragment_to_function_name(&tail_call, code));
 
+    let location = FunctionLocation::NamedFunction { index: *index };
+
     let cluster = code
         .fragments
         .find_cluster_by_function_index(index)
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
-        FunctionLocation::NamedFunction { index: *index },
+        location,
         tail_call,
         false,
         cluster,
