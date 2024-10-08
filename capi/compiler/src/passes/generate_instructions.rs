@@ -37,13 +37,13 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    for ((&index, function), (id, _)) in fragments
+    for ((&index, function), (function_id, _)) in fragments
         .functions
         .iter()
         .zip(fragments.iter_from(fragments.root))
     {
         queue.push_front(FunctionToCompile {
-            fragment: id,
+            fragment: function_id,
             function: function.clone(),
             location: FunctionLocation::NamedFunction { index },
             address_of_instruction_to_make_anon_function: None,
