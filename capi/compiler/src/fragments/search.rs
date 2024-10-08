@@ -31,7 +31,7 @@ impl FoundFunction {
         self.branches
             .first_key_value()
             .map(|(&index, branch)| FoundBranch {
-                branch,
+                branch: branch.clone(),
                 location: BranchLocation {
                     parent: Box::new(self.location.clone()),
                     index,
@@ -49,15 +49,15 @@ impl Deref for FoundFunction {
 }
 
 /// # A branch that was found by a search
-pub struct FoundBranch<'r> {
+pub struct FoundBranch {
     /// # The branch that was found
-    pub branch: &'r Branch,
+    pub branch: Branch,
 
     /// # The location of the branch that was found
     pub location: BranchLocation,
 }
 
-impl FoundBranch<'_> {
+impl FoundBranch {
     /// # Find the n-th fragment in the branch's body
     ///
     /// Returns `None`, if the branch has too few fragments.
@@ -75,11 +75,11 @@ impl FoundBranch<'_> {
     }
 }
 
-impl Deref for FoundBranch<'_> {
+impl Deref for FoundBranch {
     type Target = Branch;
 
     fn deref(&self) -> &Self::Target {
-        self.branch
+        &self.branch
     }
 }
 
