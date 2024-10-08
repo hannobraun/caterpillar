@@ -29,8 +29,10 @@ impl DebugBranch {
         effects: &[Effect],
     ) -> Self {
         let body = branch
-            .body(fragments)
-            .map(|(id, fragment)| {
+            .body
+            .iter()
+            .zip(branch.body(fragments))
+            .map(|((_index, fragment), (id, _))| {
                 DebugFragment::new(
                     id,
                     fragment.clone(),
