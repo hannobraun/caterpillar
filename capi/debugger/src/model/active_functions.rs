@@ -69,14 +69,14 @@ impl ActiveFunctions {
         }
 
         while let Some(address) = active_instructions.pop_front() {
-            let function = instruction_to_named_function(&address, code);
+            let named_function = instruction_to_named_function(&address, code);
             let active_fragment = code
                 .source_map
                 .instruction_to_fragment(&address)
                 .map(|(id, _)| id);
 
             if let Some(expected_name) = &expected_next_function {
-                if Some(expected_name) != function.name.as_ref() {
+                if Some(expected_name) != named_function.name.as_ref() {
                     reconstruct_function(
                         expected_name,
                         &mut entries,
@@ -96,7 +96,7 @@ impl ActiveFunctions {
 
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
-                    function,
+                    named_function,
                     active_fragment,
                     active_instructions.is_empty(),
                     &code.fragments,
