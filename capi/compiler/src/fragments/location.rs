@@ -1,16 +1,43 @@
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct FragmentLocation {
     pub parent: Box<BranchLocation>,
     pub index: FragmentIndexInBranchBody,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct BranchLocation {
     pub parent: Box<FunctionLocation>,
     pub index: BranchIndex,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub enum FunctionLocation {
     NamedFunction { index: FunctionIndexInRootContext },
     AnonymousFunction { location: FragmentLocation },
