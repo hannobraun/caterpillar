@@ -38,13 +38,16 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    compile_context(
-        fragments.root,
-        &fragments.clusters,
-        &fragments.map,
-        &mut output,
-        &mut queue,
-    );
+    for (id, fragment) in fragments.iter_from(fragments.root) {
+        compile_fragment(
+            id,
+            fragment,
+            &fragments.clusters,
+            &fragments.map,
+            &mut output,
+            &mut queue,
+        );
+    }
 
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
