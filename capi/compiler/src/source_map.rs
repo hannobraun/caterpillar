@@ -2,9 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::fragments::{
-    FragmentId, FragmentLocation, Function, FunctionLocation,
-};
+use crate::fragments::{FragmentId, FragmentLocation, FunctionLocation};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -35,9 +33,7 @@ impl SourceMap {
     /// # Define which instructions map to the given function
     pub fn define_instruction_range(
         &mut self,
-        _: Function,
         location: FunctionLocation,
-        _: FragmentId,
         range: [InstructionAddress; 2],
     ) {
         self.function_to_instruction_range.insert(location, range);
