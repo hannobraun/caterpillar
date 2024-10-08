@@ -1,12 +1,12 @@
 use std::rc::Rc;
 
 pub struct FragmentLocation {
-    pub parent: BranchLocation,
+    pub parent: Rc<BranchLocation>,
     pub index: FragmentIndexInBranchBody,
 }
 
 pub struct BranchLocation {
-    pub parent: Rc<FunctionLocation>,
+    pub parent: FunctionLocation,
     pub branch: BranchIndex,
 }
 
