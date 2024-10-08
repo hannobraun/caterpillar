@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct FragmentLocation {
-    pub parent: Rc<BranchLocation>,
+    pub parent: Box<BranchLocation>,
     pub index: FragmentIndexInBranchBody,
 }
 

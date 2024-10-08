@@ -228,7 +228,7 @@ fn compile_branch(
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> [InstructionAddress; 2] {
-    let location = Rc::new(location);
+    let location = Box::new(location);
 
     let mut first_instruction = None;
 
