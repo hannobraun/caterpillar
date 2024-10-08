@@ -228,8 +228,6 @@ fn compile_branch(
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> [InstructionAddress; 2] {
-    let location = Box::new(location);
-
     let mut first_instruction = None;
 
     for ((&index, fragment), (id, _)) in
@@ -239,7 +237,7 @@ fn compile_branch(
             id,
             fragment,
             FragmentLocation {
-                parent: location.clone(),
+                parent: Box::new(location.clone()),
                 index,
             },
             clusters,
