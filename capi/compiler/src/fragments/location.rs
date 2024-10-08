@@ -7,7 +7,7 @@ pub struct FragmentLocation {
 
 pub struct BranchLocation {
     pub parent: Rc<FunctionLocation>,
-    pub branch: BranchIndex,
+    pub index: BranchIndex,
 }
 
 pub enum FunctionLocation {
