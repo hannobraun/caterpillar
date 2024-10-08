@@ -24,7 +24,7 @@ pub fn generate_instructions(
     // ends the process, if executed.
     //
     // If there's no `main` function, this won't get replaced. Since this is a
-    // result of wrong code, an instruction generating the `BuildError` effect
+    // result of invalid code, an instruction generating the `BuildError` effect
     // is an appropriate placeholder.
     let call_to_main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
