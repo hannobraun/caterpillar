@@ -5,7 +5,7 @@ use std::{
 
 use super::{
     FragmentId, FragmentMap, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext,
+    FunctionIndexInRootContext, FunctionLocation,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -42,8 +42,12 @@ impl Fragments {
     /// # Find the cluster containing the function with the provided index
     pub fn find_cluster_by_function_index(
         &self,
-        index: &FunctionIndexInRootContext,
+        location: &FunctionLocation,
     ) -> Option<&Cluster> {
+        let FunctionLocation::NamedFunction { index } = location else {
+            panic!("Can't search for cluster by anonymous function.");
+        };
+
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|(_, i)| i == index))

@@ -103,7 +103,7 @@ impl ActiveFunctions {
 
             let cluster = code
                 .fragments
-                .find_cluster_by_function_index(&function_index_in_root_context)
+                .find_cluster_by_function_index(&location)
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
@@ -310,7 +310,7 @@ fn reconstruct_function(
 
     let cluster = code
         .fragments
-        .find_cluster_by_function_index(index)
+        .find_cluster_by_function_index(&location)
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
