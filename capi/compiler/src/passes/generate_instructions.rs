@@ -20,8 +20,7 @@ pub fn generate_instructions(
     let mut output = Output::default();
     let mut functions = Functions::default();
 
-    // Create placeholder for call to `main` function, and the last return that
-    // ends the process, if executed.
+    // Create placeholder for call to `main` function.
     //
     // If there's no `main` function, this won't get replaced. Since this is a
     // result of invalid code, an instruction generating the `BuildError` effect
