@@ -1,7 +1,9 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{self, Fragment, FragmentId, FunctionLocation};
+use capi_compiler::fragments::{
+    self, Fragment, FragmentId, FunctionIndexInRootContext, FunctionLocation,
+};
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
@@ -236,7 +238,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
-) -> (fragments::Function, FunctionLocation) {
+) -> (fragments::Function, FunctionIndexInRootContext) {
     let location = code.source_map.instruction_to_function(address).expect(
         "Expecting instructions on call stack to all map to a function.",
     );
@@ -256,7 +258,7 @@ fn instruction_to_named_function(
                     )
                     .clone();
 
-                return (function, current_location);
+                return (function, index);
             }
             FunctionLocation::AnonymousFunction { location } => {
                 current_location = *location.parent.parent;
