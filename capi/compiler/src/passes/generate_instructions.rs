@@ -230,7 +230,7 @@ fn compile_branch(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for ((_index, fragment), (id, _)) in
+    for ((index, fragment), (id, _)) in
         branch.body.iter().zip(fragments.iter_from(branch.start))
     {
         let addr = compile_fragment(
@@ -238,7 +238,7 @@ fn compile_branch(
             fragment,
             FragmentLocation {
                 parent: location.clone(),
-                index: *_index,
+                index: *index,
             },
             clusters,
             fragments,
