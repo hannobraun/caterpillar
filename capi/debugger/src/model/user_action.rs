@@ -6,7 +6,7 @@ pub enum UserAction {
         fragment: (FragmentId, FragmentLocation),
     },
     BreakpointSet {
-        fragment: FragmentId,
+        fragment: (FragmentId, FragmentLocation),
     },
     Continue,
     Reset,
