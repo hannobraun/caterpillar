@@ -65,10 +65,9 @@ impl Fragments {
     /// the ongoing refactoring on fragment addressing has finished, that
     /// function can be removed, and this one can take over its name.
     pub fn find_function_by_name2(&self, name: &str) -> Option<FoundFunction> {
-        self.functions.iter().find_map(|(index, function)| {
+        self.functions.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
-                let location =
-                    FunctionLocation::NamedFunction { index: *index };
+                let location = FunctionLocation::NamedFunction { index };
                 Some(FoundFunction {
                     function: function.clone(),
                     location,
