@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Cluster, Fragment, FragmentId, FragmentMap, Fragments, Function,
-        Parameters,
+        Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
+        Function, Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -144,7 +144,7 @@ fn compile_function(
         let bindings_address = output.generate_binding(parameters, fragment);
 
         let [branch_address, last_address] = compile_branch(
-            branch.start,
+            branch,
             &fragments.clusters,
             &fragments.map,
             output,
@@ -211,7 +211,7 @@ fn compile_function(
 }
 
 fn compile_branch(
-    start: Option<FragmentId>,
+    branch: &Branch,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
@@ -219,7 +219,7 @@ fn compile_branch(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for (id, fragment) in fragments.iter_from(start) {
+    for (id, fragment) in fragments.iter_from(branch.start) {
         let addr =
             compile_fragment(id, fragment, clusters, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
