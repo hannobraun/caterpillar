@@ -127,7 +127,6 @@ fn compile_function(
         location,
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
-    let location = Box::new(location);
 
     let mut branches = Vec::new();
     let mut instruction_range = None;
@@ -150,7 +149,7 @@ fn compile_function(
         let [branch_address, last_address] = compile_branch(
             branch,
             BranchLocation {
-                parent: location.clone(),
+                parent: Box::new(location.clone()),
                 index,
             },
             &fragments.clusters,
