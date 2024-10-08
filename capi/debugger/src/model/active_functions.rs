@@ -284,7 +284,8 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effects: &[Effect],
 ) -> Option<String> {
-    let Some((function, index)) = code.fragments.find_function_by_name2(name)
+    let Some((function, location)) =
+        code.fragments.find_function_by_name2(name)
     else {
         panic!("Expecting function `{name}` to exist.");
     };
@@ -305,8 +306,6 @@ fn reconstruct_function(
 
     let expected_next_function = tail_call
         .and_then(|tail_call| call_fragment_to_function_name(&tail_call, code));
-
-    let location = FunctionLocation::NamedFunction { index: *index };
 
     let cluster = code
         .fragments

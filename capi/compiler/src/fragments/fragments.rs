@@ -67,10 +67,12 @@ impl Fragments {
     pub fn find_function_by_name2(
         &self,
         name: &str,
-    ) -> Option<(&Function, &FunctionIndexInRootContext)> {
+    ) -> Option<(&Function, FunctionLocation)> {
         self.functions.iter().find_map(|(index, function)| {
             if function.name.as_deref() == Some(name) {
-                Some((function, index))
+                let location =
+                    FunctionLocation::NamedFunction { index: *index };
+                Some((function, location))
             } else {
                 None
             }
