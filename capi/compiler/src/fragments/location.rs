@@ -6,7 +6,7 @@ pub struct FragmentLocation {
 }
 
 pub struct BranchLocation {
-    pub parent: FunctionLocation,
+    pub parent: Rc<FunctionLocation>,
     pub branch: BranchIndex,
 }
 
