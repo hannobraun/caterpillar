@@ -1,5 +1,7 @@
 #![allow(clippy::module_inception)]
 
+pub mod search;
+
 mod fragment;
 mod fragments;
 mod functions;
