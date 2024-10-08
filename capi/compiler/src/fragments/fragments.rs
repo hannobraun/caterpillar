@@ -69,7 +69,10 @@ impl Fragments {
             if function.name.as_deref() == Some(name) {
                 let location =
                     FunctionLocation::NamedFunction { index: *index };
-                Some(FoundFunction { function, location })
+                Some(FoundFunction {
+                    function: function.clone(),
+                    location,
+                })
             } else {
                 None
             }

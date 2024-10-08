@@ -11,15 +11,15 @@ use super::{
 };
 
 /// # A function that was found by a search
-pub struct FoundFunction<'r> {
+pub struct FoundFunction {
     /// # The function that was found
-    pub function: &'r Function,
+    pub function: Function,
 
     /// # The location of the function that was found
     pub location: FunctionLocation,
 }
 
-impl FoundFunction<'_> {
+impl FoundFunction {
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
@@ -40,11 +40,11 @@ impl FoundFunction<'_> {
     }
 }
 
-impl Deref for FoundFunction<'_> {
+impl Deref for FoundFunction {
     type Target = Function;
 
     fn deref(&self) -> &Self::Target {
-        self.function
+        &self.function
     }
 }
 
