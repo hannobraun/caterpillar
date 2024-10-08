@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 #[derive(Clone)]
 pub struct FragmentLocation {
     pub parent: Box<BranchLocation>,
@@ -8,7 +6,7 @@ pub struct FragmentLocation {
 
 #[derive(Clone)]
 pub struct BranchLocation {
-    pub parent: Rc<FunctionLocation>,
+    pub parent: Box<FunctionLocation>,
     pub index: BranchIndex,
 }
 

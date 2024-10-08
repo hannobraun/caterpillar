@@ -1,7 +1,4 @@
-use std::{
-    collections::{BTreeMap, VecDeque},
-    rc::Rc,
-};
+use std::collections::{BTreeMap, VecDeque};
 
 use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
@@ -130,7 +127,7 @@ fn compile_function(
         location,
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
-    let location = Rc::new(location);
+    let location = Box::new(location);
 
     let mut branches = Vec::new();
     let mut instruction_range = None;
