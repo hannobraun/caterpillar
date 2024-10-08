@@ -130,7 +130,7 @@ pub enum DebugFragmentKind {
 impl DebugFragmentKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        id: FragmentId,
+        _: FragmentId,
         fragment: Fragment,
         active_fragment: Option<FragmentId>,
         is_in_innermost_active_function: bool,
@@ -145,21 +145,6 @@ impl DebugFragmentKind {
                 Self::CallToFunction { name }
             }
             Fragment::CallToFunctionRecursive { index, .. } => {
-                let (calling_function, _) = fragments
-                    .find_named_function_by_fragment_in_body(&id)
-                    .expect(
-                        "Any fragments displayed in the debugger are part of \
-                        named functions. Expecting to find the one that this \
-                        fragment's ID refers to.",
-                    );
-                let cluster = fragments
-                    .find_cluster_by_function_id(&calling_function.id)
-                    .expect(
-                        "Only named functions can call themselves, and all \
-                        named functions are grouped into clusters. Expecting \
-                        to find a cluster when providing a named function's \
-                        ID.",
-                    );
                 let (called_function_id, _) = cluster
                     .functions
                     .get(&index)
