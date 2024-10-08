@@ -38,6 +38,16 @@ impl Fragments {
             cluster.functions.values().any(|(id, _)| id == function_id)
         })
     }
+
+    /// # Find the cluster containing the function with the provided index
+    pub fn find_cluster_by_function_index(
+        &self,
+        index: &FunctionIndexInRootContext,
+    ) -> Option<&Cluster> {
+        self.clusters
+            .iter()
+            .find(|cluster| cluster.functions.values().any(|(_, i)| i == index))
+    }
 }
 
 impl Deref for Fragments {

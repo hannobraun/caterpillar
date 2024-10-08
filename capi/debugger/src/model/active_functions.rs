@@ -99,13 +99,7 @@ impl ActiveFunctions {
 
             let cluster = code
                 .fragments
-                .clusters
-                .iter()
-                .find(|cluster| {
-                    cluster.functions.values().any(|(_, index)| {
-                        *index == function_index_in_root_context
-                    })
-                })
+                .find_cluster_by_function_index(&function_index_in_root_context)
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
