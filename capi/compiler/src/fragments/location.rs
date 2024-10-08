@@ -1,5 +1,6 @@
 use std::rc::Rc;
 
+#[derive(Clone)]
 pub struct FragmentLocation {
     pub parent: Rc<BranchLocation>,
     pub index: FragmentIndexInBranchBody,
