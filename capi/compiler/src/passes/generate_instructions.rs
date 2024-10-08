@@ -1,11 +1,15 @@
-use std::collections::{BTreeMap, VecDeque};
+use std::{
+    collections::{BTreeMap, VecDeque},
+    rc::Rc,
+};
 
 use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, Cluster, Fragment, FragmentId, FragmentMap, Fragments,
-        Function, Parameters,
+        Branch, BranchLocation, Cluster, Fragment, FragmentId,
+        FragmentLocation, FragmentMap, Fragments, Function, FunctionLocation,
+        Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -46,6 +50,9 @@ pub fn generate_instructions(
         queue.push_front(FunctionToCompile {
             fragment: id,
             function: function.clone(),
+            location: Rc::new(FunctionLocation::NamedFunction {
+                index: *_index,
+            }),
             address_of_instruction_to_make_anon_function: None,
         });
     }
@@ -122,6 +129,7 @@ fn compile_function(
     let FunctionToCompile {
         fragment,
         function,
+        location,
         address_of_instruction_to_make_anon_function,
         ..
     } = function_to_compile;
@@ -146,6 +154,10 @@ fn compile_function(
 
         let [branch_address, last_address] = compile_branch(
             branch,
+            Rc::new(BranchLocation {
+                parent: location.clone(),
+                index: *_index,
+            }),
             &fragments.clusters,
             &fragments.map,
             output,
@@ -213,6 +225,7 @@ fn compile_function(
 
 fn compile_branch(
     branch: &Branch,
+    location: Rc<BranchLocation>,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
@@ -223,8 +236,18 @@ fn compile_branch(
     for ((_index, fragment), (id, _)) in
         branch.body.iter().zip(fragments.iter_from(branch.start))
     {
-        let addr =
-            compile_fragment(id, fragment, clusters, fragments, output, queue);
+        let addr = compile_fragment(
+            id,
+            fragment,
+            FragmentLocation {
+                parent: location.clone(),
+                index: *_index,
+            },
+            clusters,
+            fragments,
+            output,
+            queue,
+        );
         first_instruction = first_instruction.or(addr);
     }
 
@@ -259,6 +282,7 @@ fn compile_branch(
 fn compile_fragment(
     id: FragmentId,
     fragment: &Fragment,
+    location: FragmentLocation,
     clusters: &[Cluster],
     fragments: &FragmentMap,
     output: &mut Output,
@@ -391,6 +415,9 @@ fn compile_fragment(
             queue.push_front(FunctionToCompile {
                 fragment: id,
                 function: function.clone(),
+                location: Rc::new(FunctionLocation::AnonymousFunction {
+                    location,
+                }),
                 address_of_instruction_to_make_anon_function,
             });
 
@@ -509,5 +536,6 @@ struct Functions {
 struct FunctionToCompile {
     fragment: FragmentId,
     function: Function,
+    location: Rc<FunctionLocation>,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
 }
