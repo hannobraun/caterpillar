@@ -50,7 +50,7 @@ pub fn generate_instructions(
         queue.push_front(FunctionToCompile {
             fragment: id,
             function: function.clone(),
-            location: Rc::new(FunctionLocation::NamedFunction { index }),
+            location: FunctionLocation::NamedFunction { index },
             address_of_instruction_to_make_anon_function: None,
         });
     }
@@ -130,6 +130,7 @@ fn compile_function(
         location,
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
+    let location = Rc::new(location);
 
     let mut branches = Vec::new();
     let mut instruction_range = None;
@@ -412,9 +413,7 @@ fn compile_fragment(
             queue.push_front(FunctionToCompile {
                 fragment: id,
                 function: function.clone(),
-                location: Rc::new(FunctionLocation::AnonymousFunction {
-                    location,
-                }),
+                location: FunctionLocation::AnonymousFunction { location },
                 address_of_instruction_to_make_anon_function,
             });
 
@@ -532,6 +531,6 @@ struct Functions {
 struct FunctionToCompile {
     fragment: FragmentId,
     function: Function,
-    location: Rc<FunctionLocation>,
+    location: FunctionLocation,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
 }
