@@ -44,12 +44,9 @@ impl PersistentState {
         let mut commands = Vec::new();
 
         match action {
-            UserAction::BreakpointClear {
-                fragment: (fragment, _),
-                ..
-            } => {
+            UserAction::BreakpointClear { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instruction(&fragment)?;
+                let address = self.code.fragment_to_instruction(&fragment.0)?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -57,12 +54,9 @@ impl PersistentState {
                     instructions: self.apply_breakpoints(code),
                 });
             }
-            UserAction::BreakpointSet {
-                fragment: (fragment, _),
-                ..
-            } => {
+            UserAction::BreakpointSet { fragment, .. } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instruction(&fragment)?;
+                let address = self.code.fragment_to_instruction(&fragment.0)?;
 
                 self.breakpoints.set_durable(address);
 
