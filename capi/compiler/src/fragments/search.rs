@@ -16,6 +16,27 @@ pub struct FoundFunction<'r> {
     pub location: FunctionLocation,
 }
 
+impl FoundFunction<'_> {
+    /// # Access the function's single branch
+    ///
+    /// Returns `None`, if the function does not have exactly one branch.
+    pub fn find_single_branch(&self) -> Option<FoundBranch> {
+        if self.branches.len() > 1 {
+            return None;
+        }
+
+        self.branches
+            .first_key_value()
+            .map(|(&index, branch)| FoundBranch {
+                branch,
+                location: BranchLocation {
+                    parent: Box::new(self.location.clone()),
+                    index,
+                },
+            })
+    }
+}
+
 impl Deref for FoundFunction<'_> {
     type Target = Function;
 
