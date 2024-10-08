@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, iter, ops::Deref};
 
 use crate::hash::{Hash, NextNeighbor, PrevNeighbor};
 
-use super::{Branch, Fragment, Function};
+use super::{Fragment, Function};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
@@ -53,67 +53,6 @@ impl FragmentMap {
                     None
                 }
             })
-    }
-
-    /// Find the named function that contains the provided fragment
-    ///
-    /// Any fragment that is syntactically a part of the named function will do.
-    /// This specifically includes fragments within anonymous functions that are
-    /// defined in the named function.
-    ///
-    /// Returns the found function, as well as the branch within which the
-    /// fragment was found.
-    pub fn find_named_function_by_fragment_in_body(
-        &self,
-        fragment_in_body: &FragmentId,
-    ) -> Option<(FoundFunction, &Branch)> {
-        let mut current_fragment = *fragment_in_body;
-
-        loop {
-            let previous = self.next_to_previous.get(&current_fragment);
-
-            if let Some(id) = previous {
-                // There's a previous fragment. Continue the search there.
-                current_fragment = *id;
-                continue;
-            }
-
-            // If there's no previous fragment, this might be the first fragment
-            // in a branch of a function.
-            let function = self
-                .fragments_by_id
-                .iter()
-                .filter_map(|(id, fragment)| match &fragment {
-                    Fragment::Function { function } => Some((id, function)),
-                    _ => None,
-                })
-                .find_map(|(id, function)| {
-                    let (_index, branch) =
-                        function.branches.iter().find(|(_index, branch)| {
-                            branch.start == Some(current_fragment)
-                        })?;
-                    Some((*id, function, branch))
-                });
-
-            if let Some((id, function, branch)) = function {
-                // We have found a function!
-
-                if function.name.is_some() {
-                    // It's a named function! Exactly what we've been looking
-                    // for.
-                    return Some((FoundFunction { id, function }, branch));
-                } else {
-                    // An anonymous function. Let's continue our search in the
-                    // context where it was defined.
-                    current_fragment = id;
-                    continue;
-                }
-            }
-
-            // We haven't found anything. Not even a new fragment to look at.
-            // We're done here.
-            break None;
-        }
     }
 
     pub fn iter_from(
