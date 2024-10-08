@@ -134,7 +134,7 @@ fn compile_function(
     let mut branches = Vec::new();
     let mut instruction_range = None;
 
-    for (_index, branch) in function.branches.iter() {
+    for (index, branch) in function.branches.iter() {
         let parameters = branch.parameters.inner.iter().filter_map(|pattern| {
             match pattern {
                 Pattern::Identifier { name } => Some(name),
@@ -153,7 +153,7 @@ fn compile_function(
             branch,
             Rc::new(BranchLocation {
                 parent: location.clone(),
-                index: *_index,
+                index: *index,
             }),
             &fragments.clusters,
             &fragments.map,
