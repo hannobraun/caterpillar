@@ -57,6 +57,24 @@ pub struct FoundBranch<'r> {
     pub location: BranchLocation,
 }
 
+impl FoundBranch<'_> {
+    /// # Find the n-th fragment in the branch's body
+    ///
+    /// Returns `None`, if the branch has too few fragments.
+    pub fn find_nth_fragment(&self, n: usize) -> Option<FoundFragment> {
+        self.body
+            .iter()
+            .nth(n)
+            .map(|(&index, fragment)| FoundFragment {
+                fragment,
+                location: FragmentLocation {
+                    parent: Box::new(self.location.clone()),
+                    index,
+                },
+            })
+    }
+}
+
 impl Deref for FoundBranch<'_> {
     type Target = Branch;
 
