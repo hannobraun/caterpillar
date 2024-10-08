@@ -42,7 +42,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue from the root context.
-    for ((_index, function), (id, _)) in fragments
+    for ((index, function), (id, _)) in fragments
         .functions
         .iter()
         .zip(fragments.iter_from(fragments.root))
@@ -51,7 +51,7 @@ pub fn generate_instructions(
             fragment: id,
             function: function.clone(),
             location: Rc::new(FunctionLocation::NamedFunction {
-                index: *_index,
+                index: *index,
             }),
             address_of_instruction_to_make_anon_function: None,
         });
