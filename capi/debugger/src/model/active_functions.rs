@@ -236,10 +236,9 @@ fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &Code,
 ) -> fragments::Function {
-    let (_, _, location) =
-        code.source_map.instruction_to_function(address).expect(
-            "Expecting instructions on call stack to all map to a function.",
-        );
+    let location = code.source_map.instruction_to_function(address).expect(
+        "Expecting instructions on call stack to all map to a function.",
+    );
 
     let mut current_location = location.clone();
 

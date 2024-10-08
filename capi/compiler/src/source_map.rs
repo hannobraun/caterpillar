@@ -79,13 +79,13 @@ impl SourceMap {
     pub fn instruction_to_function(
         &self,
         instruction: &InstructionAddress,
-    ) -> Option<(&Function, &FragmentId, &FunctionLocation)> {
+    ) -> Option<&FunctionLocation> {
         self.function_to_instruction_range.iter().find_map(
-            |(function, (function_id, location, [min, max]))| {
+            |(_, (_, location, [min, max]))| {
                 if instruction.index >= min.index
                     && instruction.index <= max.index
                 {
-                    Some((function, function_id, location))
+                    Some(location)
                 } else {
                     None
                 }
