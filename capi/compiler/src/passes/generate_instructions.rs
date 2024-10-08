@@ -36,7 +36,7 @@ pub fn generate_instructions(
         });
     }
 
-    // Seed the queue from the root context.
+    // Seed the queue with the named functions.
     for ((&index, function), (id, _)) in fragments
         .functions
         .iter()
