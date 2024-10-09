@@ -100,27 +100,16 @@ impl PersistentState {
                 let targets = if let Some(name) =
                     origin.data.fragment.as_call_to_function()
                 {
-                    let function =
-                        code.fragments.find_function_by_name(name).expect(
-                            "Got function name from fragment that calls it; \
-                            expecting it to exist.",
-                        );
                     let function2 =
                         code.fragments.find_function_by_name2(name).expect(
                             "Got function name from fragment that calls it; \
                             expecting it to exist.",
                         );
 
-                    function
-                        .branches
-                        .values()
-                        .filter_map(|branch| branch.start)
-                        .zip(
-                            function2
-                                .branches()
-                                .filter_map(|branch| branch.fragments().next())
-                                .map(|fragment| fragment.location),
-                        )
+                    function2
+                        .branches()
+                        .filter_map(|branch| branch.fragments().next())
+                        .map(|fragment| fragment.location)
                         .collect()
                 } else {
                     let mut fragment = origin.clone();
@@ -151,7 +140,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![(after.data.id, after.data.location)];
+                        break vec![(after.data.location)];
                     }
                 };
 
@@ -197,7 +186,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![(after.data.id, after.data.location)];
+                        break vec![(after.data.location)];
                     }
                 };
 
@@ -242,7 +231,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![(after.data.id, after.data.location)];
+                        break vec![(after.data.location)];
                     }
                 };
 
@@ -282,7 +271,7 @@ impl PersistentState {
     fn step_or_continue(
         &mut self,
         (_, origin): &(FragmentId, FragmentLocation),
-        targets: Vec<(FragmentId, FragmentLocation)>,
+        targets: Vec<FragmentLocation>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;
@@ -305,7 +294,7 @@ impl PersistentState {
         // And of course, if we have any targets we want to stop at (we might
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
-        for (_, target) in targets {
+        for target in targets {
             let target = self.code.fragment_to_instruction(&target)?;
             self.breakpoints.set_ephemeral(target);
         }
