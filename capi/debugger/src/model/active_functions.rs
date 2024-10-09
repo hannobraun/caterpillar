@@ -2,8 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{
-    self, Fragment, FragmentLocation, FunctionIndexInRootContext,
-    FunctionLocation,
+    self, FragmentLocation, FunctionIndexInRootContext, FunctionLocation,
 };
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
@@ -332,10 +331,8 @@ fn function_call_to_function_name(
         .fragments
         .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
+    let hash = fragment.as_call_to_function()?;
+    let function = code.fragments.find_named_function_by_hash(hash)?;
 
-    let Fragment::CallToFunction { name, .. } = &fragment else {
-        return None;
-    };
-
-    Some(name.clone())
+    function.name.clone()
 }
