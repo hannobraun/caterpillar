@@ -10,14 +10,14 @@ use crate::{
 };
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
+    let mut hashes = BTreeMap::new();
+
     let functions = clusters
         .clusters
         .iter()
         .rev()
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
-            let mut hashes = BTreeMap::new();
-
             let function = clusters.functions[&index].clone();
             let function = compile_function(function, &mut hashes);
 
