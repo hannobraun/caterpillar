@@ -153,23 +153,17 @@ impl DebugFragmentKind {
                 Self::CallToFunction { name }
             }
             Fragment::CallToFunctionRecursive { index, .. } => {
-                let (called_function_id, _) = cluster
+                let (_, called_function_index) = cluster
                     .functions
                     .get(&index)
                     .expect(
                     "The index of a recursive call must be valid within the \
                     calling function's cluster.",
                 );
-                let called_function = fragments
-                    .get(called_function_id)
-                    .expect(
+                let called_function =
+                    fragments.functions.get(called_function_index).expect(
                         "Expecting to find fragment referred to from a \
                         cluster.",
-                    )
-                    .as_function()
-                    .expect(
-                        "Got fragment ID through function call; must refer to \
-                        a function.",
                     );
                 let name = called_function.name.clone().expect(
                     "Calling anonymous functions recursively is not possible. \
