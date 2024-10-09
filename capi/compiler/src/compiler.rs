@@ -4,9 +4,9 @@ use crate::{
     fragments::Fragments,
     host::Host,
     passes::{
-        determine_tail_positions, generate_fragments, generate_instructions,
-        group_into_clusters, mark_recursive_calls, parse, resolve_identifiers,
-        tokenize,
+        detect_changes, determine_tail_positions, generate_fragments,
+        generate_instructions, group_into_clusters, mark_recursive_calls,
+        parse, resolve_identifiers, tokenize,
     },
     source_map::SourceMap,
 };
@@ -32,6 +32,9 @@ impl Compiler {
 
         let fragments = generate_fragments(clusters);
         self.fragments = Some(fragments.clone());
+
+        let changes = detect_changes(self.fragments.as_ref(), &fragments);
+        dbg!(changes.added, changes.updated);
 
         let (instructions, source_map) =
             generate_instructions(fragments.clone());

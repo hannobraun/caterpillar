@@ -1,3 +1,4 @@
+mod detect_changes;
 mod generate_fragments;
 mod generate_instructions;
 mod group_into_clusters;
@@ -8,7 +9,7 @@ mod tail_position;
 mod tokenize;
 
 pub use {
-    generate_fragments::generate_fragments,
+    detect_changes::detect_changes, generate_fragments::generate_fragments,
     generate_instructions::generate_instructions,
     group_into_clusters::group_into_clusters,
     mark_recursive_calls::mark_recursive_calls, parse::parse,
