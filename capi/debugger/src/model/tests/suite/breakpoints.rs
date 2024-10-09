@@ -31,7 +31,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .find_single_branch()
         .unwrap()
-        .fragments()
+        .body()
         .next()
         .unwrap()
         .location;
@@ -66,7 +66,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .find_single_branch()
         .unwrap()
-        .fragments()
+        .body()
         .next()
         .unwrap()
         .location;
@@ -115,7 +115,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments()
+            .body()
             .map(|fragment| fragment.location);
 
         array::from_fn(|_| body.next().unwrap())
@@ -174,7 +174,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments();
+            .body();
 
         array::from_fn(|_| {
             body.find_map(|fragment| {
@@ -287,7 +287,7 @@ fn step_into_function() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments()
+            .body()
             .nth(2)
             .unwrap()
             .location;
@@ -362,7 +362,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments()
+            .body()
             .next()
             .unwrap()
             .location;
@@ -413,7 +413,7 @@ fn step_out_of_main_function() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments()
+            .body()
             .next()
             .unwrap()
             .location
@@ -460,7 +460,7 @@ fn step_over_function_call() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments();
+            .body();
 
         array::from_fn(|_| {
             body.find_map(|fragment| {
@@ -521,7 +521,7 @@ fn step_out_of_function() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .fragments()
+            .body()
             .next()
             .unwrap()
             .location;

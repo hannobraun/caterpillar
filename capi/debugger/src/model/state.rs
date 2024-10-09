@@ -102,7 +102,7 @@ impl PersistentState {
 
                     function
                         .branches()
-                        .filter_map(|branch| branch.fragments().next())
+                        .filter_map(|branch| branch.body().next())
                         .map(|fragment| fragment.location)
                         .collect()
                 } else {
