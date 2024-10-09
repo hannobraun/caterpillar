@@ -370,7 +370,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .map(|(id, _)| id)
             .nth(1)
             .unwrap();
-        let nop_in_f2 = fragments
+        let nop_in_f = fragments
             .find_function_by_name2("f")
             .unwrap()
             .find_single_branch()
@@ -380,7 +380,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .location;
 
-        (nop_in_main, nop_in_f2)
+        (nop_in_main, nop_in_f)
     };
 
     debugger
