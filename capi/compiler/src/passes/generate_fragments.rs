@@ -55,7 +55,6 @@ fn compile_function(
             .into_iter()
             .map(|expression| compile_expression(expression, fragments))
             .collect::<Vec<_>>();
-        let start = address_context(&body, &mut Vec::new(), fragments);
 
         let body = iter::successors(Some(0), |i| Some(i + 1))
             .map(FragmentIndexInBranchBody)
@@ -66,7 +65,6 @@ fn compile_function(
             parameters: Parameters {
                 inner: branch.parameters,
             },
-            start,
             body,
         });
     }

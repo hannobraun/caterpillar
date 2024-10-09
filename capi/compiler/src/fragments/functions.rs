@@ -3,8 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::syntax::Pattern;
 
 use super::{
-    BranchIndex, Fragment, FragmentId, FragmentIndexInBranchBody, FragmentMap,
-    FunctionIndexInCluster,
+    BranchIndex, Fragment, FragmentIndexInBranchBody, FunctionIndexInCluster,
 };
 
 #[derive(
@@ -92,23 +91,8 @@ impl Function {
 pub struct Branch {
     pub parameters: Parameters,
 
-    /// # The first fragment of the branch's body
-    ///
-    /// Can be `None`, if the branch body is empty.
-    pub start: Option<FragmentId>,
-
     /// # The body of the branch
     pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
-}
-
-impl Branch {
-    /// # Iterate over the body of this branch
-    pub fn body<'r>(
-        &self,
-        fragments: &'r FragmentMap,
-    ) -> impl Iterator<Item = (FragmentId, &'r Fragment)> {
-        fragments.iter_from(self.start)
-    }
 }
 
 #[derive(
