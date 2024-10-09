@@ -1,11 +1,10 @@
 use anyhow::anyhow;
 use capi_compiler::{
     fragments::{
-        Branch, BranchLocation, Cluster, FragmentId, FragmentLocation,
-        Fragments,
+        Branch, BranchLocation, FragmentId, FragmentLocation, Fragments,
     },
     source_map::SourceMap,
-    syntax::Pattern,
+    syntax::{Cluster, Pattern},
 };
 use capi_runtime::Effect;
 

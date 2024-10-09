@@ -2,12 +2,11 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     fragments::{
-        Branch, BranchIndex, Cluster, Fragment, FragmentId,
-        FragmentIndexInBranchBody, FragmentMap, Fragments, Function,
-        Parameters,
+        Branch, BranchIndex, Fragment, FragmentId, FragmentIndexInBranchBody,
+        FragmentMap, Fragments, Function, Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
-    syntax::{self, IdentifierTarget},
+    syntax::{self, Cluster, IdentifierTarget},
 };
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {

@@ -4,13 +4,13 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Fragments,
+        Branch, BranchLocation, Fragment, FragmentLocation, Fragments,
         Function, FunctionLocation, Parameters,
     },
     hash::Hash,
     intrinsics::Intrinsic,
     source_map::SourceMap,
-    syntax::Pattern,
+    syntax::{Cluster, Pattern},
 };
 
 pub fn generate_instructions(

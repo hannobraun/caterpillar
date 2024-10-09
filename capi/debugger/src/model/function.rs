@@ -1,10 +1,10 @@
 use anyhow::anyhow;
 use capi_compiler::{
     fragments::{
-        self, BranchLocation, Cluster, FragmentLocation, Fragments,
-        FunctionLocation,
+        self, BranchLocation, FragmentLocation, Fragments, FunctionLocation,
     },
     source_map::SourceMap,
+    syntax::Cluster,
 };
 use capi_runtime::Effect;
 
