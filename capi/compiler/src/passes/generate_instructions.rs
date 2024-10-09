@@ -37,7 +37,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    for (&index, function) in fragments.functions.iter() {
+    for (&index, function) in &fragments.functions {
         let cluster = fragments
             .clusters
             .iter()
