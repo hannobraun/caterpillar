@@ -46,7 +46,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: (nop, nop2.location),
+        fragment: nop2.location,
     })?;
     assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
@@ -85,7 +85,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .next()
         .unwrap();
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: (nop, nop2.location),
+        fragment: nop2.location,
     })?;
 
     debugger.run_program();
@@ -182,11 +182,6 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
 
     let [a, b, c] = {
         let fragments = debugger.expect_code();
-        let mut body = fragments
-            .find_function_by_name("main")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments);
         let mut body2 = fragments
             .find_function_by_name2("main")
             .unwrap()
@@ -195,17 +190,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .fragments();
 
         array::from_fn(|_| {
-            let id = body
-                .find_map(|(id, fragment)| {
-                    if fragment.as_comment().is_none() {
-                        Some(id)
-                    } else {
-                        None
-                    }
-                })
-                .unwrap();
-
-            let location = body2
+            body2
                 .find_map(|fragment| {
                     if fragment.as_comment().is_none() {
                         Some(fragment.location)
@@ -213,9 +198,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
                         None
                     }
                 })
-                .unwrap();
-
-            (id, location)
+                .unwrap()
         })
     };
 
@@ -234,7 +217,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_fragment()
             .data
             .location,
-        a.1,
+        a,
     );
 
     // Step to `b`, over the durable breakpoint. This sets an ephemeral
@@ -250,7 +233,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_fragment()
             .data
             .location,
-        b.1,
+        b,
     );
     assert!(
         debugger
@@ -262,7 +245,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.data.location == a.1)
+            .find(|fragment| fragment.data.location == a)
             .unwrap()
             .data
             .has_durable_breakpoint
@@ -280,7 +263,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_fragment()
             .data
             .location,
-        c.1,
+        c,
     );
 
     Ok(())
@@ -313,14 +296,6 @@ fn step_into_function() {
     let (f, a) = {
         let fragments = debugger.expect_code();
 
-        let f = fragments
-            .find_function_by_name("main")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id)
-            .nth(2)
-            .unwrap();
         let f2 = fragments
             .find_function_by_name2("main")
             .unwrap()
@@ -339,7 +314,7 @@ fn step_into_function() {
             .start
             .unwrap();
 
-        ((f, f2.location), a)
+        (f2.location, a)
     };
 
     debugger
@@ -395,14 +370,6 @@ fn step_out_of_function_if_at_last_fragment() {
             .map(|(id, _)| id)
             .nth(1)
             .unwrap();
-        let nop_in_f = fragments
-            .find_function_by_name("f")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id)
-            .next()
-            .unwrap();
         let nop_in_f2 = fragments
             .find_function_by_name2("f")
             .unwrap()
@@ -413,7 +380,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .unwrap()
             .location;
 
-        (nop_in_main, (nop_in_f, nop_in_f2))
+        (nop_in_main, nop_in_f2)
     };
 
     debugger
@@ -454,15 +421,7 @@ fn step_out_of_main_function() {
     let nop = {
         let fragments = debugger.expect_code();
 
-        let id = fragments
-            .find_function_by_name("main")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id)
-            .next()
-            .unwrap();
-        let location = fragments
+        fragments
             .find_function_by_name2("main")
             .unwrap()
             .find_single_branch()
@@ -470,9 +429,7 @@ fn step_out_of_main_function() {
             .fragments()
             .next()
             .unwrap()
-            .location;
-
-        (id, location)
+            .location
     };
 
     debugger
@@ -511,11 +468,6 @@ fn step_over_function_call() {
 
     let [f, nop] = {
         let fragments = debugger.expect_code();
-        let mut body = fragments
-            .find_function_by_name("main")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments);
         let mut body2 = fragments
             .find_function_by_name2("main")
             .unwrap()
@@ -524,16 +476,7 @@ fn step_over_function_call() {
             .fragments();
 
         array::from_fn(|_| {
-            let id = body
-                .find_map(|(id, fragment)| {
-                    if fragment.as_comment().is_none() {
-                        Some(id)
-                    } else {
-                        None
-                    }
-                })
-                .unwrap();
-            let location = body2
+            body2
                 .find_map(|fragment| {
                     if fragment.as_comment().is_none() {
                         Some(fragment.location)
@@ -541,9 +484,7 @@ fn step_over_function_call() {
                         None
                     }
                 })
-                .unwrap();
-
-            (id, location)
+                .unwrap()
         })
     };
 
@@ -562,7 +503,7 @@ fn step_over_function_call() {
             .active_fragment()
             .data
             .location,
-        nop.1,
+        nop,
     );
 }
 
@@ -589,14 +530,6 @@ fn step_out_of_function() {
     let (a, b) = {
         let fragments = debugger.expect_code();
 
-        let a = fragments
-            .find_function_by_name("f")
-            .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id)
-            .next()
-            .unwrap();
         let a2 = fragments
             .find_function_by_name2("f")
             .unwrap()
@@ -615,7 +548,7 @@ fn step_out_of_function() {
             .nth(1)
             .unwrap();
 
-        ((a, a2), b)
+        (a2, b)
     };
 
     debugger
