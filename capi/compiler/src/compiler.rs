@@ -15,6 +15,7 @@ use crate::{
 pub struct Compiler {}
 
 impl Compiler {
+    /// # Compile the provided source code
     pub fn compile<H: Host>(
         &mut self,
         source: &str,
