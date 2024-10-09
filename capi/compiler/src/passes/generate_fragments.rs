@@ -16,15 +16,15 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .rev()
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
-            let mut functions = BTreeMap::new();
+            let mut hashes = BTreeMap::new();
 
             let function = clusters.functions[&index].clone();
-            let function = compile_function(function, &mut functions);
+            let function = compile_function(function, &mut hashes);
 
             let name = function.name.clone().expect(
                 "Just compiled a named function; should have its name set.",
             );
-            functions.insert(name, Hash::new(&function));
+            hashes.insert(name, Hash::new(&function));
 
             (index, function)
         })
