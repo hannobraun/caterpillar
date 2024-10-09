@@ -92,7 +92,7 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                active_fragment.as_ref().and_then(|active_fragment| {
+                active_fragment.and_then(|active_fragment| {
                     function_call_to_function_name(active_fragment, code)
                 });
 
@@ -108,7 +108,7 @@ impl ActiveFunctions {
                 DebugFunction::new(
                     named_function,
                     location,
-                    active_fragment.as_ref(),
+                    active_fragment,
                     active_instructions.is_empty(),
                     cluster,
                     &code.fragments,
