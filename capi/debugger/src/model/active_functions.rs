@@ -289,10 +289,10 @@ fn reconstruct_function(
         panic!("Expecting function `{name}` to exist.");
     };
 
-    let tail_call = if let Some(branch2) = function.find_single_branch() {
+    let tail_call = if let Some(branch) = function.find_single_branch() {
         let mut tail_call = None;
 
-        for fragment in branch2.body() {
+        for fragment in branch.body() {
             tail_call = Some(fragment.location);
         }
 
