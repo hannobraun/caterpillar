@@ -18,7 +18,7 @@ pub fn generate_instructions(
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
-    let mut functions = Functions::default();
+    let mut functions = BTreeMap::default();
 
     // Create placeholder for call to `main` function.
     //
@@ -66,7 +66,7 @@ pub fn generate_instructions(
     }
 
     for call in output.placeholders {
-        let Some(function) = functions.by_fragment.get(&call.function) else {
+        let Some(function) = functions.get(&call.function) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -122,7 +122,7 @@ fn compile_function(
     fragments: &Fragments,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
-    functions: &mut Functions,
+    functions: &mut BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 ) {
     let FunctionToCompile {
         fragment,
@@ -164,7 +164,6 @@ fn compile_function(
 
         let first_address = bindings_address.unwrap_or(branch_address);
         functions
-            .by_fragment
             .entry(fragment)
             .or_default()
             .push((branch.parameters.clone(), first_address));
@@ -505,11 +504,6 @@ pub struct CallToFunction {
     pub function: FragmentId,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
-}
-
-#[derive(Default)]
-struct Functions {
-    by_fragment: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 }
 
 struct FunctionToCompile {
