@@ -290,13 +290,9 @@ fn reconstruct_function(
     };
 
     let tail_call = if let Some(branch2) = function.find_single_branch() {
-        let branch = function.expect_one_branch();
-
         let mut tail_call = None;
 
-        for (fragment, (_, _)) in
-            branch2.body().zip(branch.body(&code.fragments))
-        {
+        for fragment in branch2.body() {
             tail_call = Some(fragment.location);
         }
 
