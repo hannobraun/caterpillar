@@ -17,7 +17,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         .collect::<BTreeMap<_, _>>();
 
     let mut call_graph = Graph::new();
-    let mut function_graph_index_by_name = BTreeMap::new();
+    let mut graph_index_by_function_name = BTreeMap::new();
 
     for (named_function_index, function) in functions.iter() {
         let name = function
@@ -26,10 +26,10 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
             .expect("Top-level function must have a name");
         let graph_index =
             call_graph.add_node((function, *named_function_index));
-        function_graph_index_by_name.insert(name, graph_index);
+        graph_index_by_function_name.insert(name, graph_index);
     }
 
-    for &caller_index in function_graph_index_by_name.values() {
+    for &caller_index in graph_index_by_function_name.values() {
         let (function, _) = call_graph[caller_index];
 
         for branch in &function.branches {
@@ -40,7 +40,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
                     ..
                 } = expression
                 {
-                    let callee_index = function_graph_index_by_name[name];
+                    let callee_index = graph_index_by_function_name[name];
                     call_graph.add_edge(caller_index, callee_index, ());
                 }
             }
