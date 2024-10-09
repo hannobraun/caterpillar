@@ -37,13 +37,21 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    for ((&index, function), (function_id, _)) in fragments
+    for ((&index, function), (_, _)) in fragments
         .functions
         .iter()
         .zip(fragments.iter_from(fragments.root))
     {
         let cluster = fragments
-            .find_cluster_by_function_id(&function_id)
+            .clusters
+            .iter()
+            .find(|cluster| {
+                cluster
+                    .functions
+                    .values()
+                    .map(|(_, index)| index)
+                    .any(|i| i == &index)
+            })
             .expect("All named functions are part of a cluster.");
 
         queue.push_front(FunctionToCompile {
