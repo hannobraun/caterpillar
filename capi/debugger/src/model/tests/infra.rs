@@ -31,7 +31,7 @@ pub struct TestDebugger {
 
 impl TestDebugger {
     pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
-        let mut compiler = Compiler {};
+        let mut compiler = Compiler::default();
         let (fragments, instructions, source_map) =
             compiler.compile::<GameEngineHost>(source);
 

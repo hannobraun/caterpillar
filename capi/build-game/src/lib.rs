@@ -46,7 +46,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
 
     let source = fs::read_to_string(path).await?;
 
-    let mut compiler = Compiler {};
+    let mut compiler = Compiler::default();
     let (fragments, instructions, source_map) =
         compiler.compile::<GameEngineHost>(&source);
 

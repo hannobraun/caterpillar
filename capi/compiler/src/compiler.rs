@@ -12,6 +12,7 @@ use crate::{
 };
 
 /// # Entry point to the compiler API
+#[derive(Default)]
 pub struct Compiler {}
 
 impl Compiler {
