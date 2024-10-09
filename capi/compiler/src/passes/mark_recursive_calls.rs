@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::syntax::{Clusters, Expression, IdentifierTarget};
+use crate::{
+    fragments::FunctionIndexInCluster,
+    syntax::{Clusters, Expression, Function, IdentifierTarget},
+};
 
 pub fn mark_recursive_calls(clusters: &mut Clusters) {
     for cluster in &mut clusters.clusters {
@@ -21,24 +24,36 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
                 .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
-            for branch in &mut function.branches {
-                for expression in &mut branch.body {
-                    if let Expression::Identifier {
-                        name,
-                        target:
-                            Some(IdentifierTarget::Function {
-                                is_known_to_be_recursive_call_to_index,
-                            }),
-                        ..
-                    } = expression
-                    {
-                        if let Some(&index) =
-                            indices_in_cluster_by_function_name.get(name)
-                        {
-                            *is_known_to_be_recursive_call_to_index =
-                                Some(index);
-                        }
-                    }
+            mark_recursive_calls_in_function(
+                function,
+                &indices_in_cluster_by_function_name,
+            );
+        }
+    }
+}
+
+fn mark_recursive_calls_in_function(
+    function: &mut Function,
+    indices_in_cluster_by_function_name: &BTreeMap<
+        String,
+        FunctionIndexInCluster,
+    >,
+) {
+    for branch in &mut function.branches {
+        for expression in &mut branch.body {
+            if let Expression::Identifier {
+                name,
+                target:
+                    Some(IdentifierTarget::Function {
+                        is_known_to_be_recursive_call_to_index,
+                    }),
+                ..
+            } = expression
+            {
+                if let Some(&index) =
+                    indices_in_cluster_by_function_name.get(name)
+                {
+                    *is_known_to_be_recursive_call_to_index = Some(index);
                 }
             }
         }
