@@ -326,12 +326,12 @@ fn reconstruct_function(
 }
 
 fn function_call_to_function_name(
-    call_fragment: &FragmentId,
+    function_call: &FragmentId,
     code: &Code,
 ) -> Option<String> {
     let fragment = code
         .fragments
-        .get(call_fragment)
+        .get(function_call)
         .expect("Fragment referenced by active function must exist.");
 
     let Fragment::CallToFunction { name, .. } = &fragment else {
