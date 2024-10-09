@@ -5,8 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 use crate::{
     fragments::{
         Branch, BranchLocation, Cluster, Fragment, FragmentId,
-        FragmentLocation, FragmentMap, Fragments, Function, FunctionLocation,
-        Parameters,
+        FragmentLocation, Fragments, Function, FunctionLocation, Parameters,
     },
     intrinsics::Intrinsic,
     source_map::SourceMap,
@@ -279,7 +278,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    fragments: &FragmentMap,
+    fragments: &Fragments,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> Option<InstructionAddress> {
