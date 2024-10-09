@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, iter, ops::Deref};
+use std::{collections::BTreeMap, ops::Deref};
 
 use crate::hash::{Hash, NextNeighbor, PrevNeighbor};
 
@@ -7,8 +7,6 @@ use super::{Fragment, Function};
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct FragmentMap {
     fragments_by_id: BTreeMap<FragmentId, Fragment>,
-    previous_to_next: BTreeMap<FragmentId, FragmentId>,
-    next_to_previous: BTreeMap<FragmentId, FragmentId>,
 }
 
 impl FragmentMap {
@@ -16,8 +14,8 @@ impl FragmentMap {
         &mut self,
         id: FragmentId,
         fragment: Fragment,
-        previous: Option<FragmentId>,
-        next: Option<FragmentId>,
+        _: Option<FragmentId>,
+        _: Option<FragmentId>,
     ) {
         assert_eq!(
             id.content,
@@ -26,33 +24,10 @@ impl FragmentMap {
         );
 
         self.fragments_by_id.insert(id, fragment.clone());
-
-        if let Some(previous) = previous {
-            self.next_to_previous.insert(id, previous);
-        }
-        if let Some(next) = next {
-            self.previous_to_next.insert(id, next);
-        }
     }
 
     pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
         self.fragments_by_id.get(id)
-    }
-
-    pub fn iter_from(
-        &self,
-        start: Option<FragmentId>,
-    ) -> impl Iterator<Item = (FragmentId, &Fragment)> {
-        let mut next = start;
-
-        iter::from_fn(move || {
-            let id = next.take()?;
-            let fragment = self.fragments_by_id.get(&id)?;
-
-            next = self.previous_to_next.get(&id).copied();
-
-            Some((id, fragment))
-        })
     }
 }
 
