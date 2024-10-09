@@ -233,8 +233,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
-        a.0,
+            .location,
+        a.1,
     );
 
     // Step to `b`, over the durable breakpoint. This sets an ephemeral
@@ -249,8 +249,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
-        b.0,
+            .location,
+        b.1,
     );
     assert!(
         debugger
@@ -262,7 +262,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.data.id == a.0)
+            .find(|fragment| fragment.data.location == a.1)
             .unwrap()
             .data
             .has_durable_breakpoint
@@ -279,8 +279,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
-        c.0,
+            .location,
+        c.1,
     );
 
     Ok(())
@@ -561,8 +561,8 @@ fn step_over_function_call() {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
-        nop.0,
+            .location,
+        nop.1,
     );
 }
 
