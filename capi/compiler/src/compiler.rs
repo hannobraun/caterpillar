@@ -19,19 +19,16 @@ impl Compiler {
         &mut self,
         source: &str,
     ) -> (Fragments, Instructions, SourceMap) {
-        compile::<H>(source)
+        let tokens = tokenize(source);
+        let mut functions = parse(tokens);
+        determine_tail_positions(&mut functions);
+        resolve_identifiers::<H>(&mut functions);
+        let mut clusters = group_into_clusters(functions);
+        mark_recursive_calls(&mut clusters);
+        let fragments = generate_fragments(clusters);
+        let (instructions, source_map) =
+            generate_instructions(fragments.clone());
+
+        (fragments, instructions, source_map)
     }
-}
-
-pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
-    let tokens = tokenize(source);
-    let mut functions = parse(tokens);
-    determine_tail_positions(&mut functions);
-    resolve_identifiers::<H>(&mut functions);
-    let mut clusters = group_into_clusters(functions);
-    mark_recursive_calls(&mut clusters);
-    let fragments = generate_fragments(clusters);
-    let (instructions, source_map) = generate_instructions(fragments.clone());
-
-    (fragments, instructions, source_map)
 }
