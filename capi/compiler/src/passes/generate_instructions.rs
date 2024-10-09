@@ -7,6 +7,7 @@ use crate::{
         Branch, BranchLocation, Cluster, Fragment, FragmentId,
         FragmentLocation, Fragments, Function, FunctionLocation, Parameters,
     },
+    hash::Hash,
     intrinsics::Intrinsic,
     source_map::SourceMap,
     syntax::Pattern,
@@ -29,7 +30,7 @@ pub fn generate_instructions(
     });
     if let Some(function) = fragments.find_function_by_name("main") {
         output.placeholders.push(CallToFunction {
-            function: function.id,
+            hash: Hash::new(&function),
             address: call_to_main,
             is_tail_call: true,
         });
@@ -46,7 +47,6 @@ pub fn generate_instructions(
             .expect("All named functions are part of a cluster.");
 
         queue.push_front(FunctionToCompile {
-            fragment: function_id,
             function: function.clone(),
             location: FunctionLocation::NamedFunction { index },
             cluster: cluster.clone(),
@@ -65,7 +65,7 @@ pub fn generate_instructions(
     }
 
     for call in output.placeholders {
-        let Some(function) = functions.get(&call.function) else {
+        let Some(function) = functions.get(&call.hash) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -121,10 +121,12 @@ fn compile_function(
     fragments: &Fragments,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
-    functions: &mut BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
+    functions: &mut BTreeMap<
+        Hash<Function>,
+        Vec<(Parameters, InstructionAddress)>,
+    >,
 ) {
     let FunctionToCompile {
-        fragment,
         function,
         location,
         cluster,
@@ -163,7 +165,7 @@ fn compile_function(
 
         let first_address = bindings_address.unwrap_or(branch_address);
         functions
-            .entry(fragment)
+            .entry(Hash::new(&function))
             .or_default()
             .push((branch.parameters.clone(), first_address));
 
@@ -274,7 +276,7 @@ fn compile_branch(
 }
 
 fn compile_fragment(
-    id: FragmentId,
+    _: FragmentId,
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
@@ -303,7 +305,7 @@ fn compile_fragment(
             // adding it to this list.
             if let Some(function) = fragments.find_function_by_name(name) {
                 output.placeholders.push(CallToFunction {
-                    function: function.id,
+                    hash: Hash::new(&function),
                     address,
                     is_tail_call: *is_tail_call,
                 });
@@ -315,7 +317,11 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let (called_function, _) = cluster.functions[index];
+            let (_, function_index_in_root_context) = cluster.functions[index];
+            let called_function = fragments
+                .functions
+                .get(&function_index_in_root_context)
+                .expect("Function referred to from cluster must exist.");
 
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.
@@ -333,7 +339,7 @@ fn compile_fragment(
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
             output.placeholders.push(CallToFunction {
-                function: called_function,
+                hash: Hash::new(called_function),
                 address,
                 is_tail_call: *is_tail_call,
             });
@@ -392,7 +398,6 @@ fn compile_fragment(
             // into a queue. Once whatever's currently being compiled is out of
             // the way, we can process that.
             queue.push_front(FunctionToCompile {
-                fragment: id,
                 function: function.clone(),
                 location: FunctionLocation::AnonymousFunction { location },
                 cluster: cluster.clone(),
@@ -500,13 +505,12 @@ impl Output {
 }
 
 pub struct CallToFunction {
-    pub function: FragmentId,
+    pub hash: Hash<Function>,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
 
 struct FunctionToCompile {
-    fragment: FragmentId,
     function: Function,
     location: FunctionLocation,
     cluster: Cluster,
