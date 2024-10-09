@@ -113,9 +113,10 @@ fn step_over_brk() -> anyhow::Result<()> {
         let mut body = fragments
             .find_function_by_name("main")
             .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id);
+            .find_single_branch()
+            .unwrap()
+            .fragments()
+            .map(|fragment| fragment.location);
 
         array::from_fn(|_| body.next().unwrap())
     };
@@ -129,7 +130,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
+            .location,
         brk,
     );
 
@@ -143,7 +144,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
+            .location,
         nop,
     );
 
