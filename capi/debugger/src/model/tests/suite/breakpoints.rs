@@ -187,12 +187,12 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .unwrap()
             .expect_one_branch()
             .body(fragments);
-        let branch = fragments
+        let mut body2 = fragments
             .find_function_by_name2("main")
             .unwrap()
             .find_single_branch()
-            .unwrap();
-        let mut body2 = branch.fragments();
+            .unwrap()
+            .fragments();
 
         array::from_fn(|_| {
             let id = body
@@ -516,12 +516,12 @@ fn step_over_function_call() {
             .unwrap()
             .expect_one_branch()
             .body(fragments);
-        let branch = fragments
+        let mut body2 = fragments
             .find_function_by_name2("main")
             .unwrap()
             .find_single_branch()
-            .unwrap();
-        let mut body2 = branch.fragments();
+            .unwrap()
+            .fragments();
 
         array::from_fn(|_| {
             let id = body
