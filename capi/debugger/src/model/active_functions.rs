@@ -107,7 +107,7 @@ impl ActiveFunctions {
                 DebugFunction::new(
                     named_function,
                     location,
-                    active_fragment.map(|(id, _)| id),
+                    active_fragment.as_ref().map(|(_, location)| location),
                     active_instructions.is_empty(),
                     cluster,
                     &code.fragments,
@@ -313,7 +313,7 @@ fn reconstruct_function(
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
         function.location,
-        tail_call.map(|tail_call| tail_call.0),
+        tail_call.as_ref().map(|tail_call| &tail_call.1),
         false,
         cluster,
         &code.fragments,

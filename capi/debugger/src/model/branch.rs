@@ -23,7 +23,7 @@ impl DebugBranch {
     pub fn new(
         branch: Branch,
         location: BranchLocation,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         fragments: &Fragments,

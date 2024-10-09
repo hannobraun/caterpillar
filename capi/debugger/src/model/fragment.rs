@@ -23,7 +23,7 @@ impl DebugFragment {
         id: FragmentId,
         fragment: Fragment,
         location: FragmentLocation,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         fragments: &Fragments,
@@ -31,7 +31,7 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Self {
-        let state = if Some(id) == active_fragment {
+        let state = if Some(&location) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
             } else {
@@ -140,7 +140,7 @@ impl DebugFragmentKind {
     pub fn new(
         fragment: Fragment,
         location: FragmentLocation,
-        active_fragment: Option<FragmentId>,
+        active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         fragments: &Fragments,
