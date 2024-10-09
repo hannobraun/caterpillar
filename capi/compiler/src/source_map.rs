@@ -10,7 +10,8 @@ use crate::fragments::{FragmentId, FragmentLocation, FunctionLocation};
 pub struct SourceMap {
     instruction_to_fragment:
         BTreeMap<InstructionAddress, (FragmentId, FragmentLocation)>,
-    fragment_to_instructions: BTreeMap<FragmentId, Vec<InstructionAddress>>,
+    fragment_to_instructions:
+        BTreeMap<(FragmentId, FragmentLocation), Vec<InstructionAddress>>,
     function_to_instruction_range:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
@@ -23,7 +24,6 @@ impl SourceMap {
     ) {
         self.instruction_to_fragment
             .insert(instruction, fragment.clone());
-        let (fragment, _) = fragment;
         self.fragment_to_instructions
             .entry(fragment)
             .or_default()
@@ -56,7 +56,7 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        (fragment, _): &(FragmentId, FragmentLocation),
+        fragment: &(FragmentId, FragmentLocation),
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
