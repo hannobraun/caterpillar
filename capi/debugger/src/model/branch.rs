@@ -30,11 +30,11 @@ impl DebugBranch {
     ) -> Self {
         let body = branch
             .body
-            .iter()
+            .into_iter()
             .map(|(index, fragment)| {
                 let location = FragmentLocation {
                     parent: Box::new(location.clone()),
-                    index: *index,
+                    index,
                 };
                 DebugFragment::new(
                     fragment.clone(),
