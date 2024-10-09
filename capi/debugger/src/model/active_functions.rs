@@ -74,8 +74,10 @@ impl ActiveFunctions {
         while let Some(address) = active_instructions.pop_front() {
             let (named_function, function_index_in_root_context) =
                 instruction_to_named_function(&address, code);
-            let active_fragment =
-                code.source_map.instruction_to_fragment(&address);
+            let active_fragment = code
+                .source_map
+                .instruction_to_fragment(&address)
+                .map(|(_, location)| location);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != named_function.name.as_ref() {
@@ -93,7 +95,7 @@ impl ActiveFunctions {
 
             expected_next_function =
                 active_fragment.as_ref().and_then(|active_fragment| {
-                    function_call_to_function_name(&active_fragment.1, code)
+                    function_call_to_function_name(active_fragment, code)
                 });
 
             let location = FunctionLocation::NamedFunction {
@@ -108,7 +110,7 @@ impl ActiveFunctions {
                 DebugFunction::new(
                     named_function,
                     location,
-                    active_fragment.as_ref().map(|(_, location)| location),
+                    active_fragment.as_ref(),
                     active_instructions.is_empty(),
                     cluster,
                     &code.fragments,
