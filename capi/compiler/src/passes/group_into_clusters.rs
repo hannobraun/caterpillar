@@ -2,6 +2,7 @@ use std::{collections::BTreeMap, iter};
 
 use petgraph::{
     algo::{condensation, toposort},
+    graph::NodeIndex,
     Graph,
 };
 
@@ -32,19 +33,12 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     for &caller_index in graph_index_by_function_name.values() {
         let (function, _) = call_graph[caller_index];
 
-        for branch in &function.branches {
-            for expression in &branch.body {
-                if let Expression::Identifier {
-                    name,
-                    target: Some(IdentifierTarget::Function { .. }),
-                    ..
-                } = expression
-                {
-                    let callee_index = graph_index_by_function_name[name];
-                    call_graph.add_edge(caller_index, callee_index, ());
-                }
-            }
-        }
+        include_calls_from_function_in_call_graph(
+            caller_index,
+            function,
+            &graph_index_by_function_name,
+            &mut call_graph,
+        );
     }
 
     let make_acyclic = true;
@@ -73,6 +67,27 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
     Clusters {
         functions,
         clusters,
+    }
+}
+
+fn include_calls_from_function_in_call_graph(
+    caller_index: NodeIndex,
+    function: &Function,
+    graph_index_by_function_name: &BTreeMap<&String, NodeIndex>,
+    call_graph: &mut Graph<(&Function, FunctionIndexInRootContext), ()>,
+) {
+    for branch in &function.branches {
+        for expression in &branch.body {
+            if let Expression::Identifier {
+                name,
+                target: Some(IdentifierTarget::Function { .. }),
+                ..
+            } = expression
+            {
+                let callee_index = graph_index_by_function_name[name];
+                call_graph.add_edge(caller_index, callee_index, ());
+            }
+        }
     }
 }
 
