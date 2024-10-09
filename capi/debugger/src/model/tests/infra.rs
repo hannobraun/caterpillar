@@ -1,6 +1,6 @@
 use capi_compiler::{
-    compile,
     fragments::{FragmentLocation, Fragments},
+    Compiler,
 };
 use capi_game_engine::{
     command::Command, game_engine::GameEngine, host::GameEngineHost,
@@ -32,7 +32,7 @@ pub struct TestDebugger {
 impl TestDebugger {
     pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
         let (fragments, instructions, source_map) =
-            compile::<GameEngineHost>(source);
+            (Compiler {}).compile::<GameEngineHost>(source);
 
         let command = self.persistent.on_new_code(Code {
             fragments,

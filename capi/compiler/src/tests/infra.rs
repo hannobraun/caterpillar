@@ -1,6 +1,6 @@
 use capi_runtime::{Effect, Instructions, Runtime};
 
-use crate::{compile, host::Host};
+use crate::{host::Host, Compiler};
 
 pub fn runtime() -> TestRuntime {
     TestRuntime::default()
@@ -14,7 +14,7 @@ pub struct TestRuntime {
 
 impl TestRuntime {
     pub fn update_code(&mut self, source: &str) -> &mut Self {
-        let (_, instructions, _) = compile::<TestHost>(source);
+        let (_, instructions, _) = (Compiler {}).compile::<TestHost>(source);
         self.instructions = Some(instructions);
         self
     }

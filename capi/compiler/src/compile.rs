@@ -14,6 +14,15 @@ use crate::{
 /// # Entry point to the compiler API
 pub struct Compiler {}
 
+impl Compiler {
+    pub fn compile<H: Host>(
+        &mut self,
+        source: &str,
+    ) -> (Fragments, Instructions, SourceMap) {
+        compile::<H>(source)
+    }
+}
+
 pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
     let tokens = tokenize(source);
     let mut functions = parse(tokens);

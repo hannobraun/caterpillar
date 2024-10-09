@@ -1,6 +1,6 @@
 use std::{str, time::SystemTime};
 
-use capi_compiler::compile;
+use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::{updates::Code, Versioned};
 use capi_watch::DebouncedChanges;
@@ -47,7 +47,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     let source = fs::read_to_string(path).await?;
 
     let (fragments, instructions, source_map) =
-        compile::<GameEngineHost>(&source);
+        (Compiler {}).compile::<GameEngineHost>(&source);
 
     Ok(Code {
         fragments,
