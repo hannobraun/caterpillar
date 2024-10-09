@@ -41,37 +41,6 @@ pub enum Fragment {
         /// # The hash of the function being called
         hash: Hash<Function>,
 
-        /// # The name of the function being called
-        ///
-        /// ## Implementation Note
-        ///
-        /// This references references the called function by name. It should
-        /// instead reference it using an `id: FragmentId` field.
-        ///
-        /// This would have the advantage of versioning this call, allowing it
-        /// to refer to any available version of the function. This is going to
-        /// be useful to have. It would also make function calls easier to
-        /// process when generating code.
-        ///
-        /// Unfortunately, this is not easy. There are two main hurdles, as
-        /// best I can tell:
-        ///
-        /// 1. It requires function fragments to be created in the correct
-        ///    order, as the called function must be created before its caller.
-        /// 2. There would need to be special handling of recursive calls, or
-        ///    there would be a dependency cycle when hashing the calls and
-        ///    their targets.
-        ///
-        /// I think what we need, is a new compiler pass that creates a call
-        /// graph. This call graph can then be used to order the creation of
-        /// fragments, from the leaves up, as well as to detect any recursive
-        /// call cycles.
-        ///
-        /// As for the handling of those, here is some information on how Unison
-        /// does that, which might prove useful:
-        /// https://stackoverflow.com/a/73343072/8369834
-        name: String,
-
         /// # Indicate whether the call is in tail position
         ///
         /// This is relevant as function calls might necessitate tail call

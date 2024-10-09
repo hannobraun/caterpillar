@@ -122,7 +122,6 @@ fn compile_expression(
 
                         Fragment::CallToFunction {
                             hash,
-                            name,
                             is_tail_call: is_in_tail_position,
                         }
                     }
