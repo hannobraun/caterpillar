@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentId,
-        FragmentLocation, Fragments, Function, FunctionLocation, Parameters,
+        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Fragments,
+        Function, FunctionLocation, Parameters,
     },
     hash::Hash,
     intrinsics::Intrinsic,
@@ -229,11 +229,10 @@ fn compile_branch(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for ((&index, fragment), (id, _)) in
+    for ((&index, fragment), (_, _)) in
         branch.body.iter().zip(fragments.iter_from(branch.start))
     {
         let addr = compile_fragment(
-            id,
             fragment,
             FragmentLocation {
                 parent: Box::new(location.clone()),
@@ -276,7 +275,6 @@ fn compile_branch(
 }
 
 fn compile_fragment(
-    _: FragmentId,
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
