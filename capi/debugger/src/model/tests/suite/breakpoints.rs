@@ -27,7 +27,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
 
     let fragments = debugger.expect_code();
     let nop = fragments
-        .find_function_by_name2("main")
+        .find_function_by_name("main")
         .unwrap()
         .expect_one_branch()
         .body(fragments)
@@ -35,7 +35,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .next()
         .unwrap();
     let nop2 = fragments
-        .find_function_by_name2("main")
+        .find_function_by_name("main")
         .unwrap()
         .find_single_branch()
         .unwrap()
@@ -69,7 +69,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
 
     let fragments = debugger.expect_code();
     let nop = fragments
-        .find_function_by_name2("main")
+        .find_function_by_name("main")
         .unwrap()
         .expect_one_branch()
         .body(fragments)
@@ -77,7 +77,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .next()
         .unwrap();
     let nop2 = fragments
-        .find_function_by_name2("main")
+        .find_function_by_name("main")
         .unwrap()
         .find_single_branch()
         .unwrap()
@@ -125,7 +125,7 @@ fn step_over_brk() -> anyhow::Result<()> {
     let [brk, nop] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
             .body(fragments)
@@ -183,7 +183,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     let [a, b, c] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -296,7 +296,7 @@ fn step_into_function() {
         let fragments = debugger.expect_code();
 
         let f = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -305,7 +305,7 @@ fn step_into_function() {
             .unwrap()
             .location;
         let a = fragments
-            .find_function_by_name2("f")
+            .find_function_by_name("f")
             .unwrap()
             .branches
             .first_key_value()
@@ -363,7 +363,7 @@ fn step_out_of_function_if_at_last_fragment() {
         let fragments = debugger.expect_code();
 
         let nop_in_main = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
             .body(fragments)
@@ -371,7 +371,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .nth(1)
             .unwrap();
         let nop_in_f = fragments
-            .find_function_by_name2("f")
+            .find_function_by_name("f")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -422,7 +422,7 @@ fn step_out_of_main_function() {
         let fragments = debugger.expect_code();
 
         fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -469,7 +469,7 @@ fn step_over_function_call() {
     let [f, nop] = {
         let fragments = debugger.expect_code();
         let mut body = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -530,7 +530,7 @@ fn step_out_of_function() {
         let fragments = debugger.expect_code();
 
         let a = fragments
-            .find_function_by_name2("f")
+            .find_function_by_name("f")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -539,7 +539,7 @@ fn step_out_of_function() {
             .unwrap()
             .location;
         let b = fragments
-            .find_function_by_name2("main")
+            .find_function_by_name("main")
             .unwrap()
             .expect_one_branch()
             .body(fragments)

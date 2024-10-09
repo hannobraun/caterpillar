@@ -87,7 +87,7 @@ impl Fragments {
     /// There is currently a function with a similar name on `FragmentMap`. Once
     /// the ongoing refactoring on fragment addressing has finished, that
     /// function can be removed, and this one can take over its name.
-    pub fn find_function_by_name2(&self, name: &str) -> Option<FoundFunction> {
+    pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
         self.functions.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 let location = FunctionLocation::NamedFunction { index };

@@ -283,7 +283,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effects: &[Effect],
 ) -> Option<String> {
-    let Some(function) = code.fragments.find_function_by_name2(name) else {
+    let Some(function) = code.fragments.find_function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
 
