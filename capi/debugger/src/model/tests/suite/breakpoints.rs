@@ -61,7 +61,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     );
 
     let fragments = debugger.expect_code();
-    let nop2 = fragments
+    let nop = fragments
         .find_function_by_name("main")
         .unwrap()
         .find_single_branch()
@@ -71,7 +71,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .location;
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop2.clone(),
+        fragment: nop.clone(),
     })?;
 
     debugger.run_program();
@@ -86,7 +86,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .active_fragment()
             .data
             .location,
-        nop2,
+        nop,
     );
 
     Ok(())
