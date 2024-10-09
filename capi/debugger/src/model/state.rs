@@ -100,13 +100,13 @@ impl PersistentState {
                 let targets = if let Some(name) =
                     origin.data.fragment.as_call_to_function()
                 {
-                    let function2 =
+                    let function =
                         code.fragments.find_function_by_name2(name).expect(
                             "Got function name from fragment that calls it; \
                             expecting it to exist.",
                         );
 
-                    function2
+                    function
                         .branches()
                         .filter_map(|branch| branch.fragments().next())
                         .map(|fragment| fragment.location)
