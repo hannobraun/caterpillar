@@ -530,11 +530,12 @@ fn step_out_of_function() {
         let b = fragments
             .find_function_by_name("main")
             .unwrap()
-            .expect_one_branch()
-            .body(fragments)
-            .map(|(id, _)| id)
+            .find_single_branch()
+            .unwrap()
+            .body()
             .nth(1)
-            .unwrap();
+            .unwrap()
+            .location;
 
         (a, b)
     };
@@ -553,7 +554,7 @@ fn step_out_of_function() {
             .expect_leaf("main")
             .active_fragment()
             .data
-            .id,
+            .location,
         b,
     );
 }
