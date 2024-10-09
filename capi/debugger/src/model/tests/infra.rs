@@ -31,8 +31,9 @@ pub struct TestDebugger {
 
 impl TestDebugger {
     pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
+        let mut compiler = Compiler {};
         let (fragments, instructions, source_map) =
-            (Compiler {}).compile::<GameEngineHost>(source);
+            compiler.compile::<GameEngineHost>(source);
 
         let command = self.persistent.on_new_code(Code {
             fragments,
