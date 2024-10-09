@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::syntax::Cluster;
+use crate::{hash::Hash, syntax::Cluster};
 
 use super::{
     search::FoundFunction, Branch, BranchLocation, Fragment, FragmentLocation,
@@ -67,6 +67,23 @@ impl Fragments {
                 fragment.as_function()
             }
         }
+    }
+
+    /// # Find the named function with the provided hash
+    pub fn find_named_function_by_hash(
+        &self,
+        hash: &Hash<Function>,
+    ) -> Option<FoundFunction> {
+        self.functions.iter().find_map(|(&index, function)| {
+            if &Hash::new(function) == hash {
+                Some(FoundFunction {
+                    function: function.clone(),
+                    location: FunctionLocation::NamedFunction { index },
+                })
+            } else {
+                None
+            }
+        })
     }
 
     /// # Find the function with the provided name
