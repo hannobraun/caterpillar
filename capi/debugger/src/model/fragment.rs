@@ -142,7 +142,15 @@ impl DebugFragmentKind {
         effects: &[Effect],
     ) -> Self {
         match fragment {
-            Fragment::CallToFunction { name, .. } => {
+            Fragment::CallToFunction { hash, .. } => {
+                let function = fragments
+                    .find_named_function_by_hash(&hash)
+                    .expect("Expecting function referenced by call to exist.");
+                let name = function.name.clone().expect(
+                    "Got this function from search for named function. It must \
+                    has a name.",
+                );
+
                 Self::CallToFunction { name }
             }
             Fragment::CallToFunctionRecursive { index, .. } => {
