@@ -11,7 +11,7 @@ pub struct SourceMap {
     instruction_to_fragment:
         BTreeMap<InstructionAddress, (FragmentId, FragmentLocation)>,
     fragment_to_instructions:
-        BTreeMap<(FragmentId, FragmentLocation), Vec<InstructionAddress>>,
+        BTreeMap<FragmentLocation, Vec<InstructionAddress>>,
     function_to_instruction_range:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
@@ -24,6 +24,7 @@ impl SourceMap {
     ) {
         self.instruction_to_fragment
             .insert(instruction, fragment.clone());
+        let (_, fragment) = fragment;
         self.fragment_to_instructions
             .entry(fragment)
             .or_default()
@@ -56,7 +57,7 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        fragment: &(FragmentId, FragmentLocation),
+        (_, fragment): &(FragmentId, FragmentLocation),
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
