@@ -20,6 +20,21 @@ pub struct FoundFunction {
 }
 
 impl FoundFunction {
+    /// # Iterate over the function's branches
+    pub fn branches(&self) -> impl Iterator<Item = FoundBranch> {
+        let location = self.location.clone();
+        self.branches
+            .clone()
+            .into_iter()
+            .map(move |(index, branch)| FoundBranch {
+                branch,
+                location: BranchLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            })
+    }
+
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
