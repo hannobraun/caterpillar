@@ -187,6 +187,56 @@ mod tests {
         );
     }
 
+    #[test]
+    fn sort_clusters_by_call_graph() {
+        let clusters = group_into_clusters(
+            r"
+                main: {
+                    \ ->
+                        a
+                }
+
+                a: {
+                    \ ->
+                        # Call a function that comes is placed after this one in
+                        # the source code.
+                        c
+                }
+
+                b: {
+                    \ ->
+                        nop
+                }
+
+                c: {
+                    \ ->
+                        # And for some variety, call a function that is placed
+                        # before.
+                        b
+                }
+            ",
+        );
+
+        assert_eq!(
+            clusters.clusters,
+            [
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
+                    .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
+                    .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(3))]
+                    .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
+                    .as_slice(),
+            ]
+            .into_iter()
+            .map(|indices| Cluster {
+                functions: indices.iter().copied().collect(),
+            })
+            .collect::<Vec<_>>(),
+        );
+    }
+
     fn group_into_clusters(source: &str) -> Clusters {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
