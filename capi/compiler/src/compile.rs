@@ -11,6 +11,9 @@ use crate::{
     source_map::SourceMap,
 };
 
+/// # Entry point to the compiler API
+pub struct Compiler {}
+
 pub fn compile<H: Host>(source: &str) -> (Fragments, Instructions, SourceMap) {
     let tokens = tokenize(source);
     let mut functions = parse(tokens);
