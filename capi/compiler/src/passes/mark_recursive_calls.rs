@@ -101,6 +101,57 @@ mod tests {
         }
     }
 
+    #[test]
+    #[should_panic] // known bug; currently not tracked in an issue
+    fn mark_recursive_calls_from_anonymous_functions() {
+        let clusters = mark_recursive_calls(
+            r"
+                f: {
+                    \ ->
+                        {
+                            \ ->
+                                f
+                        }
+                }
+            ",
+        );
+
+        let mut functions = clusters.functions.into_values();
+        let f = functions.next().unwrap();
+        assert!(functions.next().is_none());
+
+        let mut branches = f.branches.into_iter();
+        let branch = branches.next().unwrap();
+        assert!(branches.next().is_none());
+
+        let mut body = branch.body.into_iter();
+        let expression = body.next().unwrap();
+        assert!(body.next().is_none());
+
+        let Expression::Function { function } = expression else {
+            panic!("Expected expression to be a function.");
+        };
+
+        let mut branches = function.branches.into_iter();
+        let branch = branches.next().unwrap();
+        assert!(branches.next().is_none());
+
+        let mut body = branch.body.into_iter();
+        let expression = body.next().unwrap();
+        assert!(body.next().is_none());
+
+        let Expression::Identifier {
+            target:
+                Some(IdentifierTarget::Function {
+                    is_known_to_be_recursive_call_to_index: Some(_),
+                }),
+            ..
+        } = expression
+        else {
+            panic!("Expected identifier to be a recursive function call.");
+        };
+    }
+
     fn mark_recursive_calls(source: &str) -> Clusters {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
