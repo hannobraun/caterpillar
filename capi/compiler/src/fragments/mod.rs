@@ -8,8 +8,6 @@ mod functions;
 mod location;
 mod map;
 
-pub use crate::syntax::Cluster;
-
 pub use self::{
     fragment::Fragment,
     fragments::Fragments,
