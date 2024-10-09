@@ -302,7 +302,8 @@ fn step_into_function() {
             .unwrap()
             .fragments()
             .nth(2)
-            .unwrap();
+            .unwrap()
+            .location;
         let a = fragments
             .find_function_by_name("f")
             .unwrap()
@@ -313,7 +314,7 @@ fn step_into_function() {
             .start
             .unwrap();
 
-        (f.location, a)
+        (f, a)
     };
 
     debugger
