@@ -294,10 +294,10 @@ fn reconstruct_function(
 
         let mut tail_call = None;
 
-        for (fragment, (id, _)) in
+        for (fragment, (_, _)) in
             branch2.body().zip(branch.body(&code.fragments))
         {
-            tail_call = Some((id, fragment.location));
+            tail_call = Some(fragment.location);
         }
 
         tail_call
@@ -305,9 +305,9 @@ fn reconstruct_function(
         None
     };
 
-    let expected_next_function = tail_call.as_ref().and_then(|tail_call| {
-        function_call_to_function_name(&tail_call.1, code)
-    });
+    let expected_next_function = tail_call
+        .as_ref()
+        .and_then(|tail_call| function_call_to_function_name(tail_call, code));
 
     let cluster = code
         .fragments
@@ -316,7 +316,7 @@ fn reconstruct_function(
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
         function.location,
-        tail_call.as_ref().map(|tail_call| &tail_call.1),
+        tail_call.as_ref(),
         false,
         cluster,
         &code.fragments,
