@@ -1,14 +1,10 @@
-use std::{
-    collections::BTreeMap,
-    ops::{Deref, DerefMut},
-};
+use std::collections::BTreeMap;
 
 use crate::syntax::Cluster;
 
 use super::{
     search::FoundFunction, Branch, BranchLocation, Fragment, FragmentId,
-    FragmentLocation, FragmentMap, Function, FunctionIndexInRootContext,
-    FunctionLocation,
+    FragmentLocation, Function, FunctionIndexInRootContext, FunctionLocation,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -23,8 +19,6 @@ pub struct Fragments {
 
     /// # The function clusters
     pub clusters: Vec<Cluster>,
-
-    pub map: FragmentMap,
 }
 
 impl Fragments {
@@ -99,19 +93,5 @@ impl Fragments {
                 None
             }
         })
-    }
-}
-
-impl Deref for Fragments {
-    type Target = FragmentMap;
-
-    fn deref(&self) -> &Self::Target {
-        &self.map
-    }
-}
-
-impl DerefMut for Fragments {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.map
     }
 }

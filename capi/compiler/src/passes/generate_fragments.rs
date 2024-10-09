@@ -39,7 +39,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         root,
         functions,
         clusters: clusters.clusters,
-        map: fragments,
     }
 }
 
