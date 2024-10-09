@@ -1,7 +1,5 @@
 use capi_compiler::{
-    fragments::{
-        Fragment, FragmentId, FragmentLocation, Fragments, FunctionLocation,
-    },
+    fragments::{Fragment, FragmentLocation, Fragments, FunctionLocation},
     host::Host,
     source_map::SourceMap,
     syntax::Cluster,
@@ -20,7 +18,6 @@ pub struct DebugFragment {
 impl DebugFragment {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        _: FragmentId,
         fragment: Fragment,
         location: FragmentLocation,
         active_fragment: Option<&FragmentLocation>,
