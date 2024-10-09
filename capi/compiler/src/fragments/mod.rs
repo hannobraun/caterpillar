@@ -6,7 +6,6 @@ mod fragment;
 mod fragments;
 mod functions;
 mod location;
-mod map;
 
 pub use self::{
     fragment::Fragment,
@@ -17,5 +16,4 @@ pub use self::{
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
         FunctionLocation,
     },
-    map::{FoundFunction, FragmentId, FragmentMap},
 };
