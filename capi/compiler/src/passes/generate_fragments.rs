@@ -5,6 +5,7 @@ use crate::{
         Branch, BranchIndex, Fragment, FragmentIndexInBranchBody, Fragments,
         Function, Parameters,
     },
+    hash::Hash,
     syntax::{self, IdentifierTarget},
 };
 
@@ -16,7 +17,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
             let function = clusters.functions[&index].clone();
-            let fragment = compile_function(function);
+            let fragment = compile_function(function, &mut BTreeMap::new());
             (index, fragment)
         })
         .collect::<BTreeMap<_, _>>();
@@ -27,14 +28,17 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     }
 }
 
-fn compile_function(function: syntax::Function) -> Function {
+fn compile_function(
+    function: syntax::Function,
+    functions: &mut BTreeMap<String, Hash<Function>>,
+) -> Function {
     let mut branches = Vec::new();
 
     for branch in function.branches {
         let body = branch
             .body
             .into_iter()
-            .map(compile_expression)
+            .map(|expression| compile_expression(expression, functions))
             .collect::<Vec<_>>();
 
         let body = iter::successors(Some(0), |i| Some(i + 1))
@@ -63,11 +67,14 @@ fn compile_function(function: syntax::Function) -> Function {
     }
 }
 
-fn compile_expression(expression: syntax::Expression) -> Fragment {
+fn compile_expression(
+    expression: syntax::Expression,
+    functions: &mut BTreeMap<String, Hash<Function>>,
+) -> Fragment {
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            let function = compile_function(function);
+            let function = compile_function(function, functions);
             Fragment::Function { function }
         }
         syntax::Expression::Identifier {
