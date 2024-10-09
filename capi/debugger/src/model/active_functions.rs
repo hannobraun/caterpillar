@@ -93,8 +93,8 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                active_fragment.and_then(|active_fragment| {
-                    call_fragment_to_function_name(&active_fragment, code)
+                active_fragment.as_ref().and_then(|active_fragment| {
+                    call_fragment_to_function_name(active_fragment, code)
                 });
 
             let location = FunctionLocation::NamedFunction {
