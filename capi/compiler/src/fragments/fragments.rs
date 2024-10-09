@@ -3,10 +3,12 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
+use crate::syntax::Cluster;
+
 use super::{
     search::FoundFunction, Branch, BranchLocation, Fragment, FragmentId,
-    FragmentLocation, FragmentMap, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext, FunctionLocation,
+    FragmentLocation, FragmentMap, Function, FunctionIndexInRootContext,
+    FunctionLocation,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -112,9 +114,4 @@ impl DerefMut for Fragments {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.map
     }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct Cluster {
-    pub functions: BTreeMap<FunctionIndexInCluster, FunctionIndexInRootContext>,
 }

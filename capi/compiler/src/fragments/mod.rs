@@ -8,9 +8,11 @@ mod functions;
 mod location;
 mod map;
 
+pub use crate::syntax::Cluster;
+
 pub use self::{
     fragment::Fragment,
-    fragments::{Cluster, Fragments},
+    fragments::Fragments,
     functions::{Branch, Function, Parameters},
     location::{
         BranchIndex, BranchLocation, FragmentIndexInBranchBody,
