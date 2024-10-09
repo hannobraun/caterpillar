@@ -112,7 +112,16 @@ fn compile_expression(
                             is_tail_call: is_in_tail_position,
                         }
                     } else {
+                        let Some(hash) = functions.get(&name).copied() else {
+                            panic!(
+                                "Compiling call to function `{name}`. \
+                                called function to already be compiled when \
+                                its caller is being compiled."
+                            );
+                        };
+
                         Fragment::CallToFunction {
+                            hash,
                             name,
                             is_tail_call: is_in_tail_position,
                         }

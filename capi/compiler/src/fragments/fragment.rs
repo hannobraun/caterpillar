@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::intrinsics::Intrinsic;
+use crate::{hash::Hash, intrinsics::Intrinsic};
 
 use super::{Function, FunctionIndexInCluster};
 
@@ -38,6 +38,9 @@ use super::{Function, FunctionIndexInCluster};
 pub enum Fragment {
     /// # A call to a user-defined function
     CallToFunction {
+        /// # The hash of the function being called
+        hash: Hash<Function>,
+
         /// # The name of the function being called
         ///
         /// ## Implementation Note
