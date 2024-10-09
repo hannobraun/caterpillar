@@ -45,10 +45,12 @@ impl PersistentState {
 
         match action {
             UserAction::BreakpointClear {
-                fragment: (id, _), ..
+                fragment: (id, location),
+                ..
             } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instruction(&id)?;
+                let address =
+                    self.code.fragment_to_instruction((&id, &location))?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -57,10 +59,12 @@ impl PersistentState {
                 });
             }
             UserAction::BreakpointSet {
-                fragment: (id, _), ..
+                fragment: (id, location),
+                ..
             } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instruction(&id)?;
+                let address =
+                    self.code.fragment_to_instruction((&id, &location))?;
 
                 self.breakpoints.set_durable(address);
 
@@ -279,7 +283,7 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        (origin, _): (&FragmentId, &FragmentLocation),
+        origin: (&FragmentId, &FragmentLocation),
         targets: Vec<(FragmentId, FragmentLocation)>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
@@ -303,8 +307,9 @@ impl PersistentState {
         // And of course, if we have any targets we want to stop at (we might
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
-        for (target, _) in targets {
-            let target = self.code.fragment_to_instruction(&target)?;
+        for (target, location) in targets {
+            let target =
+                self.code.fragment_to_instruction((&target, &location))?;
             self.breakpoints.set_ephemeral(target);
         }
 
