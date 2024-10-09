@@ -17,7 +17,7 @@ impl DebugCode {
 
     pub fn fragment_to_instruction(
         &self,
-        fragment: &(FragmentId, FragmentLocation),
+        (_, fragment): &(FragmentId, FragmentLocation),
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map
