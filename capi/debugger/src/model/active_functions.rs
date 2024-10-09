@@ -286,11 +286,8 @@ fn reconstruct_function(
         panic!("Expecting function `{name}` to exist.");
     };
 
-    let tail_call = if function.branches.len() == 1 {
+    let tail_call = if let Some(branch2) = function.find_single_branch() {
         let branch = function.expect_one_branch();
-        let branch2 = function
-            .find_single_branch()
-            .expect("Just checked, that the function has exactly one branch.");
 
         let mut tail_call = None;
 
