@@ -21,6 +21,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             let function = clusters.functions[&index].clone();
             let function = compile_function(function, &mut functions);
 
+            let name = function.name.clone().expect(
+                "Just compiled a named function; should have its name set.",
+            );
+            functions.insert(name, Hash::new(&function));
+
             (index, function)
         })
         .collect::<BTreeMap<_, _>>();
