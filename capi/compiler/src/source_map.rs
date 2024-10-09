@@ -56,7 +56,7 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        (fragment, _): (&FragmentId, &FragmentLocation),
+        (fragment, _): &(FragmentId, FragmentLocation),
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 

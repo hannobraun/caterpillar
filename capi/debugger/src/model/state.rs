@@ -50,7 +50,7 @@ impl PersistentState {
             } => {
                 let code = self.code.get()?;
                 let address =
-                    self.code.fragment_to_instruction((&id, &location))?;
+                    self.code.fragment_to_instruction(&(id, location))?;
 
                 self.breakpoints.clear_durable(&address);
 
@@ -64,7 +64,7 @@ impl PersistentState {
             } => {
                 let code = self.code.get()?;
                 let address =
-                    self.code.fragment_to_instruction((&id, &location))?;
+                    self.code.fragment_to_instruction(&(id, location))?;
 
                 self.breakpoints.set_durable(address);
 
@@ -84,7 +84,7 @@ impl PersistentState {
                 let targets = Vec::new();
 
                 self.step_or_continue(
-                    (&origin.id, &origin.location),
+                    &(origin.id, origin.location.clone()),
                     targets,
                     &mut commands,
                 )?;
@@ -140,7 +140,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                (&origin.data.id, &origin.data.location),
+                                &(origin.data.id, origin.data.location.clone()),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -158,7 +158,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    (&origin.data.id, &origin.data.location),
+                    &(origin.data.id, origin.data.location.clone()),
                     targets,
                     &mut commands,
                 )?;
@@ -186,7 +186,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                (&origin.data.id, &origin.data.location),
+                                &(origin.data.id, origin.data.location.clone()),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -204,7 +204,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    (&origin.data.id, &origin.data.location),
+                    &(origin.data.id, origin.data.location.clone()),
                     targets,
                     &mut commands,
                 )?;
@@ -231,7 +231,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                (&origin.data.id, &origin.data.location),
+                                &(origin.data.id, origin.data.location.clone()),
                                 vec![],
                                 &mut commands,
                             )?;
@@ -249,7 +249,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    (&origin.data.id, &origin.data.location),
+                    &(origin.data.id, origin.data.location.clone()),
                     targets,
                     &mut commands,
                 )?;
@@ -283,7 +283,7 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        origin: (&FragmentId, &FragmentLocation),
+        origin: &(FragmentId, FragmentLocation),
         targets: Vec<(FragmentId, FragmentLocation)>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
@@ -307,9 +307,8 @@ impl PersistentState {
         // And of course, if we have any targets we want to stop at (we might
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
-        for (target, location) in targets {
-            let target =
-                self.code.fragment_to_instruction((&target, &location))?;
+        for target in targets {
+            let target = self.code.fragment_to_instruction(&target)?;
             self.breakpoints.set_ephemeral(target);
         }
 
