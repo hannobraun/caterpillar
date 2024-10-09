@@ -45,11 +45,11 @@ impl PersistentState {
 
         match action {
             UserAction::BreakpointClear {
-                fragment: (_, location),
+                fragment: (_, fragment),
                 ..
             } => {
                 let code = self.code.get()?;
-                let address = self.code.fragment_to_instruction(&location)?;
+                let address = self.code.fragment_to_instruction(&fragment)?;
 
                 self.breakpoints.clear_durable(&address);
 
