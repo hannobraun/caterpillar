@@ -280,7 +280,7 @@ fn compile_fragment(
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToFunction {
-            name, is_tail_call, ..
+            hash, is_tail_call, ..
         } => {
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.
@@ -297,13 +297,11 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            if let Some(function) = fragments.find_function_by_name(name) {
-                output.placeholders.push(CallToFunction {
-                    hash: Hash::new(&function),
-                    address,
-                    is_tail_call: *is_tail_call,
-                });
-            }
+            output.placeholders.push(CallToFunction {
+                hash: *hash,
+                address,
+                is_tail_call: *is_tail_call,
+            });
 
             Some(address)
         }
