@@ -16,8 +16,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .rev()
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
+            let mut functions = BTreeMap::new();
+
             let function = clusters.functions[&index].clone();
-            let fragment = compile_function(function, &mut BTreeMap::new());
+            let fragment = compile_function(function, &mut functions);
+
             (index, fragment)
         })
         .collect::<BTreeMap<_, _>>();
