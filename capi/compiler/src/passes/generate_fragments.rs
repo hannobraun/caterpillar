@@ -19,7 +19,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .flat_map(|cluster| cluster.functions.values())
         .map(|&index| {
             let function = clusters.functions[&index].clone();
-            let fragment = compile_function(function, &mut fragments);
+            let fragment = compile_function(function);
             (index, fragment)
         })
         .collect::<BTreeMap<_, _>>();
@@ -42,17 +42,14 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     }
 }
 
-fn compile_function(
-    function: syntax::Function,
-    fragments: &mut FragmentMap,
-) -> Function {
+fn compile_function(function: syntax::Function) -> Function {
     let mut branches = Vec::new();
 
     for branch in function.branches {
         let body = branch
             .body
             .into_iter()
-            .map(|expression| compile_expression(expression, fragments))
+            .map(compile_expression)
             .collect::<Vec<_>>();
 
         let body = iter::successors(Some(0), |i| Some(i + 1))
@@ -125,14 +122,11 @@ fn address_context(
     ids.first().copied()
 }
 
-fn compile_expression(
-    expression: syntax::Expression,
-    fragments: &mut FragmentMap,
-) -> Fragment {
+fn compile_expression(expression: syntax::Expression) -> Fragment {
     match expression {
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            let function = compile_function(function, fragments);
+            let function = compile_function(function);
             Fragment::Function { function }
         }
         syntax::Expression::Identifier {
