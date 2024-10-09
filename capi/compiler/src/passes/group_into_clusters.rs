@@ -78,14 +78,24 @@ fn include_calls_from_function_in_call_graph(
 ) {
     for branch in &function.branches {
         for expression in &branch.body {
-            if let Expression::Identifier {
-                name,
-                target: Some(IdentifierTarget::Function { .. }),
-                ..
-            } = expression
-            {
-                let callee_index = graph_index_by_function_name[name];
-                call_graph.add_edge(caller_index, callee_index, ());
+            match expression {
+                Expression::Function { function } => {
+                    include_calls_from_function_in_call_graph(
+                        caller_index,
+                        function,
+                        graph_index_by_function_name,
+                        call_graph,
+                    );
+                }
+                Expression::Identifier {
+                    name,
+                    target: Some(IdentifierTarget::Function { .. }),
+                    ..
+                } => {
+                    let callee_index = graph_index_by_function_name[name];
+                    call_graph.add_edge(caller_index, callee_index, ());
+                }
+                _ => {}
             }
         }
     }
@@ -253,7 +263,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // known bug; currently not tracked in an issue
     fn consider_anonymous_functions_in_call_graph() {
         let clusters = group_into_clusters(
             r"
