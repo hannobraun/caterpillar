@@ -99,11 +99,22 @@ impl PersistentState {
                             "Got function name from fragment that calls it; \
                             expecting it to exist.",
                         );
+                    let function2 =
+                        code.fragments.find_function_by_name2(name).expect(
+                            "Got function name from fragment that calls it; \
+                            expecting it to exist.",
+                        );
 
                     function
                         .branches
                         .values()
                         .filter_map(|branch| branch.start)
+                        .zip(
+                            function2
+                                .branches()
+                                .filter_map(|branch| branch.fragments().next())
+                                .map(|fragment| fragment.location),
+                        )
                         .collect()
                 } else {
                     let mut fragment = origin.clone();
@@ -134,7 +145,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id];
+                        break vec![(after.data.id, after.data.location)];
                     }
                 };
 
@@ -180,7 +191,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id];
+                        break vec![(after.data.id, after.data.location)];
                     }
                 };
 
@@ -225,7 +236,7 @@ impl PersistentState {
                             continue;
                         }
 
-                        break vec![after.data.id];
+                        break vec![(after.data.id, after.data.location)];
                     }
                 };
 
@@ -265,7 +276,7 @@ impl PersistentState {
     fn step_or_continue(
         &mut self,
         (origin, _): (&FragmentId, &FragmentLocation),
-        targets: Vec<FragmentId>,
+        targets: Vec<(FragmentId, FragmentLocation)>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;
@@ -288,7 +299,7 @@ impl PersistentState {
         // And of course, if we have any targets we want to stop at (we might
         // not, if we're continuing instead of stepping), we need to set
         // ephemeral breakpoints there.
-        for target in targets {
+        for (target, _) in targets {
             let target = self.code.fragment_to_instruction(&target)?;
             self.breakpoints.set_ephemeral(target);
         }
