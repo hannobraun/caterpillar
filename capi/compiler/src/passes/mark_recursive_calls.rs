@@ -41,20 +41,28 @@ fn mark_recursive_calls_in_function(
 ) {
     for branch in &mut function.branches {
         for expression in &mut branch.body {
-            if let Expression::Identifier {
-                name,
-                target:
-                    Some(IdentifierTarget::Function {
-                        is_known_to_be_recursive_call_to_index,
-                    }),
-                ..
-            } = expression
-            {
-                if let Some(&index) =
-                    indices_in_cluster_by_function_name.get(name)
-                {
-                    *is_known_to_be_recursive_call_to_index = Some(index);
+            match expression {
+                Expression::Function { function } => {
+                    mark_recursive_calls_in_function(
+                        function,
+                        indices_in_cluster_by_function_name,
+                    );
                 }
+                Expression::Identifier {
+                    name,
+                    target:
+                        Some(IdentifierTarget::Function {
+                            is_known_to_be_recursive_call_to_index,
+                        }),
+                    ..
+                } => {
+                    if let Some(&index) =
+                        indices_in_cluster_by_function_name.get(name)
+                    {
+                        *is_known_to_be_recursive_call_to_index = Some(index);
+                    }
+                }
+                _ => {}
             }
         }
     }
@@ -117,7 +125,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // known bug; currently not tracked in an issue
     fn mark_recursive_calls_from_anonymous_functions() {
         let clusters = mark_recursive_calls(
             r"
