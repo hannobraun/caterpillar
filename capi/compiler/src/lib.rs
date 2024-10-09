@@ -4,11 +4,11 @@ pub mod intrinsics;
 pub mod source_map;
 pub mod syntax;
 
-mod compile;
+mod compiler;
 mod hash;
 mod passes;
 
 #[cfg(test)]
 mod tests;
 
-pub use self::compile::Compiler;
+pub use self::compiler::Compiler;
