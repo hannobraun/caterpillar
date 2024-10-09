@@ -41,13 +41,12 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .fragments()
         .next()
-        .unwrap();
+        .unwrap()
+        .location;
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
-    debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop2.location,
-    })?;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop2 })?;
     assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     Ok(())
