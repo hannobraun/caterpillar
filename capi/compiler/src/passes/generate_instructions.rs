@@ -157,7 +157,7 @@ fn compile_function(
                 index,
             },
             &cluster,
-            &fragments.map,
+            fragments,
             output,
             queue,
         );
