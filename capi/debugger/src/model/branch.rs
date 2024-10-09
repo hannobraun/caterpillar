@@ -31,8 +31,7 @@ impl DebugBranch {
         let body = branch
             .body
             .iter()
-            .zip(branch.body(fragments))
-            .map(|((index, fragment), (_, _))| {
+            .map(|(index, fragment)| {
                 let location = FragmentLocation {
                     parent: Box::new(location.clone()),
                     index: *index,
