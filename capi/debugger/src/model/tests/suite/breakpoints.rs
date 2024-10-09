@@ -294,12 +294,13 @@ fn step_into_function() {
         let a = fragments
             .find_function_by_name("f")
             .unwrap()
-            .branches
-            .first_key_value()
-            .map(|(_index, branch)| branch)
+            .branches()
+            .next()
             .unwrap()
-            .start
-            .unwrap();
+            .body()
+            .next()
+            .unwrap()
+            .location;
 
         (f, a)
     };
@@ -320,7 +321,7 @@ fn step_into_function() {
             .expect_leaf("f")
             .active_fragment()
             .data
-            .id,
+            .location,
         a,
     );
 }
