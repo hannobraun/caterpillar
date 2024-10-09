@@ -26,7 +26,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .run_program();
 
     let fragments = debugger.expect_code();
-    let nop2 = fragments
+    let nop = fragments
         .find_function_by_name("main")
         .unwrap()
         .find_single_branch()
@@ -36,12 +36,12 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .location;
 
-    assert!(!debugger.expect_fragment(&nop2).data.has_durable_breakpoint);
+    assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop2.clone(),
+        fragment: nop.clone(),
     })?;
-    assert!(debugger.expect_fragment(&nop2).data.has_durable_breakpoint);
+    assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     Ok(())
 }
