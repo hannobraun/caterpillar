@@ -297,7 +297,7 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some((id, location)),
+                Some(location),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -328,7 +328,7 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some((id, location)),
+                Some(location),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -347,13 +347,13 @@ fn compile_fragment(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                Some((id, location.clone())),
+                Some(location.clone()),
             );
             output.generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                Some((id, location)),
+                Some(location),
             );
             Some(address)
         }
@@ -364,7 +364,7 @@ fn compile_fragment(
             let instruction =
                 intrinsic_to_instruction(intrinsic, *is_tail_call);
 
-            Some(output.generate_instruction(instruction, Some((id, location))))
+            Some(output.generate_instruction(instruction, Some(location)))
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
@@ -384,7 +384,7 @@ fn compile_fragment(
                         Instruction::TriggerEffect {
                             effect: Effect::CompilerBug,
                         },
-                        Some((id, location.clone())),
+                        Some(location.clone()),
                     ))
                 } else {
                     None
@@ -406,7 +406,7 @@ fn compile_fragment(
         Fragment::ResolvedBinding { name } => {
             Some(output.generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
-                Some((id, location)),
+                Some(location),
             ))
         }
         Fragment::UnresolvedIdentifier { name: _ } => {
@@ -414,12 +414,12 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                Some((id, location)),
+                Some(location),
             ))
         }
         Fragment::Value(value) => Some(output.generate_instruction(
             Instruction::Push { value: *value },
-            Some((id, location)),
+            Some(location),
         )),
     }
 }
@@ -470,10 +470,10 @@ impl Output {
     fn generate_instruction(
         &mut self,
         instruction: Instruction,
-        fragment: Option<(FragmentId, FragmentLocation)>,
+        fragment: Option<FragmentLocation>,
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
-        if let Some((_, fragment)) = fragment {
+        if let Some(fragment) = fragment {
             self.source_map.define_mapping(addr, fragment);
         }
         addr
