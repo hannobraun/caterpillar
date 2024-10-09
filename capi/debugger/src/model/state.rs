@@ -1,4 +1,4 @@
-use capi_compiler::fragments::{FragmentId, FragmentLocation};
+use capi_compiler::fragments::FragmentLocation;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
     host_state::HostState,
@@ -82,7 +82,7 @@ impl PersistentState {
                 let targets = Vec::new();
 
                 self.step_or_continue(
-                    &(origin.id, origin.location.clone()),
+                    &origin.location,
                     targets,
                     &mut commands,
                 )?;
@@ -127,7 +127,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &(origin.data.id, origin.data.location.clone()),
+                                &origin.data.location,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -145,7 +145,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    &(origin.data.id, origin.data.location.clone()),
+                    &origin.data.location,
                     targets,
                     &mut commands,
                 )?;
@@ -173,7 +173,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &(origin.data.id, origin.data.location.clone()),
+                                &origin.data.location,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -191,7 +191,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    &(origin.data.id, origin.data.location.clone()),
+                    &origin.data.location,
                     targets,
                     &mut commands,
                 )?;
@@ -218,7 +218,7 @@ impl PersistentState {
                             // Let's just tell the runtime to continue, so the
                             // process finishes.
                             self.step_or_continue(
-                                &(origin.data.id, origin.data.location.clone()),
+                                &origin.data.location,
                                 vec![],
                                 &mut commands,
                             )?;
@@ -236,7 +236,7 @@ impl PersistentState {
                 };
 
                 self.step_or_continue(
-                    &(origin.data.id, origin.data.location.clone()),
+                    &origin.data.location,
                     targets,
                     &mut commands,
                 )?;
@@ -270,7 +270,7 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        (_, origin): &(FragmentId, FragmentLocation),
+        origin: &FragmentLocation,
         targets: Vec<FragmentLocation>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
