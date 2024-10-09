@@ -2,16 +2,13 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     fragments::{
-        Branch, BranchIndex, Fragment, FragmentId, FragmentIndexInBranchBody,
-        FragmentMap, Fragments, Function, Parameters,
+        Branch, BranchIndex, Fragment, FragmentIndexInBranchBody, Fragments,
+        Function, Parameters,
     },
-    hash::{Hash, NextNeighbor, PrevNeighbor},
     syntax::{self, IdentifierTarget},
 };
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
-    let mut fragments = FragmentMap::default();
-
     let functions = clusters
         .clusters
         .iter()
@@ -24,19 +21,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         })
         .collect::<BTreeMap<_, _>>();
 
-    let mut function_ids = Vec::new();
-    let root = address_context(
-        &functions
-            .values()
-            .cloned()
-            .map(|function| Fragment::Function { function })
-            .collect(),
-        &mut function_ids,
-        &mut fragments,
-    );
-
     Fragments {
-        root,
         functions,
         clusters: clusters.clusters,
     }
@@ -76,50 +61,6 @@ fn compile_function(function: syntax::Function) -> Function {
         environment: function.environment,
         index_in_cluster: function.index_in_cluster,
     }
-}
-
-fn address_context(
-    context: &Vec<Fragment>,
-    ids: &mut Vec<FragmentId>,
-    fragments: &mut FragmentMap,
-) -> Option<FragmentId> {
-    for fragment in context {
-        ids.push(FragmentId {
-            prev: None,
-            next: None,
-            content: Hash::new(fragment),
-        });
-    }
-
-    let mut prev = None;
-
-    for id in ids.iter_mut() {
-        let prev_hash = prev.as_ref().map(Hash::new);
-
-        id.prev = prev_hash;
-        prev = Some(PrevNeighbor {
-            ulterior_neighbor: prev_hash,
-            content: id.content,
-        });
-    }
-
-    let mut next = None;
-
-    for id in ids.iter_mut().rev() {
-        let next_hash = next.as_ref().map(Hash::new);
-
-        id.next = next_hash;
-        next = Some(NextNeighbor {
-            ulterior_neighbor: next_hash,
-            content: id.content,
-        });
-    }
-
-    for (fragment, id) in context.iter().zip(&*ids) {
-        fragments.insert(*id, fragment.clone());
-    }
-
-    ids.first().copied()
 }
 
 fn compile_expression(expression: syntax::Expression) -> Fragment {

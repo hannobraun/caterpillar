@@ -3,17 +3,12 @@ use std::collections::BTreeMap;
 use crate::syntax::Cluster;
 
 use super::{
-    search::FoundFunction, Branch, BranchLocation, Fragment, FragmentId,
-    FragmentLocation, Function, FunctionIndexInRootContext, FunctionLocation,
+    search::FoundFunction, Branch, BranchLocation, Fragment, FragmentLocation,
+    Function, FunctionIndexInRootContext, FunctionLocation,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
-    /// # The first fragment in the root context
-    ///
-    /// This indirectly points to all existing fragments.
-    pub root: Option<FragmentId>,
-
     /// # The named functions in the root context
     pub functions: BTreeMap<FunctionIndexInRootContext, Function>,
 
