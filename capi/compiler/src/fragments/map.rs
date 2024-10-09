@@ -39,22 +39,6 @@ impl FragmentMap {
         self.fragments_by_id.get(id)
     }
 
-    pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.fragments_by_id
-            .iter()
-            .filter_map(|(id, fragment)| match &fragment {
-                Fragment::Function { function } => Some((*id, function)),
-                _ => None,
-            })
-            .find_map(|(id, function)| {
-                if function.name.as_deref() == Some(name) {
-                    Some(FoundFunction { id, function })
-                } else {
-                    None
-                }
-            })
-    }
-
     pub fn iter_from(
         &self,
         start: Option<FragmentId>,
