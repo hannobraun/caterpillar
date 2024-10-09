@@ -468,7 +468,7 @@ fn step_over_function_call() {
 
     let [f, nop] = {
         let fragments = debugger.expect_code();
-        let mut body2 = fragments
+        let mut body = fragments
             .find_function_by_name2("main")
             .unwrap()
             .find_single_branch()
@@ -476,15 +476,14 @@ fn step_over_function_call() {
             .fragments();
 
         array::from_fn(|_| {
-            body2
-                .find_map(|fragment| {
-                    if fragment.as_comment().is_none() {
-                        Some(fragment.location)
-                    } else {
-                        None
-                    }
-                })
-                .unwrap()
+            body.find_map(|fragment| {
+                if fragment.as_comment().is_none() {
+                    Some(fragment.location)
+                } else {
+                    None
+                }
+            })
+            .unwrap()
         })
     };
 
