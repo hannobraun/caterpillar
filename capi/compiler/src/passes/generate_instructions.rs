@@ -229,9 +229,7 @@ fn compile_branch(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for ((&index, fragment), (_, _)) in
-        branch.body.iter().zip(fragments.iter_from(branch.start))
-    {
+    for (&index, fragment) in branch.body.iter() {
         let addr = compile_fragment(
             fragment,
             FragmentLocation {
