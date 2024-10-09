@@ -295,7 +295,7 @@ fn step_into_function() {
     let (f, a) = {
         let fragments = debugger.expect_code();
 
-        let f2 = fragments
+        let f = fragments
             .find_function_by_name2("main")
             .unwrap()
             .find_single_branch()
@@ -313,7 +313,7 @@ fn step_into_function() {
             .start
             .unwrap();
 
-        (f2.location, a)
+        (f.location, a)
     };
 
     debugger
