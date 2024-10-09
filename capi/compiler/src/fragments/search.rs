@@ -75,16 +75,16 @@ pub struct FoundBranch {
 impl FoundBranch {
     /// # Iterate over the fragments in the branch's body
     pub fn fragments(&self) -> impl Iterator<Item = FoundFragment> + '_ {
-        self.body
-            .clone()
-            .into_iter()
-            .map(|(index, fragment)| FoundFragment {
+        let location = self.location.clone();
+        self.body.clone().into_iter().map(move |(index, fragment)| {
+            FoundFragment {
                 fragment,
                 location: FragmentLocation {
-                    parent: Box::new(self.location.clone()),
+                    parent: Box::new(location.clone()),
                     index,
                 },
-            })
+            }
+        })
     }
 }
 
