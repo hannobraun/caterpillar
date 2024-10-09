@@ -92,7 +92,7 @@ impl ActiveFunctions {
 
             expected_next_function =
                 active_fragment.as_ref().and_then(|active_fragment| {
-                    call_fragment_to_function_name(&active_fragment.0, code)
+                    function_call_to_function_name(&active_fragment.0, code)
                 });
 
             let location = FunctionLocation::NamedFunction {
@@ -303,7 +303,7 @@ fn reconstruct_function(
     };
 
     let expected_next_function = tail_call.as_ref().and_then(|tail_call| {
-        call_fragment_to_function_name(&tail_call.0, code)
+        function_call_to_function_name(&tail_call.0, code)
     });
 
     let cluster = code
@@ -325,7 +325,7 @@ fn reconstruct_function(
     expected_next_function
 }
 
-fn call_fragment_to_function_name(
+fn function_call_to_function_name(
     call_fragment: &FragmentId,
     code: &Code,
 ) -> Option<String> {
