@@ -28,7 +28,7 @@ pub fn generate_instructions(
     let call_to_main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     });
-    if let Some(function) = fragments.find_function_by_name("main") {
+    if let Some(function) = fragments.find_function_by_name2("main") {
         output.placeholders.push(CallToFunction {
             hash: Hash::new(&function),
             address: call_to_main,
@@ -297,7 +297,7 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            if let Some(function) = fragments.find_function_by_name(name) {
+            if let Some(function) = fragments.find_function_by_name2(name) {
                 output.placeholders.push(CallToFunction {
                     hash: Hash::new(&function),
                     address,
