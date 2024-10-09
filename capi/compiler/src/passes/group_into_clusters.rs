@@ -24,8 +24,9 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
             .name
             .as_ref()
             .expect("Top-level function must have a name");
-        let index = call_graph.add_node((function, *named_function_index));
-        function_graph_index_by_name.insert(name, index);
+        let graph_index =
+            call_graph.add_node((function, *named_function_index));
+        function_graph_index_by_name.insert(name, graph_index);
     }
 
     for &caller_index in function_graph_index_by_name.values() {
