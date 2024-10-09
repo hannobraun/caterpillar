@@ -10,13 +10,7 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
-    pub fn insert(
-        &mut self,
-        id: FragmentId,
-        fragment: Fragment,
-        _: Option<FragmentId>,
-        _: Option<FragmentId>,
-    ) {
+    pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
         assert_eq!(
             id.content,
             Hash::new(&fragment),

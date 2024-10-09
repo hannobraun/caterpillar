@@ -119,15 +119,8 @@ fn address_context(
         });
     }
 
-    for (i, (fragment, id)) in context.iter().zip(&*ids).enumerate() {
-        let previous = if i == 0 {
-            None
-        } else {
-            ids.get(i - 1).copied()
-        };
-        let next = ids.get(i + 1).copied();
-
-        fragments.insert(*id, fragment.clone(), previous, next);
+    for (fragment, id) in context.iter().zip(&*ids) {
+        fragments.insert(*id, fragment.clone());
     }
 
     ids.first().copied()
