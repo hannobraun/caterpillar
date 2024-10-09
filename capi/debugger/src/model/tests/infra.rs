@@ -1,6 +1,6 @@
 use capi_compiler::{
     compile,
-    fragments::{FragmentId, Fragments},
+    fragments::{FragmentLocation, Fragments},
 };
 use capi_game_engine::{
     command::Command, game_engine::GameEngine, host::GameEngineHost,
@@ -104,7 +104,7 @@ impl TestDebugger {
         &self.persistent.code.inner.as_ref().unwrap().fragments
     }
 
-    pub fn expect_fragment(&mut self, id: &FragmentId) -> DebugFragment {
+    pub fn expect_fragment(&mut self, id: &FragmentLocation) -> DebugFragment {
         let Some(fragment) = self
             .transient_state()
             .active_functions
@@ -114,7 +114,7 @@ impl TestDebugger {
             .find_map(|function| {
                 function.branches.iter().find_map(|branch| {
                     branch.body.iter().find_map(|fragment| {
-                        if &fragment.data.id == id {
+                        if &fragment.data.location == id {
                             Some(fragment.clone())
                         } else {
                             None
