@@ -76,10 +76,9 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .fragments()
         .next()
-        .unwrap();
-    debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop2.location,
-    })?;
+        .unwrap()
+        .location;
+    debugger.on_user_action(UserAction::BreakpointSet { fragment: nop2 })?;
 
     debugger.run_program();
 
