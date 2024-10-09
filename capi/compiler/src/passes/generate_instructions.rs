@@ -41,13 +41,7 @@ pub fn generate_instructions(
         let cluster = fragments
             .clusters
             .iter()
-            .find(|cluster| {
-                cluster
-                    .functions
-                    .values()
-                    .map(|(_, index)| index)
-                    .any(|i| i == &index)
-            })
+            .find(|cluster| cluster.functions.values().any(|i| i == &index))
             .expect("All named functions are part of a cluster.");
 
         queue.push_front(FunctionToCompile {
@@ -317,7 +311,7 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let (_, function_index_in_root_context) = cluster.functions[index];
+            let function_index_in_root_context = cluster.functions[index];
             let called_function = fragments
                 .functions
                 .get(&function_index_in_root_context)

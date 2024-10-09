@@ -41,7 +41,7 @@ impl Fragments {
 
         self.clusters
             .iter()
-            .find(|cluster| cluster.functions.values().any(|(_, i)| i == index))
+            .find(|cluster| cluster.functions.values().any(|i| i == index))
     }
 
     /// # Find the branch at the given location
@@ -116,8 +116,5 @@ impl DerefMut for Fragments {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Cluster {
-    pub functions: BTreeMap<
-        FunctionIndexInCluster,
-        (FragmentId, FunctionIndexInRootContext),
-    >,
+    pub functions: BTreeMap<FunctionIndexInCluster, FunctionIndexInRootContext>,
 }

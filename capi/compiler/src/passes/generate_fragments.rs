@@ -46,17 +46,9 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         for (function_index_in_cluster, function_index_in_root_context) in
             cluster.functions
         {
-            let id = {
-                let index: usize = function_index_in_root_context
-                    .0
-                    .try_into()
-                    .expect("Expecting `usize` to be at least 32-bit.");
-
-                function_ids[index]
-            };
             compiled_cluster.functions.insert(
                 function_index_in_cluster,
-                (id, function_index_in_root_context),
+                function_index_in_root_context,
             );
         }
 

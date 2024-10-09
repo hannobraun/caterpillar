@@ -153,7 +153,7 @@ impl DebugFragmentKind {
                 Self::CallToFunction { name }
             }
             Fragment::CallToFunctionRecursive { index, .. } => {
-                let (_, called_function_index) = cluster
+                let called_function_index = cluster
                     .functions
                     .get(&index)
                     .expect(
