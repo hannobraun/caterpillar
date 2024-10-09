@@ -6,7 +6,7 @@ use crate::{
         FragmentMap, Fragments, Function, Parameters,
     },
     hash::{Hash, NextNeighbor, PrevNeighbor},
-    syntax::{self, Cluster, IdentifierTarget},
+    syntax::{self, IdentifierTarget},
 };
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
@@ -35,29 +35,10 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         &mut fragments,
     );
 
-    let mut compiled_clusters = Vec::new();
-
-    for cluster in clusters.clusters.clone() {
-        let mut compiled_cluster = Cluster {
-            functions: BTreeMap::new(),
-        };
-
-        for (function_index_in_cluster, function_index_in_root_context) in
-            cluster.functions
-        {
-            compiled_cluster.functions.insert(
-                function_index_in_cluster,
-                function_index_in_root_context,
-            );
-        }
-
-        compiled_clusters.push(compiled_cluster);
-    }
-
     Fragments {
         root,
         functions,
-        clusters: compiled_clusters,
+        clusters: clusters.clusters,
         map: fragments,
     }
 }
