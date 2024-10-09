@@ -222,7 +222,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    fragments: &FragmentMap,
+    fragments: &Fragments,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> [InstructionAddress; 2] {
