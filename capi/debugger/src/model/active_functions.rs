@@ -303,7 +303,8 @@ fn reconstruct_function(
     };
 
     let expected_next_function = tail_call
-        .and_then(|tail_call| call_fragment_to_function_name(&tail_call, code));
+        .as_ref()
+        .and_then(|tail_call| call_fragment_to_function_name(tail_call, code));
 
     let cluster = code
         .fragments
