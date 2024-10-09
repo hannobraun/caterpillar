@@ -530,7 +530,7 @@ fn step_out_of_function() {
     let (a, b) = {
         let fragments = debugger.expect_code();
 
-        let a2 = fragments
+        let a = fragments
             .find_function_by_name2("f")
             .unwrap()
             .find_single_branch()
@@ -548,7 +548,7 @@ fn step_out_of_function() {
             .nth(1)
             .unwrap();
 
-        (a2, b)
+        (a, b)
     };
 
     debugger
