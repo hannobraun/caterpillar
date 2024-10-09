@@ -2,7 +2,8 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{
-    self, Fragment, FragmentId, FunctionIndexInRootContext, FunctionLocation,
+    self, Fragment, FragmentId, FragmentLocation, FunctionIndexInRootContext,
+    FunctionLocation,
 };
 use capi_protocol::{host_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
@@ -92,7 +93,7 @@ impl ActiveFunctions {
 
             expected_next_function =
                 active_fragment.as_ref().and_then(|active_fragment| {
-                    function_call_to_function_name(&active_fragment.0, code)
+                    function_call_to_function_name(&active_fragment.1, code)
                 });
 
             let location = FunctionLocation::NamedFunction {
@@ -303,7 +304,7 @@ fn reconstruct_function(
     };
 
     let expected_next_function = tail_call.as_ref().and_then(|tail_call| {
-        function_call_to_function_name(&tail_call.0, code)
+        function_call_to_function_name(&tail_call.1, code)
     });
 
     let cluster = code
@@ -326,12 +327,12 @@ fn reconstruct_function(
 }
 
 fn function_call_to_function_name(
-    function_call: &FragmentId,
+    function_call: &FragmentLocation,
     code: &Code,
 ) -> Option<String> {
     let fragment = code
         .fragments
-        .get(function_call)
+        .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
 
     let Fragment::CallToFunction { name, .. } = &fragment else {
