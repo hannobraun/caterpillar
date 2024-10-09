@@ -115,8 +115,8 @@ fn compile_expression(
                         let Some(hash) = functions.get(&name).copied() else {
                             panic!(
                                 "Compiling call to function `{name}`. \
-                                called function to already be compiled when \
-                                its caller is being compiled."
+                                Expecting called function to already be \
+                                compiled when its caller is being compiled."
                             );
                         };
 
