@@ -13,7 +13,9 @@ use crate::{
 
 /// # Entry point to the compiler API
 #[derive(Default)]
-pub struct Compiler {}
+pub struct Compiler {
+    fragments: Option<Fragments>,
+}
 
 impl Compiler {
     /// # Compile the provided source code
@@ -27,7 +29,10 @@ impl Compiler {
         resolve_identifiers::<H>(&mut functions);
         let mut clusters = group_into_clusters(functions);
         mark_recursive_calls(&mut clusters);
+
         let fragments = generate_fragments(clusters);
+        self.fragments = Some(fragments.clone());
+
         let (instructions, source_map) =
             generate_instructions(fragments.clone());
 
