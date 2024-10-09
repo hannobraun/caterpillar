@@ -189,12 +189,12 @@ pub enum Fragment {
 }
 
 impl Fragment {
-    pub fn as_call_to_function(&self) -> Option<&str> {
-        let Fragment::CallToFunction { name, .. } = self else {
+    pub fn as_call_to_function(&self) -> Option<&Hash<Function>> {
+        let Fragment::CallToFunction { hash, .. } = self else {
             return None;
         };
 
-        Some(name)
+        Some(hash)
     }
 
     pub fn as_comment(&self) -> Option<&String> {

@@ -91,13 +91,14 @@ impl PersistentState {
                 let branch = entries.leaf().function()?.active_branch()?;
 
                 let origin = branch.active_fragment()?;
-                let targets = if let Some(name) =
+                let targets = if let Some(hash) =
                     origin.data.fragment.as_call_to_function()
                 {
-                    let function =
-                        code.fragments.find_function_by_name(name).expect(
-                            "Got function name from fragment that calls it; \
-                            expecting it to exist.",
+                    let function = code
+                        .fragments
+                        .find_named_function_by_hash(hash)
+                        .expect(
+                            "Expecting function referenced from call to exist.",
                         );
 
                     function
