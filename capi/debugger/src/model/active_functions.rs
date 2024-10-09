@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{
-    self, Fragment, FragmentId, FragmentLocation, FunctionIndexInRootContext,
+    self, Fragment, FragmentLocation, FunctionIndexInRootContext,
     FunctionLocation,
 };
 use capi_protocol::{host_state::HostState, updates::Code};
@@ -156,7 +156,7 @@ impl ActiveFunctionsEntries {
     pub fn find_next_fragment_or_next_after_caller(
         &self,
         branch: &DebugBranch,
-        fragment: &FragmentId,
+        fragment: &FragmentLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
         if let Some(after) = branch.fragment_after(fragment)? {
             return Ok(Some(after.clone()));
@@ -167,7 +167,7 @@ impl ActiveFunctionsEntries {
 
     pub fn find_next_fragment_after_caller(
         &self,
-        fragment: &FragmentId,
+        fragment: &FragmentLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
@@ -180,7 +180,9 @@ impl ActiveFunctionsEntries {
                 Ok(branch) => Some(branch),
                 Err(_) => None,
             })
-            .find(|branch| !branch.body.iter().any(|f| f.data.id == *fragment));
+            .find(|branch| {
+                !branch.body.iter().any(|f| f.data.location == *fragment)
+            });
 
         let Some(caller_branch) = caller_branch else {
             return Ok(None);
@@ -190,7 +192,7 @@ impl ActiveFunctionsEntries {
 
         self.find_next_fragment_or_next_after_caller(
             caller_branch,
-            &caller.data.id,
+            &caller.data.location,
         )
     }
 }

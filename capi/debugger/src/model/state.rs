@@ -112,7 +112,7 @@ impl PersistentState {
                         let Some(after) = entries
                             .find_next_fragment_or_next_after_caller(
                                 branch,
-                                &fragment.data.id,
+                                &fragment.data.location,
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
@@ -158,7 +158,7 @@ impl PersistentState {
                     loop {
                         let Some(after) = entries
                             .find_next_fragment_after_caller(
-                                &fragment.data.id,
+                                &fragment.data.location,
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
@@ -203,7 +203,7 @@ impl PersistentState {
                         let Some(after) = entries
                             .find_next_fragment_or_next_after_caller(
                                 branch,
-                                &fragment.data.id,
+                                &fragment.data.location,
                             )?
                         else {
                             // Can't find a next fragment _or_ a caller, which
