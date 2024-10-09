@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::intrinsics::Intrinsic;
 
-use super::{FoundFunction, FragmentMap, Function, FunctionIndexInCluster};
+use super::{Function, FunctionIndexInCluster};
 
 /// # A pre-compiled piece of code
 ///
@@ -181,20 +181,12 @@ pub enum Fragment {
 }
 
 impl Fragment {
-    pub fn as_call_to_function<'r>(
-        &self,
-        fragments: &'r FragmentMap,
-    ) -> Option<FoundFunction<'r>> {
+    pub fn as_call_to_function(&self) -> Option<&str> {
         let Fragment::CallToFunction { name, .. } = self else {
             return None;
         };
 
-        let function = fragments.find_function_by_name(name).expect(
-            "Got function name from fragment that calls it; expecting it to \
-            exist.",
-        );
-
-        Some(function)
+        Some(name)
     }
 
     pub fn as_comment(&self) -> Option<&String> {
