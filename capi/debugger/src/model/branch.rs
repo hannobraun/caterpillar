@@ -90,7 +90,7 @@ impl DebugBranch {
         &self,
         id: &FragmentId,
     ) -> anyhow::Result<Option<&DebugFragment>> {
-        if !self.body.iter().any(|fragment| fragment.data.id == *id) {
+        if !self.body.iter().any(|f| f.data.id == *id) {
             return Err(anyhow!(
                 "Expected fragment to be in branch, but could not find it. \
                 Fragment:\n\
