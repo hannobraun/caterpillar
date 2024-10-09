@@ -84,6 +84,11 @@ pub enum Fragment {
     /// This call can either be directly recursive (a function is calling
     /// itself), or mutually recursive (the function is calling another function
     /// that directly or indirectly calls the original function).
+    ///
+    /// This needs to be handled separately from non-recursive calls, as those
+    /// non-recursive calls reference the callee by hash. In a recursive call,
+    /// this is not possible, due to a circular dependency when creating the
+    /// hash of the callee.
     CallToFunctionRecursive {
         /// # The index of the called function within its cluster
         ///
