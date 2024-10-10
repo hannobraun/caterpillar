@@ -8,6 +8,11 @@ use tokio::{fs, sync::watch, task};
 
 pub type CodeRx = watch::Receiver<Versioned<Code>>;
 
+pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
+    let mut compiler = Compiler::default();
+    build_game_once_with_compiler(game, &mut compiler).await
+}
+
 pub async fn build_and_watch_game(
     game: impl Into<String>,
     mut changes: DebouncedChanges,
@@ -39,11 +44,6 @@ pub async fn build_and_watch_game(
     });
 
     Ok(game_rx)
-}
-
-pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
-    let mut compiler = Compiler::default();
-    build_game_once_with_compiler(game, &mut compiler).await
 }
 
 async fn build_game_once_with_compiler(
