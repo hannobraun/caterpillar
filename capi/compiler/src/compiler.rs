@@ -36,8 +36,7 @@ impl Compiler {
 
         self.fragments = Some(fragments.clone());
 
-        let (instructions, source_map) =
-            generate_instructions(fragments.clone());
+        let (instructions, source_map) = generate_instructions(&fragments);
 
         (fragments, instructions, source_map)
     }

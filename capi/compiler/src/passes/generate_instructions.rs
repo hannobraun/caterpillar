@@ -14,7 +14,7 @@ use crate::{
 };
 
 pub fn generate_instructions(
-    fragments: Fragments,
+    fragments: &Fragments,
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
@@ -55,7 +55,7 @@ pub fn generate_instructions(
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
             function_to_compile,
-            &fragments,
+            fragments,
             &mut output,
             &mut queue,
             &mut functions,
