@@ -15,12 +15,13 @@ use crate::{
 
 pub fn generate_instructions(
     fragments: &Fragments,
-) -> (Instructions, SourceMap) {
-    let mut instructions = Instructions::default();
+    instructions: &mut Instructions,
+) -> SourceMap {
+    *instructions = Instructions::default();
 
     let mut queue = VecDeque::new();
     let mut output = Output {
-        instructions: &mut instructions,
+        instructions,
         placeholders: Vec::new(),
         source_map: SourceMap::default(),
     };
@@ -118,7 +119,7 @@ pub fn generate_instructions(
     }
 
     let Output { source_map, .. } = output;
-    (instructions, source_map)
+    source_map
 }
 
 fn compile_function(
