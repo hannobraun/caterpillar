@@ -16,9 +16,11 @@ use crate::{
 pub fn generate_instructions(
     fragments: &Fragments,
 ) -> (Instructions, SourceMap) {
+    let instructions = Instructions::default();
+
     let mut queue = VecDeque::new();
     let mut output = Output {
-        instructions: Instructions::default(),
+        instructions,
         placeholders: Vec::new(),
         source_map: SourceMap::default(),
     };
