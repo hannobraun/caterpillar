@@ -31,10 +31,10 @@ impl Compiler {
         mark_recursive_calls(&mut clusters);
 
         let fragments = generate_fragments(clusters);
-        self.fragments = Some(fragments.clone());
-
         let changes = detect_changes(self.fragments.as_ref(), &fragments);
         dbg!(changes.added, changes.updated);
+
+        self.fragments = Some(fragments.clone());
 
         let (instructions, source_map) =
             generate_instructions(fragments.clone());
