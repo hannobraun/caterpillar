@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, BranchLocation, Fragment, FragmentLocation, Fragments,
+        Branch, BranchLocation, Changes, Fragment, FragmentLocation, Fragments,
         Function, FunctionLocation, Parameters,
     },
     hash::Hash,
@@ -15,6 +15,7 @@ use crate::{
 
 pub fn generate_instructions(
     fragments: &Fragments,
+    _: &Changes,
     instructions: &mut Instructions,
 ) -> SourceMap {
     *instructions = Instructions::default();

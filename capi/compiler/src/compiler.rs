@@ -33,12 +33,11 @@ impl Compiler {
 
         let fragments = generate_fragments(clusters);
         let changes = detect_changes(self.fragments.as_ref(), &fragments);
-        dbg!(changes.added, changes.updated);
 
         self.fragments = Some(fragments.clone());
 
         let source_map =
-            generate_instructions(&fragments, &mut self.instructions);
+            generate_instructions(&fragments, &changes, &mut self.instructions);
 
         (fragments, self.instructions.clone(), source_map)
     }
