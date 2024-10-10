@@ -17,7 +17,11 @@ pub fn generate_instructions(
     fragments: &Fragments,
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
-    let mut output = Output::default();
+    let mut output = Output {
+        instructions: Instructions::default(),
+        placeholders: Vec::new(),
+        source_map: SourceMap::default(),
+    };
     let mut functions = BTreeMap::default();
 
     // Create placeholder for call to `main` function.
@@ -454,7 +458,6 @@ fn intrinsic_to_instruction(
     }
 }
 
-#[derive(Default)]
 struct Output {
     instructions: Instructions,
     placeholders: Vec<CallToFunction>,
