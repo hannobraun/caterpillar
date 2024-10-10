@@ -1,7 +1,6 @@
 use crate::tests::infra::runtime;
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
 fn use_updated_code_on_next_function_call() {
     // If a function is updated, we expect the next call to it to execute the
     // new version.

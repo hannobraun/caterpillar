@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 use crate::{
     fragments::{
         Branch, BranchLocation, Changes, Fragment, FragmentLocation, Fragments,
-        Function, FunctionLocation, Parameters,
+        Function, FunctionLocation, Parameters, UpdatedFunction,
     },
     hash::Hash,
     intrinsics::Intrinsic,
@@ -45,7 +45,13 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    let changed_and_updated_functions = changes.added.iter();
+    let changed_and_updated_functions =
+        changes.added.iter().chain(changes.updated.iter().map(
+            |UpdatedFunction {
+                 new: (index, function),
+                 ..
+             }| (index, function),
+        ));
     for (&index, function) in changed_and_updated_functions {
         let cluster = fragments
             .clusters
