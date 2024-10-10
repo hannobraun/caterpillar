@@ -8,14 +8,14 @@ pub fn runtime() -> TestRuntime {
 
 #[derive(Default)]
 pub struct TestRuntime {
+    compiler: Compiler,
     runtime: Runtime,
     instructions: Option<Instructions>,
 }
 
 impl TestRuntime {
     pub fn update_code(&mut self, source: &str) -> &mut Self {
-        let mut compiler = Compiler::default();
-        let (_, instructions, _) = compiler.compile::<TestHost>(source);
+        let (_, instructions, _) = self.compiler.compile::<TestHost>(source);
         self.instructions = Some(instructions);
         self
     }
