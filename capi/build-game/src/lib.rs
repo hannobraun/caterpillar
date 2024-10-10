@@ -42,11 +42,18 @@ pub async fn build_and_watch_game(
 }
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
+    let mut compiler = Compiler::default();
+    build_game_once_with_compiler(game, &mut compiler).await
+}
+
+async fn build_game_once_with_compiler(
+    game: &str,
+    compiler: &mut Compiler,
+) -> anyhow::Result<Code> {
     let path = format!("games/{game}/{game}.capi");
 
     let source = fs::read_to_string(path).await?;
 
-    let mut compiler = Compiler::default();
     let (fragments, instructions, source_map) =
         compiler.compile::<GameEngineHost>(&source);
 
