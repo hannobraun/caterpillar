@@ -1,5 +1,5 @@
 use crate::{
-    fragments::{Changes, Fragments},
+    fragments::{Changes, Fragments, UpdatedFunction},
     hash::Hash,
 };
 
@@ -53,7 +53,10 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
             let old_function = old.remove(&old_index).expect(
                 "Just found index in map; expecting it to still be there.",
             );
-            updated.push((old_function, new_function));
+            updated.push(UpdatedFunction {
+                old: old_function,
+                new: new_function,
+            });
 
             continue;
         }
