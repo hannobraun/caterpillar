@@ -118,8 +118,7 @@ pub fn generate_instructions(
         );
     }
 
-    let Output { source_map, .. } = output;
-    source_map
+    output.source_map
 }
 
 fn compile_function(
