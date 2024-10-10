@@ -16,11 +16,11 @@ use crate::{
 pub fn generate_instructions(
     fragments: &Fragments,
 ) -> (Instructions, SourceMap) {
-    let instructions = Instructions::default();
+    let mut instructions = Instructions::default();
 
     let mut queue = VecDeque::new();
     let mut output = Output {
-        instructions,
+        instructions: &mut instructions,
         placeholders: Vec::new(),
         source_map: SourceMap::default(),
     };
@@ -117,11 +117,7 @@ pub fn generate_instructions(
         );
     }
 
-    let Output {
-        instructions,
-        source_map,
-        ..
-    } = output;
+    let Output { source_map, .. } = output;
 
     (instructions, source_map)
 }
@@ -466,13 +462,13 @@ fn intrinsic_to_instruction(
     }
 }
 
-struct Output {
-    instructions: Instructions,
+struct Output<'r> {
+    instructions: &'r mut Instructions,
     placeholders: Vec<CallToFunction>,
     source_map: SourceMap,
 }
 
-impl Output {
+impl Output<'_> {
     fn generate_instruction(
         &mut self,
         instruction: Instruction,
