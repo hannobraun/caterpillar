@@ -117,7 +117,13 @@ pub fn generate_instructions(
         );
     }
 
-    (output.instructions, output.source_map)
+    let Output {
+        instructions,
+        source_map,
+        ..
+    } = output;
+
+    (instructions, source_map)
 }
 
 fn compile_function(
