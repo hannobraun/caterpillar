@@ -15,7 +15,7 @@ use crate::{
 
 pub fn generate_instructions(
     fragments: &Fragments,
-    _: &Changes,
+    changes: &Changes,
     instructions: &mut Instructions,
 ) -> SourceMap {
     *instructions = Instructions::default();
@@ -45,7 +45,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    for (&index, function) in &fragments.functions {
+    for (&index, function) in &changes.added {
         let cluster = fragments
             .clusters
             .iter()
