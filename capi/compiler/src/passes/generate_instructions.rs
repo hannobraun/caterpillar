@@ -18,8 +18,6 @@ pub fn generate_instructions(
     changes: &Changes,
     instructions: &mut Instructions,
 ) -> SourceMap {
-    *instructions = Instructions::default();
-
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
