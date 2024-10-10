@@ -45,7 +45,7 @@ pub fn generate_instructions(
     }
 
     // Seed the queue with the named functions.
-    let changed_and_updated_functions = &changes.added;
+    let changed_and_updated_functions = changes.added.iter();
     for (&index, function) in changed_and_updated_functions {
         let cluster = fragments
             .clusters
