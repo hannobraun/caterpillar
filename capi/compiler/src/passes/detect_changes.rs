@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     fragments::{Changes, Fragments, UpdatedFunction},
     hash::Hash,
@@ -9,10 +11,10 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
         .unwrap_or_default();
     let mut new = new.functions.clone();
 
-    let mut added = Vec::new();
+    let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    while let Some((_, new_function)) = new.pop_first() {
+    while let Some((new_index, new_function)) = new.pop_first() {
         // We've removed `new_function` from `new`. From here on, where we
         // remove functions from `old`, we don't have to do the same for `new`.
 
@@ -63,7 +65,7 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
 
         // If we make it here, there was neither an identical function before,
         // nor one with the same name. This must mean this function is new.
-        added.push(new_function);
+        added.insert(new_index, new_function);
     }
 
     Changes { added, updated }
