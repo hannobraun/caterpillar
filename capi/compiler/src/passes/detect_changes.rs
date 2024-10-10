@@ -56,8 +56,8 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
                 "Just found index in map; expecting it to still be there.",
             );
             updated.push(UpdatedFunction {
-                old: old_function,
-                new: new_function,
+                old: (old_index, old_function),
+                new: (new_index, new_function),
             });
 
             continue;
