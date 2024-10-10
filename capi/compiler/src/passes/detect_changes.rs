@@ -1,5 +1,5 @@
 use crate::{
-    fragments::{Fragments, Function},
+    fragments::{Changes, Fragments},
     hash::Hash,
 };
 
@@ -64,10 +64,4 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
     }
 
     Changes { added, updated }
-}
-
-#[derive(Debug)]
-pub struct Changes {
-    pub added: Vec<Function>,
-    pub updated: Vec<(Function, Function)>,
 }
