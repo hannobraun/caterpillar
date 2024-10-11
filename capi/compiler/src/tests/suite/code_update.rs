@@ -5,6 +5,8 @@ use crate::tests::infra::runtime;
 fn use_updated_code_on_next_recursive_function_call() {
     // If a function is updated, we expect the next call to it to execute the
     // new version.
+    //
+    // This test covers recursive calls, which is the easier test case to write.
 
     let mut runtime = runtime();
 
