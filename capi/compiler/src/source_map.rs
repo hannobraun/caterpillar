@@ -21,12 +21,11 @@ impl SourceMap {
         fragment: FragmentLocation,
         instruction: InstructionAddress,
     ) {
-        self.instruction_to_fragment
-            .insert(instruction, fragment.clone());
         self.fragment_to_instructions
-            .entry(fragment)
+            .entry(fragment.clone())
             .or_default()
             .push(instruction);
+        self.instruction_to_fragment.insert(instruction, fragment);
     }
 
     /// # Define which instructions map to the given function
