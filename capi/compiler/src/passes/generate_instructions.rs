@@ -43,14 +43,14 @@ pub fn generate_instructions(
         });
     }
 
-    let changed_and_updated_functions =
+    let added_and_updated_functions =
         changes.added.iter().chain(changes.updated.iter().map(
             |UpdatedFunction {
                  new: (index, function),
                  ..
              }| (index, function),
         ));
-    for (&index, function) in changed_and_updated_functions {
+    for (&index, function) in added_and_updated_functions {
         let cluster = fragments
             .clusters
             .iter()
