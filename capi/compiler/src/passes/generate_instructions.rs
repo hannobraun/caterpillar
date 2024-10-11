@@ -75,7 +75,7 @@ pub fn generate_instructions(
         );
     }
 
-    for call in output.placeholders {
+    for call in &output.placeholders {
         let Some(function) = functions.get(&call.hash) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
