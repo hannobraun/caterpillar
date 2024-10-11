@@ -18,6 +18,18 @@ pub struct SourceMap {
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 
     /// # Mapping of functions to the instructions that call them
+    ///
+    /// ## Implementation Note
+    ///
+    /// This data doesn't really fit here, as it's only ostensibly related to
+    /// the purpose of the source map.
+    ///
+    /// The source map is sent to the debugger, and plays an essential role
+    /// there to make it work. This data isn't used by the debugger, however.
+    /// It's just used internally by the compiler, to update calls to changes
+    /// functions.
+    ///
+    /// This should probably live as a field in `Compiler`.
     function_to_calling_instructions:
         BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
