@@ -16,6 +16,7 @@ use crate::{
 pub struct Compiler {
     fragments: Option<Fragments>,
     instructions: Instructions,
+    source_map: SourceMap,
 }
 
 impl Compiler {
@@ -36,14 +37,17 @@ impl Compiler {
 
         self.fragments = Some(fragments.clone());
 
-        let mut source_map = SourceMap::default();
         generate_instructions(
             &fragments,
             &changes,
             &mut self.instructions,
-            &mut source_map,
+            &mut self.source_map,
         );
 
-        (fragments, self.instructions.clone(), source_map)
+        (
+            fragments,
+            self.instructions.clone(),
+            self.source_map.clone(),
+        )
     }
 }
