@@ -481,7 +481,7 @@ impl Output<'_> {
     ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
         if let Some(fragment) = fragment {
-            self.source_map.define_mapping(addr, fragment);
+            self.source_map.define_mapping(fragment, addr);
         }
         addr
     }

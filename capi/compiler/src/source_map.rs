@@ -18,8 +18,8 @@ pub struct SourceMap {
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        instruction: InstructionAddress,
         fragment: FragmentLocation,
+        instruction: InstructionAddress,
     ) {
         self.instruction_to_fragment
             .insert(instruction, fragment.clone());
