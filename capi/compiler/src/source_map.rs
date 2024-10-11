@@ -106,6 +106,20 @@ impl SourceMap {
             },
         )
     }
+
+    /// # Consume all instructions that call the provided function
+    ///
+    /// Completely removes the entry for that function. This is done to prevent
+    /// the source map from accumulating old calls that should no longer be
+    /// relevant, and might possibly cause problems in future updates.
+    pub fn consume_calls_to_function(
+        &mut self,
+        function: &Hash<Function>,
+    ) -> Vec<InstructionAddress> {
+        self.function_to_calling_instructions
+            .remove(function)
+            .unwrap_or_default()
+    }
 }
 
 /// # A mapping of a fragment to a number of instructions
