@@ -129,6 +129,67 @@ pub fn generate_instructions(
             );
         }
     }
+
+    for update in &changes.updated {
+        let old_hash = Hash::new(&update.old.function);
+        let new_hash = Hash::new(&update.new.function);
+
+        for calling_address in
+            output.source_map.consume_calls_to_function(&old_hash)
+        {
+            let calling_instruction = output
+                .instructions
+                .get(&calling_address)
+                .expect("Instruction referenced from source map must exist.");
+            let Instruction::CallFunction { is_tail_call, .. } =
+                calling_instruction
+            else {
+                panic!(
+                    "Calling instruction referenced from source map is not a \
+                    function call."
+                );
+            };
+
+            let function = functions.get(&new_hash).expect(
+                "New function referenced in update should have been compiled; \
+                is expected to exist.",
+            );
+            let function = capi_runtime::Function {
+                branches: function
+                    .iter()
+                    .map(|(parameters, address)| {
+                        let parameters = parameters
+                            .inner
+                            .iter()
+                            .cloned()
+                            .map(|pattern| match pattern {
+                                Pattern::Identifier { name } => {
+                                    capi_runtime::Pattern::Identifier { name }
+                                }
+                                Pattern::Literal { value } => {
+                                    capi_runtime::Pattern::Literal { value }
+                                }
+                            })
+                            .collect();
+
+                        capi_runtime::Branch {
+                            parameters,
+                            start: *address,
+                        }
+                    })
+                    .collect(),
+                environment: BTreeMap::new(),
+            };
+
+            output.instructions.replace(
+                &calling_address,
+                Instruction::CallFunction {
+                    function,
+                    is_tail_call: *is_tail_call,
+                },
+            );
+        }
+    }
 }
 
 fn compile_function(

@@ -1,7 +1,6 @@
 use crate::tests::infra::runtime;
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
 fn use_updated_code_on_next_recursive_function_call() {
     // If a function is updated, we expect the next call to it to execute the
     // new version.
@@ -117,7 +116,6 @@ fn use_old_code_before_next_function_call() {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
 fn handle_update_that_makes_function_larger() {
     // The update procedure laid out by previous tests should still work, if the
     // update makes the function larger.
@@ -150,7 +148,6 @@ fn handle_update_that_makes_function_larger() {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
 fn handle_update_that_makes_function_smaller() {
     // The update procedure laid out by previous tests should still work, if the
     // update makes the function smaller.
