@@ -23,7 +23,7 @@ pub fn generate_instructions(
     let mut output = Output {
         instructions,
         source_map,
-        placeholders: Vec::new(),
+        placeholders: BTreeMap::new(),
     };
     let mut functions = BTreeMap::default();
 
@@ -36,11 +36,15 @@ pub fn generate_instructions(
         effect: Effect::BuildError,
     });
     if let Some(function) = fragments.find_function_by_name("main") {
-        output.placeholders.push(CallToFunction {
-            hash: Hash::new(&function),
-            address: call_to_main,
-            is_tail_call: true,
-        });
+        output
+            .placeholders
+            .entry(Hash::new(&function))
+            .or_default()
+            .push(CallToFunction {
+                hash: Hash::new(&function),
+                address: call_to_main,
+                is_tail_call: true,
+            });
     }
 
     let added_and_updated_functions =
@@ -75,7 +79,7 @@ pub fn generate_instructions(
         );
     }
 
-    for call in &output.placeholders {
+    for call in output.placeholders.values().flatten() {
         let Some(function) = functions.get(&call.hash) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
@@ -313,11 +317,13 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            output.placeholders.push(CallToFunction {
-                hash: *hash,
-                address,
-                is_tail_call: *is_tail_call,
-            });
+            output.placeholders.entry(*hash).or_default().push(
+                CallToFunction {
+                    hash: *hash,
+                    address,
+                    is_tail_call: *is_tail_call,
+                },
+            );
 
             Some(address)
         }
@@ -352,11 +358,15 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            output.placeholders.push(CallToFunction {
-                hash,
-                address,
-                is_tail_call: *is_tail_call,
-            });
+            output
+                .placeholders
+                .entry(hash)
+                .or_default()
+                .push(CallToFunction {
+                    hash,
+                    address,
+                    is_tail_call: *is_tail_call,
+                });
 
             Some(address)
         }
@@ -514,7 +524,7 @@ fn generate_instruction(
 struct Output<'r> {
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
-    placeholders: Vec<CallToFunction>,
+    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
 impl Output<'_> {
