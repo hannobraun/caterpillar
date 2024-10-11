@@ -34,6 +34,53 @@ fn use_updated_code_on_next_recursive_function_call() {
 }
 
 #[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
+fn use_updated_code_on_next_non_recursive_function_call() {
+    // If a function is updated, we expect the next call to it to execute the
+    // new version.
+    //
+    // This test covers non-recursive calls.
+
+    let mut runtime = runtime();
+
+    runtime
+        .update_code(
+            r"
+                main: {
+                    \ ->
+                        0 send
+                        notify
+                        main
+                }
+
+                notify: {
+                    \ ->
+                        1 send
+                }
+            ",
+        )
+        .run_until_receiving(0);
+
+    runtime
+        .update_code(
+            r"
+                main: {
+                    \ ->
+                        0 send
+                        notify
+                        main
+                }
+
+                notify: {
+                    \ ->
+                        2 send
+                }
+            ",
+        )
+        .run_until_receiving(2);
+}
+
+#[test]
 fn use_old_code_before_next_function_call() {
     // If a function is updated while it's running, we expect it to still
     // execute the old code, until the next call to it.
