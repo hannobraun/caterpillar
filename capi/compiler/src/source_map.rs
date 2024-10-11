@@ -2,7 +2,10 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::fragments::{FragmentLocation, FunctionLocation};
+use crate::{
+    fragments::{FragmentLocation, Function, FunctionLocation},
+    hash::Hash,
+};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -13,6 +16,8 @@ pub struct SourceMap {
     instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
+    function_to_calling_instructions:
+        BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
 
 impl SourceMap {
@@ -41,6 +46,18 @@ impl SourceMap {
         range: [InstructionAddress; 2],
     ) {
         self.function_to_instructions.insert(function, range);
+    }
+
+    /// # Map a function to the instructions that call it
+    pub fn map_function_to_calling_instructions(
+        &mut self,
+        function: Hash<Function>,
+        call: InstructionAddress,
+    ) {
+        self.function_to_calling_instructions
+            .entry(function)
+            .or_default()
+            .push(call);
     }
 
     /// Get the ID of the fragment that the given instruction maps to
