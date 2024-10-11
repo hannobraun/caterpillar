@@ -16,8 +16,11 @@ pub struct Changes {
 #[derive(Debug)]
 pub struct FunctionUpdate {
     /// # The old version of the function
-    pub old: (FunctionIndexInRootContext, Function),
+    pub old: FunctionInUpdate,
 
     /// # The new version of the function
-    pub new: (FunctionIndexInRootContext, Function),
+    pub new: FunctionInUpdate,
 }
+
+/// # An function that is part of an update; either an old or a new version
+pub type FunctionInUpdate = (FunctionIndexInRootContext, Function);
