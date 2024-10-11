@@ -330,6 +330,7 @@ fn compile_fragment(
                 .functions
                 .get(&function_index_in_root_context)
                 .expect("Function referred to from cluster must exist.");
+            let hash = Hash::new(called_function);
 
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.
@@ -352,7 +353,7 @@ fn compile_fragment(
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
             output.placeholders.push(CallToFunction {
-                hash: Hash::new(called_function),
+                hash,
                 address,
                 is_tail_call: *is_tail_call,
             });
