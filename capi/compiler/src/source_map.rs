@@ -20,7 +20,10 @@ impl SourceMap {
     ///
     /// This function only accepts the location of the fragment. To append the
     /// associated instructions, use the returned [`Mapping`].
-    pub fn define_mapping(&mut self, fragment: FragmentLocation) -> Mapping {
+    pub fn map_fragment_to_instructions(
+        &mut self,
+        fragment: FragmentLocation,
+    ) -> Mapping {
         // Make sure we don't have a previous mapping whose leftovers might
         // corrupt the new one.
         self.fragment_to_instructions.remove(&fragment);
