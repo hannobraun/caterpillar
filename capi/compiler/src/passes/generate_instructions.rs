@@ -368,6 +368,12 @@ fn compile_fragment(
                     is_tail_call: *is_tail_call,
                 });
 
+            // We also need to do some bookkeeping, so we can update the call,
+            // in case the called function is updated.
+            output
+                .source_map
+                .map_function_to_calling_instructions(hash, address);
+
             Some(address)
         }
         Fragment::CallToHostFunction { effect_number } => {
