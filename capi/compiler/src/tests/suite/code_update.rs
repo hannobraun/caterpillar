@@ -90,17 +90,18 @@ fn handle_update_that_makes_function_larger() {
         .update_code(
             r"
                 main: { \ ->
-                    0 send
                     1 send
+                    2 send
                     main
                 }
             ",
         )
-        .run_until_receiving(0)
-        .run_until_receiving(1);
+        .run_until_receiving(1)
+        .run_until_receiving(2);
 }
 
 #[test]
+#[should_panic] // https://github.com/hannobraun/caterpillar/issues/50
 fn handle_update_that_makes_function_smaller() {
     // The update procedure laid out by previous tests should still work, if the
     // update makes the function smaller.
@@ -123,11 +124,11 @@ fn handle_update_that_makes_function_smaller() {
         .update_code(
             r"
                 main: { \ ->
-                    0 send
+                    2 send
                     main
                 }
             ",
         )
         .run_until_receiving(1)
-        .run_until_receiving(0);
+        .run_until_receiving(2);
 }
