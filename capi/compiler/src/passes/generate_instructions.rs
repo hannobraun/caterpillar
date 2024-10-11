@@ -21,8 +21,8 @@ pub fn generate_instructions(
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
-        placeholders: Vec::new(),
         source_map: SourceMap::default(),
+        placeholders: Vec::new(),
     };
     let mut functions = BTreeMap::default();
 
@@ -468,8 +468,8 @@ fn intrinsic_to_instruction(
 
 struct Output<'r> {
     instructions: &'r mut Instructions,
-    placeholders: Vec<CallToFunction>,
     source_map: SourceMap,
+    placeholders: Vec<CallToFunction>,
 }
 
 impl Output<'_> {
