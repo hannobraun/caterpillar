@@ -16,16 +16,15 @@ pub struct SourceMap {
 }
 
 impl SourceMap {
-    pub fn define_mapping(
-        &mut self,
-        fragment: FragmentLocation,
-        instruction: InstructionAddress,
-    ) {
-        self.fragment_to_instructions
-            .entry(fragment.clone())
-            .or_default()
-            .push(instruction);
-        self.instruction_to_fragment.insert(instruction, fragment);
+    pub fn define_mapping(&mut self, fragment: FragmentLocation) -> Mapping {
+        // Make sure we don't have a previous mapping whose leftovers might
+        // corrupt the new one.
+        self.fragment_to_instructions.remove(&fragment);
+
+        Mapping {
+            fragment,
+            source_map: self,
+        }
     }
 
     /// # Define which instructions map to the given function
@@ -82,5 +81,26 @@ impl SourceMap {
                 }
             },
         )
+    }
+}
+
+/// # A mapping of a fragment to a number of instructions
+///
+/// Returned by [`SourceMap::define_mapping`].
+pub struct Mapping<'r> {
+    fragment: FragmentLocation,
+    source_map: &'r mut SourceMap,
+}
+
+impl Mapping<'_> {
+    pub fn append_instruction(&mut self, instruction: InstructionAddress) {
+        self.source_map
+            .fragment_to_instructions
+            .entry(self.fragment.clone())
+            .or_default()
+            .push(instruction);
+        self.source_map
+            .instruction_to_fragment
+            .insert(instruction, self.fragment.clone());
     }
 }

@@ -9,7 +9,7 @@ use crate::{
     },
     hash::Hash,
     intrinsics::Intrinsic,
-    source_map::SourceMap,
+    source_map::{Mapping, SourceMap},
     syntax::{Cluster, Pattern},
 };
 
@@ -275,12 +275,8 @@ fn compile_branch(
     //   compiler optimizations. I'd rather have that, instead of making
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
-    let last_instruction = generate_instruction(
-        Instruction::Return,
-        None,
-        output.instructions,
-        output.source_map,
-    );
+    let last_instruction =
+        generate_instruction(Instruction::Return, None, output.instructions);
 
     let first_instruction = first_instruction.unwrap_or(last_instruction);
 
@@ -308,9 +304,8 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some(location),
+                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
-                output.source_map,
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -343,9 +338,8 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some(location),
+                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
-                output.source_map,
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -360,21 +354,21 @@ fn compile_fragment(
             Some(address)
         }
         Fragment::CallToHostFunction { effect_number } => {
+            let mut mapping = output.source_map.define_mapping(location);
+
             let address = generate_instruction(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                Some(location.clone()),
+                Some(&mut mapping),
                 output.instructions,
-                output.source_map,
             );
             generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                Some(location),
+                Some(&mut mapping),
                 output.instructions,
-                output.source_map,
             );
             Some(address)
         }
@@ -387,36 +381,38 @@ fn compile_fragment(
 
             Some(generate_instruction(
                 instruction,
-                Some(location),
+                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
-                output.source_map,
             ))
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
-            let address_of_instruction_to_make_anon_function =
-                if function.name.is_none() {
-                    // If this is an anonymous function, we need to emit an
-                    // instruction that allocates it, and takes care of its
-                    // environment.
-                    //
-                    // But we haven't compiled the anonymous function yet, so we
-                    // don't have the required information to do that. For now,
-                    // let's create a placeholder for that instruction.
-                    //
-                    // Once the function gets compiled, we'll replace the
-                    // placeholder with the real instruction.
-                    Some(generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::CompilerBug,
-                        },
-                        Some(location.clone()),
-                        output.instructions,
-                        output.source_map,
-                    ))
-                } else {
-                    None
-                };
+            let address_of_instruction_to_make_anon_function = if function
+                .name
+                .is_none()
+            {
+                // If this is an anonymous function, we need to emit an
+                // instruction that allocates it, and takes care of its
+                // environment.
+                //
+                // But we haven't compiled the anonymous function yet, so we
+                // don't have the required information to do that. For now,
+                // let's create a placeholder for that instruction.
+                //
+                // Once the function gets compiled, we'll replace the
+                // placeholder with the real instruction.
+                Some(generate_instruction(
+                    Instruction::TriggerEffect {
+                        effect: Effect::CompilerBug,
+                    },
+                    Some(
+                        &mut output.source_map.define_mapping(location.clone()),
+                    ),
+                    output.instructions,
+                ))
+            } else {
+                None
+            };
 
             // And to make it happen later, we need to put what we already have
             // into a queue. Once whatever's currently being compiled is out of
@@ -432,25 +428,22 @@ fn compile_fragment(
         }
         Fragment::ResolvedBinding { name } => Some(generate_instruction(
             Instruction::BindingEvaluate { name: name.clone() },
-            Some(location),
+            Some(&mut output.source_map.define_mapping(location)),
             output.instructions,
-            output.source_map,
         )),
         Fragment::UnresolvedIdentifier { name: _ } => {
             Some(generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                Some(location),
+                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
-                output.source_map,
             ))
         }
         Fragment::Value(value) => Some(generate_instruction(
             Instruction::Push { value: *value },
-            Some(location),
+            Some(&mut output.source_map.define_mapping(location)),
             output.instructions,
-            output.source_map,
         )),
     }
 }
@@ -492,13 +485,12 @@ fn intrinsic_to_instruction(
 
 fn generate_instruction(
     instruction: Instruction,
-    fragment: Option<FragmentLocation>,
+    mapping: Option<&mut Mapping<'_>>,
     instructions: &mut Instructions,
-    source_map: &mut SourceMap,
 ) -> InstructionAddress {
     let addr = instructions.push(instruction);
-    if let Some(fragment) = fragment {
-        source_map.define_mapping(fragment, addr);
+    if let Some(mapping) = mapping {
+        mapping.append_instruction(addr);
     }
     addr
 }
@@ -525,7 +517,6 @@ impl Output<'_> {
                 Instruction::Bind { name: name.clone() },
                 None,
                 self.instructions,
-                self.source_map,
             );
             first_address = first_address.or(Some(address));
         }
