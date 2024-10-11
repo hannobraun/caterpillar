@@ -276,7 +276,7 @@ fn compile_branch(
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
     let last_instruction =
-        generate_instruction(Instruction::Return, None, output.instructions);
+        generate_instruction(Instruction::Return, output.instructions, None);
 
     let first_instruction = first_instruction.unwrap_or(last_instruction);
 
@@ -304,8 +304,8 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
+                Some(&mut output.source_map.define_mapping(location)),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -338,8 +338,8 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
+                Some(&mut output.source_map.define_mapping(location)),
             );
 
             // We can't leave it at that, however. We need to make sure this
@@ -360,15 +360,15 @@ fn compile_fragment(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                Some(&mut mapping),
                 output.instructions,
+                Some(&mut mapping),
             );
             generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                Some(&mut mapping),
                 output.instructions,
+                Some(&mut mapping),
             );
             Some(address)
         }
@@ -381,8 +381,8 @@ fn compile_fragment(
 
             Some(generate_instruction(
                 instruction,
-                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
+                Some(&mut output.source_map.define_mapping(location)),
             ))
         }
         Fragment::Comment { .. } => None,
@@ -405,10 +405,10 @@ fn compile_fragment(
                     Instruction::TriggerEffect {
                         effect: Effect::CompilerBug,
                     },
+                    output.instructions,
                     Some(
                         &mut output.source_map.define_mapping(location.clone()),
                     ),
-                    output.instructions,
                 ))
             } else {
                 None
@@ -428,22 +428,22 @@ fn compile_fragment(
         }
         Fragment::ResolvedBinding { name } => Some(generate_instruction(
             Instruction::BindingEvaluate { name: name.clone() },
-            Some(&mut output.source_map.define_mapping(location)),
             output.instructions,
+            Some(&mut output.source_map.define_mapping(location)),
         )),
         Fragment::UnresolvedIdentifier { name: _ } => {
             Some(generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                Some(&mut output.source_map.define_mapping(location)),
                 output.instructions,
+                Some(&mut output.source_map.define_mapping(location)),
             ))
         }
         Fragment::Value(value) => Some(generate_instruction(
             Instruction::Push { value: *value },
-            Some(&mut output.source_map.define_mapping(location)),
             output.instructions,
+            Some(&mut output.source_map.define_mapping(location)),
         )),
     }
 }
@@ -485,8 +485,8 @@ fn intrinsic_to_instruction(
 
 fn generate_instruction(
     instruction: Instruction,
-    mapping: Option<&mut Mapping<'_>>,
     instructions: &mut Instructions,
+    mapping: Option<&mut Mapping<'_>>,
 ) -> InstructionAddress {
     let addr = instructions.push(instruction);
     if let Some(mapping) = mapping {
@@ -515,8 +515,8 @@ impl Output<'_> {
         for name in names.into_iter().rev() {
             let address = generate_instruction(
                 Instruction::Bind { name: name.clone() },
-                None,
                 self.instructions,
+                None,
             );
             first_address = first_address.or(Some(address));
         }
