@@ -23,4 +23,8 @@ pub struct FunctionUpdate {
 }
 
 /// # An function that is part of an update; either an old or a new version
-pub type FunctionInUpdate = (FunctionIndexInRootContext, Function);
+#[derive(Debug)]
+pub struct FunctionInUpdate {
+    pub index: FunctionIndexInRootContext,
+    pub function: Function,
+}
