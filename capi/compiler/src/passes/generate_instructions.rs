@@ -19,8 +19,6 @@ pub fn generate_instructions(
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
 ) {
-    *source_map = SourceMap::default();
-
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
