@@ -18,10 +18,12 @@ pub fn generate_instructions(
     changes: &Changes,
     instructions: &mut Instructions,
 ) -> SourceMap {
+    let source_map = SourceMap::default();
+
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
-        source_map: SourceMap::default(),
+        source_map,
         placeholders: Vec::new(),
     };
     let mut functions = BTreeMap::default();
