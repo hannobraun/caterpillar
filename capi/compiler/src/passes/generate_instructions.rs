@@ -17,13 +17,14 @@ pub fn generate_instructions(
     fragments: &Fragments,
     changes: &Changes,
     instructions: &mut Instructions,
-) -> SourceMap {
-    let mut source_map = SourceMap::default();
+    source_map: &mut SourceMap,
+) {
+    *source_map = SourceMap::default();
 
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
-        source_map: &mut source_map,
+        source_map,
         placeholders: Vec::new(),
     };
     let mut functions = BTreeMap::default();
@@ -124,8 +125,6 @@ pub fn generate_instructions(
             },
         );
     }
-
-    source_map
 }
 
 fn compile_function(

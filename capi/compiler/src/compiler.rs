@@ -36,8 +36,13 @@ impl Compiler {
 
         self.fragments = Some(fragments.clone());
 
-        let source_map =
-            generate_instructions(&fragments, &changes, &mut self.instructions);
+        let mut source_map = SourceMap::default();
+        generate_instructions(
+            &fragments,
+            &changes,
+            &mut self.instructions,
+            &mut source_map,
+        );
 
         (fragments, self.instructions.clone(), source_map)
     }
