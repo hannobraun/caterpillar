@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 use crate::{
     fragments::{
         Branch, BranchLocation, Changes, Fragment, FragmentLocation, Fragments,
-        Function, FunctionLocation, Parameters, UpdatedFunction,
+        Function, FunctionLocation, FunctionUpdate, Parameters,
     },
     hash::Hash,
     intrinsics::Intrinsic,
@@ -48,7 +48,7 @@ pub fn generate_instructions(
 
     let added_and_updated_functions =
         changes.added.iter().chain(changes.updated.iter().map(
-            |UpdatedFunction {
+            |FunctionUpdate {
                  new: (index, function),
                  ..
              }| (index, function),

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{Changes, Fragments, UpdatedFunction},
+    fragments::{Changes, Fragments, FunctionUpdate},
     hash::Hash,
 };
 
@@ -55,7 +55,7 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
             let old_function = old.remove(&old_index).expect(
                 "Just found index in map; expecting it to still be there.",
             );
-            updated.push(UpdatedFunction {
+            updated.push(FunctionUpdate {
                 old: (old_index, old_function),
                 new: (new_index, new_function),
             });

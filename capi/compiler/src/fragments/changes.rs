@@ -9,12 +9,12 @@ pub struct Changes {
     pub added: BTreeMap<FunctionIndexInRootContext, Function>,
 
     /// # The functions that were updated in the new version
-    pub updated: Vec<UpdatedFunction>,
+    pub updated: Vec<FunctionUpdate>,
 }
 
 /// # A function that was updated in a new version of the code
 #[derive(Debug)]
-pub struct UpdatedFunction {
+pub struct FunctionUpdate {
     /// # The old version of the function
     pub old: (FunctionIndexInRootContext, Function),
 

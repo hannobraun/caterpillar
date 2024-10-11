@@ -9,7 +9,7 @@ mod functions;
 mod location;
 
 pub use self::{
-    changes::{Changes, UpdatedFunction},
+    changes::{Changes, FunctionUpdate},
     fragment::Fragment,
     fragments::Fragments,
     functions::{Branch, Function, Parameters},
