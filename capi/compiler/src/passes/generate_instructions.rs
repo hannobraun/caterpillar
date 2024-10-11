@@ -41,7 +41,6 @@ pub fn generate_instructions(
             .entry(Hash::new(&function))
             .or_default()
             .push(CallToFunction {
-                hash: Hash::new(&function),
                 address: call_to_main,
                 is_tail_call: true,
             });
@@ -79,8 +78,8 @@ pub fn generate_instructions(
         );
     }
 
-    for call in output.placeholders.values().flatten() {
-        let Some(function) = functions.get(&call.hash) else {
+    for (hash, calls) in &output.placeholders {
+        let Some(function) = functions.get(hash) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -119,13 +118,15 @@ pub fn generate_instructions(
             environment: BTreeMap::new(),
         };
 
-        output.instructions.replace(
-            &call.address,
-            Instruction::CallFunction {
-                function,
-                is_tail_call: call.is_tail_call,
-            },
-        );
+        for call in calls {
+            output.instructions.replace(
+                &call.address,
+                Instruction::CallFunction {
+                    function: function.clone(),
+                    is_tail_call: call.is_tail_call,
+                },
+            );
+        }
     }
 }
 
@@ -319,7 +320,6 @@ fn compile_fragment(
             // adding it to this list.
             output.placeholders.entry(*hash).or_default().push(
                 CallToFunction {
-                    hash: *hash,
                     address,
                     is_tail_call: *is_tail_call,
                 },
@@ -363,7 +363,6 @@ fn compile_fragment(
                 .entry(hash)
                 .or_default()
                 .push(CallToFunction {
-                    hash,
                     address,
                     is_tail_call: *is_tail_call,
                 });
@@ -552,7 +551,6 @@ impl Output<'_> {
 }
 
 pub struct CallToFunction {
-    pub hash: Hash<Function>,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
