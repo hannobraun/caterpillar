@@ -8,9 +8,9 @@ use crate::fragments::{FragmentLocation, FunctionLocation};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
     fragment_to_instructions:
         BTreeMap<FragmentLocation, Vec<InstructionAddress>>,
+    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
     function_to_instruction_range:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
