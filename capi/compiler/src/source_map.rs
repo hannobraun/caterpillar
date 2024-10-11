@@ -16,6 +16,8 @@ pub struct SourceMap {
     instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
+
+    /// # Mapping of functions to the instructions that call them
     function_to_calling_instructions:
         BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
