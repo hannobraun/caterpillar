@@ -207,7 +207,7 @@ fn compile_function(
     if let Some(instruction_range) = instruction_range {
         output
             .source_map
-            .define_instruction_range(location, instruction_range);
+            .map_function_to_instructions(location, instruction_range);
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {

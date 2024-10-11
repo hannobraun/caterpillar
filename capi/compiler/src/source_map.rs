@@ -35,7 +35,7 @@ impl SourceMap {
     }
 
     /// # Define which instructions map to the given function
-    pub fn define_instruction_range(
+    pub fn map_function_to_instructions(
         &mut self,
         function: FunctionLocation,
         range: [InstructionAddress; 2],
