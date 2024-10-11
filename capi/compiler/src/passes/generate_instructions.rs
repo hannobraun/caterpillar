@@ -387,6 +387,12 @@ fn compile_fragment(
                 },
             );
 
+            // We also need to do some bookkeeping, so we can update the call,
+            // in case the called function is updated.
+            output
+                .source_map
+                .map_function_to_calling_instructions(*hash, address);
+
             Some(address)
         }
         Fragment::CallToFunctionRecursive {
