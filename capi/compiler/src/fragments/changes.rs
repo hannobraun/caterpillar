@@ -12,7 +12,7 @@ pub struct Changes {
     pub updated: Vec<FunctionUpdate>,
 }
 
-/// # A function that was updated in a new version of the code
+/// # A function update
 #[derive(Debug)]
 pub struct FunctionUpdate {
     /// # The old version of the function
