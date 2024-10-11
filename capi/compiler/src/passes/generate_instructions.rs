@@ -18,12 +18,12 @@ pub fn generate_instructions(
     changes: &Changes,
     instructions: &mut Instructions,
 ) -> SourceMap {
-    let source_map = SourceMap::default();
+    let mut source_map = SourceMap::default();
 
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
-        source_map,
+        source_map: &mut source_map,
         placeholders: Vec::new(),
     };
     let mut functions = BTreeMap::default();
@@ -125,7 +125,7 @@ pub fn generate_instructions(
         );
     }
 
-    output.source_map
+    source_map
 }
 
 fn compile_function(
@@ -470,7 +470,7 @@ fn intrinsic_to_instruction(
 
 struct Output<'r> {
     instructions: &'r mut Instructions,
-    source_map: SourceMap,
+    source_map: &'r mut SourceMap,
     placeholders: Vec<CallToFunction>,
 }
 
