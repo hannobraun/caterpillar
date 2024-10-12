@@ -31,7 +31,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         .collect::<BTreeMap<_, _>>();
 
     Fragments {
-        functions: NamedFunctions { inner: functions },
+        named_functions: NamedFunctions { inner: functions },
         clusters: clusters.clusters,
     }
 }

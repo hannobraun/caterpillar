@@ -5,7 +5,7 @@ use super::{search::FoundFunction, FunctionLocation, NamedFunctions};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     /// # The named functions in the root context
-    pub functions: NamedFunctions,
+    pub named_functions: NamedFunctions,
 
     /// # The function clusters
     pub clusters: Vec<Cluster>,
@@ -38,16 +38,19 @@ impl Fragments {
     /// the ongoing refactoring on fragment addressing has finished, that
     /// function can be removed, and this one can take over its name.
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.functions.inner.iter().find_map(|(&index, function)| {
-            if function.name.as_deref() == Some(name) {
-                let location = FunctionLocation::NamedFunction { index };
-                Some(FoundFunction {
-                    function: function.clone(),
-                    location,
-                })
-            } else {
-                None
-            }
-        })
+        self.named_functions
+            .inner
+            .iter()
+            .find_map(|(&index, function)| {
+                if function.name.as_deref() == Some(name) {
+                    let location = FunctionLocation::NamedFunction { index };
+                    Some(FoundFunction {
+                        function: function.clone(),
+                        location,
+                    })
+                } else {
+                    None
+                }
+            })
     }
 }

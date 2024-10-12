@@ -96,7 +96,7 @@ impl PersistentState {
                 {
                     let function = code
                         .fragments
-                        .functions
+                        .named_functions
                         .find_by_hash(hash)
                         .expect(
                             "Expecting function referenced from call to exist.",

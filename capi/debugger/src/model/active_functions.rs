@@ -260,7 +260,7 @@ fn instruction_to_named_function(
             FunctionLocation::NamedFunction { index } => {
                 let function = code
                     .fragments
-                    .functions
+                    .named_functions
                     .inner
                     .get(&index)
                     .expect(
@@ -330,11 +330,11 @@ fn function_call_to_function_name(
 ) -> Option<String> {
     let fragment = code
         .fragments
-        .functions
+        .named_functions
         .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
     let hash = fragment.as_call_to_function()?;
-    let function = code.fragments.functions.find_by_hash(hash)?;
+    let function = code.fragments.named_functions.find_by_hash(hash)?;
 
     function.name.clone()
 }

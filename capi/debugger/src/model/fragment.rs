@@ -144,7 +144,7 @@ impl DebugFragmentKind {
         match fragment {
             Fragment::CallToFunction { hash, .. } => {
                 let function = fragments
-                    .functions
+                    .named_functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone().expect(
@@ -163,7 +163,7 @@ impl DebugFragmentKind {
                     calling function's cluster.",
                 );
                 let called_function = fragments
-                    .functions
+                    .named_functions
                     .inner
                     .get(called_function_index)
                     .expect(
