@@ -9,6 +9,15 @@ use super::{
 };
 
 /// # All named functions in a program
+///
+/// At this point, all named functions live in a single root context, and are
+/// addressed by an index into that root context. The language is expected to
+/// grow a module system in the future, and then this will change.
+///
+/// Additionally, functions are content-addressed, and can be referred to with a
+/// hash that is expected to be unique to that function. This requires the
+/// function to be fully pre-compiled (or the hash would not remain stable), but
+/// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
     pub inner: BTreeMap<FunctionIndexInRootContext, Function>,
