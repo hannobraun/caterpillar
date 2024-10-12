@@ -1,8 +1,6 @@
-use crate::{hash::Hash, syntax::Cluster};
+use crate::syntax::Cluster;
 
-use super::{
-    search::FoundFunction, Function, FunctionLocation, NamedFunctions,
-};
+use super::{search::FoundFunction, FunctionLocation, NamedFunctions};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -30,23 +28,6 @@ impl Fragments {
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
-    }
-
-    /// # Find the named function with the provided hash
-    pub fn find_named_function_by_hash(
-        &self,
-        hash: &Hash<Function>,
-    ) -> Option<FoundFunction> {
-        self.functions.inner.iter().find_map(|(&index, function)| {
-            if &Hash::new(function) == hash {
-                Some(FoundFunction {
-                    function: function.clone(),
-                    location: FunctionLocation::NamedFunction { index },
-                })
-            } else {
-                None
-            }
-        })
     }
 
     /// # Find the function with the provided name

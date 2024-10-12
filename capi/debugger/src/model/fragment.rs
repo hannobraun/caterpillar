@@ -144,6 +144,7 @@ impl DebugFragmentKind {
         match fragment {
             Fragment::CallToFunction { hash, .. } => {
                 let function = fragments
+                    .functions
                     .find_named_function_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone().expect(

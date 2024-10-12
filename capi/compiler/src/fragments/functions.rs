@@ -1,11 +1,11 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::syntax::Pattern;
+use crate::{hash::Hash, syntax::Pattern};
 
 use super::{
-    BranchIndex, BranchLocation, Fragment, FragmentIndexInBranchBody,
-    FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
-    FunctionLocation,
+    search::FoundFunction, BranchIndex, BranchLocation, Fragment,
+    FragmentIndexInBranchBody, FragmentLocation, FunctionIndexInCluster,
+    FunctionIndexInRootContext, FunctionLocation,
 };
 
 /// # All named functions in a program
@@ -24,6 +24,23 @@ pub struct NamedFunctions {
 }
 
 impl NamedFunctions {
+    /// # Find the named function with the provided hash
+    pub fn find_named_function_by_hash(
+        &self,
+        hash: &Hash<Function>,
+    ) -> Option<FoundFunction> {
+        self.inner.iter().find_map(|(&index, function)| {
+            if &Hash::new(function) == hash {
+                Some(FoundFunction {
+                    function: function.clone(),
+                    location: FunctionLocation::NamedFunction { index },
+                })
+            } else {
+                None
+            }
+        })
+    }
+
     /// # Find the branch at the given location
     pub fn find_branch_by_location(
         &self,
