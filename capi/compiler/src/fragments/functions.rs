@@ -4,7 +4,14 @@ use crate::syntax::Pattern;
 
 use super::{
     BranchIndex, Fragment, FragmentIndexInBranchBody, FunctionIndexInCluster,
+    FunctionIndexInRootContext,
 };
+
+/// # All named functions in a program
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+pub struct NamedFunctions {
+    pub inner: BTreeMap<FunctionIndexInRootContext, Function>,
+}
 
 #[derive(
     Clone,

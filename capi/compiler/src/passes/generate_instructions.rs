@@ -402,6 +402,7 @@ fn compile_fragment(
             let function_index_in_root_context = cluster.functions[index];
             let called_function = fragments
                 .functions
+                .inner
                 .get(&function_index_in_root_context)
                 .expect("Function referred to from cluster must exist.");
             let hash = Hash::new(called_function);

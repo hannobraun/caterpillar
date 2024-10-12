@@ -1,16 +1,14 @@
-use std::collections::BTreeMap;
-
 use crate::{hash::Hash, syntax::Cluster};
 
 use super::{
     search::FoundFunction, Branch, BranchLocation, Fragment, FragmentLocation,
-    Function, FunctionIndexInRootContext, FunctionLocation,
+    Function, FunctionLocation, NamedFunctions,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     /// # The named functions in the root context
-    pub functions: BTreeMap<FunctionIndexInRootContext, Function>,
+    pub functions: NamedFunctions,
 
     /// # The function clusters
     pub clusters: Vec<Cluster>,
@@ -60,7 +58,7 @@ impl Fragments {
     ) -> Option<&Function> {
         match location {
             FunctionLocation::NamedFunction { index } => {
-                self.functions.get(index)
+                self.functions.inner.get(index)
             }
             FunctionLocation::AnonymousFunction { location } => {
                 let fragment = self.find_fragment_by_location(location)?;
@@ -74,7 +72,7 @@ impl Fragments {
         &self,
         hash: &Hash<Function>,
     ) -> Option<FoundFunction> {
-        self.functions.iter().find_map(|(&index, function)| {
+        self.functions.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(function) == hash {
                 Some(FoundFunction {
                     function: function.clone(),
@@ -94,7 +92,7 @@ impl Fragments {
     /// the ongoing refactoring on fragment addressing has finished, that
     /// function can be removed, and this one can take over its name.
     pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.functions.iter().find_map(|(&index, function)| {
+        self.functions.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 let location = FunctionLocation::NamedFunction { index };
                 Some(FoundFunction {

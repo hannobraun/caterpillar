@@ -161,8 +161,11 @@ impl DebugFragmentKind {
                     "The index of a recursive call must be valid within the \
                     calling function's cluster.",
                 );
-                let called_function =
-                    fragments.functions.get(called_function_index).expect(
+                let called_function = fragments
+                    .functions
+                    .inner
+                    .get(called_function_index)
+                    .expect(
                         "Expecting to find fragment referred to from a \
                         cluster.",
                     );

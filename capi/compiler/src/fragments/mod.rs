@@ -12,7 +12,7 @@ pub use self::{
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     fragment::Fragment,
     fragments::Fragments,
-    functions::{Branch, Function, Parameters},
+    functions::{Branch, Function, NamedFunctions, Parameters},
     location::{
         BranchIndex, BranchLocation, FragmentIndexInBranchBody,
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
