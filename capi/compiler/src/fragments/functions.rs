@@ -3,14 +3,49 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::syntax::Pattern;
 
 use super::{
-    BranchIndex, Fragment, FragmentIndexInBranchBody, FunctionIndexInCluster,
-    FunctionIndexInRootContext,
+    BranchIndex, BranchLocation, Fragment, FragmentIndexInBranchBody,
+    FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
+    FunctionLocation,
 };
 
 /// # All named functions in a program
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
     pub inner: BTreeMap<FunctionIndexInRootContext, Function>,
+}
+
+impl NamedFunctions {
+    /// # Find the branch at the given location
+    pub fn find_branch_by_location(
+        &self,
+        location: &BranchLocation,
+    ) -> Option<&Branch> {
+        let function = self.find_function_by_location(&location.parent)?;
+        function.branches.get(&location.index)
+    }
+
+    /// # Find the fragment at the given location
+    pub fn find_fragment_by_location(
+        &self,
+        location: &FragmentLocation,
+    ) -> Option<&Fragment> {
+        let branch = self.find_branch_by_location(&location.parent)?;
+        branch.body.get(&location.index)
+    }
+
+    /// # Find the function at the given location
+    pub fn find_function_by_location(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<&Function> {
+        match location {
+            FunctionLocation::NamedFunction { index } => self.inner.get(index),
+            FunctionLocation::AnonymousFunction { location } => {
+                let fragment = self.find_fragment_by_location(location)?;
+                fragment.as_function()
+            }
+        }
+    }
 }
 
 #[derive(

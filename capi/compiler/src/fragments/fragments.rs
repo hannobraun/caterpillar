@@ -1,8 +1,7 @@
 use crate::{hash::Hash, syntax::Cluster};
 
 use super::{
-    search::FoundFunction, Branch, BranchLocation, Fragment, FragmentLocation,
-    Function, FunctionLocation, NamedFunctions,
+    search::FoundFunction, Function, FunctionLocation, NamedFunctions,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -31,40 +30,6 @@ impl Fragments {
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
-    }
-
-    /// # Find the branch at the given location
-    pub fn find_branch_by_location(
-        &self,
-        location: &BranchLocation,
-    ) -> Option<&Branch> {
-        let function = self.find_function_by_location(&location.parent)?;
-        function.branches.get(&location.index)
-    }
-
-    /// # Find the fragment at the given location
-    pub fn find_fragment_by_location(
-        &self,
-        location: &FragmentLocation,
-    ) -> Option<&Fragment> {
-        let branch = self.find_branch_by_location(&location.parent)?;
-        branch.body.get(&location.index)
-    }
-
-    /// # Find the function at the given location
-    pub fn find_function_by_location(
-        &self,
-        location: &FunctionLocation,
-    ) -> Option<&Function> {
-        match location {
-            FunctionLocation::NamedFunction { index } => {
-                self.functions.inner.get(index)
-            }
-            FunctionLocation::AnonymousFunction { location } => {
-                let fragment = self.find_fragment_by_location(location)?;
-                fragment.as_function()
-            }
-        }
     }
 
     /// # Find the named function with the provided hash

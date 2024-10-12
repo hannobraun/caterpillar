@@ -330,6 +330,7 @@ fn function_call_to_function_name(
 ) -> Option<String> {
     let fragment = code
         .fragments
+        .functions
         .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
     let hash = fragment.as_call_to_function()?;
