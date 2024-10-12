@@ -60,6 +60,8 @@ impl NamedFunctions {
     }
 
     /// # Find the function at the given location
+    ///
+    /// This includes both named and anonymous functions.
     pub fn find_function_by_location(
         &self,
         location: &FunctionLocation,
