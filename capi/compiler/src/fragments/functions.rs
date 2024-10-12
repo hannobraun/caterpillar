@@ -25,10 +25,7 @@ pub struct NamedFunctions {
 
 impl NamedFunctions {
     /// # Find the named function with the provided hash
-    pub fn find_named_function_by_hash(
-        &self,
-        hash: &Hash<Function>,
-    ) -> Option<FoundFunction> {
+    pub fn find_by_hash(&self, hash: &Hash<Function>) -> Option<FoundFunction> {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(function) == hash {
                 Some(FoundFunction {
