@@ -46,6 +46,11 @@ impl CallGraph {
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
     }
+
+    /// # Iterate over the function clusters
+    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
+        self.clusters.iter()
+    }
 }
 
 /// # A cluster of functions
