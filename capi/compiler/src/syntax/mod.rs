@@ -24,5 +24,3 @@ pub use self::{
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function, Pattern},
 };
-
-pub use crate::fragments::Cluster;
