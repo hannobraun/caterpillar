@@ -13,7 +13,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
-    for cluster in clusters.clusters.iter().rev() {
+    let call_graph = CallGraph {
+        clusters: clusters.clusters,
+    };
+
+    for cluster in call_graph.clusters.iter().rev() {
         for &index in cluster.functions.values() {
             let function = clusters.functions[&index].clone();
             let function = compile_function(function, &mut hashes);
@@ -29,9 +33,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     Fragments {
         named_functions,
-        clusters: CallGraph {
-            clusters: clusters.clusters,
-        },
+        clusters: call_graph,
     }
 }
 
