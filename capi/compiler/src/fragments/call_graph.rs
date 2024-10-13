@@ -9,6 +9,17 @@ pub struct CallGraph {
 }
 
 impl CallGraph {
+    /// # Insert a cluster
+    ///
+    /// ## Implementation Note
+    ///
+    /// This method is way too low-level and does nothing to help with anything
+    /// related to a call graph. Its existence is an artifact of the ongoing
+    /// compiler cleanup.
+    pub fn insert(&mut self, cluster: Cluster) {
+        self.clusters.push(cluster);
+    }
+
     /// # Find the cluster containing a given function
     ///
     /// ## Panics
