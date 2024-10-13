@@ -13,9 +13,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
-    let call_graph = CallGraph {
-        clusters: clusters.clusters,
-    };
+    let mut call_graph = CallGraph::default();
+
+    for cluster in clusters.clusters.into_iter() {
+        call_graph.insert(cluster);
+    }
 
     for cluster in call_graph.clusters.iter().rev() {
         for &index in cluster.functions.values() {
