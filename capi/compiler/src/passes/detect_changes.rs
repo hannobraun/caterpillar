@@ -8,10 +8,10 @@ use crate::{
 };
 
 pub fn detect_changes(
-    old: Option<NamedFunctions>,
+    old_functions: Option<NamedFunctions>,
     new: &NamedFunctions,
 ) -> Changes {
-    let old_functions = old.unwrap_or_default();
+    let old_functions = old_functions.unwrap_or_default();
     let new_functions = new.clone();
 
     let mut added = BTreeMap::new();
