@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
-    let mut old_functions = old.unwrap_or_default();
+    let old_functions = old.unwrap_or_default();
     let mut new_functions = new.named_functions.inner.clone();
 
     let mut added = BTreeMap::new();
@@ -29,16 +29,13 @@ pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
             .as_deref()
             .expect("Named function should have a name.");
         if let Some(Find {
+            find: old_function,
             metadata: old_index,
-            ..
         }) = old_functions.find_by_name(name)
         {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function
             // is an updated version of the old.
-            let old_function = old_functions.inner.remove(&old_index).expect(
-                "Just found index in map; expecting it to still be there.",
-            );
             updated.push(FunctionUpdate {
                 old: FunctionInUpdate {
                     index: old_index,
