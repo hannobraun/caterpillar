@@ -15,14 +15,7 @@ pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let mut updated = Vec::new();
 
     while let Some((new_index, new_function)) = new_functions.pop_first() {
-        let same_hash =
-            old_functions.iter().find_map(|(&index, old_function)| {
-                if Hash::new(old_function) == Hash::new(&new_function) {
-                    Some(index)
-                } else {
-                    None
-                }
-            });
+        let same_hash = old_functions.find_by_hash(&Hash::new(&new_function));
         if same_hash.is_some() {
             // Function has not changed. We can forget about it.
             continue;
