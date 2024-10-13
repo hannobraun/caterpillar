@@ -61,7 +61,8 @@ async fn build_game_once_with_compiler(
         compiler.compile::<GameEngineHost>(&source);
 
     Ok(Code {
-        fragments,
+        named_functions: fragments.named_functions,
+        call_graph: fragments.call_graph,
         instructions,
         source_map,
     })

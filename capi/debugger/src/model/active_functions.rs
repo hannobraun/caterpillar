@@ -96,7 +96,6 @@ impl ActiveFunctions {
                 });
 
             let cluster = code
-                .fragments
                 .call_graph
                 .find_cluster_by_named_function(&function_index_in_root_context)
                 .expect("All named functions must be part of a cluster.");
@@ -109,7 +108,7 @@ impl ActiveFunctions {
                     active_fragment,
                     active_instructions.is_empty(),
                     cluster,
-                    &code.fragments.named_functions,
+                    &code.named_functions,
                     &code.source_map,
                     breakpoints,
                     effects,
@@ -258,7 +257,6 @@ fn instruction_to_named_function(
         match current_location {
             FunctionLocation::NamedFunction { index } => {
                 let function = code
-                    .fragments
                     .named_functions
                     .get(&index)
                     .expect(
@@ -283,8 +281,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effects: &[Effect],
 ) -> Option<String> {
-    let Some(function) = code.fragments.named_functions.find_by_name(name)
-    else {
+    let Some(function) = code.named_functions.find_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
 
@@ -305,7 +302,6 @@ fn reconstruct_function(
         .and_then(|tail_call| function_call_to_function_name(tail_call, code));
 
     let cluster = code
-        .fragments
         .call_graph
         .find_cluster_by_named_function(&function.index())
         .expect("All functions must be part of a cluster.");
@@ -315,7 +311,7 @@ fn reconstruct_function(
         tail_call.as_ref(),
         false,
         cluster,
-        &code.fragments.named_functions,
+        &code.named_functions,
         &code.source_map,
         breakpoints,
         effects,
@@ -329,12 +325,11 @@ fn function_call_to_function_name(
     code: &Code,
 ) -> Option<String> {
     let fragment = code
-        .fragments
         .named_functions
         .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
     let hash = fragment.as_call_to_function()?;
-    let function = code.fragments.named_functions.find_by_hash(hash)?;
+    let function = code.named_functions.find_by_hash(hash)?;
 
     function.name.clone()
 }

@@ -1,4 +1,7 @@
-use capi_compiler::{fragments::Fragments, source_map::SourceMap};
+use capi_compiler::{
+    fragments::{CallGraph, NamedFunctions},
+    source_map::SourceMap,
+};
 use capi_game_engine::memory::Memory;
 use capi_runtime::{Instructions, Runtime, RuntimeState};
 
@@ -88,7 +91,8 @@ impl UpdateFromHost {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Code {
-    pub fragments: Fragments,
+    pub named_functions: NamedFunctions,
+    pub call_graph: CallGraph,
     pub instructions: Instructions,
     pub source_map: SourceMap,
 }

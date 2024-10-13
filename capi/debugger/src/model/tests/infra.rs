@@ -36,7 +36,8 @@ impl TestDebugger {
             compiler.compile::<GameEngineHost>(source);
 
         let command = self.persistent.on_new_code(Code {
-            fragments,
+            named_functions: fragments.named_functions,
+            call_graph: fragments.call_graph,
             instructions,
             source_map,
         });
@@ -102,14 +103,7 @@ impl TestDebugger {
     }
 
     pub fn expect_code(&self) -> &NamedFunctions {
-        &self
-            .persistent
-            .code
-            .inner
-            .as_ref()
-            .unwrap()
-            .fragments
-            .named_functions
+        &self.persistent.code.inner.as_ref().unwrap().named_functions
     }
 
     pub fn expect_fragment(

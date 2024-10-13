@@ -94,11 +94,8 @@ impl PersistentState {
                 let targets = if let Some(hash) =
                     origin.data.fragment.as_call_to_function()
                 {
-                    let function = code
-                        .fragments
-                        .named_functions
-                        .find_by_hash(hash)
-                        .expect(
+                    let function =
+                        code.named_functions.find_by_hash(hash).expect(
                             "Expecting function referenced from call to exist.",
                         );
 
