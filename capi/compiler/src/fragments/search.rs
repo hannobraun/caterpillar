@@ -94,6 +94,13 @@ impl Find<Branch, BranchLocation> {
     }
 }
 
+impl Find<Fragment, FragmentLocation> {
+    /// # Consume the found fragment, returning its location
+    pub fn into_location(self) -> FragmentLocation {
+        self.metadata
+    }
+}
+
 /// # A fragment that was found by a search
 pub struct FoundFragment {
     /// # The fragment that was found
