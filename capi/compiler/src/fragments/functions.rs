@@ -20,7 +20,7 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
-    pub inner: BTreeMap<FunctionIndexInRootContext, Function>,
+    pub inner: NamedFunctionsInner,
 }
 
 impl NamedFunctions {
@@ -94,6 +94,8 @@ impl NamedFunctions {
         self.inner.iter()
     }
 }
+
+type NamedFunctionsInner = BTreeMap<FunctionIndexInRootContext, Function>;
 
 #[derive(
     Clone,
