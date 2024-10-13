@@ -101,6 +101,7 @@ impl ActiveFunctions {
 
             let cluster = code
                 .fragments
+                .clusters
                 .find_cluster_by_named_function(&location)
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
@@ -307,6 +308,7 @@ fn reconstruct_function(
 
     let cluster = code
         .fragments
+        .clusters
         .find_cluster_by_named_function(&function.location())
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
