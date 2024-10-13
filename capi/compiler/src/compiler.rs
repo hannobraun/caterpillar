@@ -14,7 +14,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    fragments: Option<NamedFunctions>,
+    old_functions: Option<NamedFunctions>,
     instructions: Instructions,
     source_map: SourceMap,
 }
@@ -33,9 +33,9 @@ impl Compiler {
         mark_recursive_calls(&mut clusters);
 
         let fragments = generate_fragments(clusters);
-        let changes = detect_changes(self.fragments.take(), &fragments);
+        let changes = detect_changes(self.old_functions.take(), &fragments);
 
-        self.fragments = Some(fragments.named_functions.clone());
+        self.old_functions = Some(fragments.named_functions.clone());
 
         generate_instructions(
             &fragments,
