@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn self_recursive_functions() {
-        let clusters = mark_recursive_calls(
+        let functions = mark_recursive_calls(
             r"
                 f: {
                     \ ->
@@ -104,7 +104,7 @@ mod tests {
             ",
         );
 
-        for mut function in clusters.into_values() {
+        for mut function in functions.into_values() {
             let Expression::Identifier { target, .. } =
                 function.branches.remove(0).body.remove(0)
             else {
