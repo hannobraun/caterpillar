@@ -16,7 +16,6 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let functions = clusters.functions;
 
     let mut call_graph = CallGraph::default();
-
     for cluster in clusters.clusters.into_iter() {
         call_graph.insert(cluster);
     }
