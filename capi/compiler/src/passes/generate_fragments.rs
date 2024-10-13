@@ -11,8 +11,8 @@ use crate::{
 
 pub fn generate_fragments(
     functions: BTreeMap<FunctionIndexInRootContext, syntax::Function>,
-    call_graph: CallGraph,
-) -> (NamedFunctions, CallGraph) {
+    call_graph: &CallGraph,
+) -> NamedFunctions {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
@@ -28,7 +28,7 @@ pub fn generate_fragments(
         named_functions.insert(index, function);
     }
 
-    (named_functions, call_graph)
+    named_functions
 }
 
 fn compile_function(
