@@ -25,10 +25,8 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
                 None
             }
         });
-        if let Some(old_index) = same_hash {
+        if same_hash.is_some() {
             // Function has not changed. We can forget about it.
-            old.remove(&old_index);
-
             continue;
         }
 
