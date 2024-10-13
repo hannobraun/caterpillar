@@ -43,6 +43,12 @@ pub enum FunctionLocation {
     AnonymousFunction { location: FragmentLocation },
 }
 
+impl From<FunctionIndexInRootContext> for FunctionLocation {
+    fn from(index: FunctionIndexInRootContext) -> Self {
+        Self::NamedFunction { index }
+    }
+}
+
 /// # The index of a named function in the root context
 #[derive(
     Clone,
