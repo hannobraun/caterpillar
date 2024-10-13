@@ -3,8 +3,7 @@ use std::{collections::BTreeMap, iter};
 use crate::{
     fragments::{
         Branch, BranchIndex, CallGraph, Fragment, FragmentIndexInBranchBody,
-        Fragments, Function, FunctionIndexInRootContext, NamedFunctions,
-        Parameters,
+        Function, FunctionIndexInRootContext, NamedFunctions, Parameters,
     },
     hash::Hash,
     syntax::{self, IdentifierTarget},
@@ -13,7 +12,7 @@ use crate::{
 pub fn generate_fragments(
     functions: BTreeMap<FunctionIndexInRootContext, syntax::Function>,
     call_graph: CallGraph,
-) -> Fragments {
+) -> (NamedFunctions, CallGraph) {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
@@ -29,10 +28,7 @@ pub fn generate_fragments(
         named_functions.insert(index, function);
     }
 
-    Fragments {
-        named_functions,
-        call_graph,
-    }
+    (named_functions, call_graph)
 }
 
 fn compile_function(

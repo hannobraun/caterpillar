@@ -32,25 +32,24 @@ impl Compiler {
         let (mut functions, call_graph) = create_call_graph(functions);
         mark_recursive_calls(&mut functions, &call_graph);
 
-        let fragments = generate_fragments(functions, call_graph);
-        let changes = detect_changes(
-            self.old_functions.take(),
-            &fragments.named_functions,
-        );
+        let (named_functions, call_graph) =
+            generate_fragments(functions, call_graph);
+        let changes =
+            detect_changes(self.old_functions.take(), &named_functions);
 
-        self.old_functions = Some(fragments.named_functions.clone());
+        self.old_functions = Some(named_functions.clone());
 
         generate_instructions(
-            &fragments.named_functions,
-            &fragments.call_graph,
+            &named_functions,
+            &call_graph,
             &changes,
             &mut self.instructions,
             &mut self.source_map,
         );
 
         (
-            fragments.named_functions,
-            fragments.call_graph,
+            named_functions,
+            call_graph,
             self.instructions.clone(),
             self.source_map.clone(),
         )
