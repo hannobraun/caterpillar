@@ -37,8 +37,11 @@ pub struct FoundFunction {
 impl FoundFunction {
     /// # Iterate over the function's branches
     pub fn branches(&self) -> impl Iterator<Item = FoundBranch> {
+        let function = &self.function;
         let location = self.location.clone();
-        self.branches
+
+        function
+            .branches
             .clone()
             .into_iter()
             .map(move |(index, branch)| FoundBranch {
