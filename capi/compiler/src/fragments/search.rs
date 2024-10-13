@@ -58,6 +58,7 @@ impl FoundFunction {
     /// Returns `None`, if the function does not have exactly one branch.
     pub fn find_single_branch(&self) -> Option<FoundBranch> {
         let function = &self.function;
+        let location = self.location.clone();
 
         if function.branches.len() > 1 {
             return None;
@@ -67,7 +68,7 @@ impl FoundFunction {
             FoundBranch {
                 branch: branch.clone(),
                 location: BranchLocation {
-                    parent: Box::new(self.location.clone()),
+                    parent: Box::new(location),
                     index,
                 },
             }
