@@ -32,12 +32,12 @@ pub struct TestDebugger {
 impl TestDebugger {
     pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
         let mut compiler = Compiler::default();
-        let (fragments, instructions, source_map) =
+        let (named_functions, call_graph, instructions, source_map) =
             compiler.compile::<GameEngineHost>(source);
 
         let command = self.persistent.on_new_code(Code {
-            named_functions: fragments.named_functions,
-            call_graph: fragments.call_graph,
+            named_functions,
+            call_graph,
             instructions,
             source_map,
         });

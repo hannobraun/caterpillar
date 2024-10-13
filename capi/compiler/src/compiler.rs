@@ -1,7 +1,7 @@
 use capi_runtime::Instructions;
 
 use crate::{
-    fragments::{Fragments, NamedFunctions},
+    fragments::{CallGraph, NamedFunctions},
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
@@ -24,7 +24,7 @@ impl Compiler {
     pub fn compile<H: Host>(
         &mut self,
         source: &str,
-    ) -> (Fragments, Instructions, SourceMap) {
+    ) -> (NamedFunctions, CallGraph, Instructions, SourceMap) {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
@@ -49,7 +49,8 @@ impl Compiler {
         );
 
         (
-            fragments,
+            fragments.named_functions,
+            fragments.call_graph,
             self.instructions.clone(),
             self.source_map.clone(),
         )

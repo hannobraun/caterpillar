@@ -57,12 +57,12 @@ async fn build_game_once_with_compiler(
 
     let source = fs::read_to_string(path).await?;
 
-    let (fragments, instructions, source_map) =
+    let (named_functions, call_graph, instructions, source_map) =
         compiler.compile::<GameEngineHost>(&source);
 
     Ok(Code {
-        named_functions: fragments.named_functions,
-        call_graph: fragments.call_graph,
+        named_functions,
+        call_graph,
         instructions,
         source_map,
     })
