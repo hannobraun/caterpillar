@@ -72,10 +72,13 @@ fn mark_recursive_calls_in_function(
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use crate::{
+        fragments::FunctionIndexInRootContext,
         host::NoHost,
         passes::{group_into_clusters, parse, resolve_identifiers, tokenize},
-        syntax::{Clusters, Expression, IdentifierTarget},
+        syntax::{Expression, Function, IdentifierTarget},
     };
 
     #[test]
@@ -101,7 +104,7 @@ mod tests {
             ",
         );
 
-        for mut function in clusters.functions.into_values() {
+        for mut function in clusters.into_values() {
             let Expression::Identifier { target, .. } =
                 function.branches.remove(0).body.remove(0)
             else {
@@ -140,7 +143,7 @@ mod tests {
             ",
         );
 
-        let mut functions = clusters.functions.into_values();
+        let mut functions = clusters.into_values();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
@@ -176,7 +179,9 @@ mod tests {
         };
     }
 
-    fn mark_recursive_calls(source: &str) -> Clusters {
+    fn mark_recursive_calls(
+        source: &str,
+    ) -> BTreeMap<FunctionIndexInRootContext, Function> {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
@@ -186,6 +191,6 @@ mod tests {
             let clusters = &clusters.clusters;
             super::mark_recursive_calls(functions, clusters);
         }
-        clusters
+        clusters.functions
     }
 }
