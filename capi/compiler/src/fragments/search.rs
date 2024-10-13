@@ -80,17 +80,20 @@ impl Find<Function, FunctionLocation> {
 
 impl Find<Branch, BranchLocation> {
     /// # Iterate over the fragments in the branch's body
-    pub fn body(&self) -> impl Iterator<Item = FoundFragment> {
+    pub fn body(
+        &self,
+    ) -> impl Iterator<Item = Find<Fragment, FragmentLocation>> {
         let location = self.metadata.clone();
-        self.body.clone().into_iter().map(move |(index, fragment)| {
-            FoundFragment {
-                fragment,
-                location: FragmentLocation {
+        self.body
+            .clone()
+            .into_iter()
+            .map(move |(index, fragment)| Find {
+                find: fragment,
+                metadata: FragmentLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },
-            }
-        })
+            })
     }
 }
 
@@ -98,22 +101,5 @@ impl Find<Fragment, FragmentLocation> {
     /// # Consume the found fragment, returning its location
     pub fn into_location(self) -> FragmentLocation {
         self.metadata
-    }
-}
-
-/// # A fragment that was found by a search
-pub struct FoundFragment {
-    /// # The fragment that was found
-    pub fragment: Fragment,
-
-    /// # The location of the fragment that was found
-    pub location: FragmentLocation,
-}
-
-impl Deref for FoundFragment {
-    type Target = Fragment;
-
-    fn deref(&self) -> &Self::Target {
-        &self.fragment
     }
 }

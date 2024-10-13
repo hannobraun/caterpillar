@@ -35,7 +35,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .body()
         .next()
         .unwrap()
-        .location;
+        .into_location();
 
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
@@ -71,7 +71,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .body()
         .next()
         .unwrap()
-        .location;
+        .into_location();
     debugger.on_user_action(UserAction::BreakpointSet {
         fragment: nop.clone(),
     })?;
@@ -119,7 +119,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .find_single_branch()
             .unwrap()
             .body()
-            .map(|fragment| fragment.location);
+            .map(|fragment| fragment.into_location());
 
         array::from_fn(|_| body.next().unwrap())
     };
@@ -183,7 +183,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         array::from_fn(|_| {
             body.find_map(|fragment| {
                 if fragment.as_comment().is_none() {
-                    Some(fragment.location)
+                    Some(fragment.into_location())
                 } else {
                     None
                 }
@@ -295,7 +295,7 @@ fn step_into_function() {
             .body()
             .nth(2)
             .unwrap()
-            .location;
+            .into_location();
         let a = fragments
             .named_functions
             .find_by_name("f")
@@ -306,7 +306,7 @@ fn step_into_function() {
             .body()
             .next()
             .unwrap()
-            .location;
+            .into_location();
 
         (f, a)
     };
@@ -365,7 +365,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .body()
             .nth(1)
             .unwrap()
-            .location;
+            .into_location();
         let nop_in_f = fragments
             .named_functions
             .find_by_name("f")
@@ -375,7 +375,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .body()
             .next()
             .unwrap()
-            .location;
+            .into_location();
 
         (nop_in_main, nop_in_f)
     };
@@ -427,7 +427,7 @@ fn step_out_of_main_function() {
             .body()
             .next()
             .unwrap()
-            .location
+            .into_location()
     };
 
     debugger
@@ -477,7 +477,7 @@ fn step_over_function_call() {
         array::from_fn(|_| {
             body.find_map(|fragment| {
                 if fragment.as_comment().is_none() {
-                    Some(fragment.location)
+                    Some(fragment.into_location())
                 } else {
                     None
                 }
@@ -537,7 +537,7 @@ fn step_out_of_function() {
             .body()
             .next()
             .unwrap()
-            .location;
+            .into_location();
         let b = fragments
             .named_functions
             .find_by_name("main")
@@ -547,7 +547,7 @@ fn step_out_of_function() {
             .body()
             .nth(1)
             .unwrap()
-            .location;
+            .into_location();
 
         (a, b)
     };

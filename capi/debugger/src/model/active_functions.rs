@@ -294,7 +294,7 @@ fn reconstruct_function(
         let mut tail_call = None;
 
         for fragment in branch.body() {
-            tail_call = Some(fragment.location);
+            tail_call = Some(fragment.into_location());
         }
 
         tail_call
