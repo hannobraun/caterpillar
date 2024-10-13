@@ -25,6 +25,14 @@ pub struct Find<T, M> {
     pub metadata: M,
 }
 
+impl<T, M> Deref for Find<T, M> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.find
+    }
+}
+
 /// # A function that was found by a search
 pub struct FoundFunction {
     /// # The function that was found
