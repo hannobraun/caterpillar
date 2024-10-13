@@ -33,13 +33,16 @@ impl<T, M> Deref for Find<T, M> {
     }
 }
 
-impl Find<Function, FunctionLocation> {
+impl<M> Find<Function, M>
+where
+    M: Clone + Into<FunctionLocation>,
+{
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
     ) -> impl Iterator<Item = Find<Branch, BranchLocation>> {
         let function = &self.find;
-        let location = self.metadata.clone();
+        let location = self.metadata.clone().into();
 
         function
             .branches
@@ -59,7 +62,7 @@ impl Find<Function, FunctionLocation> {
     /// Returns `None`, if the function does not have exactly one branch.
     pub fn find_single_branch(&self) -> Option<Find<Branch, BranchLocation>> {
         let function = &self.find;
-        let location = self.metadata.clone();
+        let location = self.metadata.clone().into();
 
         if function.branches.len() > 1 {
             return None;
