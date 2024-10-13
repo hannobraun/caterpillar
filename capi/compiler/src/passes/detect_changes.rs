@@ -10,12 +10,12 @@ use crate::{
 
 pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let old_functions = old.unwrap_or_default();
-    let mut new_functions = new.named_functions.inner.clone();
+    let new_functions = new.named_functions.inner.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    while let Some((new_index, new_function)) = new_functions.pop_first() {
+    for (new_index, new_function) in new_functions.into_iter() {
         if old_functions
             .find_by_hash(&Hash::new(&new_function))
             .is_some()
