@@ -15,9 +15,6 @@ pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
     let mut updated = Vec::new();
 
     while let Some((new_index, new_function)) = new.pop_first() {
-        // We've removed `new_function` from `new`. From here on, where we
-        // remove functions from `old`, we don't have to do the same for `new`.
-
         let same_hash = old.iter().find_map(|(&index, old_function)| {
             if Hash::new(old_function) == Hash::new(&new_function) {
                 Some(index)
