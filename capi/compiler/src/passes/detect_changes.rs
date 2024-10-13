@@ -23,24 +23,14 @@ pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
             continue;
         }
 
-        let same_name =
-            old_functions.iter().find_map(|(&index, old_function)| {
-                assert!(
-                    old_function.name.is_some(),
-                    "Named function should have a name."
-                );
-                assert!(
-                    new_function.name.is_some(),
-                    "Named function should have a name."
-                );
+        let name = new_function
+            .name
+            .as_deref()
+            .expect("Named function should have a name.");
+        let same_name = old_functions.find_by_name(name);
+        if let Some(same_name) = same_name {
+            let old_index = same_name.metadata;
 
-                if old_function.name == new_function.name {
-                    Some(index)
-                } else {
-                    None
-                }
-            });
-        if let Some(old_index) = same_name {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function
             // is an updated version of the old.
