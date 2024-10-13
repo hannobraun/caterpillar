@@ -6,7 +6,7 @@ use crate::{
     fragments::{
         Branch, BranchLocation, Changes, Cluster, Fragment, FragmentLocation,
         Fragments, Function, FunctionInUpdate, FunctionLocation,
-        FunctionUpdate, Parameters,
+        FunctionUpdate, NamedFunctions, Parameters,
     },
     hash::Hash,
     intrinsics::Intrinsic,
@@ -312,7 +312,7 @@ fn compile_branch(
                 index,
             },
             cluster,
-            fragments,
+            &fragments.named_functions,
             output,
             queue,
         );
@@ -351,7 +351,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    fragments: &Fragments,
+    named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> Option<InstructionAddress> {
@@ -399,8 +399,7 @@ fn compile_fragment(
             is_tail_call,
         } => {
             let function_index_in_root_context = cluster.functions[index];
-            let called_function = fragments
-                .named_functions
+            let called_function = named_functions
                 .get(&function_index_in_root_context)
                 .expect("Function referred to from cluster must exist.");
             let hash = Hash::new(called_function);
