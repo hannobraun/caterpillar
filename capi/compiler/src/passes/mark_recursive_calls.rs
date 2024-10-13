@@ -131,7 +131,7 @@ mod tests {
 
     #[test]
     fn mark_recursive_calls_from_anonymous_functions() {
-        let clusters = mark_recursive_calls(
+        let functions = mark_recursive_calls(
             r"
                 f: {
                     \ ->
@@ -143,7 +143,7 @@ mod tests {
             ",
         );
 
-        let mut functions = clusters.into_values();
+        let mut functions = functions.into_values();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
