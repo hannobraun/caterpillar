@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{FragmentLocation, Fragments},
+    fragments::{FragmentLocation, NamedFunctions},
     Compiler,
 };
 use capi_game_engine::{
@@ -101,8 +101,15 @@ impl TestDebugger {
         self.transient = Some(self.persistent.generate_transient_state());
     }
 
-    pub fn expect_code(&self) -> &Fragments {
-        &self.persistent.code.inner.as_ref().unwrap().fragments
+    pub fn expect_code(&self) -> &NamedFunctions {
+        &self
+            .persistent
+            .code
+            .inner
+            .as_ref()
+            .unwrap()
+            .fragments
+            .named_functions
     }
 
     pub fn expect_fragment(
