@@ -28,7 +28,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     let fragments = debugger.expect_code();
     let nop = fragments
         .named_functions
-        .find_function_by_name("main")
+        .find_by_name("main")
         .unwrap()
         .find_single_branch()
         .unwrap()
@@ -64,7 +64,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     let fragments = debugger.expect_code();
     let nop = fragments
         .named_functions
-        .find_function_by_name("main")
+        .find_by_name("main")
         .unwrap()
         .find_single_branch()
         .unwrap()
@@ -114,7 +114,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -174,7 +174,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -288,7 +288,7 @@ fn step_into_function() {
 
         let f = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -298,7 +298,7 @@ fn step_into_function() {
             .location;
         let a = fragments
             .named_functions
-            .find_function_by_name("f")
+            .find_by_name("f")
             .unwrap()
             .branches()
             .next()
@@ -358,7 +358,7 @@ fn step_out_of_function_if_at_last_fragment() {
 
         let nop_in_main = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -368,7 +368,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .location;
         let nop_in_f = fragments
             .named_functions
-            .find_function_by_name("f")
+            .find_by_name("f")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -420,7 +420,7 @@ fn step_out_of_main_function() {
 
         fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -468,7 +468,7 @@ fn step_over_function_call() {
         let fragments = debugger.expect_code();
         let mut body = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -530,7 +530,7 @@ fn step_out_of_function() {
 
         let a = fragments
             .named_functions
-            .find_function_by_name("f")
+            .find_by_name("f")
             .unwrap()
             .find_single_branch()
             .unwrap()
@@ -540,7 +540,7 @@ fn step_out_of_function() {
             .location;
         let b = fragments
             .named_functions
-            .find_function_by_name("main")
+            .find_by_name("main")
             .unwrap()
             .find_single_branch()
             .unwrap()

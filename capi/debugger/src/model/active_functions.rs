@@ -286,7 +286,7 @@ fn reconstruct_function(
     effects: &[Effect],
 ) -> Option<String> {
     let Some(function) =
-        code.fragments.named_functions.find_function_by_name(name)
+        code.fragments.named_functions.find_by_name(name)
     else {
         panic!("Expecting function `{name}` to exist.");
     };
