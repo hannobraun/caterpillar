@@ -3,7 +3,7 @@ use crate::syntax::Cluster;
 use super::FunctionIndexInRootContext;
 
 /// # The program's named functions, organized as a call graph
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct CallGraph {
     pub clusters: Vec<Cluster>,
 }
