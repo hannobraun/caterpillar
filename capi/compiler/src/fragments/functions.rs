@@ -20,7 +20,7 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
-    pub inner: NamedFunctionsInner,
+    inner: NamedFunctionsInner,
 }
 
 impl NamedFunctions {
