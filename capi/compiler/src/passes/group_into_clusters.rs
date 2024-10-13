@@ -106,7 +106,8 @@ mod tests {
 
     use crate::{
         fragments::{
-            Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
+            CallGraph, Cluster, FunctionIndexInCluster,
+            FunctionIndexInRootContext,
         },
         host::NoHost,
         passes::{parse, resolve_identifiers, tokenize},
@@ -129,7 +130,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters,
+            clusters.clusters().cloned().collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
@@ -159,7 +160,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters,
+            clusters.clusters().cloned().collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1))
@@ -194,7 +195,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters,
+            clusters.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -243,7 +244,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters,
+            clusters.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -302,7 +303,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters,
+            clusters.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -321,11 +322,17 @@ mod tests {
         );
     }
 
-    fn group_into_clusters(source: &str) -> Vec<Cluster> {
+    fn group_into_clusters(source: &str) -> CallGraph {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
         let (_, clusters) = super::group_into_clusters(functions);
-        clusters
+
+        let mut call_graph = CallGraph::default();
+        for cluster in clusters.into_iter() {
+            call_graph.insert(cluster);
+        }
+
+        call_graph
     }
 }
