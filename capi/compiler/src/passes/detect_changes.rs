@@ -9,10 +9,10 @@ use crate::{
 
 pub fn detect_changes(
     old_functions: Option<NamedFunctions>,
-    new: &NamedFunctions,
+    new_functions: &NamedFunctions,
 ) -> Changes {
     let old_functions = old_functions.unwrap_or_default();
-    let new_functions = new.clone();
+    let new_functions = new_functions.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
