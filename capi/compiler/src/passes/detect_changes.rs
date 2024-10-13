@@ -2,15 +2,17 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        search::Find, Changes, Fragments, FunctionInUpdate, FunctionUpdate,
-        NamedFunctions,
+        search::Find, Changes, FunctionInUpdate, FunctionUpdate, NamedFunctions,
     },
     hash::Hash,
 };
 
-pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
+pub fn detect_changes(
+    old: Option<NamedFunctions>,
+    new: &NamedFunctions,
+) -> Changes {
     let old_functions = old.unwrap_or_default();
-    let new_functions = new.named_functions.clone();
+    let new_functions = new.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();

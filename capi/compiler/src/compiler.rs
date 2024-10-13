@@ -33,7 +33,10 @@ impl Compiler {
         mark_recursive_calls(&mut clusters);
 
         let fragments = generate_fragments(clusters);
-        let changes = detect_changes(self.old_functions.take(), &fragments);
+        let changes = detect_changes(
+            self.old_functions.take(),
+            &fragments.named_functions,
+        );
 
         self.old_functions = Some(fragments.named_functions.clone());
 
