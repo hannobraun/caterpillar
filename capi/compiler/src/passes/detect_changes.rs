@@ -27,8 +27,7 @@ pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
             .name
             .as_deref()
             .expect("Named function should have a name.");
-        let same_name = old_functions.find_by_name(name);
-        if let Some(same_name) = same_name {
+        if let Some(same_name) = old_functions.find_by_name(name) {
             let old_index = same_name.metadata;
 
             // Found a function with the same name. But it can't have the same
