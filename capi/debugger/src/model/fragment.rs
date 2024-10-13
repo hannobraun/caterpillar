@@ -1,8 +1,9 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentLocation, Fragments, FunctionLocation},
+    fragments::{
+        Cluster, Fragment, FragmentLocation, Fragments, FunctionLocation,
+    },
     host::Host,
     source_map::SourceMap,
-    syntax::Cluster,
 };
 use capi_game_engine::host::GameEngineHost;
 use capi_runtime::Effect;

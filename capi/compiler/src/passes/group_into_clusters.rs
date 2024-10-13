@@ -7,8 +7,8 @@ use petgraph::{
 };
 
 use crate::{
-    fragments::{FunctionIndexInCluster, FunctionIndexInRootContext},
-    syntax::{Cluster, Clusters, Expression, Function, IdentifierTarget},
+    fragments::{Cluster, FunctionIndexInCluster, FunctionIndexInRootContext},
+    syntax::{Clusters, Expression, Function, IdentifierTarget},
 };
 
 pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
@@ -106,10 +106,12 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{FunctionIndexInCluster, FunctionIndexInRootContext},
+        fragments::{
+            Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
+        },
         host::NoHost,
         passes::{parse, resolve_identifiers, tokenize},
-        syntax::{Cluster, Clusters},
+        syntax::Clusters,
     };
 
     #[test]

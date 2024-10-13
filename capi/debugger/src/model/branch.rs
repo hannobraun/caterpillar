@@ -1,8 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, BranchLocation, FragmentLocation, Fragments},
+    fragments::{Branch, BranchLocation, Cluster, FragmentLocation, Fragments},
     source_map::SourceMap,
-    syntax::{Cluster, Pattern},
+    syntax::Pattern,
 };
 use capi_runtime::Effect;
 
