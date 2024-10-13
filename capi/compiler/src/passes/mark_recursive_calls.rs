@@ -9,9 +9,9 @@ use crate::{
 
 pub fn mark_recursive_calls(
     functions: &mut BTreeMap<FunctionIndexInRootContext, Function>,
-    clusters: &CallGraph,
+    call_graph: &CallGraph,
 ) {
-    for cluster in clusters.clusters() {
+    for cluster in call_graph.clusters() {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
