@@ -71,7 +71,7 @@ pub fn generate_instructions(
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
             function_to_compile,
-            fragments,
+            &fragments.named_functions,
             &mut output,
             &mut queue,
             &mut functions,
@@ -193,7 +193,7 @@ pub fn generate_instructions(
 
 fn compile_function(
     function_to_compile: FunctionToCompile,
-    fragments: &Fragments,
+    named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
@@ -233,7 +233,7 @@ fn compile_function(
                 index,
             },
             &cluster,
-            &fragments.named_functions,
+            named_functions,
             output,
             queue,
         );
