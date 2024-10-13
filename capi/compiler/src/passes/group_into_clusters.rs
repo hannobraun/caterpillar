@@ -7,13 +7,15 @@ use petgraph::{
 };
 
 use crate::{
-    fragments::{Cluster, FunctionIndexInCluster, FunctionIndexInRootContext},
+    fragments::{
+        CallGraph, Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
+    },
     syntax::{Expression, Function, IdentifierTarget},
 };
 
 pub fn group_into_clusters(
     functions: Vec<Function>,
-) -> (BTreeMap<FunctionIndexInRootContext, Function>, Vec<Cluster>) {
+) -> (BTreeMap<FunctionIndexInRootContext, Function>, CallGraph) {
     let functions = iter::successors(Some(0), |i| Some(i + 1))
         .map(FunctionIndexInRootContext)
         .zip(functions)
@@ -50,23 +52,28 @@ pub fn group_into_clusters(
             "The previous operation should have made the call graph acyclic. \
             Hence, topologically sorting the graph should not fail.",
         );
-    let clusters = clustered_and_sorted_call_graph
-        .into_iter()
-        .map(|graph_index| {
-            let named_function_indices = clustered_call_graph[graph_index]
-                .iter()
-                .map(|(_, named_function_index)| named_function_index)
-                .copied();
-            let functions = iter::successors(Some(0), |i| Some(i + 1))
-                .map(FunctionIndexInCluster)
-                .zip(named_function_indices)
-                .collect();
+    let clusters =
+        clustered_and_sorted_call_graph
+            .into_iter()
+            .map(|graph_index| {
+                let named_function_indices = clustered_call_graph[graph_index]
+                    .iter()
+                    .map(|(_, named_function_index)| named_function_index)
+                    .copied();
+                let functions = iter::successors(Some(0), |i| Some(i + 1))
+                    .map(FunctionIndexInCluster)
+                    .zip(named_function_indices)
+                    .collect();
 
-            Cluster { functions }
-        })
-        .collect();
+                Cluster { functions }
+            });
 
-    (functions, clusters)
+    let mut call_graph = CallGraph::default();
+    for cluster in clusters.into_iter() {
+        call_graph.insert(cluster);
+    }
+
+    (functions, call_graph)
 }
 
 fn include_calls_from_function_in_call_graph(
@@ -326,13 +333,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let (_, clusters) = super::group_into_clusters(functions);
-
-        let mut call_graph = CallGraph::default();
-        for cluster in clusters.into_iter() {
-            call_graph.insert(cluster);
-        }
-
+        let (_, call_graph) = super::group_into_clusters(functions);
         call_graph
     }
 }

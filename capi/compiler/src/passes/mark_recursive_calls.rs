@@ -77,7 +77,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{CallGraph, FunctionIndexInRootContext},
+        fragments::FunctionIndexInRootContext,
         host::NoHost,
         passes::{group_into_clusters, parse, resolve_identifiers, tokenize},
         syntax::{Expression, Function, IdentifierTarget},
@@ -187,13 +187,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let (mut functions, clusters) = group_into_clusters(functions);
-
-        let mut call_graph = CallGraph::default();
-        for cluster in clusters.into_iter() {
-            call_graph.insert(cluster);
-        }
-
+        let (mut functions, call_graph) = group_into_clusters(functions);
         super::mark_recursive_calls(&mut functions, &call_graph);
 
         functions

@@ -1,7 +1,7 @@
 use capi_runtime::Instructions;
 
 use crate::{
-    fragments::{CallGraph, Fragments, NamedFunctions},
+    fragments::{Fragments, NamedFunctions},
     host::Host,
     passes::{
         detect_changes, determine_tail_positions, generate_fragments,
@@ -29,13 +29,7 @@ impl Compiler {
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
         resolve_identifiers::<H>(&mut functions);
-        let (mut functions, clusters) = group_into_clusters(functions);
-
-        let mut call_graph = CallGraph::default();
-        for cluster in clusters.into_iter() {
-            call_graph.insert(cluster);
-        }
-
+        let (mut functions, call_graph) = group_into_clusters(functions);
         mark_recursive_calls(&mut functions, &call_graph);
 
         let fragments = generate_fragments(functions, call_graph);
