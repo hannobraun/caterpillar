@@ -115,7 +115,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let clusters = group_into_clusters(
+        let call_graph = group_into_clusters(
             r"
                 main: {
                     \ ->
@@ -130,7 +130,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters().cloned().collect::<Vec<_>>(),
+            call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
@@ -145,7 +145,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let clusters = group_into_clusters(
+        let call_graph = group_into_clusters(
             r"
                 main: {
                     \ ->
@@ -160,7 +160,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters().cloned().collect::<Vec<_>>(),
+            call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1))
@@ -175,7 +175,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let clusters = group_into_clusters(
+        let call_graph = group_into_clusters(
             r"
                 main: {
                     \ ->
@@ -195,7 +195,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters().cloned().collect::<Vec<_>>(),
+            call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -215,7 +215,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let clusters = group_into_clusters(
+        let call_graph = group_into_clusters(
             r"
                 main: {
                     \ ->
@@ -244,7 +244,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters().cloned().collect::<Vec<_>>(),
+            call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let clusters = group_into_clusters(
+        let call_graph = group_into_clusters(
             r"
                 main: {
                     \ ->
@@ -303,7 +303,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters().cloned().collect::<Vec<_>>(),
+            call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
