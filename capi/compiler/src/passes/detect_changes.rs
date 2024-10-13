@@ -12,12 +12,11 @@ pub fn detect_changes(
     new_functions: &NamedFunctions,
 ) -> Changes {
     let old_functions = old_functions.unwrap_or_default();
-    let new_functions = new_functions.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for (new_index, new_function) in new_functions.into_iter() {
+    for (new_index, new_function) in new_functions.clone().into_iter() {
         if old_functions
             .find_by_hash(&Hash::new(&new_function))
             .is_some()
