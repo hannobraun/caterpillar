@@ -6,12 +6,14 @@ use crate::{
 };
 
 pub fn mark_recursive_calls(clusters: &mut Clusters) {
+    let functions = &mut clusters.functions;
+
     for cluster in &mut clusters.clusters {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
             .filter_map(|(&function_index_in_cluster, named_function_index)| {
-                clusters.functions[named_function_index]
+                functions[named_function_index]
                     .name
                     .clone()
                     .map(|name| (name, function_index_in_cluster))
@@ -19,8 +21,7 @@ pub fn mark_recursive_calls(clusters: &mut Clusters) {
             .collect::<BTreeMap<_, _>>();
 
         for named_function_index in cluster.functions.values() {
-            let function = clusters
-                .functions
+            let function = functions
                 .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
