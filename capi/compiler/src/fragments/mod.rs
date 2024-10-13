@@ -2,6 +2,7 @@
 
 pub mod search;
 
+mod call_graph;
 mod changes;
 mod fragment;
 mod fragments;
@@ -9,6 +10,7 @@ mod functions;
 mod location;
 
 pub use self::{
+    call_graph::CallGraph,
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     fragment::Fragment,
     fragments::Fragments,
