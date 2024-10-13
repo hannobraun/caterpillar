@@ -11,13 +11,14 @@ use crate::{
 
 pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut hashes = BTreeMap::new();
+    let mut named_functions = NamedFunctions::default();
 
-    let functions = clusters
+    clusters
         .clusters
         .iter()
         .rev()
         .flat_map(|cluster| cluster.functions.values())
-        .map(|&index| {
+        .for_each(|&index| {
             let function = clusters.functions[&index].clone();
             let function = compile_function(function, &mut hashes);
 
@@ -26,12 +27,11 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
             );
             hashes.insert(name, Hash::new(&function));
 
-            (index, function)
-        })
-        .collect::<BTreeMap<_, _>>();
+            named_functions.inner.insert(index, function);
+        });
 
     Fragments {
-        named_functions: NamedFunctions { inner: functions },
+        named_functions,
         clusters: clusters.clusters,
     }
 }
