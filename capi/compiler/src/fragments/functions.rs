@@ -86,6 +86,13 @@ impl NamedFunctions {
             }
         }
     }
+
+    /// # Iterate over the named functions
+    pub fn iter(
+        &self,
+    ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Function)> {
+        self.inner.iter()
+    }
 }
 
 #[derive(
