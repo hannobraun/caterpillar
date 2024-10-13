@@ -1,6 +1,6 @@
 use crate::syntax::Cluster;
 
-use super::{search::FoundFunction, FunctionLocation, NamedFunctions};
+use super::{FunctionLocation, NamedFunctions};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -28,29 +28,5 @@ impl Fragments {
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
-    }
-
-    /// # Find the function with the provided name
-    ///
-    /// ## Implementation Note
-    ///
-    /// There is currently a function with a similar name on `FragmentMap`. Once
-    /// the ongoing refactoring on fragment addressing has finished, that
-    /// function can be removed, and this one can take over its name.
-    pub fn find_function_by_name(&self, name: &str) -> Option<FoundFunction> {
-        self.named_functions
-            .inner
-            .iter()
-            .find_map(|(&index, function)| {
-                if function.name.as_deref() == Some(name) {
-                    let location = FunctionLocation::NamedFunction { index };
-                    Some(FoundFunction {
-                        function: function.clone(),
-                        location,
-                    })
-                } else {
-                    None
-                }
-            })
     }
 }

@@ -36,7 +36,9 @@ pub fn generate_instructions(
     let call_to_main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     });
-    if let Some(function) = fragments.find_function_by_name("main") {
+    if let Some(function) =
+        fragments.named_functions.find_function_by_name("main")
+    {
         output
             .placeholders
             .entry(Hash::new(&function))
