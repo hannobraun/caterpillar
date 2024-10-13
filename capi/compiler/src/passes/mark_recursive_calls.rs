@@ -7,8 +7,9 @@ use crate::{
 
 pub fn mark_recursive_calls(clusters: &mut Clusters) {
     let functions = &mut clusters.functions;
+    let clusters = &clusters.clusters;
 
-    for cluster in &clusters.clusters {
+    for cluster in clusters {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
