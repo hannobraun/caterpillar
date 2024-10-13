@@ -57,15 +57,9 @@ async fn build_game_once_with_compiler(
 
     let source = fs::read_to_string(path).await?;
 
-    let (named_functions, call_graph, instructions, source_map) =
-        compiler.compile::<GameEngineHost>(&source);
+    let output = compiler.compile::<GameEngineHost>(&source);
 
-    Ok(Code {
-        named_functions,
-        call_graph,
-        instructions,
-        source_map,
-    })
+    Ok(output)
 }
 
 struct Timestamp(u64);

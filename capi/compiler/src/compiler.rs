@@ -21,10 +21,7 @@ pub struct Compiler {
 
 impl Compiler {
     /// # Compile the provided source code
-    pub fn compile<H: Host>(
-        &mut self,
-        source: &str,
-    ) -> (NamedFunctions, CallGraph, Instructions, SourceMap) {
+    pub fn compile<H: Host>(&mut self, source: &str) -> Code {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
@@ -46,12 +43,12 @@ impl Compiler {
             &mut self.source_map,
         );
 
-        (
+        Code {
             named_functions,
             call_graph,
-            self.instructions.clone(),
-            self.source_map.clone(),
-        )
+            instructions: self.instructions.clone(),
+            source_map: self.source_map.clone(),
+        }
     }
 }
 
