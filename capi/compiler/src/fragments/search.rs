@@ -42,7 +42,7 @@ impl Find<Function, FunctionIndexInRootContext> {
         self.metadata
     }
 
-    /// # Return the location of the found function
+    /// # Access the location of the found function
     pub fn location(&self) -> FunctionLocation {
         let index = self.metadata;
         FunctionLocation::NamedFunction { index }
