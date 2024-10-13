@@ -7,7 +7,7 @@ use std::ops::Deref;
 
 use super::{
     Branch, BranchLocation, Fragment, FragmentLocation, Function,
-    FunctionLocation,
+    FunctionIndexInRootContext, FunctionLocation,
 };
 
 /// # The result of a search, alongside search-specific metadata
@@ -30,6 +30,14 @@ impl<T, M> Deref for Find<T, M> {
 
     fn deref(&self) -> &Self::Target {
         &self.find
+    }
+}
+
+impl Find<Function, FunctionIndexInRootContext> {
+    /// # Return the location of the found function
+    pub fn location(&self) -> FunctionLocation {
+        let index = self.metadata;
+        FunctionLocation::NamedFunction { index }
     }
 }
 
