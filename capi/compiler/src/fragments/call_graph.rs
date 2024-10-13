@@ -20,6 +20,19 @@ impl CallGraph {
         self.clusters.push(cluster);
     }
 
+    /// # Iterate over all named functions, from the leaves up
+    ///
+    /// Guarantees that any function that is yielded by the iterator only has
+    /// non-recursive calls to functions that have already been yielded before.
+    pub fn functions_from_leaves(
+        &self,
+    ) -> impl Iterator<Item = &FunctionIndexInRootContext> {
+        self.clusters
+            .iter()
+            .rev()
+            .flat_map(|cluster| cluster.functions.values())
+    }
+
     /// # Find the cluster containing a given function
     ///
     /// ## Panics

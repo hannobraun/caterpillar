@@ -19,18 +19,16 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         call_graph.insert(cluster);
     }
 
-    for cluster in call_graph.clusters.iter().rev() {
-        for &index in cluster.functions.values() {
-            let function = clusters.functions[&index].clone();
-            let function = compile_function(function, &mut hashes);
+    for &index in call_graph.functions_from_leaves() {
+        let function = clusters.functions[&index].clone();
+        let function = compile_function(function, &mut hashes);
 
-            let name = function.name.clone().expect(
-                "Just compiled a named function; should have its name set.",
-            );
-            hashes.insert(name, Hash::new(&function));
+        let name = function.name.clone().expect(
+            "Just compiled a named function; should have its name set.",
+        );
+        hashes.insert(name, Hash::new(&function));
 
-            named_functions.insert(index, function);
-        }
+        named_functions.insert(index, function);
     }
 
     Fragments {
