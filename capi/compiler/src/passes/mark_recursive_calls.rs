@@ -187,12 +187,10 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let clusters = group_into_clusters(functions);
-
-        let mut functions = clusters.functions;
+        let (mut functions, clusters) = group_into_clusters(functions);
 
         let mut call_graph = CallGraph::default();
-        for cluster in clusters.clusters.into_iter() {
+        for cluster in clusters.into_iter() {
             call_graph.insert(cluster);
         }
 

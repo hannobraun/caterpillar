@@ -29,12 +29,10 @@ impl Compiler {
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
         resolve_identifiers::<H>(&mut functions);
-        let clusters = group_into_clusters(functions);
-
-        let mut functions = clusters.functions;
+        let (mut functions, clusters) = group_into_clusters(functions);
 
         let mut call_graph = CallGraph::default();
-        for cluster in clusters.clusters.into_iter() {
+        for cluster in clusters.into_iter() {
             call_graph.insert(cluster);
         }
 

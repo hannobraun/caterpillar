@@ -8,10 +8,12 @@ use petgraph::{
 
 use crate::{
     fragments::{Cluster, FunctionIndexInCluster, FunctionIndexInRootContext},
-    syntax::{Clusters, Expression, Function, IdentifierTarget},
+    syntax::{Expression, Function, IdentifierTarget},
 };
 
-pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
+pub fn group_into_clusters(
+    functions: Vec<Function>,
+) -> (BTreeMap<FunctionIndexInRootContext, Function>, Vec<Cluster>) {
     let functions = iter::successors(Some(0), |i| Some(i + 1))
         .map(FunctionIndexInRootContext)
         .zip(functions)
@@ -64,10 +66,7 @@ pub fn group_into_clusters(functions: Vec<Function>) -> Clusters {
         })
         .collect();
 
-    Clusters {
-        functions,
-        clusters,
-    }
+    (functions, clusters)
 }
 
 fn include_calls_from_function_in_call_graph(
@@ -326,7 +325,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let clusters = super::group_into_clusters(functions);
-        clusters.clusters
+        let (_, clusters) = super::group_into_clusters(functions);
+        clusters
     }
 }
