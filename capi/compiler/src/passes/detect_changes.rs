@@ -9,7 +9,7 @@ use crate::{
 
 pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let mut old = old
-        .map(|fragments| fragments.inner)
+        .map(|old_functions| old_functions.inner)
         .unwrap_or_default();
     let mut new = new.named_functions.inner.clone();
 
