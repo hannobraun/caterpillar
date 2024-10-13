@@ -1,15 +1,17 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{Cluster, FunctionIndexInCluster, FunctionIndexInRootContext},
+    fragments::{
+        CallGraph, FunctionIndexInCluster, FunctionIndexInRootContext,
+    },
     syntax::{Expression, Function, IdentifierTarget},
 };
 
 pub fn mark_recursive_calls(
     functions: &mut BTreeMap<FunctionIndexInRootContext, Function>,
-    clusters: &Vec<Cluster>,
+    clusters: &CallGraph,
 ) {
-    for cluster in clusters {
+    for cluster in clusters.clusters() {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
@@ -75,7 +77,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::FunctionIndexInRootContext,
+        fragments::{CallGraph, FunctionIndexInRootContext},
         host::NoHost,
         passes::{group_into_clusters, parse, resolve_identifiers, tokenize},
         syntax::{Expression, Function, IdentifierTarget},
@@ -185,12 +187,17 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let mut clusters = group_into_clusters(functions);
-        {
-            let functions = &mut clusters.functions;
-            let clusters = &clusters.clusters;
-            super::mark_recursive_calls(functions, clusters);
+        let clusters = group_into_clusters(functions);
+
+        let mut functions = clusters.functions;
+
+        let mut call_graph = CallGraph::default();
+        for cluster in clusters.clusters.into_iter() {
+            call_graph.insert(cluster);
         }
-        clusters.functions
+
+        super::mark_recursive_calls(&mut functions, &call_graph);
+
+        functions
     }
 }

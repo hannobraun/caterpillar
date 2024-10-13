@@ -29,19 +29,16 @@ impl Compiler {
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
         resolve_identifiers::<H>(&mut functions);
-        let mut clusters = group_into_clusters(functions);
-        {
-            let functions = &mut clusters.functions;
-            let clusters = &clusters.clusters;
-            mark_recursive_calls(functions, clusters);
-        }
+        let clusters = group_into_clusters(functions);
 
-        let functions = clusters.functions;
+        let mut functions = clusters.functions;
 
         let mut call_graph = CallGraph::default();
         for cluster in clusters.clusters.into_iter() {
             call_graph.insert(cluster);
         }
+
+        mark_recursive_calls(&mut functions, &call_graph);
 
         let fragments = generate_fragments(functions, call_graph);
         let changes = detect_changes(
