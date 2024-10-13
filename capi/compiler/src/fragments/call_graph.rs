@@ -5,7 +5,7 @@ use super::{FunctionIndexInCluster, FunctionIndexInRootContext};
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct CallGraph {
-    pub clusters: Vec<Cluster>,
+    clusters: Vec<Cluster>,
 }
 
 impl CallGraph {
