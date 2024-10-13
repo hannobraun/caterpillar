@@ -1,4 +1,4 @@
-use capi_compiler::{fragments::FragmentLocation, Code};
+use capi_compiler::{fragments::FragmentLocation, CompilerOutput};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Instructions, Value};
@@ -16,7 +16,7 @@ pub struct PersistentState {
 }
 
 impl PersistentState {
-    pub fn on_new_code(&mut self, code: Code) -> Command {
+    pub fn on_new_code(&mut self, code: CompilerOutput) -> Command {
         let instructions = self.apply_breakpoints(&code);
         self.code.inner = Some(code);
         Command::UpdateCode { instructions }
@@ -339,7 +339,7 @@ impl PersistentState {
         Ok(())
     }
 
-    fn apply_breakpoints(&self, code: &Code) -> Instructions {
+    fn apply_breakpoints(&self, code: &CompilerOutput) -> Instructions {
         let mut instructions = code.instructions.clone();
 
         for address in self.breakpoints.iter() {

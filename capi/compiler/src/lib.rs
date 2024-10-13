@@ -11,4 +11,4 @@ mod passes;
 #[cfg(test)]
 mod tests;
 
-pub use self::compiler::{Code, Compiler};
+pub use self::compiler::{CompilerOutput, Compiler};

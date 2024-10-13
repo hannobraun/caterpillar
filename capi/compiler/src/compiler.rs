@@ -21,7 +21,7 @@ pub struct Compiler {
 
 impl Compiler {
     /// # Compile the provided source code
-    pub fn compile<H: Host>(&mut self, source: &str) -> Code {
+    pub fn compile<H: Host>(&mut self, source: &str) -> CompilerOutput {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
@@ -43,7 +43,7 @@ impl Compiler {
             &mut self.source_map,
         );
 
-        Code {
+        CompilerOutput {
             named_functions,
             call_graph,
             instructions: self.instructions.clone(),
@@ -53,7 +53,7 @@ impl Compiler {
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct Code {
+pub struct CompilerOutput {
     pub named_functions: NamedFunctions,
     pub call_graph: CallGraph,
     pub instructions: Instructions,

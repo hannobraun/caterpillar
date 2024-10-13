@@ -1,14 +1,14 @@
 use std::{str, time::SystemTime};
 
-use capi_compiler::{Code, Compiler};
+use capi_compiler::{Compiler, CompilerOutput};
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
 use tokio::{fs, sync::watch, task};
 
-pub type CodeRx = watch::Receiver<Versioned<Code>>;
+pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
 
-pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
+pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     let mut compiler = Compiler::default();
     build_game_once_with_compiler(game, &mut compiler).await
 }
@@ -52,7 +52,7 @@ pub async fn build_and_watch_game(
 async fn build_game_once_with_compiler(
     game: &str,
     compiler: &mut Compiler,
-) -> anyhow::Result<Code> {
+) -> anyhow::Result<CompilerOutput> {
     let path = format!("games/{game}/{game}.capi");
 
     let source = fs::read_to_string(path).await?;

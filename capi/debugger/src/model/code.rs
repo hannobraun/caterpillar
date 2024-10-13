@@ -1,14 +1,14 @@
 use anyhow::anyhow;
-use capi_compiler::{fragments::FragmentLocation, Code};
+use capi_compiler::{fragments::FragmentLocation, CompilerOutput};
 use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
 pub struct DebugCode {
-    pub inner: Option<Code>,
+    pub inner: Option<CompilerOutput>,
 }
 
 impl DebugCode {
-    pub fn get(&self) -> anyhow::Result<&Code> {
+    pub fn get(&self) -> anyhow::Result<&CompilerOutput> {
         self.inner
             .as_ref()
             .ok_or_else(|| anyhow!("Code is not available yet."))

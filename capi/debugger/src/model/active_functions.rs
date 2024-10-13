@@ -5,7 +5,7 @@ use capi_compiler::{
     fragments::{
         self, FragmentLocation, FunctionIndexInRootContext, FunctionLocation,
     },
-    Code,
+    CompilerOutput,
 };
 use capi_protocol::host_state::HostState;
 use capi_runtime::{Effect, InstructionAddress};
@@ -20,7 +20,7 @@ pub enum ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(
-        code: Option<&Code>,
+        code: Option<&CompilerOutput>,
         breakpoints: &Breakpoints,
         state: Option<&HostState>,
     ) -> Self {
@@ -248,7 +248,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 
 fn instruction_to_named_function(
     address: &InstructionAddress,
-    code: &Code,
+    code: &CompilerOutput,
 ) -> (fragments::Function, FunctionIndexInRootContext) {
     let location = code.source_map.instruction_to_function(address).expect(
         "Expecting instructions on call stack to all map to a function.",
@@ -280,7 +280,7 @@ fn instruction_to_named_function(
 fn reconstruct_function(
     name: &str,
     entries: &mut VecDeque<ActiveFunctionsEntry>,
-    code: &Code,
+    code: &CompilerOutput,
     breakpoints: &Breakpoints,
     effects: &[Effect],
 ) -> Option<String> {
@@ -325,7 +325,7 @@ fn reconstruct_function(
 
 fn function_call_to_function_name(
     function_call: &FragmentLocation,
-    code: &Code,
+    code: &CompilerOutput,
 ) -> Option<String> {
     let fragment = code
         .named_functions
