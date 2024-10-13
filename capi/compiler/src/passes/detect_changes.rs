@@ -11,12 +11,12 @@ pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let mut old_functions = old
         .map(|old_functions| old_functions.inner)
         .unwrap_or_default();
-    let mut new = new.named_functions.inner.clone();
+    let mut new_functions = new.named_functions.inner.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    while let Some((new_index, new_function)) = new.pop_first() {
+    while let Some((new_index, new_function)) = new_functions.pop_first() {
         let same_hash =
             old_functions.iter().find_map(|(&index, old_function)| {
                 if Hash::new(old_function) == Hash::new(&new_function) {
