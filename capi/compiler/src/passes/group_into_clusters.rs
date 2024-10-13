@@ -111,7 +111,6 @@ mod tests {
         },
         host::NoHost,
         passes::{parse, resolve_identifiers, tokenize},
-        syntax::Clusters,
     };
 
     #[test]
@@ -131,7 +130,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters,
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
@@ -161,7 +160,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters,
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1))
@@ -196,7 +195,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters,
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -245,7 +244,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters,
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -304,7 +303,7 @@ mod tests {
         );
 
         assert_eq!(
-            clusters.clusters,
+            clusters,
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
@@ -323,10 +322,11 @@ mod tests {
         );
     }
 
-    fn group_into_clusters(source: &str) -> Clusters {
+    fn group_into_clusters(source: &str) -> Vec<Cluster> {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        super::group_into_clusters(functions)
+        let clusters = super::group_into_clusters(functions);
+        clusters.clusters
     }
 }
