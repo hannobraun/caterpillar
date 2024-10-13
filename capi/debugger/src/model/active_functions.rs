@@ -95,10 +95,6 @@ impl ActiveFunctions {
                     function_call_to_function_name(active_fragment, code)
                 });
 
-            let location = FunctionLocation::NamedFunction {
-                index: function_index_in_root_context,
-            };
-
             let cluster = code
                 .fragments
                 .clusters
@@ -107,7 +103,9 @@ impl ActiveFunctions {
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
                     named_function,
-                    location,
+                    FunctionLocation::NamedFunction {
+                        index: function_index_in_root_context,
+                    },
                     active_fragment,
                     active_instructions.is_empty(),
                     cluster,
