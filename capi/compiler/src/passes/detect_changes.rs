@@ -10,7 +10,7 @@ use crate::{
 
 pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let old_functions = old.unwrap_or_default();
-    let new_functions = new.named_functions.inner.clone();
+    let new_functions = new.named_functions.clone();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
