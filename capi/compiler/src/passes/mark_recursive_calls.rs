@@ -1,14 +1,14 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::FunctionIndexInCluster,
-    syntax::{Clusters, Expression, Function, IdentifierTarget},
+    fragments::{Cluster, FunctionIndexInCluster, FunctionIndexInRootContext},
+    syntax::{Expression, Function, IdentifierTarget},
 };
 
-pub fn mark_recursive_calls(clusters: &mut Clusters) {
-    let functions = &mut clusters.functions;
-    let clusters = &clusters.clusters;
-
+pub fn mark_recursive_calls(
+    functions: &mut BTreeMap<FunctionIndexInRootContext, Function>,
+    clusters: &Vec<Cluster>,
+) {
     for cluster in clusters {
         let indices_in_cluster_by_function_name = cluster
             .functions
@@ -181,7 +181,11 @@ mod tests {
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
         let mut clusters = group_into_clusters(functions);
-        super::mark_recursive_calls(&mut clusters);
+        {
+            let functions = &mut clusters.functions;
+            let clusters = &clusters.clusters;
+            super::mark_recursive_calls(functions, clusters);
+        }
         clusters
     }
 }

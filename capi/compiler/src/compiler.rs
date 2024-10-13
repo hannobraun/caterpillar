@@ -30,7 +30,11 @@ impl Compiler {
         determine_tail_positions(&mut functions);
         resolve_identifiers::<H>(&mut functions);
         let mut clusters = group_into_clusters(functions);
-        mark_recursive_calls(&mut clusters);
+        {
+            let functions = &mut clusters.functions;
+            let clusters = &clusters.clusters;
+            mark_recursive_calls(functions, clusters);
+        }
 
         let functions = clusters.functions;
 
