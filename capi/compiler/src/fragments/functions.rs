@@ -18,7 +18,7 @@ use super::{
 /// hash that is expected to be unique to that function. This requires the
 /// function to be fully pre-compiled (or the hash would not remain stable), but
 /// is the more future-proof way of referring to functions.
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
     pub inner: BTreeMap<FunctionIndexInRootContext, Function>,
 }
