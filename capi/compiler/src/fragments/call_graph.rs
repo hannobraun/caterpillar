@@ -1,6 +1,6 @@
-use crate::syntax::Cluster;
+use std::collections::BTreeMap;
 
-use super::FunctionIndexInRootContext;
+use super::{FunctionIndexInCluster, FunctionIndexInRootContext};
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -46,4 +46,29 @@ impl CallGraph {
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
     }
+}
+
+/// # A cluster of functions
+///
+/// During compilation, all functions are grouped into clusters. A cluster can
+/// consist of a single function, or a group of mutually recursive functions.
+///
+/// All mutually recursive functions are grouped into a single clusters with the
+/// other functions in their recursive group.
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
+pub struct Cluster {
+    /// # Indices that refer to the functions in the cluster
+    ///
+    /// The indices refer to the functions in their original order within the
+    /// list of all named functions.
+    pub functions: BTreeMap<FunctionIndexInCluster, FunctionIndexInRootContext>,
 }

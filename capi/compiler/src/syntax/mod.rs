@@ -20,7 +20,9 @@ mod expression;
 mod function;
 
 pub use self::{
-    clusters::{Cluster, Clusters},
+    clusters::Clusters,
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function, Pattern},
 };
+
+pub use crate::fragments::Cluster;
