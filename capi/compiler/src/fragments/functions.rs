@@ -24,6 +24,35 @@ pub struct NamedFunctions {
 }
 
 impl NamedFunctions {
+    /// # Insert the provided named function
+    ///
+    /// ## Implementation Note
+    ///
+    /// The signature of this function doesn't make a whole lot of sense. The
+    /// index should be created within this function and returned from it.
+    ///
+    /// This is an artifact of the ongoing compiler cleanup. The change to the
+    /// signature can't be made until `NamedFunctions` is used earlier in the
+    /// compiler pipeline, which is blocked until `syntax::Function` and
+    /// `fragments::Function` are merged.
+    pub fn insert(
+        &mut self,
+        index: FunctionIndexInRootContext,
+        function: Function,
+    ) {
+        assert!(
+            self.get(&index).is_none(),
+            "Should not overwrite named function."
+        );
+        assert!(
+            function.name.is_some(),
+            "Trying to insert named function that does not actually have a \
+            name."
+        );
+
+        self.inner.insert(index, function);
+    }
+
     /// # Access the named function at the given index
     pub fn get(&self, index: &FunctionIndexInRootContext) -> Option<&Function> {
         self.inner.get(index)

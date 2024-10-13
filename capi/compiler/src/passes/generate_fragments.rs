@@ -27,7 +27,7 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
         );
         hashes.insert(name, Hash::new(&function));
 
-        named_functions.inner.insert(index, function);
+        named_functions.insert(index, function);
     }
 
     Fragments {
