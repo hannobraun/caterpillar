@@ -10,6 +10,21 @@ use super::{
     FunctionLocation,
 };
 
+/// # The result of a search, alongside search-specific metadata
+///
+/// This type provides a convenient way for searches to return that additional
+/// metadata, without complicating the handling of the return value too much.
+///
+/// In addition, it provides a target for attaching addition result-specific
+/// APIs to, that would otherwise be very inconvenient to access.
+pub struct Find<T, M> {
+    /// # The result of the search
+    pub find: T,
+
+    /// # The additional search-specific metadata
+    pub metadata: M,
+}
+
 /// # A function that was found by a search
 pub struct FoundFunction {
     /// # The function that was found
