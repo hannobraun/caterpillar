@@ -15,12 +15,10 @@
 //! code database, it's also going to be the canonical representation of source
 //! code.
 
-mod clusters;
 mod expression;
 mod function;
 
 pub use self::{
-    clusters::Clusters,
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function, Pattern},
 };
