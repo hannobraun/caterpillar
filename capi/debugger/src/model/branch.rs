@@ -1,6 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{Branch, BranchLocation, Cluster, FragmentLocation, Fragments},
+    fragments::{
+        Branch, BranchLocation, Cluster, FragmentLocation, NamedFunctions,
+    },
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -23,7 +25,7 @@ impl DebugBranch {
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        fragments: &Fragments,
+        named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
@@ -42,7 +44,7 @@ impl DebugBranch {
                     active_fragment,
                     is_in_innermost_active_function,
                     cluster,
-                    fragments,
+                    named_functions,
                     source_map,
                     breakpoints,
                     effects,

@@ -1,6 +1,6 @@
 use capi_compiler::{
     fragments::{
-        Cluster, Fragment, FragmentLocation, Fragments, FunctionLocation,
+        Cluster, Fragment, FragmentLocation, FunctionLocation, NamedFunctions,
     },
     host::Host,
     source_map::SourceMap,
@@ -24,7 +24,7 @@ impl DebugFragment {
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        fragments: &Fragments,
+        named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
@@ -65,7 +65,7 @@ impl DebugFragment {
             active_fragment,
             is_in_innermost_active_function,
             cluster,
-            fragments,
+            named_functions,
             source_map,
             breakpoints,
             effects,
@@ -137,15 +137,14 @@ impl DebugFragmentKind {
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        fragments: &Fragments,
+        named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effects: &[Effect],
     ) -> Self {
         match fragment {
             Fragment::CallToFunction { hash, .. } => {
-                let function = fragments
-                    .named_functions
+                let function = named_functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone().expect(
@@ -163,10 +162,8 @@ impl DebugFragmentKind {
                     "The index of a recursive call must be valid within the \
                     calling function's cluster.",
                 );
-                let called_function = fragments
-                    .named_functions
-                    .get(called_function_index)
-                    .expect(
+                let called_function =
+                    named_functions.get(called_function_index).expect(
                         "Expecting to find fragment referred to from a \
                         cluster.",
                     );
@@ -201,7 +198,7 @@ impl DebugFragmentKind {
                     active_fragment,
                     is_in_innermost_active_function,
                     cluster,
-                    fragments,
+                    named_functions,
                     source_map,
                     breakpoints,
                     effects,
