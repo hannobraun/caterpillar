@@ -24,6 +24,11 @@ pub struct NamedFunctions {
 }
 
 impl NamedFunctions {
+    /// # Access the named function at the given index
+    pub fn get(&self, index: &FunctionIndexInRootContext) -> Option<&Function> {
+        self.inner.get(index)
+    }
+
     /// # Find the named function with the provided hash
     pub fn find_by_hash(
         &self,

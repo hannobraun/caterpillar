@@ -261,7 +261,6 @@ fn instruction_to_named_function(
                 let function = code
                     .fragments
                     .named_functions
-                    .inner
                     .get(&index)
                     .expect(
                         "Function location in source map should refer to \
