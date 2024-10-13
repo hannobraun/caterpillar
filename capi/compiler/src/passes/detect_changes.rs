@@ -5,9 +5,9 @@ use crate::{
     hash::Hash,
 };
 
-pub fn detect_changes(old: Option<&Fragments>, new: &Fragments) -> Changes {
+pub fn detect_changes(old: Option<Fragments>, new: &Fragments) -> Changes {
     let mut old = old
-        .map(|fragments| fragments.named_functions.inner.clone())
+        .map(|fragments| fragments.named_functions.inner)
         .unwrap_or_default();
     let mut new = new.named_functions.inner.clone();
 
