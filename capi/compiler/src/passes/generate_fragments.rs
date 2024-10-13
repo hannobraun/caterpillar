@@ -13,21 +13,18 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
-    for &index in clusters
-        .clusters
-        .iter()
-        .rev()
-        .flat_map(|cluster| cluster.functions.values())
-    {
-        let function = clusters.functions[&index].clone();
-        let function = compile_function(function, &mut hashes);
+    for cluster in clusters.clusters.iter().rev() {
+        for &index in cluster.functions.values() {
+            let function = clusters.functions[&index].clone();
+            let function = compile_function(function, &mut hashes);
 
-        let name = function.name.clone().expect(
-            "Just compiled a named function; should have its name set.",
-        );
-        hashes.insert(name, Hash::new(&function));
+            let name = function.name.clone().expect(
+                "Just compiled a named function; should have its name set.",
+            );
+            hashes.insert(name, Hash::new(&function));
 
-        named_functions.insert(index, function);
+            named_functions.insert(index, function);
+        }
     }
 
     Fragments {
