@@ -3,22 +3,19 @@ use std::{collections::BTreeMap, iter};
 use crate::{
     fragments::{
         Branch, BranchIndex, CallGraph, Fragment, FragmentIndexInBranchBody,
-        Fragments, Function, NamedFunctions, Parameters,
+        Fragments, Function, FunctionIndexInRootContext, NamedFunctions,
+        Parameters,
     },
     hash::Hash,
     syntax::{self, IdentifierTarget},
 };
 
-pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
+pub fn generate_fragments(
+    functions: BTreeMap<FunctionIndexInRootContext, syntax::Function>,
+    call_graph: CallGraph,
+) -> Fragments {
     let mut hashes = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
-
-    let functions = clusters.functions;
-
-    let mut call_graph = CallGraph::default();
-    for cluster in clusters.clusters.into_iter() {
-        call_graph.insert(cluster);
-    }
 
     for &index in call_graph.functions_from_leaves() {
         let function = functions[&index].clone();
