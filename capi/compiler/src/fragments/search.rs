@@ -35,7 +35,9 @@ impl<T, M> Deref for Find<T, M> {
 
 impl Find<Function, FunctionLocation> {
     /// # Iterate over the function's branches
-    pub fn branches(&self) -> impl Iterator<Item = FoundBranch> {
+    pub fn branches(
+        &self,
+    ) -> impl Iterator<Item = Find<Branch, BranchLocation>> {
         let function = &self.find;
         let location = self.metadata.clone();
 
@@ -43,9 +45,9 @@ impl Find<Function, FunctionLocation> {
             .branches
             .clone()
             .into_iter()
-            .map(move |(index, branch)| FoundBranch {
-                branch,
-                location: BranchLocation {
+            .map(move |(index, branch)| Find {
+                find: branch,
+                metadata: BranchLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },
@@ -55,7 +57,7 @@ impl Find<Function, FunctionLocation> {
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(&self) -> Option<FoundBranch> {
+    pub fn find_single_branch(&self) -> Option<Find<Branch, BranchLocation>> {
         let function = &self.find;
         let location = self.metadata.clone();
 
@@ -63,31 +65,23 @@ impl Find<Function, FunctionLocation> {
             return None;
         }
 
-        function.branches.first_key_value().map(|(&index, branch)| {
-            FoundBranch {
-                branch: branch.clone(),
-                location: BranchLocation {
+        function
+            .branches
+            .first_key_value()
+            .map(|(&index, branch)| Find {
+                find: branch.clone(),
+                metadata: BranchLocation {
                     parent: Box::new(location),
                     index,
                 },
-            }
-        })
+            })
     }
 }
 
-/// # A branch that was found by a search
-pub struct FoundBranch {
-    /// # The branch that was found
-    pub branch: Branch,
-
-    /// # The location of the branch that was found
-    pub location: BranchLocation,
-}
-
-impl FoundBranch {
+impl Find<Branch, BranchLocation> {
     /// # Iterate over the fragments in the branch's body
     pub fn body(&self) -> impl Iterator<Item = FoundFragment> {
-        let location = self.location.clone();
+        let location = self.metadata.clone();
         self.body.clone().into_iter().map(move |(index, fragment)| {
             FoundFragment {
                 fragment,
@@ -97,14 +91,6 @@ impl FoundBranch {
                 },
             }
         })
-    }
-}
-
-impl Deref for FoundBranch {
-    type Target = Branch;
-
-    fn deref(&self) -> &Self::Target {
-        &self.branch
     }
 }
 
