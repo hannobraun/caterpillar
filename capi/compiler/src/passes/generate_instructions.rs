@@ -57,9 +57,7 @@ pub fn generate_instructions(
     for (&index, function) in added_and_updated_functions {
         let cluster = fragments
             .clusters
-            .clusters
-            .iter()
-            .find(|cluster| cluster.functions.values().any(|i| i == &index))
+            .find_cluster_by_named_function(&index)
             .expect("All named functions are part of a cluster.");
 
         queue.push_front(FunctionToCompile {
