@@ -1,8 +1,8 @@
 use std::{str, time::SystemTime};
 
-use capi_compiler::Compiler;
+use capi_compiler::{Code, Compiler};
 use capi_game_engine::host::GameEngineHost;
-use capi_protocol::{updates::Code, Versioned};
+use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
 use tokio::{fs, sync::watch, task};
 

@@ -1,4 +1,5 @@
-use capi_protocol::{command::CommandExt, updates::Code, Versioned};
+use capi_compiler::Code;
+use capi_protocol::{command::CommandExt, Versioned};
 use gloo_net::http::{Request, Response};
 
 use crate::{commands::CommandsToRuntimeTx, model::PersistentState};

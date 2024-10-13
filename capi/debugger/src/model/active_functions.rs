@@ -1,10 +1,13 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::fragments::{
-    self, FragmentLocation, FunctionIndexInRootContext, FunctionLocation,
+use capi_compiler::{
+    fragments::{
+        self, FragmentLocation, FunctionIndexInRootContext, FunctionLocation,
+    },
+    Code,
 };
-use capi_protocol::{host_state::HostState, updates::Code};
+use capi_protocol::host_state::HostState;
 use capi_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFragment, DebugFunction};

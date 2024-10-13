@@ -1,9 +1,6 @@
-use capi_compiler::fragments::FragmentLocation;
+use capi_compiler::{fragments::FragmentLocation, Code};
 use capi_game_engine::{command::Command, memory::Memory};
-use capi_protocol::{
-    host_state::HostState,
-    updates::{Code, UpdateFromHost},
-};
+use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Instructions, Value};
 
 use super::{

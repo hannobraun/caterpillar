@@ -1,9 +1,5 @@
-use capi_compiler::{
-    fragments::{CallGraph, NamedFunctions},
-    source_map::SourceMap,
-};
 use capi_game_engine::memory::Memory;
-use capi_runtime::{Instructions, Runtime, RuntimeState};
+use capi_runtime::{Runtime, RuntimeState};
 
 use crate::host_state::HostState;
 
@@ -87,14 +83,6 @@ impl UpdateFromHost {
     pub fn serialize(&self) -> SerializedUpdate {
         ron::to_string(self).unwrap().into_bytes()
     }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct Code {
-    pub named_functions: NamedFunctions,
-    pub call_graph: CallGraph,
-    pub instructions: Instructions,
-    pub source_map: SourceMap,
 }
 
 pub type SerializedUpdate = Vec<u8>;

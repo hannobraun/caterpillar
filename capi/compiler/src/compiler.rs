@@ -54,3 +54,11 @@ impl Compiler {
         )
     }
 }
+
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+pub struct Code {
+    pub named_functions: NamedFunctions,
+    pub call_graph: CallGraph,
+    pub instructions: Instructions,
+    pub source_map: SourceMap,
+}
