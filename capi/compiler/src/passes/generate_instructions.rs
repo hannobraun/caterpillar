@@ -233,7 +233,7 @@ fn compile_function(
                 index,
             },
             &cluster,
-            fragments,
+            &fragments.named_functions,
             output,
             queue,
         );
@@ -298,7 +298,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    fragments: &Fragments,
+    named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> [InstructionAddress; 2] {
@@ -312,7 +312,7 @@ fn compile_branch(
                 index,
             },
             cluster,
-            &fragments.named_functions,
+            named_functions,
             output,
             queue,
         );
