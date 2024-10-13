@@ -45,13 +45,12 @@ impl NamedFunctions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<Function, FunctionLocation>> {
+    ) -> Option<Find<Function, FunctionIndexInRootContext>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
-                let location = FunctionLocation::NamedFunction { index };
                 Some(Find {
                     find: function.clone(),
-                    metadata: location,
+                    metadata: index,
                 })
             } else {
                 None

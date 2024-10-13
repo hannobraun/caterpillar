@@ -308,11 +308,11 @@ fn reconstruct_function(
 
     let cluster = code
         .fragments
-        .find_cluster_by_named_function(&function.metadata)
+        .find_cluster_by_named_function(&function.location())
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
-        function.metadata,
+        function.location(),
         tail_call.as_ref(),
         false,
         cluster,
