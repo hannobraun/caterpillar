@@ -41,7 +41,8 @@ impl Compiler {
         self.old_functions = Some(fragments.named_functions.clone());
 
         generate_instructions(
-            &fragments,
+            &fragments.named_functions,
+            &fragments.call_graph,
             &changes,
             &mut self.instructions,
             &mut self.source_map,

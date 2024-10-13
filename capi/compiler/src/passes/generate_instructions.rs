@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, BranchLocation, Changes, Cluster, Fragment, FragmentLocation,
-        Fragments, Function, FunctionInUpdate, FunctionLocation,
+        Branch, BranchLocation, CallGraph, Changes, Cluster, Fragment,
+        FragmentLocation, Function, FunctionInUpdate, FunctionLocation,
         FunctionUpdate, NamedFunctions, Parameters,
     },
     hash::Hash,
@@ -15,7 +15,8 @@ use crate::{
 };
 
 pub fn generate_instructions(
-    fragments: &Fragments,
+    named_functions: &NamedFunctions,
+    call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
@@ -36,7 +37,7 @@ pub fn generate_instructions(
     let call_to_main = output.instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     });
-    if let Some(function) = fragments.named_functions.find_by_name("main") {
+    if let Some(function) = named_functions.find_by_name("main") {
         output
             .placeholders
             .entry(Hash::new(&function))
@@ -55,8 +56,7 @@ pub fn generate_instructions(
              }| (index, function),
         ));
     for (&index, function) in added_and_updated_functions {
-        let cluster = fragments
-            .call_graph
+        let cluster = call_graph
             .find_cluster_by_named_function(&index)
             .expect("All named functions are part of a cluster.");
 
@@ -71,7 +71,7 @@ pub fn generate_instructions(
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
             function_to_compile,
-            &fragments.named_functions,
+            named_functions,
             &mut output,
             &mut queue,
             &mut functions,
