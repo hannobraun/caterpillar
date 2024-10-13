@@ -2,8 +2,8 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     fragments::{
-        Branch, BranchIndex, Fragment, FragmentIndexInBranchBody, Fragments,
-        Function, NamedFunctions, Parameters,
+        Branch, BranchIndex, CallGraph, Fragment, FragmentIndexInBranchBody,
+        Fragments, Function, NamedFunctions, Parameters,
     },
     hash::Hash,
     syntax::{self, IdentifierTarget},
@@ -32,7 +32,9 @@ pub fn generate_fragments(clusters: syntax::Clusters) -> Fragments {
 
     Fragments {
         named_functions,
-        clusters: clusters.clusters,
+        clusters: CallGraph {
+            clusters: clusters.clusters,
+        },
     }
 }
 

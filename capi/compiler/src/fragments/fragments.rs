@@ -1,6 +1,6 @@
 use crate::syntax::Cluster;
 
-use super::{FunctionLocation, NamedFunctions};
+use super::{CallGraph, FunctionLocation, NamedFunctions};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -8,7 +8,7 @@ pub struct Fragments {
     pub named_functions: NamedFunctions,
 
     /// # The function clusters
-    pub clusters: Vec<Cluster>,
+    pub clusters: CallGraph,
 }
 
 impl Fragments {
@@ -26,6 +26,7 @@ impl Fragments {
         };
 
         self.clusters
+            .clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
     }
