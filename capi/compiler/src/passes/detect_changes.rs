@@ -1,13 +1,15 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{Changes, Fragments, FunctionInUpdate, FunctionUpdate},
+    fragments::{
+        Changes, Fragments, FunctionInUpdate, FunctionUpdate, NamedFunctions,
+    },
     hash::Hash,
 };
 
-pub fn detect_changes(old: Option<Fragments>, new: &Fragments) -> Changes {
+pub fn detect_changes(old: Option<NamedFunctions>, new: &Fragments) -> Changes {
     let mut old = old
-        .map(|fragments| fragments.named_functions.inner)
+        .map(|fragments| fragments.inner)
         .unwrap_or_default();
     let mut new = new.named_functions.inner.clone();
 
