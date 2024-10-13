@@ -164,7 +164,6 @@ impl DebugFragmentKind {
                 );
                 let called_function = fragments
                     .named_functions
-                    .inner
                     .get(called_function_index)
                     .expect(
                         "Expecting to find fragment referred to from a \
