@@ -33,20 +33,11 @@ impl<T, M> Deref for Find<T, M> {
     }
 }
 
-/// # A function that was found by a search
-pub struct FoundFunction {
-    /// # The function that was found
-    pub function: Function,
-
-    /// # The location of the function that was found
-    pub location: FunctionLocation,
-}
-
-impl FoundFunction {
+impl Find<Function, FunctionLocation> {
     /// # Iterate over the function's branches
     pub fn branches(&self) -> impl Iterator<Item = FoundBranch> {
-        let function = &self.function;
-        let location = self.location.clone();
+        let function = &self.find;
+        let location = self.metadata.clone();
 
         function
             .branches
@@ -65,8 +56,8 @@ impl FoundFunction {
     ///
     /// Returns `None`, if the function does not have exactly one branch.
     pub fn find_single_branch(&self) -> Option<FoundBranch> {
-        let function = &self.function;
-        let location = self.location.clone();
+        let function = &self.find;
+        let location = self.metadata.clone();
 
         if function.branches.len() > 1 {
             return None;
@@ -81,14 +72,6 @@ impl FoundFunction {
                 },
             }
         })
-    }
-}
-
-impl Deref for FoundFunction {
-    type Target = Function;
-
-    fn deref(&self) -> &Self::Target {
-        &self.function
     }
 }
 

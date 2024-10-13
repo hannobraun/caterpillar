@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::{hash::Hash, syntax::Pattern};
 
 use super::{
-    search::FoundFunction, BranchIndex, BranchLocation, Fragment,
+    search::Find, BranchIndex, BranchLocation, Fragment,
     FragmentIndexInBranchBody, FragmentLocation, FunctionIndexInCluster,
     FunctionIndexInRootContext, FunctionLocation,
 };
@@ -25,12 +25,15 @@ pub struct NamedFunctions {
 
 impl NamedFunctions {
     /// # Find the named function with the provided hash
-    pub fn find_by_hash(&self, hash: &Hash<Function>) -> Option<FoundFunction> {
+    pub fn find_by_hash(
+        &self,
+        hash: &Hash<Function>,
+    ) -> Option<Find<Function, FunctionLocation>> {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(function) == hash {
-                Some(FoundFunction {
-                    function: function.clone(),
-                    location: FunctionLocation::NamedFunction { index },
+                Some(Find {
+                    find: function.clone(),
+                    metadata: FunctionLocation::NamedFunction { index },
                 })
             } else {
                 None
@@ -39,13 +42,16 @@ impl NamedFunctions {
     }
 
     /// # Find the function with the provided name
-    pub fn find_by_name(&self, name: &str) -> Option<FoundFunction> {
+    pub fn find_by_name(
+        &self,
+        name: &str,
+    ) -> Option<Find<Function, FunctionLocation>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 let location = FunctionLocation::NamedFunction { index };
-                Some(FoundFunction {
-                    function: function.clone(),
-                    location,
+                Some(Find {
+                    find: function.clone(),
+                    metadata: location,
                 })
             } else {
                 None

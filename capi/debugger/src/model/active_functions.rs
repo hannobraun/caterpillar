@@ -285,8 +285,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effects: &[Effect],
 ) -> Option<String> {
-    let Some(function) =
-        code.fragments.named_functions.find_by_name(name)
+    let Some(function) = code.fragments.named_functions.find_by_name(name)
     else {
         panic!("Expecting function `{name}` to exist.");
     };
@@ -309,11 +308,11 @@ fn reconstruct_function(
 
     let cluster = code
         .fragments
-        .find_cluster_by_named_function(&function.location)
+        .find_cluster_by_named_function(&function.metadata)
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
         function.clone(),
-        function.location,
+        function.metadata,
         tail_call.as_ref(),
         false,
         cluster,
