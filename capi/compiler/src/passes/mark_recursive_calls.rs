@@ -79,7 +79,7 @@ mod tests {
     use crate::{
         fragments::FunctionIndexInRootContext,
         host::NoHost,
-        passes::{group_into_clusters, parse, resolve_identifiers, tokenize},
+        passes::{create_call_graph, parse, resolve_identifiers, tokenize},
         syntax::{Expression, Function, IdentifierTarget},
     };
 
@@ -187,7 +187,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let (mut functions, call_graph) = group_into_clusters(functions);
+        let (mut functions, call_graph) = create_call_graph(functions);
         super::mark_recursive_calls(&mut functions, &call_graph);
 
         functions

@@ -4,9 +4,9 @@ use crate::{
     fragments::{Fragments, NamedFunctions},
     host::Host,
     passes::{
-        detect_changes, determine_tail_positions, generate_fragments,
-        generate_instructions, group_into_clusters, mark_recursive_calls,
-        parse, resolve_identifiers, tokenize,
+        create_call_graph, detect_changes, determine_tail_positions,
+        generate_fragments, generate_instructions, mark_recursive_calls, parse,
+        resolve_identifiers, tokenize,
     },
     source_map::SourceMap,
 };
@@ -29,7 +29,7 @@ impl Compiler {
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
         resolve_identifiers::<H>(&mut functions);
-        let (mut functions, call_graph) = group_into_clusters(functions);
+        let (mut functions, call_graph) = create_call_graph(functions);
         mark_recursive_calls(&mut functions, &call_graph);
 
         let fragments = generate_fragments(functions, call_graph);

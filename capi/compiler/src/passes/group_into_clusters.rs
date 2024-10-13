@@ -13,7 +13,7 @@ use crate::{
     syntax::{Expression, Function, IdentifierTarget},
 };
 
-pub fn group_into_clusters(
+pub fn create_call_graph(
     functions: Vec<Function>,
 ) -> (BTreeMap<FunctionIndexInRootContext, Function>, CallGraph) {
     let functions = iter::successors(Some(0), |i| Some(i + 1))
@@ -333,7 +333,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
-        let (_, call_graph) = super::group_into_clusters(functions);
+        let (_, call_graph) = super::create_call_graph(functions);
         call_graph
     }
 }
