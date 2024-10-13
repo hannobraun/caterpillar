@@ -122,7 +122,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let call_graph = group_into_clusters(
+        let call_graph = create_call_graph(
             r"
                 main: {
                     \ ->
@@ -152,7 +152,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let call_graph = group_into_clusters(
+        let call_graph = create_call_graph(
             r"
                 main: {
                     \ ->
@@ -182,7 +182,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let call_graph = group_into_clusters(
+        let call_graph = create_call_graph(
             r"
                 main: {
                     \ ->
@@ -222,7 +222,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let call_graph = group_into_clusters(
+        let call_graph = create_call_graph(
             r"
                 main: {
                     \ ->
@@ -272,7 +272,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let call_graph = group_into_clusters(
+        let call_graph = create_call_graph(
             r"
                 main: {
                     \ ->
@@ -329,7 +329,7 @@ mod tests {
         );
     }
 
-    fn group_into_clusters(source: &str) -> CallGraph {
+    fn create_call_graph(source: &str) -> CallGraph {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_identifiers::<NoHost>(&mut functions);
