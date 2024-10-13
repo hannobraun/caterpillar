@@ -31,7 +31,7 @@ pub fn generate_fragments(
 
     Fragments {
         named_functions,
-        clusters: call_graph,
+        call_graph,
     }
 }
 

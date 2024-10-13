@@ -56,7 +56,7 @@ pub fn generate_instructions(
         ));
     for (&index, function) in added_and_updated_functions {
         let cluster = fragments
-            .clusters
+            .call_graph
             .find_cluster_by_named_function(&index)
             .expect("All named functions are part of a cluster.");
 

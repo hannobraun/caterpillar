@@ -6,5 +6,5 @@ pub struct Fragments {
     pub named_functions: NamedFunctions,
 
     /// # The function clusters
-    pub clusters: CallGraph,
+    pub call_graph: CallGraph,
 }
