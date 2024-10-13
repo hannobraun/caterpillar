@@ -34,6 +34,14 @@ impl<T, M> Deref for Find<T, M> {
 }
 
 impl Find<Function, FunctionIndexInRootContext> {
+    /// # Access the index of the found function
+    ///
+    /// This is a convenience accessor, to make code that would otherwise access
+    /// `metadata` directly more readable.
+    pub fn index(&self) -> FunctionIndexInRootContext {
+        self.metadata
+    }
+
     /// # Return the location of the found function
     pub fn location(&self) -> FunctionLocation {
         let index = self.metadata;
