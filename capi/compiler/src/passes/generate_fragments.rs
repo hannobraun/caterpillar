@@ -19,12 +19,15 @@ pub fn generate_fragments(
 
     for &index in call_graph.functions_from_leaves() {
         let function = functions[&index].clone();
+        let hash = Hash::new(&function);
+
         let function = compile_function(function, &mut hashes, &mut functions2);
 
         let name = function.name.clone().expect(
             "Just compiled a named function; should have its name set.",
         );
         hashes.insert(name, Hash::new(&function));
+        functions2.insert(hash, Hash::new(&function));
 
         named_functions.insert(index, function);
     }
