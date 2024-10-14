@@ -14,11 +14,12 @@ pub fn generate_fragments(
     call_graph: &CallGraph,
 ) -> NamedFunctions {
     let mut hashes = BTreeMap::new();
+    let mut functions2 = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
     for &index in call_graph.functions_from_leaves() {
         let function = functions[&index].clone();
-        let function = compile_function(function, &mut hashes);
+        let function = compile_function(function, &mut hashes, &mut functions2);
 
         let name = function.name.clone().expect(
             "Just compiled a named function; should have its name set.",
@@ -34,6 +35,7 @@ pub fn generate_fragments(
 fn compile_function(
     function: syntax::Function,
     functions: &mut BTreeMap<String, Hash<Function>>,
+    functions2: &mut BTreeMap<Hash<syntax::Function>, Hash<Function>>,
 ) -> Function {
     let mut branches = Vec::new();
 
@@ -41,7 +43,9 @@ fn compile_function(
         let body = branch
             .body
             .into_iter()
-            .map(|expression| compile_expression(expression, functions))
+            .map(|expression| {
+                compile_expression(expression, functions, functions2)
+            })
             .collect::<Vec<_>>();
 
         let body = iter::successors(Some(0), |i| Some(i + 1))
@@ -73,6 +77,7 @@ fn compile_function(
 fn compile_expression(
     expression: syntax::Expression,
     functions: &mut BTreeMap<String, Hash<Function>>,
+    functions2: &mut BTreeMap<Hash<syntax::Function>, Hash<Function>>,
 ) -> Fragment {
     match expression {
         syntax::Expression::CallToHostFunction { effect_number } => {
@@ -87,7 +92,7 @@ fn compile_expression(
         },
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
-            let function = compile_function(function, functions);
+            let function = compile_function(function, functions, functions2);
             Fragment::Function { function }
         }
         syntax::Expression::ResolvedBinding { name } => {
