@@ -6,7 +6,7 @@ use petgraph::{
     Graph,
 };
 
-use crate::fragments::{
+use crate::code::{
     CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster,
     FunctionIndexInRootContext,
 };
@@ -110,7 +110,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{
+        code::{
             CallGraph, Cluster, FunctionIndexInCluster,
             FunctionIndexInRootContext,
         },

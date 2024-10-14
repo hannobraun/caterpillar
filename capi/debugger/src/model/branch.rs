@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{
+    code::{
         Branch, BranchLocation, Cluster, FragmentLocation, NamedFunctions,
         Pattern,
     },

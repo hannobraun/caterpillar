@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    fragments::{FragmentLocation, Function, FunctionLocation},
+    code::{FragmentLocation, Function, FunctionLocation},
     hash::Hash,
 };
 

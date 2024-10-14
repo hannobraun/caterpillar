@@ -1,7 +1,7 @@
 use capi_runtime::Instructions;
 
 use crate::{
-    fragments::{CallGraph, NamedFunctions},
+    code::{CallGraph, NamedFunctions},
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,

@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{FragmentLocation, NamedFunctions},
+    code::{FragmentLocation, NamedFunctions},
     Compiler,
 };
 use capi_game_engine::{

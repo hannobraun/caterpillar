@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::fragments::{
+use crate::code::{
     CallGraph, Fragment, Function, FunctionIndexInCluster,
     FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
 };
@@ -75,7 +75,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{
+        code::{
             Fragment, Function, FunctionIndexInRootContext,
             UnresolvedCallToUserDefinedFunction,
         },

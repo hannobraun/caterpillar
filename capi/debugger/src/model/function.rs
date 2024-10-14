@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{
-    fragments::{
+    code::{
         self, BranchLocation, Cluster, FragmentLocation, FunctionLocation,
         NamedFunctions,
     },
@@ -19,7 +19,7 @@ pub struct DebugFunction {
 impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        function: fragments::Function,
+        function: code::Function,
         location: FunctionLocation,
         active_fragment: Option<&FragmentLocation>,
         is_innermost_active_function: bool,

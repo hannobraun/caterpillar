@@ -1,4 +1,4 @@
-pub mod fragments;
+pub mod code;
 pub mod host;
 pub mod intrinsics;
 pub mod source_map;

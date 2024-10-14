@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{
+    code::{
         search::Find, Changes, FunctionInUpdate, FunctionUpdate, NamedFunctions,
     },
     hash::Hash,

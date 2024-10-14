@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, iter};
 
 use crate::{
-    fragments::{
+    code::{
         Branch, BranchIndex, CallGraph, Fragment, FragmentIndexInBranchBody,
         Function, FunctionIndexInRootContext, NamedFunctions,
     },

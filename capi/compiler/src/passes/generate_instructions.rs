@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, VecDeque};
 use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
-    fragments::{
+    code::{
         Branch, BranchLocation, CallGraph, Changes, Cluster, Fragment,
         FragmentLocation, Function, FunctionInUpdate, FunctionLocation,
         FunctionUpdate, NamedFunctions, Pattern,

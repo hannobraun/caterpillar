@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    fragments::{
+    code::{
         Branch, Fragment, Function, Pattern,
         UnresolvedCallToUserDefinedFunction,
     },
@@ -148,7 +148,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        fragments::{
+        code::{
             Branch, Fragment, Function, UnresolvedCallToUserDefinedFunction,
         },
         host::Host,

@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{
+    code::{
         Cluster, Fragment, FragmentLocation, FunctionLocation, NamedFunctions,
     },
     host::Host,

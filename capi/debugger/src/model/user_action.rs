@@ -1,4 +1,4 @@
-use capi_compiler::fragments::FragmentLocation;
+use capi_compiler::code::FragmentLocation;
 
 #[derive(Clone)]
 pub enum UserAction {

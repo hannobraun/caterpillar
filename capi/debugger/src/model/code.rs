@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{fragments::FragmentLocation, CompilerOutput};
+use capi_compiler::{code::FragmentLocation, CompilerOutput};
 use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]

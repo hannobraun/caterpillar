@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{CallGraph, Fragment, Function, FunctionIndexInRootContext},
+    code::{CallGraph, Fragment, Function, FunctionIndexInRootContext},
     hash::Hash,
 };
 
