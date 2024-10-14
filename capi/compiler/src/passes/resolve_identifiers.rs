@@ -148,7 +148,10 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Branch, Fragment, UnresolvedCallToUserDefinedFunction},
+        code::{
+            Branch, Fragment, NamedFunctions,
+            UnresolvedCallToUserDefinedFunction,
+        },
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -280,8 +283,13 @@ mod tests {
         let mut functions = parse(tokens);
         super::resolve_most_identifiers::<TestHost>(&mut functions);
 
-        functions
-            .into_iter()
+        let mut named_functions = NamedFunctions::default();
+        for function in functions {
+            named_functions.insert(function);
+        }
+
+        named_functions
+            .into_functions()
             .flat_map(|function| function.branches.into_values())
             .collect()
     }
