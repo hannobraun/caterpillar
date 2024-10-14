@@ -37,6 +37,12 @@ pub enum Expression {
         /// This flag is relevant for tail call elimination. It is only needed
         /// for identifiers, because only identifiers can lead to tail calls.
         is_known_to_be_in_tail_position: bool,
+
+        /// # Indicate whether the identifier is known to be a function call
+        ///
+        /// This starts out as `false` and might later get updated by the
+        /// respective compiler pass.
+        is_known_to_be_call_to_user_defined_function: bool,
     },
 
     Value(Value),

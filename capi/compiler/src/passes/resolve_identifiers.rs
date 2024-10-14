@@ -170,6 +170,7 @@ mod tests {
                 name: String::from("value"),
                 target: None,
                 is_known_to_be_in_tail_position: false,
+                is_known_to_be_call_to_user_defined_function: false,
             })
         );
     }
@@ -197,6 +198,7 @@ mod tests {
                     effect_number: 0
                 }),
                 is_known_to_be_in_tail_position: false,
+                is_known_to_be_call_to_user_defined_function: false,
             })
         );
     }
@@ -224,6 +226,7 @@ mod tests {
                     intrinsic: IntrinsicFunction::Eval
                 }),
                 is_known_to_be_in_tail_position: false,
+                is_known_to_be_call_to_user_defined_function: false,
             })
         );
     }
@@ -254,6 +257,7 @@ mod tests {
                     is_known_to_be_recursive_call_to_index: None
                 }),
                 is_known_to_be_in_tail_position: false,
+                is_known_to_be_call_to_user_defined_function: false,
             })
         );
     }
