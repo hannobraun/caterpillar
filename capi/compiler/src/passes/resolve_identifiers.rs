@@ -99,6 +99,7 @@ fn resolve_in_branch<H: Host>(
             Expression::Identifier {
                 name,
                 target,
+                is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function,
                 ..
             } => {
@@ -120,6 +121,10 @@ fn resolve_in_branch<H: Host>(
                     IntrinsicFunction::from_name(name)
                 {
                     *target = Some(IdentifierTarget::Intrinsic { intrinsic });
+                    *expression = Expression::CallToIntrinsicFunction {
+                        intrinsic,
+                        is_tail_call: *is_known_to_be_in_tail_position,
+                    };
                 } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
@@ -150,7 +155,7 @@ mod tests {
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
-        syntax::{Branch, Expression, Function, IdentifierTarget},
+        syntax::{Branch, Expression, Function},
     };
 
     #[test]
@@ -220,13 +225,9 @@ mod tests {
 
         assert_eq!(
             functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
-                name: String::from("eval"),
-                target: Some(IdentifierTarget::Intrinsic {
-                    intrinsic: IntrinsicFunction::Eval
-                }),
-                is_known_to_be_in_tail_position: false,
-                is_known_to_be_call_to_user_defined_function: None,
+            Some(&Expression::CallToIntrinsicFunction {
+                intrinsic: IntrinsicFunction::Eval,
+                is_tail_call: false
             })
         );
     }
