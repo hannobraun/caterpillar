@@ -115,17 +115,16 @@ fn resolve_in_branch<H: Host>(
                             environment.insert(name.clone());
                         }
                     }
-                }
-                if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
+                } else if let Some(intrinsic) =
+                    IntrinsicFunction::from_name(name)
+                {
                     *target = Some(IdentifierTarget::Intrinsic { intrinsic });
-                }
-                if let Some(effect_number) =
+                } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
                     *target =
                         Some(IdentifierTarget::HostFunction { effect_number });
-                }
-                if known_named_functions.contains(name) {
+                } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
                             is_known_to_be_recursive_call: None,
