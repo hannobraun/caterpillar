@@ -1,7 +1,8 @@
 use capi_runtime::Value;
 
 use crate::{
-    fragments::UnresolvedCallToUserDefinedFunction, hash::Hash,
+    fragments::{FunctionIndexInCluster, UnresolvedCallToUserDefinedFunction},
+    hash::Hash,
     intrinsics::IntrinsicFunction,
 };
 
@@ -20,6 +21,11 @@ pub enum Expression {
 
     CallToUserDefinedFunction {
         hash: Hash<Function>,
+        is_tail_call: bool,
+    },
+
+    CallToUserDefinedFunctionRecursive {
+        index: FunctionIndexInCluster,
         is_tail_call: bool,
     },
 

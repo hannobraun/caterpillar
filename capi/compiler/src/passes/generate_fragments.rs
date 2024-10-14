@@ -104,6 +104,13 @@ fn compile_expression(
 
             Fragment::CallToUserDefinedFunction { hash, is_tail_call }
         }
+        syntax::Expression::CallToUserDefinedFunctionRecursive {
+            index,
+            is_tail_call,
+        } => Fragment::CallToUserDefinedFunctionRecursive {
+            index,
+            is_tail_call,
+        },
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
             let function = compile_function(function, functions, functions2);
