@@ -75,6 +75,9 @@ fn compile_expression(
     functions: &mut BTreeMap<String, Hash<Function>>,
 ) -> Fragment {
     match expression {
+        syntax::Expression::CallToHostFunction { effect_number } => {
+            Fragment::CallToHostFunction { effect_number }
+        }
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
             let function = compile_function(function, functions);

@@ -9,6 +9,10 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
+    CallToHostFunction {
+        effect_number: u8,
+    },
+
     Comment {
         text: String,
     },
