@@ -24,13 +24,7 @@ impl Compiler {
     /// # Compile the provided source code
     pub fn compile<H: Host>(&mut self, source: &str) -> CompilerOutput {
         let tokens = tokenize(source);
-        let functions = parse(tokens);
-
-        let mut named_functions = NamedFunctions::default();
-        for function in functions {
-            named_functions.insert(function);
-        }
-
+        let mut named_functions = parse(tokens);
         determine_tail_positions(&mut named_functions);
         resolve_most_identifiers::<H>(&mut named_functions);
         let call_graph = create_call_graph(&named_functions);

@@ -1,10 +1,10 @@
 use std::collections::VecDeque;
 
-use crate::code::{Branch, Fragment, Function, Pattern};
+use crate::code::{Branch, Fragment, Function, NamedFunctions, Pattern};
 
 use super::tokenize::Token;
 
-pub fn parse(tokens: Vec<Token>) -> Vec<Function> {
+pub fn parse(tokens: Vec<Token>) -> NamedFunctions {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
@@ -14,7 +14,12 @@ pub fn parse(tokens: Vec<Token>) -> Vec<Function> {
         functions.push(function);
     }
 
-    functions
+    let mut named_functions = NamedFunctions::default();
+    for function in functions {
+        named_functions.insert(function);
+    }
+
+    named_functions
 }
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {

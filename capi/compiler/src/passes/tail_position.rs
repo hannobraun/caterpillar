@@ -132,13 +132,7 @@ mod tests {
 
     pub fn determine_tail_positions(source: &str) -> NamedFunctions {
         let tokens = tokenize(source);
-        let functions = parse(tokens);
-
-        let mut named_functions = NamedFunctions::default();
-        for function in functions {
-            named_functions.insert(function);
-        }
-
+        let mut named_functions = parse(tokens);
         super::determine_tail_positions(&mut named_functions);
 
         named_functions

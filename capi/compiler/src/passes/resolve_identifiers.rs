@@ -148,10 +148,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{
-            Branch, Fragment, NamedFunctions,
-            UnresolvedCallToUserDefinedFunction,
-        },
+        code::{Branch, Fragment, UnresolvedCallToUserDefinedFunction},
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -280,13 +277,7 @@ mod tests {
 
     fn resolve_identifiers(source: &str) -> Vec<Branch> {
         let tokens = tokenize(source);
-        let functions = parse(tokens);
-
-        let mut named_functions = NamedFunctions::default();
-        for function in functions {
-            named_functions.insert(function);
-        }
-
+        let mut named_functions = parse(tokens);
         super::resolve_most_identifiers::<TestHost>(&mut named_functions);
 
         named_functions
