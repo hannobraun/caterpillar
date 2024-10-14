@@ -115,7 +115,7 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
         match token {
             Token::FunctionStart => {
                 if let Some(function) = parse_function(tokens) {
-                    branch.body.push(Expression::Function { function });
+                    branch.add_fragment(Expression::Function { function });
                 }
             }
             Token::BranchStart | Token::FunctionEnd => {
@@ -123,17 +123,17 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
             }
             _ => match tokens.take()? {
                 Token::Comment { text } => {
-                    branch.body.push(Expression::Comment { text });
+                    branch.add_fragment(Expression::Comment { text });
                 }
                 Token::Identifier { name } => {
-                    branch.body.push(Expression::UnresolvedIdentifier {
+                    branch.add_fragment(Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position: false,
                         is_known_to_be_call_to_user_defined_function: None,
                     });
                 }
                 Token::IntegerLiteral { value } => {
-                    branch.body.push(Expression::Value(value.into()));
+                    branch.add_fragment(Expression::Value(value.into()));
                 }
                 token => {
                     panic!("Unexpected token: {token:?}");

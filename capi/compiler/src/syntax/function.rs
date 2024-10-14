@@ -50,3 +50,9 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,
 }
+
+impl Branch {
+    pub fn add_fragment(&mut self, fragment: Expression) {
+        self.body.push(fragment);
+    }
+}
