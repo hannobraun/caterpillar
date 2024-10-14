@@ -1,8 +1,6 @@
 use std::collections::BTreeSet;
 
-use capi_runtime::Value;
-
-use crate::fragments::FunctionIndexInCluster;
+use crate::fragments::{FunctionIndexInCluster, Pattern};
 
 use super::Expression;
 
@@ -35,20 +33,4 @@ pub struct Function {
 pub struct Branch {
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub enum Pattern {
-    Identifier { name: String },
-    Literal { value: Value },
 }

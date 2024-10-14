@@ -1,6 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{hash::Hash, syntax::Pattern};
+use capi_runtime::Value;
+
+use crate::hash::Hash;
 
 use super::{
     search::Find, BranchIndex, BranchLocation, Fragment,
@@ -248,4 +250,20 @@ pub struct Branch {
 )]
 pub struct Parameters {
     pub inner: Vec<Pattern>,
+}
+
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub enum Pattern {
+    Identifier { name: String },
+    Literal { value: Value },
 }

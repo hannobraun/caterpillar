@@ -20,5 +20,7 @@ mod function;
 
 pub use self::{
     expression::{Expression, IdentifierTarget},
-    function::{Branch, Function, Pattern},
+    function::{Branch, Function},
 };
+
+pub use crate::fragments::Pattern;
