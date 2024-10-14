@@ -36,6 +36,38 @@ use super::{Function, FunctionIndexInCluster};
     udigest::Digestable,
 )]
 pub enum Fragment {
+    /// # A call to a function defined by the host
+    ///
+    /// Host functions present as functions to the user. But contrary to regular
+    /// functions, they have no representation in the form of Caterpillar code.
+    ///
+    /// The compiler translates calls to host functions into instructions that
+    /// trigger a specific effect. This effect is then handled by the host in
+    /// whatever way it deems appropriate.
+    CallToHostFunction {
+        /// # A number that identifies the specific effect
+        ///
+        /// The meaning of this number is only known to the host. The compiler
+        /// doesn't know, nor doesn't need to know, what it means.
+        effect_number: u8,
+    },
+
+    /// # A call to a compiler-intrinsic function
+    ///
+    /// Intrinsic functions are implemented in the compiler. Calls to them are
+    /// directly translated into a series of instructions, which provide the
+    /// desired behavior.
+    CallToIntrinsicFunction {
+        /// # The intrinsic function being called
+        intrinsic: IntrinsicFunction,
+
+        /// # Indicate whether the call is in tail position
+        ///
+        /// This is relevant, as intrinsics can trigger calls to user-defined
+        /// functions, which might necessitate tail call elimination.
+        is_tail_call: bool,
+    },
+
     /// # A call to a user-defined function
     CallToUserDefinedFunction {
         /// # The hash of the function being called
@@ -77,38 +109,6 @@ pub enum Fragment {
         ///
         /// This is relevant as function calls might necessitate tail call
         /// elimination.
-        is_tail_call: bool,
-    },
-
-    /// # A call to a function defined by the host
-    ///
-    /// Host functions present as functions to the user. But contrary to regular
-    /// functions, they have no representation in the form of Caterpillar code.
-    ///
-    /// The compiler translates calls to host functions into instructions that
-    /// trigger a specific effect. This effect is then handled by the host in
-    /// whatever way it deems appropriate.
-    CallToHostFunction {
-        /// # A number that identifies the specific effect
-        ///
-        /// The meaning of this number is only known to the host. The compiler
-        /// doesn't know, nor doesn't need to know, what it means.
-        effect_number: u8,
-    },
-
-    /// # A call to a compiler-intrinsic function
-    ///
-    /// Intrinsic functions are implemented in the compiler. Calls to them are
-    /// directly translated into a series of instructions, which provide the
-    /// desired behavior.
-    CallToIntrinsicFunction {
-        /// # The intrinsic function being called
-        intrinsic: IntrinsicFunction,
-
-        /// # Indicate whether the call is in tail position
-        ///
-        /// This is relevant, as intrinsics can trigger calls to user-defined
-        /// functions, which might necessitate tail call elimination.
         is_tail_call: bool,
     },
 
