@@ -81,8 +81,10 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
+    let mut body = Vec::new();
+
     let parameters = parse_branch_parameters(tokens);
-    let body = parse_branch_body(tokens)?;
+    parse_branch_body(tokens, &mut body)?;
 
     Some(Branch { parameters, body })
 }
@@ -112,9 +114,10 @@ fn parse_branch_parameters(tokens: &mut Tokens) -> Vec<Pattern> {
     parameters
 }
 
-fn parse_branch_body(tokens: &mut Tokens) -> Option<Vec<Expression>> {
-    let mut body = Vec::new();
-
+fn parse_branch_body(
+    tokens: &mut Tokens,
+    body: &mut Vec<Expression>,
+) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
@@ -147,7 +150,7 @@ fn parse_branch_body(tokens: &mut Tokens) -> Option<Vec<Expression>> {
         }
     }
 
-    Some(body)
+    Some(())
 }
 
 struct Tokens {
