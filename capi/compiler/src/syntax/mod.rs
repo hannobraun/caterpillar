@@ -15,10 +15,4 @@
 //! code database, it's also going to be the canonical representation of source
 //! code.
 
-mod expression;
-mod function;
-
-pub use self::{
-    expression::Fragment,
-    function::{Branch, Function},
-};
+pub use crate::fragments::{Branch, Fragment, Function};
