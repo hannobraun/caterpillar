@@ -4,7 +4,7 @@ use crate::{
     fragments::{Pattern, UnresolvedCallToUserDefinedFunction},
     host::Host,
     intrinsics::IntrinsicFunction,
-    syntax::{Expression, Function},
+    syntax::{Branch, Expression, Function},
 };
 
 /// # Resolve all identifiers, except those referring to user-defined functions
@@ -59,7 +59,7 @@ fn resolve_in_function<H: Host>(
         );
 
         resolve_in_branch::<H>(
-            &mut branch.body,
+            branch,
             scopes,
             &mut function.environment,
             known_named_functions,
@@ -68,12 +68,12 @@ fn resolve_in_function<H: Host>(
 }
 
 fn resolve_in_branch<H: Host>(
-    body: &mut [Expression],
+    branch: &mut Branch,
     scopes: &mut Scopes,
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for expression in body {
+    for expression in &mut branch.body {
         match expression {
             Expression::Function { function } => {
                 resolve_in_function::<H>(
