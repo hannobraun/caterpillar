@@ -130,7 +130,10 @@ fn compile_expression(
                         is_tail_call: is_in_tail_position,
                     }
                 }
-                None => Fragment::UnresolvedIdentifier { name },
+                None => Fragment::UnresolvedIdentifier {
+                    name,
+                    is_known_to_be_in_tail_position: is_in_tail_position,
+                },
             }
         }
         syntax::Expression::Value(value) => Fragment::Value(value),

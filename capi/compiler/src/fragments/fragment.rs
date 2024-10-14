@@ -145,6 +145,18 @@ pub enum Fragment {
     UnresolvedIdentifier {
         /// # The name of the unresolved identifier
         name: String,
+
+        /// Indicate whether the identifier is known to be in tail position
+        ///
+        /// An expression is in tail position, if it is the last expression in
+        /// its function or block.
+        ///
+        /// This starts out being `false` for all expressions, and will
+        /// eventually be filled in by a dedicated compiler pass.
+        ///
+        /// This flag is relevant for tail call elimination. It is only needed
+        /// for identifiers, because only identifiers can result in tail calls.
+        is_known_to_be_in_tail_position: bool,
     },
 
     /// # A literal value
