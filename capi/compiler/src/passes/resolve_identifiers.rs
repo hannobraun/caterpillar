@@ -1,10 +1,12 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    fragments::{Function, Pattern, UnresolvedCallToUserDefinedFunction},
+    fragments::{
+        Fragment, Function, Pattern, UnresolvedCallToUserDefinedFunction,
+    },
     host::Host,
     intrinsics::IntrinsicFunction,
-    syntax::{Branch, Fragment},
+    syntax::Branch,
 };
 
 /// # Resolve all identifiers, except those referring to user-defined functions
@@ -146,11 +148,11 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        fragments::{Function, UnresolvedCallToUserDefinedFunction},
+        fragments::{Fragment, Function, UnresolvedCallToUserDefinedFunction},
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
-        syntax::{Branch, Fragment},
+        syntax::Branch,
     };
 
     #[test]

@@ -1,9 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    fragments::{CallGraph, Function, FunctionIndexInRootContext},
+    fragments::{CallGraph, Fragment, Function, FunctionIndexInRootContext},
     hash::Hash,
-    syntax::Fragment,
 };
 
 pub fn resolve_calls_to_user_defined_functions(

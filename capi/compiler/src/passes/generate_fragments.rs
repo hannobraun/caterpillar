@@ -6,7 +6,6 @@ use crate::{
         Function, FunctionIndexInRootContext, NamedFunctions,
     },
     hash::Hash,
-    syntax,
 };
 
 pub fn generate_fragments(
@@ -68,21 +67,21 @@ fn compile_function(
 }
 
 fn compile_expression(
-    expression: syntax::Fragment,
+    expression: Fragment,
     functions2: &mut BTreeMap<Hash<Function>, Hash<Function>>,
 ) -> Fragment {
     match expression {
-        syntax::Fragment::CallToHostFunction { effect_number } => {
+        Fragment::CallToHostFunction { effect_number } => {
             Fragment::CallToHostFunction { effect_number }
         }
-        syntax::Fragment::CallToIntrinsicFunction {
+        Fragment::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         } => Fragment::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         },
-        syntax::Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
+        Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
             let Some(hash) = functions2.get(&hash).copied() else {
                 panic!(
                     "Compiling call to function `{hash:?}`. Expecting called \
@@ -93,22 +92,22 @@ fn compile_expression(
 
             Fragment::CallToUserDefinedFunction { hash, is_tail_call }
         }
-        syntax::Fragment::CallToUserDefinedFunctionRecursive {
+        Fragment::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         } => Fragment::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         },
-        syntax::Fragment::Comment { text } => Fragment::Comment { text },
-        syntax::Fragment::Function { function } => {
+        Fragment::Comment { text } => Fragment::Comment { text },
+        Fragment::Function { function } => {
             let function = compile_function(function, functions2);
             Fragment::Function { function }
         }
-        syntax::Fragment::ResolvedBinding { name } => {
+        Fragment::ResolvedBinding { name } => {
             Fragment::ResolvedBinding { name }
         }
-        syntax::Fragment::UnresolvedIdentifier {
+        Fragment::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
@@ -117,6 +116,6 @@ fn compile_expression(
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
         },
-        syntax::Fragment::Value(value) => Fragment::Value(value),
+        Fragment::Value(value) => Fragment::Value(value),
     }
 }

@@ -6,12 +6,9 @@ use petgraph::{
     Graph,
 };
 
-use crate::{
-    fragments::{
-        CallGraph, Cluster, Function, FunctionIndexInCluster,
-        FunctionIndexInRootContext,
-    },
-    syntax::Fragment,
+use crate::fragments::{
+    CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster,
+    FunctionIndexInRootContext,
 };
 
 pub fn create_call_graph(

@@ -1,6 +1,6 @@
 use crate::{
-    fragments::Function,
-    syntax::{Branch, Fragment},
+    fragments::{Fragment, Function},
+    syntax::Branch,
 };
 
 pub fn determine_tail_positions(functions: &mut Vec<Function>) {
@@ -44,9 +44,8 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::{FragmentIndexInBranchBody, Function},
+        fragments::{Fragment, FragmentIndexInBranchBody, Function},
         passes::{parse, tokenize},
-        syntax::Fragment,
     };
 
     use super::determine_tail_positions;
