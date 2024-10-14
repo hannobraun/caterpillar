@@ -73,7 +73,7 @@ fn resolve_in_branch<H: Host>(
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for expression in &mut branch.body {
+    for expression in branch.body.values_mut() {
         match expression {
             Expression::Function { function } => {
                 resolve_in_function::<H>(
@@ -173,7 +173,11 @@ mod tests {
         ));
 
         assert_eq!(
-            functions.remove(0).body.last(),
+            functions
+                .remove(0)
+                .body
+                .last_key_value()
+                .map(|(_, fragment)| fragment),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
@@ -198,7 +202,11 @@ mod tests {
         ));
 
         assert_eq!(
-            functions.remove(0).body.last(),
+            functions
+                .remove(0)
+                .body
+                .last_key_value()
+                .map(|(_, fragment)| fragment),
             Some(&Expression::CallToHostFunction { effect_number: 0 })
         );
     }
@@ -219,7 +227,11 @@ mod tests {
         ));
 
         assert_eq!(
-            functions.remove(0).body.last(),
+            functions
+                .remove(0)
+                .body
+                .last_key_value()
+                .map(|(_, fragment)| fragment),
             Some(&Expression::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
@@ -246,7 +258,11 @@ mod tests {
         ));
 
         assert_eq!(
-            functions.remove(0).body.last(),
+            functions
+                .remove(0)
+                .body
+                .last_key_value()
+                .map(|(_, fragment)| fragment),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,

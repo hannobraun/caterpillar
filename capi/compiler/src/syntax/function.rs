@@ -1,6 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::fragments::{BranchIndex, FunctionIndexInCluster, Pattern};
+use crate::fragments::{
+    BranchIndex, FragmentIndexInBranchBody, FunctionIndexInCluster, Pattern,
+};
 
 use super::Expression;
 
@@ -48,11 +50,18 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
-    pub body: Vec<Expression>,
+    pub body: BTreeMap<FragmentIndexInBranchBody, Expression>,
 }
 
 impl Branch {
     pub fn add_fragment(&mut self, fragment: Expression) {
-        self.body.push(fragment);
+        let index = self
+            .body
+            .last_key_value()
+            .map(|(&FragmentIndexInBranchBody(index), _)| index)
+            .unwrap_or(0);
+
+        self.body
+            .insert(FragmentIndexInBranchBody(index + 1), fragment);
     }
 }

@@ -39,7 +39,7 @@ fn compile_function(
     for branch in function.branches.into_values() {
         let body = branch
             .body
-            .into_iter()
+            .into_values()
             .map(|expression| compile_expression(expression, functions2))
             .collect::<Vec<_>>();
 

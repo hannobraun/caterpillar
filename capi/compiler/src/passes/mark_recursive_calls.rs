@@ -45,7 +45,7 @@ fn mark_recursive_calls_in_function(
     >,
 ) {
     for branch in function.branches.values_mut() {
-        for expression in &mut branch.body {
+        for expression in branch.body.values_mut() {
             match expression {
                 Expression::Function { function } => {
                     mark_recursive_calls_in_function(
@@ -121,7 +121,9 @@ mod tests {
                 .map(|(_, branch)| branch)
                 .unwrap()
                 .body
-                .remove(0)
+                .pop_first()
+                .map(|(_, fragment)| fragment)
+                .unwrap()
             else {
                 panic!("Expected expression to be an identifier.");
             };
@@ -166,7 +168,7 @@ mod tests {
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.into_iter();
+        let mut body = branch.body.into_values();
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
@@ -178,7 +180,7 @@ mod tests {
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.into_iter();
+        let mut body = branch.body.into_values();
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 

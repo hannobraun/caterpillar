@@ -13,7 +13,7 @@ fn analyze_function(function: &mut Function) {
 }
 
 fn analyze_branch(branch: &mut Branch) {
-    for expression in branch.body.iter_mut().rev() {
+    for expression in branch.body.values_mut().rev() {
         if let Expression::Comment { .. } = expression {
             continue;
         }
@@ -29,7 +29,7 @@ fn analyze_branch(branch: &mut Branch) {
         break;
     }
 
-    for expression in &mut branch.body {
+    for expression in branch.body.values_mut() {
         if let Expression::Function { function } = expression {
             analyze_function(function);
         }
@@ -38,7 +38,10 @@ fn analyze_branch(branch: &mut Branch) {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use crate::{
+        fragments::FragmentIndexInBranchBody,
         passes::{parse, tokenize},
         syntax::{Expression, Function},
     };
@@ -90,8 +93,10 @@ mod tests {
         determine_tail_positions(&mut functions);
 
         let mut function = functions.remove(0);
-        let (_, mut branch) = function.branches.pop_first().unwrap();
-        let Expression::Function { function } = branch.body.remove(1) else {
+        let (_, branch) = function.branches.pop_first().unwrap();
+        let Expression::Function { function } =
+            branch.body.values().nth(1).unwrap()
+        else {
             panic!("Expected block.");
         };
         let identifiers = function
@@ -137,9 +142,9 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for Vec<Expression> {
+    impl ToIdentifiers for BTreeMap<FragmentIndexInBranchBody, Expression> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
-            self.iter()
+            self.values()
                 .filter_map(|expression| {
                     if let Expression::UnresolvedIdentifier {
                         name,

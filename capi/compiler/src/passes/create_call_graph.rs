@@ -83,7 +83,7 @@ fn include_calls_from_function_in_call_graph(
     call_graph: &mut Graph<(&Function, FunctionIndexInRootContext), ()>,
 ) {
     for branch in function.branches.values() {
-        for expression in &branch.body {
+        for expression in branch.body.values() {
             match expression {
                 Expression::Function { function } => {
                     include_calls_from_function_in_call_graph(
