@@ -15,4 +15,4 @@
 //! code database, it's also going to be the canonical representation of source
 //! code.
 
-pub use crate::fragments::{Branch, Fragment};
+pub use crate::fragments::Branch;
