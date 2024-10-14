@@ -82,7 +82,9 @@ mod tests {
             FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
         },
         host::NoHost,
-        passes::{create_call_graph, parse, resolve_identifiers_except_functions, tokenize},
+        passes::{
+            create_call_graph, parse, resolve_most_identifiers, tokenize,
+        },
         syntax::{Expression, Function},
     };
 
@@ -191,7 +193,7 @@ mod tests {
     ) -> BTreeMap<FunctionIndexInRootContext, Function> {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
-        resolve_identifiers_except_functions::<NoHost>(&mut functions);
+        resolve_most_identifiers::<NoHost>(&mut functions);
         let (mut functions, call_graph) = create_call_graph(functions);
         super::mark_recursive_calls(&mut functions, &call_graph);
 

@@ -6,7 +6,7 @@ use crate::{
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
         generate_fragments, generate_instructions, mark_recursive_calls, parse,
-        resolve_identifiers_except_functions, tokenize,
+        resolve_most_identifiers, tokenize,
     },
     source_map::SourceMap,
 };
@@ -25,7 +25,7 @@ impl Compiler {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
-        resolve_identifiers_except_functions::<H>(&mut functions);
+        resolve_most_identifiers::<H>(&mut functions);
         let (mut functions, call_graph) = create_call_graph(functions);
         mark_recursive_calls(&mut functions, &call_graph);
 

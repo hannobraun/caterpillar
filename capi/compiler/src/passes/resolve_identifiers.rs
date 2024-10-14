@@ -12,7 +12,7 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_identifiers_except_functions<H: Host>(
+pub fn resolve_most_identifiers<H: Host>(
     functions: &mut Vec<Function>,
 ) {
     let mut scopes = Scopes::new();
@@ -269,7 +269,7 @@ mod tests {
     }
 
     fn resolve_identifiers(mut functions: Vec<Function>) -> Vec<Branch> {
-        super::resolve_identifiers_except_functions::<TestHost>(&mut functions);
+        super::resolve_most_identifiers::<TestHost>(&mut functions);
 
         functions
             .into_iter()

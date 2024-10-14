@@ -117,7 +117,7 @@ mod tests {
             FunctionIndexInRootContext,
         },
         host::NoHost,
-        passes::{parse, resolve_identifiers_except_functions, tokenize},
+        passes::{parse, resolve_most_identifiers, tokenize},
     };
 
     #[test]
@@ -332,7 +332,7 @@ mod tests {
     fn create_call_graph(source: &str) -> CallGraph {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
-        resolve_identifiers_except_functions::<NoHost>(&mut functions);
+        resolve_most_identifiers::<NoHost>(&mut functions);
         let (_, call_graph) = super::create_call_graph(functions);
         call_graph
     }
