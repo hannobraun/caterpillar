@@ -8,14 +8,9 @@ pub fn parse(tokens: Vec<Token>) -> NamedFunctions {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
-    let mut functions = Vec::new();
+    let mut named_functions = NamedFunctions::default();
 
     while let Some(function) = parse_named_function(&mut tokens) {
-        functions.push(function);
-    }
-
-    let mut named_functions = NamedFunctions::default();
-    for function in functions {
         named_functions.insert(function);
     }
 
