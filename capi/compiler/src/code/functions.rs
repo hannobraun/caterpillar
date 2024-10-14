@@ -146,6 +146,11 @@ impl NamedFunctions {
     ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Function)> {
         self.inner.iter()
     }
+
+    /// # Consume this instance and return an iterator over the functions
+    pub fn into_functions(self) -> impl Iterator<Item = Function> {
+        self.inner.into_values()
+    }
 }
 
 impl IntoIterator for NamedFunctions {
