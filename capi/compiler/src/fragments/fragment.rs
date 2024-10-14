@@ -70,12 +70,6 @@ pub enum Fragment {
         /// the calling function is part of a cluster of mutually recursive
         /// functions, the index identifies the called function within the
         /// cluster.
-        ///
-        /// ## Implementation Note
-        ///
-        /// As of this writing, this enum variant is only created for
-        /// self-recursive calls. While this is still the case, this field
-        /// should always be `0`.
         index: FunctionIndexInCluster,
 
         /// # Indicate whether the call is in tail position
