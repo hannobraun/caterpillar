@@ -1,4 +1,4 @@
-use crate::syntax::{Expression, Function};
+use crate::syntax::{Branch, Expression, Function};
 
 pub fn determine_tail_positions(functions: &mut Vec<Function>) {
     for function in functions {
@@ -8,12 +8,12 @@ pub fn determine_tail_positions(functions: &mut Vec<Function>) {
 
 fn analyze_function(function: &mut Function) {
     for branch in function.branches.values_mut() {
-        analyze_branch(&mut branch.body);
+        analyze_branch(branch);
     }
 }
 
-fn analyze_branch(body: &mut [Expression]) {
-    for expression in body.iter_mut().rev() {
+fn analyze_branch(branch: &mut Branch) {
+    for expression in branch.body.iter_mut().rev() {
         if let Expression::Comment { .. } = expression {
             continue;
         }
@@ -29,7 +29,7 @@ fn analyze_branch(body: &mut [Expression]) {
         break;
     }
 
-    for expression in body {
+    for expression in &mut branch.body {
         if let Expression::Function { function } = expression {
             analyze_function(function);
         }
