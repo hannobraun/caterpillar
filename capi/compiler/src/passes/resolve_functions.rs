@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    code::{CallGraph, Fragment, Function, FunctionIndexInRootContext},
+    code::{CallGraph, Fragment, Function, NamedFunctions},
     hash::Hash,
 };
 
 pub fn resolve_calls_to_user_defined_functions(
-    named_functions: &mut BTreeMap<FunctionIndexInRootContext, Function>,
+    named_functions: &mut NamedFunctions,
     call_graph: &CallGraph,
 ) {
     let mut resolved_hashes_by_name = BTreeMap::new();
