@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 use crate::{
     fragments::{
         CallGraph, FunctionIndexInCluster, FunctionIndexInRootContext,
+        UnresolvedCallToUserDefinedFunction,
     },
     syntax::{Expression, Function, IdentifierTarget},
 };
@@ -58,12 +59,17 @@ fn mark_recursive_calls_in_function(
                         Some(IdentifierTarget::Function {
                             is_known_to_be_recursive_call_to_index,
                         }),
+                    is_known_to_be_call_to_user_defined_function:
+                        Some(UnresolvedCallToUserDefinedFunction {
+                            is_known_to_be_recursive_call,
+                        }),
                     ..
                 } => {
                     if let Some(&index) =
                         indices_in_cluster_by_function_name.get(name)
                     {
                         *is_known_to_be_recursive_call_to_index = Some(index);
+                        *is_known_to_be_recursive_call = Some(index);
                     }
                 }
                 _ => {}
@@ -77,10 +83,12 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        fragments::FunctionIndexInRootContext,
+        fragments::{
+            FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
+        },
         host::NoHost,
         passes::{create_call_graph, parse, resolve_identifiers, tokenize},
-        syntax::{Expression, Function, IdentifierTarget},
+        syntax::{Expression, Function},
     };
 
     #[test]
@@ -107,14 +115,17 @@ mod tests {
         );
 
         for mut function in functions.into_values() {
-            let Expression::Identifier { target, .. } =
-                function.branches.remove(0).body.remove(0)
+            let Expression::Identifier {
+                is_known_to_be_call_to_user_defined_function,
+                ..
+            } = function.branches.remove(0).body.remove(0)
             else {
                 panic!("Expected expression to be an identifier.");
             };
-            let Some(IdentifierTarget::Function {
-                is_known_to_be_recursive_call_to_index,
-            }) = target
+            let Some(UnresolvedCallToUserDefinedFunction {
+                is_known_to_be_recursive_call:
+                    is_known_to_be_recursive_call_to_index,
+            }) = is_known_to_be_call_to_user_defined_function
             else {
                 panic!("Expected expression to be a function call");
             };
@@ -170,9 +181,9 @@ mod tests {
         assert!(body.next().is_none());
 
         let Expression::Identifier {
-            target:
-                Some(IdentifierTarget::Function {
-                    is_known_to_be_recursive_call_to_index: Some(_),
+            is_known_to_be_call_to_user_defined_function:
+                Some(UnresolvedCallToUserDefinedFunction {
+                    is_known_to_be_recursive_call: Some(_),
                 }),
             ..
         } = expression
