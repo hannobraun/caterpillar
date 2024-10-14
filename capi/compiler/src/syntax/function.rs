@@ -4,7 +4,9 @@ use crate::fragments::{FunctionIndexInCluster, Pattern};
 
 use super::Expression;
 
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(
+    Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct Function {
     /// The name of the function, if available
     ///
