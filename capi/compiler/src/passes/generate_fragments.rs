@@ -90,6 +90,9 @@ fn compile_expression(
             let function = compile_function(function, functions);
             Fragment::Function { function }
         }
+        syntax::Expression::ResolvedBinding { name } => {
+            Fragment::ResolvedBinding { name }
+        }
         syntax::Expression::Identifier {
             name,
             target,

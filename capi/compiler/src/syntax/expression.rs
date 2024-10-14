@@ -27,6 +27,11 @@ pub enum Expression {
         function: Function,
     },
 
+    ResolvedBinding {
+        /// # The name of the binding
+        name: String,
+    },
+
     /// A name that identifies a definition in the source code
     Identifier {
         /// The name of the definition, as it appears in the code
