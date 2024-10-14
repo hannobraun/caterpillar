@@ -78,6 +78,13 @@ fn compile_expression(
         syntax::Expression::CallToHostFunction { effect_number } => {
             Fragment::CallToHostFunction { effect_number }
         }
+        syntax::Expression::CallToIntrinsicFunction {
+            intrinsic,
+            is_tail_call,
+        } => Fragment::CallToIntrinsicFunction {
+            intrinsic,
+            is_tail_call,
+        },
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
             let function = compile_function(function, functions);

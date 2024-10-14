@@ -13,6 +13,11 @@ pub enum Expression {
         effect_number: u8,
     },
 
+    CallToIntrinsicFunction {
+        intrinsic: IntrinsicFunction,
+        is_tail_call: bool,
+    },
+
     Comment {
         text: String,
     },
