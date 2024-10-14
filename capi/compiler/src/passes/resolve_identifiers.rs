@@ -7,6 +7,11 @@ use crate::{
     syntax::{Branch, Expression, Function},
 };
 
+/// # Resolve all identifiers, except those referring to user-defined functions
+///
+/// Identifiers referring to user-defined functions are identified as such, but
+/// can not be resolved without a call graph. But by identifying them as such,
+/// this compiler pass creates the prerequisite for creating a call graph.
 pub fn resolve_identifiers_except_functions<H: Host>(
     functions: &mut Vec<Function>,
 ) {
