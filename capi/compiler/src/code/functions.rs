@@ -149,7 +149,6 @@ impl IntoIterator for NamedFunctions {
     type Item = <NamedFunctionsInner as IntoIterator>::Item;
     type IntoIter = <NamedFunctionsInner as IntoIterator>::IntoIter;
 
-    /// # Convert this struct into an iterator over the named functions
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
     }
