@@ -148,9 +148,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{
-            Branch, Fragment, Function, UnresolvedCallToUserDefinedFunction,
-        },
+        code::{Branch, Fragment, UnresolvedCallToUserDefinedFunction},
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -161,7 +159,7 @@ mod tests {
         // Bindings that are defined in a scope that is a lexical child of the
         // current scope, should not be resolved.
 
-        let mut functions = resolve_identifiers(code(
+        let mut functions = resolve_identifiers(
             r"
                 f: {
                     \ ->
@@ -172,7 +170,7 @@ mod tests {
                         value
                 }
             ",
-        ));
+        );
 
         assert_eq!(
             functions
@@ -194,14 +192,14 @@ mod tests {
         // We set up a special test host below, that provides the function that
         // is referenced here.
 
-        let mut functions = resolve_identifiers(code(
+        let mut functions = resolve_identifiers(
             r"
                 f: {
                     \ ->
                         host_fn
                 }
             ",
-        ));
+        );
 
         assert_eq!(
             functions
@@ -219,14 +217,14 @@ mod tests {
         // host or user, but the compiler. They are translated into a series of
         // instructions at compile-time.
 
-        let mut functions = resolve_identifiers(code(
+        let mut functions = resolve_identifiers(
             r"
                 f: {
                     \ ->
                         eval
                 }
             ",
-        ));
+        );
 
         assert_eq!(
             functions
@@ -246,7 +244,7 @@ mod tests {
         // User-defined functions can be resolved by checking for the existence
         // of a matching function in the code.
 
-        let mut functions = resolve_identifiers(code(
+        let mut functions = resolve_identifiers(
             r"
                 f: {
                     \ ->
@@ -257,7 +255,7 @@ mod tests {
                     \ ->
                 }
             ",
-        ));
+        );
 
         assert_eq!(
             functions
@@ -277,7 +275,9 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(mut functions: Vec<Function>) -> Vec<Branch> {
+    fn resolve_identifiers(source: &str) -> Vec<Branch> {
+        let tokens = tokenize(source);
+        let mut functions = parse(tokens);
         super::resolve_most_identifiers::<TestHost>(&mut functions);
 
         functions
@@ -302,10 +302,5 @@ mod tests {
                 _ => None,
             }
         }
-    }
-
-    fn code(source: &str) -> Vec<Function> {
-        let tokens = tokenize(source);
-        parse(tokens)
     }
 }
