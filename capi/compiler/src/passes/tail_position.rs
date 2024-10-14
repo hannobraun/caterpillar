@@ -45,14 +45,12 @@ mod tests {
         passes::{parse, tokenize},
     };
 
-    use super::determine_tail_positions;
-
     #[test]
     fn tail_call_in_named_function() {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
-        let mut functions = tokenize_and_parse(
+        let mut functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -61,8 +59,6 @@ mod tests {
                 }
             ",
         );
-
-        determine_tail_positions(&mut functions);
 
         let (_, branch) = functions.remove(0).branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
@@ -74,7 +70,7 @@ mod tests {
         // The compiler pass that determines tail positions should step into
         // nested functions.
 
-        let mut functions = tokenize_and_parse(
+        let mut functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -88,8 +84,6 @@ mod tests {
                 }
             ",
         );
-
-        determine_tail_positions(&mut functions);
 
         let mut function = functions.remove(0);
         let (_, branch) = function.branches.pop_first().unwrap();
@@ -113,7 +107,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let mut functions = tokenize_and_parse(
+        let mut functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -124,17 +118,18 @@ mod tests {
             ",
         );
 
-        determine_tail_positions(&mut functions);
-
         let mut function = functions.remove(0);
         let (_, branch) = function.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
-    pub fn tokenize_and_parse(source: &str) -> Vec<Function> {
+    pub fn determine_tail_positions(source: &str) -> Vec<Function> {
         let tokens = tokenize(source);
-        parse(tokens)
+        let mut functions = parse(tokens);
+        super::determine_tail_positions(&mut functions);
+
+        functions
     }
 
     trait ToIdentifiers {
