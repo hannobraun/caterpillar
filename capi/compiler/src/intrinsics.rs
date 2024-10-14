@@ -23,12 +23,12 @@ macro_rules! intrinsics {
             serde::Serialize,
             udigest::Digestable,
         )]
-        pub enum Intrinsic {
+        pub enum IntrinsicFunction {
             $($variant,)*
         }
 
-        impl Intrinsic {
-            pub fn from_name(name: &str) -> Option<Intrinsic> {
+        impl IntrinsicFunction {
+            pub fn from_name(name: &str) -> Option<IntrinsicFunction> {
                 let intrinsic = match name {
                     $($name => Self::$variant,)*
 
@@ -41,7 +41,7 @@ macro_rules! intrinsics {
             }
         }
 
-        impl fmt::Display for Intrinsic {
+        impl fmt::Display for IntrinsicFunction {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 match self {
                     $(Self::$variant => write!(f, $name),)*

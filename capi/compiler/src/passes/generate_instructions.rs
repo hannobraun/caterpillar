@@ -9,7 +9,7 @@ use crate::{
         FunctionUpdate, NamedFunctions, Parameters, Pattern,
     },
     hash::Hash,
-    intrinsics::Intrinsic,
+    intrinsics::IntrinsicFunction,
     source_map::{Mapping, SourceMap},
 };
 
@@ -539,37 +539,37 @@ fn compile_fragment(
 }
 
 fn intrinsic_to_instruction(
-    intrinsic: &Intrinsic,
+    intrinsic: &IntrinsicFunction,
     is_tail_call: bool,
 ) -> Instruction {
     match intrinsic {
-        Intrinsic::AddS8 => Instruction::AddS8,
-        Intrinsic::AddS32 => Instruction::AddS32,
-        Intrinsic::AddU8 => Instruction::AddU8,
-        Intrinsic::AddU8Wrap => Instruction::AddU8Wrap,
-        Intrinsic::And => Instruction::LogicalAnd,
-        Intrinsic::Brk => Instruction::TriggerEffect {
+        IntrinsicFunction::AddS8 => Instruction::AddS8,
+        IntrinsicFunction::AddS32 => Instruction::AddS32,
+        IntrinsicFunction::AddU8 => Instruction::AddU8,
+        IntrinsicFunction::AddU8Wrap => Instruction::AddU8Wrap,
+        IntrinsicFunction::And => Instruction::LogicalAnd,
+        IntrinsicFunction::Brk => Instruction::TriggerEffect {
             effect: Effect::Breakpoint,
         },
-        Intrinsic::Copy => Instruction::Copy,
-        Intrinsic::DivS32 => Instruction::DivS32,
-        Intrinsic::DivU8 => Instruction::DivU8,
-        Intrinsic::Drop => Instruction::Drop,
-        Intrinsic::Eq => Instruction::Eq,
-        Intrinsic::Eval => Instruction::Eval { is_tail_call },
-        Intrinsic::GreaterS8 => Instruction::GreaterS8,
-        Intrinsic::GreaterS32 => Instruction::GreaterS32,
-        Intrinsic::GreaterU8 => Instruction::GreaterU8,
-        Intrinsic::MulS32 => Instruction::MulS32,
-        Intrinsic::MulU8Wrap => Instruction::MulU8Wrap,
-        Intrinsic::NegS32 => Instruction::NegS32,
-        Intrinsic::Nop => Instruction::Nop,
-        Intrinsic::Not => Instruction::LogicalNot,
-        Intrinsic::RemainderS32 => Instruction::RemainderS32,
-        Intrinsic::S32ToS8 => Instruction::ConvertS32ToS8,
-        Intrinsic::SubS32 => Instruction::SubS32,
-        Intrinsic::SubU8 => Instruction::SubU8,
-        Intrinsic::SubU8Wrap => Instruction::SubU8Wrap,
+        IntrinsicFunction::Copy => Instruction::Copy,
+        IntrinsicFunction::DivS32 => Instruction::DivS32,
+        IntrinsicFunction::DivU8 => Instruction::DivU8,
+        IntrinsicFunction::Drop => Instruction::Drop,
+        IntrinsicFunction::Eq => Instruction::Eq,
+        IntrinsicFunction::Eval => Instruction::Eval { is_tail_call },
+        IntrinsicFunction::GreaterS8 => Instruction::GreaterS8,
+        IntrinsicFunction::GreaterS32 => Instruction::GreaterS32,
+        IntrinsicFunction::GreaterU8 => Instruction::GreaterU8,
+        IntrinsicFunction::MulS32 => Instruction::MulS32,
+        IntrinsicFunction::MulU8Wrap => Instruction::MulU8Wrap,
+        IntrinsicFunction::NegS32 => Instruction::NegS32,
+        IntrinsicFunction::Nop => Instruction::Nop,
+        IntrinsicFunction::Not => Instruction::LogicalNot,
+        IntrinsicFunction::RemainderS32 => Instruction::RemainderS32,
+        IntrinsicFunction::S32ToS8 => Instruction::ConvertS32ToS8,
+        IntrinsicFunction::SubS32 => Instruction::SubS32,
+        IntrinsicFunction::SubU8 => Instruction::SubU8,
+        IntrinsicFunction::SubU8Wrap => Instruction::SubU8Wrap,
     }
 }
 

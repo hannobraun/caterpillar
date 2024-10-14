@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use crate::{
     fragments::Pattern,
     host::Host,
-    intrinsics::Intrinsic,
+    intrinsics::IntrinsicFunction,
     syntax::{Branch, Expression, Function, IdentifierTarget},
 };
 
@@ -111,7 +111,7 @@ fn resolve_in_branch<H: Host>(
                         }
                     }
                 }
-                if let Some(intrinsic) = Intrinsic::from_name(name) {
+                if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
                     *target = Some(IdentifierTarget::Intrinsic { intrinsic });
                 }
                 if let Some(effect_number) =
@@ -141,7 +141,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         host::Host,
-        intrinsics::Intrinsic,
+        intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
         syntax::{Branch, Expression, Function, IdentifierTarget},
     };
@@ -221,7 +221,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("eval"),
                 target: Some(IdentifierTarget::Intrinsic {
-                    intrinsic: Intrinsic::Eval
+                    intrinsic: IntrinsicFunction::Eval
                 }),
                 is_known_to_be_in_tail_position: false,
             })

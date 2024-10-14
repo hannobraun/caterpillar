@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::{hash::Hash, intrinsics::Intrinsic};
+use crate::{hash::Hash, intrinsics::IntrinsicFunction};
 
 use super::{Function, FunctionIndexInCluster};
 
@@ -103,7 +103,7 @@ pub enum Fragment {
     /// desired behavior.
     CallToIntrinsicFunction {
         /// # The intrinsic function being called
-        intrinsic: Intrinsic,
+        intrinsic: IntrinsicFunction,
 
         /// # Indicate whether the call is in tail position
         ///

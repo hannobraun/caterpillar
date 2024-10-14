@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::{fragments::FunctionIndexInCluster, intrinsics::Intrinsic};
+use crate::{fragments::FunctionIndexInCluster, intrinsics::IntrinsicFunction};
 
 use super::Function;
 
@@ -63,6 +63,6 @@ pub enum IdentifierTarget {
     },
 
     Intrinsic {
-        intrinsic: Intrinsic,
+        intrinsic: IntrinsicFunction,
     },
 }
