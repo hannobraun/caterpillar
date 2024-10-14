@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, iter};
 use crate::{
     fragments::{
         Branch, BranchIndex, CallGraph, Fragment, FragmentIndexInBranchBody,
-        Function, FunctionIndexInRootContext, NamedFunctions, Parameters,
+        Function, FunctionIndexInRootContext, NamedFunctions,
     },
     hash::Hash,
     syntax,
@@ -49,9 +49,7 @@ fn compile_function(
             .collect();
 
         branches.push(Branch {
-            parameters: Parameters {
-                inner: branch.parameters,
-            },
+            parameters: branch.parameters,
             body,
         });
     }

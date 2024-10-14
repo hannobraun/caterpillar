@@ -231,25 +231,10 @@ impl Function {
     udigest::Digestable,
 )]
 pub struct Branch {
-    pub parameters: Parameters,
+    pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
     pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct Parameters {
-    pub inner: Vec<Pattern>,
 }
 
 #[derive(

@@ -6,7 +6,7 @@ use crate::{
     fragments::{
         Branch, BranchLocation, CallGraph, Changes, Cluster, Fragment,
         FragmentLocation, Function, FunctionInUpdate, FunctionLocation,
-        FunctionUpdate, NamedFunctions, Parameters, Pattern,
+        FunctionUpdate, NamedFunctions, Pattern,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -95,7 +95,6 @@ pub fn generate_instructions(
                 .iter()
                 .map(|(parameters, address)| {
                     let parameters = parameters
-                        .inner
                         .iter()
                         .cloned()
                         .map(|pattern| match pattern {
@@ -157,7 +156,6 @@ pub fn generate_instructions(
                     .iter()
                     .map(|(parameters, address)| {
                         let parameters = parameters
-                            .inner
                             .iter()
                             .cloned()
                             .map(|pattern| match pattern {
@@ -197,7 +195,7 @@ fn compile_function(
     queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
-        Vec<(Parameters, InstructionAddress)>,
+        Vec<(Vec<Pattern>, InstructionAddress)>,
     >,
 ) {
     let FunctionToCompile {
@@ -211,7 +209,7 @@ fn compile_function(
     let mut instruction_range = None;
 
     for (&index, branch) in function.branches.iter() {
-        let parameters = branch.parameters.inner.iter().filter_map(|pattern| {
+        let parameters = branch.parameters.iter().filter_map(|pattern| {
             match pattern {
                 Pattern::Identifier { name } => Some(name),
                 Pattern::Literal { .. } => {
@@ -246,7 +244,6 @@ fn compile_function(
         branches.push(capi_runtime::Branch {
             parameters: branch
                 .parameters
-                .inner
                 .iter()
                 .cloned()
                 .map(|pattern| match pattern {
