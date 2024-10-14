@@ -523,19 +523,13 @@ fn compile_fragment(
             output.instructions,
             Some(&mut output.source_map.map_fragment_to_instructions(location)),
         )),
-        Fragment::UnresolvedIdentifier { name: _ } => {
-            Some(generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::BuildError,
-                },
-                output.instructions,
-                Some(
-                    &mut output
-                        .source_map
-                        .map_fragment_to_instructions(location),
-                ),
-            ))
-        }
+        Fragment::UnresolvedIdentifier { .. } => Some(generate_instruction(
+            Instruction::TriggerEffect {
+                effect: Effect::BuildError,
+            },
+            output.instructions,
+            Some(&mut output.source_map.map_fragment_to_instructions(location)),
+        )),
         Fragment::Value(value) => Some(generate_instruction(
             Instruction::Push { value: *value },
             output.instructions,
