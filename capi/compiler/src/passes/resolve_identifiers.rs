@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     code::{
-        Branch, Fragment, Function, Pattern,
+        Branch, Fragment, Function, NamedFunctions, Pattern,
         UnresolvedCallToUserDefinedFunction,
     },
     host::Host,
@@ -14,14 +14,14 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_most_identifiers<H: Host>(functions: &mut Vec<Function>) {
+pub fn resolve_most_identifiers<H: Host>(functions: &mut NamedFunctions) {
     let mut scopes = Scopes::new();
     let known_named_functions = functions
-        .iter()
+        .functions()
         .filter_map(|function| function.name.clone())
         .collect();
 
-    for function in functions {
+    for function in functions.functions_mut() {
         if !function.environment.is_empty() {
             panic!(
                 "Named functions do not have an environment that they could \
@@ -280,13 +280,14 @@ mod tests {
 
     fn resolve_identifiers(source: &str) -> Vec<Branch> {
         let tokens = tokenize(source);
-        let mut functions = parse(tokens);
-        super::resolve_most_identifiers::<TestHost>(&mut functions);
+        let functions = parse(tokens);
 
         let mut named_functions = NamedFunctions::default();
         for function in functions {
             named_functions.insert(function);
         }
+
+        super::resolve_most_identifiers::<TestHost>(&mut named_functions);
 
         named_functions
             .into_functions()
