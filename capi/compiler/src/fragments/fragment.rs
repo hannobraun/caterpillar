@@ -144,7 +144,7 @@ pub enum Fragment {
         /// # The name of the unresolved identifier
         name: String,
 
-        /// Indicate whether the identifier is known to be in tail position
+        /// # Indicate whether the identifier is known to be in tail position
         ///
         /// An expression is in tail position, if it is the last expression in
         /// its function or block.
