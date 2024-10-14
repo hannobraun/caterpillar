@@ -67,6 +67,4 @@ pub enum Expression {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum IdentifierTarget {
-    Intrinsic { intrinsic: IntrinsicFunction },
-}
+pub enum IdentifierTarget {}

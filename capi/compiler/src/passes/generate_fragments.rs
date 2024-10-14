@@ -6,7 +6,7 @@ use crate::{
         Function, FunctionIndexInRootContext, NamedFunctions, Parameters,
     },
     hash::Hash,
-    syntax::{self, IdentifierTarget},
+    syntax,
 };
 
 pub fn generate_fragments(
@@ -130,11 +130,8 @@ fn compile_expression(
                 }
             } else {
                 match target {
-                    Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                        Fragment::CallToIntrinsicFunction {
-                            intrinsic,
-                            is_tail_call: is_in_tail_position,
-                        }
+                    Some(_) => {
+                        unreachable!()
                     }
                     None => Fragment::UnresolvedIdentifier {
                         name,
