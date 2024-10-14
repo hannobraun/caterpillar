@@ -37,12 +37,6 @@ pub enum Expression {
         /// The name of the definition, as it appears in the code
         name: String,
 
-        /// The kind of definition that the identifier identifies
-        ///
-        /// This might be `None`, if the target has not been determined yet, or
-        /// can not be determined.
-        target: Option<IdentifierTarget>,
-
         /// Indicate whether the identifier is known to be in tail position
         ///
         /// An expression is in tail position, if it is the last expression in

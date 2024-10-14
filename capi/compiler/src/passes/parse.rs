@@ -137,7 +137,6 @@ fn parse_branch_body(tokens: &mut Tokens) -> Option<Vec<Expression>> {
                 Token::Identifier { name } => {
                     body.push(Expression::Identifier {
                         name,
-                        target: None,
                         is_known_to_be_in_tail_position: false,
                         is_known_to_be_call_to_user_defined_function: None,
                     });

@@ -178,7 +178,6 @@ mod tests {
             functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                target: None,
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: None,
             })
@@ -252,7 +251,6 @@ mod tests {
             functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                target: None,
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: Some(
                     UnresolvedCallToUserDefinedFunction {
