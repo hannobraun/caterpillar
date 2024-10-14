@@ -50,7 +50,7 @@ mod tests {
         // The last expression in a function should be marked as being in tail
         // position. Others should not be.
 
-        let mut functions = determine_tail_positions(
+        let functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -60,7 +60,13 @@ mod tests {
             ",
         );
 
-        let (_, branch) = functions.remove(0).branches.pop_first().unwrap();
+        let (_, branch) = functions
+            .into_iter()
+            .next()
+            .unwrap()
+            .branches
+            .pop_first()
+            .unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -70,7 +76,7 @@ mod tests {
         // The compiler pass that determines tail positions should step into
         // nested functions.
 
-        let mut functions = determine_tail_positions(
+        let functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -85,7 +91,7 @@ mod tests {
             ",
         );
 
-        let mut function = functions.remove(0);
+        let mut function = functions.into_iter().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
         let Fragment::Function { function } =
             branch.body.values().nth(1).unwrap()
@@ -107,7 +113,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let mut functions = determine_tail_positions(
+        let functions = determine_tail_positions(
             r"
                 f: {
                     \ ->
@@ -118,7 +124,7 @@ mod tests {
             ",
         );
 
-        let mut function = functions.remove(0);
+        let mut function = functions.into_iter().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
