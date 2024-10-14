@@ -19,10 +19,15 @@ pub fn create_call_graph(
         .zip(functions)
         .collect::<BTreeMap<_, _>>();
 
+    let mut named_functions = NamedFunctions::default();
+    for (index, function) in functions {
+        named_functions.insert(index, function);
+    }
+
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for (named_function_index, function) in functions.iter() {
+    for (named_function_index, function) in named_functions.iter() {
         let name = function
             .name
             .as_ref()
@@ -69,11 +74,6 @@ pub fn create_call_graph(
     let mut call_graph = CallGraph::default();
     for cluster in clusters.into_iter() {
         call_graph.insert(cluster);
-    }
-
-    let mut named_functions = NamedFunctions::default();
-    for (index, function) in functions {
-        named_functions.insert(index, function);
     }
 
     (named_functions, call_graph)
