@@ -108,8 +108,6 @@ fn resolve_in_branch<H: Host>(
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
                 if scopes.iter().any(|bindings| bindings.contains(name)) {
-                    *target = Some(IdentifierTarget::Binding);
-
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains(name) {
                             environment.insert(name.clone());
