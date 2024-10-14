@@ -31,6 +31,12 @@ pub struct Function {
     pub index_in_cluster: Option<FunctionIndexInCluster>,
 }
 
+impl Function {
+    pub fn add_branch(&mut self, branch: Branch) {
+        self.branches.push(branch);
+    }
+}
+
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
