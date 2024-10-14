@@ -14,14 +14,9 @@ use crate::code::{
 pub fn create_call_graph(
     functions: Vec<Function>,
 ) -> (NamedFunctions, CallGraph) {
-    let functions = iter::successors(Some(0), |i| Some(i + 1))
-        .map(FunctionIndexInRootContext)
-        .zip(functions)
-        .collect::<BTreeMap<_, _>>();
-
     let mut named_functions = NamedFunctions::default();
-    for (index, function) in functions {
-        named_functions.insert(index, function);
+    for function in functions {
+        named_functions.insert(function);
     }
 
     let mut call_graph = Graph::new();

@@ -41,22 +41,21 @@ impl NamedFunctions {
     /// signature can't be made until `NamedFunctions` is used earlier in the
     /// compiler pipeline, which is blocked until `syntax::Function` and
     /// `fragments::Function` are merged.
-    pub fn insert(
-        &mut self,
-        index: FunctionIndexInRootContext,
-        function: Function,
-    ) {
-        assert!(
-            self.get(&index).is_none(),
-            "Should not overwrite named function."
-        );
+    pub fn insert(&mut self, function: Function) {
         assert!(
             function.name.is_some(),
             "Trying to insert named function that does not actually have a \
             name."
         );
 
-        self.inner.insert(index, function);
+        let index = self
+            .inner
+            .last_key_value()
+            .map(|(&FunctionIndexInRootContext(index), _)| index + 1)
+            .unwrap_or(0);
+
+        self.inner
+            .insert(FunctionIndexInRootContext(index), function);
     }
 
     /// # Access the named function at the given index
