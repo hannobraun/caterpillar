@@ -189,3 +189,17 @@ impl Fragment {
         Some(function)
     }
 }
+
+/// # The information that is currently known about an unresolved function call
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct UnresolvedCallToUserDefinedFunction {}
