@@ -250,6 +250,20 @@ pub struct Branch {
     pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
 }
 
+impl Branch {
+    /// # Add a fragment to the body of this branch
+    pub fn add_fragment(&mut self, fragment: Fragment) {
+        let index = self
+            .body
+            .last_key_value()
+            .map(|(&FragmentIndexInBranchBody(index), _)| index)
+            .unwrap_or(0);
+
+        self.body
+            .insert(FragmentIndexInBranchBody(index + 1), fragment);
+    }
+}
+
 #[derive(
     Clone,
     Debug,
