@@ -14,5 +14,3 @@
 //! what it is. The compiler's representation of source code. And once we have a
 //! code database, it's also going to be the canonical representation of source
 //! code.
-
-pub use crate::fragments::Branch;
