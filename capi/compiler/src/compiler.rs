@@ -5,7 +5,7 @@ use crate::{
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
-        generate_fragments, generate_instructions, mark_recursive_calls, parse,
+        generate_instructions, mark_recursive_calls, parse,
         resolve_calls_to_user_defined_functions, resolve_most_identifiers,
         tokenize,
     },
@@ -36,7 +36,6 @@ impl Compiler {
             named_functions.insert(index, function);
         }
 
-        generate_fragments(&mut named_functions, &call_graph);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
 
