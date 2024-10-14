@@ -7,7 +7,7 @@ use crate::{
 
 use super::Function;
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
     CallToHostFunction {
         effect_number: u8,

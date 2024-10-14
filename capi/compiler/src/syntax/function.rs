@@ -4,7 +4,7 @@ use crate::fragments::{FunctionIndexInCluster, Pattern};
 
 use super::Expression;
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Function {
     /// The name of the function, if available
     ///
@@ -29,7 +29,7 @@ pub struct Function {
     pub index_in_cluster: Option<FunctionIndexInCluster>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,
