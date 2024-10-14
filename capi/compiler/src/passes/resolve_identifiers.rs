@@ -115,6 +115,9 @@ fn resolve_in_branch<H: Host>(
                             environment.insert(name.clone());
                         }
                     }
+
+                    *expression =
+                        Expression::ResolvedBinding { name: name.clone() }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
