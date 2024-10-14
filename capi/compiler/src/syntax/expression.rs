@@ -1,7 +1,7 @@
 use capi_runtime::Value;
 
 use crate::{
-    fragments::UnresolvedCallToUserDefinedFunction,
+    fragments::UnresolvedCallToUserDefinedFunction, hash::Hash,
     intrinsics::IntrinsicFunction,
 };
 
@@ -15,6 +15,11 @@ pub enum Expression {
 
     CallToIntrinsicFunction {
         intrinsic: IntrinsicFunction,
+        is_tail_call: bool,
+    },
+
+    CallToUserDefinedFunction {
+        hash: Hash<Function>,
         is_tail_call: bool,
     },
 

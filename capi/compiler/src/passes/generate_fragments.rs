@@ -90,6 +90,20 @@ fn compile_expression(
             intrinsic,
             is_tail_call,
         },
+        syntax::Expression::CallToUserDefinedFunction {
+            hash,
+            is_tail_call,
+        } => {
+            let Some(hash) = functions2.get(&hash).copied() else {
+                panic!(
+                    "Compiling call to function `{hash:?}`. Expecting called \
+                    function to already be compiled when its caller is being \
+                    compiled."
+                );
+            };
+
+            Fragment::CallToUserDefinedFunction { hash, is_tail_call }
+        }
         syntax::Expression::Comment { text } => Fragment::Comment { text },
         syntax::Expression::Function { function } => {
             let function = compile_function(function, functions, functions2);
