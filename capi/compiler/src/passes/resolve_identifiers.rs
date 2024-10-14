@@ -4,7 +4,7 @@ use crate::{
     fragments::{Pattern, UnresolvedCallToUserDefinedFunction},
     host::Host,
     intrinsics::IntrinsicFunction,
-    syntax::{Branch, Expression, Function},
+    syntax::{Branch, Fragment, Function},
 };
 
 /// # Resolve all identifiers, except those referring to user-defined functions
@@ -75,7 +75,7 @@ fn resolve_in_branch<H: Host>(
 ) {
     for expression in branch.body.values_mut() {
         match expression {
-            Expression::Function { function } => {
+            Fragment::Function { function } => {
                 resolve_in_function::<H>(
                     function,
                     scopes,
@@ -94,7 +94,7 @@ fn resolve_in_branch<H: Host>(
                     }
                 }
             }
-            Expression::UnresolvedIdentifier {
+            Fragment::UnresolvedIdentifier {
                 name,
                 is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function,
@@ -113,19 +113,18 @@ fn resolve_in_branch<H: Host>(
                     }
 
                     *expression =
-                        Expression::ResolvedBinding { name: name.clone() }
+                        Fragment::ResolvedBinding { name: name.clone() }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    *expression = Expression::CallToIntrinsicFunction {
+                    *expression = Fragment::CallToIntrinsicFunction {
                         intrinsic,
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
                 } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
-                    *expression =
-                        Expression::CallToHostFunction { effect_number }
+                    *expression = Fragment::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
@@ -151,7 +150,7 @@ mod tests {
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
-        syntax::{Branch, Expression, Function},
+        syntax::{Branch, Fragment, Function},
     };
 
     #[test]
@@ -178,7 +177,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Expression::UnresolvedIdentifier {
+            Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: None,
@@ -207,7 +206,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Expression::CallToHostFunction { effect_number: 0 })
+            Some(&Fragment::CallToHostFunction { effect_number: 0 })
         );
     }
 
@@ -232,7 +231,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Expression::CallToIntrinsicFunction {
+            Some(&Fragment::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
             })
@@ -263,7 +262,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Expression::UnresolvedIdentifier {
+            Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: Some(

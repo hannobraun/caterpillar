@@ -4,7 +4,7 @@ use crate::fragments::{
     BranchIndex, FragmentIndexInBranchBody, FunctionIndexInCluster, Pattern,
 };
 
-use super::Expression;
+use super::Fragment;
 
 #[derive(
     Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
@@ -50,11 +50,11 @@ impl Function {
 )]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
-    pub body: BTreeMap<FragmentIndexInBranchBody, Expression>,
+    pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
 }
 
 impl Branch {
-    pub fn add_fragment(&mut self, fragment: Expression) {
+    pub fn add_fragment(&mut self, fragment: Fragment) {
         let index = self
             .body
             .last_key_value()

@@ -68,21 +68,21 @@ fn compile_function(
 }
 
 fn compile_expression(
-    expression: syntax::Expression,
+    expression: syntax::Fragment,
     functions2: &mut BTreeMap<Hash<syntax::Function>, Hash<Function>>,
 ) -> Fragment {
     match expression {
-        syntax::Expression::CallToHostFunction { effect_number } => {
+        syntax::Fragment::CallToHostFunction { effect_number } => {
             Fragment::CallToHostFunction { effect_number }
         }
-        syntax::Expression::CallToIntrinsicFunction {
+        syntax::Fragment::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         } => Fragment::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         },
-        syntax::Expression::CallToUserDefinedFunction {
+        syntax::Fragment::CallToUserDefinedFunction {
             hash,
             is_tail_call,
         } => {
@@ -96,22 +96,22 @@ fn compile_expression(
 
             Fragment::CallToUserDefinedFunction { hash, is_tail_call }
         }
-        syntax::Expression::CallToUserDefinedFunctionRecursive {
+        syntax::Fragment::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         } => Fragment::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         },
-        syntax::Expression::Comment { text } => Fragment::Comment { text },
-        syntax::Expression::Function { function } => {
+        syntax::Fragment::Comment { text } => Fragment::Comment { text },
+        syntax::Fragment::Function { function } => {
             let function = compile_function(function, functions2);
             Fragment::Function { function }
         }
-        syntax::Expression::ResolvedBinding { name } => {
+        syntax::Fragment::ResolvedBinding { name } => {
             Fragment::ResolvedBinding { name }
         }
-        syntax::Expression::UnresolvedIdentifier {
+        syntax::Fragment::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
@@ -120,6 +120,6 @@ fn compile_expression(
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
         },
-        syntax::Expression::Value(value) => Fragment::Value(value),
+        syntax::Fragment::Value(value) => Fragment::Value(value),
     }
 }

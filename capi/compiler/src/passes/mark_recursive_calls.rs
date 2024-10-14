@@ -5,7 +5,7 @@ use crate::{
         CallGraph, FunctionIndexInCluster, FunctionIndexInRootContext,
         UnresolvedCallToUserDefinedFunction,
     },
-    syntax::{Expression, Function},
+    syntax::{Fragment, Function},
 };
 
 pub fn mark_recursive_calls(
@@ -47,13 +47,13 @@ fn mark_recursive_calls_in_function(
     for branch in function.branches.values_mut() {
         for expression in branch.body.values_mut() {
             match expression {
-                Expression::Function { function } => {
+                Fragment::Function { function } => {
                     mark_recursive_calls_in_function(
                         function,
                         indices_in_cluster_by_function_name,
                     );
                 }
-                Expression::UnresolvedIdentifier {
+                Fragment::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function:
                         Some(UnresolvedCallToUserDefinedFunction {
@@ -85,7 +85,7 @@ mod tests {
         passes::{
             create_call_graph, parse, resolve_most_identifiers, tokenize,
         },
-        syntax::{Expression, Function},
+        syntax::{Fragment, Function},
     };
 
     #[test]
@@ -112,7 +112,7 @@ mod tests {
         );
 
         for mut function in functions.into_values() {
-            let Expression::UnresolvedIdentifier {
+            let Fragment::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
             } = function
@@ -172,7 +172,7 @@ mod tests {
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::Function { function } = expression else {
+        let Fragment::Function { function } = expression else {
             panic!("Expected expression to be a function.");
         };
 
@@ -184,7 +184,7 @@ mod tests {
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::UnresolvedIdentifier {
+        let Fragment::UnresolvedIdentifier {
             is_known_to_be_call_to_user_defined_function:
                 Some(UnresolvedCallToUserDefinedFunction {
                     is_known_to_be_recursive_call: Some(_),

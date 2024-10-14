@@ -10,7 +10,7 @@ use crate::{
     fragments::{
         CallGraph, Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
     },
-    syntax::{Expression, Function},
+    syntax::{Fragment, Function},
 };
 
 pub fn create_call_graph(
@@ -85,7 +85,7 @@ fn include_calls_from_function_in_call_graph(
     for branch in function.branches.values() {
         for expression in branch.body.values() {
             match expression {
-                Expression::Function { function } => {
+                Fragment::Function { function } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,
                         function,
@@ -93,7 +93,7 @@ fn include_calls_from_function_in_call_graph(
                         call_graph,
                     );
                 }
-                Expression::UnresolvedIdentifier {
+                Fragment::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function: Some(_),
                     ..

@@ -19,6 +19,6 @@ mod expression;
 mod function;
 
 pub use self::{
-    expression::Expression,
+    expression::Fragment,
     function::{Branch, Function},
 };
