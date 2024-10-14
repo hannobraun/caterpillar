@@ -183,7 +183,7 @@ impl DebugFragmentKind {
 
                 Self::CallToHostFunction { name }
             }
-            Fragment::CallToIntrinsic { intrinsic, .. } => {
+            Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
                 Self::CallToIntrinsic {
                     name: intrinsic.to_string(),
                 }

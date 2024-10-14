@@ -104,7 +104,7 @@ pub enum Fragment {
     ///
     /// The compiler translates calls to intrinsics directly into whichever
     /// instructions are required for the specific intrinsic.
-    CallToIntrinsic {
+    CallToIntrinsicFunction {
         /// # The intrinsic being called
         intrinsic: Intrinsic,
 

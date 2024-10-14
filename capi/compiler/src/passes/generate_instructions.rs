@@ -460,7 +460,7 @@ fn compile_fragment(
             );
             Some(address)
         }
-        Fragment::CallToIntrinsic {
+        Fragment::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         } => {

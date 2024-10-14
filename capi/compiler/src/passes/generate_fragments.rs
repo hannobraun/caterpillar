@@ -125,7 +125,7 @@ fn compile_expression(
                     Fragment::CallToHostFunction { effect_number }
                 }
                 Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    Fragment::CallToIntrinsic {
+                    Fragment::CallToIntrinsicFunction {
                         intrinsic,
                         is_tail_call: is_in_tail_position,
                     }
