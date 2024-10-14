@@ -125,10 +125,11 @@ fn compile_expression(
         syntax::Expression::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
-            is_known_to_be_call_to_user_defined_function: _,
+            is_known_to_be_call_to_user_defined_function,
         } => Fragment::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
+            is_known_to_be_call_to_user_defined_function,
         },
         syntax::Expression::Value(value) => Fragment::Value(value),
     }
