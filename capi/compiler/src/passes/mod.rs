@@ -13,6 +13,6 @@ pub use {
     generate_fragments::generate_fragments,
     generate_instructions::generate_instructions,
     mark_recursive_calls::mark_recursive_calls, parse::parse,
-    resolve_identifiers::resolve_identifiers,
+    resolve_identifiers::resolve_identifiers_except_functions,
     tail_position::determine_tail_positions, tokenize::tokenize,
 };

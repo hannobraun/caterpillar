@@ -7,7 +7,9 @@ use crate::{
     syntax::{Branch, Expression, Function},
 };
 
-pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
+pub fn resolve_identifiers_except_functions<H: Host>(
+    functions: &mut Vec<Function>,
+) {
     let mut scopes = Scopes::new();
     let known_named_functions = functions
         .iter()
@@ -262,7 +264,7 @@ mod tests {
     }
 
     fn resolve_identifiers(mut functions: Vec<Function>) -> Vec<Branch> {
-        super::resolve_identifiers::<TestHost>(&mut functions);
+        super::resolve_identifiers_except_functions::<TestHost>(&mut functions);
 
         functions
             .into_iter()
