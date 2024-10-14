@@ -7,7 +7,7 @@ pub fn determine_tail_positions(functions: &mut Vec<Function>) {
 }
 
 fn analyze_function(function: &mut Function) {
-    for branch in &mut function.branches {
+    for branch in function.branches.values_mut() {
         analyze_branch(&mut branch.body);
     }
 }
@@ -62,7 +62,7 @@ mod tests {
 
         determine_tail_positions(&mut functions);
 
-        let branch = functions.remove(0).branches.remove(0);
+        let (_, branch) = functions.remove(0).branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -90,12 +90,17 @@ mod tests {
         determine_tail_positions(&mut functions);
 
         let mut function = functions.remove(0);
-        let mut branch = function.branches.remove(0);
+        let (_, mut branch) = function.branches.pop_first().unwrap();
         let Expression::Function { function } = branch.body.remove(1) else {
             panic!("Expected block.");
         };
-        let identifiers =
-            function.branches.first().unwrap().body.to_identifiers();
+        let identifiers = function
+            .branches
+            .first_key_value()
+            .map(|(_, branch)| branch)
+            .unwrap()
+            .body
+            .to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
@@ -118,7 +123,7 @@ mod tests {
         determine_tail_positions(&mut functions);
 
         let mut function = functions.remove(0);
-        let branch = function.branches.remove(0);
+        let (_, branch) = function.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }

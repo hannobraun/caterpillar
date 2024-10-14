@@ -36,7 +36,7 @@ fn compile_function(
 ) -> Function {
     let mut branches = Vec::new();
 
-    for branch in function.branches {
+    for branch in function.branches.into_values() {
         let body = branch
             .body
             .into_iter()

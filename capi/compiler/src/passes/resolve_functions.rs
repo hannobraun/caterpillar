@@ -30,7 +30,7 @@ fn resolve_calls_in_function(
     function: &mut Function,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
-    for branch in &mut function.branches {
+    for branch in function.branches.values_mut() {
         for fragment in &mut branch.body {
             resolve_calls_in_fragment(fragment, resolved_hashes_by_name);
         }

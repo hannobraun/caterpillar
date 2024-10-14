@@ -1,6 +1,6 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
-use crate::fragments::{FunctionIndexInCluster, Pattern};
+use crate::fragments::{BranchIndex, FunctionIndexInCluster, Pattern};
 
 use super::Expression;
 
@@ -13,7 +13,7 @@ pub struct Function {
     /// This is `Some` for named functions, `None` for anonymous ones.
     pub name: Option<String>,
 
-    pub branches: Vec<Branch>,
+    pub branches: BTreeMap<BranchIndex, Branch>,
 
     /// The environment of the function
     ///
@@ -33,7 +33,13 @@ pub struct Function {
 
 impl Function {
     pub fn add_branch(&mut self, branch: Branch) {
-        self.branches.push(branch);
+        let index = self
+            .branches
+            .last_key_value()
+            .map(|(&BranchIndex(index), _)| index)
+            .unwrap_or(0);
+
+        self.branches.insert(BranchIndex(index + 1), branch);
     }
 }
 

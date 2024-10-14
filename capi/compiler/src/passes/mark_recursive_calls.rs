@@ -44,7 +44,7 @@ fn mark_recursive_calls_in_function(
         FunctionIndexInCluster,
     >,
 ) {
-    for branch in &mut function.branches {
+    for branch in function.branches.values_mut() {
         for expression in &mut branch.body {
             match expression {
                 Expression::Function { function } => {
@@ -115,7 +115,13 @@ mod tests {
             let Expression::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
-            } = function.branches.remove(0).body.remove(0)
+            } = function
+                .branches
+                .pop_first()
+                .map(|(_, branch)| branch)
+                .unwrap()
+                .body
+                .remove(0)
             else {
                 panic!("Expected expression to be an identifier.");
             };
@@ -156,7 +162,7 @@ mod tests {
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
-        let mut branches = f.branches.into_iter();
+        let mut branches = f.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
@@ -168,7 +174,7 @@ mod tests {
             panic!("Expected expression to be a function.");
         };
 
-        let mut branches = function.branches.into_iter();
+        let mut branches = function.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
