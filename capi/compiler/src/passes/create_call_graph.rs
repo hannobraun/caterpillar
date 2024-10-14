@@ -15,7 +15,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for (named_function_index, function) in named_functions.iter() {
+    for (named_function_index, function) in named_functions {
         let name = function
             .name
             .as_ref()

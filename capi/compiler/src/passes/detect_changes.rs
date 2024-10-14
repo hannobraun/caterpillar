@@ -16,7 +16,7 @@ pub fn detect_changes(
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for (new_index, new_function) in new_functions.iter() {
+    for (new_index, new_function) in new_functions {
         if old_functions
             .find_by_hash(&Hash::new(new_function))
             .is_some()

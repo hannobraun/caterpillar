@@ -139,13 +139,6 @@ impl NamedFunctions {
         }
     }
 
-    /// # Iterate over the named functions
-    pub fn iter(
-        &self,
-    ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Function)> {
-        self.inner.iter()
-    }
-
     /// # Consume this instance and return an iterator over the functions
     pub fn into_functions(self) -> impl Iterator<Item = Function> {
         self.inner.into_values()
@@ -159,6 +152,15 @@ impl IntoIterator for NamedFunctions {
     /// # Convert this struct into an iterator over the named functions
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
+    }
+}
+
+impl<'r> IntoIterator for &'r NamedFunctions {
+    type Item = <&'r NamedFunctionsInner as IntoIterator>::Item;
+    type IntoIter = <&'r NamedFunctionsInner as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.iter()
     }
 }
 
