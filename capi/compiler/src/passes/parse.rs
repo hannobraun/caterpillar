@@ -81,13 +81,12 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    let mut parameters = Vec::new();
-    let mut body = Vec::new();
+    let mut branch = Branch::default();
 
-    parse_branch_parameters(tokens, &mut parameters);
-    parse_branch_body(tokens, &mut body)?;
+    parse_branch_parameters(tokens, &mut branch.parameters);
+    parse_branch_body(tokens, &mut branch.body)?;
 
-    Some(Branch { parameters, body })
+    Some(branch)
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens, parameters: &mut Vec<Pattern>) {
