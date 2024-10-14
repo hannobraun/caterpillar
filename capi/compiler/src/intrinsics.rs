@@ -14,6 +14,7 @@ macro_rules! intrinsics {
         /// translate that into the appropriate instructions.
         #[derive(
             Clone,
+            Copy,
             Debug,
             Eq,
             PartialEq,
