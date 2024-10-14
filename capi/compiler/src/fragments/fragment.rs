@@ -96,22 +96,19 @@ pub enum Fragment {
         effect_number: u8,
     },
 
-    /// # A call to a compiler intrinsic
+    /// # A call to a compiler-intrinsic function
     ///
-    /// Compiler intrinsics present as functions to the user. But contrary to
-    /// regular functions, they have no representation in the form of
-    /// Caterpillar code.
-    ///
-    /// The compiler translates calls to intrinsics directly into whichever
-    /// instructions are required for the specific intrinsic.
+    /// Intrinsic functions are implemented in the compiler. Calls to them are
+    /// directly translated into a series of instructions, which provide the
+    /// desired behavior.
     CallToIntrinsicFunction {
-        /// # The intrinsic being called
+        /// # The intrinsic function being called
         intrinsic: Intrinsic,
 
         /// # Indicate whether the call is in tail position
         ///
-        /// This is relevant, as intrinsics can trigger function calls, which
-        /// might necessitate tail call elimination.
+        /// This is relevant, as intrinsics can trigger calls to user-defined
+        /// functions, which might necessitate tail call elimination.
         is_tail_call: bool,
     },
 
