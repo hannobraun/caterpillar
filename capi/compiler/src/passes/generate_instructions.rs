@@ -393,7 +393,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToFunctionRecursive {
+        Fragment::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         } => {

@@ -59,7 +59,7 @@ pub enum Fragment {
     /// this is not possible. It would result in a circular dependency when
     /// creating the hash of the callee, since that would depend on the hash of
     /// caller, which would depend on the hash of the callee again.
-    CallToFunctionRecursive {
+    CallToUserDefinedFunctionRecursive {
         /// # The index of the called function within its cluster
         ///
         /// During compilation, functions are grouped into clusters. A cluster

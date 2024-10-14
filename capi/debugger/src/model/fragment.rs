@@ -154,7 +154,7 @@ impl DebugFragmentKind {
 
                 Self::CallToFunction { name }
             }
-            Fragment::CallToFunctionRecursive { index, .. } => {
+            Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
                 let called_function_index = cluster
                     .functions
                     .get(&index)

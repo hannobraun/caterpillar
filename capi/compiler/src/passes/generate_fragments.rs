@@ -102,7 +102,7 @@ fn compile_expression(
                         is_known_to_be_recursive_call_to_index;
 
                     if let Some(index) = is_recursive_call_to_index {
-                        Fragment::CallToFunctionRecursive {
+                        Fragment::CallToUserDefinedFunctionRecursive {
                             index,
                             is_tail_call: is_in_tail_position,
                         }
