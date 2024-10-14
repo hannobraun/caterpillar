@@ -59,12 +59,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
                 Cluster { functions }
             });
 
-    let mut call_graph = CallGraph::default();
-    for cluster in clusters.into_iter() {
-        call_graph.insert(cluster);
-    }
-
-    call_graph
+    clusters.collect()
 }
 
 fn include_calls_from_function_in_call_graph(

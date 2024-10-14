@@ -9,17 +9,6 @@ pub struct CallGraph {
 }
 
 impl CallGraph {
-    /// # Insert a cluster
-    ///
-    /// ## Implementation Note
-    ///
-    /// This method is way too low-level and does nothing to help with anything
-    /// related to a call graph. Its existence is an artifact of the ongoing
-    /// compiler cleanup.
-    pub fn insert(&mut self, cluster: Cluster) {
-        self.clusters.push(cluster);
-    }
-
     /// # Iterate over all named functions, from the leaves up
     ///
     /// Guarantees that any function that is yielded by the iterator only has
@@ -50,6 +39,14 @@ impl CallGraph {
     /// # Iterate over the function clusters
     pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter()
+    }
+}
+
+impl FromIterator<Cluster> for CallGraph {
+    fn from_iter<T: IntoIterator<Item = Cluster>>(clusters: T) -> Self {
+        Self {
+            clusters: clusters.into_iter().collect(),
+        }
     }
 }
 
