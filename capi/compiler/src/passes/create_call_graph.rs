@@ -11,14 +11,7 @@ use crate::code::{
     FunctionIndexInRootContext, NamedFunctions,
 };
 
-pub fn create_call_graph(
-    functions: Vec<Function>,
-) -> (NamedFunctions, CallGraph) {
-    let mut named_functions = NamedFunctions::default();
-    for function in functions {
-        named_functions.insert(function);
-    }
-
+pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
@@ -71,7 +64,7 @@ pub fn create_call_graph(
         call_graph.insert(cluster);
     }
 
-    (named_functions, call_graph)
+    call_graph
 }
 
 fn include_calls_from_function_in_call_graph(
@@ -112,7 +105,7 @@ mod tests {
     use crate::{
         code::{
             CallGraph, Cluster, FunctionIndexInCluster,
-            FunctionIndexInRootContext,
+            FunctionIndexInRootContext, NamedFunctions,
         },
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
@@ -331,7 +324,12 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers::<NoHost>(&mut functions);
-        let (_, call_graph) = super::create_call_graph(functions);
-        call_graph
+
+        let mut named_functions = NamedFunctions::default();
+        for function in functions {
+            named_functions.insert(function);
+        }
+
+        super::create_call_graph(&named_functions)
     }
 }
