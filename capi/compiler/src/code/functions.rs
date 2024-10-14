@@ -139,6 +139,11 @@ impl NamedFunctions {
         }
     }
 
+    /// # Iterate over the named functions
+    pub fn functions(&self) -> impl Iterator<Item = &Function> {
+        self.inner.values()
+    }
+
     /// # Consume this instance and return an iterator over the functions
     pub fn into_functions(self) -> impl Iterator<Item = Function> {
         self.inner.into_values()
