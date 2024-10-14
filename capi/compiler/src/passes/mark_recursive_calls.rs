@@ -123,13 +123,12 @@ mod tests {
                 panic!("Expected expression to be an identifier.");
             };
             let Some(UnresolvedCallToUserDefinedFunction {
-                is_known_to_be_recursive_call:
-                    is_known_to_be_recursive_call_to_index,
+                is_known_to_be_recursive_call,
             }) = is_known_to_be_call_to_user_defined_function
             else {
                 panic!("Expected expression to be a function call");
             };
-            let Some(index) = is_known_to_be_recursive_call_to_index else {
+            let Some(index) = is_known_to_be_recursive_call else {
                 panic!("Expected function call to be recursive.");
             };
 
