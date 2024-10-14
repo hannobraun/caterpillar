@@ -15,8 +15,12 @@ pub fn generate_fragments(
     let mut functions2 = BTreeMap::new();
     let mut named_functions = NamedFunctions::default();
 
+    for (index, function) in functions {
+        named_functions.insert(index, function);
+    }
+
     for &index in call_graph.functions_from_leaves() {
-        let function = functions
+        let function = named_functions
             .get(&index)
             .expect("Function referred to from call graph must exist.")
             .clone();
@@ -25,8 +29,6 @@ pub fn generate_fragments(
         let function = compile_function(function, &mut functions2);
 
         functions2.insert(hash, Hash::new(&function));
-
-        named_functions.insert(index, function);
     }
 
     named_functions
