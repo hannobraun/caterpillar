@@ -123,8 +123,6 @@ fn resolve_in_branch<H: Host>(
                 } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
-                    *target =
-                        Some(IdentifierTarget::HostFunction { effect_number });
                     *expression =
                         Expression::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {

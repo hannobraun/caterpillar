@@ -130,9 +130,6 @@ fn compile_expression(
                 }
             } else {
                 match target {
-                    Some(IdentifierTarget::HostFunction { effect_number }) => {
-                        Fragment::CallToHostFunction { effect_number }
-                    }
                     Some(IdentifierTarget::Intrinsic { intrinsic }) => {
                         Fragment::CallToIntrinsicFunction {
                             intrinsic,

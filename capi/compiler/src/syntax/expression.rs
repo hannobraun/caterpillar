@@ -68,6 +68,5 @@ pub enum Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum IdentifierTarget {
-    HostFunction { effect_number: u8 },
     Intrinsic { intrinsic: IntrinsicFunction },
 }
