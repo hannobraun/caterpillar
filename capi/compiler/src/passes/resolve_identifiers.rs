@@ -1,9 +1,10 @@
 use std::collections::BTreeSet;
 
 use crate::{
+    fragments::Pattern,
     host::Host,
     intrinsics::Intrinsic,
-    syntax::{Branch, Expression, Function, IdentifierTarget, Pattern},
+    syntax::{Branch, Expression, Function, IdentifierTarget},
 };
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {

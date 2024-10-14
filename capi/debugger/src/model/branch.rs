@@ -2,9 +2,9 @@ use anyhow::anyhow;
 use capi_compiler::{
     fragments::{
         Branch, BranchLocation, Cluster, FragmentLocation, NamedFunctions,
+        Pattern,
     },
     source_map::SourceMap,
-    syntax::Pattern,
 };
 use capi_runtime::Effect;
 

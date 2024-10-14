@@ -1,6 +1,9 @@
 use std::collections::{BTreeSet, VecDeque};
 
-use crate::syntax::{Branch, Expression, Function, Pattern};
+use crate::{
+    fragments::Pattern,
+    syntax::{Branch, Expression, Function},
+};
 
 use super::tokenize::Token;
 

@@ -6,12 +6,11 @@ use crate::{
     fragments::{
         Branch, BranchLocation, CallGraph, Changes, Cluster, Fragment,
         FragmentLocation, Function, FunctionInUpdate, FunctionLocation,
-        FunctionUpdate, NamedFunctions, Parameters,
+        FunctionUpdate, NamedFunctions, Parameters, Pattern,
     },
     hash::Hash,
     intrinsics::Intrinsic,
     source_map::{Mapping, SourceMap},
-    syntax::Pattern,
 };
 
 pub fn generate_instructions(
