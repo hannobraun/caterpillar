@@ -31,16 +31,6 @@ impl NamedFunctions {
     /// ## Panics
     ///
     /// Panics, if the added function does not have a name.
-    ///
-    /// ## Implementation Note
-    ///
-    /// The signature of this function doesn't make a whole lot of sense. The
-    /// index should be created within this function and returned from it.
-    ///
-    /// This is an artifact of the ongoing compiler cleanup. The change to the
-    /// signature can't be made until `NamedFunctions` is used earlier in the
-    /// compiler pipeline, which is blocked until `syntax::Function` and
-    /// `fragments::Function` are merged.
     pub fn insert(&mut self, function: Function) {
         assert!(
             function.name.is_some(),
