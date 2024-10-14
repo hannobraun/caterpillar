@@ -1,6 +1,9 @@
 use capi_runtime::Value;
 
-use crate::{fragments::FunctionIndexInCluster, intrinsics::IntrinsicFunction};
+use crate::{
+    fragments::{FunctionIndexInCluster, UnresolvedCallToUserDefinedFunction},
+    intrinsics::IntrinsicFunction,
+};
 
 use super::Function;
 
@@ -42,7 +45,8 @@ pub enum Expression {
         ///
         /// This starts out as `false` and might later get updated by the
         /// respective compiler pass.
-        is_known_to_be_call_to_user_defined_function: bool,
+        is_known_to_be_call_to_user_defined_function:
+            Option<UnresolvedCallToUserDefinedFunction>,
     },
 
     Value(Value),
