@@ -96,7 +96,7 @@ fn resolve_in_branch<H: Host>(
                     }
                 }
             }
-            Expression::Identifier {
+            Expression::UnresolvedIdentifier {
                 name,
                 is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function,
@@ -176,7 +176,7 @@ mod tests {
 
         assert_eq!(
             functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
+            Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: None,
@@ -249,7 +249,7 @@ mod tests {
 
         assert_eq!(
             functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
+            Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: Some(

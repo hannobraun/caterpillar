@@ -93,7 +93,7 @@ fn include_calls_from_function_in_call_graph(
                         call_graph,
                     );
                 }
-                Expression::Identifier {
+                Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function: Some(_),
                     ..

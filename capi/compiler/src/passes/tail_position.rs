@@ -18,7 +18,7 @@ fn analyze_branch(body: &mut [Expression]) {
             continue;
         }
 
-        if let Expression::Identifier {
+        if let Expression::UnresolvedIdentifier {
             is_known_to_be_in_tail_position,
             ..
         } = expression
@@ -136,7 +136,7 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.iter()
                 .filter_map(|expression| {
-                    if let Expression::Identifier {
+                    if let Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position,
                         ..

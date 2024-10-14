@@ -33,7 +33,7 @@ pub enum Expression {
     },
 
     /// A name that identifies a definition in the source code
-    Identifier {
+    UnresolvedIdentifier {
         /// The name of the definition, as it appears in the code
         name: String,
 

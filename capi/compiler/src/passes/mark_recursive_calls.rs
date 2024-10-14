@@ -53,7 +53,7 @@ fn mark_recursive_calls_in_function(
                         indices_in_cluster_by_function_name,
                     );
                 }
-                Expression::Identifier {
+                Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function:
                         Some(UnresolvedCallToUserDefinedFunction {
@@ -110,7 +110,7 @@ mod tests {
         );
 
         for mut function in functions.into_values() {
-            let Expression::Identifier {
+            let Expression::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
             } = function.branches.remove(0).body.remove(0)
@@ -174,7 +174,7 @@ mod tests {
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::Identifier {
+        let Expression::UnresolvedIdentifier {
             is_known_to_be_call_to_user_defined_function:
                 Some(UnresolvedCallToUserDefinedFunction {
                     is_known_to_be_recursive_call: Some(_),
