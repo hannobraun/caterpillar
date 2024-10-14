@@ -125,6 +125,8 @@ fn resolve_in_branch<H: Host>(
                 {
                     *target =
                         Some(IdentifierTarget::HostFunction { effect_number });
+                    *expression =
+                        Expression::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
@@ -199,14 +201,7 @@ mod tests {
 
         assert_eq!(
             functions.remove(0).body.last(),
-            Some(&Expression::Identifier {
-                name: String::from("host_fn"),
-                target: Some(IdentifierTarget::HostFunction {
-                    effect_number: 0
-                }),
-                is_known_to_be_in_tail_position: false,
-                is_known_to_be_call_to_user_defined_function: None,
-            })
+            Some(&Expression::CallToHostFunction { effect_number: 0 })
         );
     }
 
