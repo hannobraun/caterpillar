@@ -16,7 +16,10 @@ pub fn generate_fragments(
     let mut named_functions = NamedFunctions::default();
 
     for &index in call_graph.functions_from_leaves() {
-        let function = functions[&index].clone();
+        let function = functions
+            .get(&index)
+            .expect("Function referred to from call graph must exist.")
+            .clone();
         let hash = Hash::new(&function);
 
         let function = compile_function(function, &mut functions2);
