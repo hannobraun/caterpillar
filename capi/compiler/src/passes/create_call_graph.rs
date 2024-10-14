@@ -8,12 +8,12 @@ use petgraph::{
 
 use crate::code::{
     CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext,
+    FunctionIndexInRootContext, NamedFunctions,
 };
 
 pub fn create_call_graph(
     functions: Vec<Function>,
-) -> (BTreeMap<FunctionIndexInRootContext, Function>, CallGraph) {
+) -> (NamedFunctions, CallGraph) {
     let functions = iter::successors(Some(0), |i| Some(i + 1))
         .map(FunctionIndexInRootContext)
         .zip(functions)
@@ -71,7 +71,12 @@ pub fn create_call_graph(
         call_graph.insert(cluster);
     }
 
-    (functions, call_graph)
+    let mut named_functions = NamedFunctions::default();
+    for (index, function) in functions {
+        named_functions.insert(index, function);
+    }
+
+    (named_functions, call_graph)
 }
 
 fn include_calls_from_function_in_call_graph(

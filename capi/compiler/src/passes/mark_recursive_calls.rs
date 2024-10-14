@@ -198,13 +198,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers::<NoHost>(&mut functions);
-        let (functions, call_graph) = create_call_graph(functions);
-
-        let mut named_functions = NamedFunctions::default();
-        for (index, function) in functions {
-            named_functions.insert(index, function);
-        }
-
+        let (mut named_functions, call_graph) = create_call_graph(functions);
         super::mark_recursive_calls(&mut named_functions, &call_graph);
 
         named_functions
