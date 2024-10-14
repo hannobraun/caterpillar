@@ -126,9 +126,6 @@ fn resolve_in_branch<H: Host>(
                         Some(IdentifierTarget::HostFunction { effect_number });
                 }
                 if known_named_functions.contains(name) {
-                    *target = Some(IdentifierTarget::Function {
-                        is_known_to_be_recursive_call_to_index: None,
-                    });
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
                             is_known_to_be_recursive_call: None,
@@ -263,9 +260,7 @@ mod tests {
             functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                target: Some(IdentifierTarget::Function {
-                    is_known_to_be_recursive_call_to_index: None
-                }),
+                target: None,
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: Some(
                     UnresolvedCallToUserDefinedFunction {

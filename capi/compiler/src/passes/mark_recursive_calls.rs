@@ -5,7 +5,7 @@ use crate::{
         CallGraph, FunctionIndexInCluster, FunctionIndexInRootContext,
         UnresolvedCallToUserDefinedFunction,
     },
-    syntax::{Expression, Function, IdentifierTarget},
+    syntax::{Expression, Function},
 };
 
 pub fn mark_recursive_calls(
@@ -55,10 +55,6 @@ fn mark_recursive_calls_in_function(
                 }
                 Expression::Identifier {
                     name,
-                    target:
-                        Some(IdentifierTarget::Function {
-                            is_known_to_be_recursive_call_to_index,
-                        }),
                     is_known_to_be_call_to_user_defined_function:
                         Some(UnresolvedCallToUserDefinedFunction {
                             is_known_to_be_recursive_call,
@@ -68,7 +64,6 @@ fn mark_recursive_calls_in_function(
                     if let Some(&index) =
                         indices_in_cluster_by_function_name.get(name)
                     {
-                        *is_known_to_be_recursive_call_to_index = Some(index);
                         *is_known_to_be_recursive_call = Some(index);
                     }
                 }
