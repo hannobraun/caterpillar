@@ -64,6 +64,14 @@ impl NamedFunctions {
         self.inner.get(index)
     }
 
+    /// # Access the named function at the given index mutably
+    pub fn get_mut(
+        &mut self,
+        index: &FunctionIndexInRootContext,
+    ) -> Option<&mut Function> {
+        self.inner.get_mut(index)
+    }
+
     /// # Find the named function with the provided hash
     pub fn find_by_hash(
         &self,
