@@ -1,7 +1,4 @@
-use crate::{
-    fragments::{Fragment, Function},
-    syntax::Branch,
-};
+use crate::fragments::{Branch, Fragment, Function};
 
 pub fn determine_tail_positions(functions: &mut Vec<Function>) {
     for function in functions {
