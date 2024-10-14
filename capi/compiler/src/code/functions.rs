@@ -28,6 +28,10 @@ pub struct NamedFunctions {
 impl NamedFunctions {
     /// # Insert the provided named function
     ///
+    /// ## Panics
+    ///
+    /// Panics, if the added function does not have a name.
+    ///
     /// ## Implementation Note
     ///
     /// The signature of this function doesn't make a whole lot of sense. The
