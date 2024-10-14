@@ -43,7 +43,9 @@ impl Function {
     }
 }
 
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(
+    Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,
