@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    fragments::Pattern,
+    fragments::{Pattern, UnresolvedCallToUserDefinedFunction},
     host::Host,
     intrinsics::IntrinsicFunction,
     syntax::{Branch, Expression, Function, IdentifierTarget},
@@ -96,7 +96,12 @@ fn resolve_in_branch<H: Host>(
                     }
                 }
             }
-            Expression::Identifier { name, target, .. } => {
+            Expression::Identifier {
+                name,
+                target,
+                is_known_to_be_call_to_user_defined_function,
+                ..
+            } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
                 //
@@ -124,6 +129,10 @@ fn resolve_in_branch<H: Host>(
                     *target = Some(IdentifierTarget::Function {
                         is_known_to_be_recursive_call_to_index: None,
                     });
+                    *is_known_to_be_call_to_user_defined_function =
+                        Some(UnresolvedCallToUserDefinedFunction {
+                            is_known_to_be_recursive_call: None,
+                        });
                 }
             }
             _ => {}
@@ -140,6 +149,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
+        fragments::UnresolvedCallToUserDefinedFunction,
         host::Host,
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -257,7 +267,11 @@ mod tests {
                     is_known_to_be_recursive_call_to_index: None
                 }),
                 is_known_to_be_in_tail_position: false,
-                is_known_to_be_call_to_user_defined_function: None,
+                is_known_to_be_call_to_user_defined_function: Some(
+                    UnresolvedCallToUserDefinedFunction {
+                        is_known_to_be_recursive_call: None
+                    }
+                ),
             })
         );
     }
