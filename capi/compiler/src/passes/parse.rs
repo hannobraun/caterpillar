@@ -54,9 +54,8 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    let mut branches = Vec::new();
     while let Some(branch) = parse_branch(tokens) {
-        branches.push(branch);
+        function.branches.push(branch);
     }
 
     match tokens.take()? {
@@ -66,7 +65,6 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    function.branches = branches;
     Some(function)
 }
 
