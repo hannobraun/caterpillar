@@ -2,7 +2,6 @@ pub mod code;
 pub mod host;
 pub mod intrinsics;
 pub mod source_map;
-pub mod syntax;
 
 mod compiler;
 mod hash;
