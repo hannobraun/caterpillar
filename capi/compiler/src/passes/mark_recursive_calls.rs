@@ -14,7 +14,12 @@ pub fn mark_recursive_calls(
             .functions
             .iter()
             .filter_map(|(&function_index_in_cluster, named_function_index)| {
-                functions[named_function_index]
+                functions
+                    .get(named_function_index)
+                    .expect(
+                        "Expecting function referenced from call graph to \
+                        exist.",
+                    )
                     .name
                     .clone()
                     .map(|name| (name, function_index_in_cluster))
