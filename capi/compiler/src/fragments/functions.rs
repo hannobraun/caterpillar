@@ -198,6 +198,17 @@ pub struct Function {
 }
 
 impl Function {
+    /// # Add a branch to this function
+    pub fn add_branch(&mut self, branch: Branch) {
+        let index = self
+            .branches
+            .last_key_value()
+            .map(|(&BranchIndex(index), _)| index)
+            .unwrap_or(0);
+
+        self.branches.insert(BranchIndex(index + 1), branch);
+    }
+
     /// # Expect the function to have one branch and access that
     ///
     /// This is a convenience method, designed for tests and such. It should not
