@@ -59,6 +59,3 @@ pub enum Expression {
 
     Value(Value),
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum IdentifierTarget {}

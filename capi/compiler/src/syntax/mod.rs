@@ -19,6 +19,6 @@ mod expression;
 mod function;
 
 pub use self::{
-    expression::{Expression, IdentifierTarget},
+    expression::Expression,
     function::{Branch, Function},
 };
