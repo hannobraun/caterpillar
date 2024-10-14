@@ -125,44 +125,11 @@ fn compile_expression(
         syntax::Expression::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
-            is_known_to_be_call_to_user_defined_function,
-        } => {
-            // By the time we make it to this compiler pass, all expressions
-            // that are in tail position should be known to be so.
-            let is_in_tail_position = is_known_to_be_in_tail_position;
-
-            if let Some(call) = is_known_to_be_call_to_user_defined_function {
-                // By the time we make it to this compiler pass, all calls that
-                // are recursive should be known to be so.
-                let is_recursive_call_to_index =
-                    call.is_known_to_be_recursive_call;
-
-                if let Some(index) = is_recursive_call_to_index {
-                    Fragment::CallToUserDefinedFunctionRecursive {
-                        index,
-                        is_tail_call: is_in_tail_position,
-                    }
-                } else {
-                    let Some(hash) = functions.get(&name).copied() else {
-                        panic!(
-                            "Compiling call to function `{name}`. Expecting \
-                            called function to already be compiled when its \
-                            caller is being compiled."
-                        );
-                    };
-
-                    Fragment::CallToUserDefinedFunction {
-                        hash,
-                        is_tail_call: is_in_tail_position,
-                    }
-                }
-            } else {
-                Fragment::UnresolvedIdentifier {
-                    name,
-                    is_known_to_be_in_tail_position: is_in_tail_position,
-                }
-            }
-        }
+            is_known_to_be_call_to_user_defined_function: _,
+        } => Fragment::UnresolvedIdentifier {
+            name,
+            is_known_to_be_in_tail_position,
+        },
         syntax::Expression::Value(value) => Fragment::Value(value),
     }
 }
