@@ -151,6 +151,7 @@ type NamedFunctionsInner = BTreeMap<FunctionIndexInRootContext, Function>;
 #[derive(
     Clone,
     Debug,
+    Default,
     Eq,
     PartialEq,
     Ord,
