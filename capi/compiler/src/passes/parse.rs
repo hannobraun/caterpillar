@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, VecDeque};
+use std::collections::VecDeque;
 
 use crate::{
     fragments::Pattern,
@@ -45,6 +45,8 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
 }
 
 fn parse_function(tokens: &mut Tokens) -> Option<Function> {
+    let mut function = Function::default();
+
     match tokens.take()? {
         Token::FunctionStart => {}
         token => {
@@ -64,12 +66,8 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    Some(Function {
-        name: None,
-        branches,
-        environment: BTreeSet::new(),
-        index_in_cluster: None,
-    })
+    function.branches = branches;
+    Some(function)
 }
 
 fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
