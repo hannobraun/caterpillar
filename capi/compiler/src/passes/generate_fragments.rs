@@ -84,57 +84,85 @@ fn compile_expression(
             name,
             target,
             is_known_to_be_in_tail_position,
-            is_known_to_be_call_to_user_defined_function: _,
+            is_known_to_be_call_to_user_defined_function,
         } => {
             // By the time we make it to this compiler pass, all expressions
             // that are in tail position should be known to be so.
             let is_in_tail_position = is_known_to_be_in_tail_position;
 
-            match target {
-                Some(IdentifierTarget::Binding) => {
-                    Fragment::ResolvedBinding { name }
-                }
-                Some(IdentifierTarget::Function {
-                    is_known_to_be_recursive_call_to_index,
-                }) => {
-                    // By the time we make it to this compiler pass, all calls
-                    // that are recursive should be known to be so.
-                    let is_recursive_call_to_index =
-                        is_known_to_be_recursive_call_to_index;
+            if let Some(call) = is_known_to_be_call_to_user_defined_function {
+                // By the time we make it to this compiler pass, all calls that
+                // are recursive should be known to be so.
+                let is_recursive_call_to_index =
+                    call.is_known_to_be_recursive_call;
 
-                    if let Some(index) = is_recursive_call_to_index {
-                        Fragment::CallToUserDefinedFunctionRecursive {
-                            index,
-                            is_tail_call: is_in_tail_position,
-                        }
-                    } else {
-                        let Some(hash) = functions.get(&name).copied() else {
-                            panic!(
-                                "Compiling call to function `{name}`. \
-                                Expecting called function to already be \
-                                compiled when its caller is being compiled."
-                            );
-                        };
-
-                        Fragment::CallToUserDefinedFunction {
-                            hash,
-                            is_tail_call: is_in_tail_position,
-                        }
+                if let Some(index) = is_recursive_call_to_index {
+                    Fragment::CallToUserDefinedFunctionRecursive {
+                        index,
+                        is_tail_call: is_in_tail_position,
                     }
-                }
-                Some(IdentifierTarget::HostFunction { effect_number }) => {
-                    Fragment::CallToHostFunction { effect_number }
-                }
-                Some(IdentifierTarget::Intrinsic { intrinsic }) => {
-                    Fragment::CallToIntrinsicFunction {
-                        intrinsic,
+                } else {
+                    let Some(hash) = functions.get(&name).copied() else {
+                        panic!(
+                            "Compiling call to function `{name}`. Expecting \
+                            called function to already be compiled when its \
+                            caller is being compiled."
+                        );
+                    };
+
+                    Fragment::CallToUserDefinedFunction {
+                        hash,
                         is_tail_call: is_in_tail_position,
                     }
                 }
-                None => Fragment::UnresolvedIdentifier {
-                    name,
-                    is_known_to_be_in_tail_position: is_in_tail_position,
-                },
+            } else {
+                match target {
+                    Some(IdentifierTarget::Binding) => {
+                        Fragment::ResolvedBinding { name }
+                    }
+                    Some(IdentifierTarget::Function {
+                        is_known_to_be_recursive_call_to_index,
+                    }) => {
+                        // By the time we make it to this compiler pass, all
+                        // calls that are recursive should be known to be so.
+                        let is_recursive_call_to_index =
+                            is_known_to_be_recursive_call_to_index;
+
+                        if let Some(index) = is_recursive_call_to_index {
+                            Fragment::CallToUserDefinedFunctionRecursive {
+                                index,
+                                is_tail_call: is_in_tail_position,
+                            }
+                        } else {
+                            let Some(hash) = functions.get(&name).copied()
+                            else {
+                                panic!(
+                                    "Compiling call to function `{name}`. \
+                                Expecting called function to already be \
+                                compiled when its caller is being compiled."
+                                );
+                            };
+
+                            Fragment::CallToUserDefinedFunction {
+                                hash,
+                                is_tail_call: is_in_tail_position,
+                            }
+                        }
+                    }
+                    Some(IdentifierTarget::HostFunction { effect_number }) => {
+                        Fragment::CallToHostFunction { effect_number }
+                    }
+                    Some(IdentifierTarget::Intrinsic { intrinsic }) => {
+                        Fragment::CallToIntrinsicFunction {
+                            intrinsic,
+                            is_tail_call: is_in_tail_position,
+                        }
+                    }
+                    None => Fragment::UnresolvedIdentifier {
+                        name,
+                        is_known_to_be_in_tail_position: is_in_tail_position,
+                    },
+                }
             }
         }
         syntax::Expression::Value(value) => Fragment::Value(value),
