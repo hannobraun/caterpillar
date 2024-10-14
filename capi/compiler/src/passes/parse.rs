@@ -84,7 +84,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     let mut branch = Branch::default();
 
     parse_branch_parameters(tokens, &mut branch.parameters);
-    parse_branch_body(tokens, &mut branch.body)?;
+    parse_branch_body(tokens, &mut branch)?;
 
     Some(branch)
 }
@@ -110,14 +110,11 @@ fn parse_branch_parameters(tokens: &mut Tokens, parameters: &mut Vec<Pattern>) {
     }
 }
 
-fn parse_branch_body(
-    tokens: &mut Tokens,
-    body: &mut Vec<Expression>,
-) -> Option<()> {
+fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
-                body.extend(
+                branch.body.extend(
                     parse_function(tokens)
                         .map(|function| Expression::Function { function }),
                 );
@@ -127,17 +124,17 @@ fn parse_branch_body(
             }
             _ => match tokens.take()? {
                 Token::Comment { text } => {
-                    body.push(Expression::Comment { text });
+                    branch.body.push(Expression::Comment { text });
                 }
                 Token::Identifier { name } => {
-                    body.push(Expression::UnresolvedIdentifier {
+                    branch.body.push(Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position: false,
                         is_known_to_be_call_to_user_defined_function: None,
                     });
                 }
                 Token::IntegerLiteral { value } => {
-                    body.push(Expression::Value(value.into()));
+                    branch.body.push(Expression::Value(value.into()));
                 }
                 token => {
                     panic!("Unexpected token: {token:?}");
