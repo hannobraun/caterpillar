@@ -77,13 +77,9 @@ fn mark_recursive_calls_in_function(
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
 
     use crate::{
-        code::{
-            Fragment, Function, FunctionIndexInRootContext,
-            UnresolvedCallToUserDefinedFunction,
-        },
+        code::{Fragment, NamedFunctions, UnresolvedCallToUserDefinedFunction},
         host::NoHost,
         passes::{
             create_call_graph, parse, resolve_most_identifiers, tokenize,
@@ -113,7 +109,7 @@ mod tests {
             ",
         );
 
-        for mut function in functions.into_values() {
+        for mut function in functions.into_functions() {
             let Fragment::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
@@ -162,7 +158,7 @@ mod tests {
             ",
         );
 
-        let mut functions = functions.into_values();
+        let mut functions = functions.into_functions();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
@@ -198,15 +194,18 @@ mod tests {
         };
     }
 
-    fn mark_recursive_calls(
-        source: &str,
-    ) -> BTreeMap<FunctionIndexInRootContext, Function> {
+    fn mark_recursive_calls(source: &str) -> NamedFunctions {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers::<NoHost>(&mut functions);
         let (mut functions, call_graph) = create_call_graph(functions);
         super::mark_recursive_calls(&mut functions, &call_graph);
 
-        functions
+        let mut named_functions = NamedFunctions::default();
+        for (index, function) in functions {
+            named_functions.insert(index, function);
+        }
+
+        named_functions
     }
 }
