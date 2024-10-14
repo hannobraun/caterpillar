@@ -41,7 +41,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        code::{Fragment, FragmentIndexInBranchBody, Function},
+        code::{Fragment, FragmentIndexInBranchBody, NamedFunctions},
         passes::{parse, tokenize},
     };
 
@@ -61,7 +61,7 @@ mod tests {
         );
 
         let (_, branch) = functions
-            .into_iter()
+            .into_functions()
             .next()
             .unwrap()
             .branches
@@ -91,7 +91,7 @@ mod tests {
             ",
         );
 
-        let mut function = functions.into_iter().next().unwrap();
+        let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
         let Fragment::Function { function } =
             branch.body.values().nth(1).unwrap()
@@ -124,18 +124,23 @@ mod tests {
             ",
         );
 
-        let mut function = functions.into_iter().next().unwrap();
+        let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
-    pub fn determine_tail_positions(source: &str) -> Vec<Function> {
+    pub fn determine_tail_positions(source: &str) -> NamedFunctions {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         super::determine_tail_positions(&mut functions);
 
-        functions
+        let mut named_functions = NamedFunctions::default();
+        for function in functions {
+            named_functions.insert(function);
+        }
+
+        named_functions
     }
 
     trait ToIdentifiers {
