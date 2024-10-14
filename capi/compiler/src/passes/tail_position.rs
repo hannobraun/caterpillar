@@ -1,7 +1,7 @@
 use crate::code::{Branch, Fragment, Function, NamedFunctions};
 
-pub fn determine_tail_positions(functions: &mut NamedFunctions) {
-    for function in functions.functions_mut() {
+pub fn determine_tail_positions(named_functions: &mut NamedFunctions) {
+    for function in named_functions.functions_mut() {
         analyze_function(function);
     }
 }
