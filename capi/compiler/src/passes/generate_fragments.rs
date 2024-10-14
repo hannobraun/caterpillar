@@ -97,7 +97,6 @@ fn compile_expression(
             name,
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
-            ..
         } => {
             // By the time we make it to this compiler pass, all expressions
             // that are in tail position should be known to be so.
