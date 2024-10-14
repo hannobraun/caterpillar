@@ -114,10 +114,9 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
-                branch.body.extend(
-                    parse_function(tokens)
-                        .map(|function| Expression::Function { function }),
-                );
+                if let Some(function) = parse_function(tokens) {
+                    branch.body.push(Expression::Function { function });
+                }
             }
             Token::BranchStart | Token::FunctionEnd => {
                 break;
