@@ -83,20 +83,20 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
 
     let mut branch = Branch::default();
 
-    parse_branch_parameters(tokens, &mut branch.parameters);
+    parse_branch_parameters(tokens, &mut branch);
     parse_branch_body(tokens, &mut branch)?;
 
     Some(branch)
 }
 
-fn parse_branch_parameters(tokens: &mut Tokens, parameters: &mut Vec<Pattern>) {
+fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
     while let Some(token) = tokens.take() {
         match token {
             Token::Identifier { name } => {
-                parameters.push(Pattern::Identifier { name });
+                branch.parameters.push(Pattern::Identifier { name });
             }
             Token::IntegerLiteral { value } => {
-                parameters.push(Pattern::Literal {
+                branch.parameters.push(Pattern::Literal {
                     value: value.into(),
                 });
             }
