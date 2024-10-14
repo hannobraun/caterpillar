@@ -22,5 +22,3 @@ pub use self::{
     expression::{Expression, IdentifierTarget},
     function::{Branch, Function},
 };
-
-pub use crate::fragments::Pattern;
