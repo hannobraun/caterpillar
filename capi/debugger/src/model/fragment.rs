@@ -143,7 +143,7 @@ impl DebugFragmentKind {
         effects: &[Effect],
     ) -> Self {
         match fragment {
-            Fragment::CallToFunction { hash, .. } => {
+            Fragment::CallToUserDefinedFunction { hash, .. } => {
                 let function = named_functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");

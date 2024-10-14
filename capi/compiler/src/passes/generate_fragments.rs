@@ -115,7 +115,7 @@ fn compile_expression(
                             );
                         };
 
-                        Fragment::CallToFunction {
+                        Fragment::CallToUserDefinedFunction {
                             hash,
                             is_tail_call: is_in_tail_position,
                         }

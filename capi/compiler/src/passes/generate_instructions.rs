@@ -355,7 +355,7 @@ fn compile_fragment(
     queue: &mut VecDeque<FunctionToCompile>,
 ) -> Option<InstructionAddress> {
     match &fragment {
-        Fragment::CallToFunction {
+        Fragment::CallToUserDefinedFunction {
             hash, is_tail_call, ..
         } => {
             // We know that this expression refers to a user-defined function,

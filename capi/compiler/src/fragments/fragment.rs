@@ -37,7 +37,7 @@ use super::{Function, FunctionIndexInCluster};
 )]
 pub enum Fragment {
     /// # A call to a user-defined function
-    CallToFunction {
+    CallToUserDefinedFunction {
         /// # The hash of the function being called
         hash: Hash<Function>,
 
@@ -166,7 +166,7 @@ pub enum Fragment {
 
 impl Fragment {
     pub fn as_call_to_function(&self) -> Option<&Hash<Function>> {
-        let Fragment::CallToFunction { hash, .. } = self else {
+        let Fragment::CallToUserDefinedFunction { hash, .. } = self else {
             return None;
         };
 
