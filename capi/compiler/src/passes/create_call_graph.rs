@@ -10,7 +10,7 @@ use crate::{
     fragments::{
         CallGraph, Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
     },
-    syntax::{Expression, Function, IdentifierTarget},
+    syntax::{Expression, Function},
 };
 
 pub fn create_call_graph(
@@ -95,7 +95,7 @@ fn include_calls_from_function_in_call_graph(
                 }
                 Expression::Identifier {
                     name,
-                    target: Some(IdentifierTarget::Function { .. }),
+                    is_known_to_be_call_to_user_defined_function: Some(_),
                     ..
                 } => {
                     let callee_index = graph_index_by_function_name[name];
