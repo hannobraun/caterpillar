@@ -144,6 +144,11 @@ impl NamedFunctions {
         self.inner.values()
     }
 
+    /// # Iterate over the named functions mutably
+    pub fn functions_mut(&mut self) -> impl Iterator<Item = &mut Function> {
+        self.inner.values_mut()
+    }
+
     /// # Consume this instance and return an iterator over the functions
     pub fn into_functions(self) -> impl Iterator<Item = Function> {
         self.inner.into_values()
