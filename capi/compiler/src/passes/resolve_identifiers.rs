@@ -12,9 +12,7 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_most_identifiers<H: Host>(
-    functions: &mut Vec<Function>,
-) {
+pub fn resolve_most_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
     let known_named_functions = functions
         .iter()
