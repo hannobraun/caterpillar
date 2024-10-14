@@ -219,10 +219,10 @@ impl Function {
         let index = self
             .branches
             .last_key_value()
-            .map(|(&BranchIndex(index), _)| index)
+            .map(|(&BranchIndex(index), _)| index + 1)
             .unwrap_or(0);
 
-        self.branches.insert(BranchIndex(index + 1), branch);
+        self.branches.insert(BranchIndex(index), branch);
     }
 
     /// # Expect the function to have one branch and access that
@@ -272,11 +272,10 @@ impl Branch {
         let index = self
             .body
             .last_key_value()
-            .map(|(&FragmentIndexInBranchBody(index), _)| index)
+            .map(|(&FragmentIndexInBranchBody(index), _)| index + 1)
             .unwrap_or(0);
 
-        self.body
-            .insert(FragmentIndexInBranchBody(index + 1), fragment);
+        self.body.insert(FragmentIndexInBranchBody(index), fragment);
     }
 }
 
