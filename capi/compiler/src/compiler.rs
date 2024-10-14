@@ -27,14 +27,14 @@ impl Compiler {
         let mut functions = parse(tokens);
         determine_tail_positions(&mut functions);
         resolve_most_identifiers::<H>(&mut functions);
-        let (mut functions, call_graph) = create_call_graph(functions);
-        mark_recursive_calls(&mut functions, &call_graph);
+        let (functions, call_graph) = create_call_graph(functions);
 
         let mut named_functions = NamedFunctions::default();
         for (index, function) in functions {
             named_functions.insert(index, function);
         }
 
+        mark_recursive_calls(&mut named_functions, &call_graph);
         resolve_calls_to_user_defined_functions(
             &mut named_functions,
             &call_graph,

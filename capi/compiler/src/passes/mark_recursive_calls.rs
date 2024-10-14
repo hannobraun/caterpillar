@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Fragment, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
+    CallGraph, Fragment, Function, FunctionIndexInCluster, NamedFunctions,
+    UnresolvedCallToUserDefinedFunction,
 };
 
 pub fn mark_recursive_calls(
-    functions: &mut BTreeMap<FunctionIndexInRootContext, Function>,
+    functions: &mut NamedFunctions,
     call_graph: &CallGraph,
 ) {
     for cluster in call_graph.clusters() {
@@ -198,13 +198,14 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers::<NoHost>(&mut functions);
-        let (mut functions, call_graph) = create_call_graph(functions);
-        super::mark_recursive_calls(&mut functions, &call_graph);
+        let (functions, call_graph) = create_call_graph(functions);
 
         let mut named_functions = NamedFunctions::default();
         for (index, function) in functions {
             named_functions.insert(index, function);
         }
+
+        super::mark_recursive_calls(&mut named_functions, &call_graph);
 
         named_functions
     }
