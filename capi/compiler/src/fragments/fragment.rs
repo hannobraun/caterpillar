@@ -202,4 +202,11 @@ impl Fragment {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct UnresolvedCallToUserDefinedFunction {}
+pub struct UnresolvedCallToUserDefinedFunction {
+    /// # Indicate whether the call is known to be recursive
+    ///
+    /// Starts out as `None`, until it might get filled in by the respective
+    /// compiler pass. In that case, the index of the function within the
+    /// cluster is provided, which is later needed to resolve the call.
+    pub is_known_to_be_recursive_call: Option<FunctionIndexInCluster>,
+}
