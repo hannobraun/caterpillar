@@ -95,9 +95,9 @@ fn compile_expression(
         }
         syntax::Expression::Identifier {
             name,
-            target,
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
+            ..
         } => {
             // By the time we make it to this compiler pass, all expressions
             // that are in tail position should be known to be so.
@@ -129,14 +129,9 @@ fn compile_expression(
                     }
                 }
             } else {
-                match target {
-                    Some(_) => {
-                        unreachable!()
-                    }
-                    None => Fragment::UnresolvedIdentifier {
-                        name,
-                        is_known_to_be_in_tail_position: is_in_tail_position,
-                    },
+                Fragment::UnresolvedIdentifier {
+                    name,
+                    is_known_to_be_in_tail_position: is_in_tail_position,
                 }
             }
         }
