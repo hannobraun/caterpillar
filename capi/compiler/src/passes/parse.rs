@@ -1,8 +1,8 @@
 use std::collections::VecDeque;
 
 use crate::{
-    fragments::Pattern,
-    syntax::{Branch, Fragment, Function},
+    fragments::{Function, Pattern},
+    syntax::{Branch, Fragment},
 };
 
 use super::tokenize::Token;

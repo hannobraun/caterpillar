@@ -8,9 +8,10 @@ use petgraph::{
 
 use crate::{
     fragments::{
-        CallGraph, Cluster, FunctionIndexInCluster, FunctionIndexInRootContext,
+        CallGraph, Cluster, Function, FunctionIndexInCluster,
+        FunctionIndexInRootContext,
     },
-    syntax::{Fragment, Function},
+    syntax::Fragment,
 };
 
 pub fn create_call_graph(

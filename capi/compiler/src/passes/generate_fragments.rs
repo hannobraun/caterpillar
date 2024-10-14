@@ -10,7 +10,7 @@ use crate::{
 };
 
 pub fn generate_fragments(
-    functions: BTreeMap<FunctionIndexInRootContext, syntax::Function>,
+    functions: BTreeMap<FunctionIndexInRootContext, Function>,
     call_graph: &CallGraph,
 ) -> NamedFunctions {
     let mut functions2 = BTreeMap::new();
@@ -31,8 +31,8 @@ pub fn generate_fragments(
 }
 
 fn compile_function(
-    function: syntax::Function,
-    functions2: &mut BTreeMap<Hash<syntax::Function>, Hash<Function>>,
+    function: Function,
+    functions2: &mut BTreeMap<Hash<Function>, Hash<Function>>,
 ) -> Function {
     let mut branches = Vec::new();
 
@@ -69,7 +69,7 @@ fn compile_function(
 
 fn compile_expression(
     expression: syntax::Fragment,
-    functions2: &mut BTreeMap<Hash<syntax::Function>, Hash<Function>>,
+    functions2: &mut BTreeMap<Hash<Function>, Hash<Function>>,
 ) -> Fragment {
     match expression {
         syntax::Fragment::CallToHostFunction { effect_number } => {
@@ -82,10 +82,7 @@ fn compile_expression(
             intrinsic,
             is_tail_call,
         },
-        syntax::Fragment::CallToUserDefinedFunction {
-            hash,
-            is_tail_call,
-        } => {
+        syntax::Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
             let Some(hash) = functions2.get(&hash).copied() else {
                 panic!(
                     "Compiling call to function `{hash:?}`. Expecting called \

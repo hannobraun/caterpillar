@@ -2,10 +2,10 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        CallGraph, FunctionIndexInCluster, FunctionIndexInRootContext,
-        UnresolvedCallToUserDefinedFunction,
+        CallGraph, Function, FunctionIndexInCluster,
+        FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
     },
-    syntax::{Fragment, Function},
+    syntax::Fragment,
 };
 
 pub fn mark_recursive_calls(
@@ -79,13 +79,14 @@ mod tests {
 
     use crate::{
         fragments::{
-            FunctionIndexInRootContext, UnresolvedCallToUserDefinedFunction,
+            Function, FunctionIndexInRootContext,
+            UnresolvedCallToUserDefinedFunction,
         },
         host::NoHost,
         passes::{
             create_call_graph, parse, resolve_most_identifiers, tokenize,
         },
-        syntax::{Fragment, Function},
+        syntax::Fragment,
     };
 
     #[test]
