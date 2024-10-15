@@ -501,15 +501,24 @@ fn compile_fragment(
                 "An anonymous function should not have a name."
             );
 
-            // If this is an anonymous function, we need to emit an instruction
-            // that allocates it, and takes care of its environment.
+            // We have encountered an anonymous function. We need to emit an
+            // instruction that allocates it, and takes care of its environment.
             //
-            // But we haven't compiled the anonymous function yet, so we don't
-            // have the required information to do that. For now, let's create a
-            // placeholder for that instruction.
+            // But we haven't compiled the anonymous function yet, and we can't
+            // do that right now. If we did, we would be emitting its
+            // instructions in the middle of whatever function (anonymous or
+            // named) that we're currently compiling.
             //
-            // Once the function gets compiled, we'll replace the placeholder
-            // with the real instruction.
+            // The result of that would be, that every anonymous function would
+            // be executed right where it's defined, which would defeat the
+            // purpose of having them in the first place.
+            //
+            // But we still somehow need to emit that instruction to allocate
+            // the anonymous function and take care of its environment. We'll do
+            // that later, after we've actually compiled the anonymous function.
+            //
+            // For now, we'll just emit a placeholder that can be replaced with
+            // the real instruction then.
             let address_of_instruction_to_make_anon_function =
                 Some(generate_instruction(
                     Instruction::TriggerEffect {
