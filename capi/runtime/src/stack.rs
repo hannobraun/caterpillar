@@ -115,9 +115,9 @@ impl Stack {
                 "Trying to access bindings, but none are available. This \
                 implies that no stack frame is available.\n\
                 \n\
-                But one _should_ be available, as that is always the case \
-                before, unless the runtime has finished running. Right now, \
-                we're trying to reuse a stack frame.\n\
+                But one _should_ be available, as that is always the case, \
+                unless the runtime has finished running. Right now, we're \
+                trying to reuse a stack frame.\n\
                 \n\
                 Current stack:\n\
                 {self:#?}",
