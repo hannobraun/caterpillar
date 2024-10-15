@@ -134,7 +134,7 @@ pub fn generate_instructions(
         let new_hash = Hash::new(&update.new.function);
 
         for calling_address in
-            output.source_map.consume_calls_to_function(&old_hash)
+            calls_by_function.remove(&old_hash).unwrap_or_default()
         {
             let calling_instruction = output
                 .instructions
