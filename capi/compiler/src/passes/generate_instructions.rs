@@ -496,6 +496,11 @@ fn compile_fragment(
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
+            assert!(
+                function.name.is_none(),
+                "An anonymous function should not have a name."
+            );
+
             let address_of_instruction_to_make_anon_function =
                 if function.name.is_none() {
                     // If this is an anonymous function, we need to emit an
