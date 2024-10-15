@@ -241,6 +241,7 @@ fn compile_function(
             named_functions,
             output,
             queue,
+            functions,
             calls_by_function,
         );
 
@@ -299,6 +300,7 @@ fn compile_function(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
@@ -306,6 +308,10 @@ fn compile_branch(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
+    functions: &mut BTreeMap<
+        Hash<Function>,
+        Vec<(Vec<Pattern>, InstructionAddress)>,
+    >,
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
@@ -321,6 +327,7 @@ fn compile_branch(
             named_functions,
             output,
             queue,
+            functions,
             calls_by_function,
         );
         first_instruction = first_instruction.or(addr);
@@ -354,6 +361,7 @@ fn compile_branch(
     [first_instruction, last_instruction]
 }
 
+#[allow(clippy::too_many_arguments)]
 fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
@@ -361,6 +369,10 @@ fn compile_fragment(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
+    _functions: &mut BTreeMap<
+        Hash<Function>,
+        Vec<(Vec<Pattern>, InstructionAddress)>,
+    >,
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) -> Option<InstructionAddress> {
     match &fragment {
