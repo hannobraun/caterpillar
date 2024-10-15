@@ -1,7 +1,10 @@
-use capi_runtime::Instructions;
+use std::collections::BTreeMap;
+
+use capi_runtime::{InstructionAddress, Instructions};
 
 use crate::{
-    code::{CallGraph, NamedFunctions},
+    code::{CallGraph, Function, NamedFunctions},
+    hash::Hash,
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
@@ -17,6 +20,7 @@ use crate::{
 pub struct Compiler {
     old_functions: Option<NamedFunctions>,
     instructions: Instructions,
+    calls_by_function: BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     source_map: SourceMap,
 }
 
@@ -43,6 +47,7 @@ impl Compiler {
             &call_graph,
             &changes,
             &mut self.instructions,
+            &mut self.calls_by_function,
             &mut self.source_map,
         );
 
