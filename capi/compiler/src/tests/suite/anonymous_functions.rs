@@ -5,9 +5,10 @@ fn anonymous_function_eval() {
     runtime()
         .update_code(
             r"
-                main: { \ ->
-                    { \ -> 0 send }
-                        eval
+                main: {
+                    \ ->
+                        { \ -> 0 send }
+                            eval
                 }
             ",
         )
@@ -19,11 +20,12 @@ fn anonymous_function_parameter() {
     runtime()
         .update_code(
             r"
-                main: { \ ->
-                    0
-                    { \ channel -> channel }
-                        eval
-                        send
+                main: {
+                    \ ->
+                        0
+                        { \ channel -> channel }
+                            eval
+                            send
                 }
             ",
         )
@@ -35,15 +37,17 @@ fn anonymous_function_parameter_shadowing() {
     runtime()
         .update_code(
             r"
-                main: { \ ->
-                    0
-                    { \ channel ->
-                        channel
-                        { \ channel -> channel }
+                main: {
+                    \ ->
+                        0
+                        {
+                            \ channel ->
+                                channel
+                                { \ channel -> channel }
+                                    eval
+                        }
                             eval
-                    }
-                        eval
-                        send
+                            send
                 }
             ",
         )
@@ -55,19 +59,22 @@ fn anonymous_function_captured_binding() {
     runtime()
         .update_code(
             r"
-                main: { \ ->
-                    0
-                    { \ channel ->
-                        { \ ->
-                            # We are not using `channel` here, to make sure that
-                            # capturing works even from a grandparent scope.
+                main: {
+                    \ ->
+                        0
+                        {
+                            \ channel ->
+                                { \ ->
+                                    # We are not using `channel` here, to make
+                                    # sure that capturing works even from a
+                                    # grandparent scope.
 
-                            { \ -> channel send }
-                                eval
+                                    { \ -> channel send }
+                                        eval
+                                }
+                                    eval
                         }
                             eval
-                    }
-                        eval
                 }
             ",
         )
