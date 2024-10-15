@@ -356,7 +356,7 @@ fn compile_fragment(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
-    _calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
@@ -394,7 +394,7 @@ fn compile_fragment(
             output
                 .source_map
                 .map_function_to_calling_instructions(*hash, address);
-            _calls_by_function.entry(*hash).or_default().push(address);
+            calls_by_function.entry(*hash).or_default().push(address);
 
             Some(address)
         }
@@ -442,7 +442,7 @@ fn compile_fragment(
             output
                 .source_map
                 .map_function_to_calling_instructions(hash, address);
-            _calls_by_function.entry(hash).or_default().push(address);
+            calls_by_function.entry(hash).or_default().push(address);
 
             Some(address)
         }
