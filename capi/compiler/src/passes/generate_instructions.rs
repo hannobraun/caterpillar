@@ -61,7 +61,7 @@ pub fn generate_instructions(
 
     for (&index, cluster) in call_graph.functions_from_leaves() {
         let Some(function) = added_and_updated_functions.remove(&index) else {
-            // Only need to compile added and updated functions.
+            // We only need to compile added and updated functions.
             continue;
         };
 
