@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, iter};
 
 use super::{FunctionIndexInCluster, FunctionIndexInRootContext};
 
@@ -15,11 +15,10 @@ impl CallGraph {
     /// non-recursive calls to functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
-    ) -> impl Iterator<Item = &FunctionIndexInRootContext> {
-        self.clusters
-            .iter()
-            .rev()
-            .flat_map(|cluster| cluster.functions.values())
+    ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Cluster)> {
+        self.clusters.iter().rev().flat_map(|cluster| {
+            cluster.functions.values().zip(iter::repeat(cluster))
+        })
     }
 
     /// # Find the cluster containing a given function
