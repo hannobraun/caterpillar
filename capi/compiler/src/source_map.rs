@@ -2,10 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::{
-    code::{FragmentLocation, Function, FunctionLocation},
-    hash::Hash,
-};
+use crate::code::{FragmentLocation, FunctionLocation};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -16,22 +13,6 @@ pub struct SourceMap {
     instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
-
-    /// # Mapping of functions to the instructions that call them
-    ///
-    /// ## Implementation Note
-    ///
-    /// This data doesn't really fit here, as it's only ostensibly related to
-    /// the purpose of the source map.
-    ///
-    /// The source map is sent to the debugger, and plays an essential role
-    /// there to make it work. This data isn't used by the debugger, however.
-    /// It's just used internally by the compiler, to update calls to changes
-    /// functions.
-    ///
-    /// This should probably live as a field in `Compiler`.
-    function_to_calling_instructions:
-        BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
 
 impl SourceMap {
@@ -60,18 +41,6 @@ impl SourceMap {
         range: [InstructionAddress; 2],
     ) {
         self.function_to_instructions.insert(function, range);
-    }
-
-    /// # Map a function to the instructions that call it
-    pub fn map_function_to_calling_instructions(
-        &mut self,
-        function: Hash<Function>,
-        call: InstructionAddress,
-    ) {
-        self.function_to_calling_instructions
-            .entry(function)
-            .or_default()
-            .push(call);
     }
 
     /// Get the ID of the fragment that the given instruction maps to
@@ -119,20 +88,6 @@ impl SourceMap {
                 }
             },
         )
-    }
-
-    /// # Consume all instructions that call the provided function
-    ///
-    /// Completely removes the entry for that function. This is done to prevent
-    /// the source map from accumulating old calls that should no longer be
-    /// relevant, and might possibly cause problems in future updates.
-    pub fn consume_calls_to_function(
-        &mut self,
-        function: &Hash<Function>,
-    ) -> Vec<InstructionAddress> {
-        self.function_to_calling_instructions
-            .remove(function)
-            .unwrap_or_default()
     }
 }
 
