@@ -48,13 +48,17 @@ pub fn generate_instructions(
             });
     }
 
-    let added_and_updated_functions =
-        changes.added.iter().chain(changes.updated.iter().map(
+    let added_and_updated_functions = changes
+        .added
+        .iter()
+        .chain(changes.updated.iter().map(
             |FunctionUpdate {
                  new: FunctionInUpdate { index, function },
                  ..
              }| (index, function),
-        ));
+        ))
+        .collect::<BTreeMap<_, _>>();
+
     for (&index, function) in added_and_updated_functions {
         let cluster = call_graph
             .find_cluster_by_named_function(&index)
