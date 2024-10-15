@@ -18,7 +18,7 @@ pub fn generate_instructions(
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
-    _calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     source_map: &mut SourceMap,
 ) {
     let mut queue = VecDeque::new();
@@ -75,7 +75,7 @@ pub fn generate_instructions(
             &mut output,
             &mut queue,
             &mut functions,
-            _calls_by_function,
+            calls_by_function,
         );
     }
 
