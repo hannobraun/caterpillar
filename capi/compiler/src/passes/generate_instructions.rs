@@ -532,9 +532,9 @@ fn compile_fragment(
                     ),
                 ));
 
-            // And to make it happen later, we need to put what we already have
-            // into a queue. Once whatever's currently being compiled is out of
-            // the way, we can process that.
+            // We've done what we could. Let's arrange for the anonymous
+            // function to be compiled, and the placeholder instruction to be
+            // replaced, at a later time.
             queue.push_front(FunctionToCompile {
                 function: function.clone(),
                 location: FunctionLocation::AnonymousFunction { location },
