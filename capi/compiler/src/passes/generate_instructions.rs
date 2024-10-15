@@ -48,7 +48,7 @@ pub fn generate_instructions(
             });
     }
 
-    let added_and_updated_functions = changes
+    let mut added_and_updated_functions = changes
         .added
         .iter()
         .chain(changes.updated.iter().map(
@@ -59,10 +59,11 @@ pub fn generate_instructions(
         ))
         .collect::<BTreeMap<_, _>>();
 
-    for (&index, function) in added_and_updated_functions {
-        let cluster = call_graph
-            .find_cluster_by_named_function(&index)
-            .expect("All named functions are part of a cluster.");
+    for (&index, cluster) in call_graph.functions_from_leaves() {
+        let Some(function) = added_and_updated_functions.remove(&index) else {
+            // Only need to compile added and updated functions.
+            continue;
+        };
 
         queue.push_front(FunctionToCompile {
             function: function.clone(),
