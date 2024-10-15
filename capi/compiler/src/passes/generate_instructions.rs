@@ -75,6 +75,7 @@ pub fn generate_instructions(
             &mut output,
             &mut queue,
             &mut functions,
+            _calls_by_function,
         );
     }
 
@@ -198,6 +199,7 @@ fn compile_function(
         Hash<Function>,
         Vec<(Vec<Pattern>, InstructionAddress)>,
     >,
+    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) {
     let FunctionToCompile {
         function,
@@ -234,6 +236,7 @@ fn compile_function(
             named_functions,
             output,
             queue,
+            calls_by_function,
         );
 
         let first_address = bindings_address.unwrap_or(branch_address);
@@ -298,6 +301,7 @@ fn compile_branch(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
+    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -312,6 +316,7 @@ fn compile_branch(
             named_functions,
             output,
             queue,
+            calls_by_function,
         );
         first_instruction = first_instruction.or(addr);
     }
@@ -351,6 +356,7 @@ fn compile_fragment(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
+    _calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
