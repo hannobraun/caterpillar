@@ -112,7 +112,7 @@ fn compile_named_functions(
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
-    let mut compile_functions = CompileNamedFunctionsContext {
+    let mut context = CompileNamedFunctionsContext {
         named_functions,
         changes,
         instructions,
@@ -124,32 +124,32 @@ fn compile_named_functions(
     };
 
     while let Some(function_to_compile) =
-        compile_functions.queue_of_functions_to_compile.pop_front()
+        context.queue_of_functions_to_compile.pop_front()
     {
-        compile_function(function_to_compile, &mut compile_functions);
+        compile_function(function_to_compile, &mut context);
     }
 
-    for (hash, calls) in &compile_functions.placeholders {
+    for (hash, calls) in &context.placeholders {
         for call in calls {
             compile_call_to_function(
                 hash,
                 call,
-                &mut compile_functions.functions,
-                compile_functions.instructions,
+                &mut context.functions,
+                context.instructions,
             );
         }
     }
 
-    for update in &compile_functions.changes.updated {
+    for update in &context.changes.updated {
         let old_hash = Hash::new(&update.old.function);
         let new_hash = Hash::new(&update.new.function);
 
-        for calling_address in compile_functions
+        for calling_address in context
             .calls_by_function
             .remove(&old_hash)
             .unwrap_or_default()
         {
-            let calling_instruction = compile_functions
+            let calling_instruction = context
                 .instructions
                 .get(&calling_address)
                 .expect("Instruction referenced from source map must exist.");
@@ -162,7 +162,7 @@ fn compile_named_functions(
                 );
             };
 
-            let function = compile_functions.functions.get(&new_hash).expect(
+            let function = context.functions.get(&new_hash).expect(
                 "New function referenced in update should have been compiled; \
             is expected to exist.",
             );
@@ -192,7 +192,7 @@ fn compile_named_functions(
                 environment: BTreeMap::new(),
             };
 
-            compile_functions.instructions.replace(
+            context.instructions.replace(
                 &calling_address,
                 Instruction::CallFunction {
                     function,
@@ -202,7 +202,7 @@ fn compile_named_functions(
         }
     }
 
-    compile_functions.functions
+    context.functions
 }
 
 struct CompileNamedFunctionsContext<'r> {
