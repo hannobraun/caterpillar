@@ -64,17 +64,6 @@ pub fn generate_instructions(
 
     compile_functions.execute();
 
-    for (hash, calls) in &compile_functions.placeholders {
-        for call in calls {
-            compile_call_to_function(
-                hash,
-                call,
-                &mut compile_functions.functions,
-                compile_functions.instructions,
-            );
-        }
-    }
-
     for update in &changes.updated {
         let old_hash = Hash::new(&update.old.function);
         let new_hash = Hash::new(&update.new.function);
@@ -203,6 +192,17 @@ impl CompileFunctions<'_> {
             self.queue_of_functions_to_compile.pop_front()
         {
             compile_function(function_to_compile, self);
+        }
+
+        for (hash, calls) in &self.placeholders {
+            for call in calls {
+                compile_call_to_function(
+                    hash,
+                    call,
+                    &mut self.functions,
+                    self.instructions,
+                );
+            }
         }
     }
 }
