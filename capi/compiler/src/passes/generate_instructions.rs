@@ -35,7 +35,8 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let mut named_functions_to_compile = gather_functions_to_compile(changes);
+    let mut named_functions_to_compile =
+        gather_named_functions_to_compile(changes);
 
     let mut queue = VecDeque::new();
 
@@ -166,7 +167,7 @@ fn create_placeholder_for_call_to_main(
     })
 }
 
-fn gather_functions_to_compile(
+fn gather_named_functions_to_compile(
     changes: &Changes,
 ) -> BTreeMap<&FunctionIndexInRootContext, &Function> {
     changes
