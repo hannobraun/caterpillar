@@ -35,8 +35,6 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let mut functions = BTreeMap::default();
-
     let mut named_functions_to_compile = gather_functions_to_compile(changes);
 
     let mut queue = VecDeque::new();
@@ -60,6 +58,7 @@ pub fn generate_instructions(
         source_map,
         placeholders: BTreeMap::new(),
     };
+    let mut functions = BTreeMap::default();
 
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
