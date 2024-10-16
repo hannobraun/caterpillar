@@ -50,7 +50,6 @@ pub fn generate_instructions(
         placeholders: BTreeMap::new(),
         functions: BTreeMap::default(),
     };
-    compile_functions.execute();
 
     if let Some(function) = named_functions.find_by_name("main") {
         compile_functions
@@ -62,6 +61,8 @@ pub fn generate_instructions(
                 is_tail_call: true,
             });
     }
+
+    compile_functions.execute();
 
     for (hash, calls) in &compile_functions.placeholders {
         for call in calls {
