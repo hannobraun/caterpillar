@@ -21,6 +21,17 @@ pub fn generate_instructions(
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     source_map: &mut SourceMap,
 ) {
+    // The placeholder call into `main` is created unconditionally, regardless
+    // of whether this is a fresh build and we actually need to do that, or if
+    // we already have an active runtime and are just compiling changes.
+    //
+    // I don't think this has any adverse effects, except creating junk
+    // instructions that increase the code size. And I don't want to fix that,
+    // until we have infrastructure in place that would measure the code size
+    // and actually show the impact of those changes.
+    //
+    // Otherwise, we'll just complicate the code with unclear benefit, and no
+    // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     let mut queue = VecDeque::new();
