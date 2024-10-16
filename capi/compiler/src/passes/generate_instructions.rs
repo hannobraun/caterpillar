@@ -171,6 +171,36 @@ fn gather_named_functions_to_compile(
         .collect::<BTreeMap<_, _>>()
 }
 
+struct Output<'r> {
+    instructions: &'r mut Instructions,
+    source_map: &'r mut SourceMap,
+    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+}
+
+impl Output<'_> {
+    fn generate_binding<'r, N>(
+        &mut self,
+        names: N,
+    ) -> Option<InstructionAddress>
+    where
+        N: IntoIterator<Item = &'r String>,
+        N::IntoIter: DoubleEndedIterator,
+    {
+        let mut first_address = None;
+
+        for name in names.into_iter().rev() {
+            let address = generate_instruction(
+                Instruction::Bind { name: name.clone() },
+                self.instructions,
+                None,
+            );
+            first_address = first_address.or(Some(address));
+        }
+
+        first_address
+    }
+}
+
 fn seed_queue_of_functions_to_compile(
     mut named_functions_to_compile: BTreeMap<
         &FunctionIndexInRootContext,
@@ -662,36 +692,6 @@ fn generate_instruction(
         mapping.append_instruction(addr);
     }
     addr
-}
-
-struct Output<'r> {
-    instructions: &'r mut Instructions,
-    source_map: &'r mut SourceMap,
-    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-}
-
-impl Output<'_> {
-    fn generate_binding<'r, N>(
-        &mut self,
-        names: N,
-    ) -> Option<InstructionAddress>
-    where
-        N: IntoIterator<Item = &'r String>,
-        N::IntoIter: DoubleEndedIterator,
-    {
-        let mut first_address = None;
-
-        for name in names.into_iter().rev() {
-            let address = generate_instruction(
-                Instruction::Bind { name: name.clone() },
-                self.instructions,
-                None,
-            );
-            first_address = first_address.or(Some(address));
-        }
-
-        first_address
-    }
 }
 
 pub struct CallToFunction {
