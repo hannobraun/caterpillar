@@ -41,7 +41,7 @@ pub fn generate_instructions(
         call_graph,
     );
 
-    let mut compile_functions = CompileFunctions {
+    let mut compile_functions = CompileNamedFunctionsContext {
         named_functions,
         changes,
         instructions,
@@ -114,7 +114,7 @@ fn seed_queue_of_functions_to_compile(
         .collect::<VecDeque<_>>()
 }
 
-struct CompileFunctions<'r> {
+struct CompileNamedFunctionsContext<'r> {
     named_functions: &'r NamedFunctions,
     changes: &'r Changes,
     instructions: &'r mut Instructions,
@@ -126,7 +126,7 @@ struct CompileFunctions<'r> {
     functions:
         BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
 }
-impl CompileFunctions<'_> {
+impl CompileNamedFunctionsContext<'_> {
     fn execute(&mut self) {
         while let Some(function_to_compile) =
             self.queue_of_functions_to_compile.pop_front()
@@ -211,7 +211,7 @@ impl CompileFunctions<'_> {
 
 fn compile_function(
     function_to_compile: FunctionToCompile,
-    output: &mut CompileFunctions,
+    output: &mut CompileNamedFunctionsContext,
 ) {
     let FunctionToCompile {
         function,
@@ -309,7 +309,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    output: &mut CompileFunctions,
+    output: &mut CompileNamedFunctionsContext,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -359,7 +359,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    output: &mut CompileFunctions,
+    output: &mut CompileNamedFunctionsContext,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
