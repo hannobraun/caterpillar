@@ -92,51 +92,11 @@ pub fn generate_instructions(
 
     for (hash, calls) in &output.placeholders {
         for call in calls {
-            let Some(function) = functions.get(hash) else {
-                // This won't happen for any regular function, because we only
-                // create placeholders for functions that we actually
-                // encounter. But it can happen for the `main` function, since
-                // we create a placeholder for that unconditionally.
-                //
-                // If that happens, let's just leave the placeholder panic. It's
-                // not great, as it doesn't provide any context to the user. But
-                // while we don't have any way to make panics more descriptive,
-                // it'll have to do.
-                continue;
-            };
-
-            let function = capi_runtime::Function {
-                branches: function
-                    .iter()
-                    .map(|(parameters, address)| {
-                        let parameters = parameters
-                            .iter()
-                            .cloned()
-                            .map(|pattern| match pattern {
-                                Pattern::Identifier { name } => {
-                                    capi_runtime::Pattern::Identifier { name }
-                                }
-                                Pattern::Literal { value } => {
-                                    capi_runtime::Pattern::Literal { value }
-                                }
-                            })
-                            .collect();
-
-                        capi_runtime::Branch {
-                            parameters,
-                            start: *address,
-                        }
-                    })
-                    .collect(),
-                environment: BTreeMap::new(),
-            };
-
-            output.instructions.replace(
-                &call.address,
-                Instruction::CallFunction {
-                    function: function.clone(),
-                    is_tail_call: call.is_tail_call,
-                },
+            compile_call_to_function(
+                hash,
+                call,
+                &mut functions,
+                output.instructions,
             );
         }
     }
@@ -569,6 +529,62 @@ fn compile_fragment(
             Some(&mut output.source_map.map_fragment_to_instructions(location)),
         )),
     }
+}
+
+fn compile_call_to_function(
+    hash: &Hash<Function>,
+    call: &CallToFunction,
+    functions: &mut BTreeMap<
+        Hash<Function>,
+        Vec<(Vec<Pattern>, InstructionAddress)>,
+    >,
+    instructions: &mut Instructions,
+) {
+    let Some(function) = functions.get(hash) else {
+        // This won't happen for any regular function, because we only create
+        // placeholders for functions that we actually encounter. But it can
+        // happen for the `main` function, since we create a placeholder for
+        // that unconditionally.
+        //
+        // If that happens, let's just leave the placeholder panic. It's not
+        // great, as it doesn't provide any context to the user. But while we
+        // don't have any way to make panics more descriptive, it'll have to do.
+        return;
+    };
+
+    let function = capi_runtime::Function {
+        branches: function
+            .iter()
+            .map(|(parameters, address)| {
+                let parameters = parameters
+                    .iter()
+                    .cloned()
+                    .map(|pattern| match pattern {
+                        Pattern::Identifier { name } => {
+                            capi_runtime::Pattern::Identifier { name }
+                        }
+                        Pattern::Literal { value } => {
+                            capi_runtime::Pattern::Literal { value }
+                        }
+                    })
+                    .collect();
+
+                capi_runtime::Branch {
+                    parameters,
+                    start: *address,
+                }
+            })
+            .collect(),
+        environment: BTreeMap::new(),
+    };
+
+    instructions.replace(
+        &call.address,
+        Instruction::CallFunction {
+            function: function.clone(),
+            is_tail_call: call.is_tail_call,
+        },
+    );
 }
 
 fn intrinsic_to_instruction(
