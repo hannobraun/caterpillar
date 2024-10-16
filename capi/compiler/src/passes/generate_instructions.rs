@@ -48,13 +48,13 @@ pub fn generate_instructions(
         calls_by_function,
         queue_of_functions_to_compile,
         placeholders: BTreeMap::new(),
+        functions: BTreeMap::default(),
     };
-    let mut functions = BTreeMap::default();
 
     while let Some(function_to_compile) =
         output.queue_of_functions_to_compile.pop_front()
     {
-        compile_function(function_to_compile, &mut output, &mut functions);
+        compile_function(function_to_compile, &mut output);
     }
 
     if let Some(function) = named_functions.find_by_name("main") {
@@ -73,7 +73,7 @@ pub fn generate_instructions(
             compile_call_to_function(
                 hash,
                 call,
-                &mut functions,
+                &mut output.functions,
                 output.instructions,
             );
         }
@@ -101,7 +101,7 @@ pub fn generate_instructions(
                 );
             };
 
-            let function = functions.get(&new_hash).expect(
+            let function = output.functions.get(&new_hash).expect(
                 "New function referenced in update should have been compiled; \
                 is expected to exist.",
             );
@@ -198,15 +198,13 @@ struct CompileFunctions<'r> {
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+    functions:
+        BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
 }
 
 fn compile_function(
     function_to_compile: FunctionToCompile,
     output: &mut CompileFunctions,
-    functions: &mut BTreeMap<
-        Hash<Function>,
-        Vec<(Vec<Pattern>, InstructionAddress)>,
-    >,
 ) {
     let FunctionToCompile {
         function,
@@ -241,11 +239,11 @@ fn compile_function(
             },
             &cluster,
             output,
-            functions,
         );
 
         let first_address = bindings_address.unwrap_or(branch_address);
-        functions
+        output
+            .functions
             .entry(Hash::new(&function))
             .or_default()
             .push((branch.parameters.clone(), first_address));
@@ -305,10 +303,6 @@ fn compile_branch(
     location: BranchLocation,
     cluster: &Cluster,
     output: &mut CompileFunctions,
-    functions: &mut BTreeMap<
-        Hash<Function>,
-        Vec<(Vec<Pattern>, InstructionAddress)>,
-    >,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -321,7 +315,6 @@ fn compile_branch(
             },
             cluster,
             output,
-            functions,
         );
         first_instruction = first_instruction.or(addr);
     }
@@ -360,10 +353,6 @@ fn compile_fragment(
     location: FragmentLocation,
     cluster: &Cluster,
     output: &mut CompileFunctions,
-    functions: &mut BTreeMap<
-        Hash<Function>,
-        Vec<(Vec<Pattern>, InstructionAddress)>,
-    >,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
@@ -392,7 +381,7 @@ fn compile_fragment(
                     address,
                     is_tail_call: *is_tail_call,
                 },
-                functions,
+                &mut output.functions,
                 output.instructions,
             );
 
