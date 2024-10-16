@@ -103,33 +103,34 @@ pub fn generate_instructions(
             // to do.
             continue;
         };
-        let function = capi_runtime::Function {
-            branches: function
-                .iter()
-                .map(|(parameters, address)| {
-                    let parameters = parameters
-                        .iter()
-                        .cloned()
-                        .map(|pattern| match pattern {
-                            Pattern::Identifier { name } => {
-                                capi_runtime::Pattern::Identifier { name }
-                            }
-                            Pattern::Literal { value } => {
-                                capi_runtime::Pattern::Literal { value }
-                            }
-                        })
-                        .collect();
-
-                    capi_runtime::Branch {
-                        parameters,
-                        start: *address,
-                    }
-                })
-                .collect(),
-            environment: BTreeMap::new(),
-        };
 
         for call in calls {
+            let function = capi_runtime::Function {
+                branches: function
+                    .iter()
+                    .map(|(parameters, address)| {
+                        let parameters = parameters
+                            .iter()
+                            .cloned()
+                            .map(|pattern| match pattern {
+                                Pattern::Identifier { name } => {
+                                    capi_runtime::Pattern::Identifier { name }
+                                }
+                                Pattern::Literal { value } => {
+                                    capi_runtime::Pattern::Literal { value }
+                                }
+                            })
+                            .collect();
+
+                        capi_runtime::Branch {
+                            parameters,
+                            start: *address,
+                        }
+                    })
+                    .collect(),
+                environment: BTreeMap::new(),
+            };
+
             output.instructions.replace(
                 &call.address,
                 Instruction::CallFunction {
