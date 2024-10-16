@@ -231,8 +231,7 @@ fn compile_function(
                 }
             }
         });
-        let bindings_address =
-            generate_binding(parameters, output.instructions);
+        let bindings_address = compile_binding(parameters, output.instructions);
 
         let [branch_address, last_address] = compile_branch(
             branch,
@@ -657,7 +656,7 @@ fn intrinsic_to_instruction(
     }
 }
 
-fn generate_binding<'r, N>(
+fn compile_binding<'r, N>(
     names: N,
     instructions: &mut Instructions,
 ) -> Option<InstructionAddress>
