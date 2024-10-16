@@ -40,18 +40,14 @@ pub fn generate_instructions(
         named_functions_to_compile,
         call_graph,
     );
-
-    let mut compile_functions = CompileNamedFunctionsContext {
+    let mut functions = compile_named_functions(
         named_functions,
         changes,
         instructions,
         source_map,
         calls_by_function,
         queue_of_functions_to_compile,
-        placeholders: BTreeMap::new(),
-        functions: BTreeMap::default(),
-    };
-    compile_functions.execute();
+    );
 
     if let Some(main) = named_functions.find_by_name("main") {
         compile_call_to_function(
@@ -60,8 +56,8 @@ pub fn generate_instructions(
                 address: call_to_main,
                 is_tail_call: true,
             },
-            &mut compile_functions.functions,
-            compile_functions.instructions,
+            &mut functions,
+            instructions,
         );
     }
 }
@@ -112,6 +108,29 @@ fn seed_queue_of_functions_to_compile(
             })
         })
         .collect::<VecDeque<_>>()
+}
+
+fn compile_named_functions(
+    named_functions: &NamedFunctions,
+    changes: &Changes,
+    instructions: &mut Instructions,
+    source_map: &mut SourceMap,
+    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
+) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
+    let mut compile_functions = CompileNamedFunctionsContext {
+        named_functions,
+        changes,
+        instructions,
+        source_map,
+        calls_by_function,
+        queue_of_functions_to_compile,
+        placeholders: BTreeMap::new(),
+        functions: BTreeMap::default(),
+    };
+    compile_functions.execute();
+
+    compile_functions.functions
 }
 
 struct CompileNamedFunctionsContext<'r> {
