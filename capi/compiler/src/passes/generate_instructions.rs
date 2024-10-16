@@ -43,6 +43,7 @@ pub fn generate_instructions(
 
     let mut compile_functions = CompileFunctions {
         named_functions,
+        changes,
         instructions,
         source_map,
         calls_by_function,
@@ -64,7 +65,7 @@ pub fn generate_instructions(
         );
     }
 
-    for update in &changes.updated {
+    for update in &compile_functions.changes.updated {
         let old_hash = Hash::new(&update.old.function);
         let new_hash = Hash::new(&update.new.function);
 
@@ -177,6 +178,7 @@ fn seed_queue_of_functions_to_compile(
 
 struct CompileFunctions<'r> {
     named_functions: &'r NamedFunctions,
+    changes: &'r Changes,
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
     calls_by_function:
