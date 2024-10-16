@@ -41,7 +41,7 @@ pub fn generate_instructions(
         call_graph,
     );
 
-    let mut output = Output {
+    let mut output = CompileFunctions {
         instructions,
         source_map,
         placeholders: BTreeMap::new(),
@@ -171,13 +171,13 @@ fn gather_named_functions_to_compile(
         .collect::<BTreeMap<_, _>>()
 }
 
-struct Output<'r> {
+struct CompileFunctions<'r> {
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
-impl Output<'_> {
+impl CompileFunctions<'_> {
     fn generate_binding<'r, N>(
         &mut self,
         names: N,
@@ -225,7 +225,7 @@ fn seed_queue_of_functions_to_compile(
 fn compile_function(
     function_to_compile: FunctionToCompile,
     named_functions: &NamedFunctions,
-    output: &mut Output,
+    output: &mut CompileFunctions,
     queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
@@ -333,7 +333,7 @@ fn compile_branch(
     location: BranchLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
-    output: &mut Output,
+    output: &mut CompileFunctions,
     queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
@@ -394,7 +394,7 @@ fn compile_fragment(
     location: FragmentLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
-    output: &mut Output,
+    output: &mut CompileFunctions,
     queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
