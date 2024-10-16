@@ -158,13 +158,13 @@ fn compile_named_functions(
             else {
                 panic!(
                     "Calling instruction referenced from source map is not a \
-                function call."
+                    function call."
                 );
             };
 
             let function = context.functions.get(&new_hash).expect(
                 "New function referenced in update should have been compiled; \
-            is expected to exist.",
+                is expected to exist.",
             );
             let function = capi_runtime::Function {
                 branches: function
