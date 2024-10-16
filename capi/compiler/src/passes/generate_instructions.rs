@@ -52,9 +52,9 @@ pub fn generate_instructions(
     };
     compile_functions.execute();
 
-    if let Some(function) = named_functions.find_by_name("main") {
+    if let Some(main) = named_functions.find_by_name("main") {
         compile_call_to_function(
-            &Hash::new(&function),
+            &Hash::new(&main),
             &CallToFunction {
                 address: call_to_main,
                 is_tail_call: true,
