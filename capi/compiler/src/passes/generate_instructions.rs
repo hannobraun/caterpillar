@@ -42,6 +42,7 @@ pub fn generate_instructions(
     );
 
     let mut output = CompileFunctions {
+        named_functions,
         queue_of_functions_to_compile,
         instructions,
         source_map,
@@ -54,7 +55,6 @@ pub fn generate_instructions(
     {
         compile_function(
             function_to_compile,
-            named_functions,
             &mut output,
             &mut functions,
             calls_by_function,
@@ -172,6 +172,7 @@ fn gather_named_functions_to_compile(
 }
 
 struct CompileFunctions<'r> {
+    named_functions: &'r NamedFunctions,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
@@ -225,7 +226,6 @@ fn seed_queue_of_functions_to_compile(
 
 fn compile_function(
     function_to_compile: FunctionToCompile,
-    named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
     functions: &mut BTreeMap<
         Hash<Function>,
@@ -265,7 +265,6 @@ fn compile_function(
                 index,
             },
             &cluster,
-            named_functions,
             output,
             functions,
             calls_by_function,
@@ -331,7 +330,6 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
     functions: &mut BTreeMap<
         Hash<Function>,
@@ -349,7 +347,6 @@ fn compile_branch(
                 index,
             },
             cluster,
-            named_functions,
             output,
             functions,
             calls_by_function,
@@ -390,7 +387,6 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
     functions: &mut BTreeMap<
         Hash<Function>,
@@ -440,7 +436,8 @@ fn compile_fragment(
             is_tail_call,
         } => {
             let function_index_in_root_context = cluster.functions[index];
-            let called_function = named_functions
+            let called_function = output
+                .named_functions
                 .get(&function_index_in_root_context)
                 .expect("Function referred to from cluster must exist.");
             let hash = Hash::new(called_function);
