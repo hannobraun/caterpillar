@@ -38,10 +38,9 @@ pub fn generate_instructions(
     let mut named_functions_to_compile =
         gather_named_functions_to_compile(changes);
 
-    let mut queue = VecDeque::new();
-
-    queue.extend(call_graph.functions_from_leaves().filter_map(
-        |(&index, cluster)| {
+    let mut queue = call_graph
+        .functions_from_leaves()
+        .filter_map(|(&index, cluster)| {
             let function = named_functions_to_compile.remove(&index)?;
             Some(FunctionToCompile {
                 function: function.clone(),
@@ -49,8 +48,8 @@ pub fn generate_instructions(
                 cluster: cluster.clone(),
                 address_of_instruction_to_make_anon_function: None,
             })
-        },
-    ));
+        })
+        .collect::<VecDeque<_>>();
 
     let mut output = Output {
         instructions,
