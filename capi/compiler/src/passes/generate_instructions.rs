@@ -37,7 +37,7 @@ pub fn generate_instructions(
     let mut queue = VecDeque::new();
     let mut functions = BTreeMap::default();
 
-    let mut added_and_updated_functions = changes
+    let mut named_functions_to_compile = changes
         .added
         .iter()
         .chain(changes.updated.iter().map(
@@ -49,7 +49,7 @@ pub fn generate_instructions(
         .collect::<BTreeMap<_, _>>();
 
     for (&index, cluster) in call_graph.functions_from_leaves() {
-        let Some(function) = added_and_updated_functions.remove(&index) else {
+        let Some(function) = named_functions_to_compile.remove(&index) else {
             // We only need to compile added and updated functions.
             continue;
         };
