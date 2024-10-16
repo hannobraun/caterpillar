@@ -50,19 +50,19 @@ pub fn generate_instructions(
         placeholders: BTreeMap::new(),
         functions: BTreeMap::default(),
     };
+    compile_functions.execute();
 
     if let Some(function) = named_functions.find_by_name("main") {
-        compile_functions
-            .placeholders
-            .entry(Hash::new(&function))
-            .or_default()
-            .push(CallToFunction {
+        compile_call_to_function(
+            &Hash::new(&function),
+            &CallToFunction {
                 address: call_to_main,
                 is_tail_call: true,
-            });
+            },
+            &mut compile_functions.functions,
+            compile_functions.instructions,
+        );
     }
-
-    compile_functions.execute();
 
     for update in &changes.updated {
         let old_hash = Hash::new(&update.old.function);
