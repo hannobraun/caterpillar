@@ -54,7 +54,7 @@ pub fn generate_instructions(
             continue;
         };
 
-        queue.push_front(FunctionToCompile {
+        queue.push_back(FunctionToCompile {
             function: function.clone(),
             location: FunctionLocation::NamedFunction { index },
             cluster: cluster.clone(),
