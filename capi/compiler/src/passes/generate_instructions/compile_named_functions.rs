@@ -12,7 +12,7 @@ use crate::{
     source_map::{Mapping, SourceMap},
 };
 
-struct Context<'r> {
+pub struct Context<'r> {
     named_functions: &'r NamedFunctions,
     changes: &'r Changes,
     instructions: &'r mut Instructions,
