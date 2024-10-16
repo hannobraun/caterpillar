@@ -40,11 +40,13 @@ pub fn generate_instructions(
 
     let mut queue = VecDeque::new();
 
-    for (&index, cluster) in call_graph.functions_from_leaves() {
-        let Some(function) = named_functions_to_compile.remove(&index) else {
-            continue;
-        };
-
+    for (&index, function, cluster) in call_graph
+        .functions_from_leaves()
+        .filter_map(|(index, cluster)| {
+            let function = named_functions_to_compile.remove(index)?;
+            Some((index, function, cluster))
+        })
+    {
         queue.push_back(FunctionToCompile {
             function: function.clone(),
             location: FunctionLocation::NamedFunction { index },
