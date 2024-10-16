@@ -48,18 +48,12 @@ pub fn generate_instructions(
         calls_by_function,
         queue_of_functions_to_compile,
     );
-
-    if let Some(main) = named_functions.find_by_name("main") {
-        compile_call_to_function(
-            &Hash::new(&main),
-            &CallToFunction {
-                address: call_to_main,
-                is_tail_call: true,
-            },
-            &mut functions,
-            instructions,
-        );
-    }
+    compile_call_to_main(
+        call_to_main,
+        named_functions,
+        instructions,
+        &mut functions,
+    );
 }
 
 fn create_placeholder_for_call_to_main(
@@ -225,6 +219,28 @@ impl CompileNamedFunctionsContext<'_> {
                 );
             }
         }
+    }
+}
+
+fn compile_call_to_main(
+    call_to_main: InstructionAddress,
+    named_functions: &NamedFunctions,
+    instructions: &mut Instructions,
+    functions: &mut BTreeMap<
+        Hash<Function>,
+        Vec<(Vec<Pattern>, InstructionAddress)>,
+    >,
+) {
+    if let Some(main) = named_functions.find_by_name("main") {
+        compile_call_to_function(
+            &Hash::new(&main),
+            &CallToFunction {
+                address: call_to_main,
+                is_tail_call: true,
+            },
+            functions,
+            instructions,
+        );
     }
 }
 
