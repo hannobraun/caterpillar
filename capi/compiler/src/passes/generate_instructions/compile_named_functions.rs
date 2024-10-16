@@ -12,6 +12,19 @@ use crate::{
     source_map::{Mapping, SourceMap},
 };
 
+struct CompileNamedFunctionsContext<'r> {
+    named_functions: &'r NamedFunctions,
+    changes: &'r Changes,
+    instructions: &'r mut Instructions,
+    source_map: &'r mut SourceMap,
+    calls_by_function:
+        &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
+    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+    functions:
+        BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
+}
+
 pub fn compile_named_functions(
     named_functions: &NamedFunctions,
     changes: &Changes,
@@ -111,19 +124,6 @@ pub fn compile_named_functions(
     }
 
     context.functions
-}
-
-struct CompileNamedFunctionsContext<'r> {
-    named_functions: &'r NamedFunctions,
-    changes: &'r Changes,
-    instructions: &'r mut Instructions,
-    source_map: &'r mut SourceMap,
-    calls_by_function:
-        &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
-    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-    functions:
-        BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
 }
 
 fn compile_function(
