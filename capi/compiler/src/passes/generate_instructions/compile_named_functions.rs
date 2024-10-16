@@ -15,7 +15,6 @@ use super::compile_function::{
 
 pub struct Context<'r> {
     pub named_functions: &'r NamedFunctions,
-    pub changes: &'r Changes,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub calls_by_function:
@@ -36,7 +35,6 @@ pub fn compile_named_functions(
 ) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
     let mut context = Context {
         named_functions,
-        changes,
         instructions,
         source_map,
         calls_by_function,
@@ -62,7 +60,7 @@ pub fn compile_named_functions(
         }
     }
 
-    for update in &context.changes.updated {
+    for update in &changes.updated {
         let old_hash = Hash::new(&update.old.function);
         let new_hash = Hash::new(&update.new.function);
 
