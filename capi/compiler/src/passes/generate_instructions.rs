@@ -36,7 +36,7 @@ pub fn generate_instructions(
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     let named_functions_to_compile = gather_named_functions_to_compile(changes);
-    let mut queue = seed_queue_of_functions_to_compile(
+    let mut queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
         named_functions_to_compile,
         call_graph,
     );
@@ -48,12 +48,14 @@ pub fn generate_instructions(
     };
     let mut functions = BTreeMap::default();
 
-    while let Some(function_to_compile) = queue.pop_front() {
+    while let Some(function_to_compile) =
+        queue_of_functions_to_compile.pop_front()
+    {
         compile_function(
             function_to_compile,
             named_functions,
             &mut output,
-            &mut queue,
+            &mut queue_of_functions_to_compile,
             &mut functions,
             calls_by_function,
         );
