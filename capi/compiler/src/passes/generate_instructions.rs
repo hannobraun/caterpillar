@@ -50,12 +50,7 @@ pub fn generate_instructions(
         placeholders: BTreeMap::new(),
         functions: BTreeMap::default(),
     };
-
-    while let Some(function_to_compile) =
-        output.queue_of_functions_to_compile.pop_front()
-    {
-        compile_function(function_to_compile, &mut output);
-    }
+    output.execute();
 
     if let Some(function) = named_functions.find_by_name("main") {
         output
@@ -200,6 +195,15 @@ struct CompileFunctions<'r> {
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
     functions:
         BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
+}
+impl CompileFunctions<'_> {
+    fn execute(&mut self) {
+        while let Some(function_to_compile) =
+            self.queue_of_functions_to_compile.pop_front()
+        {
+            compile_function(function_to_compile, self);
+        }
+    }
 }
 
 fn compile_function(
