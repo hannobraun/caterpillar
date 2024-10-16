@@ -29,7 +29,7 @@ pub fn generate_instructions(
     };
     let mut functions = BTreeMap::default();
 
-    let call_to_main = create_placeholder_for_call_to_main(&mut output);
+    let call_to_main = create_placeholder_for_call_to_main(output.instructions);
     if let Some(function) = named_functions.find_by_name("main") {
         output
             .placeholders
@@ -189,13 +189,13 @@ pub fn generate_instructions(
 }
 
 fn create_placeholder_for_call_to_main(
-    output: &mut Output,
+    instructions: &mut Instructions,
 ) -> InstructionAddress {
     // If there's no `main` function, this instruction won't get replaced later.
     // That would be a result of invalid code (valid code would provide a `main`
     // function), so an instruction generating the `BuildError` effect is an
     // appropriate placeholder.
-    output.instructions.push(Instruction::TriggerEffect {
+    instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     })
 }
