@@ -200,30 +200,6 @@ struct CompileFunctions<'r> {
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
-impl CompileFunctions<'_> {
-    fn generate_binding<'r, N>(
-        &mut self,
-        names: N,
-    ) -> Option<InstructionAddress>
-    where
-        N: IntoIterator<Item = &'r String>,
-        N::IntoIter: DoubleEndedIterator,
-    {
-        let mut first_address = None;
-
-        for name in names.into_iter().rev() {
-            let address = generate_instruction(
-                Instruction::Bind { name: name.clone() },
-                self.instructions,
-                None,
-            );
-            first_address = first_address.or(Some(address));
-        }
-
-        first_address
-    }
-}
-
 fn compile_function(
     function_to_compile: FunctionToCompile,
     output: &mut CompileFunctions,
@@ -255,7 +231,8 @@ fn compile_function(
                 }
             }
         });
-        let bindings_address = output.generate_binding(parameters);
+        let bindings_address =
+            generate_binding(parameters, output.instructions);
 
         let [branch_address, last_address] = compile_branch(
             branch,
@@ -678,6 +655,28 @@ fn intrinsic_to_instruction(
         IntrinsicFunction::SubU8 => Instruction::SubU8,
         IntrinsicFunction::SubU8Wrap => Instruction::SubU8Wrap,
     }
+}
+
+fn generate_binding<'r, N>(
+    names: N,
+    instructions: &mut Instructions,
+) -> Option<InstructionAddress>
+where
+    N: IntoIterator<Item = &'r String>,
+    N::IntoIter: DoubleEndedIterator,
+{
+    let mut first_address = None;
+
+    for name in names.into_iter().rev() {
+        let address = generate_instruction(
+            Instruction::Bind { name: name.clone() },
+            instructions,
+            None,
+        );
+        first_address = first_address.or(Some(address));
+    }
+
+    first_address
 }
 
 fn generate_instruction(
