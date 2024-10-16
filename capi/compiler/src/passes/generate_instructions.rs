@@ -5,8 +5,9 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Changes, Cluster, Fragment,
-        FragmentLocation, Function, FunctionInUpdate, FunctionLocation,
-        FunctionUpdate, NamedFunctions, Pattern,
+        FragmentLocation, Function, FunctionInUpdate,
+        FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
+        NamedFunctions, Pattern,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -37,16 +38,7 @@ pub fn generate_instructions(
     let mut queue = VecDeque::new();
     let mut functions = BTreeMap::default();
 
-    let mut named_functions_to_compile = changes
-        .added
-        .iter()
-        .chain(changes.updated.iter().map(
-            |FunctionUpdate {
-                 new: FunctionInUpdate { index, function },
-                 ..
-             }| (index, function),
-        ))
-        .collect::<BTreeMap<_, _>>();
+    let mut named_functions_to_compile = gather_functions_to_compile(changes);
 
     for (&index, cluster) in call_graph.functions_from_leaves() {
         let Some(function) = named_functions_to_compile.remove(&index) else {
@@ -172,6 +164,21 @@ fn create_placeholder_for_call_to_main(
     instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     })
+}
+
+fn gather_functions_to_compile(
+    changes: &Changes,
+) -> BTreeMap<&FunctionIndexInRootContext, &Function> {
+    changes
+        .added
+        .iter()
+        .chain(changes.updated.iter().map(
+            |FunctionUpdate {
+                 new: FunctionInUpdate { index, function },
+                 ..
+             }| (index, function),
+        ))
+        .collect::<BTreeMap<_, _>>()
 }
 
 fn compile_function(
