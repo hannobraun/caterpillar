@@ -21,6 +21,8 @@ pub fn generate_instructions(
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     source_map: &mut SourceMap,
 ) {
+    let call_to_main = create_placeholder_for_call_to_main(instructions);
+
     let mut queue = VecDeque::new();
     let mut output = Output {
         instructions,
@@ -28,8 +30,6 @@ pub fn generate_instructions(
         placeholders: BTreeMap::new(),
     };
     let mut functions = BTreeMap::default();
-
-    let call_to_main = create_placeholder_for_call_to_main(output.instructions);
 
     let mut added_and_updated_functions = changes
         .added
