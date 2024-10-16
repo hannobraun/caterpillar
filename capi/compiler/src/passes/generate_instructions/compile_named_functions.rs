@@ -12,7 +12,7 @@ use crate::{
     source_map::{Mapping, SourceMap},
 };
 
-struct CompileNamedFunctionsContext<'r> {
+struct Context<'r> {
     named_functions: &'r NamedFunctions,
     changes: &'r Changes,
     instructions: &'r mut Instructions,
@@ -33,7 +33,7 @@ pub fn compile_named_functions(
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
-    let mut context = CompileNamedFunctionsContext {
+    let mut context = Context {
         named_functions,
         changes,
         instructions,
@@ -128,7 +128,7 @@ pub fn compile_named_functions(
 
 fn compile_function(
     function_to_compile: FunctionToCompile,
-    output: &mut CompileNamedFunctionsContext,
+    output: &mut Context,
 ) {
     let FunctionToCompile {
         function,
@@ -226,7 +226,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    output: &mut CompileNamedFunctionsContext,
+    output: &mut Context,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -276,7 +276,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    output: &mut CompileNamedFunctionsContext,
+    output: &mut Context,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
