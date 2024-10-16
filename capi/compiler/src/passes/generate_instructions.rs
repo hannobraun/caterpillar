@@ -375,14 +375,14 @@ fn compile_fragment(
                 ),
             );
 
-            // We can't leave it at that, however. We need to make sure this
-            // placeholder actually gets replaced later, and we're doing that by
-            // adding it to this list.
-            output.placeholders.entry(*hash).or_default().push(
-                CallToFunction {
+            compile_call_to_function(
+                hash,
+                &CallToFunction {
                     address,
                     is_tail_call: *is_tail_call,
                 },
+                _functions,
+                output.instructions,
             );
 
             // We also need to do some bookkeeping, so we can update the call,
