@@ -122,7 +122,85 @@ fn compile_named_functions(
         placeholders: BTreeMap::new(),
         functions: BTreeMap::default(),
     };
-    compile_functions.execute();
+
+    while let Some(function_to_compile) =
+        compile_functions.queue_of_functions_to_compile.pop_front()
+    {
+        compile_function(function_to_compile, &mut compile_functions);
+    }
+
+    for (hash, calls) in &compile_functions.placeholders {
+        for call in calls {
+            compile_call_to_function(
+                hash,
+                call,
+                &mut compile_functions.functions,
+                compile_functions.instructions,
+            );
+        }
+    }
+
+    for update in &compile_functions.changes.updated {
+        let old_hash = Hash::new(&update.old.function);
+        let new_hash = Hash::new(&update.new.function);
+
+        for calling_address in compile_functions
+            .calls_by_function
+            .remove(&old_hash)
+            .unwrap_or_default()
+        {
+            let calling_instruction = compile_functions
+                .instructions
+                .get(&calling_address)
+                .expect("Instruction referenced from source map must exist.");
+            let Instruction::CallFunction { is_tail_call, .. } =
+                calling_instruction
+            else {
+                panic!(
+                    "Calling instruction referenced from source map is not a \
+                function call."
+                );
+            };
+
+            let function = compile_functions.functions.get(&new_hash).expect(
+                "New function referenced in update should have been compiled; \
+            is expected to exist.",
+            );
+            let function = capi_runtime::Function {
+                branches: function
+                    .iter()
+                    .map(|(parameters, address)| {
+                        let parameters = parameters
+                            .iter()
+                            .cloned()
+                            .map(|pattern| match pattern {
+                                Pattern::Identifier { name } => {
+                                    capi_runtime::Pattern::Identifier { name }
+                                }
+                                Pattern::Literal { value } => {
+                                    capi_runtime::Pattern::Literal { value }
+                                }
+                            })
+                            .collect();
+
+                        capi_runtime::Branch {
+                            parameters,
+                            start: *address,
+                        }
+                    })
+                    .collect(),
+                environment: BTreeMap::new(),
+            };
+
+            compile_functions.instructions.replace(
+                &calling_address,
+                Instruction::CallFunction {
+                    function,
+                    is_tail_call: *is_tail_call,
+                },
+            );
+        }
+    }
 
     compile_functions.functions
 }
@@ -138,88 +216,6 @@ struct CompileNamedFunctionsContext<'r> {
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
     functions:
         BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
-}
-impl CompileNamedFunctionsContext<'_> {
-    fn execute(&mut self) {
-        while let Some(function_to_compile) =
-            self.queue_of_functions_to_compile.pop_front()
-        {
-            compile_function(function_to_compile, self);
-        }
-
-        for (hash, calls) in &self.placeholders {
-            for call in calls {
-                compile_call_to_function(
-                    hash,
-                    call,
-                    &mut self.functions,
-                    self.instructions,
-                );
-            }
-        }
-
-        for update in &self.changes.updated {
-            let old_hash = Hash::new(&update.old.function);
-            let new_hash = Hash::new(&update.new.function);
-
-            for calling_address in
-                self.calls_by_function.remove(&old_hash).unwrap_or_default()
-            {
-                let calling_instruction =
-                    self.instructions.get(&calling_address).expect(
-                        "Instruction referenced from source map must exist.",
-                    );
-                let Instruction::CallFunction { is_tail_call, .. } =
-                    calling_instruction
-                else {
-                    panic!(
-                    "Calling instruction referenced from source map is not a \
-                    function call."
-                );
-                };
-
-                let function = self.functions.get(&new_hash).expect(
-                "New function referenced in update should have been compiled; \
-                is expected to exist.",
-            );
-                let function = capi_runtime::Function {
-                    branches: function
-                        .iter()
-                        .map(|(parameters, address)| {
-                            let parameters = parameters
-                                .iter()
-                                .cloned()
-                                .map(|pattern| match pattern {
-                                    Pattern::Identifier { name } => {
-                                        capi_runtime::Pattern::Identifier {
-                                            name,
-                                        }
-                                    }
-                                    Pattern::Literal { value } => {
-                                        capi_runtime::Pattern::Literal { value }
-                                    }
-                                })
-                                .collect();
-
-                            capi_runtime::Branch {
-                                parameters,
-                                start: *address,
-                            }
-                        })
-                        .collect(),
-                    environment: BTreeMap::new(),
-                };
-
-                self.instructions.replace(
-                    &calling_address,
-                    Instruction::CallFunction {
-                        function,
-                        is_tail_call: *is_tail_call,
-                    },
-                );
-            }
-        }
-    }
 }
 
 fn compile_call_to_main(
