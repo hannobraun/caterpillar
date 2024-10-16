@@ -43,9 +43,9 @@ pub fn generate_instructions(
 
     let mut output = CompileFunctions {
         named_functions,
-        queue_of_functions_to_compile,
         instructions,
         source_map,
+        queue_of_functions_to_compile,
         placeholders: BTreeMap::new(),
     };
     let mut functions = BTreeMap::default();
@@ -173,9 +173,9 @@ fn gather_named_functions_to_compile(
 
 struct CompileFunctions<'r> {
     named_functions: &'r NamedFunctions,
-    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
+    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
