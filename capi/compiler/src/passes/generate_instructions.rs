@@ -40,10 +40,10 @@ pub fn generate_instructions(
 
     let mut queue = VecDeque::new();
 
-    for (&index, function, cluster) in call_graph
+    for (index, function, cluster) in call_graph
         .functions_from_leaves()
-        .filter_map(|(index, cluster)| {
-            let function = named_functions_to_compile.remove(index)?;
+        .filter_map(|(&index, cluster)| {
+            let function = named_functions_to_compile.remove(&index)?;
             Some((index, function, cluster))
         })
     {
