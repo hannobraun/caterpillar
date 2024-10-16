@@ -35,11 +35,6 @@ pub fn generate_instructions(
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     let mut queue = VecDeque::new();
-    let mut output = Output {
-        instructions,
-        source_map,
-        placeholders: BTreeMap::new(),
-    };
     let mut functions = BTreeMap::default();
 
     let mut added_and_updated_functions = changes
@@ -66,6 +61,12 @@ pub fn generate_instructions(
             address_of_instruction_to_make_anon_function: None,
         });
     }
+
+    let mut output = Output {
+        instructions,
+        source_map,
+        placeholders: BTreeMap::new(),
+    };
 
     while let Some(function_to_compile) = queue.pop_front() {
         compile_function(
