@@ -35,10 +35,11 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let mut queue = VecDeque::new();
     let mut functions = BTreeMap::default();
 
     let mut named_functions_to_compile = gather_functions_to_compile(changes);
+
+    let mut queue = VecDeque::new();
 
     for (&index, cluster) in call_graph.functions_from_leaves() {
         let Some(function) = named_functions_to_compile.remove(&index) else {
