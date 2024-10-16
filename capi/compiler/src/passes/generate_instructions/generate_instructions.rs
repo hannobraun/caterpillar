@@ -12,9 +12,11 @@ use crate::{
     source_map::SourceMap,
 };
 
-use super::compile_named_functions::{
-    compile_call_to_function, compile_named_functions, CallToFunction,
-    FunctionToCompile,
+use super::{
+    compile_function::{
+        compile_call_to_function, CallToFunction, FunctionToCompile,
+    },
+    compile_named_functions::compile_named_functions,
 };
 
 pub fn generate_instructions(

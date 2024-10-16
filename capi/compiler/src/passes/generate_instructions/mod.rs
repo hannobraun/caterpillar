@@ -1,3 +1,4 @@
+mod compile_function;
 mod compile_named_functions;
 mod generate_instructions;
 
