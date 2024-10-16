@@ -36,12 +36,13 @@ pub fn generate_instructions(
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     let named_functions_to_compile = gather_named_functions_to_compile(changes);
-    let mut queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
+    let queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
         named_functions_to_compile,
         call_graph,
     );
 
     let mut output = CompileFunctions {
+        queue_of_functions_to_compile,
         instructions,
         source_map,
         placeholders: BTreeMap::new(),
@@ -49,13 +50,12 @@ pub fn generate_instructions(
     let mut functions = BTreeMap::default();
 
     while let Some(function_to_compile) =
-        queue_of_functions_to_compile.pop_front()
+        output.queue_of_functions_to_compile.pop_front()
     {
         compile_function(
             function_to_compile,
             named_functions,
             &mut output,
-            &mut queue_of_functions_to_compile,
             &mut functions,
             calls_by_function,
         );
@@ -172,6 +172,7 @@ fn gather_named_functions_to_compile(
 }
 
 struct CompileFunctions<'r> {
+    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     instructions: &'r mut Instructions,
     source_map: &'r mut SourceMap,
     placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
@@ -226,7 +227,6 @@ fn compile_function(
     function_to_compile: FunctionToCompile,
     named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
-    queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
         Vec<(Vec<Pattern>, InstructionAddress)>,
@@ -267,7 +267,6 @@ fn compile_function(
             &cluster,
             named_functions,
             output,
-            queue,
             functions,
             calls_by_function,
         );
@@ -334,7 +333,6 @@ fn compile_branch(
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
-    queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
         Vec<(Vec<Pattern>, InstructionAddress)>,
@@ -353,7 +351,6 @@ fn compile_branch(
             cluster,
             named_functions,
             output,
-            queue,
             functions,
             calls_by_function,
         );
@@ -395,7 +392,6 @@ fn compile_fragment(
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     output: &mut CompileFunctions,
-    queue: &mut VecDeque<FunctionToCompile>,
     functions: &mut BTreeMap<
         Hash<Function>,
         Vec<(Vec<Pattern>, InstructionAddress)>,
@@ -562,12 +558,14 @@ fn compile_fragment(
             // We've done what we could. Let's arrange for the anonymous
             // function to be compiled, and the placeholder instruction to be
             // replaced, at a later time.
-            queue.push_front(FunctionToCompile {
-                function: function.clone(),
-                location: FunctionLocation::AnonymousFunction { location },
-                cluster: cluster.clone(),
-                address_of_instruction_to_make_anon_function,
-            });
+            output.queue_of_functions_to_compile.push_front(
+                FunctionToCompile {
+                    function: function.clone(),
+                    location: FunctionLocation::AnonymousFunction { location },
+                    cluster: cluster.clone(),
+                    address_of_instruction_to_make_anon_function,
+                },
+            );
 
             address_of_instruction_to_make_anon_function
         }
