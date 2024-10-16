@@ -13,15 +13,15 @@ use crate::{
 };
 
 pub struct Context<'r> {
-    named_functions: &'r NamedFunctions,
-    changes: &'r Changes,
-    instructions: &'r mut Instructions,
-    source_map: &'r mut SourceMap,
-    calls_by_function:
+    pub named_functions: &'r NamedFunctions,
+    pub changes: &'r Changes,
+    pub instructions: &'r mut Instructions,
+    pub source_map: &'r mut SourceMap,
+    pub calls_by_function:
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
-    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-    placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-    functions:
+    pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
+    pub placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+    pub functions:
         BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
 }
 
