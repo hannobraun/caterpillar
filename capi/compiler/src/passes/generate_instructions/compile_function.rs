@@ -12,11 +12,11 @@ use crate::{
     source_map::Mapping,
 };
 
-use super::compile_named_functions::Context;
+use super::compile_named_functions;
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
-    output: &mut Context,
+    output: &mut compile_named_functions::Context,
 ) {
     let FunctionToCompile {
         function,
@@ -114,7 +114,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
-    output: &mut Context,
+    output: &mut compile_named_functions::Context,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -164,7 +164,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
-    output: &mut Context,
+    output: &mut compile_named_functions::Context,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
