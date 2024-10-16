@@ -41,7 +41,7 @@ pub fn generate_instructions(
         call_graph,
     );
 
-    let mut output = CompileFunctions {
+    let mut compile_functions = CompileFunctions {
         named_functions,
         instructions,
         source_map,
@@ -50,10 +50,10 @@ pub fn generate_instructions(
         placeholders: BTreeMap::new(),
         functions: BTreeMap::default(),
     };
-    output.execute();
+    compile_functions.execute();
 
     if let Some(function) = named_functions.find_by_name("main") {
-        output
+        compile_functions
             .placeholders
             .entry(Hash::new(&function))
             .or_default()
@@ -63,13 +63,13 @@ pub fn generate_instructions(
             });
     }
 
-    for (hash, calls) in &output.placeholders {
+    for (hash, calls) in &compile_functions.placeholders {
         for call in calls {
             compile_call_to_function(
                 hash,
                 call,
-                &mut output.functions,
-                output.instructions,
+                &mut compile_functions.functions,
+                compile_functions.instructions,
             );
         }
     }
@@ -78,12 +78,12 @@ pub fn generate_instructions(
         let old_hash = Hash::new(&update.old.function);
         let new_hash = Hash::new(&update.new.function);
 
-        for calling_address in output
+        for calling_address in compile_functions
             .calls_by_function
             .remove(&old_hash)
             .unwrap_or_default()
         {
-            let calling_instruction = output
+            let calling_instruction = compile_functions
                 .instructions
                 .get(&calling_address)
                 .expect("Instruction referenced from source map must exist.");
@@ -96,7 +96,7 @@ pub fn generate_instructions(
                 );
             };
 
-            let function = output.functions.get(&new_hash).expect(
+            let function = compile_functions.functions.get(&new_hash).expect(
                 "New function referenced in update should have been compiled; \
                 is expected to exist.",
             );
@@ -126,7 +126,7 @@ pub fn generate_instructions(
                 environment: BTreeMap::new(),
             };
 
-            output.instructions.replace(
+            compile_functions.instructions.replace(
                 &calling_address,
                 Instruction::CallFunction {
                     function,
