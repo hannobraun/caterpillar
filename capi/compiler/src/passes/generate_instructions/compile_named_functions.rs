@@ -42,7 +42,7 @@ pub fn compile_named_functions(
         calls_by_function,
         queue_of_functions_to_compile,
         placeholders: BTreeMap::new(),
-        functions: BTreeMap::default(),
+        functions: BTreeMap::new(),
     };
 
     while let Some(function_to_compile) =
