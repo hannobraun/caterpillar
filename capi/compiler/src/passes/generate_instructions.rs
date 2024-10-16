@@ -30,16 +30,6 @@ pub fn generate_instructions(
     let mut functions = BTreeMap::default();
 
     let call_to_main = create_placeholder_for_call_to_main(output.instructions);
-    if let Some(function) = named_functions.find_by_name("main") {
-        output
-            .placeholders
-            .entry(Hash::new(&function))
-            .or_default()
-            .push(CallToFunction {
-                address: call_to_main,
-                is_tail_call: true,
-            });
-    }
 
     let mut added_and_updated_functions = changes
         .added
@@ -75,6 +65,17 @@ pub fn generate_instructions(
             &mut functions,
             calls_by_function,
         );
+    }
+
+    if let Some(function) = named_functions.find_by_name("main") {
+        output
+            .placeholders
+            .entry(Hash::new(&function))
+            .or_default()
+            .push(CallToFunction {
+                address: call_to_main,
+                is_tail_call: true,
+            });
     }
 
     for (hash, calls) in &output.placeholders {
