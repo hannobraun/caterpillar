@@ -348,7 +348,7 @@ fn compile_fragment(
     named_functions: &NamedFunctions,
     output: &mut Output,
     queue: &mut VecDeque<FunctionToCompile>,
-    _functions: &mut BTreeMap<
+    functions: &mut BTreeMap<
         Hash<Function>,
         Vec<(Vec<Pattern>, InstructionAddress)>,
     >,
@@ -381,7 +381,7 @@ fn compile_fragment(
                     address,
                     is_tail_call: *is_tail_call,
                 },
-                _functions,
+                functions,
                 output.instructions,
             );
 
