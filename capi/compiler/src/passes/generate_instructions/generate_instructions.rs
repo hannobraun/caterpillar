@@ -25,7 +25,7 @@ pub fn generate_instructions(
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
-    calls_by_function: &mut CallInstructionsByCalleeHash,
+    call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
     source_map: &mut SourceMap,
 ) {
     // The placeholder call into `main` is created unconditionally, regardless
@@ -51,7 +51,7 @@ pub fn generate_instructions(
         changes,
         instructions,
         source_map,
-        calls_by_function,
+        call_instructions_by_callee_hash,
         queue_of_functions_to_compile,
     );
     compile_call_to_main(
