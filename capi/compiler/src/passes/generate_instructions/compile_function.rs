@@ -16,7 +16,7 @@ use super::compile_named_functions;
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
-    parent_context: &mut compile_named_functions::Context,
+    functions_context: &mut compile_named_functions::Context,
 ) {
     let FunctionToCompile {
         function,
@@ -42,7 +42,7 @@ pub fn compile_function(
             }
         });
         let bindings_address =
-            compile_binding(parameters, parent_context.instructions);
+            compile_binding(parameters, functions_context.instructions);
 
         let [branch_address, last_address] = compile_branch(
             branch,
@@ -51,11 +51,11 @@ pub fn compile_function(
                 index,
             },
             &cluster,
-            parent_context,
+            functions_context,
         );
 
         let first_address = bindings_address.unwrap_or(branch_address);
-        parent_context
+        functions_context
             .functions
             .entry(Hash::new(&function))
             .or_default()
@@ -87,13 +87,13 @@ pub fn compile_function(
     }
 
     if let Some(instruction_range) = instruction_range {
-        parent_context
+        functions_context
             .source_map
             .map_function_to_instructions(location, instruction_range);
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {
-        parent_context.instructions.replace(
+        functions_context.instructions.replace(
             &address,
             Instruction::MakeAnonymousFunction {
                 branches,
