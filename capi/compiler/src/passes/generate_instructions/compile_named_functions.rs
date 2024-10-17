@@ -31,14 +31,17 @@ pub fn compile_named_functions(
     changes: &Changes,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
-    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    call_instructions_by_callee_hash: &mut BTreeMap<
+        Hash<Function>,
+        Vec<InstructionAddress>,
+    >,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
         source_map,
-        call_instructions_by_callee_hash: calls_by_function,
+        call_instructions_by_callee_hash,
         queue_of_functions_to_compile,
         recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
