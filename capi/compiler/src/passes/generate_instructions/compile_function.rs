@@ -61,7 +61,7 @@ pub fn compile_function(
             .or_default()
             .push((branch.parameters.clone(), first_address));
 
-        let branch = capi_runtime::Branch {
+        let runtime_branch = capi_runtime::Branch {
             parameters: branch
                 .parameters
                 .iter()
@@ -78,7 +78,7 @@ pub fn compile_function(
             start: first_address,
         };
 
-        branches.push(branch);
+        branches.push(runtime_branch);
 
         instruction_range = {
             let [first_in_function, _last_in_function] =
