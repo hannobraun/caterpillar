@@ -149,7 +149,7 @@ fn compile_branch_body(
                 parent: Box::new(location.clone()),
                 index,
             },
-            function_context.cluster,
+            function_context,
             named_functions_context,
         );
         first_instruction = first_instruction.or(addr);
@@ -190,7 +190,7 @@ fn compile_branch_body(
 fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
-    cluster: &Cluster,
+    function_context: &mut Context,
     output: &mut compile_named_functions::Context,
 ) -> Option<InstructionAddress> {
     match &fragment {
@@ -238,7 +238,8 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let function_index_in_root_context = cluster.functions[index];
+            let function_index_in_root_context =
+                function_context.cluster.functions[index];
             let called_function = output
                 .named_functions
                 .get(&function_index_in_root_context)
@@ -366,7 +367,7 @@ fn compile_fragment(
                 FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
-                    cluster: cluster.clone(),
+                    cluster: function_context.cluster.clone(),
                     address_of_instruction_to_make_anon_function,
                 },
             );
