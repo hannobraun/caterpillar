@@ -16,7 +16,7 @@ use super::compile_named_functions;
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
-    functions_context: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::Context,
 ) {
     let FunctionToCompile {
         function,
@@ -36,10 +36,10 @@ pub fn compile_function(
                 index,
             },
             &cluster,
-            functions_context,
+            named_functions_context,
         );
 
-        functions_context
+        named_functions_context
             .functions
             .entry(Hash::new(&function))
             .or_default()
@@ -55,13 +55,13 @@ pub fn compile_function(
     }
 
     if let Some(instruction_range) = instruction_range {
-        functions_context
+        named_functions_context
             .source_map
             .map_function_to_instructions(location, instruction_range);
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {
-        functions_context.instructions.replace(
+        named_functions_context.instructions.replace(
             &address,
             Instruction::MakeAnonymousFunction {
                 branches,
