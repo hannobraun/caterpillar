@@ -13,7 +13,7 @@ use super::compile_function::{
     FunctionToCompile,
 };
 
-pub struct Context<'r> {
+pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
@@ -33,7 +33,7 @@ pub fn compile_named_functions(
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
-    let mut context = Context {
+    let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
         source_map,

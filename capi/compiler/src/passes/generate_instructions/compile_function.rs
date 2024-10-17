@@ -20,7 +20,7 @@ pub struct FunctionContext<'r> {
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
-    named_functions_context: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::NamedFunctionsContext,
 ) {
     let FunctionToCompile {
         function,
@@ -88,7 +88,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     function_context: &mut FunctionContext,
-    named_functions_context: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::NamedFunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
         match pattern {
@@ -138,7 +138,7 @@ fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
     function_context: &mut FunctionContext,
-    named_functions_context: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::NamedFunctionsContext,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -191,7 +191,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     function_context: &mut FunctionContext,
-    named_functions_context: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
