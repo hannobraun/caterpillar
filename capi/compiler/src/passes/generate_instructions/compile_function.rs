@@ -21,7 +21,7 @@ pub struct FunctionContext<'r> {
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
     named_functions_context: &mut NamedFunctionsContext,
-) {
+) -> capi_runtime::Function {
     let FunctionToCompile {
         function,
         location,
@@ -55,10 +55,6 @@ pub fn compile_function(
         };
     }
 
-    named_functions_context
-        .functions
-        .insert(Hash::new(&function), runtime_function.clone());
-
     if let Some(instruction_range) = instruction_range {
         named_functions_context
             .source_map
@@ -69,7 +65,7 @@ pub fn compile_function(
         named_functions_context.instructions.replace(
             &address,
             Instruction::MakeAnonymousFunction {
-                branches: runtime_function.branches,
+                branches: runtime_function.branches.clone(),
                 environment: function.environment,
             },
         );
@@ -81,6 +77,8 @@ pub fn compile_function(
             This is a bug.",
         );
     }
+
+    runtime_function
 }
 
 fn compile_branch(

@@ -45,7 +45,10 @@ pub fn compile_named_functions(
     while let Some(function_to_compile) =
         context.queue_of_functions_to_compile.pop_front()
     {
-        compile_function(function_to_compile, &mut context);
+        let hash = Hash::new(&function_to_compile.function);
+        let runtime_function =
+            compile_function(function_to_compile, &mut context);
+        context.functions.insert(hash, runtime_function);
     }
 
     for (hash, calls) in &context.placeholders {
