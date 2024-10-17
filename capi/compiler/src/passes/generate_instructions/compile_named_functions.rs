@@ -17,7 +17,7 @@ pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
-    pub calls_by_function:
+    pub call_instructions_by_callee_hash:
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     pub recursive_function_calls_by_callee_hash:
@@ -38,7 +38,7 @@ pub fn compile_named_functions(
         named_functions,
         instructions,
         source_map,
-        calls_by_function,
+        call_instructions_by_callee_hash: calls_by_function,
         queue_of_functions_to_compile,
         recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
@@ -71,7 +71,7 @@ pub fn compile_named_functions(
         let new_hash = Hash::new(&update.new.function);
 
         for calling_address in context
-            .calls_by_function
+            .call_instructions_by_callee_hash
             .remove(&old_hash)
             .unwrap_or_default()
         {

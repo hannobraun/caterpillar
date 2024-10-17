@@ -229,7 +229,7 @@ fn compile_fragment(
             // We also need to do some bookkeeping, so we can update the call,
             // in case the called function is updated.
             named_functions_context
-                .calls_by_function
+                .call_instructions_by_callee_hash
                 .entry(*hash)
                 .or_default()
                 .push(address);
@@ -288,7 +288,7 @@ fn compile_fragment(
             // We also need to do some bookkeeping, so we can update the call,
             // in case the called function is updated.
             named_functions_context
-                .calls_by_function
+                .call_instructions_by_callee_hash
                 .entry(hash)
                 .or_default()
                 .push(address);
