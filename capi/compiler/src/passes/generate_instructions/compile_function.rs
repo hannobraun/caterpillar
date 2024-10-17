@@ -55,11 +55,6 @@ pub fn compile_function(
         );
 
         let first_address = bindings_address.unwrap_or(branch_address);
-        functions_context
-            .functions
-            .entry(Hash::new(&function))
-            .or_default()
-            .push((branch.parameters.clone(), first_address));
 
         let runtime_branch = capi_runtime::Branch {
             parameters: branch
@@ -78,6 +73,11 @@ pub fn compile_function(
             start: first_address,
         };
 
+        functions_context
+            .functions
+            .entry(Hash::new(&function))
+            .or_default()
+            .push((branch.parameters.clone(), first_address));
         branches.push(runtime_branch);
 
         instruction_range = {
