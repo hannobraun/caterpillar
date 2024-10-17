@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     code::{
-        Branch, BranchIndex, BranchLocation, Cluster, Fragment,
-        FragmentLocation, Function, FunctionLocation, Pattern,
+        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
+        FunctionLocation, Pattern,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -31,8 +31,10 @@ pub fn compile_function(
     for (&index, branch) in function.branches.iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
             branch,
-            index,
-            &location,
+            BranchLocation {
+                parent: Box::new(location.clone()),
+                index,
+            },
             &cluster,
             functions_context,
         );
@@ -78,8 +80,7 @@ pub fn compile_function(
 
 fn compile_branch(
     branch: &Branch,
-    index: BranchIndex,
-    parent: &FunctionLocation,
+    location: BranchLocation,
     cluster: &Cluster,
     functions_context: &mut compile_named_functions::Context,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -98,15 +99,8 @@ fn compile_branch(
     let bindings_address =
         compile_binding(parameters, functions_context.instructions);
 
-    let [branch_address, last_address] = compile_branch_body(
-        branch,
-        BranchLocation {
-            parent: Box::new(parent.clone()),
-            index,
-        },
-        cluster,
-        functions_context,
-    );
+    let [branch_address, last_address] =
+        compile_branch_body(branch, location, cluster, functions_context);
 
     let first_address = bindings_address.unwrap_or(branch_address);
 
