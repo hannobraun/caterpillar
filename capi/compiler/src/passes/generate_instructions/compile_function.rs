@@ -44,7 +44,7 @@ pub fn compile_function(
         let bindings_address =
             compile_binding(parameters, functions_context.instructions);
 
-        let [branch_address, last_address] = compile_branch(
+        let [branch_address, last_address] = compile_branch_body(
             branch,
             BranchLocation {
                 parent: Box::new(location.clone()),
@@ -110,7 +110,7 @@ pub fn compile_function(
     }
 }
 
-fn compile_branch(
+fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
     cluster: &Cluster,
