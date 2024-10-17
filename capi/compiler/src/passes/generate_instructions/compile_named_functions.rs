@@ -20,7 +20,8 @@ pub struct NamedFunctionsContext<'r> {
     pub calls_by_function:
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-    pub placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+    pub recursive_function_calls_by_callee_hash:
+        BTreeMap<Hash<Function>, Vec<CallToFunction>>,
     pub compiled_functions_by_hash:
         BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
@@ -39,7 +40,7 @@ pub fn compile_named_functions(
         source_map,
         calls_by_function,
         queue_of_functions_to_compile,
-        placeholders: BTreeMap::new(),
+        recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
     };
 
@@ -54,7 +55,7 @@ pub fn compile_named_functions(
             .insert(hash, runtime_function);
     }
 
-    for (hash, calls) in &context.placeholders {
+    for (hash, calls) in &context.recursive_function_calls_by_callee_hash {
         for call in calls {
             compile_call_to_function(
                 hash,

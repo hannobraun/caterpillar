@@ -277,7 +277,7 @@ fn compile_fragment(
                     is_tail_call: *is_tail_call,
                 });
             named_functions_context
-                .placeholders
+                .recursive_function_calls_by_callee_hash
                 .entry(hash)
                 .or_default()
                 .push(CallToFunction {
