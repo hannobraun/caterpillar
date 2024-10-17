@@ -108,7 +108,7 @@ fn compile_branch(
     let [branch_address, last_address] = compile_branch_body(
         branch,
         location,
-        function_context.cluster,
+        function_context,
         named_functions_context,
     );
 
@@ -137,7 +137,7 @@ fn compile_branch(
 fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
-    cluster: &Cluster,
+    function_context: &mut Context,
     output: &mut compile_named_functions::Context,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
@@ -149,7 +149,7 @@ fn compile_branch_body(
                 parent: Box::new(location.clone()),
                 index,
             },
-            cluster,
+            function_context.cluster,
             output,
         );
         first_instruction = first_instruction.or(addr);
