@@ -113,7 +113,7 @@ fn compile_call_to_main(
     call_to_main: InstructionAddress,
     named_functions: &NamedFunctions,
     instructions: &mut Instructions,
-    functions: &mut BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
+    functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
 ) {
     if let Some(main) = named_functions.find_by_name("main") {
         compile_call_to_function(

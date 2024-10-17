@@ -49,6 +49,7 @@ pub fn compile_function(
             .functions
             .entry(Hash::new(&function))
             .or_default()
+            .branches
             .push(runtime_branch.clone());
         branches.push(runtime_branch);
 
@@ -410,7 +411,7 @@ fn compile_fragment(
 pub fn compile_call_to_function(
     hash: &Hash<Function>,
     call: &CallToFunction,
-    functions: &mut BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
+    functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
     let Some(function) = functions.get(hash) else {
@@ -423,11 +424,6 @@ pub fn compile_call_to_function(
         // great, as it doesn't provide any context to the user. But while we
         // don't have any way to make panics more descriptive, it'll have to do.
         return;
-    };
-
-    let function = capi_runtime::Function {
-        branches: function.clone(),
-        environment: BTreeMap::new(),
     };
 
     instructions.replace(

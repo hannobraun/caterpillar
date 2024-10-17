@@ -21,7 +21,7 @@ pub struct NamedFunctionsContext<'r> {
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     pub placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-    pub functions: BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
+    pub functions: BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
 
 pub fn compile_named_functions(
@@ -31,7 +31,7 @@ pub fn compile_named_functions(
     source_map: &mut SourceMap,
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-) -> BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>> {
+) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
@@ -85,15 +85,11 @@ pub fn compile_named_functions(
                 "New function referenced in update should have been compiled; \
                 is expected to exist.",
             );
-            let function = capi_runtime::Function {
-                branches: function.clone(),
-                environment: BTreeMap::new(),
-            };
 
             context.instructions.replace(
                 &calling_address,
                 Instruction::CallFunction {
-                    function,
+                    function: function.clone(),
                     is_tail_call: *is_tail_call,
                 },
             );
