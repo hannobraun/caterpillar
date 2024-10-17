@@ -79,7 +79,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: &Branch,
     index: BranchIndex,
-    location: &FunctionLocation,
+    parent: &FunctionLocation,
     cluster: &Cluster,
     functions_context: &mut compile_named_functions::Context,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -101,7 +101,7 @@ fn compile_branch(
     let [branch_address, last_address] = compile_branch_body(
         branch,
         BranchLocation {
-            parent: Box::new(location.clone()),
+            parent: Box::new(parent.clone()),
             index,
         },
         cluster,
