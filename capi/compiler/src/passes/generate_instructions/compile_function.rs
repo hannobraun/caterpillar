@@ -191,7 +191,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     function_context: &mut Context,
-    output: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::Context,
 ) -> Option<InstructionAddress> {
     match &fragment {
         Fragment::CallToUserDefinedFunction {
@@ -206,9 +206,9 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                output.instructions,
+                named_functions_context.instructions,
                 Some(
-                    &mut output
+                    &mut named_functions_context
                         .source_map
                         .map_fragment_to_instructions(location),
                 ),
@@ -220,13 +220,13 @@ fn compile_fragment(
                     address,
                     is_tail_call: *is_tail_call,
                 },
-                &mut output.functions,
-                output.instructions,
+                &mut named_functions_context.functions,
+                named_functions_context.instructions,
             );
 
             // We also need to do some bookkeeping, so we can update the call,
             // in case the called function is updated.
-            output
+            named_functions_context
                 .calls_by_function
                 .entry(*hash)
                 .or_default()
@@ -240,7 +240,7 @@ fn compile_fragment(
         } => {
             let function_index_in_root_context =
                 function_context.cluster.functions[index];
-            let called_function = output
+            let called_function = named_functions_context
                 .named_functions
                 .get(&function_index_in_root_context)
                 .expect("Function referred to from cluster must exist.");
@@ -255,9 +255,9 @@ fn compile_fragment(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                output.instructions,
+                named_functions_context.instructions,
                 Some(
-                    &mut output
+                    &mut named_functions_context
                         .source_map
                         .map_fragment_to_instructions(location),
                 ),
@@ -266,7 +266,7 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            output
+            named_functions_context
                 .placeholders
                 .entry(hash)
                 .or_default()
@@ -277,7 +277,7 @@ fn compile_fragment(
 
             // We also need to do some bookkeeping, so we can update the call,
             // in case the called function is updated.
-            output
+            named_functions_context
                 .calls_by_function
                 .entry(hash)
                 .or_default()
@@ -286,21 +286,22 @@ fn compile_fragment(
             Some(address)
         }
         Fragment::CallToHostFunction { effect_number } => {
-            let mut mapping =
-                output.source_map.map_fragment_to_instructions(location);
+            let mut mapping = named_functions_context
+                .source_map
+                .map_fragment_to_instructions(location);
 
             let address = generate_instruction(
                 Instruction::Push {
                     value: (*effect_number).into(),
                 },
-                output.instructions,
+                named_functions_context.instructions,
                 Some(&mut mapping),
             );
             generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                output.instructions,
+                named_functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
@@ -314,9 +315,9 @@ fn compile_fragment(
 
             Some(generate_instruction(
                 instruction,
-                output.instructions,
+                named_functions_context.instructions,
                 Some(
-                    &mut output
+                    &mut named_functions_context
                         .source_map
                         .map_fragment_to_instructions(location),
                 ),
@@ -352,9 +353,9 @@ fn compile_fragment(
                     Instruction::TriggerEffect {
                         effect: Effect::CompilerBug,
                     },
-                    output.instructions,
+                    named_functions_context.instructions,
                     Some(
-                        &mut output
+                        &mut named_functions_context
                             .source_map
                             .map_fragment_to_instructions(location.clone()),
                     ),
@@ -363,33 +364,45 @@ fn compile_fragment(
             // We've done what we could. Let's arrange for the anonymous
             // function to be compiled, and the placeholder instruction to be
             // replaced, at a later time.
-            output.queue_of_functions_to_compile.push_front(
-                FunctionToCompile {
+            named_functions_context
+                .queue_of_functions_to_compile
+                .push_front(FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
                     cluster: function_context.cluster.clone(),
                     address_of_instruction_to_make_anon_function,
-                },
-            );
+                });
 
             address_of_instruction_to_make_anon_function
         }
         Fragment::ResolvedBinding { name } => Some(generate_instruction(
             Instruction::BindingEvaluate { name: name.clone() },
-            output.instructions,
-            Some(&mut output.source_map.map_fragment_to_instructions(location)),
+            named_functions_context.instructions,
+            Some(
+                &mut named_functions_context
+                    .source_map
+                    .map_fragment_to_instructions(location),
+            ),
         )),
         Fragment::UnresolvedIdentifier { .. } => Some(generate_instruction(
             Instruction::TriggerEffect {
                 effect: Effect::BuildError,
             },
-            output.instructions,
-            Some(&mut output.source_map.map_fragment_to_instructions(location)),
+            named_functions_context.instructions,
+            Some(
+                &mut named_functions_context
+                    .source_map
+                    .map_fragment_to_instructions(location),
+            ),
         )),
         Fragment::Value(value) => Some(generate_instruction(
             Instruction::Push { value: *value },
-            output.instructions,
-            Some(&mut output.source_map.map_fragment_to_instructions(location)),
+            named_functions_context.instructions,
+            Some(
+                &mut named_functions_context
+                    .source_map
+                    .map_fragment_to_instructions(location),
+            ),
         )),
     }
 }
