@@ -138,7 +138,7 @@ fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
     function_context: &mut Context,
-    output: &mut compile_named_functions::Context,
+    named_functions_context: &mut compile_named_functions::Context,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -150,7 +150,7 @@ fn compile_branch_body(
                 index,
             },
             function_context.cluster,
-            output,
+            named_functions_context,
         );
         first_instruction = first_instruction.or(addr);
     }
@@ -175,8 +175,11 @@ fn compile_branch_body(
     //   compiler optimizations. I'd rather have that, instead of making
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
-    let last_instruction =
-        generate_instruction(Instruction::Return, output.instructions, None);
+    let last_instruction = generate_instruction(
+        Instruction::Return,
+        named_functions_context.instructions,
+        None,
+    );
 
     let first_instruction = first_instruction.unwrap_or(last_instruction);
 
