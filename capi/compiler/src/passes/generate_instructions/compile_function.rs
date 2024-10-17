@@ -45,7 +45,7 @@ pub fn compile_function(
             named_functions_context,
         );
 
-        runtime_function.branches.push(runtime_branch.clone());
+        runtime_function.branches.push(runtime_branch);
 
         instruction_range = {
             let [first_in_function, _last_in_function] =
