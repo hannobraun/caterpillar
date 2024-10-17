@@ -1,9 +1,10 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use capi_runtime::{Instruction, InstructionAddress, Instructions};
+use capi_runtime::{Instruction, Instructions};
 
 use crate::{
     code::{Changes, Function, NamedFunctions},
+    compiler::CallInstructionsByCalleeHash,
     hash::Hash,
     source_map::SourceMap,
 };
@@ -17,8 +18,7 @@ pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
-    pub call_instructions_by_callee_hash:
-        &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCalleeHash,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     pub recursive_function_calls_by_callee_hash:
         BTreeMap<Hash<Function>, Vec<CallToFunction>>,
@@ -31,10 +31,7 @@ pub fn compile_named_functions(
     changes: &Changes,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
-    call_instructions_by_callee_hash: &mut BTreeMap<
-        Hash<Function>,
-        Vec<InstructionAddress>,
-    >,
+    call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
     let mut context = NamedFunctionsContext {
@@ -75,6 +72,7 @@ pub fn compile_named_functions(
 
         for calling_address in context
             .call_instructions_by_callee_hash
+            .inner
             .remove(&old_hash)
             .unwrap_or_default()
         {

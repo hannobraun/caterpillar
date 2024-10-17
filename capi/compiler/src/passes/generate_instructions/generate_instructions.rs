@@ -8,6 +8,7 @@ use crate::{
         FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
         NamedFunctions,
     },
+    compiler::CallInstructionsByCalleeHash,
     hash::Hash,
     source_map::SourceMap,
 };
@@ -24,7 +25,7 @@ pub fn generate_instructions(
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
-    calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    calls_by_function: &mut CallInstructionsByCalleeHash,
     source_map: &mut SourceMap,
 ) {
     // The placeholder call into `main` is created unconditionally, regardless

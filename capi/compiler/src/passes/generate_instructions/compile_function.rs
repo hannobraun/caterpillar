@@ -230,6 +230,7 @@ fn compile_fragment(
             // in case the called function is updated.
             named_functions_context
                 .call_instructions_by_callee_hash
+                .inner
                 .entry(*hash)
                 .or_default()
                 .push(address);
@@ -289,6 +290,7 @@ fn compile_fragment(
             // in case the called function is updated.
             named_functions_context
                 .call_instructions_by_callee_hash
+                .inner
                 .entry(hash)
                 .or_default()
                 .push(address);

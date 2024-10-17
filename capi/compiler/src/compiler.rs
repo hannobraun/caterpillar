@@ -20,7 +20,7 @@ use crate::{
 pub struct Compiler {
     old_functions: Option<NamedFunctions>,
     instructions: Instructions,
-    calls_by_function: BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    calls_by_function: CallInstructionsByCalleeHash,
     source_map: SourceMap,
 }
 
@@ -58,6 +58,11 @@ impl Compiler {
             source_map: self.source_map.clone(),
         }
     }
+}
+
+#[derive(Default)]
+pub struct CallInstructionsByCalleeHash {
+    pub inner: BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
