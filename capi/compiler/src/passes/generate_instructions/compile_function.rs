@@ -16,8 +16,6 @@ use super::compile_named_functions::NamedFunctionsContext;
 
 pub struct FunctionContext<'r> {
     pub cluster: &'r Cluster,
-    pub recursive_function_calls_by_callee_hash:
-        BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
 pub fn compile_function(
@@ -31,10 +29,7 @@ pub fn compile_function(
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
-    let mut context = FunctionContext {
-        cluster: &cluster,
-        recursive_function_calls_by_callee_hash: BTreeMap::new(),
-    };
+    let mut context = FunctionContext { cluster: &cluster };
 
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
@@ -269,14 +264,6 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            function_context
-                .recursive_function_calls_by_callee_hash
-                .entry(hash)
-                .or_default()
-                .push(CallToFunction {
-                    address,
-                    is_tail_call: *is_tail_call,
-                });
             named_functions_context
                 .recursive_function_calls_by_callee_hash
                 .entry(hash)
