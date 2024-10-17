@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     code::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
-        FunctionLocation, Pattern,
+        Branch, BranchIndex, BranchLocation, Cluster, Fragment,
+        FragmentLocation, Function, FunctionLocation, Pattern,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -29,49 +29,13 @@ pub fn compile_function(
     let mut instruction_range = None;
 
     for (&index, branch) in function.branches.iter() {
-        let parameters = branch.parameters.iter().filter_map(|pattern| {
-            match pattern {
-                Pattern::Identifier { name } => Some(name),
-                Pattern::Literal { .. } => {
-                    // Literal patterns are only relevant when
-                    // selecting the branch to execute. They no
-                    // longer have meaning once the function
-                    // actually starts executing.
-                    None
-                }
-            }
-        });
-        let bindings_address =
-            compile_binding(parameters, functions_context.instructions);
-
-        let [branch_address, last_address] = compile_branch_body(
+        let (runtime_branch, [first_address, last_address]) = compile_branch(
             branch,
-            BranchLocation {
-                parent: Box::new(location.clone()),
-                index,
-            },
+            index,
+            &location,
             &cluster,
             functions_context,
         );
-
-        let first_address = bindings_address.unwrap_or(branch_address);
-
-        let runtime_branch = capi_runtime::Branch {
-            parameters: branch
-                .parameters
-                .iter()
-                .cloned()
-                .map(|pattern| match pattern {
-                    Pattern::Identifier { name } => {
-                        capi_runtime::Pattern::Identifier { name }
-                    }
-                    Pattern::Literal { value } => {
-                        capi_runtime::Pattern::Literal { value }
-                    }
-                })
-                .collect(),
-            start: first_address,
-        };
 
         functions_context
             .functions
@@ -110,6 +74,60 @@ pub fn compile_function(
             This is a bug.",
         );
     }
+}
+
+fn compile_branch(
+    branch: &Branch,
+    index: BranchIndex,
+    location: &FunctionLocation,
+    cluster: &Cluster,
+    functions_context: &mut compile_named_functions::Context,
+) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
+    let parameters = branch.parameters.iter().filter_map(|pattern| {
+        match pattern {
+            Pattern::Identifier { name } => Some(name),
+            Pattern::Literal { .. } => {
+                // Literal patterns are only relevant when
+                // selecting the branch to execute. They no
+                // longer have meaning once the function
+                // actually starts executing.
+                None
+            }
+        }
+    });
+    let bindings_address =
+        compile_binding(parameters, functions_context.instructions);
+
+    let [branch_address, last_address] = compile_branch_body(
+        branch,
+        BranchLocation {
+            parent: Box::new(location.clone()),
+            index,
+        },
+        cluster,
+        functions_context,
+    );
+
+    let first_address = bindings_address.unwrap_or(branch_address);
+
+    let branch = capi_runtime::Branch {
+        parameters: branch
+            .parameters
+            .iter()
+            .cloned()
+            .map(|pattern| match pattern {
+                Pattern::Identifier { name } => {
+                    capi_runtime::Pattern::Identifier { name }
+                }
+                Pattern::Literal { value } => {
+                    capi_runtime::Pattern::Literal { value }
+                }
+            })
+            .collect(),
+        start: first_address,
+    };
+
+    (branch, [first_address, last_address])
 }
 
 fn compile_branch_body(
