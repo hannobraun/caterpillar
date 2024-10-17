@@ -29,7 +29,7 @@ pub fn compile_function(
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
-    let context = Context { cluster: &cluster };
+    let mut context = Context { cluster: &cluster };
 
     let mut branches = Vec::new();
     let mut instruction_range = None;
@@ -41,7 +41,7 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            context.cluster,
+            &mut context,
             named_functions_context,
         );
 
@@ -87,7 +87,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
-    cluster: &Cluster,
+    function_context: &mut Context,
     named_functions_context: &mut compile_named_functions::Context,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
@@ -105,8 +105,12 @@ fn compile_branch(
     let bindings_address =
         compile_binding(parameters, named_functions_context.instructions);
 
-    let [branch_address, last_address] =
-        compile_branch_body(branch, location, cluster, named_functions_context);
+    let [branch_address, last_address] = compile_branch_body(
+        branch,
+        location,
+        function_context.cluster,
+        named_functions_context,
+    );
 
     let first_address = bindings_address.unwrap_or(branch_address);
 
