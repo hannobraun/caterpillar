@@ -110,7 +110,6 @@ pub fn compile_function(
     }
 }
 
-#[allow(clippy::too_many_arguments)]
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
