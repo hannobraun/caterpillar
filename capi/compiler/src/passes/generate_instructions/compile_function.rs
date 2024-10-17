@@ -32,7 +32,6 @@ pub fn compile_function(
     let mut context = FunctionContext { cluster: &cluster };
 
     let mut runtime_function = capi_runtime::Function::default();
-    let mut branches = Vec::new();
     let mut instruction_range = None;
 
     for (&index, branch) in function.branches.iter() {
@@ -47,7 +46,6 @@ pub fn compile_function(
         );
 
         runtime_function.branches.push(runtime_branch.clone());
-        branches.push(runtime_branch);
 
         instruction_range = {
             let [first_in_function, _last_in_function] =
@@ -59,7 +57,7 @@ pub fn compile_function(
 
     named_functions_context
         .functions
-        .insert(Hash::new(&function), runtime_function);
+        .insert(Hash::new(&function), runtime_function.clone());
 
     if let Some(instruction_range) = instruction_range {
         named_functions_context
@@ -71,7 +69,7 @@ pub fn compile_function(
         named_functions_context.instructions.replace(
             &address,
             Instruction::MakeAnonymousFunction {
-                branches,
+                branches: runtime_function.branches,
                 environment: function.environment,
             },
         );
