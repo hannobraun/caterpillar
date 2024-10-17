@@ -217,7 +217,7 @@ fn compile_fragment(
                     address,
                     is_tail_call: *is_tail_call,
                 },
-                &mut named_functions_context.functions,
+                &mut named_functions_context.compiled_functions_by_hash,
                 named_functions_context.instructions,
             );
 

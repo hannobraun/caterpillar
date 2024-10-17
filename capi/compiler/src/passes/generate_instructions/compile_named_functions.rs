@@ -21,7 +21,8 @@ pub struct NamedFunctionsContext<'r> {
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     pub placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-    pub functions: BTreeMap<Hash<Function>, capi_runtime::Function>,
+    pub compiled_functions_by_hash:
+        BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
 
 pub fn compile_named_functions(
@@ -39,7 +40,7 @@ pub fn compile_named_functions(
         calls_by_function,
         queue_of_functions_to_compile,
         placeholders: BTreeMap::new(),
-        functions: BTreeMap::new(),
+        compiled_functions_by_hash: BTreeMap::new(),
     };
 
     while let Some(function_to_compile) =
@@ -48,7 +49,9 @@ pub fn compile_named_functions(
         let hash = Hash::new(&function_to_compile.function);
         let runtime_function =
             compile_function(function_to_compile, &mut context);
-        context.functions.insert(hash, runtime_function);
+        context
+            .compiled_functions_by_hash
+            .insert(hash, runtime_function);
     }
 
     for (hash, calls) in &context.placeholders {
@@ -56,7 +59,7 @@ pub fn compile_named_functions(
             compile_call_to_function(
                 hash,
                 call,
-                &mut context.functions,
+                &mut context.compiled_functions_by_hash,
                 context.instructions,
             );
         }
@@ -84,7 +87,10 @@ pub fn compile_named_functions(
                 );
             };
 
-            let function = context.functions.get(&new_hash).expect(
+            let function = context
+                .compiled_functions_by_hash
+                .get(&new_hash)
+                .expect(
                 "New function referenced in update should have been compiled; \
                 is expected to exist.",
             );
@@ -99,5 +105,5 @@ pub fn compile_named_functions(
         }
     }
 
-    context.functions
+    context.compiled_functions_by_hash
 }
