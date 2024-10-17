@@ -49,7 +49,7 @@ pub fn compile_function(
             .functions
             .entry(Hash::new(&function))
             .or_default()
-            .push((branch.parameters.clone(), first_address));
+            .push(runtime_branch.clone());
         branches.push(runtime_branch);
 
         instruction_range = {
@@ -410,10 +410,7 @@ fn compile_fragment(
 pub fn compile_call_to_function(
     hash: &Hash<Function>,
     call: &CallToFunction,
-    functions: &mut BTreeMap<
-        Hash<Function>,
-        Vec<(Vec<Pattern>, InstructionAddress)>,
-    >,
+    functions: &mut BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
     instructions: &mut Instructions,
 ) {
     let Some(function) = functions.get(hash) else {
@@ -429,28 +426,7 @@ pub fn compile_call_to_function(
     };
 
     let function = capi_runtime::Function {
-        branches: function
-            .iter()
-            .map(|(parameters, address)| {
-                let parameters = parameters
-                    .iter()
-                    .cloned()
-                    .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => {
-                            capi_runtime::Pattern::Identifier { name }
-                        }
-                        Pattern::Literal { value } => {
-                            capi_runtime::Pattern::Literal { value }
-                        }
-                    })
-                    .collect();
-
-                capi_runtime::Branch {
-                    parameters,
-                    start: *address,
-                }
-            })
-            .collect(),
+        branches: function.clone(),
         environment: BTreeMap::new(),
     };
 

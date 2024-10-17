@@ -6,7 +6,7 @@ use crate::{
     code::{
         CallGraph, Changes, Function, FunctionInUpdate,
         FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
-        NamedFunctions, Pattern,
+        NamedFunctions,
     },
     hash::Hash,
     source_map::SourceMap,
@@ -113,10 +113,7 @@ fn compile_call_to_main(
     call_to_main: InstructionAddress,
     named_functions: &NamedFunctions,
     instructions: &mut Instructions,
-    functions: &mut BTreeMap<
-        Hash<Function>,
-        Vec<(Vec<Pattern>, InstructionAddress)>,
-    >,
+    functions: &mut BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
 ) {
     if let Some(main) = named_functions.find_by_name("main") {
         compile_call_to_function(

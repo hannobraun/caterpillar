@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, VecDeque};
 use capi_runtime::{Instruction, InstructionAddress, Instructions};
 
 use crate::{
-    code::{Changes, Function, NamedFunctions, Pattern},
+    code::{Changes, Function, NamedFunctions},
     hash::Hash,
     source_map::SourceMap,
 };
@@ -21,8 +21,7 @@ pub struct NamedFunctionsContext<'r> {
         &'r mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
     pub placeholders: BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-    pub functions:
-        BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>>,
+    pub functions: BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>>,
 }
 
 pub fn compile_named_functions(
@@ -32,7 +31,7 @@ pub fn compile_named_functions(
     source_map: &mut SourceMap,
     calls_by_function: &mut BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
     queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-) -> BTreeMap<Hash<Function>, Vec<(Vec<Pattern>, InstructionAddress)>> {
+) -> BTreeMap<Hash<Function>, Vec<capi_runtime::Branch>> {
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
@@ -87,28 +86,7 @@ pub fn compile_named_functions(
                 is expected to exist.",
             );
             let function = capi_runtime::Function {
-                branches: function
-                    .iter()
-                    .map(|(parameters, address)| {
-                        let parameters = parameters
-                            .iter()
-                            .cloned()
-                            .map(|pattern| match pattern {
-                                Pattern::Identifier { name } => {
-                                    capi_runtime::Pattern::Identifier { name }
-                                }
-                                Pattern::Literal { value } => {
-                                    capi_runtime::Pattern::Literal { value }
-                                }
-                            })
-                            .collect();
-
-                        capi_runtime::Branch {
-                            parameters,
-                            start: *address,
-                        }
-                    })
-                    .collect(),
+                branches: function.clone(),
                 environment: BTreeMap::new(),
             };
 
