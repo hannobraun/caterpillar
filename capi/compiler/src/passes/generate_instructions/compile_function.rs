@@ -14,7 +14,7 @@ use crate::{
 
 use super::compile_named_functions;
 
-pub struct Context<'r> {
+pub struct FunctionContext<'r> {
     pub cluster: &'r Cluster,
 }
 
@@ -29,7 +29,7 @@ pub fn compile_function(
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
-    let mut context = Context { cluster: &cluster };
+    let mut context = FunctionContext { cluster: &cluster };
 
     let mut branches = Vec::new();
     let mut instruction_range = None;
@@ -87,7 +87,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
-    function_context: &mut Context,
+    function_context: &mut FunctionContext,
     named_functions_context: &mut compile_named_functions::Context,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
@@ -137,7 +137,7 @@ fn compile_branch(
 fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
-    function_context: &mut Context,
+    function_context: &mut FunctionContext,
     named_functions_context: &mut compile_named_functions::Context,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
@@ -190,7 +190,7 @@ fn compile_branch_body(
 fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
-    function_context: &mut Context,
+    function_context: &mut FunctionContext,
     named_functions_context: &mut compile_named_functions::Context,
 ) -> Option<InstructionAddress> {
     match &fragment {
