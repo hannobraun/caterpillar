@@ -14,6 +14,10 @@ use crate::{
 
 use super::compile_named_functions;
 
+pub struct Context<'r> {
+    pub cluster: &'r Cluster,
+}
+
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
     named_functions_context: &mut compile_named_functions::Context,
@@ -25,6 +29,8 @@ pub fn compile_function(
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
+    let context = Context { cluster: &cluster };
+
     let mut branches = Vec::new();
     let mut instruction_range = None;
 
@@ -35,7 +41,7 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            &cluster,
+            context.cluster,
             named_functions_context,
         );
 
