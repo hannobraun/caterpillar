@@ -20,7 +20,7 @@ use crate::{
 pub struct Compiler {
     old_functions: Option<NamedFunctions>,
     instructions: Instructions,
-    calls_by_function: CallInstructionsByCallee,
+    call_instructions_by_callee: CallInstructionsByCallee,
     source_map: SourceMap,
 }
 
@@ -47,7 +47,7 @@ impl Compiler {
             &call_graph,
             &changes,
             &mut self.instructions,
-            &mut self.calls_by_function,
+            &mut self.call_instructions_by_callee,
             &mut self.source_map,
         );
 
