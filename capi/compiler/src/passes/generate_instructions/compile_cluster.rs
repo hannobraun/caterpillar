@@ -32,7 +32,7 @@ pub struct ClusterContext {
     /// instruction is emitted. An entry is also added to this map, so the
     /// placeholder instruction can be replaced with the real call, once all
     /// functions have been compiled.
-    pub recursive_function_calls_by_callee:
+    pub recursive_calls_by_callee:
         BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
@@ -43,7 +43,7 @@ pub fn compile_cluster(
 ) {
     let mut context = ClusterContext {
         queue_of_functions_to_compile: VecDeque::new(),
-        recursive_function_calls_by_callee: BTreeMap::new(),
+        recursive_calls_by_callee: BTreeMap::new(),
     };
 
     seed_queue_of_functions_to_compile(
@@ -66,7 +66,7 @@ pub fn compile_cluster(
             .insert(hash, runtime_function);
     }
 
-    for (hash, calls) in &context.recursive_function_calls_by_callee {
+    for (hash, calls) in &context.recursive_calls_by_callee {
         for call in calls {
             compile_call_to_function(
                 hash,

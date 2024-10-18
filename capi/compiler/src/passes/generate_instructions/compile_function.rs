@@ -274,7 +274,7 @@ fn compile_fragment(
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
             cluster_context
-                .recursive_function_calls_by_callee
+                .recursive_calls_by_callee
                 .entry(hash)
                 .or_default()
                 .push(CallToFunction {
