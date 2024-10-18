@@ -212,8 +212,12 @@ fn compile_fragment(
                 ),
             );
 
-            // We also need to do some bookkeeping, so we can update the call,
-            // in case the called function is updated.
+            // For now, we're done with this call. But the function we're
+            // calling might get updated in the future. When that happens, the
+            // compiler wants to know about all calls to the function, to update
+            // them.
+            //
+            // Let's make sure that information is going to be available.
             named_functions_context
                 .call_instructions_by_callee_hash
                 .inner
@@ -263,8 +267,12 @@ fn compile_fragment(
                     is_tail_call,
                 });
 
-            // We also need to do some bookkeeping, so we can update the call,
-            // in case the called function is updated.
+            // For now, we're done with this call. But the function we're
+            // calling might get updated in the future. When that happens, the
+            // compiler wants to know about all calls to the function, to update
+            // them.
+            //
+            // Let's make sure that information is going to be available.
             named_functions_context
                 .call_instructions_by_callee_hash
                 .inner
