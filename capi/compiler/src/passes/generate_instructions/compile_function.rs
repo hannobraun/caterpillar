@@ -300,7 +300,7 @@ fn compile_fragment(
             intrinsic,
             is_tail_call,
         } => {
-            let address = intrinsic_to_instruction(
+            let address = compile_intrinsic(
                 &intrinsic,
                 is_tail_call,
                 named_functions_context.instructions,
@@ -402,7 +402,7 @@ pub fn compile_call_to_function(
     );
 }
 
-fn intrinsic_to_instruction(
+fn compile_intrinsic(
     intrinsic: &IntrinsicFunction,
     is_tail_call: bool,
     instructions: &mut Instructions,
