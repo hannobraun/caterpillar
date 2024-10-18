@@ -354,23 +354,32 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::ResolvedBinding { name } => Some(generate_instruction(
-            Instruction::BindingEvaluate { name: name.clone() },
-            named_functions_context.instructions,
-            Some(&mut mapping),
-        )),
-        Fragment::UnresolvedIdentifier { .. } => Some(generate_instruction(
-            Instruction::TriggerEffect {
-                effect: Effect::BuildError,
-            },
-            named_functions_context.instructions,
-            Some(&mut mapping),
-        )),
-        Fragment::Value(value) => Some(generate_instruction(
-            Instruction::Push { value },
-            named_functions_context.instructions,
-            Some(&mut mapping),
-        )),
+        Fragment::ResolvedBinding { name } => {
+            let address = generate_instruction(
+                Instruction::BindingEvaluate { name: name.clone() },
+                named_functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
+        Fragment::UnresolvedIdentifier { .. } => {
+            let address = generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::BuildError,
+                },
+                named_functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
+        Fragment::Value(value) => {
+            let address = generate_instruction(
+                Instruction::Push { value },
+                named_functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
     }
 }
 
