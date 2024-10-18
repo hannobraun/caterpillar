@@ -9,6 +9,11 @@ pub struct CallGraph {
 }
 
 impl CallGraph {
+    /// # Iterate over the function clusters
+    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
+        self.clusters.iter()
+    }
+
     /// # Iterate over all named functions, from the leaves up
     ///
     /// Guarantees that any function that is yielded by the iterator only has
@@ -33,11 +38,6 @@ impl CallGraph {
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
-    }
-
-    /// # Iterate over the function clusters
-    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
-        self.clusters.iter()
     }
 }
 
