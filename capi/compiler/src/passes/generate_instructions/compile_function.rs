@@ -28,9 +28,9 @@ pub fn compile_function(
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
-    for (&index, branch) in function.branches.iter() {
+    for (index, branch) in function.branches.into_iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
-            branch,
+            &branch,
             BranchLocation {
                 parent: Box::new(location.clone()),
                 index,
