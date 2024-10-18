@@ -15,31 +15,35 @@ use super::{
 pub fn compile_cluster(
     cluster: &Cluster,
     changes: &Changes,
-    context: &mut NamedFunctionsContext,
+    named_functions_context: &mut NamedFunctionsContext,
 ) {
     seed_queue_of_functions_to_compile(
-        &mut context.queue_of_functions_to_compile,
+        &mut named_functions_context.queue_of_functions_to_compile,
         cluster,
         changes,
     );
 
-    while let Some(function_to_compile) =
-        context.queue_of_functions_to_compile.pop_front()
+    while let Some(function_to_compile) = named_functions_context
+        .queue_of_functions_to_compile
+        .pop_front()
     {
         let hash = Hash::new(&function_to_compile.function);
-        let runtime_function = compile_function(function_to_compile, context);
-        context
+        let runtime_function =
+            compile_function(function_to_compile, named_functions_context);
+        named_functions_context
             .compiled_functions_by_hash
             .insert(hash, runtime_function);
     }
 
-    for (hash, calls) in &context.recursive_function_calls_by_callee_hash {
+    for (hash, calls) in
+        &named_functions_context.recursive_function_calls_by_callee_hash
+    {
         for call in calls {
             compile_call_to_function(
                 hash,
                 call,
-                &mut context.compiled_functions_by_hash,
-                context.instructions,
+                &mut named_functions_context.compiled_functions_by_hash,
+                named_functions_context.instructions,
             );
         }
     }
