@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::{fmt, marker::PhantomData};
 
 #[derive(
     Debug,
@@ -35,3 +35,13 @@ impl<T> Clone for Hash<T> {
 }
 
 impl<T> Copy for Hash<T> {}
+
+impl<T> fmt::Display for Hash<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for b in &self.hash {
+            write!(f, "{b:x}")?;
+        }
+
+        writeln!(f)
+    }
+}
