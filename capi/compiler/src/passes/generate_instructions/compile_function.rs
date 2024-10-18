@@ -30,7 +30,7 @@ pub fn compile_function(
 
     for (index, branch) in function.branches.into_iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
-            &branch,
+            branch,
             BranchLocation {
                 parent: Box::new(location.clone()),
                 index,
@@ -77,7 +77,7 @@ pub fn compile_function(
 }
 
 fn compile_branch(
-    branch: &Branch,
+    branch: Branch,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -99,7 +99,7 @@ fn compile_branch(
         compile_binding(parameters, named_functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
-        branch,
+        &branch,
         location,
         cluster,
         cluster_context,
