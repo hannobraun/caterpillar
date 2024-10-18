@@ -51,14 +51,7 @@ pub fn compile_named_functions(
     source_map: &mut SourceMap,
     call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
-    let mut queue_of_functions_to_compile = VecDeque::new();
-
-    let named_functions_to_compile = gather_named_functions_to_compile(changes);
-    seed_queue_of_functions_to_compile(
-        &mut queue_of_functions_to_compile,
-        named_functions_to_compile,
-        call_graph,
-    );
+    let queue_of_functions_to_compile = VecDeque::new();
 
     let mut context = NamedFunctionsContext {
         named_functions,
@@ -69,6 +62,13 @@ pub fn compile_named_functions(
         recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
     };
+
+    let named_functions_to_compile = gather_named_functions_to_compile(changes);
+    seed_queue_of_functions_to_compile(
+        &mut context.queue_of_functions_to_compile,
+        named_functions_to_compile,
+        call_graph,
+    );
 
     while let Some(function_to_compile) =
         context.queue_of_functions_to_compile.pop_front()
