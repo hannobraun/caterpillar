@@ -219,7 +219,7 @@ fn compile_fragment(
             //
             // Let's make sure that information is going to be available.
             named_functions_context
-                .call_instructions_by_callee_hash
+                .call_instructions_by_callee
                 .inner
                 .entry(hash)
                 .or_default()
@@ -274,7 +274,7 @@ fn compile_fragment(
             //
             // Let's make sure that information is going to be available.
             named_functions_context
-                .call_instructions_by_callee_hash
+                .call_instructions_by_callee
                 .inner
                 .entry(hash)
                 .or_default()

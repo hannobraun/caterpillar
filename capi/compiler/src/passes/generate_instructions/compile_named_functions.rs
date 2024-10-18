@@ -15,7 +15,7 @@ pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
-    pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCallee,
+    pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
     pub compiled_functions_by_hash:
         BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
@@ -32,7 +32,7 @@ pub fn compile_named_functions(
         named_functions,
         instructions,
         source_map,
-        call_instructions_by_callee_hash: call_instructions_by_callee,
+        call_instructions_by_callee,
         compiled_functions_by_hash: BTreeMap::new(),
     };
 
@@ -45,7 +45,7 @@ pub fn compile_named_functions(
         let new_hash = Hash::new(&update.new.function);
 
         for calling_address in context
-            .call_instructions_by_callee_hash
+            .call_instructions_by_callee
             .inner
             .remove(&old_hash)
             .unwrap_or_default()
