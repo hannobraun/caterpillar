@@ -19,13 +19,13 @@ use super::{
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
+    cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> capi_runtime::Function {
     let FunctionToCompile {
         function,
         location,
-        cluster,
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
@@ -39,7 +39,7 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            &cluster,
+            cluster,
             cluster_context,
             named_functions_context,
         );
@@ -369,7 +369,6 @@ fn compile_fragment(
                 FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
-                    cluster: cluster.clone(),
                     address_of_instruction_to_make_anon_function,
                 },
             );
@@ -512,7 +511,6 @@ pub struct CallToFunction {
 pub struct FunctionToCompile {
     pub function: Function,
     pub location: FunctionLocation,
-    pub cluster: Cluster,
     pub address_of_instruction_to_make_anon_function:
         Option<InstructionAddress>,
 }

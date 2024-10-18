@@ -58,6 +58,7 @@ pub fn compile_cluster(
         let hash = Hash::new(&function_to_compile.function);
         let runtime_function = compile_function(
             function_to_compile,
+            cluster,
             &mut context,
             named_functions_context,
         );
@@ -89,7 +90,6 @@ fn seed_queue_of_functions_to_compile(
             Some(FunctionToCompile {
                 function: function.clone(),
                 location: FunctionLocation::NamedFunction { index },
-                cluster: cluster.clone(),
                 address_of_instruction_to_make_anon_function: None,
             })
         });
