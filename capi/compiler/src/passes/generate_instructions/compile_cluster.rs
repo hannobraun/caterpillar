@@ -1,13 +1,14 @@
-use std::collections::VecDeque;
+use std::collections::{BTreeMap, VecDeque};
 
 use crate::{
-    code::{Changes, Cluster, FunctionLocation},
+    code::{Changes, Cluster, Function, FunctionLocation},
     hash::Hash,
 };
 
 use super::{
     compile_function::{
-        compile_call_to_function, compile_function, FunctionToCompile,
+        compile_call_to_function, compile_function, CallToFunction,
+        FunctionToCompile,
     },
     compile_named_functions::NamedFunctionsContext,
 };
@@ -19,6 +20,20 @@ pub struct ClusterContext {
     /// new or have been updated. But any anonymous functions encountered while
     /// compiling those, will be added later.
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
+
+    /// # Track calls to recursive functions by hash of called function
+    ///
+    /// When a recursive call is encountered, not all branches of the callee
+    /// (which might be the calling function itself, or another function in the
+    /// same cluster) might be compiled yet. But they're needed to compile the
+    /// call.
+    ///
+    /// So instead of compiling the call right then and there, a placeholder
+    /// instruction is emitted instead. An entry is also added to this map, so
+    /// the placeholder instruction can be replaced with the real call, once all
+    /// functions have been compiled.
+    pub recursive_function_calls_by_callee_hash:
+        BTreeMap<Hash<Function>, Vec<CallToFunction>>,
 }
 
 pub fn compile_cluster(
@@ -28,6 +43,7 @@ pub fn compile_cluster(
 ) {
     let mut context = ClusterContext {
         queue_of_functions_to_compile: VecDeque::new(),
+        recursive_function_calls_by_callee_hash: BTreeMap::new(),
     };
 
     seed_queue_of_functions_to_compile(
@@ -50,9 +66,7 @@ pub fn compile_cluster(
             .insert(hash, runtime_function);
     }
 
-    for (hash, calls) in
-        &named_functions_context.recursive_function_calls_by_callee_hash
-    {
+    for (hash, calls) in &context.recursive_function_calls_by_callee_hash {
         for call in calls {
             compile_call_to_function(
                 hash,

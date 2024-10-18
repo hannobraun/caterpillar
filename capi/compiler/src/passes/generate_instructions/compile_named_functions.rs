@@ -9,30 +9,13 @@ use crate::{
     source_map::SourceMap,
 };
 
-use super::{
-    compile_cluster::compile_cluster, compile_function::CallToFunction,
-};
+use super::compile_cluster::compile_cluster;
 
 pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCalleeHash,
-
-    /// # Track calls to recursive functions by hash of called function
-    ///
-    /// When a recursive call is encountered, not all branches of the callee
-    /// (which might be the calling function itself, or another function in the
-    /// same cluster) might be compiled yet. But they're needed to compile the
-    /// call.
-    ///
-    /// So instead of compiling the call right then and there, a placeholder
-    /// instruction is emitted instead. An entry is also added to this map, so
-    /// the placeholder instruction can be replaced with the real call, once all
-    /// functions have been compiled.
-    pub recursive_function_calls_by_callee_hash:
-        BTreeMap<Hash<Function>, Vec<CallToFunction>>,
-
     pub compiled_functions_by_hash:
         BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
@@ -50,7 +33,6 @@ pub fn compile_named_functions(
         instructions,
         source_map,
         call_instructions_by_callee_hash,
-        recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
     };
 

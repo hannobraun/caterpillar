@@ -273,7 +273,7 @@ fn compile_fragment(
             // We can't leave it at that, however. We need to make sure this
             // placeholder actually gets replaced later, and we're doing that by
             // adding it to this list.
-            named_functions_context
+            cluster_context
                 .recursive_function_calls_by_callee_hash
                 .entry(hash)
                 .or_default()
