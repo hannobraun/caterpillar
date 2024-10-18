@@ -179,7 +179,6 @@ fn handle_update_that_makes_function_smaller() {
 }
 
 #[test]
-#[should_panic] // known bug; no issue for tracking it yet
 fn compile_call_to_function_that_has_not_been_updated() {
     // The compiler only emits new instructions for compiled and updated
     // functions. To make this work, it needs to preserve some of the

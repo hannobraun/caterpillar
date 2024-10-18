@@ -21,6 +21,8 @@ pub struct Compiler {
     old_functions: Option<NamedFunctions>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
+    compiled_functions_by_hash:
+        BTreeMap<Hash<Function>, capi_runtime::Function>,
     source_map: SourceMap,
 }
 
@@ -48,6 +50,7 @@ impl Compiler {
             &changes,
             &mut self.instructions,
             &mut self.call_instructions_by_callee,
+            &mut self.compiled_functions_by_hash,
             &mut self.source_map,
         );
 
