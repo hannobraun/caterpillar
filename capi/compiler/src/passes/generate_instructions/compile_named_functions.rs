@@ -4,9 +4,8 @@ use capi_runtime::{Instruction, Instructions};
 
 use crate::{
     code::{
-        CallGraph, Changes, Function, FunctionInUpdate,
-        FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
-        NamedFunctions,
+        CallGraph, Changes, Function, FunctionInUpdate, FunctionLocation,
+        FunctionUpdate, NamedFunctions,
     },
     compiler::CallInstructionsByCalleeHash,
     hash::Hash,
@@ -61,10 +60,9 @@ pub fn compile_named_functions(
         compiled_functions_by_hash: BTreeMap::new(),
     };
 
-    let named_functions_to_compile = gather_named_functions_to_compile(changes);
     seed_queue_of_functions_to_compile(
         &mut context.queue_of_functions_to_compile,
-        named_functions_to_compile,
+        changes,
         call_graph,
     );
 
@@ -134,10 +132,12 @@ pub fn compile_named_functions(
     context.compiled_functions_by_hash
 }
 
-fn gather_named_functions_to_compile(
+fn seed_queue_of_functions_to_compile(
+    queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     changes: &Changes,
-) -> BTreeMap<&FunctionIndexInRootContext, &Function> {
-    changes
+    call_graph: &CallGraph,
+) {
+    let mut named_functions_to_compile = changes
         .added
         .iter()
         .chain(changes.updated.iter().map(
@@ -146,17 +146,8 @@ fn gather_named_functions_to_compile(
                  ..
              }| (index, function),
         ))
-        .collect::<BTreeMap<_, _>>()
-}
+        .collect::<BTreeMap<_, _>>();
 
-fn seed_queue_of_functions_to_compile(
-    queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
-    mut named_functions_to_compile: BTreeMap<
-        &FunctionIndexInRootContext,
-        &Function,
-    >,
-    call_graph: &CallGraph,
-) {
     queue_of_functions_to_compile.extend(
         call_graph
             .functions_from_leaves()
