@@ -9,7 +9,11 @@ pub struct CallGraph {
 }
 
 impl CallGraph {
-    /// # Iterate over the function clusters
+    /// # Iterate over the function clusters, from the leaves up
+    ///
+    /// Guarantees that any cluster that is yielded by the iterator only has
+    /// non-recursive calls to functions in clusters that have already been
+    /// yielded before.
     pub fn clusters_from_leaves(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
