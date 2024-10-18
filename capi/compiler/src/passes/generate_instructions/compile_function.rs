@@ -231,12 +231,16 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let function_index_in_root_context = cluster.functions[&index];
-            let called_function = named_functions_context
-                .named_functions
-                .get(&function_index_in_root_context)
-                .expect("Function referred to from cluster must exist.");
-            let hash = Hash::new(called_function);
+            let hash = {
+                let function_index_in_root_context = cluster.functions[&index];
+
+                let called_function = named_functions_context
+                    .named_functions
+                    .get(&function_index_in_root_context)
+                    .expect("Function referred to from cluster must exist.");
+
+                Hash::new(called_function)
+            };
 
             // We know that this expression refers to a user-defined function,
             // but we might not have compiled that function yet.
