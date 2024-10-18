@@ -300,14 +300,13 @@ fn compile_fragment(
             intrinsic,
             is_tail_call,
         } => {
-            let instruction =
-                intrinsic_to_instruction(&intrinsic, is_tail_call);
-
-            Some(generate_instruction(
-                instruction,
+            let address = intrinsic_to_instruction(
+                &intrinsic,
+                is_tail_call,
                 named_functions_context.instructions,
-                Some(&mut mapping),
-            ))
+                &mut mapping,
+            );
+            Some(address)
         }
         Fragment::Comment { .. } => None,
         Fragment::Function { function } => {
@@ -406,8 +405,10 @@ pub fn compile_call_to_function(
 fn intrinsic_to_instruction(
     intrinsic: &IntrinsicFunction,
     is_tail_call: bool,
-) -> Instruction {
-    match intrinsic {
+    instructions: &mut Instructions,
+    mapping: &mut Mapping,
+) -> InstructionAddress {
+    let instruction = match intrinsic {
         IntrinsicFunction::AddS8 => Instruction::AddS8,
         IntrinsicFunction::AddS32 => Instruction::AddS32,
         IntrinsicFunction::AddU8 => Instruction::AddU8,
@@ -435,7 +436,9 @@ fn intrinsic_to_instruction(
         IntrinsicFunction::SubS32 => Instruction::SubS32,
         IntrinsicFunction::SubU8 => Instruction::SubU8,
         IntrinsicFunction::SubU8Wrap => Instruction::SubU8Wrap,
-    }
+    };
+
+    generate_instruction(instruction, instructions, Some(mapping))
 }
 
 fn compile_binding<'r, N>(
