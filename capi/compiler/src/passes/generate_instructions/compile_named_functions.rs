@@ -3,7 +3,11 @@ use std::collections::{BTreeMap, VecDeque};
 use capi_runtime::{Instruction, Instructions};
 
 use crate::{
-    code::{Changes, Function, NamedFunctions},
+    code::{
+        CallGraph, Changes, Function, FunctionInUpdate,
+        FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
+        NamedFunctions,
+    },
     compiler::CallInstructionsByCalleeHash,
     hash::Hash,
     source_map::SourceMap,
@@ -42,11 +46,17 @@ pub struct NamedFunctionsContext<'r> {
 pub fn compile_named_functions(
     named_functions: &NamedFunctions,
     changes: &Changes,
+    call_graph: &CallGraph,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
-    queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
+    let named_functions_to_compile = gather_named_functions_to_compile(changes);
+    let queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
+        named_functions_to_compile,
+        call_graph,
+    );
+
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
@@ -121,4 +131,40 @@ pub fn compile_named_functions(
     }
 
     context.compiled_functions_by_hash
+}
+
+fn gather_named_functions_to_compile(
+    changes: &Changes,
+) -> BTreeMap<&FunctionIndexInRootContext, &Function> {
+    changes
+        .added
+        .iter()
+        .chain(changes.updated.iter().map(
+            |FunctionUpdate {
+                 new: FunctionInUpdate { index, function },
+                 ..
+             }| (index, function),
+        ))
+        .collect::<BTreeMap<_, _>>()
+}
+
+fn seed_queue_of_functions_to_compile(
+    mut named_functions_to_compile: BTreeMap<
+        &FunctionIndexInRootContext,
+        &Function,
+    >,
+    call_graph: &CallGraph,
+) -> VecDeque<FunctionToCompile> {
+    call_graph
+        .functions_from_leaves()
+        .filter_map(|(&index, cluster)| {
+            let function = named_functions_to_compile.remove(&index)?;
+            Some(FunctionToCompile {
+                function: function.clone(),
+                location: FunctionLocation::NamedFunction { index },
+                cluster: cluster.clone(),
+                address_of_instruction_to_make_anon_function: None,
+            })
+        })
+        .collect::<VecDeque<_>>()
 }

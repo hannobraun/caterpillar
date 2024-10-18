@@ -1,22 +1,16 @@
-use std::collections::{BTreeMap, VecDeque};
+use std::collections::BTreeMap;
 
 use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
-    code::{
-        CallGraph, Changes, Function, FunctionInUpdate,
-        FunctionIndexInRootContext, FunctionLocation, FunctionUpdate,
-        NamedFunctions,
-    },
+    code::{CallGraph, Changes, Function, NamedFunctions},
     compiler::CallInstructionsByCalleeHash,
     hash::Hash,
     source_map::SourceMap,
 };
 
 use super::{
-    compile_function::{
-        compile_call_to_function, CallToFunction, FunctionToCompile,
-    },
+    compile_function::{compile_call_to_function, CallToFunction},
     compile_named_functions::compile_named_functions,
 };
 
@@ -41,18 +35,13 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let named_functions_to_compile = gather_named_functions_to_compile(changes);
-    let queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
-        named_functions_to_compile,
-        call_graph,
-    );
     let mut functions = compile_named_functions(
         named_functions,
         changes,
+        call_graph,
         instructions,
         source_map,
         call_instructions_by_callee_hash,
-        queue_of_functions_to_compile,
     );
     compile_call_to_main(
         call_to_main,
@@ -72,42 +61,6 @@ fn create_placeholder_for_call_to_main(
     instructions.push(Instruction::TriggerEffect {
         effect: Effect::BuildError,
     })
-}
-
-fn gather_named_functions_to_compile(
-    changes: &Changes,
-) -> BTreeMap<&FunctionIndexInRootContext, &Function> {
-    changes
-        .added
-        .iter()
-        .chain(changes.updated.iter().map(
-            |FunctionUpdate {
-                 new: FunctionInUpdate { index, function },
-                 ..
-             }| (index, function),
-        ))
-        .collect::<BTreeMap<_, _>>()
-}
-
-fn seed_queue_of_functions_to_compile(
-    mut named_functions_to_compile: BTreeMap<
-        &FunctionIndexInRootContext,
-        &Function,
-    >,
-    call_graph: &CallGraph,
-) -> VecDeque<FunctionToCompile> {
-    call_graph
-        .functions_from_leaves()
-        .filter_map(|(&index, cluster)| {
-            let function = named_functions_to_compile.remove(&index)?;
-            Some(FunctionToCompile {
-                function: function.clone(),
-                location: FunctionLocation::NamedFunction { index },
-                cluster: cluster.clone(),
-                address_of_instruction_to_make_anon_function: None,
-            })
-        })
-        .collect::<VecDeque<_>>()
 }
 
 fn compile_call_to_main(
