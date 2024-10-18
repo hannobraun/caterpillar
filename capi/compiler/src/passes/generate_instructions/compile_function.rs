@@ -242,11 +242,12 @@ fn compile_fragment(
                 Hash::new(called_function)
             };
 
-            // We know that this expression refers to a user-defined function,
-            // but we might not have compiled that function yet.
+            // For recursive calls, we can't generally assume that the called
+            // function has been compiled yet. It's a recursive call, after all!
             //
-            // For now, just generate a placeholder that we can replace with the
-            // call later.
+            // Let's emit a placeholder instruction and arrange for that to be
+            // replaced later, once all of the functions in the cluster have
+            // been compiled.
             let address = generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
@@ -258,10 +259,6 @@ fn compile_fragment(
                         .map_fragment_to_instructions(location),
                 ),
             );
-
-            // We can't leave it at that, however. We need to make sure this
-            // placeholder actually gets replaced later, and we're doing that by
-            // adding it to this list.
             cluster_context
                 .recursive_calls_by_callee
                 .entry(hash)
