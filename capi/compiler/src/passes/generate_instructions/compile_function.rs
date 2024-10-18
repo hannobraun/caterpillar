@@ -18,17 +18,13 @@ use super::{
 };
 
 pub fn compile_function(
-    function_to_compile: FunctionToCompile,
+    function: Function,
+    location: FunctionLocation,
+    address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> capi_runtime::Function {
-    let FunctionToCompile {
-        function,
-        location,
-        address_of_instruction_to_make_anon_function,
-    } = function_to_compile;
-
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 

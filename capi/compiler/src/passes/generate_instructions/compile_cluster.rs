@@ -57,7 +57,9 @@ pub fn compile_cluster(
     {
         let hash = Hash::new(&function_to_compile.function);
         let runtime_function = compile_function(
-            function_to_compile,
+            function_to_compile.function,
+            function_to_compile.location,
+            function_to_compile.address_of_instruction_to_make_anon_function,
             cluster,
             &mut context,
             named_functions_context,
