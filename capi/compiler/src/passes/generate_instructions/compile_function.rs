@@ -189,6 +189,10 @@ fn compile_fragment(
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
+    let mut mapping = named_functions_context
+        .source_map
+        .map_fragment_to_instructions(location.clone());
+
     match fragment {
         Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
             let function = named_functions_context
@@ -205,11 +209,7 @@ fn compile_fragment(
                     is_tail_call,
                 },
                 named_functions_context.instructions,
-                Some(
-                    &mut named_functions_context
-                        .source_map
-                        .map_fragment_to_instructions(location),
-                ),
+                Some(&mut mapping),
             );
 
             // For now, we're done with this call. But the function we're
@@ -253,11 +253,7 @@ fn compile_fragment(
                     effect: Effect::CompilerBug,
                 },
                 named_functions_context.instructions,
-                Some(
-                    &mut named_functions_context
-                        .source_map
-                        .map_fragment_to_instructions(location),
-                ),
+                Some(&mut mapping),
             );
             cluster_context
                 .recursive_calls_by_callee
@@ -284,10 +280,6 @@ fn compile_fragment(
             Some(address)
         }
         Fragment::CallToHostFunction { effect_number } => {
-            let mut mapping = named_functions_context
-                .source_map
-                .map_fragment_to_instructions(location);
-
             let address = generate_instruction(
                 Instruction::Push {
                     value: effect_number.into(),
@@ -314,11 +306,7 @@ fn compile_fragment(
             Some(generate_instruction(
                 instruction,
                 named_functions_context.instructions,
-                Some(
-                    &mut named_functions_context
-                        .source_map
-                        .map_fragment_to_instructions(location),
-                ),
+                Some(&mut mapping),
             ))
         }
         Fragment::Comment { .. } => None,
@@ -352,11 +340,7 @@ fn compile_fragment(
                         effect: Effect::CompilerBug,
                     },
                     named_functions_context.instructions,
-                    Some(
-                        &mut named_functions_context
-                            .source_map
-                            .map_fragment_to_instructions(location.clone()),
-                    ),
+                    Some(&mut mapping),
                 ));
 
             // We've done what we could. Let's arrange for the anonymous
@@ -375,31 +359,19 @@ fn compile_fragment(
         Fragment::ResolvedBinding { name } => Some(generate_instruction(
             Instruction::BindingEvaluate { name: name.clone() },
             named_functions_context.instructions,
-            Some(
-                &mut named_functions_context
-                    .source_map
-                    .map_fragment_to_instructions(location),
-            ),
+            Some(&mut mapping),
         )),
         Fragment::UnresolvedIdentifier { .. } => Some(generate_instruction(
             Instruction::TriggerEffect {
                 effect: Effect::BuildError,
             },
             named_functions_context.instructions,
-            Some(
-                &mut named_functions_context
-                    .source_map
-                    .map_fragment_to_instructions(location),
-            ),
+            Some(&mut mapping),
         )),
         Fragment::Value(value) => Some(generate_instruction(
             Instruction::Push { value },
             named_functions_context.instructions,
-            Some(
-                &mut named_functions_context
-                    .source_map
-                    .map_fragment_to_instructions(location),
-            ),
+            Some(&mut mapping),
         )),
     }
 }
