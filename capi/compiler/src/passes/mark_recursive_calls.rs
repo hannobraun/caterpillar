@@ -9,7 +9,7 @@ pub fn mark_recursive_calls(
     functions: &mut NamedFunctions,
     call_graph: &CallGraph,
 ) {
-    for cluster in call_graph.clusters() {
+    for cluster in call_graph.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()

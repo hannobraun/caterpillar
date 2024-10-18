@@ -123,7 +123,10 @@ mod tests {
         );
 
         assert_eq!(
-            call_graph.clusters().cloned().collect::<Vec<_>>(),
+            call_graph
+                .clusters_from_leaves()
+                .cloned()
+                .collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
@@ -153,7 +156,10 @@ mod tests {
         );
 
         assert_eq!(
-            call_graph.clusters().cloned().collect::<Vec<_>>(),
+            call_graph
+                .clusters_from_leaves()
+                .cloned()
+                .collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
@@ -188,7 +194,10 @@ mod tests {
         );
 
         assert_eq!(
-            call_graph.clusters().cloned().collect::<Vec<_>>(),
+            call_graph
+                .clusters_from_leaves()
+                .cloned()
+                .collect::<Vec<_>>(),
             [
                 [
                     (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
@@ -237,7 +246,10 @@ mod tests {
         );
 
         assert_eq!(
-            call_graph.clusters().cloned().collect::<Vec<_>>(),
+            call_graph
+                .clusters_from_leaves()
+                .cloned()
+                .collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
                     .as_slice(),
@@ -296,7 +308,10 @@ mod tests {
         );
 
         assert_eq!(
-            call_graph.clusters().cloned().collect::<Vec<_>>(),
+            call_graph
+                .clusters_from_leaves()
+                .cloned()
+                .collect::<Vec<_>>(),
             [
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
                     .as_slice(),

@@ -10,7 +10,7 @@ pub struct CallGraph {
 
 impl CallGraph {
     /// # Iterate over the function clusters
-    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
+    pub fn clusters_from_leaves(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
 
