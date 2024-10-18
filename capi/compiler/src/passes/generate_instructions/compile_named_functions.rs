@@ -4,7 +4,7 @@ use capi_runtime::{Instruction, Instructions};
 
 use crate::{
     code::{CallGraph, Changes, Function, NamedFunctions},
-    compiler::CallInstructionsByCalleeHash,
+    compiler::CallInstructionsByCallee,
     hash::Hash,
     source_map::SourceMap,
 };
@@ -15,7 +15,7 @@ pub struct NamedFunctionsContext<'r> {
     pub named_functions: &'r NamedFunctions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
-    pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCalleeHash,
+    pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCallee,
     pub compiled_functions_by_hash:
         BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
@@ -26,7 +26,7 @@ pub fn compile_named_functions(
     call_graph: &CallGraph,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
-    call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
+    call_instructions_by_callee_hash: &mut CallInstructionsByCallee,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
     let mut context = NamedFunctionsContext {
         named_functions,

@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     code::{CallGraph, Changes, Function, NamedFunctions},
-    compiler::CallInstructionsByCalleeHash,
+    compiler::CallInstructionsByCallee,
     hash::Hash,
     source_map::SourceMap,
 };
@@ -19,7 +19,7 @@ pub fn generate_instructions(
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
-    call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
+    call_instructions_by_callee_hash: &mut CallInstructionsByCallee,
     source_map: &mut SourceMap,
 ) {
     // The placeholder call into `main` is created unconditionally, regardless

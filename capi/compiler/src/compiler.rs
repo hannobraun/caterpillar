@@ -20,7 +20,7 @@ use crate::{
 pub struct Compiler {
     old_functions: Option<NamedFunctions>,
     instructions: Instructions,
-    calls_by_function: CallInstructionsByCalleeHash,
+    calls_by_function: CallInstructionsByCallee,
     source_map: SourceMap,
 }
 
@@ -61,7 +61,7 @@ impl Compiler {
 }
 
 #[derive(Default)]
-pub struct CallInstructionsByCalleeHash {
+pub struct CallInstructionsByCallee {
     pub inner: BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
 }
 
