@@ -21,7 +21,7 @@ impl CallGraph {
     pub fn functions_from_leaves(
         &self,
     ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Cluster)> {
-        self.clusters.iter().rev().flat_map(|cluster| {
+        self.clusters_from_leaves().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
     }
