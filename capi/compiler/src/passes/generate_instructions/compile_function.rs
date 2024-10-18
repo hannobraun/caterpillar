@@ -312,7 +312,7 @@ fn compile_fragment(
         Fragment::Function { function } => {
             assert!(
                 function.name.is_none(),
-                "An anonymous function should not have a name."
+                "Encountered an anonymous function, but it has a name."
             );
 
             // We have encountered an anonymous function. We need to emit an
