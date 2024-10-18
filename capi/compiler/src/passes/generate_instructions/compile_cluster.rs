@@ -56,6 +56,7 @@ pub fn compile_cluster(
         context.queue_of_functions_to_compile.pop_front()
     {
         let hash = Hash::new(&function_to_compile.function);
+
         let runtime_function = compile_function(
             function_to_compile.function,
             function_to_compile.location,
@@ -64,6 +65,7 @@ pub fn compile_cluster(
             &mut context,
             named_functions_context,
         );
+
         named_functions_context
             .compiled_functions_by_hash
             .insert(hash, runtime_function);
