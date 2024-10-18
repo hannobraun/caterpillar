@@ -190,9 +190,7 @@ fn compile_fragment(
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
     match fragment {
-        Fragment::CallToUserDefinedFunction {
-            hash, is_tail_call, ..
-        } => {
+        Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
             let function = named_functions_context
                 .compiled_functions_by_hash
                 .get(&hash)
