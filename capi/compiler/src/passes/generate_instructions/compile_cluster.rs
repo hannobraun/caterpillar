@@ -12,24 +12,27 @@ use super::{
     compile_named_functions::NamedFunctionsContext,
 };
 
-pub struct ClusterContext {}
+pub struct ClusterContext {
+    pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
+}
 
 pub fn compile_cluster(
     cluster: &Cluster,
     changes: &Changes,
     named_functions_context: &mut NamedFunctionsContext,
 ) {
-    let mut context = ClusterContext {};
+    let mut context = ClusterContext {
+        queue_of_functions_to_compile: VecDeque::new(),
+    };
 
     seed_queue_of_functions_to_compile(
-        &mut named_functions_context.queue_of_functions_to_compile,
+        &mut context.queue_of_functions_to_compile,
         cluster,
         changes,
     );
 
-    while let Some(function_to_compile) = named_functions_context
-        .queue_of_functions_to_compile
-        .pop_front()
+    while let Some(function_to_compile) =
+        context.queue_of_functions_to_compile.pop_front()
     {
         let hash = Hash::new(&function_to_compile.function);
         let runtime_function = compile_function(

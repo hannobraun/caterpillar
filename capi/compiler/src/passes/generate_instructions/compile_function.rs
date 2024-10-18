@@ -372,14 +372,14 @@ fn compile_fragment(
             // We've done what we could. Let's arrange for the anonymous
             // function to be compiled, and the placeholder instruction to be
             // replaced, at a later time.
-            named_functions_context
-                .queue_of_functions_to_compile
-                .push_front(FunctionToCompile {
+            _cluster_context.queue_of_functions_to_compile.push_front(
+                FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
                     cluster: function_context.cluster.clone(),
                     address_of_instruction_to_make_anon_function,
-                });
+                },
+            );
 
             address_of_instruction_to_make_anon_function
         }

@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, VecDeque};
+use std::collections::BTreeMap;
 
 use capi_runtime::{Instruction, Instructions};
 
@@ -10,8 +10,7 @@ use crate::{
 };
 
 use super::{
-    compile_cluster::compile_cluster,
-    compile_function::{CallToFunction, FunctionToCompile},
+    compile_cluster::compile_cluster, compile_function::CallToFunction,
 };
 
 pub struct NamedFunctionsContext<'r> {
@@ -19,7 +18,6 @@ pub struct NamedFunctionsContext<'r> {
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee_hash: &'r mut CallInstructionsByCalleeHash,
-    pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 
     /// # Track calls to recursive functions by hash of called function
     ///
@@ -52,7 +50,6 @@ pub fn compile_named_functions(
         instructions,
         source_map,
         call_instructions_by_callee_hash,
-        queue_of_functions_to_compile: VecDeque::new(),
         recursive_function_calls_by_callee_hash: BTreeMap::new(),
         compiled_functions_by_hash: BTreeMap::new(),
     };
