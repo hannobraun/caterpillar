@@ -11,7 +11,7 @@ pub struct CallGraph {
 impl CallGraph {
     /// # Iterate over the function clusters
     pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
-        self.clusters.iter()
+        self.clusters.iter().rev()
     }
 
     /// # Iterate over all named functions, from the leaves up

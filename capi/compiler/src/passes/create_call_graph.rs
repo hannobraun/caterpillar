@@ -125,8 +125,8 @@ mod tests {
         assert_eq!(
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -155,8 +155,8 @@ mod tests {
         assert_eq!(
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -190,13 +190,13 @@ mod tests {
         assert_eq!(
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
                 [
                     (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
                     (FunctionIndexInCluster(1), FunctionIndexInRootContext(2))
                 ]
                 .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
+                    .as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -239,13 +239,13 @@ mod tests {
         assert_eq!(
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
                     .as_slice(),
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(3))]
                     .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
+                    .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
             ]
             .into_iter()
@@ -298,13 +298,13 @@ mod tests {
         assert_eq!(
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
                     .as_slice(),
                 [(FunctionIndexInCluster(0), FunctionIndexInRootContext(3))]
                     .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
+                    .as_slice(),
+                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
                     .as_slice(),
             ]
             .into_iter()
