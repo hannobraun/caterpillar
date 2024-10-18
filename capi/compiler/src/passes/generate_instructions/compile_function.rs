@@ -391,13 +391,7 @@ pub fn compile_call_to_function(
 ) {
     let Some(function) = functions.get(hash) else {
         // This won't happen for any regular function, because we only create
-        // placeholders for functions that we actually encounter. But it can
-        // happen for the `main` function, since we create a placeholder for
-        // that unconditionally.
-        //
-        // If that happens, let's just leave the placeholder panic. It's not
-        // great, as it doesn't provide any context to the user. But while we
-        // don't have any way to make panics more descriptive, it'll have to do.
+        // placeholders for functions that we actually encounter.
         return;
     };
 
