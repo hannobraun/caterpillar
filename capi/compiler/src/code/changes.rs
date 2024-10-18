@@ -12,6 +12,26 @@ pub struct Changes {
     pub updated: Vec<FunctionUpdate>,
 }
 
+impl Changes {
+    /// # Access the new or updated function with the given index
+    ///
+    /// Can return `None`, if the function with the given index is neither new
+    /// nor updated.
+    pub fn new_or_updated_function(
+        &self,
+        index: &FunctionIndexInRootContext,
+    ) -> Option<&Function> {
+        if let Some(function) = self.added.get(index) {
+            return Some(function);
+        }
+
+        self.updated.iter().find_map(|update| {
+            let new = &update.new;
+            (new.index == *index).then_some(&new.function)
+        })
+    }
+}
+
 /// # A function update
 #[derive(Debug)]
 pub struct FunctionUpdate {
