@@ -27,15 +27,17 @@ pub fn compile_named_functions(
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
-) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
-    let mut compiled_functions_by_hash = BTreeMap::new();
-
+    compiled_functions_by_hash: &mut BTreeMap<
+        Hash<Function>,
+        capi_runtime::Function,
+    >,
+) {
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
         source_map,
         call_instructions_by_callee,
-        compiled_functions_by_hash: &mut compiled_functions_by_hash,
+        compiled_functions_by_hash,
     };
 
     for cluster in call_graph.clusters_from_leaves() {
@@ -82,6 +84,4 @@ pub fn compile_named_functions(
             );
         }
     }
-
-    compiled_functions_by_hash
 }

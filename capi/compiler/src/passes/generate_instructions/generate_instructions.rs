@@ -22,6 +22,8 @@ pub fn generate_instructions(
     call_instructions_by_callee: &mut CallInstructionsByCallee,
     source_map: &mut SourceMap,
 ) {
+    let mut compiled_functions_by_hash = BTreeMap::new();
+
     // The placeholder call into `main` is created unconditionally, regardless
     // of whether this is a fresh build and we actually need to do that, or if
     // we already have an active runtime and are just compiling changes.
@@ -35,13 +37,14 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let mut compiled_functions_by_hash = compile_named_functions(
+    compile_named_functions(
         named_functions,
         changes,
         call_graph,
         instructions,
         source_map,
         call_instructions_by_callee,
+        &mut compiled_functions_by_hash,
     );
     compile_call_to_main(
         call_to_main,
