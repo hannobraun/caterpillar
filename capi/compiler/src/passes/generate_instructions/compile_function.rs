@@ -139,7 +139,7 @@ fn compile_branch_body(
 
     for (index, fragment) in body {
         let addr = compile_fragment(
-            &fragment,
+            fragment,
             FragmentLocation {
                 parent: Box::new(location.clone()),
                 index,
@@ -183,7 +183,7 @@ fn compile_branch_body(
 }
 
 fn compile_fragment(
-    fragment: &Fragment,
+    fragment: Fragment,
     location: FragmentLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
