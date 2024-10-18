@@ -71,11 +71,11 @@ pub fn compile_cluster(
             .insert(hash, runtime_function);
     }
 
-    for (hash, calls) in &context.recursive_calls_by_callee {
+    for (hash, calls) in context.recursive_calls_by_callee {
         for call in calls {
             compile_call_to_function(
-                hash,
-                call,
+                &hash,
+                &call,
                 &mut named_functions_context.compiled_functions_by_hash,
                 named_functions_context.instructions,
             );
