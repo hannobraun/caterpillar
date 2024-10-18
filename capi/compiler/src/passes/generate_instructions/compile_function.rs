@@ -333,13 +333,13 @@ fn compile_fragment(
             //
             // For now, we'll just emit a placeholder that can be replaced with
             // the real instruction then.
-            let address = Some(generate_instruction(
+            let address = generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
                 named_functions_context.instructions,
                 Some(&mut mapping),
-            ));
+            );
 
             // We've done what we could. Let's arrange for the anonymous
             // function to be compiled, and the placeholder instruction to be
@@ -348,11 +348,11 @@ fn compile_fragment(
                 FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
-                    address_of_instruction_to_make_anon_function: address,
+                    address_of_instruction_to_make_anon_function: Some(address),
                 },
             );
 
-            address
+            Some(address)
         }
         Fragment::ResolvedBinding { name } => Some(generate_instruction(
             Instruction::BindingEvaluate { name: name.clone() },
