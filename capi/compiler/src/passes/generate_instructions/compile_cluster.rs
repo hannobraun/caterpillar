@@ -21,7 +21,7 @@ pub struct ClusterContext {
     /// compiling those, will be added later.
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 
-    /// # Track calls to recursive functions by hash of called function
+    /// # Recursive calls within the cluster that need to be replaced
     ///
     /// When a recursive call is encountered, not all branches of the callee
     /// (which might be the calling function itself, or another function in the
@@ -29,8 +29,8 @@ pub struct ClusterContext {
     /// call.
     ///
     /// So instead of compiling the call right then and there, a placeholder
-    /// instruction is emitted instead. An entry is also added to this map, so
-    /// the placeholder instruction can be replaced with the real call, once all
+    /// instruction is emitted. An entry is also added to this map, so the
+    /// placeholder instruction can be replaced with the real call, once all
     /// functions have been compiled.
     pub recursive_function_calls_by_callee:
         BTreeMap<Hash<Function>, Vec<CallToFunction>>,
