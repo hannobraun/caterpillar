@@ -62,8 +62,8 @@ pub fn compile_named_functions(
     for cluster in call_graph.clusters_from_leaves() {
         seed_queue_of_functions_to_compile(
             &mut context.queue_of_functions_to_compile,
-            changes,
             cluster,
+            changes,
         );
 
         while let Some(function_to_compile) =
@@ -135,8 +135,8 @@ pub fn compile_named_functions(
 
 fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
-    changes: &Changes,
     cluster: &Cluster,
+    changes: &Changes,
 ) {
     let functions_in_cluster_to_compile =
         cluster.functions.values().filter_map(|&index| {
