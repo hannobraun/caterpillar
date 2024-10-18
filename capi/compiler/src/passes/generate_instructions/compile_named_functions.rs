@@ -138,7 +138,7 @@ fn seed_queue_of_functions_to_compile(
     changes: &Changes,
     cluster: &Cluster,
 ) {
-    queue_of_functions_to_compile.extend(
+    let functions_in_cluster_to_compile =
         cluster.functions.values().filter_map(|&index| {
             let function = changes.new_or_updated_function(&index)?;
             Some(FunctionToCompile {
@@ -147,6 +147,6 @@ fn seed_queue_of_functions_to_compile(
                 cluster: cluster.clone(),
                 address_of_instruction_to_make_anon_function: None,
             })
-        }),
-    );
+        });
+    queue_of_functions_to_compile.extend(functions_in_cluster_to_compile);
 }
