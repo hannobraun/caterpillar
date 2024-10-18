@@ -139,7 +139,7 @@ fn seed_queue_of_functions_to_compile(
     changes: &Changes,
     cluster: &Cluster,
 ) {
-    let mut named_functions_to_compile = changes
+    let mut new_or_updated_functions = changes
         .added
         .iter()
         .chain(changes.updated.iter().map(
@@ -152,7 +152,7 @@ fn seed_queue_of_functions_to_compile(
 
     queue_of_functions_to_compile.extend(cluster.functions.values().filter_map(
         |&index| {
-            let function = named_functions_to_compile.remove(&index)?;
+            let function = new_or_updated_functions.remove(&index)?;
             Some(FunctionToCompile {
                 function: function.clone(),
                 location: FunctionLocation::NamedFunction { index },
