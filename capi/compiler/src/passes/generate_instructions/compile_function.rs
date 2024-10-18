@@ -195,13 +195,15 @@ fn compile_fragment(
 
     match fragment {
         Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
-            let function = named_functions_context
+            let Some(function) = named_functions_context
                 .compiled_functions_by_hash
                 .get(&hash)
-                .expect(
+            else {
+                panic!(
                     "Function must have been compiled before any non-recursive \
                     calls to it.",
-                );
+                )
+            };
 
             let address = generate_instruction(
                 Instruction::CallFunction {
