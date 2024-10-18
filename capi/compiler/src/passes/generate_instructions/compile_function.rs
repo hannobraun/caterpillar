@@ -389,11 +389,10 @@ pub fn compile_call_to_function(
     functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
-    let Some(function) = functions.get(hash) else {
-        // This won't happen for any regular function, because we only create
-        // placeholders for functions that we actually encounter.
-        return;
-    };
+    let function = functions.get(hash).expect(
+        "Attempting to compile call to function. Expecting that function to \
+        have been compiled already.",
+    );
 
     instructions.replace(
         &call.address,
