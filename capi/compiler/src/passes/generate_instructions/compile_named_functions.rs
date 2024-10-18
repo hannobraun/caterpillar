@@ -26,13 +26,13 @@ pub fn compile_named_functions(
     call_graph: &CallGraph,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
-    call_instructions_by_callee_hash: &mut CallInstructionsByCallee,
+    call_instructions_by_callee: &mut CallInstructionsByCallee,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
     let mut context = NamedFunctionsContext {
         named_functions,
         instructions,
         source_map,
-        call_instructions_by_callee_hash,
+        call_instructions_by_callee_hash: call_instructions_by_callee,
         compiled_functions_by_hash: BTreeMap::new(),
     };
 
