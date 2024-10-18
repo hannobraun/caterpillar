@@ -12,11 +12,15 @@ use super::{
     compile_named_functions::NamedFunctionsContext,
 };
 
+pub struct ClusterContext {}
+
 pub fn compile_cluster(
     cluster: &Cluster,
     changes: &Changes,
     named_functions_context: &mut NamedFunctionsContext,
 ) {
+    let mut context = ClusterContext {};
+
     seed_queue_of_functions_to_compile(
         &mut named_functions_context.queue_of_functions_to_compile,
         cluster,
@@ -28,8 +32,11 @@ pub fn compile_cluster(
         .pop_front()
     {
         let hash = Hash::new(&function_to_compile.function);
-        let runtime_function =
-            compile_function(function_to_compile, named_functions_context);
+        let runtime_function = compile_function(
+            function_to_compile,
+            &mut context,
+            named_functions_context,
+        );
         named_functions_context
             .compiled_functions_by_hash
             .insert(hash, runtime_function);

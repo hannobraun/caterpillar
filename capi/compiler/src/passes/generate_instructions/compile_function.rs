@@ -12,7 +12,10 @@ use crate::{
     source_map::Mapping,
 };
 
-use super::compile_named_functions::NamedFunctionsContext;
+use super::{
+    compile_cluster::ClusterContext,
+    compile_named_functions::NamedFunctionsContext,
+};
 
 pub struct FunctionContext<'r> {
     pub cluster: &'r Cluster,
@@ -20,6 +23,7 @@ pub struct FunctionContext<'r> {
 
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
+    cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> capi_runtime::Function {
     let FunctionToCompile {
@@ -42,6 +46,7 @@ pub fn compile_function(
                 index,
             },
             &mut context,
+            cluster_context,
             named_functions_context,
         );
 
@@ -85,6 +90,7 @@ fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
     function_context: &mut FunctionContext,
+    cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
@@ -106,6 +112,7 @@ fn compile_branch(
         branch,
         location,
         function_context,
+        cluster_context,
         named_functions_context,
     );
 
@@ -135,6 +142,7 @@ fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
     function_context: &mut FunctionContext,
+    cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
@@ -147,6 +155,7 @@ fn compile_branch_body(
                 index,
             },
             function_context,
+            cluster_context,
             named_functions_context,
         );
         first_instruction = first_instruction.or(addr);
@@ -187,6 +196,7 @@ fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     function_context: &mut FunctionContext,
+    _cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
     match &fragment {
