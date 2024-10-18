@@ -69,15 +69,17 @@ fn compile_call_to_main(
     instructions: &mut Instructions,
     functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
 ) {
-    if let Some(main) = named_functions.find_by_name("main") {
-        compile_call_to_function(
-            &Hash::new(&main),
-            CallToFunction {
-                address: call_to_main,
-                is_tail_call: true,
-            },
-            functions,
-            instructions,
-        );
-    }
+    let Some(main) = named_functions.find_by_name("main") else {
+        return;
+    };
+
+    compile_call_to_function(
+        &Hash::new(&main),
+        CallToFunction {
+            address: call_to_main,
+            is_tail_call: true,
+        },
+        functions,
+        instructions,
+    );
 }
