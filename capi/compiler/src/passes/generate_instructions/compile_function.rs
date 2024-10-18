@@ -17,10 +17,6 @@ use super::{
     compile_named_functions::NamedFunctionsContext,
 };
 
-pub struct FunctionContext<'r> {
-    pub cluster: &'r Cluster,
-}
-
 pub fn compile_function(
     function_to_compile: FunctionToCompile,
     cluster_context: &mut ClusterContext,
@@ -33,8 +29,6 @@ pub fn compile_function(
         address_of_instruction_to_make_anon_function,
     } = function_to_compile;
 
-    let mut context = FunctionContext { cluster: &cluster };
-
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
@@ -45,7 +39,7 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            &mut context,
+            &cluster,
             cluster_context,
             named_functions_context,
         );
@@ -89,7 +83,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: &Branch,
     location: BranchLocation,
-    function_context: &mut FunctionContext,
+    cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -111,7 +105,7 @@ fn compile_branch(
     let [branch_address, last_address] = compile_branch_body(
         branch,
         location,
-        function_context,
+        cluster,
         cluster_context,
         named_functions_context,
     );
@@ -141,7 +135,7 @@ fn compile_branch(
 fn compile_branch_body(
     branch: &Branch,
     location: BranchLocation,
-    function_context: &mut FunctionContext,
+    cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> [InstructionAddress; 2] {
@@ -154,7 +148,7 @@ fn compile_branch_body(
                 parent: Box::new(location.clone()),
                 index,
             },
-            function_context,
+            cluster,
             cluster_context,
             named_functions_context,
         );
@@ -195,7 +189,7 @@ fn compile_branch_body(
 fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
-    function_context: &mut FunctionContext,
+    cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
@@ -245,8 +239,7 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let function_index_in_root_context =
-                function_context.cluster.functions[index];
+            let function_index_in_root_context = cluster.functions[index];
             let called_function = named_functions_context
                 .named_functions
                 .get(&function_index_in_root_context)
@@ -376,7 +369,7 @@ fn compile_fragment(
                 FunctionToCompile {
                     function: function.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
-                    cluster: function_context.cluster.clone(),
+                    cluster: cluster.clone(),
                     address_of_instruction_to_make_anon_function,
                 },
             );
