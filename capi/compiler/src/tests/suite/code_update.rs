@@ -177,3 +177,46 @@ fn handle_update_that_makes_function_smaller() {
         .run_until_receiving(1)
         .run_until_receiving(2);
 }
+
+#[test]
+#[should_panic] // known bug; no issue for tracking it yet
+fn compile_call_to_function_that_has_not_been_updated() {
+    // The compiler only emits new instructions for compiled and updated
+    // functions. To make this work, it needs to preserve some of the
+    // intermediate results from previous invocations of the compiler pipeline.
+    //
+    // This test covers one case where it didn't do that properly, resulting in
+    // a bug.
+
+    let mut runtime = runtime();
+
+    runtime
+        .update_code(
+            r"
+                main: {
+                    \ ->
+                        f
+                        0 send
+                        main
+                }
+
+                f: { \ -> }
+            ",
+        )
+        .run_until_receiving(0);
+
+    runtime
+        .update_code(
+            r"
+                main: {
+                    \ ->
+                        f
+                        1 send
+                        main
+                }
+
+                f: { \ -> }
+            ",
+        )
+        .run_until_receiving(1);
+}
