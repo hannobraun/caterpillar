@@ -75,7 +75,7 @@ pub fn compile_cluster(
         for call in calls {
             compile_call_to_function(
                 &hash,
-                &call,
+                call,
                 &mut named_functions_context.compiled_functions_by_hash,
                 named_functions_context.instructions,
             );

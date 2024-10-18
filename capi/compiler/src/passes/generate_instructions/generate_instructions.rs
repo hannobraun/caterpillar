@@ -72,7 +72,7 @@ fn compile_call_to_main(
     if let Some(main) = named_functions.find_by_name("main") {
         compile_call_to_function(
             &Hash::new(&main),
-            &CallToFunction {
+            CallToFunction {
                 address: call_to_main,
                 is_tail_call: true,
             },

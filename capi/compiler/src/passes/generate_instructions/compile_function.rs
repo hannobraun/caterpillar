@@ -385,7 +385,7 @@ fn compile_fragment(
 
 pub fn compile_call_to_function(
     hash: &Hash<Function>,
-    call: &CallToFunction,
+    call: CallToFunction,
     functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
