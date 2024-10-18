@@ -35,7 +35,7 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    let mut functions = compile_named_functions(
+    let mut compiled_functions_by_hash = compile_named_functions(
         named_functions,
         changes,
         call_graph,
@@ -47,7 +47,7 @@ pub fn generate_instructions(
         call_to_main,
         named_functions,
         instructions,
-        &mut functions,
+        &mut compiled_functions_by_hash,
     );
 }
 
