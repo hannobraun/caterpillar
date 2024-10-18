@@ -51,8 +51,11 @@ pub fn compile_named_functions(
     source_map: &mut SourceMap,
     call_instructions_by_callee_hash: &mut CallInstructionsByCalleeHash,
 ) -> BTreeMap<Hash<Function>, capi_runtime::Function> {
+    let mut queue_of_functions_to_compile = VecDeque::new();
+
     let named_functions_to_compile = gather_named_functions_to_compile(changes);
-    let queue_of_functions_to_compile = seed_queue_of_functions_to_compile(
+    seed_queue_of_functions_to_compile(
+        &mut queue_of_functions_to_compile,
         named_functions_to_compile,
         call_graph,
     );
@@ -149,22 +152,24 @@ fn gather_named_functions_to_compile(
 }
 
 fn seed_queue_of_functions_to_compile(
+    queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     mut named_functions_to_compile: BTreeMap<
         &FunctionIndexInRootContext,
         &Function,
     >,
     call_graph: &CallGraph,
-) -> VecDeque<FunctionToCompile> {
-    call_graph
-        .functions_from_leaves()
-        .filter_map(|(&index, cluster)| {
-            let function = named_functions_to_compile.remove(&index)?;
-            Some(FunctionToCompile {
-                function: function.clone(),
-                location: FunctionLocation::NamedFunction { index },
-                cluster: cluster.clone(),
-                address_of_instruction_to_make_anon_function: None,
-            })
-        })
-        .collect::<VecDeque<_>>()
+) {
+    queue_of_functions_to_compile.extend(
+        call_graph
+            .functions_from_leaves()
+            .filter_map(|(&index, cluster)| {
+                let function = named_functions_to_compile.remove(&index)?;
+                Some(FunctionToCompile {
+                    function: function.clone(),
+                    location: FunctionLocation::NamedFunction { index },
+                    cluster: cluster.clone(),
+                    address_of_instruction_to_make_anon_function: None,
+                })
+            }),
+    )
 }
