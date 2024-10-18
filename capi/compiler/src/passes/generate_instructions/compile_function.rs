@@ -199,9 +199,19 @@ fn compile_fragment(
                 .compiled_functions_by_hash
                 .get(&hash)
             else {
+                let function = named_functions_context
+                    .named_functions
+                    .functions()
+                    .find(|&function| Hash::new(function) == hash);
+
                 panic!(
-                    "Function must have been compiled before any non-recursive \
-                    calls to it.",
+                    "Compiling call to user-defined function `{hash}`. \
+                    Expecting functions to be compiled before any \
+                    non-recursive calls to them, but can't find the compiled \
+                    version of this one.\n\
+                    \n\
+                    Function:\n\
+                    {function:#?}",
                 )
             };
 
