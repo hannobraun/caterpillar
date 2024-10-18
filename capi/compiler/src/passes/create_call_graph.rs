@@ -156,7 +156,7 @@ mod tests {
             call_graph.clusters().cloned().collect::<Vec<_>>(),
             [
                 (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1))
+                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
             ]
             .into_iter()
             .map(|indices| Cluster {
