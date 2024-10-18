@@ -4,8 +4,8 @@ use capi_runtime::{Instruction, Instructions};
 
 use crate::{
     code::{
-        CallGraph, Changes, Function, FunctionInUpdate, FunctionLocation,
-        FunctionUpdate, NamedFunctions,
+        CallGraph, Changes, Cluster, Function, FunctionInUpdate,
+        FunctionLocation, FunctionUpdate, NamedFunctions,
     },
     compiler::CallInstructionsByCalleeHash,
     hash::Hash,
@@ -60,31 +60,33 @@ pub fn compile_named_functions(
         compiled_functions_by_hash: BTreeMap::new(),
     };
 
-    seed_queue_of_functions_to_compile(
-        &mut context.queue_of_functions_to_compile,
-        changes,
-        call_graph,
-    );
+    for cluster in call_graph.clusters_from_leaves() {
+        seed_queue_of_functions_to_compile(
+            &mut context.queue_of_functions_to_compile,
+            changes,
+            cluster,
+        );
 
-    while let Some(function_to_compile) =
-        context.queue_of_functions_to_compile.pop_front()
-    {
-        let hash = Hash::new(&function_to_compile.function);
-        let runtime_function =
-            compile_function(function_to_compile, &mut context);
-        context
-            .compiled_functions_by_hash
-            .insert(hash, runtime_function);
-    }
+        while let Some(function_to_compile) =
+            context.queue_of_functions_to_compile.pop_front()
+        {
+            let hash = Hash::new(&function_to_compile.function);
+            let runtime_function =
+                compile_function(function_to_compile, &mut context);
+            context
+                .compiled_functions_by_hash
+                .insert(hash, runtime_function);
+        }
 
-    for (hash, calls) in &context.recursive_function_calls_by_callee_hash {
-        for call in calls {
-            compile_call_to_function(
-                hash,
-                call,
-                &mut context.compiled_functions_by_hash,
-                context.instructions,
-            );
+        for (hash, calls) in &context.recursive_function_calls_by_callee_hash {
+            for call in calls {
+                compile_call_to_function(
+                    hash,
+                    call,
+                    &mut context.compiled_functions_by_hash,
+                    context.instructions,
+                );
+            }
         }
     }
 
@@ -135,7 +137,7 @@ pub fn compile_named_functions(
 fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     changes: &Changes,
-    call_graph: &CallGraph,
+    cluster: &Cluster,
 ) {
     let mut named_functions_to_compile = changes
         .added
@@ -148,17 +150,15 @@ fn seed_queue_of_functions_to_compile(
         ))
         .collect::<BTreeMap<_, _>>();
 
-    queue_of_functions_to_compile.extend(
-        call_graph
-            .functions_from_leaves()
-            .filter_map(|(&index, cluster)| {
-                let function = named_functions_to_compile.remove(&index)?;
-                Some(FunctionToCompile {
-                    function: function.clone(),
-                    location: FunctionLocation::NamedFunction { index },
-                    cluster: cluster.clone(),
-                    address_of_instruction_to_make_anon_function: None,
-                })
-            }),
-    )
+    queue_of_functions_to_compile.extend(cluster.functions.values().filter_map(
+        |&index| {
+            let function = named_functions_to_compile.remove(&index)?;
+            Some(FunctionToCompile {
+                function: function.clone(),
+                location: FunctionLocation::NamedFunction { index },
+                cluster: cluster.clone(),
+                address_of_instruction_to_make_anon_function: None,
+            })
+        },
+    ))
 }
