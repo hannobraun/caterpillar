@@ -189,7 +189,7 @@ fn compile_fragment(
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {
-    match &fragment {
+    match fragment {
         Fragment::CallToUserDefinedFunction {
             hash, is_tail_call, ..
         } => {
@@ -211,10 +211,10 @@ fn compile_fragment(
             );
 
             compile_call_to_function(
-                hash,
+                &hash,
                 &CallToFunction {
                     address,
-                    is_tail_call: *is_tail_call,
+                    is_tail_call,
                 },
                 &mut named_functions_context.compiled_functions_by_hash,
                 named_functions_context.instructions,
@@ -225,7 +225,7 @@ fn compile_fragment(
             named_functions_context
                 .call_instructions_by_callee_hash
                 .inner
-                .entry(*hash)
+                .entry(hash)
                 .or_default()
                 .push(address);
 
@@ -235,7 +235,7 @@ fn compile_fragment(
             index,
             is_tail_call,
         } => {
-            let function_index_in_root_context = cluster.functions[index];
+            let function_index_in_root_context = cluster.functions[&index];
             let called_function = named_functions_context
                 .named_functions
                 .get(&function_index_in_root_context)
@@ -268,7 +268,7 @@ fn compile_fragment(
                 .or_default()
                 .push(CallToFunction {
                     address,
-                    is_tail_call: *is_tail_call,
+                    is_tail_call,
                 });
 
             // We also need to do some bookkeeping, so we can update the call,
@@ -289,7 +289,7 @@ fn compile_fragment(
 
             let address = generate_instruction(
                 Instruction::Push {
-                    value: (*effect_number).into(),
+                    value: effect_number.into(),
                 },
                 named_functions_context.instructions,
                 Some(&mut mapping),
@@ -308,7 +308,7 @@ fn compile_fragment(
             is_tail_call,
         } => {
             let instruction =
-                intrinsic_to_instruction(intrinsic, *is_tail_call);
+                intrinsic_to_instruction(&intrinsic, is_tail_call);
 
             Some(generate_instruction(
                 instruction,
@@ -392,7 +392,7 @@ fn compile_fragment(
             ),
         )),
         Fragment::Value(value) => Some(generate_instruction(
-            Instruction::Push { value: *value },
+            Instruction::Push { value },
             named_functions_context.instructions,
             Some(
                 &mut named_functions_context
