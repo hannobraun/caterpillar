@@ -4,8 +4,7 @@ use capi_runtime::{Instruction, Instructions};
 
 use crate::{
     code::{
-        CallGraph, Changes, Cluster, Function, FunctionInUpdate,
-        FunctionLocation, FunctionUpdate, NamedFunctions,
+        CallGraph, Changes, Cluster, Function, FunctionLocation, NamedFunctions,
     },
     compiler::CallInstructionsByCalleeHash,
     hash::Hash,
@@ -139,20 +138,9 @@ fn seed_queue_of_functions_to_compile(
     changes: &Changes,
     cluster: &Cluster,
 ) {
-    let mut new_or_updated_functions = changes
-        .added
-        .iter()
-        .chain(changes.updated.iter().map(
-            |FunctionUpdate {
-                 new: FunctionInUpdate { index, function },
-                 ..
-             }| (index, function),
-        ))
-        .collect::<BTreeMap<_, _>>();
-
     queue_of_functions_to_compile.extend(cluster.functions.values().filter_map(
         |&index| {
-            let function = new_or_updated_functions.remove(&index)?;
+            let function = changes.new_or_updated_function(&index)?;
             Some(FunctionToCompile {
                 function: function.clone(),
                 location: FunctionLocation::NamedFunction { index },
