@@ -13,6 +13,11 @@ use super::{
 };
 
 pub struct ClusterContext {
+    /// # The queue of functions to compile in the cluster
+    ///
+    /// This is initially seeded by the named functions in the cluster that are
+    /// new or have been updated. But any anonymous functions encountered while
+    /// compiling those, will be added later.
     pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
 }
 
