@@ -193,14 +193,18 @@ fn compile_fragment(
         Fragment::CallToUserDefinedFunction {
             hash, is_tail_call, ..
         } => {
-            // We know that this expression refers to a user-defined function,
-            // but we might not have compiled that function yet.
-            //
-            // For now, just generate a placeholder that we can replace with the
-            // call later.
+            let function = named_functions_context
+                .compiled_functions_by_hash
+                .get(&hash)
+                .expect(
+                    "Function must have been compiled before any non-recursive \
+                    calls to it.",
+                );
+
             let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::CompilerBug,
+                Instruction::CallFunction {
+                    function: function.clone(),
+                    is_tail_call,
                 },
                 named_functions_context.instructions,
                 Some(
@@ -208,16 +212,6 @@ fn compile_fragment(
                         .source_map
                         .map_fragment_to_instructions(location),
                 ),
-            );
-
-            compile_call_to_function(
-                &hash,
-                &CallToFunction {
-                    address,
-                    is_tail_call,
-                },
-                &mut named_functions_context.compiled_functions_by_hash,
-                named_functions_context.instructions,
             );
 
             // We also need to do some bookkeeping, so we can update the call,
