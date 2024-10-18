@@ -183,7 +183,6 @@ fn compile_branch_body(
     [first_instruction, last_instruction]
 }
 
-#[allow(clippy::too_many_arguments)]
 fn compile_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
