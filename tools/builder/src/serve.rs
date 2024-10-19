@@ -59,15 +59,24 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                     continue 'updates;
                 }
             }
-        }
 
-        println!();
-        println!("✅ Build is ready:");
-        println!();
-        println!("\t🚀 http://{address}/");
-        println!();
-        println!("================================================");
-        println!();
+            match line.trim() {
+                "builder: ready" => {
+                    println!();
+                    println!("✅ Build is ready:");
+                    println!();
+                    println!("\t🚀 http://{address}/");
+                    println!();
+                    println!(
+                        "================================================"
+                    );
+                    println!();
+                }
+                _ => {
+                    continue;
+                }
+            }
+        }
     }
 
     Ok(())
