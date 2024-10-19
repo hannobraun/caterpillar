@@ -13,7 +13,6 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     let mut current_server: Option<Child> = None;
 
-    updates.mark_unchanged(); // make sure we enter the loop body immediately
     'updates: while let Ok(()) = updates.changed().await {
         let Some(serve_dir) = updates.borrow().clone() else {
             // The channel is initialized with `None`. After the initial build
