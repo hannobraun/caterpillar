@@ -22,7 +22,9 @@ pub async fn build_and_watch_game(
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
+    println!("build:initial:start");
     let code = build_game_once_with_compiler(&game, &mut compiler).await?;
+    println!("build:initial:finish");
 
     timestamp.update();
     let (game_tx, game_rx) = watch::channel(Versioned {
@@ -32,9 +34,11 @@ pub async fn build_and_watch_game(
 
     task::spawn(async move {
         while changes.wait_for_change().await {
+            println!("build:change");
             let code = build_game_once_with_compiler(&game, &mut compiler)
                 .await
                 .unwrap();
+            println!("build:finish");
 
             timestamp.update();
             game_tx

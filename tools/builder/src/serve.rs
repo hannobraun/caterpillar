@@ -78,6 +78,18 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                         \n"
                     );
                 }
+                "build:initial:start" => {
+                    println!("Starting initial build of game...");
+                }
+                "build:initial:finish" => {
+                    println!("Finished initial build of game.");
+                }
+                "build:change" => {
+                    println!("Change detected. Rebuilding game...");
+                }
+                "build:finish" => {
+                    println!("Finished rebuilding game.");
+                }
                 _ => {
                     continue;
                 }
