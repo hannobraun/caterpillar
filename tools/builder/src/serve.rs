@@ -13,6 +13,12 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     let mut current_server: Option<Child> = None;
 
+    // The initial value in the channel (it is initialized with `None`) is
+    // considered to be "seen". This means the call to `changed` will wait for
+    // an unseen value, which is the result of the initial build.
+    //
+    // This means that we're going to wait here until the initial build has
+    // finished, before entering the loop.
     'updates: while let Ok(()) = updates.changed().await {
         let Some(serve_dir) = updates.borrow().clone() else {
             // The channel is initialized with `None`. After the initial build
