@@ -40,7 +40,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             .spawn()?;
 
         let stdout = new_server.stdout.take().expect(
-            "Expect stdio to be captured, according to configuration above",
+            "Expecting stdio to be captured, according to configuration above",
         );
         let mut stdout = BufReader::new(stdout);
 
