@@ -46,6 +46,8 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
         let mut line = String::new();
         while !line.starts_with("builder: ready") {
+            line.clear();
+
             select! {
                 result = stdout.read_line(&mut line) => {
                     result?;
