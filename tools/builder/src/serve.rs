@@ -16,6 +16,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     updates.mark_unchanged(); // make sure we enter the loop body immediately
     'updates: while let Ok(()) = updates.changed().await {
         let Some(serve_dir) = updates.borrow().clone() else {
+            // The channel is initialized with `None`. After the initial build
+            // has finished, it will always be `Some`.
+            //
+            // This means that if we make it here, the initial build has not
+            // finished yet. Restart the loop to wait for that.
             continue;
         };
 
