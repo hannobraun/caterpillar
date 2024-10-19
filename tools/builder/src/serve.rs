@@ -20,14 +20,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     // This means that we're going to wait here until the initial build has
     // finished, before entering the loop.
     'updates: while let Ok(()) = updates.changed().await {
-        let Some(serve_dir) = updates.borrow().clone() else {
-            // The channel is initialized with `None`. After the initial build
-            // has finished, it will always be `Some`.
-            //
-            // This means that if we make it here, the initial build has not
-            // finished yet. Restart the loop to wait for that.
-            continue;
-        };
+        let serve_dir = updates.borrow().clone().expect(
+            "Should not have entered the loop until the result of the initial \
+            build was available. After that, the channel should always contain \
+            `Some`.",
+        );
 
         println!();
 
