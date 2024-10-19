@@ -13,19 +13,13 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     let mut current_server: Option<Child> = None;
 
-    // The initial value in the channel (it is initialized with `None`) is
-    // considered to be "seen". This means the call to `changed` will wait for
-    // an unseen value, which is the result of the initial build.
-    //
-    // This means that we're going to wait here until the initial build has
-    // finished, before entering the loop.
-    'updates: while let Ok(()) = updates.changed().await {
-        let serve_dir = updates.borrow().clone().expect(
-            "Should not have entered the loop until the result of the initial \
-            build was available. After that, the channel should always contain \
-            `Some`.",
-        );
+    let Some(mut serve_dir) = updates.recv().await else {
+        // The sender has been dropped, which means the process is shutting
+        // down.
+        return Ok(());
+    };
 
+    'updates: loop {
         println!();
 
         if let Some(mut server) = current_server.take() {
@@ -54,15 +48,20 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
         current_server = Some(new_server);
 
         let mut line = String::new();
-        while !line.starts_with("builder: ready") {
+        loop {
             line.clear();
 
             select! {
                 result = stdout.read_line(&mut line) => {
                     result?;
                 }
-                _ = updates.changed() => {
-                    updates.mark_changed();
+                update = updates.recv() => {
+                    let Some(update) = update else {
+                        // The sender has been dropped, which means the process
+                        // is shutting down.
+                        return Ok(());
+                    };
+                    serve_dir = update;
                     continue 'updates;
                 }
             }
@@ -85,6 +84,4 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             }
         }
     }
-
-    Ok(())
 }

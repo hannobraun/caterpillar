@@ -6,13 +6,13 @@ use std::{
 use anyhow::Context;
 use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
-use tokio::{fs, process::Command, sync::watch, task};
+use tokio::{fs, process::Command, sync::mpsc, task};
 use tracing::error;
 use walkdir::WalkDir;
 use wasm_bindgen_cli_support::Bindgen;
 
 pub fn start(changes: DebouncedChanges) -> UpdatesRx {
-    let (tx, rx) = watch::channel(None);
+    let (tx, rx) = mpsc::channel(1);
     task::spawn(async {
         if let Err(err) = watch_and_build(changes, tx).await {
             error!("Build error: {err:?}");
@@ -108,7 +108,7 @@ async fn build_once(
 
     let output_path = new_output_dir.path().to_path_buf();
 
-    if updates.send(Some(output_path)).is_err() {
+    if updates.send(output_path).await.is_err() {
         // If the send failed, the other end has hung up. That means either
         // we're currently shutting down, or something went wrong over there and
         // we _should_ be shutting down.
@@ -148,7 +148,8 @@ enum ShouldContinue {
     NoBecauseShutdown,
 }
 
-pub type UpdatesRx = watch::Receiver<Update>;
-pub type UpdatesTx = watch::Sender<Update>;
+pub type UpdatesRx = mpsc::Receiver<Update>;
+pub type UpdatesTx = mpsc::Sender<Update>;
 
-pub type Update = Option<PathBuf>;
+// TASK: Inline?
+pub type Update = PathBuf;
