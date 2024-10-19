@@ -26,7 +26,7 @@ pub async fn start(
         .with_state(ServerState { serve_dir, code });
 
     let listener = TcpListener::bind(address).await?;
-    println!("builder: ready"); // signal the builder we're ready
+    println!("ready"); // signal the builder we're ready
     axum::serve(listener, router).await?;
 
     Ok(())
