@@ -44,6 +44,8 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
         );
         let mut stdout = BufReader::new(stdout);
 
+        current_server = Some(new_server);
+
         let mut line = String::new();
         while !line.starts_with("builder: ready") {
             line.clear();
@@ -58,8 +60,6 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                 }
             }
         }
-
-        current_server = Some(new_server);
 
         println!();
         println!("✅ Build is ready:");
