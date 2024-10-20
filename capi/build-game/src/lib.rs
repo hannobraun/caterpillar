@@ -40,8 +40,8 @@ pub async fn build_and_watch_game(
                 .await
             {
                 Ok(code) => code,
-                Err(_err) => {
-                    panic!();
+                Err(err) => {
+                    panic!("Unexpected error while building game: {err:?}");
                 }
             };
             println!("build:finish");
