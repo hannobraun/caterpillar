@@ -33,6 +33,8 @@ pub async fn build_and_watch_game(
         inner: code,
     });
 
+    let mut ignored_error = None;
+
     task::spawn(async move {
         while changes.wait_for_change().await {
             println!("build:change");
@@ -40,11 +42,30 @@ pub async fn build_and_watch_game(
                 .await
             {
                 Ok(code) => code,
-                Err(err) => {
-                    panic!("Unexpected error while building game: {err:?}");
-                }
+                Err(err) => match err.kind() {
+                    io::ErrorKind::NotFound => {
+                        // Depending on the editor, this can happen while the
+                        // file is being saved.
+                        if let Some(old_err) = ignored_error {
+                            panic!(
+                                "Unexpected error: {err:?}\n\
+                                \n\
+                                Previously ignored an error, because a false \
+                                positive was suspected: {old_err:?}"
+                            );
+                        } else {
+                            ignored_error = Some(err);
+                            continue;
+                        }
+                    }
+                    _ => {
+                        panic!("Unexpected error while building game: {err:?}");
+                    }
+                },
             };
             println!("build:finish");
+
+            ignored_error = None;
 
             timestamp.update();
 
