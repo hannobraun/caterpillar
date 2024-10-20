@@ -36,9 +36,14 @@ pub async fn build_and_watch_game(
     task::spawn(async move {
         while changes.wait_for_change().await {
             println!("build:change");
-            let code = build_game_once_with_compiler(&game, &mut compiler)
+            let code = match build_game_once_with_compiler(&game, &mut compiler)
                 .await
-                .unwrap();
+            {
+                Ok(code) => code,
+                Err(_err) => {
+                    panic!();
+                }
+            };
             println!("build:finish");
 
             timestamp.update();
