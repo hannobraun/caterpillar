@@ -10,7 +10,8 @@ pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     let mut compiler = Compiler::default();
-    build_game_once_with_compiler(game, &mut compiler).await
+    let output = build_game_once_with_compiler(game, &mut compiler).await?;
+    Ok(output)
 }
 
 pub async fn build_and_watch_game(
