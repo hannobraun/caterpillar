@@ -1,4 +1,4 @@
-use std::{str, time::SystemTime};
+use std::{io, str, time::SystemTime};
 
 use capi_compiler::{Compiler, CompilerOutput};
 use capi_game_engine::host::GameEngineHost;
@@ -60,7 +60,7 @@ pub async fn build_and_watch_game(
 async fn build_game_once_with_compiler(
     game: &str,
     compiler: &mut Compiler,
-) -> anyhow::Result<CompilerOutput> {
+) -> io::Result<CompilerOutput> {
     let path = format!("games/{game}/{game}.capi");
     let source = fs::read_to_string(path).await?;
     let output = compiler.compile::<GameEngineHost>(&source);
