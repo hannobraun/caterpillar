@@ -46,7 +46,10 @@ pub async fn build_and_watch_game(
                 timestamp: timestamp.0,
                 inner: code,
             };
-            game_tx.send(code).unwrap();
+            if game_tx.send(code).is_err() {
+                // Receiver dropped. We must be in the process of shutting down.
+                return;
+            }
         }
     });
 
