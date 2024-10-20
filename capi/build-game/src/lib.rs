@@ -41,12 +41,12 @@ pub async fn build_and_watch_game(
             println!("build:finish");
 
             timestamp.update();
-            game_tx
-                .send(Versioned {
-                    timestamp: timestamp.0,
-                    inner: code,
-                })
-                .unwrap();
+
+            let code = Versioned {
+                timestamp: timestamp.0,
+                inner: code,
+            };
+            game_tx.send(code).unwrap();
         }
     });
 
