@@ -39,7 +39,10 @@ impl TestRuntime {
 
     pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
         let Some(effect) = self.run_until_effect() else {
-            return self;
+            panic!(
+                "Waited to receive on channel `{expected_channel}`, but did \
+                not receive anything."
+            );
         };
 
         match effect {
