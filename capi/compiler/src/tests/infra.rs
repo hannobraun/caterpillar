@@ -68,8 +68,8 @@ impl TestRuntime {
 
                 panic!(
                     "Unexpected effect: {effect}\n\
-                        Runtime: {:#?}\n\
-                        Instructions: {instructions:#?}",
+                    Runtime: {:#?}\n\
+                    Instructions: {instructions:#?}",
                     self.runtime,
                 );
             }
