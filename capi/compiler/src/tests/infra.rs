@@ -57,9 +57,9 @@ impl TestRuntime {
                     self.runtime.ignore_next_instruction();
                 } else {
                     panic!(
-                        "Received unexpected signal on channel \
-                            `{channel}`. Expected to receive signal on channel \
-                            `{expected_channel}`."
+                        "Received unexpected signal on channel `{channel}`. \
+                        Expected to receive signal on channel \
+                        `{expected_channel}`."
                     );
                 }
             }
