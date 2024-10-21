@@ -38,7 +38,9 @@ impl TestRuntime {
     }
 
     pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
-        match self.run_until_effect() {
+        let effect = self.run_until_effect();
+
+        match effect {
             Some(Effect::Host) => {
                 let effect = self.runtime.stack_mut().pop_operand().unwrap();
                 assert_eq!(effect.to_u32(), 0);
