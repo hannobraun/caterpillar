@@ -38,10 +38,12 @@ impl TestRuntime {
     }
 
     pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
-        let effect = self.run_until_effect();
+        let Some(effect) = self.run_until_effect() else {
+            return self;
+        };
 
         match effect {
-            Some(Effect::Host) => {
+            Effect::Host => {
                 let effect = self.runtime.stack_mut().pop_operand().unwrap();
                 assert_eq!(effect.to_u32(), 0);
 
@@ -50,7 +52,6 @@ impl TestRuntime {
 
                 if channel == expected_channel {
                     self.runtime.ignore_next_instruction();
-                    return self;
                 } else {
                     panic!(
                         "Received unexpected signal on channel \
@@ -59,7 +60,7 @@ impl TestRuntime {
                     );
                 }
             }
-            Some(effect) => {
+            effect => {
                 let instructions = self.instructions.as_ref();
 
                 panic!(
@@ -69,7 +70,6 @@ impl TestRuntime {
                     self.runtime,
                 );
             }
-            None => {}
         }
 
         self
