@@ -11,7 +11,7 @@ pub use self::{
     effects::{Effect, Effects},
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
-    operands::Operands,
+    operands::{Operands, PopOperandError},
     runtime::{Runtime, RuntimeState},
     stack::Stack,
     value::Value,
