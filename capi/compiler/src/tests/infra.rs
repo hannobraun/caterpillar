@@ -20,7 +20,7 @@ impl TestRuntime {
         self
     }
 
-    pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
+    pub fn run_until_effect(&mut self) -> Option<Effect> {
         let instructions = self
             .instructions
             .as_ref()
@@ -29,37 +29,45 @@ impl TestRuntime {
         while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(instructions);
 
-            match self.runtime.effects_mut().handle_first() {
-                Some(Effect::Host) => {
-                    let effect =
-                        self.runtime.stack_mut().pop_operand().unwrap();
-                    assert_eq!(effect.to_u32(), 0);
+            if let Some(effect) = self.runtime.effects_mut().handle_first() {
+                return Some(effect);
+            }
+        }
 
-                    let channel =
-                        self.runtime.stack_mut().pop_operand().unwrap();
-                    let channel: u32 = u32::from_le_bytes(channel.0);
+        None
+    }
 
-                    if channel == expected_channel {
-                        self.runtime.ignore_next_instruction();
-                        break;
-                    } else {
-                        panic!(
-                            "Received unexpected signal on channel \
+    pub fn run_until_receiving(&mut self, expected_channel: u32) -> &mut Self {
+        match self.run_until_effect() {
+            Some(Effect::Host) => {
+                let effect = self.runtime.stack_mut().pop_operand().unwrap();
+                assert_eq!(effect.to_u32(), 0);
+
+                let channel = self.runtime.stack_mut().pop_operand().unwrap();
+                let channel: u32 = u32::from_le_bytes(channel.0);
+
+                if channel == expected_channel {
+                    self.runtime.ignore_next_instruction();
+                    return self;
+                } else {
+                    panic!(
+                        "Received unexpected signal on channel \
                             `{channel}`. Expected to receive signal on channel \
                             `{expected_channel}`."
-                        );
-                    }
-                }
-                Some(effect) => {
-                    panic!(
-                        "Unexpected effect: {effect}\n\
-                        Runtime: {:#?}\n\
-                        Instructions: {instructions:#?}",
-                        self.runtime,
                     );
                 }
-                None => {}
             }
+            Some(effect) => {
+                let instructions = self.instructions.as_ref();
+
+                panic!(
+                    "Unexpected effect: {effect}\n\
+                        Runtime: {:#?}\n\
+                        Instructions: {instructions:#?}",
+                    self.runtime,
+                );
+            }
+            None => {}
         }
 
         self
