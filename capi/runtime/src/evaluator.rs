@@ -503,7 +503,7 @@ fn evaluate_instruction(
 
 #[cfg(test)]
 mod tests {
-    use alloc::{collections::BTreeMap, string::String, vec};
+    use std::collections::BTreeMap;
 
     use crate::{
         evaluator::Evaluator, stack::StackElement, Branch, Function,
