@@ -87,7 +87,11 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
-    while let Some(token) = tokens.take() {
+    loop {
+        let Some(token) = tokens.take() else {
+            break;
+        };
+
         match parse_branch_parameter(token) {
             Some(pattern) => {
                 branch.parameters.push(pattern);
