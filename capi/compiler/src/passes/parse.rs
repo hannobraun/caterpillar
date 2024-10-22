@@ -100,6 +100,27 @@ fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
                 break;
             }
         }
+
+        let Some(token) = tokens.take() else {
+            break;
+        };
+
+        match token {
+            Token::Delimiter => {
+                // If we have a delimiter, then we're good here. Next loop
+                // iteration, we'll either parse the next parameter, or if it
+                // was the last one, find the start of the branch body.
+                continue;
+            }
+            Token::BranchBodyStart => {
+                // The last parameter doesn't need a delimiter, so this is fine
+                // too.
+                break;
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 # Main loop
 main: {
-    \ size_x size_y ->
+    \ size_x, size_y ->
         size_x
         size_y
         tile_field_size
@@ -36,7 +36,7 @@ clear_pixels: {
 }
 
 clear_pixels_inner: {
-    \ tile_x tile_y ->
+    \ tile_x, tile_y ->
         # This is a recursive function, so we might have been at
         # it for a while, if we make it here. Check if the tile
         # index has gone beyond the last tile, which would let
@@ -84,10 +84,10 @@ _draw_snake_inner: {
 }
 
 _draw_snake_draw_rest_of_snake: {
-    \ 0 _ ->
+    \ 0, _ ->
         # Index is out of bounds. We're done.
 
-    \ 1 index ->
+    \ 1, index ->
         # Index is valid. Continue drawing the snake.
         index
         _draw_snake_draw_body_segment
@@ -140,7 +140,7 @@ check_tile_index: {
 }
 
 increment_tile_index: {
-    \ tile_x tile_y ->
+    \ tile_x, tile_y ->
         tile_x
         _increment_tile_index_increment_coord
         _increment_tile_index_is_tile_x_within_limit
@@ -169,29 +169,29 @@ _increment_tile_index_is_tile_x_within_limit: {
 }
 
 _increment_tile_index_reset_x_if_overflowed: {
-    \ _ 0 ->
+    \ _, 0 ->
         0 0
 
-    \ tile_x 1 ->
+    \ tile_x, 1 ->
         tile_x 1
 }
 
 _increment_tile_index_increment_y_if_necessary: {
-    \ tile_x 0 tile_y ->
+    \ tile_x, 0, tile_y ->
         tile_x
         tile_y
         _increment_tile_index_increment_coord
 
-    \ tile_x 1 tile_y ->
+    \ tile_x, 1, tile_y ->
         tile_x tile_y
 }
 
 # Tile field size
 is_out_of_bounds: {
-    \ x y ->
+    \ x, y ->
         tile_field_size
         vec_load
-        { \ limit_x limit_y ->
+        { \ limit_x, limit_y ->
             x
             limit_x
             _is_out_of_bounds_is_coord_within_bounds
@@ -205,7 +205,7 @@ is_out_of_bounds: {
 }
 
 _is_out_of_bounds_is_coord_within_bounds: {
-    \ coord limit ->
+    \ coord, limit ->
         coord
         0
         greater_u8
@@ -324,10 +324,10 @@ update_next_position: {
             \ 1 ->
                 next_position
                 vec_load
-                { \ next_x next_y ->
+                { \ next_x, next_y ->
                     tile_field_size
                     vec_load
-                    { \ limit_x limit_y ->
+                    { \ limit_x, limit_y ->
                         next_x
                         limit_x
                         handle_coordinate_smaller_than_zero
@@ -368,7 +368,7 @@ update_next_position: {
 }
 
 handle_coordinate_smaller_than_zero: {
-    \ coord limit ->
+    \ coord, limit ->
         0
         coord
         greater_s8
@@ -387,7 +387,7 @@ handle_coordinate_smaller_than_zero: {
 }
 
 handle_coordinate_larger_than_limit: {
-    \ coord limit ->
+    \ coord, limit ->
         limit
         coord
         greater_u8
@@ -544,7 +544,7 @@ grow_snake: {
 }
 
 check_body_collision: {
-    \ x y ->
+    \ x, y ->
         x
         y
         0
@@ -552,7 +552,7 @@ check_body_collision: {
 }
 
 check_body_collision_inner: {
-    \ x y index ->
+    \ x, y, index ->
         positions
         vec_buf_len
         1
@@ -682,12 +682,12 @@ positions: {
 
 # Utilities - Vector
 vec_x: {
-    \ x _ ->
+    \ x, _ ->
         x
 }
 
 vec_y: {
-    \ _ y ->
+    \ _, y ->
         y
 }
 
@@ -702,7 +702,7 @@ vec_load: {
 }
 
 vec_store: {
-    \ x y address ->
+    \ x, y, address ->
         x
         address
         store
@@ -714,16 +714,16 @@ vec_store: {
 }
 
 vec_copy: {
-    \ vx vy ->
+    \ vx, vy ->
         vx vy vx vy
 }
 
 vec_drop: {
-    \ _ _ ->
+    \ _, _ ->
 }
 
 vec_eq: {
-    \ ax ay bx by ->
+    \ ax, ay, bx, by ->
         ax
         bx
         eq
@@ -751,7 +751,7 @@ vec_buf_init: {
 }
 
 vec_buf_get: {
-    \ vec_buf index ->
+    \ vec_buf, index ->
         index
         2
         mul_u8_wrap
@@ -786,7 +786,7 @@ vec_buf_last: {
 }
 
 vec_buf_push: {
-    \ vec_buf x y ->
+    \ vec_buf, x, y ->
         vec_buf
         _vec_buf_next
         { \ next_addr ->
@@ -846,7 +846,7 @@ vec_buf_capacity: {
 }
 
 _vec_buf_address: {
-    \ vec_buf base offset ->
+    \ vec_buf, base, offset ->
         # Compute the memory address of a location within the
         # vector buffer.
         #

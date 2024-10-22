@@ -17,7 +17,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     debugger
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     nop # this is where the breakpoint will be set
                     brk # prevent process from ending before we set breakpoint
                 }
@@ -54,7 +54,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 nop
             }
         ",
@@ -100,7 +100,7 @@ fn step_over_brk() -> anyhow::Result<()> {
     debugger
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     brk
                     nop
                 }
@@ -159,7 +159,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 nop # a
                 nop # b
                 nop # c
@@ -263,17 +263,17 @@ fn step_into_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 1 2 f
             }
 
             # Add some arguments. In case the compiler decides to generate code
             # to handle those, this makes sure we step over that generated code.
             f: {
-                \ 1 a ->
+                \ 1, a ->
                     nop # a
 
-                \ 2 b ->
+                \ 2, b ->
                     nop # b
             }
         ",
@@ -334,7 +334,7 @@ fn step_out_of_function_if_at_last_fragment() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 f
                 nop
             }
@@ -401,7 +401,7 @@ fn step_out_of_main_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 nop
             }
         ",
@@ -444,7 +444,7 @@ fn step_over_function_call() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 f
                 nop
             }
@@ -503,7 +503,7 @@ fn step_out_of_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: { \ size_x size_y ->
+            main: { \ size_x, size_y ->
                 f
                 nop # b
             }

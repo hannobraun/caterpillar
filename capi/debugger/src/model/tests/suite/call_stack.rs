@@ -22,7 +22,7 @@ fn basic_call_stack() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
                 }
@@ -50,7 +50,7 @@ fn stopped_at_host_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     halt
                 }
             ",
@@ -76,7 +76,7 @@ fn stopped_in_anonymous_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     { \ -> brk } eval
                 }
             ",
@@ -107,7 +107,7 @@ fn call_stack_reconstruction_missing_main() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     f
                 }
 
@@ -140,7 +140,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
                 }
@@ -179,10 +179,10 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
         .provide_source_code(
             r"
                 main: {
-                    \ 0 0 ->
+                    \ 0, 0 ->
                         f
 
-                    \ size_x size_y ->
+                    \ size_x, size_y ->
                         f
                 }
 
@@ -219,7 +219,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     0 f
                 }
 
@@ -273,7 +273,7 @@ fn instruction_on_call_stack_with_no_associated_fragment() {
     debugger
         .provide_source_code(
             r"
-                main: { \ size_x size_y ->
+                main: { \ size_x, size_y ->
                     submit
                     main
                 }
