@@ -1,4 +1,5 @@
-use std::{collections::VecDeque, num::TryFromIntError};
+use alloc::collections::VecDeque;
+use std::num::TryFromIntError;
 
 use crate::{
     operands::PopOperandError, stack::PushStackFrameError,

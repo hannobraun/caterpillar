@@ -1,7 +1,9 @@
-use std::{
+use alloc::{
     collections::{BTreeSet, VecDeque},
-    fmt,
+    string::String,
+    vec::Vec,
 };
+use std::fmt;
 
 use crate::{Branch, Effect, Function, Value};
 

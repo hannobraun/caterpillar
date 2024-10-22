@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use alloc::{collections::BTreeMap, vec::Vec};
 
 use crate::{
     function::Pattern, Effect, Function, Instruction, InstructionAddress,
@@ -503,7 +503,7 @@ fn evaluate_instruction(
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
+    use alloc::{collections::BTreeMap, string::String, vec};
 
     use crate::{
         evaluator::Evaluator, stack::StackElement, Branch, Function,

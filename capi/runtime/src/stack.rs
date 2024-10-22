@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use alloc::{collections::BTreeMap, string::String, vec, vec::Vec};
 
 use crate::{operands::PopOperandError, InstructionAddress, Value};
 
