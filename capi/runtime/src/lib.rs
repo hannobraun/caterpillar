@@ -1,3 +1,5 @@
+extern crate alloc;
+
 mod effects;
 mod evaluator;
 mod function;
