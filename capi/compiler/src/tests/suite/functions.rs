@@ -26,6 +26,8 @@ fn access_operand_from_parent_scope() {
 
     assert_eq!(
         effect,
-        Some(Effect::PopOperand(PopOperandError::MissingOperand))
+        Some(Effect::PopOperand {
+            source: PopOperandError::MissingOperand
+        })
     );
 }

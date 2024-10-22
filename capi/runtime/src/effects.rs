@@ -95,7 +95,10 @@ pub enum Effect {
     OperandOutOfBounds,
 
     #[error(transparent)]
-    PopOperand(#[from] PopOperandError),
+    PopOperand {
+        #[from]
+        source: PopOperandError,
+    },
 
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
