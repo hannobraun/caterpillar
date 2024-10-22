@@ -18,7 +18,7 @@ pub fn tokenize(source: &str) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
-                    buffer.take_literal_or_identifier(&mut tokens);
+                    buffer.take_literal_or_keyword_identifier(&mut tokens);
                     state = State::Comment;
                 }
                 ':' => {
@@ -27,14 +27,16 @@ pub fn tokenize(source: &str) -> Vec<Token> {
                     });
                 }
                 ch if ch.is_whitespace() => {
-                    buffer.take_literal_or_identifier(&mut tokens);
+                    buffer.take_literal_or_keyword_identifier(&mut tokens);
                 }
                 ch => {
                     buffer.push(ch);
 
                     for (s, token) in &eager_tokens {
                         if buffer.take_from_end(s) {
-                            buffer.take_literal_or_identifier(&mut tokens);
+                            buffer.take_literal_or_keyword_identifier(
+                                &mut tokens,
+                            );
                             tokens.push(token.clone());
                         }
                     }
@@ -103,7 +105,10 @@ impl Buffer {
         }
     }
 
-    pub fn take_literal_or_identifier(&mut self, tokens: &mut Vec<Token>) {
+    pub fn take_literal_or_keyword_identifier(
+        &mut self,
+        tokens: &mut Vec<Token>,
+    ) {
         tokens.extend(self.take_if_not_empty().map(|token| {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
