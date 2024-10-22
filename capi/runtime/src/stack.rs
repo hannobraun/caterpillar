@@ -251,20 +251,17 @@ pub type Bindings = BTreeMap<String, Value>;
     Debug,
     Eq,
     PartialEq,
-    thiserror::Error,
     serde::Deserialize,
     serde::Serialize,
+    snafu::Snafu,
 )]
 pub enum PushStackFrameError {
-    #[error(transparent)]
-    PopOperand {
-        #[from]
-        source: PopOperandError,
-    },
+    #[snafu(transparent)]
+    PopOperand { source: PopOperandError },
 
-    #[error("Reached recursion limit")]
+    #[snafu(display("Reached recursion limit"))]
     Overflow,
 
-    #[error("Evaluator is already finished")]
+    #[snafu(display("Evaluator is already finished"))]
     Finished,
 }

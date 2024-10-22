@@ -62,56 +62,50 @@ impl Effects {
     PartialEq,
     serde::Deserialize,
     serde::Serialize,
-    thiserror::Error,
+    snafu::Snafu,
 )]
 pub enum Effect {
-    #[error("Breakpoint")]
+    #[snafu(display("Breakpoint"))]
     Breakpoint,
 
-    #[error(
+    #[snafu(display(
         "Hit instruction that was generated from invalid Caterpillar code"
-    )]
+    ))]
     BuildError,
 
-    #[error("Mis-compilation due to a compiler bug")]
+    #[snafu(display("Mis-compilation due to a compiler bug"))]
     CompilerBug,
 
-    #[error("Divide by zero")]
+    #[snafu(display("Divide by zero"))]
     DivideByZero,
 
-    #[error("Integer overflow")]
+    #[snafu(display("Integer overflow"))]
     IntegerOverflow,
 
-    #[error("Invalid function")]
+    #[snafu(display("Invalid function"))]
     InvalidFunction,
 
-    #[error("Invalid host effect")]
+    #[snafu(display("Invalid host effect"))]
     InvalidHostEffect,
 
-    #[error("Pattern matching resulted in no match")]
+    #[snafu(display("Pattern matching resulted in no match"))]
     NoMatch,
 
-    #[error("Operand is out of bounds")]
+    #[snafu(display("Operand is out of bounds"))]
     OperandOutOfBounds,
 
-    #[error(transparent)]
-    PopOperand {
-        #[from]
-        source: PopOperandError,
-    },
+    #[snafu(transparent)]
+    PopOperand { source: PopOperandError },
 
-    #[error(transparent)]
-    PushStackFrame {
-        #[from]
-        source: PushStackFrameError,
-    },
+    #[snafu(transparent)]
+    PushStackFrame { source: PushStackFrameError },
 
     /// A host-specific effect
     ///
     /// This host is expected to handle this effect. Any information it requires
     /// to do so, is expected to be present on the operand stack, when this
     /// effect is triggered.
-    #[error("Host-specific effect")]
+    #[snafu(display("Host-specific effect"))]
     Host,
 }
 

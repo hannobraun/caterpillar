@@ -32,11 +32,11 @@ impl Operands {
     Debug,
     Eq,
     PartialEq,
-    thiserror::Error,
     serde::Deserialize,
     serde::Serialize,
+    snafu::Snafu,
 )]
 pub enum PopOperandError {
-    #[error("Missing operand")]
+    #[snafu(display("Missing operand"))]
     MissingOperand,
 }
