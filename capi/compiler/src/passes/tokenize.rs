@@ -3,8 +3,6 @@ use std::mem;
 pub fn tokenize(source: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r",", Token::Delimiter),
-        (r"{", Token::FunctionStart),
-        (r"}", Token::FunctionEnd),
         (r"\", Token::BranchStart),
         (r"->", Token::BranchBodyStart),
     ];
@@ -69,8 +67,6 @@ pub enum Token {
     KeywordFn,
 
     FunctionName { name: String },
-    FunctionStart,
-    FunctionEnd,
 
     BranchStart,
     BranchBodyStart,
