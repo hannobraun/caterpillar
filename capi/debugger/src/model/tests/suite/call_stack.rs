@@ -22,15 +22,15 @@ fn basic_call_stack() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
                 }
-                f: { \ ->
+                f: fn \ ->
                     g
                     nop # make sure the previous call is not a tail call
                 }
-                g: { \ ->
+                g: fn \ ->
                     brk
                 }
             ",
@@ -50,7 +50,7 @@ fn stopped_at_host_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     halt
                 }
             ",
@@ -76,8 +76,8 @@ fn stopped_in_anonymous_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
-                    { \ -> brk } eval
+                main: fn \ size_x, size_y ->
+                    fn \ -> brk } eval
                 }
             ",
         )
@@ -107,11 +107,11 @@ fn call_stack_reconstruction_missing_main() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     f
                 }
 
-                f: { \ ->
+                f: fn \ ->
                     brk
                 }
             ",
@@ -140,16 +140,16 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
                 }
 
-                f: { \ ->
+                f: fn \ ->
                     g
                 }
 
-                g: { \ ->
+                g: fn \ ->
                     brk
                 }
             ",
@@ -178,7 +178,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: {
+                main: fn
                     \ 0, 0 ->
                         f
 
@@ -186,11 +186,11 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
                         f
                 }
 
-                f: { \ ->
+                f: fn \ ->
                     g
                 }
 
-                g: { \ ->
+                g: fn \ ->
                     brk
                 }
             ",
@@ -219,11 +219,11 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     0 f
                 }
 
-                f: {
+                f: fn
                     \ 0 ->
                         g
 
@@ -231,11 +231,11 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
                         g
                 }
 
-                g: { \ ->
+                g: fn \ ->
                     h
                 }
 
-                h: { \ ->
+                h: fn \ ->
                     brk
                 }
             ",
@@ -273,12 +273,12 @@ fn instruction_on_call_stack_with_no_associated_fragment() {
     debugger
         .provide_source_code(
             r"
-                main: { \ size_x, size_y ->
+                main: fn \ size_x, size_y ->
                     submit
                     main
                 }
 
-                submit: { \ ->
+                submit: fn \ ->
                     submit_frame # this is the call to the host function
                 }
             ",

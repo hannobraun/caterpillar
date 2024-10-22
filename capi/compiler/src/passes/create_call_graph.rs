@@ -110,12 +110,12 @@ mod tests {
     fn no_recursion() {
         let call_graph = create_call_graph(
             r"
-                main: {
+                main: fn
                     \ ->
                         f
                 }
 
-                f: {
+                f: fn
                     \ ->
                         nop
                 }
@@ -143,12 +143,12 @@ mod tests {
     fn self_recursion() {
         let call_graph = create_call_graph(
             r"
-                main: {
+                main: fn
                     \ ->
                         f
                 }
 
-                f: {
+                f: fn
                     \ ->
                         f
                 }
@@ -176,17 +176,17 @@ mod tests {
     fn mutual_recursion() {
         let call_graph = create_call_graph(
             r"
-                main: {
+                main: fn
                     \ ->
                         f
                 }
 
-                f: {
+                f: fn
                     \ ->
                         g
                 }
 
-                g: {
+                g: fn
                     \ ->
                         f
                 }
@@ -219,24 +219,24 @@ mod tests {
     fn sort_clusters_by_call_graph() {
         let call_graph = create_call_graph(
             r"
-                main: {
+                main: fn
                     \ ->
                         a
                 }
 
-                a: {
+                a: fn
                     \ ->
                         # Call a function that comes is placed after this one in
                         # the source code.
                         c
                 }
 
-                b: {
+                b: fn
                     \ ->
                         nop
                 }
 
-                c: {
+                c: fn
                     \ ->
                         # And for some variety, call a function that is placed
                         # before.
@@ -272,17 +272,17 @@ mod tests {
     fn consider_anonymous_functions_in_call_graph() {
         let call_graph = create_call_graph(
             r"
-                main: {
+                main: fn
                     \ ->
-                        {
+                        fn
                             \ ->
                                 a
                         }
                 }
 
-                a: {
+                a: fn
                     \ ->
-                        {
+                        fn
                             \ ->
                                 # Call a function that comes is placed after
                                 # this one in the source code.
@@ -290,14 +290,14 @@ mod tests {
                         }
                 }
 
-                b: {
+                b: fn
                     \ ->
                         nop
                 }
 
-                c: {
+                c: fn
                     \ ->
-                        {
+                        fn
                             \ ->
                                 # And for some variety, call a function that is
                                 # placed before.

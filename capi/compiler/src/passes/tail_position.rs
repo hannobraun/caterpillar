@@ -52,7 +52,7 @@ mod tests {
 
         let functions = determine_tail_positions(
             r"
-                f: {
+                f: fn
                     \ ->
                         not_tail
                         tail
@@ -78,10 +78,10 @@ mod tests {
 
         let functions = determine_tail_positions(
             r"
-                f: {
+                f: fn
                     \ ->
                         a
-                        {
+                        fn
                             \ ->
                                 not_tail
                                 tail
@@ -115,7 +115,7 @@ mod tests {
 
         let functions = determine_tail_positions(
             r"
-                f: {
+                f: fn
                     \ ->
                         not_tail
                         tail

@@ -45,7 +45,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     let mut function = Function::default();
 
     match tokens.take()? {
-        Token::FunctionStart => {}
+        Token::KeywordFn => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -140,7 +140,7 @@ fn parse_branch_parameter(token: Token) -> Option<Pattern> {
 fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
-            Token::FunctionStart => {
+            Token::KeywordFn => {
                 if let Some(function) = parse_function(tokens) {
                     branch.add_fragment(Fragment::Function { function });
                 }

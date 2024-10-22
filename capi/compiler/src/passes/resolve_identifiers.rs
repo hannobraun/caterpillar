@@ -161,10 +161,10 @@ mod tests {
 
         let mut functions = resolve_identifiers(
             r"
-                f: {
+                f: fn
                     \ ->
                         0
-                        {
+                        fn
                             \ value ->
                         }
                         value
@@ -194,7 +194,7 @@ mod tests {
 
         let mut functions = resolve_identifiers(
             r"
-                f: {
+                f: fn
                     \ ->
                         host_fn
                 }
@@ -219,7 +219,7 @@ mod tests {
 
         let mut functions = resolve_identifiers(
             r"
-                f: {
+                f: fn
                     \ ->
                         eval
                 }
@@ -246,12 +246,12 @@ mod tests {
 
         let mut functions = resolve_identifiers(
             r"
-                f: {
+                f: fn
                     \ ->
                         user_fn
                 }
 
-                user_fn: {
+                user_fn: fn
                     \ ->
                 }
             ",

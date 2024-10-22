@@ -90,7 +90,7 @@ mod tests {
     fn self_recursive_functions() {
         let functions = mark_recursive_calls(
             r"
-                f: {
+                f: fn
                     \ ->
                         f
                 }
@@ -102,7 +102,7 @@ mod tests {
                 #
                 # This is prone to hide a bug, so we have this second function,
                 # that has a non-zero index in the list of all named functions.
-                g: {
+                g: fn
                     \ ->
                         g
                 }
@@ -148,9 +148,9 @@ mod tests {
     fn mark_recursive_calls_from_anonymous_functions() {
         let functions = mark_recursive_calls(
             r"
-                f: {
+                f: fn
                     \ ->
-                        {
+                        fn
                             \ ->
                                 f
                         }
