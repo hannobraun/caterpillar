@@ -5,7 +5,8 @@ edition = "2021"
 
 [dependencies.serde]
 version = "*"
-features = ["derive"]
+default-features = false
+features = ["alloc", "derive"]
 
 [dependencies.snafu]
 version = "*"
