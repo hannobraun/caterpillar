@@ -88,21 +88,26 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
 
 fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
     while let Some(token) = tokens.take() {
-        match token {
-            Token::Identifier { name } => {
-                branch.parameters.push(Pattern::Identifier { name });
+        match parse_branch_parameter(token) {
+            Some(pattern) => {
+                branch.parameters.push(pattern);
             }
-            Token::IntegerLiteral { value } => {
-                branch.parameters.push(Pattern::Literal {
-                    value: value.into(),
-                });
-            }
-            Token::BranchBodyStart => {
+            None => {
                 break;
             }
-            token => {
-                panic!("Unexpected token: {token:?}");
-            }
+        }
+    }
+}
+
+fn parse_branch_parameter(token: Token) -> Option<Pattern> {
+    match token {
+        Token::Identifier { name } => Some(Pattern::Identifier { name }),
+        Token::IntegerLiteral { value } => Some(Pattern::Literal {
+            value: value.into(),
+        }),
+        Token::BranchBodyStart => None,
+        token => {
+            panic!("Unexpected token: {token:?}");
         }
     }
 }
