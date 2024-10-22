@@ -3,7 +3,7 @@ use alloc::{
     string::String,
     vec::Vec,
 };
-use std::fmt;
+use core::fmt;
 
 use crate::{Branch, Effect, Function, Value};
 

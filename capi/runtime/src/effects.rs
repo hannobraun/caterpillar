@@ -1,5 +1,5 @@
 use alloc::collections::VecDeque;
-use std::num::TryFromIntError;
+use core::num::TryFromIntError;
 
 use crate::{
     operands::PopOperandError, stack::PushStackFrameError,
