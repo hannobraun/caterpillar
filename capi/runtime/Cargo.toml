@@ -13,4 +13,4 @@ default-features = false
 
 [dependencies.udigest]
 version = "*"
-features = ["derive", "std"]
+features = ["derive"]

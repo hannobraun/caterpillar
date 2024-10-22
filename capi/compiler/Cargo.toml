@@ -19,4 +19,4 @@ features = ["derive"]
 
 [dependencies.udigest]
 version = "*"
-features = ["derive", "std"]
+features = ["derive"]
