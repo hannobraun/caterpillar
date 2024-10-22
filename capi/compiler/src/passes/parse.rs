@@ -56,7 +56,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     }
 
     match tokens.take()? {
-        Token::FunctionEnd => {}
+        Token::KeywordEnd => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -70,7 +70,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         Token::BranchStart => {
             tokens.take();
         }
-        Token::FunctionEnd => {
+        Token::KeywordEnd => {
             return None;
         }
         token => {
@@ -145,7 +145,7 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
                     branch.add_fragment(Fragment::Function { function });
                 }
             }
-            Token::BranchStart | Token::FunctionEnd => {
+            Token::BranchStart | Token::KeywordEnd => {
                 break;
             }
             _ => match tokens.take()? {

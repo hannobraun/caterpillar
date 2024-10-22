@@ -7,9 +7,9 @@ fn anonymous_function_eval() {
             r"
                 main: fn
                     \ ->
-                        fn \ -> 0 send }
+                        fn \ -> 0 send end
                             eval
-                }
+                end
             ",
         )
         .run_until_receiving(0);
@@ -23,10 +23,10 @@ fn anonymous_function_parameter() {
                 main: fn
                     \ ->
                         0
-                        fn \ channel -> channel }
+                        fn \ channel -> channel end
                             eval
                             send
-                }
+                end
             ",
         )
         .run_until_receiving(0);
@@ -43,12 +43,12 @@ fn anonymous_function_parameter_shadowing() {
                         fn
                             \ channel ->
                                 channel
-                                fn \ channel -> channel }
+                                fn \ channel -> channel end
                                     eval
-                        }
+                        end
                             eval
                             send
-                }
+                end
             ",
         )
         .run_until_receiving(0);
@@ -69,13 +69,13 @@ fn anonymous_function_captured_binding() {
                                     # sure that capturing works even from a
                                     # grandparent scope.
 
-                                    fn \ -> channel send }
+                                    fn \ -> channel send end
                                         eval
-                                }
+                                end
                                     eval
-                        }
+                        end
                             eval
-                }
+                end
             ",
         )
         .run_until_receiving(0);

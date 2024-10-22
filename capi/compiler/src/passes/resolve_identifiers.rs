@@ -166,9 +166,9 @@ mod tests {
                         0
                         fn
                             \ value ->
-                        }
+                        end
                         value
-                }
+                end
             ",
         );
 
@@ -197,7 +197,7 @@ mod tests {
                 f: fn
                     \ ->
                         host_fn
-                }
+                end
             ",
         );
 
@@ -222,7 +222,7 @@ mod tests {
                 f: fn
                     \ ->
                         eval
-                }
+                end
             ",
         );
 
@@ -249,11 +249,11 @@ mod tests {
                 f: fn
                     \ ->
                         user_fn
-                }
+                end
 
                 user_fn: fn
                     \ ->
-                }
+                end
             ",
         );
 

@@ -8,7 +8,7 @@ main: fn
         init_frame_count
         init
         main_inner
-}
+end
 
 main_inner: fn
     \ ->
@@ -16,7 +16,7 @@ main_inner: fn
         count_frame
         update
         main_inner
-}
+end
 
 # Draw
 draw: fn
@@ -27,13 +27,13 @@ draw: fn
         # This blocks until the display system is ready to process the
         # next frame.
         submit_frame
-}
+end
 
 # Draw - clear pixels
 clear_pixels: fn
     \ ->
         init_tile_index clear_pixels_inner
-}
+end
 
 clear_pixels_inner: fn
     \ tile_x, tile_y ->
@@ -60,14 +60,14 @@ clear_pixels_inner: fn
                 tile_y
                 increment_tile_index
                 clear_pixels_inner
-        }
+        end
             eval
-}
+end
 
 draw_snake: fn
     \ ->
         0 _draw_snake_inner
-}
+end
 
 _draw_snake_inner: fn
     \ index ->
@@ -79,9 +79,9 @@ _draw_snake_inner: fn
             index_is_within_bounds
             index
             _draw_snake_draw_rest_of_snake
-        }
+        end
             eval
-}
+end
 
 _draw_snake_draw_rest_of_snake: fn
     \ 0, _ ->
@@ -95,7 +95,7 @@ _draw_snake_draw_rest_of_snake: fn
         1
         add_u8
         _draw_snake_inner
-}
+end
 
 _draw_snake_draw_body_segment: fn
     \ index ->
@@ -104,12 +104,12 @@ _draw_snake_draw_body_segment: fn
         vec_buf_get
         _draw_snake_body_color
         set_pixel
-}
+end
 
 _draw_snake_body_color: fn
     \ ->
         0 255 0 255
-}
+end
 
 draw_food: fn
     \ ->
@@ -120,13 +120,13 @@ draw_food: fn
         0
         255
         set_pixel
-}
+end
 
 # Draw - write tiles - tile index
 init_tile_index: fn
     \ ->
         0 0
-}
+end
 
 check_tile_index: fn
     \ tile_y ->
@@ -137,7 +137,7 @@ check_tile_index: fn
         # Leave zero, if the y-coordinate has advanced beyond the last
         # line of the tile field. Otherwise, leave non-zero value.
         sub_s32
-}
+end
 
 increment_tile_index: fn
     \ tile_x, tile_y ->
@@ -147,12 +147,12 @@ increment_tile_index: fn
         _increment_tile_index_reset_x_if_overflowed
         tile_y
         _increment_tile_index_increment_y_if_necessary
-}
+end
 
 _increment_tile_index_increment_coord: fn
     \ coord ->
         coord 1 add_u8
-}
+end
 
 _increment_tile_index_is_tile_x_within_limit: fn
     \ tile_x ->
@@ -164,9 +164,9 @@ _increment_tile_index_is_tile_x_within_limit: fn
         fn \ tile_x_within_limit ->
             tile_x
             tile_x_within_limit
-        }
+        end
             eval
-}
+end
 
 _increment_tile_index_reset_x_if_overflowed: fn
     \ _, 0 ->
@@ -174,7 +174,7 @@ _increment_tile_index_reset_x_if_overflowed: fn
 
     \ tile_x, 1 ->
         tile_x 1
-}
+end
 
 _increment_tile_index_increment_y_if_necessary: fn
     \ tile_x, 0, tile_y ->
@@ -184,7 +184,7 @@ _increment_tile_index_increment_y_if_necessary: fn
 
     \ tile_x, 1, tile_y ->
         tile_x tile_y
-}
+end
 
 # Tile field size
 is_out_of_bounds: fn
@@ -200,9 +200,9 @@ is_out_of_bounds: fn
             _is_out_of_bounds_is_coord_within_bounds
             and
             not
-        }
+        end
             eval
-}
+end
 
 _is_out_of_bounds_is_coord_within_bounds: fn
     \ coord, limit ->
@@ -213,13 +213,13 @@ _is_out_of_bounds_is_coord_within_bounds: fn
         coord
         greater_u8
         and
-}
+end
 
 # Frame count
 init_frame_count: fn
     \ ->
         1 frame_count store
-}
+end
 
 count_frame: fn
     \ ->
@@ -235,7 +235,7 @@ count_frame: fn
         frame_count
         store
         _count_frame_reset_frame_count_if_necessary
-}
+end
 
 _count_frame_reset_frame_count_if_necessary: fn
     \ 121 ->
@@ -243,7 +243,7 @@ _count_frame_reset_frame_count_if_necessary: fn
 
     \ _ ->
         # No reset necessary.
-}
+end
 
 # Game state
 init: fn
@@ -253,7 +253,7 @@ init: fn
         init_velocity
         init_next_position
         food_init
-}
+end
 
 update: fn
     \ ->
@@ -275,21 +275,21 @@ update: fn
 
             \ _ ->
                 # Nothing to do.
-        }
+        end
             eval
-}
+end
 
 # Game state - should game run
 init_should_game_run: fn
     \ ->
         1 should_game_run store
-}
+end
 
 # Game state - velocity
 init_velocity: fn
     \ ->
         1 0 velocity vec_store
-}
+end
 
 # Game state - next position
 init_next_position: fn
@@ -299,7 +299,7 @@ init_next_position: fn
         vec_buf_get
         next_position
         vec_store
-}
+end
 
 update_next_position: fn
     \ ->
@@ -348,24 +348,24 @@ update_next_position: fn
                                         next_y
                                         next_position
                                         vec_store
-                                    }
+                                    end
                                         eval
-                                }
+                                end
                                     eval
-                            }
+                            end
                                 eval
-                        }
+                        end
                             eval
-                    }
+                    end
                         eval
-                }
+                end
                     eval
 
             \ _ ->
                 # Not out of bounds. Nothing to do.
-        }
+        end
             eval
-}
+end
 
 handle_coordinate_smaller_than_zero: fn
     \ coord, limit ->
@@ -380,11 +380,11 @@ handle_coordinate_smaller_than_zero: fn
 
                 \ _ ->
                     coord
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 handle_coordinate_larger_than_limit: fn
     \ coord, limit ->
@@ -401,11 +401,11 @@ handle_coordinate_larger_than_limit: fn
 
                 \ 1 ->
                     coord
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 # Game state - food
 food_init: fn
@@ -424,7 +424,7 @@ food_init: fn
         remainder_s32
         food_position
         vec_store
-}
+end
 
 food_eat: fn
     \ ->
@@ -437,9 +437,9 @@ food_eat: fn
                 grow_snake
 
             \ _ ->
-        }
+        end
             eval
-}
+end
 
 _food_collides_with_snake: fn
     \ ->
@@ -457,11 +457,11 @@ _food_collides_with_snake: fn
                 add_s32
                 0
                 greater_s32
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 # Game state - snake
 snake_init: fn
@@ -475,12 +475,12 @@ snake_init: fn
         15
         15
         vec_buf_push
-}
+end
 
 snake_head: fn
     \ ->
         positions vec_buf_last
-}
+end
 
 update_positions: fn
     \ ->
@@ -497,9 +497,9 @@ update_positions: fn
 
             \ 1 ->
                 # Collision. Do nothing.
-        }
+        end
             eval
-}
+end
 
 pop_positions: fn
     \ ->
@@ -515,9 +515,9 @@ pop_positions: fn
                 pop_positions
 
             \ _ ->
-        }
+        end
             eval
-}
+end
 
 grow_snake: fn
     \ ->
@@ -537,11 +537,11 @@ grow_snake: fn
                     store
 
                 \ _ ->
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 check_body_collision: fn
     \ x, y ->
@@ -549,7 +549,7 @@ check_body_collision: fn
         y
         0
         check_body_collision_inner
-}
+end
 
 check_body_collision_inner: fn
     \ x, y, index ->
@@ -592,18 +592,18 @@ check_body_collision_inner: fn
                                 check_body_collision_inner
 
                             \ _ ->
-                        }
+                        end
                             eval
-                    }
+                    end
                         eval
-                }
+                end
                     eval
 
             \ _ ->
                 0
-        }
+        end
             eval
-}
+end
 
 # Input
 handle_input: fn
@@ -637,59 +637,59 @@ handle_input: fn
     \ _ ->
         # unexpected value
         brk
-}
+end
 
 # Memory map
 tile_field_size: fn
     \ ->
         0
-}
+end
 
 frame_count: fn
     \ ->
         2
-}
+end
 
 should_game_run: fn
     \ ->
         3
-}
+end
 
 velocity: fn
     \ ->
         4
-}
+end
 
 next_position: fn
     \ ->
         6
-}
+end
 
 food_position: fn
     \ ->
         8
-}
+end
 
 snake_length: fn
     \ ->
         10
-}
+end
 
 positions: fn
     \ ->
         11
-}
+end
 
 # Utilities - Vector
 vec_x: fn
     \ x, _ ->
         x
-}
+end
 
 vec_y: fn
     \ _, y ->
         y
-}
+end
 
 vec_load: fn
     \ address ->
@@ -699,7 +699,7 @@ vec_load: fn
         1
         add_s32
         load
-}
+end
 
 vec_store: fn
     \ x, y, address ->
@@ -711,16 +711,16 @@ vec_store: fn
         1
         add_s32
         store
-}
+end
 
 vec_copy: fn
     \ vx, vy ->
         vx vy vx vy
-}
+end
 
 vec_drop: fn
     \ _, _ ->
-}
+end
 
 vec_eq: fn
     \ ax, ay, bx, by ->
@@ -731,7 +731,7 @@ vec_eq: fn
         by
         eq
         and
-}
+end
 
 # Utilities - Vector Buffer
 vec_buf_init: fn
@@ -748,7 +748,7 @@ vec_buf_init: fn
         vec_buf
         _vec_buf_capacity
         store
-}
+end
 
 vec_buf_get: fn
     \ vec_buf, index ->
@@ -765,11 +765,11 @@ vec_buf_get: fn
                 offset
                 _vec_buf_address
                 vec_load
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 vec_buf_last: fn
     \ vec_buf ->
@@ -781,9 +781,9 @@ vec_buf_last: fn
             vec_buf
             index
             vec_buf_get
-        }
+        end
             eval
-}
+end
 
 vec_buf_push: fn
     \ vec_buf, x, y ->
@@ -802,18 +802,18 @@ vec_buf_push: fn
                 vec_store
                 next_addr
                 _vec_buf_inc_index
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 vec_buf_pop: fn
     \ vec_buf ->
         vec_buf
         _vec_buf_first
         _vec_buf_inc_index
-}
+end
 
 vec_buf_len: fn
     \ vec_buf ->
@@ -830,11 +830,11 @@ vec_buf_len: fn
                 sub_u8_wrap
                 2
                 div_u8
-            }
+            end
                 eval
-        }
+        end
             eval
-}
+end
 
 vec_buf_capacity: fn
     \ vec_buf ->
@@ -843,7 +843,7 @@ vec_buf_capacity: fn
         load
         2
         div_s32
-}
+end
 
 _vec_buf_address: fn
     \ vec_buf, base, offset ->
@@ -867,7 +867,7 @@ _vec_buf_address: fn
         vec_buf
         _vec_buf_buffer
         add_u8_wrap
-}
+end
 
 _vec_buf_inc_index: fn
     \ index_addr ->
@@ -877,34 +877,34 @@ _vec_buf_inc_index: fn
         add_u8_wrap
         index_addr
         store
-}
+end
 
 _vec_buf_first: fn
     \ vec_buf ->
         vec_buf 0 add_s32
-}
+end
 
 _vec_buf_next: fn
     \ vec_buf ->
         vec_buf 1 add_s32
-}
+end
 
 _vec_buf_capacity: fn
     \ vec_buf ->
         vec_buf 2 add_s32
-}
+end
 
 _vec_buf_buffer: fn
     \ vec_buf ->
         vec_buf 3 add_s32
-}
+end
 
 # Utilities - Miscellaneous
 negatable_random: fn
     \ ->
         read_random
         _negatable_random_return_or_continue
-}
+end
 
 _negatable_random_return_or_continue: fn
     \ -2147483648 ->
@@ -914,7 +914,7 @@ _negatable_random_return_or_continue: fn
 
     \ random ->
         random
-}
+end
 
 abs: fn
     \ v ->
@@ -927,6 +927,6 @@ abs: fn
                 neg_s32
 
             \ _ ->
-        }
+        end
             eval
-}
+end

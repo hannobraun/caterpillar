@@ -93,7 +93,7 @@ mod tests {
                 f: fn
                     \ ->
                         f
-                }
+                end
 
                 # Need a second function in this test, because for the first,
                 # the index of the function within the list of all named
@@ -105,7 +105,7 @@ mod tests {
                 g: fn
                     \ ->
                         g
-                }
+                end
             ",
         );
 
@@ -153,8 +153,8 @@ mod tests {
                         fn
                             \ ->
                                 f
-                        }
-                }
+                        end
+                end
             ",
         );
 

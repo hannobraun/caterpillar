@@ -25,14 +25,14 @@ fn basic_call_stack() {
                 main: fn \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
-                }
+                end
                 f: fn \ ->
                     g
                     nop # make sure the previous call is not a tail call
-                }
+                end
                 g: fn \ ->
                     brk
-                }
+                end
             ",
         )
         .run_program()
@@ -52,7 +52,7 @@ fn stopped_at_host_function() {
             r"
                 main: fn \ size_x, size_y ->
                     halt
-                }
+                end
             ",
         )
         .run_program()
@@ -77,8 +77,8 @@ fn stopped_in_anonymous_function() {
         .provide_source_code(
             r"
                 main: fn \ size_x, size_y ->
-                    fn \ -> brk } eval
-                }
+                    fn \ -> brk end eval
+                end
             ",
         )
         .run_program()
@@ -109,11 +109,11 @@ fn call_stack_reconstruction_missing_main() {
             r"
                 main: fn \ size_x, size_y ->
                     f
-                }
+                end
 
                 f: fn \ ->
                     brk
-                }
+                end
             ",
         )
         .run_program()
@@ -143,15 +143,15 @@ fn call_stack_reconstruction_missing_single_branch_function() {
                 main: fn \ size_x, size_y ->
                     f
                     nop # make sure the previous call is not a tail call
-                }
+                end
 
                 f: fn \ ->
                     g
-                }
+                end
 
                 g: fn \ ->
                     brk
-                }
+                end
             ",
         )
         .run_program()
@@ -184,15 +184,15 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
 
                     \ size_x, size_y ->
                         f
-                }
+                end
 
                 f: fn \ ->
                     g
-                }
+                end
 
                 g: fn \ ->
                     brk
-                }
+                end
             ",
         )
         .run_program()
@@ -221,7 +221,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
             r"
                 main: fn \ size_x, size_y ->
                     0 f
-                }
+                end
 
                 f: fn
                     \ 0 ->
@@ -229,15 +229,15 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
 
                     \ n ->
                         g
-                }
+                end
 
                 g: fn \ ->
                     h
-                }
+                end
 
                 h: fn \ ->
                     brk
-                }
+                end
             ",
         )
         .run_program()
@@ -276,11 +276,11 @@ fn instruction_on_call_stack_with_no_associated_fragment() {
                 main: fn \ size_x, size_y ->
                     submit
                     main
-                }
+                end
 
                 submit: fn \ ->
                     submit_frame # this is the call to the host function
-                }
+                end
             ",
         )
         .run_program();

@@ -113,12 +113,12 @@ mod tests {
                 main: fn
                     \ ->
                         f
-                }
+                end
 
                 f: fn
                     \ ->
                         nop
-                }
+                end
             ",
         );
 
@@ -146,12 +146,12 @@ mod tests {
                 main: fn
                     \ ->
                         f
-                }
+                end
 
                 f: fn
                     \ ->
                         f
-                }
+                end
             ",
         );
 
@@ -179,17 +179,17 @@ mod tests {
                 main: fn
                     \ ->
                         f
-                }
+                end
 
                 f: fn
                     \ ->
                         g
-                }
+                end
 
                 g: fn
                     \ ->
                         f
-                }
+                end
             ",
         );
 
@@ -222,26 +222,26 @@ mod tests {
                 main: fn
                     \ ->
                         a
-                }
+                end
 
                 a: fn
                     \ ->
                         # Call a function that comes is placed after this one in
                         # the source code.
                         c
-                }
+                end
 
                 b: fn
                     \ ->
                         nop
-                }
+                end
 
                 c: fn
                     \ ->
                         # And for some variety, call a function that is placed
                         # before.
                         b
-                }
+                end
             ",
         );
 
@@ -277,8 +277,8 @@ mod tests {
                         fn
                             \ ->
                                 a
-                        }
-                }
+                        end
+                end
 
                 a: fn
                     \ ->
@@ -287,13 +287,13 @@ mod tests {
                                 # Call a function that comes is placed after
                                 # this one in the source code.
                                 c
-                        }
-                }
+                        end
+                end
 
                 b: fn
                     \ ->
                         nop
-                }
+                end
 
                 c: fn
                     \ ->
@@ -302,8 +302,8 @@ mod tests {
                                 # And for some variety, call a function that is
                                 # placed before.
                                 b
-                        }
-                }
+                        end
+                end
             ",
         );
 

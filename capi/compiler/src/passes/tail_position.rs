@@ -56,7 +56,7 @@ mod tests {
                     \ ->
                         not_tail
                         tail
-                }
+                end
             ",
         );
 
@@ -85,9 +85,9 @@ mod tests {
                             \ ->
                                 not_tail
                                 tail
-                        }
+                        end
                         b
-                }
+                end
             ",
         );
 
@@ -120,7 +120,7 @@ mod tests {
                         not_tail
                         tail
                         # This is a comment.
-                }
+                end
             ",
         );
 

@@ -20,7 +20,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
                 main: fn \ size_x, size_y ->
                     nop # this is where the breakpoint will be set
                     brk # prevent process from ending before we set breakpoint
-                }
+                end
             ",
         )
         .run_program();
@@ -56,7 +56,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         r"
             main: fn \ size_x, size_y ->
                 nop
-            }
+            end
         ",
     );
 
@@ -103,7 +103,7 @@ fn step_over_brk() -> anyhow::Result<()> {
                 main: fn \ size_x, size_y ->
                     brk
                     nop
-                }
+                end
             ",
         )
         .run_program();
@@ -163,7 +163,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
                 nop # a
                 nop # b
                 nop # c
-            }
+            end
         ",
     );
 
@@ -265,7 +265,7 @@ fn step_into_function() {
         r"
             main: fn \ size_x, size_y ->
                 1 2 f
-            }
+            end
 
             # Add some arguments. In case the compiler decides to generate code
             # to handle those, this makes sure we step over that generated code.
@@ -275,7 +275,7 @@ fn step_into_function() {
 
                 \ 2, b ->
                     nop # b
-            }
+            end
         ",
     );
 
@@ -337,13 +337,13 @@ fn step_out_of_function_if_at_last_fragment() {
             main: fn \ size_x, size_y ->
                 f
                 nop
-            }
+            end
 
             f: fn \ ->
                 nop
                 # There's a return instruction at the end of the function, which
                 # we expect to step over.
-            }
+            end
         ",
     );
 
@@ -403,7 +403,7 @@ fn step_out_of_main_function() {
         r"
             main: fn \ size_x, size_y ->
                 nop
-            }
+            end
         ",
     );
 
@@ -447,11 +447,11 @@ fn step_over_function_call() {
             main: fn \ size_x, size_y ->
                 f
                 nop
-            }
+            end
 
             f: fn \ ->
                 nop
-            }
+            end
         ",
     );
 
@@ -506,12 +506,12 @@ fn step_out_of_function() {
             main: fn \ size_x, size_y ->
                 f
                 nop # b
-            }
+            end
 
             f: fn \ ->
                 nop # a
                 nop
-            }
+            end
         ",
     );
 
