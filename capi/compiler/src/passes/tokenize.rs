@@ -63,6 +63,8 @@ pub enum Token {
     Comment { text: String },
     Delimiter,
 
+    KeywordFn,
+
     FunctionName { name: String },
     FunctionStart,
     FunctionEnd,
@@ -105,6 +107,8 @@ impl Buffer {
         tokens.extend(self.take_if_not_empty().map(|token| {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
+            } else if token == "fn" {
+                Token::KeywordFn
             } else {
                 Token::Identifier { name: token }
             }
