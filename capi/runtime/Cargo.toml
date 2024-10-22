@@ -10,6 +10,10 @@ thiserror = "*"
 version = "*"
 features = ["derive"]
 
+[dependencies.snafu]
+version = "*"
+default-features = false
+
 [dependencies.udigest]
 version = "*"
 features = ["derive", "std"]
