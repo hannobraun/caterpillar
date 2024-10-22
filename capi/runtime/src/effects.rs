@@ -101,7 +101,10 @@ pub enum Effect {
     },
 
     #[error(transparent)]
-    PushStackFrame(#[from] PushStackFrameError),
+    PushStackFrame {
+        #[from]
+        source: PushStackFrameError,
+    },
 
     /// A host-specific effect
     ///
