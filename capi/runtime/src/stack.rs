@@ -52,9 +52,7 @@ impl Stack {
             })
     }
 
-    pub fn operands_in_current_stack_frame(
-        &self,
-    ) -> impl Iterator<Item = &Value> + '_ {
+    pub fn operands(&self) -> impl Iterator<Item = &Value> + '_ {
         self.inner.iter().rev().filter_map(|element| match element {
             StackElement::Operand(value) => Some(value),
             _ => None,

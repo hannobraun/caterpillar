@@ -197,7 +197,7 @@ fn evaluate_instruction(
             let mut i = 0;
 
             #[allow(clippy::explicit_counter_loop)] // this saves us a cast
-            for operand in stack.operands_in_current_stack_frame() {
+            for operand in stack.operands() {
                 if i == *offset {
                     v = Some(*operand);
                     break;
