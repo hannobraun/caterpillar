@@ -141,3 +141,19 @@ pub enum TriggerResult {
     /// A triggered effect already exists.
     NotTriggeredBecauseTriggeredEffectAlreadyExists,
 }
+
+impl TriggerResult {
+    /// # Assert that the effect has been triggered
+    ///
+    /// This should be called by code that has previously inspected or handled
+    /// the triggered effect and _knows_ that triggering an effect must succeed.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if the effect has not been triggered.
+    pub fn assert_triggered(&self) {
+        if !matches!(self, Self::Triggered) {
+            panic!("Expected to trigger an effect, but that didn't happen.");
+        }
+    }
+}
