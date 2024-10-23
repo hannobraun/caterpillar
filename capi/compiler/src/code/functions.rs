@@ -212,6 +212,12 @@ pub struct Function {
     /// This is defined for named functions only. The value is `None` for
     /// anonymous functions.
     pub index_in_cluster: Option<FunctionIndexInCluster>,
+
+    /// # The number of inputs that the function takes
+    pub num_inputs: Option<u32>,
+
+    /// # The number of outputs of the function returns
+    pub num_outputs: Option<u32>,
 }
 
 impl Function {
