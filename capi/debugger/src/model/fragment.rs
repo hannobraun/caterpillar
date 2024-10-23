@@ -44,7 +44,7 @@ impl DebugFragment {
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
-        let effect = effects.and_then(|effect| {
+        let active_effect = effects.and_then(|effect| {
             if state.is_innermost_active_fragment() {
                 Some(*effect)
             } else {
@@ -57,7 +57,7 @@ impl DebugFragment {
             location: location.clone(),
             state,
             has_durable_breakpoint,
-            effect,
+            effect: active_effect,
         };
         let kind = DebugFragmentKind::new(
             fragment,
