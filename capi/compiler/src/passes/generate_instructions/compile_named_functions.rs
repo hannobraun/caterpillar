@@ -1,12 +1,13 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::{Instruction, Instructions};
+use capi_runtime::Instruction;
 
 use crate::{
     code::{CallGraph, Changes, Function, NamedFunctions},
     compiler::CallInstructionsByCallee,
     hash::Hash,
     source_map::SourceMap,
+    Instructions,
 };
 
 use super::compile_cluster::compile_cluster;

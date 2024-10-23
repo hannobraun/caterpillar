@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
-use capi_runtime::{Effect, Heap, Instructions, Runtime, Value};
+use capi_compiler::Instructions;
+use capi_runtime::{Effect, Heap, Runtime, Value};
 
 use crate::{
     command::Command,
@@ -78,7 +79,7 @@ impl GameEngine {
 
                 if let Some(instructions) = &self.instructions {
                     self.runtime.evaluate_next_instruction(
-                        instructions,
+                        &instructions.to_runtime_instructions(),
                         &mut self.heap,
                     );
                 } else {
@@ -179,8 +180,10 @@ impl GameEngine {
                 return true;
             };
 
-            self.runtime
-                .evaluate_next_instruction(instructions, &mut self.heap);
+            self.runtime.evaluate_next_instruction(
+                &instructions.to_runtime_instructions(),
+                &mut self.heap,
+            );
 
             if let Some(effect) = self.runtime.effect_mut().handle() {
                 match self.handle_effect(&effect, pixels) {

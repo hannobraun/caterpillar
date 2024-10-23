@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::{Effect, Instruction, InstructionAddress, Instructions};
+use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
@@ -10,6 +10,7 @@ use crate::{
     hash::Hash,
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
+    Instructions,
 };
 
 use super::{

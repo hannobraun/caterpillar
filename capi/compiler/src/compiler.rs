@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::{InstructionAddress, Instructions};
+use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{CallGraph, Function, NamedFunctions},
@@ -13,6 +13,7 @@ use crate::{
         tokenize,
     },
     source_map::SourceMap,
+    Instructions,
 };
 
 /// # Entry point to the compiler API

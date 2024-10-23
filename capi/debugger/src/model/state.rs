@@ -1,7 +1,7 @@
-use capi_compiler::{code::FragmentLocation, CompilerOutput};
+use capi_compiler::{code::FragmentLocation, CompilerOutput, Instructions};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
-use capi_runtime::{Effect, Instruction, Instructions, Value};
+use capi_runtime::{Effect, Instruction, Value};
 
 use super::{
     ActiveFunctions, Breakpoints, DebugCode, DebugFragmentKind, UserAction,
