@@ -95,9 +95,7 @@ impl InstructionAddress {
             index: self.index + 1,
         }
     }
-}
 
-impl InstructionAddress {
     fn to_usize(self) -> usize {
         self.index
             .try_into()
