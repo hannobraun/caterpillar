@@ -39,7 +39,7 @@ impl TriggeredEffect {
     /// Removes the triggered effect, considering it handled.
     ///
     /// Returns `None`, if no effect is currently triggered.
-    pub fn handle_first(&mut self) -> Option<Effect> {
+    pub fn handle(&mut self) -> Option<Effect> {
         self.inner.take()
     }
 

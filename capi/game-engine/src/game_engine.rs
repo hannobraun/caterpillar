@@ -57,14 +57,14 @@ impl GameEngine {
                 if let Some(Effect::Breakpoint) =
                     self.runtime.effects_mut().inspect()
                 {
-                    self.runtime.effects_mut().handle_first();
+                    self.runtime.effects_mut().handle();
                 }
             }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
                     self.runtime.effects().inspect()
                 {
-                    self.runtime.effects_mut().handle_first();
+                    self.runtime.effects_mut().handle();
                 } else {
                     // This shouldn't happen, unless there's a bug in the
                     // debugger. There's no point in panicking here though.
@@ -176,7 +176,7 @@ impl GameEngine {
 
             self.runtime.evaluate_next_instruction(instructions);
 
-            if let Some(effect) = self.runtime.effects_mut().handle_first() {
+            if let Some(effect) = self.runtime.effects_mut().handle() {
                 match self.handle_effect(&effect, pixels) {
                     Ok(EffectOutcome::Handled) => {
                         self.runtime.ignore_next_instruction();
