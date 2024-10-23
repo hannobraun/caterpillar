@@ -10,7 +10,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct TriggeredEffect {
-    queue: Option<Effect>,
+    inner: Option<Effect>,
 }
 
 impl TriggeredEffect {
@@ -20,8 +20,8 @@ impl TriggeredEffect {
     /// there already are other unhandled effects in the queue, this new effect
     /// is added in last place.
     pub fn trigger(&mut self, effect: impl Into<Effect>) -> TriggerResult {
-        if self.queue.is_none() {
-            self.queue = Some(effect.into());
+        if self.inner.is_none() {
+            self.inner = Some(effect.into());
             TriggerResult::Triggered
         } else {
             TriggerResult::NotTriggeredBecauseTriggeredEffectAlreadyExists
@@ -32,7 +32,7 @@ impl TriggeredEffect {
     ///
     /// Returns `None`, if the queue is empty.
     pub fn inspect_first(&self) -> Option<&Effect> {
-        self.queue.as_ref()
+        self.inner.as_ref()
     }
 
     /// # Handle the first effect in the queue
@@ -41,12 +41,12 @@ impl TriggeredEffect {
     ///
     /// Returns `None`, if the queue is empty.
     pub fn handle_first(&mut self) -> Option<Effect> {
-        self.queue.take()
+        self.inner.take()
     }
 
     /// # Iterate over all effects in the queue
     pub fn queue(&self) -> impl Iterator<Item = Effect> + '_ {
-        self.queue.iter().copied()
+        self.inner.iter().copied()
     }
 }
 
