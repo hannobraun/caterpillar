@@ -21,7 +21,7 @@ impl Runtime {
         }
     }
 
-    pub fn effects(&self) -> &TriggeredEffect {
+    pub fn effect(&self) -> &TriggeredEffect {
         &self.effect
     }
 

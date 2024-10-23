@@ -62,7 +62,7 @@ impl GameEngine {
             }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
-                    self.runtime.effects().inspect()
+                    self.runtime.effect().inspect()
                 {
                     self.runtime.effects_mut().handle();
                 } else {

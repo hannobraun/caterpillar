@@ -21,7 +21,7 @@ impl Updates {
                 RuntimeState::Running => HostState::Running,
                 RuntimeState::Finished => HostState::Finished,
                 RuntimeState::Stopped => HostState::Stopped {
-                    effect: runtime.effects().inspect().copied(),
+                    effect: runtime.effect().inspect().copied(),
                     active_instructions: runtime
                         .evaluator()
                         .active_instructions()
