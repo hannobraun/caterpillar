@@ -6,13 +6,13 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Runtime {
-    effects: TriggeredEffect,
+    effect: TriggeredEffect,
     evaluator: Evaluator,
 }
 
 impl Runtime {
     pub fn state(&self) -> RuntimeState {
-        if self.effects.inspect().is_some() {
+        if self.effect.inspect().is_some() {
             RuntimeState::Stopped
         } else if self.evaluator.stack.no_frames_left() {
             RuntimeState::Finished
@@ -22,11 +22,11 @@ impl Runtime {
     }
 
     pub fn effects(&self) -> &TriggeredEffect {
-        &self.effects
+        &self.effect
     }
 
     pub fn effects_mut(&mut self) -> &mut TriggeredEffect {
-        &mut self.effects
+        &mut self.effect
     }
 
     pub fn evaluator(&self) -> &Evaluator {
@@ -55,7 +55,7 @@ impl Runtime {
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects
+            self.effect
                 .trigger(effect)
                 // If there already was an effect, we would have left the
                 // function at the first exist. So triggering an effect must
