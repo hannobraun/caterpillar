@@ -1,5 +1,5 @@
 use crate::{
-    evaluator::Evaluator, Instructions, Stack, TriggeredEffect, Value,
+    evaluator::Evaluator, Heap, Instructions, Stack, TriggeredEffect, Value,
 };
 
 #[derive(
@@ -8,6 +8,7 @@ use crate::{
 pub struct Runtime {
     effect: TriggeredEffect,
     evaluator: Evaluator,
+    heap: Heap,
 }
 
 impl Runtime {
@@ -54,7 +55,7 @@ impl Runtime {
             return;
         }
 
-        if let Err(effect) = self.evaluator.step(instructions) {
+        if let Err(effect) = self.evaluator.step(instructions, &mut self.heap) {
             self.effect
                 .trigger(effect)
                 // If there already was an effect, we would have left the

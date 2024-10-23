@@ -11,8 +11,6 @@ use crate::{
 pub struct Evaluator {
     pub stack: Stack,
     pub next_instruction: InstructionAddress,
-
-    heap: Heap,
 }
 
 impl Evaluator {
@@ -35,7 +33,11 @@ impl Evaluator {
             .chain([self.next_instruction])
     }
 
-    pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
+    pub fn step(
+        &mut self,
+        instructions: &Instructions,
+        heap: &mut Heap,
+    ) -> Result<(), Effect> {
         if self.stack.no_frames_left() {
             return Ok(());
         }
@@ -48,8 +50,8 @@ impl Evaluator {
         self.next_instruction = evaluate_instruction(
             current_instruction,
             next_instruction,
-            &mut self.heap.closures,
-            &mut self.heap.next_closure,
+            &mut heap.closures,
+            &mut heap.next_closure,
             &mut self.stack,
         )?;
 
@@ -505,12 +507,14 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        evaluator::Evaluator, stack::StackElement, Branch, Function,
+        evaluator::Evaluator, stack::StackElement, Branch, Function, Heap,
         Instruction, InstructionAddress, Instructions, Pattern, Value,
     };
 
     #[test]
     fn call_cluster() {
+        let mut heap = Heap::default();
+
         let mut evaluator = Evaluator::default();
         evaluator.stack.push_operand(1);
         evaluator.stack.push_operand(2);
@@ -558,7 +562,7 @@ mod tests {
             is_tail_call: true,
         });
 
-        evaluator.step(&instructions).unwrap();
+        evaluator.step(&instructions, &mut heap).unwrap();
         assert!(!evaluator.stack.no_frames_left());
 
         assert_eq!(evaluator.next_instruction.index, 2);
