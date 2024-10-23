@@ -21,8 +21,12 @@ impl Effects {
     /// there already are other unhandled effects in the queue, this new effect
     /// is added in last place.
     pub fn trigger(&mut self, effect: impl Into<Effect>) -> TriggerResult {
-        self.queue.push_back(effect.into());
-        TriggerResult::Triggered
+        if self.queue.is_empty() {
+            self.queue.push_back(effect.into());
+            TriggerResult::Triggered
+        } else {
+            TriggerResult::NotTriggeredBecauseTriggeredEffectAlreadyExists
+        }
     }
 
     /// # Inspect the first effect in the queue
