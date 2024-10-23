@@ -5,9 +5,13 @@ pub mod source_map;
 
 mod compiler;
 mod hash;
+mod instructions;
 mod passes;
 
 #[cfg(test)]
 mod tests;
 
-pub use self::compiler::{Compiler, CompilerOutput};
+pub use self::{
+    compiler::{Compiler, CompilerOutput},
+    instructions::Instructions,
+};
