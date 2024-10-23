@@ -19,14 +19,6 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = InstructionAddress {
-            index: self.inner.len().try_into().unwrap(),
-        };
-        self.inner.push((address, instruction));
-        address
-    }
-
     pub fn get(&self, address: &InstructionAddress) -> Option<&Instruction> {
         let (stored_address, instruction) =
             self.inner.get(address.to_usize())?;
