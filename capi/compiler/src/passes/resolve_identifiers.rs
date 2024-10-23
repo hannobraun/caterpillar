@@ -114,7 +114,26 @@ fn resolve_in_branch<H: Host>(
                         }
                     }
 
-                    *expression = Fragment::Binding { name: name.clone() }
+                    let mut index = 0;
+                    for parameter in &branch.parameters {
+                        match parameter {
+                            Pattern::Identifier { name: n } => {
+                                if n == name {
+                                    break;
+                                }
+                            }
+                            Pattern::Literal { .. } => {
+                                continue;
+                            }
+                        }
+
+                        index += 1;
+                    }
+
+                    *expression = Fragment::Binding {
+                        name: name.clone(),
+                        index,
+                    }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
