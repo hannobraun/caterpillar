@@ -1,4 +1,4 @@
-use alloc::{collections::BTreeMap, vec::Vec};
+use alloc::vec::Vec;
 
 use crate::{
     function::Pattern, Effect, Function, Heap, Instruction, InstructionAddress,
@@ -50,8 +50,7 @@ impl Evaluator {
         self.next_instruction = evaluate_instruction(
             current_instruction,
             next_instruction,
-            &mut heap.closures,
-            &mut heap.next_closure,
+            heap,
             &mut self.stack,
         )?;
 
@@ -62,8 +61,7 @@ impl Evaluator {
 fn evaluate_instruction(
     current_instruction: &Instruction,
     next_instruction: InstructionAddress,
-    closures: &mut BTreeMap<u32, Function>,
-    next_closure: &mut u32,
+    heap: &mut Heap,
     stack: &mut Stack,
 ) -> Result<InstructionAddress, Effect> {
     match current_instruction {
@@ -256,7 +254,9 @@ fn evaluate_instruction(
                 let index = stack.pop_operand()?;
                 let index = index.to_u32();
 
-                closures.remove(&index).ok_or(Effect::InvalidFunction)?
+                heap.closures
+                    .remove(&index)
+                    .ok_or(Effect::InvalidFunction)?
             };
 
             for branch in &function.branches {
@@ -384,11 +384,11 @@ fn evaluate_instruction(
                 .collect();
 
             let index = {
-                let index = *next_closure;
-                *next_closure += 1;
+                let index = heap.next_closure;
+                heap.next_closure += 1;
                 index
             };
-            closures.insert(
+            heap.closures.insert(
                 index,
                 Function {
                     branches: branches.clone(),
