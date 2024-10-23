@@ -4,13 +4,6 @@ use core::fmt;
 use crate::{Branch, Effect, Function, Value};
 
 /// # The instructions that the runtime executes
-///
-/// ## Implementation Note
-///
-/// This type, as is, doesn't really belong here. It provides facilities for
-/// adding and replacing instructions that are only used by the compiler. It
-/// would probably be better to move the type there, and only pass a slice of
-/// `Instruction`s (or something along those lines) to the runtime.
 pub struct Instructions<'r> {
     pub inner: &'r [(InstructionAddress, Instruction)],
 }
