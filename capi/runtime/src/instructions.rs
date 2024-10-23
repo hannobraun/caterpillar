@@ -153,7 +153,7 @@ pub enum Instruction {
     /// # Convert a signed 32-bit number to a signed 8-bit number
     ConvertS32ToS8,
 
-    /// # Copy a value,
+    /// # Copy a value to the to the top of the stack
     Copy {
         /// # The offset of the value from the top of the stack
         offset: u32,
