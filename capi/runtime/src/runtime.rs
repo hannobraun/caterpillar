@@ -12,7 +12,7 @@ pub struct Runtime {
 
 impl Runtime {
     pub fn state(&self) -> RuntimeState {
-        if self.effects.inspect_first().is_some() {
+        if self.effects.inspect().is_some() {
             RuntimeState::Stopped
         } else if self.evaluator.stack.no_frames_left() {
             RuntimeState::Finished

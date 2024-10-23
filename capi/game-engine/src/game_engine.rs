@@ -55,14 +55,14 @@ impl GameEngine {
         match command {
             Command::ClearBreakpointAndContinue => {
                 if let Some(Effect::Breakpoint) =
-                    self.runtime.effects_mut().inspect_first()
+                    self.runtime.effects_mut().inspect()
                 {
                     self.runtime.effects_mut().handle_first();
                 }
             }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
-                    self.runtime.effects().inspect_first()
+                    self.runtime.effects().inspect()
                 {
                     self.runtime.effects_mut().handle_first();
                 } else {

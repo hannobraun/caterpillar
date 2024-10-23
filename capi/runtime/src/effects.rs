@@ -30,7 +30,7 @@ impl TriggeredEffect {
     /// # Inspect the currently triggered effect
     ///
     /// Returns `None`, if no effect is currently triggered.
-    pub fn inspect_first(&self) -> Option<&Effect> {
+    pub fn inspect(&self) -> Option<&Effect> {
         self.inner.as_ref()
     }
 
