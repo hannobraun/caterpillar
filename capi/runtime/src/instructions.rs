@@ -154,7 +154,10 @@ pub enum Instruction {
     ConvertS32ToS8,
 
     /// # Copy a value,
-    Copy,
+    Copy {
+        /// # The offset of the value from the top of the stack
+        offset: u32,
+    },
 
     /// # Divide two signed 32-bit integers
     DivS32,

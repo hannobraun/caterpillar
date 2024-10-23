@@ -431,7 +431,7 @@ fn compile_intrinsic(
         IntrinsicFunction::Brk => Instruction::TriggerEffect {
             effect: Effect::Breakpoint,
         },
-        IntrinsicFunction::Copy => Instruction::Copy,
+        IntrinsicFunction::Copy => Instruction::Copy { offset: 0 },
         IntrinsicFunction::DivS32 => Instruction::DivS32,
         IntrinsicFunction::DivU8 => Instruction::DivU8,
         IntrinsicFunction::Drop => Instruction::Drop,

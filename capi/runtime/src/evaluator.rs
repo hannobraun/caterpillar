@@ -192,10 +192,25 @@ fn evaluate_instruction(
 
             stack.push_operand(v);
         }
-        Instruction::Copy => {
-            let v = stack.pop_operand()?;
+        Instruction::Copy { offset } => {
+            let mut v = None;
+            let mut i = 0;
 
-            stack.push_operand(v);
+            #[allow(clippy::explicit_counter_loop)] // this saves us a cast
+            for operand in stack.operands_in_current_stack_frame() {
+                if i == *offset {
+                    v = Some(*operand);
+                    break;
+                }
+
+                i += 1;
+            }
+
+            let v = v.expect(
+                "Compiler should not generate instruction that targets operand \
+                that does not exist.",
+            );
+
             stack.push_operand(v);
         }
         Instruction::DivS32 => {
