@@ -195,7 +195,7 @@ fn compile_fragment(
         .map_fragment_to_instructions(location.clone());
 
     match fragment {
-        Fragment::Binding { name } => {
+        Fragment::Binding { name, .. } => {
             let address = generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
                 named_functions_context.instructions,
