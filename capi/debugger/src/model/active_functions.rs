@@ -282,7 +282,7 @@ fn reconstruct_function(
     entries: &mut VecDeque<ActiveFunctionsEntry>,
     code: &CompilerOutput,
     breakpoints: &Breakpoints,
-    effects: Option<&Effect>,
+    effect: Option<&Effect>,
 ) -> Option<String> {
     let Some(function) = code.named_functions.find_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
@@ -317,7 +317,7 @@ fn reconstruct_function(
         &code.named_functions,
         &code.source_map,
         breakpoints,
-        effects,
+        effect,
     )));
 
     expected_next_function
