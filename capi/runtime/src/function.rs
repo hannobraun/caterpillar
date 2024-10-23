@@ -2,6 +2,12 @@ use alloc::{collections::BTreeMap, string::String, vec::Vec};
 
 use crate::{InstructionAddress, Value};
 
+/// # The runtime representation of a function
+///
+/// ## Implementation Note
+///
+/// The goal is to remove this type. It is only needed here because of overly
+/// complex instructions that should be replaced themselves.
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
@@ -10,6 +16,12 @@ pub struct Function {
     pub environment: BTreeMap<String, Value>,
 }
 
+/// # The runtime representation of a branch
+///
+/// ## Implementation Note
+///
+/// The goal is to remove this type. It is only needed here because of overly
+/// complex instructions that should be replaced themselves.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Branch {
     pub parameters: Vec<Pattern>,
