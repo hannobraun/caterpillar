@@ -33,17 +33,6 @@ impl Instructions {
         assert_eq!(address, stored_address);
         Some(instruction)
     }
-
-    pub fn replace(
-        &mut self,
-        address: &InstructionAddress,
-        instruction: Instruction,
-    ) {
-        let (stored_address, stored_instruction) =
-            self.inner.get_mut(address.to_usize()).unwrap();
-        assert_eq!(address, stored_address);
-        *stored_instruction = instruction;
-    }
 }
 
 #[derive(
