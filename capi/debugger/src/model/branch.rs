@@ -28,7 +28,7 @@ impl DebugBranch {
         named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
-        effects: &[Effect],
+        effects: Option<&Effect>,
     ) -> Self {
         let body = branch
             .body

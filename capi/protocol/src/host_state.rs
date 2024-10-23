@@ -12,7 +12,7 @@ pub enum HostState {
     /// # The process is currently stopped
     Stopped {
         /// # The queue of unhandled effects
-        effects: Vec<Effect>,
+        effects: Option<Effect>,
 
         /// # The active instructions
         active_instructions: Vec<InstructionAddress>,

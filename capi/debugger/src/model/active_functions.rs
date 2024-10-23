@@ -68,7 +68,7 @@ impl ActiveFunctions {
                     &mut entries,
                     code,
                     breakpoints,
-                    effects,
+                    effects.as_ref(),
                 );
             }
         }
@@ -86,7 +86,7 @@ impl ActiveFunctions {
                         &mut entries,
                         code,
                         breakpoints,
-                        effects,
+                        effects.as_ref(),
                     );
                 }
             } else {
@@ -114,7 +114,7 @@ impl ActiveFunctions {
                     &code.named_functions,
                     &code.source_map,
                     breakpoints,
-                    effects,
+                    effects.as_ref(),
                 ),
             ));
         }
@@ -282,7 +282,7 @@ fn reconstruct_function(
     entries: &mut VecDeque<ActiveFunctionsEntry>,
     code: &CompilerOutput,
     breakpoints: &Breakpoints,
-    effects: &[Effect],
+    effects: Option<&Effect>,
 ) -> Option<String> {
     let Some(function) = code.named_functions.find_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
