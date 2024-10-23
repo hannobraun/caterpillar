@@ -55,16 +55,10 @@ impl Stack {
     pub fn operands_in_current_stack_frame(
         &self,
     ) -> impl Iterator<Item = &Value> + '_ {
-        self.inner
-            .iter()
-            .rev()
-            .take_while(|element| {
-                !matches!(element, StackElement::ReturnAddress(_))
-            })
-            .filter_map(|element| match element {
-                StackElement::Operand(value) => Some(value),
-                _ => None,
-            })
+        self.inner.iter().rev().filter_map(|element| match element {
+            StackElement::Operand(value) => Some(value),
+            _ => None,
+        })
     }
 
     pub fn return_addresses(
