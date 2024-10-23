@@ -46,16 +46,6 @@ impl Instructions {
     }
 }
 
-impl fmt::Display for Instructions {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for (address, instruction) in &self.inner {
-            writeln!(f, "{address:4}: {instruction:?}")?;
-        }
-
-        Ok(())
-    }
-}
-
 #[derive(
     Copy,
     Clone,
