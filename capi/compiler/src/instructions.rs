@@ -32,4 +32,10 @@ impl Instructions {
         assert_eq!(address, stored_address);
         *stored_instruction = instruction;
     }
+
+    pub fn to_runtime_instructions(&self) -> capi_runtime::Instructions {
+        capi_runtime::Instructions {
+            inner: self.inner.clone(),
+        }
+    }
 }
