@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_runtime::{Effect, Instructions, Runtime, Value};
+use capi_runtime::{Effect, Heap, Instructions, Runtime, Value};
 
 use crate::{
     command::Command,
@@ -16,6 +16,7 @@ pub struct GameEngine {
     arguments: [Value; 2],
     last_frame_start_s: Option<f64>,
     instructions: Option<Instructions>,
+    heap: Heap,
     memory: Memory,
     input: VecDeque<u8>,
     random: VecDeque<i32>,
@@ -33,6 +34,7 @@ impl GameEngine {
             arguments,
             last_frame_start_s: None,
             instructions: None,
+            heap: Heap::default(),
             memory: Memory::default(),
             input: VecDeque::new(),
             random: VecDeque::new(),
@@ -75,7 +77,10 @@ impl GameEngine {
                 }
 
                 if let Some(instructions) = &self.instructions {
-                    self.runtime.evaluate_next_instruction(instructions);
+                    self.runtime.evaluate_next_instruction(
+                        instructions,
+                        &mut self.heap,
+                    );
                 } else {
                     // Same as above: This should only happen if the debugger is
                     // buggy.
@@ -174,7 +179,8 @@ impl GameEngine {
                 return true;
             };
 
-            self.runtime.evaluate_next_instruction(instructions);
+            self.runtime
+                .evaluate_next_instruction(instructions, &mut self.heap);
 
             if let Some(effect) = self.runtime.effect_mut().handle() {
                 match self.handle_effect(&effect, pixels) {

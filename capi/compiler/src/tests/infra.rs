@@ -1,4 +1,4 @@
-use capi_runtime::{Effect, Instructions, Runtime};
+use capi_runtime::{Effect, Heap, Instructions, Runtime};
 
 use crate::{host::Host, Compiler};
 
@@ -11,6 +11,7 @@ pub struct TestRuntime {
     compiler: Compiler,
     runtime: Runtime,
     instructions: Option<Instructions>,
+    heap: Heap,
 }
 
 impl TestRuntime {
@@ -27,7 +28,8 @@ impl TestRuntime {
             .expect("Must call `update_code` before running.");
 
         while self.runtime.state().is_running() {
-            self.runtime.evaluate_next_instruction(instructions);
+            self.runtime
+                .evaluate_next_instruction(instructions, &mut self.heap);
 
             if let Some(effect) = self.runtime.effect_mut().handle() {
                 return Some(effect);
