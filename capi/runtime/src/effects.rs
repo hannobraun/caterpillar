@@ -42,11 +42,6 @@ impl TriggeredEffect {
     pub fn handle(&mut self) -> Option<Effect> {
         self.inner.take()
     }
-
-    /// # Iterate over all effects in the queue
-    pub fn queue(&self) -> impl Iterator<Item = Effect> + '_ {
-        self.inner.iter().copied()
-    }
 }
 
 /// # An effect that interrupts evaluation
