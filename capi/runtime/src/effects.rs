@@ -156,4 +156,10 @@ impl TriggerResult {
             panic!("Expected to trigger an effect, but that didn't happen.");
         }
     }
+
+    /// # Ignore this result
+    ///
+    /// This should be called by code that does not actually care, if this
+    /// specific effect has been triggered.
+    pub fn ignore(self) {}
 }
