@@ -195,6 +195,14 @@ fn compile_fragment(
         .map_fragment_to_instructions(location.clone());
 
     match fragment {
+        Fragment::Binding { name } => {
+            let address = generate_instruction(
+                Instruction::BindingEvaluate { name: name.clone() },
+                named_functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
         Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
             let Some(function) = named_functions_context
                 .compiled_functions_by_hash
@@ -365,14 +373,6 @@ fn compile_fragment(
                 },
             );
 
-            Some(address)
-        }
-        Fragment::Binding { name } => {
-            let address = generate_instruction(
-                Instruction::BindingEvaluate { name: name.clone() },
-                named_functions_context.instructions,
-                Some(&mut mapping),
-            );
             Some(address)
         }
         Fragment::UnresolvedIdentifier { .. } => {

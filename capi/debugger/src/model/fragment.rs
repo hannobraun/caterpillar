@@ -143,6 +143,7 @@ impl DebugFragmentKind {
         effect: Option<&Effect>,
     ) -> Self {
         match fragment {
+            Fragment::Binding { name } => Self::ResolvedBinding { name },
             Fragment::CallToUserDefinedFunction { hash, .. } => {
                 let function = named_functions
                     .find_by_hash(&hash)
@@ -206,7 +207,6 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
-            Fragment::Binding { name } => Self::ResolvedBinding { name },
             Fragment::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
