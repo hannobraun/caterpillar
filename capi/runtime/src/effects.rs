@@ -132,6 +132,7 @@ impl From<TryFromIntError> for Effect {
 /// # The result of attempting to trigger an effect
 ///
 /// Returned by [`Effects::trigger`].
+#[must_use]
 pub enum TriggerResult {
     /// # The effect has been triggered
     Triggered,
