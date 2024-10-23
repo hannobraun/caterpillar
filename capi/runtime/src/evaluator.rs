@@ -1,7 +1,7 @@
 use alloc::{collections::BTreeMap, vec::Vec};
 
 use crate::{
-    function::Pattern, Effect, Function, Instruction, InstructionAddress,
+    function::Pattern, Effect, Function, Heap, Instruction, InstructionAddress,
     Instructions, Stack,
 };
 
@@ -12,8 +12,7 @@ pub struct Evaluator {
     pub stack: Stack,
     pub next_instruction: InstructionAddress,
 
-    closures: BTreeMap<u32, Function>,
-    next_closure: u32,
+    heap: Heap,
 }
 
 impl Evaluator {
@@ -49,8 +48,8 @@ impl Evaluator {
         self.next_instruction = evaluate_instruction(
             current_instruction,
             next_instruction,
-            &mut self.closures,
-            &mut self.next_closure,
+            &mut self.heap.closures,
+            &mut self.heap.next_closure,
             &mut self.stack,
         )?;
 
