@@ -124,7 +124,7 @@ pub enum DebugFragmentKind {
     CallToIntrinsic { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
-    ResolvedBinding { name: String },
+    Binding { name: String },
     UnresolvedIdentifier { name: String },
     Value { as_string: String },
 }
@@ -143,7 +143,7 @@ impl DebugFragmentKind {
         effect: Option<&Effect>,
     ) -> Self {
         match fragment {
-            Fragment::Binding { name } => Self::ResolvedBinding { name },
+            Fragment::Binding { name } => Self::Binding { name },
             Fragment::CallToUserDefinedFunction { hash, .. } => {
                 let function = named_functions
                     .find_by_hash(&hash)

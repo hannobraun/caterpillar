@@ -143,7 +143,7 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
             None,
             None,
         ),
-        DebugFragmentKind::ResolvedBinding { name } => make_single_expression(
+        DebugFragmentKind::Binding { name } => make_single_expression(
             name,
             fragment.data,
             &mut class_outer,
