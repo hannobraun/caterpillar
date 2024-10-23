@@ -96,7 +96,7 @@ impl InstructionAddress {
         }
     }
 
-    fn to_usize(self) -> usize {
+    pub fn to_usize(self) -> usize {
         self.index
             .try_into()
             .expect("Expected `usize` to cover full range of `u32`")
