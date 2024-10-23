@@ -51,14 +51,14 @@ impl Runtime {
 
     pub fn evaluate_next_instruction(
         &mut self,
-        instructions: &Instructions,
+        instructions: Instructions,
         heap: &mut Heap,
     ) {
         if !self.state().is_running() {
             return;
         }
 
-        if let Err(effect) = self.evaluator.step(instructions, heap) {
+        if let Err(effect) = self.evaluator.step(&instructions, heap) {
             self.effect
                 .trigger(effect)
                 // If there already was an effect, we would have left the

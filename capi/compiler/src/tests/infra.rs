@@ -29,7 +29,7 @@ impl TestRuntime {
 
         while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(
-                &instructions.to_runtime_instructions(),
+                instructions.to_runtime_instructions(),
                 &mut self.heap,
             );
 

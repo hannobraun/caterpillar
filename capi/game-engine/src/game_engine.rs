@@ -79,7 +79,7 @@ impl GameEngine {
 
                 if let Some(instructions) = &self.instructions {
                     self.runtime.evaluate_next_instruction(
-                        &instructions.to_runtime_instructions(),
+                        instructions.to_runtime_instructions(),
                         &mut self.heap,
                     );
                 } else {
@@ -181,7 +181,7 @@ impl GameEngine {
             };
 
             self.runtime.evaluate_next_instruction(
-                &instructions.to_runtime_instructions(),
+                instructions.to_runtime_instructions(),
                 &mut self.heap,
             );
 
