@@ -184,10 +184,20 @@ impl GameEngine {
                         break;
                     }
                     Ok(EffectOutcome::Unhandled) => {
-                        self.runtime.effects_mut().trigger(effect);
+                        self.runtime
+                            .effects_mut()
+                            .trigger(effect)
+                            // We just handled the triggered effect, so we can
+                            // definitely re-trigger it..
+                            .assert_triggered();
                     }
                     Err(new_effect) => {
-                        self.runtime.effects_mut().trigger(new_effect);
+                        self.runtime
+                            .effects_mut()
+                            .trigger(new_effect)
+                            // We just handled the triggered effect, so we can
+                            // definitely trigger a new one.
+                            .assert_triggered();
                     }
                 }
             }

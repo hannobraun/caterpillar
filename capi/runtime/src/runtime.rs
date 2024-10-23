@@ -53,7 +53,12 @@ impl Runtime {
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects.trigger(effect);
+            self.effects
+                .trigger(effect)
+                // If there already was an effect, we would have left the
+                // function at the first exist. So triggering an effect must
+                // succeed.
+                .assert_triggered();
         }
     }
 
