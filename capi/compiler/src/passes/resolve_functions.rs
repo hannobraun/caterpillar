@@ -11,7 +11,7 @@ pub fn resolve_calls_to_user_defined_functions(
 ) {
     let mut resolved_hashes_by_name = BTreeMap::new();
 
-    for (index, _cluster) in call_graph.functions_from_leaves() {
+    for (index, _) in call_graph.functions_from_leaves() {
         let function = named_functions
             .get_mut(index)
             .expect("Function referred to from call graph must exist.");
