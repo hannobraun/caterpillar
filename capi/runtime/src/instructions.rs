@@ -1,8 +1,4 @@
-use alloc::{
-    collections::{BTreeSet, VecDeque},
-    string::String,
-    vec::Vec,
-};
+use alloc::{collections::BTreeSet, string::String, vec::Vec};
 use core::fmt;
 
 use crate::{Branch, Effect, Function, Value};
@@ -27,7 +23,7 @@ impl Instructions {
         let address = InstructionAddress {
             index: self.inner.len().try_into().unwrap(),
         };
-        self.inner.push_back((address, instruction));
+        self.inner.push((address, instruction));
         address
     }
 
@@ -69,7 +65,7 @@ impl fmt::Display for Instructions {
     }
 }
 
-type InstructionsInner = VecDeque<(InstructionAddress, Instruction)>;
+type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
 
 #[derive(
     Copy,
