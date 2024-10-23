@@ -12,7 +12,7 @@ mod stack;
 mod value;
 
 pub use self::{
-    effects::{Effect, Effects, TriggerResult},
+    effects::{Effect, TriggerResult, TriggeredEffect},
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::{Operands, PopOperandError},

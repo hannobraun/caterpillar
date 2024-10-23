@@ -9,11 +9,11 @@ use crate::{
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct Effects {
+pub struct TriggeredEffect {
     queue: Option<Effect>,
 }
 
-impl Effects {
+impl TriggeredEffect {
     /// # Trigger the provided effect
     ///
     /// Triggering an effect adds it to the queue of unhandled effects. If

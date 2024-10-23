@@ -1,10 +1,12 @@
-use crate::{evaluator::Evaluator, Effects, Instructions, Stack, Value};
+use crate::{
+    evaluator::Evaluator, Instructions, Stack, TriggeredEffect, Value,
+};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Runtime {
-    effects: Effects,
+    effects: TriggeredEffect,
     evaluator: Evaluator,
 }
 
@@ -19,11 +21,11 @@ impl Runtime {
         }
     }
 
-    pub fn effects(&self) -> &Effects {
+    pub fn effects(&self) -> &TriggeredEffect {
         &self.effects
     }
 
-    pub fn effects_mut(&mut self) -> &mut Effects {
+    pub fn effects_mut(&mut self) -> &mut TriggeredEffect {
         &mut self.effects
     }
 
