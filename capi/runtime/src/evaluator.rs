@@ -193,10 +193,10 @@ fn evaluate_instruction(
             stack.push_operand(v);
         }
         Instruction::Copy => {
-            let a = stack.pop_operand()?;
+            let v = stack.pop_operand()?;
 
-            stack.push_operand(a);
-            stack.push_operand(a);
+            stack.push_operand(v);
+            stack.push_operand(v);
         }
         Instruction::DivS32 => {
             let b = stack.pop_operand()?;
