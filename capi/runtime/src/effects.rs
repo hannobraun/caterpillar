@@ -20,8 +20,9 @@ impl Effects {
     /// Triggering an effect adds it to the queue of unhandled effects. If
     /// there already are other unhandled effects in the queue, this new effect
     /// is added in last place.
-    pub fn trigger(&mut self, effect: impl Into<Effect>) {
+    pub fn trigger(&mut self, effect: impl Into<Effect>) -> TriggerResult {
         self.queue.push_back(effect.into());
+        TriggerResult::Triggered
     }
 
     /// # Inspect the first effect in the queue
@@ -126,4 +127,17 @@ impl From<TryFromIntError> for Effect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }
+}
+
+/// # The result of attempting to trigger an effect
+///
+/// Returned by [`Effects::trigger`].
+pub enum TriggerResult {
+    /// # The effect has been triggered
+    Triggered,
+
+    /// # The effect has not been triggered
+    ///
+    /// A triggered effect already exists.
+    NotTriggeredBecauseTriggeredEffectAlreadyExists,
 }
