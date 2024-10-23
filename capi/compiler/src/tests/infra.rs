@@ -29,7 +29,7 @@ impl TestRuntime {
         while self.runtime.state().is_running() {
             self.runtime.evaluate_next_instruction(instructions);
 
-            if let Some(effect) = self.runtime.effects_mut().handle() {
+            if let Some(effect) = self.runtime.effect_mut().handle() {
                 return Some(effect);
             }
         }

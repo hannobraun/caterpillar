@@ -55,16 +55,16 @@ impl GameEngine {
         match command {
             Command::ClearBreakpointAndContinue => {
                 if let Some(Effect::Breakpoint) =
-                    self.runtime.effects_mut().inspect()
+                    self.runtime.effect_mut().inspect()
                 {
-                    self.runtime.effects_mut().handle();
+                    self.runtime.effect_mut().handle();
                 }
             }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
                     self.runtime.effect().inspect()
                 {
-                    self.runtime.effects_mut().handle();
+                    self.runtime.effect_mut().handle();
                 } else {
                     // This shouldn't happen, unless there's a bug in the
                     // debugger. There's no point in panicking here though.
@@ -86,7 +86,7 @@ impl GameEngine {
             }
             Command::Stop => {
                 self.runtime
-                    .effects_mut()
+                    .effect_mut()
                     .trigger(Effect::Breakpoint)
                     // If we couldn't trigger this effect because there already
                     // was one, we don't really care. That can only be the
@@ -176,7 +176,7 @@ impl GameEngine {
 
             self.runtime.evaluate_next_instruction(instructions);
 
-            if let Some(effect) = self.runtime.effects_mut().handle() {
+            if let Some(effect) = self.runtime.effect_mut().handle() {
                 match self.handle_effect(&effect, pixels) {
                     Ok(EffectOutcome::Handled) => {
                         self.runtime.ignore_next_instruction();
@@ -195,7 +195,7 @@ impl GameEngine {
                     }
                     Ok(EffectOutcome::Unhandled) => {
                         self.runtime
-                            .effects_mut()
+                            .effect_mut()
                             .trigger(effect)
                             // We just handled the triggered effect, so we can
                             // definitely re-trigger it..
@@ -203,7 +203,7 @@ impl GameEngine {
                     }
                     Err(new_effect) => {
                         self.runtime
-                            .effects_mut()
+                            .effect_mut()
                             .trigger(new_effect)
                             // We just handled the triggered effect, so we can
                             // definitely trigger a new one.

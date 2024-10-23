@@ -25,7 +25,7 @@ impl Runtime {
         &self.effect
     }
 
-    pub fn effects_mut(&mut self) -> &mut TriggeredEffect {
+    pub fn effect_mut(&mut self) -> &mut TriggeredEffect {
         &mut self.effect
     }
 
