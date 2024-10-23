@@ -15,7 +15,7 @@ use crate::{Branch, Effect, Function, Value};
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Instructions {
-    inner: InstructionsInner,
+    inner: Vec<(InstructionAddress, Instruction)>,
 }
 
 impl Instructions {
@@ -55,8 +55,6 @@ impl fmt::Display for Instructions {
         Ok(())
     }
 }
-
-type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
 
 #[derive(
     Copy,
