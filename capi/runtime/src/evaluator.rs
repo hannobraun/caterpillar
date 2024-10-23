@@ -35,7 +35,7 @@ impl Evaluator {
 
     pub fn step(
         &mut self,
-        instructions: &Instructions,
+        instructions: Instructions,
         heap: &mut Heap,
     ) -> Result<(), Effect> {
         if self.stack.no_frames_left() {
@@ -562,7 +562,7 @@ mod tests {
             is_tail_call: true,
         });
 
-        evaluator.step(&instructions, &mut heap).unwrap();
+        evaluator.step(instructions, &mut heap).unwrap();
         assert!(!evaluator.stack.no_frames_left());
 
         assert_eq!(evaluator.next_instruction.index, 2);
