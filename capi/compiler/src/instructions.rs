@@ -34,8 +34,6 @@ impl Instructions {
     }
 
     pub fn to_runtime_instructions(&self) -> capi_runtime::Instructions {
-        capi_runtime::Instructions {
-            inner: self.inner.clone(),
-        }
+        capi_runtime::Instructions { inner: &self.inner }
     }
 }

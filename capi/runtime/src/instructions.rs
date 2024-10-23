@@ -11,11 +11,11 @@ use crate::{Branch, Effect, Function, Value};
 /// adding and replacing instructions that are only used by the compiler. It
 /// would probably be better to move the type there, and only pass a slice of
 /// `Instruction`s (or something along those lines) to the runtime.
-pub struct Instructions {
-    pub inner: Vec<(InstructionAddress, Instruction)>,
+pub struct Instructions<'r> {
+    pub inner: &'r [(InstructionAddress, Instruction)],
 }
 
-impl Instructions {
+impl Instructions<'_> {
     pub fn get(&self, address: &InstructionAddress) -> Option<&Instruction> {
         let (stored_address, instruction) =
             self.inner.get(address.to_usize())?;
