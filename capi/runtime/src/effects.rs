@@ -1,4 +1,3 @@
-use alloc::collections::VecDeque;
 use core::num::TryFromIntError;
 
 use crate::{
@@ -11,7 +10,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    queue: VecDeque<Effect>,
+    queue: Option<Effect>,
 }
 
 impl Effects {
@@ -21,8 +20,8 @@ impl Effects {
     /// there already are other unhandled effects in the queue, this new effect
     /// is added in last place.
     pub fn trigger(&mut self, effect: impl Into<Effect>) -> TriggerResult {
-        if self.queue.is_empty() {
-            self.queue.push_back(effect.into());
+        if self.queue.is_none() {
+            self.queue = Some(effect.into());
             TriggerResult::Triggered
         } else {
             TriggerResult::NotTriggeredBecauseTriggeredEffectAlreadyExists
@@ -33,7 +32,7 @@ impl Effects {
     ///
     /// Returns `None`, if the queue is empty.
     pub fn inspect_first(&self) -> Option<&Effect> {
-        self.queue.front()
+        self.queue.as_ref()
     }
 
     /// # Handle the first effect in the queue
@@ -42,7 +41,7 @@ impl Effects {
     ///
     /// Returns `None`, if the queue is empty.
     pub fn handle_first(&mut self) -> Option<Effect> {
-        self.queue.pop_front()
+        self.queue.take()
     }
 
     /// # Iterate over all effects in the queue
