@@ -11,9 +11,6 @@ use crate::{Branch, Effect, Function, Value};
 /// adding and replacing instructions that are only used by the compiler. It
 /// would probably be better to move the type there, and only pass a slice of
 /// `Instruction`s (or something along those lines) to the runtime.
-#[derive(
-    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
-)]
 pub struct Instructions {
     pub inner: Vec<(InstructionAddress, Instruction)>,
 }
