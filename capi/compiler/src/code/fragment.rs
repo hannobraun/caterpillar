@@ -128,10 +128,7 @@ pub enum Fragment {
         function: Function,
     },
 
-    /// # A reference to a binding
-    ///
-    /// The reference to the binding has been resolved, meaning it is available
-    /// in the fragment's scope.
+    /// # A reference to a local binding
     Binding {
         /// # The name of the binding
         name: String,
