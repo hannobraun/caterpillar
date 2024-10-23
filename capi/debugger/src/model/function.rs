@@ -27,7 +27,7 @@ impl DebugFunction {
         named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
-        effects: Option<&Effect>,
+        effect: Option<&Effect>,
     ) -> Self {
         let name = function.name;
         let branches = function
@@ -46,7 +46,7 @@ impl DebugFunction {
                     named_functions,
                     source_map,
                     breakpoints,
-                    effects,
+                    effect,
                 )
             })
             .collect();
