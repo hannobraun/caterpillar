@@ -85,7 +85,17 @@ impl GameEngine {
                 self.runtime.reset(self.arguments);
             }
             Command::Stop => {
-                self.runtime.effects_mut().trigger(Effect::Breakpoint);
+                self.runtime
+                    .effects_mut()
+                    .trigger(Effect::Breakpoint)
+                    // If we couldn't trigger this effect because there already
+                    // was one, we don't really care. That can only be the
+                    // result of a race condition between what the debugger
+                    // knows about, and what goes on in the runtime.
+                    //
+                    // Either way, the process is stopped now, and the debugger
+                    // will learn about the specifics soon enough.
+                    .ignore();
             }
             Command::UpdateCode { instructions } => {
                 self.instructions = Some(instructions);
