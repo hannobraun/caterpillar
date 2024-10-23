@@ -27,7 +27,7 @@ impl DebugFragment {
         named_functions: &NamedFunctions,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
-        effects: Option<&Effect>,
+        effect: Option<&Effect>,
     ) -> Self {
         let state = if Some(&location) == active_fragment {
             if is_in_innermost_active_function {
@@ -44,7 +44,7 @@ impl DebugFragment {
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
-        let active_effect = effects.and_then(|effect| {
+        let active_effect = effect.and_then(|effect| {
             if state.is_innermost_active_fragment() {
                 Some(*effect)
             } else {
@@ -68,7 +68,7 @@ impl DebugFragment {
             named_functions,
             source_map,
             breakpoints,
-            effects,
+            effect,
         );
 
         Self { kind, data }
