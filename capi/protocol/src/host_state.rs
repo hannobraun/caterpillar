@@ -11,7 +11,7 @@ pub enum HostState {
 
     /// # The process is currently stopped
     Stopped {
-        /// # The queue of unhandled effects
+        /// # The triggered effect
         effect: Option<Effect>,
 
         /// # The active instructions
