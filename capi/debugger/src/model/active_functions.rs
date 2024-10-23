@@ -42,7 +42,7 @@ impl ActiveFunctions {
                     };
                 }
                 HostState::Stopped {
-                    effects,
+                    effect: effects,
                     active_instructions,
                     current_operands: _,
                 } => (effects, active_instructions),
