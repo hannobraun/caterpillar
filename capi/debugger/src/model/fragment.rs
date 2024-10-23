@@ -118,13 +118,13 @@ impl DebugFragmentState {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugFragmentKind {
+    Binding { name: String },
     CallToFunction { name: String },
     CallToFunctionRecursive { name: String },
     CallToHostFunction { name: String },
     CallToIntrinsic { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
-    Binding { name: String },
     UnresolvedIdentifier { name: String },
     Value { as_string: String },
 }

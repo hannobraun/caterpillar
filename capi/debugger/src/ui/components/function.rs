@@ -92,6 +92,12 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
     let (fragment, actions, error) = match fragment.kind {
+        DebugFragmentKind::Binding { name } => make_single_expression(
+            name,
+            fragment.data,
+            &mut class_outer,
+            actions,
+        ),
         DebugFragmentKind::CallToFunction { name } => make_single_expression(
             name,
             fragment.data,
@@ -142,12 +148,6 @@ pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
             .into_view(),
             None,
             None,
-        ),
-        DebugFragmentKind::Binding { name } => make_single_expression(
-            name,
-            fragment.data,
-            &mut class_outer,
-            actions,
         ),
         DebugFragmentKind::UnresolvedIdentifier { name } => {
             make_single_expression(
