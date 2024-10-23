@@ -5,7 +5,7 @@ use crate::{
     value::IntegerOverflow,
 };
 
-/// # A first-in, first-out queue of unhandled effects
+/// # The currently triggered effect, if one exists
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
@@ -16,9 +16,8 @@ pub struct TriggeredEffect {
 impl TriggeredEffect {
     /// # Trigger the provided effect
     ///
-    /// Triggering an effect adds it to the queue of unhandled effects. If
-    /// there already are other unhandled effects in the queue, this new effect
-    /// is added in last place.
+    /// Only triggers the provide effect, if no effect is currently triggered.
+    /// Returns a [`TriggerResult`] to indicate what happened.
     pub fn trigger(&mut self, effect: impl Into<Effect>) -> TriggerResult {
         if self.inner.is_none() {
             self.inner = Some(effect.into());
@@ -28,18 +27,18 @@ impl TriggeredEffect {
         }
     }
 
-    /// # Inspect the first effect in the queue
+    /// # Inspect the currently triggered effect
     ///
-    /// Returns `None`, if the queue is empty.
+    /// Returns `None`, if no effect is currently triggered.
     pub fn inspect_first(&self) -> Option<&Effect> {
         self.inner.as_ref()
     }
 
-    /// # Handle the first effect in the queue
+    /// # Handle the currently triggered effect
     ///
-    /// Removes the first unhandled effect in the queue, considering it handled.
+    /// Removes the triggered effect, considering it handled.
     ///
-    /// Returns `None`, if the queue is empty.
+    /// Returns `None`, if no effect is currently triggered.
     pub fn handle_first(&mut self) -> Option<Effect> {
         self.inner.take()
     }
