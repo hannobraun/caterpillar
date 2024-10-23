@@ -367,7 +367,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::ResolvedBinding { name } => {
+        Fragment::Binding { name } => {
             let address = generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
                 named_functions_context.instructions,

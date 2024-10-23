@@ -132,7 +132,7 @@ pub enum Fragment {
     ///
     /// The reference to the binding has been resolved, meaning it is available
     /// in the fragment's scope.
-    ResolvedBinding {
+    Binding {
         /// # The name of the binding
         name: String,
     },

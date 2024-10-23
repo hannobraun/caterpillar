@@ -114,8 +114,7 @@ fn resolve_in_branch<H: Host>(
                         }
                     }
 
-                    *expression =
-                        Fragment::ResolvedBinding { name: name.clone() }
+                    *expression = Fragment::Binding { name: name.clone() }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {

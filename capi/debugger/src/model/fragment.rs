@@ -206,9 +206,7 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
-            Fragment::ResolvedBinding { name } => {
-                Self::ResolvedBinding { name }
-            }
+            Fragment::Binding { name } => Self::ResolvedBinding { name },
             Fragment::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
