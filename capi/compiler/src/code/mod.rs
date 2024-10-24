@@ -7,6 +7,7 @@ mod changes;
 mod fragment;
 mod functions;
 mod location;
+mod type_;
 
 pub use self::{
     call_graph::{CallGraph, Cluster},
@@ -18,4 +19,5 @@ pub use self::{
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
         FunctionLocation,
     },
+    type_::Type,
 };
