@@ -177,9 +177,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .body();
 
         array::from_fn(|_| {
-            body.find_map(|fragment| {
-                if fragment.fragment.as_comment().is_none() {
-                    Some(fragment.into_location())
+            body.find_map(|typed_fragment| {
+                if typed_fragment.fragment.as_comment().is_none() {
+                    Some(typed_fragment.into_location())
                 } else {
                     None
                 }
@@ -465,9 +465,9 @@ fn step_over_function_call() {
             .body();
 
         array::from_fn(|_| {
-            body.find_map(|fragment| {
-                if fragment.fragment.as_comment().is_none() {
-                    Some(fragment.into_location())
+            body.find_map(|typed_fragment| {
+                if typed_fragment.fragment.as_comment().is_none() {
+                    Some(typed_fragment.into_location())
                 } else {
                     None
                 }
