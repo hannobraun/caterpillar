@@ -75,8 +75,8 @@ fn resolve_in_branch<H: Host>(
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for fragment in branch.body.values_mut() {
-        match &mut fragment.fragment {
+    for typed_fragment in branch.body.values_mut() {
+        match &mut typed_fragment.fragment {
             Fragment::Function { function } => {
                 resolve_in_function::<H>(
                     function,
@@ -130,21 +130,22 @@ fn resolve_in_branch<H: Host>(
                         index += 1;
                     }
 
-                    fragment.fragment = Fragment::Binding {
+                    typed_fragment.fragment = Fragment::Binding {
                         name: name.clone(),
                         index,
                     }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    fragment.fragment = Fragment::CallToIntrinsicFunction {
-                        intrinsic,
-                        is_tail_call: *is_known_to_be_in_tail_position,
-                    };
+                    typed_fragment.fragment =
+                        Fragment::CallToIntrinsicFunction {
+                            intrinsic,
+                            is_tail_call: *is_known_to_be_in_tail_position,
+                        };
                 } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
-                    fragment.fragment =
+                    typed_fragment.fragment =
                         Fragment::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
