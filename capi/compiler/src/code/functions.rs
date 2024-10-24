@@ -108,12 +108,9 @@ impl NamedFunctions {
     pub fn find_fragment_by_location(
         &self,
         location: &FragmentLocation,
-    ) -> Option<&Fragment> {
+    ) -> Option<&TypedFragment> {
         let branch = self.find_branch_by_location(&location.parent)?;
-        branch
-            .body
-            .get(&location.index)
-            .map(|typed_fragment| &typed_fragment.fragment)
+        branch.body.get(&location.index)
     }
 
     /// # Find the function at the given location
@@ -127,7 +124,7 @@ impl NamedFunctions {
             FunctionLocation::NamedFunction { index } => self.inner.get(index),
             FunctionLocation::AnonymousFunction { location } => {
                 let fragment = self.find_fragment_by_location(location)?;
-                fragment.as_function()
+                fragment.fragment.as_function()
             }
         }
     }
