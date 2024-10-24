@@ -7,7 +7,7 @@ use crate::hash::Hash;
 use super::{
     search::Find, BranchIndex, BranchLocation, Fragment,
     FragmentIndexInBranchBody, FragmentLocation, FunctionIndexInCluster,
-    FunctionIndexInRootContext, FunctionLocation,
+    FunctionIndexInRootContext, FunctionLocation, Signature,
 };
 
 /// # All named functions in a program
@@ -271,6 +271,12 @@ pub struct Branch {
 
     /// # The body of the branch
     pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
+
+    /// # The signature of the branch
+    ///
+    /// This must be identical for all branches of the function, for the
+    /// function to be valid.
+    pub signature: Signature,
 }
 
 impl Branch {
