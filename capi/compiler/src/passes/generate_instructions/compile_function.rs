@@ -138,9 +138,9 @@ fn compile_branch_body(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for (index, fragment) in body {
+    for (index, typed_fragment) in body {
         let addr = compile_fragment(
-            fragment.fragment,
+            typed_fragment.fragment,
             FragmentLocation {
                 parent: Box::new(location.clone()),
                 index,
