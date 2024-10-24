@@ -2,11 +2,17 @@
 pub enum Type {
     /// # A function
     Function {
-        /// # The inputs that the function consumes
-        inputs: Vec<Type>,
-
-        /// # The outputs that the function produces
-        outputs: Vec<Type>,
+        /// # The function's signature
+        signature: Signature,
     },
     Number,
+}
+
+/// # The signature of an expression
+pub struct Signature {
+    /// # The inputs that the expression consumes
+    pub inputs: Vec<Type>,
+
+    /// # The outputs that the expression produces
+    pub outputs: Vec<Type>,
 }
