@@ -277,7 +277,7 @@ pub struct Branch {
     ///
     /// This must be identical for all branches of the function, for the
     /// function to be valid.
-    pub signature: Signature,
+    pub signature: Option<Signature>,
 }
 
 impl Branch {
