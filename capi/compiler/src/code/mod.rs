@@ -6,6 +6,7 @@ mod call_graph;
 mod changes;
 mod fragment;
 mod functions;
+mod index;
 mod location;
 mod types;
 
@@ -14,6 +15,7 @@ pub use self::{
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     fragment::{Fragment, UnresolvedCallToUserDefinedFunction},
     functions::{Branch, Function, NamedFunctions, Pattern, TypedFragment},
+    index::Index,
     location::{
         BranchIndex, BranchLocation, FragmentIndexInBranchBody,
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
