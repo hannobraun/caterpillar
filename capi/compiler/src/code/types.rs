@@ -36,5 +36,15 @@ pub enum Type {
         /// # The function's signature
         signature: Signature,
     },
+
+    /// # A number
+    ///
+    /// ## Implementation Note
+    ///
+    /// Since the language is still mostly untyped, this actually covers many
+    /// different types that are all represented as a 32-bit number.
+    ///
+    /// I expect that this will get split into multiple, more specific numeric
+    /// types at some point.
     Number,
 }
