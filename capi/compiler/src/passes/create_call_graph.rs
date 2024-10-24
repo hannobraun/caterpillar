@@ -7,8 +7,8 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster,
-    FunctionIndexInRootContext, NamedFunctions,
+    CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster, Index,
+    NamedFunctions,
 };
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
@@ -66,7 +66,7 @@ fn include_calls_from_function_in_call_graph(
     caller_index: NodeIndex,
     function: &Function,
     graph_index_by_function_name: &BTreeMap<&String, NodeIndex>,
-    call_graph: &mut Graph<(&Function, FunctionIndexInRootContext), ()>,
+    call_graph: &mut Graph<(&Function, Index<Function>), ()>,
 ) {
     for branch in function.branches.values() {
         for typed_fragment in branch.body.values() {
@@ -95,13 +95,10 @@ fn include_calls_from_function_in_call_graph(
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
+    use std::{collections::BTreeMap, marker::PhantomData};
 
     use crate::{
-        code::{
-            CallGraph, Cluster, FunctionIndexInCluster,
-            FunctionIndexInRootContext,
-        },
+        code::{CallGraph, Cluster, FunctionIndexInCluster, Index},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -128,8 +125,20 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
+                (
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 1,
+                        t: PhantomData
+                    }
+                ),
+                (
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    }
+                ),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -161,8 +170,20 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
-                (FunctionIndexInCluster(0), FunctionIndexInRootContext(0)),
+                (
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 1,
+                        t: PhantomData
+                    }
+                ),
+                (
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    }
+                ),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -200,12 +221,30 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 [
-                    (FunctionIndexInCluster(0), FunctionIndexInRootContext(1)),
-                    (FunctionIndexInCluster(1), FunctionIndexInRootContext(2))
+                    (
+                        FunctionIndexInCluster(0),
+                        Index {
+                            value: 1,
+                            t: PhantomData
+                        }
+                    ),
+                    (
+                        FunctionIndexInCluster(1),
+                        Index {
+                            value: 2,
+                            t: PhantomData
+                        }
+                    )
                 ]
                 .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -251,14 +290,38 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(3))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 2,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 3,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 1,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -313,14 +376,38 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(2))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(3))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(1))]
-                    .as_slice(),
-                [(FunctionIndexInCluster(0), FunctionIndexInRootContext(0))]
-                    .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 2,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 3,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 1,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
+                [(
+                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    }
+                )]
+                .as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {

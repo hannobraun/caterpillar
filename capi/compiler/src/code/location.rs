@@ -1,3 +1,5 @@
+use super::{Function, Index};
+
 #[derive(
     Clone,
     Debug,
@@ -39,29 +41,15 @@ pub struct BranchLocation {
     serde::Serialize,
 )]
 pub enum FunctionLocation {
-    NamedFunction { index: FunctionIndexInRootContext },
+    NamedFunction { index: Index<Function> },
     AnonymousFunction { location: FragmentLocation },
 }
 
-impl From<FunctionIndexInRootContext> for FunctionLocation {
-    fn from(index: FunctionIndexInRootContext) -> Self {
+impl From<Index<Function>> for FunctionLocation {
+    fn from(index: Index<Function>) -> Self {
         Self::NamedFunction { index }
     }
 }
-
-/// # The index of a named function in the root context
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub struct FunctionIndexInRootContext(pub u32);
 
 /// # An index into the list of functions in a cluster
 #[derive(

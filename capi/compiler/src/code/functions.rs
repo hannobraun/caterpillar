@@ -1,13 +1,16 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    marker::PhantomData,
+};
 
 use capi_runtime::Value;
 
-use crate::hash::Hash;
+use crate::{code::Index, hash::Hash};
 
 use super::{
     search::Find, BranchIndex, BranchLocation, Fragment,
     FragmentIndexInBranchBody, FragmentLocation, FunctionIndexInCluster,
-    FunctionIndexInRootContext, FunctionLocation, Signature,
+    FunctionLocation, Signature,
 };
 
 /// # All named functions in a program
@@ -41,22 +44,27 @@ impl NamedFunctions {
         let index = self
             .inner
             .last_key_value()
-            .map(|(&FunctionIndexInRootContext(index), _)| index + 1)
+            .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
-        self.inner
-            .insert(FunctionIndexInRootContext(index), function);
+        self.inner.insert(
+            Index {
+                value: index,
+                t: PhantomData,
+            },
+            function,
+        );
     }
 
     /// # Access the named function at the given index
-    pub fn get(&self, index: &FunctionIndexInRootContext) -> Option<&Function> {
+    pub fn get(&self, index: &Index<Function>) -> Option<&Function> {
         self.inner.get(index)
     }
 
     /// # Access the named function at the given index mutably
     pub fn get_mut(
         &mut self,
-        index: &FunctionIndexInRootContext,
+        index: &Index<Function>,
     ) -> Option<&mut Function> {
         self.inner.get_mut(index)
     }
@@ -82,7 +90,7 @@ impl NamedFunctions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<Function, FunctionIndexInRootContext>> {
+    ) -> Option<Find<Function, Index<Function>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 Some(Find {
@@ -164,7 +172,7 @@ impl<'r> IntoIterator for &'r NamedFunctions {
     }
 }
 
-type NamedFunctionsInner = BTreeMap<FunctionIndexInRootContext, Function>;
+type NamedFunctionsInner = BTreeMap<Index<Function>, Function>;
 
 #[derive(
     Clone,

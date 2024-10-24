@@ -18,8 +18,7 @@ pub use self::{
     index::Index,
     location::{
         BranchIndex, BranchLocation, FragmentIndexInBranchBody,
-        FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
-        FunctionLocation,
+        FragmentLocation, FunctionIndexInCluster, FunctionLocation,
     },
     types::{Signature, Type},
 };

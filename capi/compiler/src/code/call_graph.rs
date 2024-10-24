@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{FunctionIndexInCluster, FunctionIndexInRootContext};
+use super::{Function, FunctionIndexInCluster, Index};
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -24,7 +24,7 @@ impl CallGraph {
     /// non-recursive calls to functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
-    ) -> impl Iterator<Item = (&FunctionIndexInRootContext, &Cluster)> {
+    ) -> impl Iterator<Item = (&Index<Function>, &Cluster)> {
         self.clusters_from_leaves().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
@@ -37,7 +37,7 @@ impl CallGraph {
     /// Panics, if the provided location does not refer to a named function.
     pub fn find_cluster_by_named_function(
         &self,
-        index: &FunctionIndexInRootContext,
+        index: &Index<Function>,
     ) -> Option<&Cluster> {
         self.clusters
             .iter()
@@ -75,5 +75,5 @@ pub struct Cluster {
     ///
     /// The indices refer to the functions in their original order within the
     /// list of all named functions.
-    pub functions: BTreeMap<FunctionIndexInCluster, FunctionIndexInRootContext>,
+    pub functions: BTreeMap<FunctionIndexInCluster, Index<Function>>,
 }

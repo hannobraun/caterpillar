@@ -6,8 +6,8 @@
 use std::ops::Deref;
 
 use super::{
-    Branch, BranchLocation, FragmentLocation, Function,
-    FunctionIndexInRootContext, FunctionLocation, TypedFragment,
+    Branch, BranchLocation, FragmentLocation, Function, FunctionLocation,
+    Index, TypedFragment,
 };
 
 /// # The result of a search, alongside search-specific metadata
@@ -33,12 +33,12 @@ impl<T, M> Deref for Find<T, M> {
     }
 }
 
-impl Find<Function, FunctionIndexInRootContext> {
+impl Find<Function, Index<Function>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
     /// `metadata` directly more readable.
-    pub fn index(&self) -> FunctionIndexInRootContext {
+    pub fn index(&self) -> Index<Function> {
         self.metadata
     }
 
