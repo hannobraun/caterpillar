@@ -179,7 +179,7 @@ mod tests {
         assert!(branches.next().is_none());
 
         let mut body = branch.body.into_values();
-        let fragment = body.next().unwrap();
+        let typed_fragment = body.next().unwrap();
         assert!(body.next().is_none());
 
         let Fragment::UnresolvedIdentifier {
@@ -188,7 +188,7 @@ mod tests {
                     is_known_to_be_recursive_call: Some(_),
                 }),
             ..
-        } = fragment.fragment
+        } = typed_fragment.fragment
         else {
             panic!("Expected identifier to be a recursive function call.");
         };
