@@ -19,5 +19,5 @@ pub use self::{
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
         FunctionLocation,
     },
-    types::Type,
+    types::{Signature, Type},
 };
