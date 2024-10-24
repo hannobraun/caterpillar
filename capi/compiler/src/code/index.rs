@@ -16,3 +16,12 @@ impl<T> Clone for Index<T> {
 }
 
 impl<T> Copy for Index<T> {}
+
+impl<T> udigest::Digestable for Index<T> {
+    fn unambiguously_encode<B: udigest::Buffer>(
+        &self,
+        encoder: udigest::encoding::EncodeValue<B>,
+    ) {
+        self.value.unambiguously_encode(encoder);
+    }
+}
