@@ -145,12 +145,12 @@ mod tests {
     impl ToIdentifiers for BTreeMap<FragmentIndexInBranchBody, Fragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
-                .filter_map(|expression| {
+                .filter_map(|fragment| {
                     if let Fragment::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position,
                         ..
-                    } = expression
+                    } = fragment
                     {
                         Some((name.as_str(), *is_known_to_be_in_tail_position))
                     } else {
