@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Branch, BranchLocation, Cluster, Fragment, FragmentIndexInBranchBody,
-        FragmentLocation, Function, FunctionLocation, Pattern,
+        FragmentLocation, Function, FunctionLocation, Pattern, TypedFragment,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -100,11 +100,7 @@ fn compile_branch(
         compile_binding(parameters, named_functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
-        branch
-            .body
-            .into_iter()
-            .map(|(index, typed_fragment)| (index, typed_fragment.fragment))
-            .collect(),
+        branch.body,
         location,
         cluster,
         cluster_context,
@@ -134,7 +130,7 @@ fn compile_branch(
 }
 
 fn compile_branch_body(
-    body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
+    body: BTreeMap<FragmentIndexInBranchBody, TypedFragment>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -144,7 +140,7 @@ fn compile_branch_body(
 
     for (index, fragment) in body {
         let addr = compile_fragment(
-            fragment,
+            fragment.fragment,
             FragmentLocation {
                 parent: Box::new(location.clone()),
                 index,
