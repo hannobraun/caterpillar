@@ -275,8 +275,16 @@ pub struct Branch {
 
     /// # The signature of the branch
     ///
+    /// Starts out as `None`, and is later filled in by the respective compiler
+    /// pass.
+    ///
     /// This must be identical for all branches of the function, for the
     /// function to be valid.
+    ///
+    /// ## Implementation Note
+    ///
+    /// As of this writing, the compiler pass mentioned above does not exist
+    /// yet.
     pub signature: Option<Signature>,
 }
 
