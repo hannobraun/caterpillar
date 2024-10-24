@@ -214,11 +214,16 @@ pub struct Function {
     /// anonymous functions.
     pub index_in_cluster: Option<FunctionIndexInCluster>,
 
-    /// # The number of inputs that the function takes
-    pub num_inputs: Option<u32>,
-
-    /// # The number of outputs of the function returns
-    pub num_outputs: Option<u32>,
+    /// # The signature of the function
+    ///
+    /// Starts out as `None`, and is later filled in by the respective compiler
+    /// pass.
+    ///
+    /// ## Implementation Note
+    ///
+    /// As of this writing, the compiler pass mentioned above does not exist
+    /// yet.
+    pub signature: Option<Signature>,
 }
 
 impl Function {
