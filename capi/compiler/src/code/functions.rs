@@ -110,7 +110,10 @@ impl NamedFunctions {
         location: &FragmentLocation,
     ) -> Option<&Fragment> {
         let branch = self.find_branch_by_location(&location.parent)?;
-        branch.body.get(&location.index)
+        branch
+            .body
+            .get(&location.index)
+            .map(|typed_fragment| &typed_fragment.fragment)
     }
 
     /// # Find the function at the given location
@@ -270,7 +273,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: BTreeMap<FragmentIndexInBranchBody, Fragment>,
+    pub body: BTreeMap<FragmentIndexInBranchBody, TypedFragment>,
 
     /// # The signature of the branch
     ///
@@ -288,7 +291,13 @@ impl Branch {
             .map(|(&FragmentIndexInBranchBody(index), _)| index + 1)
             .unwrap_or(0);
 
-        self.body.insert(FragmentIndexInBranchBody(index), fragment);
+        self.body.insert(
+            FragmentIndexInBranchBody(index),
+            TypedFragment {
+                fragment,
+                signature: None,
+            },
+        );
     }
 }
 

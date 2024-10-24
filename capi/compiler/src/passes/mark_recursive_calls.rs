@@ -48,7 +48,7 @@ fn mark_recursive_calls_in_function(
 ) {
     for branch in function.branches.values_mut() {
         for fragment in branch.body.values_mut() {
-            match fragment {
+            match &mut fragment.fragment {
                 Fragment::Function { function } => {
                     mark_recursive_calls_in_function(
                         function,
@@ -120,7 +120,7 @@ mod tests {
                 .unwrap()
                 .body
                 .pop_first()
-                .map(|(_, fragment)| fragment)
+                .map(|(_, fragment)| fragment.fragment)
                 .unwrap()
             else {
                 panic!("Expected expression to be an identifier.");
@@ -170,7 +170,7 @@ mod tests {
         let fragment = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Fragment::Function { function } = fragment else {
+        let Fragment::Function { function } = fragment.fragment else {
             panic!("Expected expression to be a function.");
         };
 
@@ -188,7 +188,7 @@ mod tests {
                     is_known_to_be_recursive_call: Some(_),
                 }),
             ..
-        } = fragment
+        } = fragment.fragment
         else {
             panic!("Expected identifier to be a recursive function call.");
         };

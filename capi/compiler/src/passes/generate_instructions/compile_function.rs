@@ -100,7 +100,11 @@ fn compile_branch(
         compile_binding(parameters, named_functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
-        branch.body,
+        branch
+            .body
+            .into_iter()
+            .map(|(index, typed_fragment)| (index, typed_fragment.fragment))
+            .collect(),
         location,
         cluster,
         cluster_context,

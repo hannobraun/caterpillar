@@ -39,7 +39,7 @@ impl DebugBranch {
                     index,
                 };
                 DebugFragment::new(
-                    fragment,
+                    fragment.fragment,
                     location,
                     active_fragment,
                     is_in_innermost_active_function,
