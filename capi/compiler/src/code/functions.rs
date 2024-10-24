@@ -307,3 +307,31 @@ pub enum Pattern {
     Identifier { name: String },
     Literal { value: Value },
 }
+
+/// # A fragment with an attached signature
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct TypedFragment {
+    /// # The fragment
+    pub fragment: Fragment,
+
+    /// # The signature of the fragment
+    ///
+    /// This starts out as `None`, and is later filled in by the respective
+    /// compiler pass.
+    ///
+    /// ## Implementation Note
+    ///
+    /// As of this writing, the compiler pass that provides this information
+    /// does not exist yet.
+    pub signature: Option<Signature>,
+}

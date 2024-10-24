@@ -13,7 +13,7 @@ pub use self::{
     call_graph::{CallGraph, Cluster},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     fragment::{Fragment, UnresolvedCallToUserDefinedFunction},
-    functions::{Branch, Function, NamedFunctions, Pattern},
+    functions::{Branch, Function, NamedFunctions, Pattern, TypedFragment},
     location::{
         BranchIndex, BranchLocation, FragmentIndexInBranchBody,
         FragmentLocation, FunctionIndexInCluster, FunctionIndexInRootContext,
