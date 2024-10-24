@@ -47,8 +47,8 @@ fn mark_recursive_calls_in_function(
     >,
 ) {
     for branch in function.branches.values_mut() {
-        for fragment in branch.body.values_mut() {
-            match &mut fragment.fragment {
+        for typed_fragment in branch.body.values_mut() {
+            match &mut typed_fragment.fragment {
                 Fragment::Function { function } => {
                     mark_recursive_calls_in_function(
                         function,
