@@ -8,6 +8,17 @@ pub struct Signature {
 }
 
 /// # The type of a value
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub enum Type {
     /// # A function
     Function {
