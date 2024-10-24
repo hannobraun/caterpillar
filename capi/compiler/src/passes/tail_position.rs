@@ -29,8 +29,8 @@ fn analyze_branch(branch: &mut Branch) {
         break;
     }
 
-    for fragment in branch.body.values_mut() {
-        if let Fragment::Function { function } = &mut fragment.fragment {
+    for typed_fragment in branch.body.values_mut() {
+        if let Fragment::Function { function } = &mut typed_fragment.fragment {
             analyze_function(function);
         }
     }
