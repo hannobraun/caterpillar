@@ -1,4 +1,16 @@
 /// # The signature of an expression
+#[derive(
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Signature {
     /// # The inputs that the expression consumes
     pub inputs: Vec<Type>,
