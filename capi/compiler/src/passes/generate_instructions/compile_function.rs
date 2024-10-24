@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentIndexInBranchBody,
-        FragmentLocation, Function, FunctionLocation, Pattern, TypedFragment,
+        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
+        FunctionLocation, Index, Pattern, TypedFragment,
     },
     hash::Hash,
     intrinsics::IntrinsicFunction,
@@ -130,7 +130,7 @@ fn compile_branch(
 }
 
 fn compile_branch_body(
-    body: BTreeMap<FragmentIndexInBranchBody, TypedFragment>,
+    body: BTreeMap<Index<Fragment>, TypedFragment>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,

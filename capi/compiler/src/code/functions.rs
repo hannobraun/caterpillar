@@ -8,8 +8,8 @@ use capi_runtime::Value;
 use crate::{code::Index, hash::Hash};
 
 use super::{
-    search::Find, BranchLocation, Cluster, Fragment, FragmentIndexInBranchBody,
-    FragmentLocation, FunctionLocation, Signature,
+    search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
+    FunctionLocation, Signature,
 };
 
 /// # All named functions in a program
@@ -289,7 +289,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: BTreeMap<FragmentIndexInBranchBody, TypedFragment>,
+    pub body: BTreeMap<Index<Fragment>, TypedFragment>,
 
     /// # The signature of the branch
     ///
@@ -312,11 +312,14 @@ impl Branch {
         let index = self
             .body
             .last_key_value()
-            .map(|(&FragmentIndexInBranchBody(index), _)| index + 1)
+            .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
         self.body.insert(
-            FragmentIndexInBranchBody(index),
+            Index {
+                value: index,
+                t: PhantomData,
+            },
             TypedFragment {
                 fragment,
                 signature: None,

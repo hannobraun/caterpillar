@@ -41,9 +41,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     use crate::{
-        code::{
-            Fragment, FragmentIndexInBranchBody, NamedFunctions, TypedFragment,
-        },
+        code::{Fragment, Index, NamedFunctions, TypedFragment},
         passes::{parse, tokenize},
     };
 
@@ -144,7 +142,7 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for BTreeMap<FragmentIndexInBranchBody, TypedFragment> {
+    impl ToIdentifiers for BTreeMap<Index<Fragment>, TypedFragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
                 .filter_map(|typed_fragment| {
