@@ -1,4 +1,4 @@
-use super::{Function, Index};
+use super::{Branch, Function, Index};
 
 #[derive(
     Clone,
@@ -27,7 +27,7 @@ pub struct FragmentLocation {
 )]
 pub struct BranchLocation {
     pub parent: Box<FunctionLocation>,
-    pub index: BranchIndex,
+    pub index: Index<Branch>,
 }
 
 #[derive(
@@ -50,21 +50,6 @@ impl From<Index<Function>> for FunctionLocation {
         Self::NamedFunction { index }
     }
 }
-
-/// # The index of a branch within a function
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct BranchIndex(pub u32);
 
 /// # The index of a fragment in a branch body
 #[derive(

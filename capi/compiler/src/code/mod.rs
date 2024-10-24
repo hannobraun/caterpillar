@@ -17,8 +17,8 @@ pub use self::{
     functions::{Branch, Function, NamedFunctions, Pattern, TypedFragment},
     index::Index,
     location::{
-        BranchIndex, BranchLocation, FragmentIndexInBranchBody,
-        FragmentLocation, FunctionLocation,
+        BranchLocation, FragmentIndexInBranchBody, FragmentLocation,
+        FunctionLocation,
     },
     types::{Signature, Type},
 };

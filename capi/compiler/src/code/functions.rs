@@ -8,8 +8,8 @@ use capi_runtime::Value;
 use crate::{code::Index, hash::Hash};
 
 use super::{
-    search::Find, BranchIndex, BranchLocation, Cluster, Fragment,
-    FragmentIndexInBranchBody, FragmentLocation, FunctionLocation, Signature,
+    search::Find, BranchLocation, Cluster, Fragment, FragmentIndexInBranchBody,
+    FragmentLocation, FunctionLocation, Signature,
 };
 
 /// # All named functions in a program
@@ -207,7 +207,7 @@ pub struct Function {
     /// A function is made up of one or more branches. When a function is
     /// called, its arguments are matched against the parameters of each branch,
     /// until one branch matches. This branch is then evaluated.
-    pub branches: BTreeMap<BranchIndex, Branch>,
+    pub branches: BTreeMap<Index<Branch>, Branch>,
 
     /// # Values captured by the function from a parent scope
     ///
@@ -239,10 +239,16 @@ impl Function {
         let index = self
             .branches
             .last_key_value()
-            .map(|(&BranchIndex(index), _)| index + 1)
+            .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
-        self.branches.insert(BranchIndex(index), branch);
+        self.branches.insert(
+            Index {
+                value: index,
+                t: PhantomData,
+            },
+            branch,
+        );
     }
 
     /// # Expect the function to have one branch and access that
