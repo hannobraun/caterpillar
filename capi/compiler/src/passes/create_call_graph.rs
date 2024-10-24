@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, iter};
+use std::{collections::BTreeMap, iter, marker::PhantomData};
 
 use petgraph::{
     algo::{condensation, toposort},
@@ -7,8 +7,7 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Fragment, Function, FunctionIndexInCluster, Index,
-    NamedFunctions,
+    CallGraph, Cluster, Fragment, Function, Index, NamedFunctions,
 };
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
@@ -52,7 +51,10 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
                     .map(|(_, named_function_index)| named_function_index)
                     .copied();
                 let functions = iter::successors(Some(0), |i| Some(i + 1))
-                    .map(FunctionIndexInCluster)
+                    .map(|index| Index {
+                        value: index,
+                        t: PhantomData,
+                    })
                     .zip(named_function_indices)
                     .collect();
 
@@ -98,7 +100,7 @@ mod tests {
     use std::{collections::BTreeMap, marker::PhantomData};
 
     use crate::{
-        code::{CallGraph, Cluster, FunctionIndexInCluster, Index},
+        code::{CallGraph, Cluster, Index},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -126,14 +128,20 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 (
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 1,
                         t: PhantomData
                     }
                 ),
                 (
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 0,
                         t: PhantomData
@@ -171,14 +179,20 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 (
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 1,
                         t: PhantomData
                     }
                 ),
                 (
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 0,
                         t: PhantomData
@@ -222,14 +236,20 @@ mod tests {
             [
                 [
                     (
-                        FunctionIndexInCluster(0),
+                        Index {
+                            value: 0,
+                            t: PhantomData
+                        },
                         Index {
                             value: 1,
                             t: PhantomData
                         }
                     ),
                     (
-                        FunctionIndexInCluster(1),
+                        Index {
+                            value: 1,
+                            t: PhantomData
+                        },
                         Index {
                             value: 2,
                             t: PhantomData
@@ -238,7 +258,10 @@ mod tests {
                 ]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 0,
                         t: PhantomData
@@ -291,7 +314,10 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 2,
                         t: PhantomData
@@ -299,7 +325,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 3,
                         t: PhantomData
@@ -307,7 +336,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 1,
                         t: PhantomData
@@ -315,7 +347,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 0,
                         t: PhantomData
@@ -377,7 +412,10 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 2,
                         t: PhantomData
@@ -385,7 +423,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 3,
                         t: PhantomData
@@ -393,7 +434,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 1,
                         t: PhantomData
@@ -401,7 +445,10 @@ mod tests {
                 )]
                 .as_slice(),
                 [(
-                    FunctionIndexInCluster(0),
+                    Index {
+                        value: 0,
+                        t: PhantomData
+                    },
                     Index {
                         value: 0,
                         t: PhantomData

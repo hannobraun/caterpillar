@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{Function, FunctionIndexInCluster, Index};
+use super::{Function, Index};
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -75,5 +75,5 @@ pub struct Cluster {
     ///
     /// The indices refer to the functions in their original order within the
     /// list of all named functions.
-    pub functions: BTreeMap<FunctionIndexInCluster, Index<Function>>,
+    pub functions: BTreeMap<Index<(Function, Cluster)>, Index<Function>>,
 }

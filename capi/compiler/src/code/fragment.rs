@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::{hash::Hash, intrinsics::IntrinsicFunction};
 
-use super::{Function, FunctionIndexInCluster};
+use super::{Cluster, Function, Index};
 
 /// # A pre-compiled piece of code
 ///
@@ -123,7 +123,7 @@ pub enum Fragment {
         /// the calling function is part of a cluster of mutually recursive
         /// functions, the index identifies the called function within the
         /// cluster.
-        index: FunctionIndexInCluster,
+        index: Index<(Function, Cluster)>,
 
         /// # Indicate whether the call is in tail position
         ///
@@ -226,5 +226,5 @@ pub struct UnresolvedCallToUserDefinedFunction {
     /// Starts out as `None`, until it might get filled in by the respective
     /// compiler pass. In that case, the index of the function within the
     /// cluster is provided, which is later needed to resolve the call.
-    pub is_known_to_be_recursive_call: Option<FunctionIndexInCluster>,
+    pub is_known_to_be_recursive_call: Option<Index<(Function, Cluster)>>,
 }

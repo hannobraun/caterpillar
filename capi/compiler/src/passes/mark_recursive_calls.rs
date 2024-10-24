@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Fragment, Function, FunctionIndexInCluster, NamedFunctions,
+    CallGraph, Cluster, Fragment, Function, Index, NamedFunctions,
     UnresolvedCallToUserDefinedFunction,
 };
 
@@ -43,7 +43,7 @@ fn mark_recursive_calls_in_function(
     function: &mut Function,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
-        FunctionIndexInCluster,
+        Index<(Function, Cluster)>,
     >,
 ) {
     for branch in function.branches.values_mut() {
@@ -136,7 +136,7 @@ mod tests {
             };
 
             assert_eq!(
-                index.0, 0,
+                index.value, 0,
                 "Function is only self-recursive, not mutually recursive. \
                 Expecting it to be alone in a cluster, hence index referring \
                 to it must be `0`."

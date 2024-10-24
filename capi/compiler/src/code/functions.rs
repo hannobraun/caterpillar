@@ -8,9 +8,8 @@ use capi_runtime::Value;
 use crate::{code::Index, hash::Hash};
 
 use super::{
-    search::Find, BranchIndex, BranchLocation, Fragment,
-    FragmentIndexInBranchBody, FragmentLocation, FunctionIndexInCluster,
-    FunctionLocation, Signature,
+    search::Find, BranchIndex, BranchLocation, Cluster, Fragment,
+    FragmentIndexInBranchBody, FragmentLocation, FunctionLocation, Signature,
 };
 
 /// # All named functions in a program
@@ -220,7 +219,7 @@ pub struct Function {
     ///
     /// This is defined for named functions only. The value is `None` for
     /// anonymous functions.
-    pub index_in_cluster: Option<FunctionIndexInCluster>,
+    pub index_in_cluster: Option<Index<(Function, Cluster)>>,
 
     /// # The signature of the function
     ///
