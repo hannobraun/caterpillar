@@ -71,7 +71,7 @@ type IndexMapInner<T> = BTreeMap<Index<T>, T>;
 #[derive(Debug)]
 pub struct Index<T> {
     pub value: u32,
-    pub t: PhantomData<T>,
+    t: PhantomData<T>,
 }
 
 impl<T> Clone for Index<T> {
