@@ -3,9 +3,8 @@ use std::collections::BTreeMap;
 use capi_runtime::Instruction;
 
 use crate::{
-    code::{CallGraph, Changes, Function, NamedFunctions},
+    code::{CallGraph, Changes, Function, Hash, NamedFunctions},
     compiler::CallInstructionsByCallee,
-    hash::Hash,
     source_map::SourceMap,
     Instructions,
 };

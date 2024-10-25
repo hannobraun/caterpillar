@@ -1,8 +1,8 @@
 use capi_runtime::Value;
 
-use crate::{hash::Hash, intrinsics::IntrinsicFunction};
+use crate::intrinsics::IntrinsicFunction;
 
-use super::{Cluster, Function, Index};
+use super::{Cluster, Function, Hash, Index};
 
 /// # A pre-compiled piece of code
 ///

@@ -3,8 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{CallGraph, Function, NamedFunctions},
-    hash::Hash,
+    code::{CallGraph, Function, Hash, NamedFunctions},
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,

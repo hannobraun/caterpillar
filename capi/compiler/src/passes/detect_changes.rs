@@ -1,10 +1,8 @@
 use std::collections::BTreeMap;
 
-use crate::{
-    code::{
-        search::Find, Changes, FunctionInUpdate, FunctionUpdate, NamedFunctions,
-    },
-    hash::Hash,
+use crate::code::{
+    search::Find, Changes, FunctionInUpdate, FunctionUpdate, Hash,
+    NamedFunctions,
 };
 
 pub fn detect_changes(

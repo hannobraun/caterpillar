@@ -5,9 +5,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
-        FunctionLocation, Index, Pattern, TypedFragment,
+        FunctionLocation, Hash, Index, Pattern, TypedFragment,
     },
-    hash::Hash,
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
     Instructions,

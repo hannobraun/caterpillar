@@ -5,11 +5,11 @@ use std::{
 
 use capi_runtime::Value;
 
-use crate::{code::Index, hash::Hash};
+use crate::code::Index;
 
 use super::{
     search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
-    FunctionLocation, Signature,
+    FunctionLocation, Hash, Signature,
 };
 
 /// # All named functions in a program

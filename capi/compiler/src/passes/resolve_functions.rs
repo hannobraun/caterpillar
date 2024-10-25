@@ -1,9 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{
-    code::{CallGraph, Fragment, Function, NamedFunctions},
-    hash::Hash,
-};
+use crate::code::{CallGraph, Fragment, Function, Hash, NamedFunctions};
 
 pub fn resolve_calls_to_user_defined_functions(
     named_functions: &mut NamedFunctions,
