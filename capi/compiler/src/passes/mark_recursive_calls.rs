@@ -146,7 +146,7 @@ mod tests {
                 Index::from(0),
                 "Function is only self-recursive, not mutually recursive. \
                 Expecting it to be alone in a cluster, hence index referring \
-                to it must be `0`."
+                to it must be zero."
             );
         }
     }
