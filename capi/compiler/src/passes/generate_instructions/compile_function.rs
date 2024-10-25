@@ -129,7 +129,7 @@ fn compile_branch(
 }
 
 fn compile_branch_body(
-    body: BTreeMap<Index<Fragment>, TypedFragment>,
+    body: BTreeMap<Index<TypedFragment>, TypedFragment>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,

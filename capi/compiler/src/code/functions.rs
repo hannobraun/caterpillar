@@ -294,7 +294,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: BTreeMap<Index<Fragment>, TypedFragment>,
+    pub body: BTreeMap<Index<TypedFragment>, TypedFragment>,
 
     /// # The signature of the branch
     ///

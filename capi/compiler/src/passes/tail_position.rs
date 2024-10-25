@@ -144,7 +144,7 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for BTreeMap<Index<Fragment>, TypedFragment> {
+    impl ToIdentifiers for BTreeMap<Index<TypedFragment>, TypedFragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
                 .filter_map(|typed_fragment| {
