@@ -17,7 +17,7 @@ use std::{
     udigest::Digestable,
 )]
 pub struct IndexMap<T> {
-    pub inner: IndexMapInner<T>,
+    inner: IndexMapInner<T>,
 }
 
 impl<T> IndexMap<T> {
