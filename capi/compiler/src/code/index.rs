@@ -26,7 +26,7 @@ impl<'r, T, I> IntoIterator for &'r IndexMap<T, I> {
 type IndexMapInner<T, I> = BTreeMap<Index<I>, T>;
 
 /// # The index of a named function in the root context
-#[derive(Debug, Ord, PartialOrd)]
+#[derive(Debug)]
 pub struct Index<T> {
     pub value: u32,
     pub t: PhantomData<T>,
@@ -42,9 +42,21 @@ impl<T> Copy for Index<T> {}
 
 impl<T> Eq for Index<T> {}
 
+impl<T> Ord for Index<T> {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.value.cmp(&other.value)
+    }
+}
+
 impl<T> PartialEq for Index<T> {
     fn eq(&self, other: &Self) -> bool {
         self.value.eq(&other.value)
+    }
+}
+
+impl<T> PartialOrd for Index<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
     }
 }
 
