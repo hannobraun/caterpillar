@@ -95,8 +95,6 @@ fn include_calls_from_function_in_call_graph(
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
-
     use crate::{
         code::{CallGraph, Cluster, Index, IndexMap},
         host::NoHost,
@@ -131,7 +129,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: IndexMap {
-                    inner: BTreeMap::from([indices])
+                    inner: [indices].into_iter().collect()
                 },
             })
             .collect::<Vec<_>>(),
@@ -166,7 +164,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: IndexMap {
-                    inner: BTreeMap::from([indices])
+                    inner: [indices].into_iter().collect()
                 }
             })
             .collect::<Vec<_>>(),
