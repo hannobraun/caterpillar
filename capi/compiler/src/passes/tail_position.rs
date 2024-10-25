@@ -38,10 +38,8 @@ fn analyze_branch(branch: &mut Branch) {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
-
     use crate::{
-        code::{Fragment, Index, NamedFunctions, TypedFragment},
+        code::{Fragment, IndexMap, NamedFunctions, TypedFragment},
         passes::{parse, tokenize},
     };
 
@@ -68,7 +66,7 @@ mod tests {
             .inner
             .pop_first()
             .unwrap();
-        let identifiers = branch.body.inner.to_identifiers();
+        let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
@@ -106,7 +104,6 @@ mod tests {
             .map(|(_, branch)| branch)
             .unwrap()
             .body
-            .inner
             .to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -129,7 +126,7 @@ mod tests {
 
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.inner.pop_first().unwrap();
-        let identifiers = branch.body.inner.to_identifiers();
+        let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
@@ -145,9 +142,10 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for BTreeMap<Index<TypedFragment>, TypedFragment> {
+    impl ToIdentifiers for IndexMap<TypedFragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
-            self.values()
+            self.inner
+                .values()
                 .filter_map(|typed_fragment| {
                     if let Fragment::UnresolvedIdentifier {
                         name,
