@@ -4,7 +4,6 @@ pub mod intrinsics;
 pub mod source_map;
 
 mod compiler;
-mod hash;
 mod instructions;
 mod passes;
 
