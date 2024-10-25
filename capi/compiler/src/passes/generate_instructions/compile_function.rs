@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
-        FunctionLocation, Hash, Index, Pattern, TypedFragment,
+        FunctionLocation, Hash, IndexMap, Pattern, TypedFragment,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -99,7 +99,7 @@ fn compile_branch(
         compile_binding(parameters, named_functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
-        branch.body.inner,
+        branch.body,
         location,
         cluster,
         cluster_context,
@@ -129,7 +129,7 @@ fn compile_branch(
 }
 
 fn compile_branch_body(
-    body: BTreeMap<Index<TypedFragment>, TypedFragment>,
+    body: IndexMap<TypedFragment>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
