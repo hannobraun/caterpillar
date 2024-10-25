@@ -109,7 +109,7 @@ impl NamedFunctions {
         location: &BranchLocation,
     ) -> Option<&Branch> {
         let function = self.find_function_by_location(&location.parent)?;
-        function.branches.get(&location.index)
+        function.branches.inner.get(&location.index)
     }
 
     /// # Find the fragment at the given location
@@ -210,7 +210,7 @@ pub struct Function {
     /// A function is made up of one or more branches. When a function is
     /// called, its arguments are matched against the parameters of each branch,
     /// until one branch matches. This branch is then evaluated.
-    pub branches: BTreeMap<Index<Branch>, Branch>,
+    pub branches: IndexMap<Branch>,
 
     /// # Values captured by the function from a parent scope
     ///
@@ -241,11 +241,12 @@ impl Function {
     pub fn add_branch(&mut self, branch: Branch) {
         let index = self
             .branches
+            .inner
             .last_key_value()
             .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
-        self.branches.insert(
+        self.branches.inner.insert(
             Index {
                 value: index,
                 t: PhantomData,
@@ -264,12 +265,13 @@ impl Function {
     /// Panics, if the function does not have exactly one branch.
     pub fn expect_one_branch(&self) -> &Branch {
         assert_eq!(
-            self.branches.len(),
+            self.branches.inner.len(),
             1,
             "Expected function to have exactly one branch."
         );
 
         self.branches
+            .inner
             .first_key_value()
             .map(|(_index, branch)| branch)
             .expect("Just checked that there is exactly one branch.")

@@ -41,7 +41,7 @@ fn resolve_in_function<H: Host>(
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for branch in function.branches.values_mut() {
+    for branch in function.branches.inner.values_mut() {
         scopes.push(
             branch
                 .parameters
@@ -302,7 +302,7 @@ mod tests {
 
         named_functions
             .into_functions()
-            .flat_map(|function| function.branches.into_values())
+            .flat_map(|function| function.branches.inner.into_values())
             .collect()
     }
 

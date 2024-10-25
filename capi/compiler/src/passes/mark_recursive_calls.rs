@@ -46,7 +46,7 @@ fn mark_recursive_calls_in_function(
         Index<(Function, Cluster)>,
     >,
 ) {
-    for branch in function.branches.values_mut() {
+    for branch in function.branches.inner.values_mut() {
         for typed_fragment in branch.body.values_mut() {
             match &mut typed_fragment.fragment {
                 Fragment::Function { function } => {
@@ -115,6 +115,7 @@ mod tests {
                 ..
             } = function
                 .branches
+                .inner
                 .pop_first()
                 .map(|(_, branch)| branch)
                 .unwrap()
@@ -162,7 +163,7 @@ mod tests {
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
-        let mut branches = f.branches.into_values();
+        let mut branches = f.branches.inner.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
@@ -174,7 +175,7 @@ mod tests {
             panic!("Expected expression to be a function.");
         };
 
-        let mut branches = function.branches.into_values();
+        let mut branches = function.branches.inner.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
