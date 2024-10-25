@@ -95,7 +95,7 @@ fn include_calls_from_function_in_call_graph(
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::BTreeMap, marker::PhantomData};
+    use std::collections::BTreeMap;
 
     use crate::{
         code::{CallGraph, Cluster, Index, IndexMap},
@@ -125,26 +125,8 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                (
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 1,
-                        t: PhantomData
-                    }
-                ),
-                (
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    }
-                ),
+                (Index::from(0), Index::from(1)),
+                (Index::from(0), Index::from(0)),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -178,26 +160,8 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                (
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 1,
-                        t: PhantomData
-                    }
-                ),
-                (
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    }
-                ),
+                (Index::from(0), Index::from(1)),
+                (Index::from(0), Index::from(0)),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -237,39 +201,11 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 [
-                    (
-                        Index {
-                            value: 0,
-                            t: PhantomData
-                        },
-                        Index {
-                            value: 1,
-                            t: PhantomData
-                        }
-                    ),
-                    (
-                        Index {
-                            value: 1,
-                            t: PhantomData
-                        },
-                        Index {
-                            value: 2,
-                            t: PhantomData
-                        }
-                    )
+                    (Index::from(0), Index::from(1)),
+                    (Index::from(1), Index::from(2))
                 ]
                 .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
+                [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -317,50 +253,10 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 2,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 3,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 1,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
+                [(Index::from(0), Index::from(2))].as_slice(),
+                [(Index::from(0), Index::from(3))].as_slice(),
+                [(Index::from(0), Index::from(1))].as_slice(),
+                [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -417,50 +313,10 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 2,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 3,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 1,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
-                [(
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    },
-                    Index {
-                        value: 0,
-                        t: PhantomData
-                    }
-                )]
-                .as_slice(),
+                [(Index::from(0), Index::from(2))].as_slice(),
+                [(Index::from(0), Index::from(3))].as_slice(),
+                [(Index::from(0), Index::from(1))].as_slice(),
+                [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {

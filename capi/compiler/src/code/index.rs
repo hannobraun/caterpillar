@@ -84,6 +84,15 @@ impl<T> Copy for Index<T> {}
 
 impl<T> Eq for Index<T> {}
 
+impl<T> From<u32> for Index<T> {
+    fn from(value: u32) -> Self {
+        Self {
+            value,
+            t: PhantomData,
+        }
+    }
+}
+
 impl<T> Ord for Index<T> {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.value.cmp(&other.value)
