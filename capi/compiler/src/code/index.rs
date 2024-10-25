@@ -4,7 +4,6 @@ use std::{collections::BTreeMap, marker::PhantomData};
 #[derive(
     Clone,
     Debug,
-    Default,
     Eq,
     PartialEq,
     Ord,
@@ -15,6 +14,14 @@ use std::{collections::BTreeMap, marker::PhantomData};
 )]
 pub struct IndexMap<T, I = T> {
     pub inner: IndexMapInner<T, I>,
+}
+
+impl<T, I> Default for IndexMap<T, I> {
+    fn default() -> Self {
+        Self {
+            inner: IndexMapInner::default(),
+        }
+    }
 }
 
 impl<T, I> IntoIterator for IndexMap<T, I> {
