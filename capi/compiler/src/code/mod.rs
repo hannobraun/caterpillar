@@ -17,7 +17,7 @@ pub use self::{
     fragment::{Fragment, UnresolvedCallToUserDefinedFunction},
     functions::{Branch, Function, NamedFunctions, Pattern, TypedFragment},
     hash::Hash,
-    index::Index,
+    index::{Index, IndexMap},
     location::{BranchLocation, FragmentLocation, FunctionLocation},
     types::{Signature, Type},
 };

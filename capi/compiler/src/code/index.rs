@@ -1,4 +1,9 @@
-use std::marker::PhantomData;
+use std::{collections::BTreeMap, marker::PhantomData};
+
+/// # A collection of values, in a defined order, accessible through their index
+pub struct IndexMap<T, I = T> {
+    pub inner: BTreeMap<Index<I>, T>,
+}
 
 /// # The index of a named function in the root context
 #[derive(Debug, Eq, Ord, PartialEq, PartialOrd)]
