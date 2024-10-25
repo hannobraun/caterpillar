@@ -13,7 +13,7 @@ use std::{collections::BTreeMap, marker::PhantomData};
     udigest::Digestable,
 )]
 pub struct IndexMap<T> {
-    pub inner: IndexMapInner<T, T>,
+    pub inner: IndexMapInner<T>,
 }
 
 impl<T> Default for IndexMap<T> {
@@ -25,8 +25,8 @@ impl<T> Default for IndexMap<T> {
 }
 
 impl<T> IntoIterator for IndexMap<T> {
-    type Item = <IndexMapInner<T, T> as IntoIterator>::Item;
-    type IntoIter = <IndexMapInner<T, T> as IntoIterator>::IntoIter;
+    type Item = <IndexMapInner<T> as IntoIterator>::Item;
+    type IntoIter = <IndexMapInner<T> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
@@ -34,15 +34,15 @@ impl<T> IntoIterator for IndexMap<T> {
 }
 
 impl<'r, T> IntoIterator for &'r IndexMap<T> {
-    type Item = <&'r IndexMapInner<T, T> as IntoIterator>::Item;
-    type IntoIter = <&'r IndexMapInner<T, T> as IntoIterator>::IntoIter;
+    type Item = <&'r IndexMapInner<T> as IntoIterator>::Item;
+    type IntoIter = <&'r IndexMapInner<T> as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.iter()
     }
 }
 
-type IndexMapInner<T, I> = BTreeMap<Index<I>, T>;
+type IndexMapInner<T> = BTreeMap<Index<T>, T>;
 
 /// # The index of a named function in the root context
 #[derive(Debug)]
