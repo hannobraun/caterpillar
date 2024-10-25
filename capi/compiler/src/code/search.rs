@@ -80,13 +80,12 @@ where
         let function = &self.find;
         let location = self.metadata.clone().into();
 
-        if function.branches.inner.len() > 1 {
+        if function.branches.len() > 1 {
             return None;
         }
 
         function
             .branches
-            .inner
             .first_key_value()
             .map(|(&index, branch)| Find {
                 find: branch.clone(),

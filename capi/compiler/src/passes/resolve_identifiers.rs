@@ -196,7 +196,6 @@ mod tests {
             functions
                 .remove(0)
                 .body
-                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::UnresolvedIdentifier {
@@ -226,7 +225,6 @@ mod tests {
             functions
                 .remove(0)
                 .body
-                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::CallToHostFunction { effect_number: 0 })
@@ -252,7 +250,6 @@ mod tests {
             functions
                 .remove(0)
                 .body
-                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::CallToIntrinsicFunction {
@@ -284,7 +281,6 @@ mod tests {
             functions
                 .remove(0)
                 .body
-                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::UnresolvedIdentifier {

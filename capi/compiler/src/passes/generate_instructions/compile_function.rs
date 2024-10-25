@@ -253,7 +253,7 @@ fn compile_fragment(
         } => {
             let hash = {
                 let function_index_in_root_context =
-                    cluster.functions.inner[&index];
+                    cluster.functions[&index];
 
                 let called_function = named_functions_context
                     .named_functions

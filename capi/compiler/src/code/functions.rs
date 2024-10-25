@@ -42,7 +42,7 @@ impl NamedFunctions {
 
     /// # Access the named function at the given index
     pub fn get(&self, index: &Index<Function>) -> Option<&Function> {
-        self.inner.inner.get(index)
+        self.inner.get(index)
     }
 
     /// # Access the named function at the given index mutably
@@ -58,7 +58,7 @@ impl NamedFunctions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Find<Function, FunctionLocation>> {
-        self.inner.inner.iter().find_map(|(&index, function)| {
+        self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(function) == hash {
                 Some(Find {
                     find: function.clone(),
@@ -75,7 +75,7 @@ impl NamedFunctions {
         &self,
         name: &str,
     ) -> Option<Find<Function, Index<Function>>> {
-        self.inner.inner.iter().find_map(|(&index, function)| {
+        self.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 Some(Find {
                     find: function.clone(),
@@ -93,7 +93,7 @@ impl NamedFunctions {
         location: &BranchLocation,
     ) -> Option<&Branch> {
         let function = self.find_function_by_location(&location.parent)?;
-        function.branches.inner.get(&location.index)
+        function.branches.get(&location.index)
     }
 
     /// # Find the fragment at the given location
@@ -102,7 +102,7 @@ impl NamedFunctions {
         location: &FragmentLocation,
     ) -> Option<&TypedFragment> {
         let branch = self.find_branch_by_location(&location.parent)?;
-        branch.body.inner.get(&location.index)
+        branch.body.get(&location.index)
     }
 
     /// # Find the function at the given location
@@ -113,9 +113,7 @@ impl NamedFunctions {
         location: &FunctionLocation,
     ) -> Option<&Function> {
         match location {
-            FunctionLocation::NamedFunction { index } => {
-                self.inner.inner.get(index)
-            }
+            FunctionLocation::NamedFunction { index } => self.inner.get(index),
             FunctionLocation::AnonymousFunction { location } => {
                 let typed_fragment =
                     self.find_fragment_by_location(location)?;
@@ -126,7 +124,7 @@ impl NamedFunctions {
 
     /// # Iterate over the named functions
     pub fn functions(&self) -> impl Iterator<Item = &Function> {
-        self.inner.inner.values()
+        self.inner.values()
     }
 
     /// # Iterate over the named functions mutably
@@ -231,13 +229,12 @@ impl Function {
     /// Panics, if the function does not have exactly one branch.
     pub fn expect_one_branch(&self) -> &Branch {
         assert_eq!(
-            self.branches.inner.len(),
+            self.branches.len(),
             1,
             "Expected function to have exactly one branch."
         );
 
         self.branches
-            .inner
             .first_key_value()
             .map(|(_index, branch)| branch)
             .expect("Just checked that there is exactly one branch.")

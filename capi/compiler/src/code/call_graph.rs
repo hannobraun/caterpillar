@@ -26,7 +26,7 @@ impl CallGraph {
         &self,
     ) -> impl Iterator<Item = (&Index<Function>, &Cluster)> {
         self.clusters_from_leaves().flat_map(|cluster| {
-            cluster.functions.inner.values().zip(iter::repeat(cluster))
+            cluster.functions.values().zip(iter::repeat(cluster))
         })
     }
 
@@ -39,9 +39,9 @@ impl CallGraph {
         &self,
         index: &Index<Function>,
     ) -> Option<&Cluster> {
-        self.clusters.iter().find(|cluster| {
-            cluster.functions.inner.values().any(|i| i == index)
-        })
+        self.clusters
+            .iter()
+            .find(|cluster| cluster.functions.values().any(|i| i == index))
     }
 }
 

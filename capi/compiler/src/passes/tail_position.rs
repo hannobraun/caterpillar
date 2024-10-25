@@ -93,13 +93,12 @@ mod tests {
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.inner.pop_first().unwrap();
         let Fragment::Function { function } =
-            &branch.body.inner.values().nth(1).unwrap().fragment
+            &branch.body.values().nth(1).unwrap().fragment
         else {
             panic!("Expected block.");
         };
         let identifiers = function
             .branches
-            .inner
             .first_key_value()
             .map(|(_, branch)| branch)
             .unwrap()
@@ -144,8 +143,7 @@ mod tests {
 
     impl ToIdentifiers for IndexMap<TypedFragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
-            self.inner
-                .values()
+            self.values()
                 .filter_map(|typed_fragment| {
                     if let Fragment::UnresolvedIdentifier {
                         name,

@@ -68,8 +68,8 @@ fn include_calls_from_function_in_call_graph(
     graph_index_by_function_name: &BTreeMap<&String, NodeIndex>,
     call_graph: &mut Graph<(&Function, Index<Function>), ()>,
 ) {
-    for branch in function.branches.inner.values() {
-        for typed_fragment in branch.body.inner.values() {
+    for branch in function.branches.values() {
+        for typed_fragment in branch.body.values() {
             match &typed_fragment.fragment {
                 Fragment::Function { function } => {
                     include_calls_from_function_in_call_graph(
