@@ -221,11 +221,6 @@ pub struct Function {
 }
 
 impl Function {
-    /// # Add a branch to this function
-    pub fn add_branch(&mut self, branch: Branch) {
-        self.branches.push(branch);
-    }
-
     /// # Expect the function to have one branch and access that
     ///
     /// This is a convenience method, designed for tests and such. It should not

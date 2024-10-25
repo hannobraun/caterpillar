@@ -52,7 +52,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     }
 
     while let Some(branch) = parse_branch(tokens) {
-        function.add_branch(branch);
+        function.branches.push(branch);
     }
 
     match tokens.take()? {
