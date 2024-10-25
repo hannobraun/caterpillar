@@ -5,6 +5,24 @@ pub struct IndexMap<T, I = T> {
     pub inner: IndexMapInner<T, I>,
 }
 
+impl<T, I> IntoIterator for IndexMap<T, I> {
+    type Item = <IndexMapInner<T, I> as IntoIterator>::Item;
+    type IntoIter = <IndexMapInner<T, I> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
+    }
+}
+
+impl<'r, T, I> IntoIterator for &'r IndexMap<T, I> {
+    type Item = <&'r IndexMapInner<T, I> as IntoIterator>::Item;
+    type IntoIter = <&'r IndexMapInner<T, I> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.iter()
+    }
+}
+
 type IndexMapInner<T, I> = BTreeMap<Index<I>, T>;
 
 /// # The index of a named function in the root context
