@@ -50,7 +50,7 @@ impl NamedFunctions {
         &mut self,
         index: &Index<Function>,
     ) -> Option<&mut Function> {
-        self.inner.inner.get_mut(index)
+        self.inner.get_mut(index)
     }
 
     /// # Find the named function with the provided hash
@@ -129,7 +129,7 @@ impl NamedFunctions {
 
     /// # Iterate over the named functions mutably
     pub fn functions_mut(&mut self) -> impl Iterator<Item = &mut Function> {
-        self.inner.inner.values_mut()
+        self.inner.values_mut()
     }
 
     /// # Consume this instance and return an iterator over the functions

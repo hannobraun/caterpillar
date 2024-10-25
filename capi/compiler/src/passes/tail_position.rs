@@ -7,13 +7,13 @@ pub fn determine_tail_positions(named_functions: &mut NamedFunctions) {
 }
 
 fn analyze_function(function: &mut Function) {
-    for branch in function.branches.inner.values_mut() {
+    for branch in function.branches.values_mut() {
         analyze_branch(branch);
     }
 }
 
 fn analyze_branch(branch: &mut Branch) {
-    for typed_fragment in branch.body.inner.values_mut().rev() {
+    for typed_fragment in branch.body.values_mut().rev() {
         if let Fragment::Comment { .. } = typed_fragment.fragment {
             continue;
         }
@@ -29,7 +29,7 @@ fn analyze_branch(branch: &mut Branch) {
         break;
     }
 
-    for typed_fragment in branch.body.inner.values_mut() {
+    for typed_fragment in branch.body.values_mut() {
         if let Fragment::Function { function } = &mut typed_fragment.fragment {
             analyze_function(function);
         }
@@ -63,7 +63,6 @@ mod tests {
             .next()
             .unwrap()
             .branches
-            .inner
             .pop_first()
             .unwrap();
         let identifiers = branch.body.to_identifiers();
@@ -91,7 +90,7 @@ mod tests {
         );
 
         let mut function = functions.into_functions().next().unwrap();
-        let (_, branch) = function.branches.inner.pop_first().unwrap();
+        let (_, branch) = function.branches.pop_first().unwrap();
         let Fragment::Function { function } =
             &branch.body.values().nth(1).unwrap().fragment
         else {
@@ -124,7 +123,7 @@ mod tests {
         );
 
         let mut function = functions.into_functions().next().unwrap();
-        let (_, branch) = function.branches.inner.pop_first().unwrap();
+        let (_, branch) = function.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }

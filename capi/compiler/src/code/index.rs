@@ -1,4 +1,8 @@
-use std::{collections::BTreeMap, marker::PhantomData, ops::Deref};
+use std::{
+    collections::BTreeMap,
+    marker::PhantomData,
+    ops::{Deref, DerefMut},
+};
 
 /// # A collection of values, in a defined order, accessible through their index
 #[derive(
@@ -52,6 +56,12 @@ impl<T> Deref for IndexMap<T> {
 
     fn deref(&self) -> &Self::Target {
         &self.inner
+    }
+}
+
+impl<T> DerefMut for IndexMap<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 

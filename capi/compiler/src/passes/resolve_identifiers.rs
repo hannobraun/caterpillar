@@ -41,7 +41,7 @@ fn resolve_in_function<H: Host>(
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for branch in function.branches.inner.values_mut() {
+    for branch in function.branches.values_mut() {
         scopes.push(
             branch
                 .parameters
@@ -75,7 +75,7 @@ fn resolve_in_branch<H: Host>(
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for typed_fragment in branch.body.inner.values_mut() {
+    for typed_fragment in branch.body.values_mut() {
         match &mut typed_fragment.fragment {
             Fragment::Function { function } => {
                 resolve_in_function::<H>(

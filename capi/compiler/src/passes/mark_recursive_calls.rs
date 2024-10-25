@@ -46,8 +46,8 @@ fn mark_recursive_calls_in_function(
         Index<Index<Function>>,
     >,
 ) {
-    for branch in function.branches.inner.values_mut() {
-        for typed_fragment in branch.body.inner.values_mut() {
+    for branch in function.branches.values_mut() {
+        for typed_fragment in branch.body.values_mut() {
             match &mut typed_fragment.fragment {
                 Fragment::Function { function } => {
                     mark_recursive_calls_in_function(
@@ -118,12 +118,10 @@ mod tests {
                 ..
             } = function
                 .branches
-                .inner
                 .pop_first()
                 .map(|(_, branch)| branch)
                 .unwrap()
                 .body
-                .inner
                 .pop_first()
                 .map(|(_, typed_fragment)| typed_fragment.fragment)
                 .unwrap()
