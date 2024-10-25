@@ -70,7 +70,7 @@ type IndexMapInner<T> = BTreeMap<Index<T>, T>;
 /// # The index of a named function in the root context
 #[derive(Debug)]
 pub struct Index<T> {
-    pub value: u32,
+    value: u32,
     t: PhantomData<T>,
 }
 
