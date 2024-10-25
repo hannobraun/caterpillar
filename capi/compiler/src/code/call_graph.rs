@@ -75,5 +75,5 @@ pub struct Cluster {
     ///
     /// The indices refer to the functions in their original order within the
     /// list of all named functions.
-    pub functions: IndexMap<Index<Function>, (Function, Cluster)>,
+    pub functions: IndexMap<Index<Function>>,
 }
