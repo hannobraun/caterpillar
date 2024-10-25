@@ -96,7 +96,7 @@ fn include_calls_from_function_in_call_graph(
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{CallGraph, Cluster, Index, IndexMap},
+        code::{CallGraph, Cluster, Index},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -128,9 +128,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: IndexMap {
-                    inner: [indices].into_iter().collect()
-                },
+                functions: [indices].into_iter().collect(),
             })
             .collect::<Vec<_>>(),
         );
@@ -163,9 +161,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: IndexMap {
-                    inner: [indices].into_iter().collect()
-                }
+                functions: [indices].into_iter().collect()
             })
             .collect::<Vec<_>>(),
         );
@@ -207,9 +203,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: IndexMap {
-                    inner: indices.iter().copied().collect(),
-                }
+                functions: indices.iter().copied().collect(),
             })
             .collect::<Vec<_>>(),
         );
@@ -258,9 +252,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: IndexMap {
-                    inner: indices.iter().copied().collect()
-                },
+                functions: indices.iter().copied().collect()
             })
             .collect::<Vec<_>>(),
         );
@@ -318,9 +310,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: IndexMap {
-                    inner: indices.iter().copied().collect()
-                },
+                functions: indices.iter().copied().collect()
             })
             .collect::<Vec<_>>(),
         );
