@@ -9,7 +9,7 @@ use crate::code::Index;
 
 use super::{
     search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
-    FunctionLocation, Hash, Signature,
+    FunctionLocation, Hash, IndexMap, Signature,
 };
 
 /// # All named functions in a program
@@ -42,11 +42,12 @@ impl NamedFunctions {
 
         let index = self
             .inner
+            .inner
             .last_key_value()
             .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
-        self.inner.insert(
+        self.inner.inner.insert(
             Index {
                 value: index,
                 t: PhantomData,
@@ -57,7 +58,7 @@ impl NamedFunctions {
 
     /// # Access the named function at the given index
     pub fn get(&self, index: &Index<Function>) -> Option<&Function> {
-        self.inner.get(index)
+        self.inner.inner.get(index)
     }
 
     /// # Access the named function at the given index mutably
@@ -65,7 +66,7 @@ impl NamedFunctions {
         &mut self,
         index: &Index<Function>,
     ) -> Option<&mut Function> {
-        self.inner.get_mut(index)
+        self.inner.inner.get_mut(index)
     }
 
     /// # Find the named function with the provided hash
@@ -73,7 +74,7 @@ impl NamedFunctions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Find<Function, FunctionLocation>> {
-        self.inner.iter().find_map(|(&index, function)| {
+        self.inner.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(function) == hash {
                 Some(Find {
                     find: function.clone(),
@@ -90,7 +91,7 @@ impl NamedFunctions {
         &self,
         name: &str,
     ) -> Option<Find<Function, Index<Function>>> {
-        self.inner.iter().find_map(|(&index, function)| {
+        self.inner.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 Some(Find {
                     find: function.clone(),
@@ -128,7 +129,9 @@ impl NamedFunctions {
         location: &FunctionLocation,
     ) -> Option<&Function> {
         match location {
-            FunctionLocation::NamedFunction { index } => self.inner.get(index),
+            FunctionLocation::NamedFunction { index } => {
+                self.inner.inner.get(index)
+            }
             FunctionLocation::AnonymousFunction { location } => {
                 let typed_fragment =
                     self.find_fragment_by_location(location)?;
@@ -139,17 +142,17 @@ impl NamedFunctions {
 
     /// # Iterate over the named functions
     pub fn functions(&self) -> impl Iterator<Item = &Function> {
-        self.inner.values()
+        self.inner.inner.values()
     }
 
     /// # Iterate over the named functions mutably
     pub fn functions_mut(&mut self) -> impl Iterator<Item = &mut Function> {
-        self.inner.values_mut()
+        self.inner.inner.values_mut()
     }
 
     /// # Consume this instance and return an iterator over the functions
     pub fn into_functions(self) -> impl Iterator<Item = Function> {
-        self.inner.into_values()
+        self.inner.inner.into_values()
     }
 }
 
@@ -167,11 +170,11 @@ impl<'r> IntoIterator for &'r NamedFunctions {
     type IntoIter = <&'r NamedFunctionsInner as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.inner.iter()
+        (&self.inner).into_iter()
     }
 }
 
-type NamedFunctionsInner = BTreeMap<Index<Function>, Function>;
+type NamedFunctionsInner = IndexMap<Function>;
 
 #[derive(
     Clone,
