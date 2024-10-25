@@ -10,6 +10,8 @@ mod index;
 mod location;
 mod types;
 
+pub use crate::hash::Hash;
+
 pub use self::{
     call_graph::{CallGraph, Cluster},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
