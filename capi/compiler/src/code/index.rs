@@ -1,7 +1,18 @@
 use std::{collections::BTreeMap, marker::PhantomData};
 
 /// # A collection of values, in a defined order, accessible through their index
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct IndexMap<T, I = T> {
     pub inner: IndexMapInner<T, I>,
 }
