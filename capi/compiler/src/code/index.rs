@@ -41,6 +41,11 @@ impl<T> IndexMap<T> {
 
         index
     }
+
+    /// # Consume the map and return an iterator over its values
+    pub fn into_values(self) -> impl Iterator<Item = T> {
+        self.inner.into_values()
+    }
 }
 
 impl<T> Default for IndexMap<T> {

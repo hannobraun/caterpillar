@@ -302,7 +302,7 @@ mod tests {
 
         named_functions
             .into_functions()
-            .flat_map(|function| function.branches.inner.into_values())
+            .flat_map(|function| function.branches.into_values())
             .collect()
     }
 

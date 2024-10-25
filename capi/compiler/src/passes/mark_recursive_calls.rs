@@ -166,11 +166,11 @@ mod tests {
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
-        let mut branches = f.branches.inner.into_values();
+        let mut branches = f.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.inner.into_values();
+        let mut body = branch.body.into_values();
         let typed_fragment = body.next().unwrap();
         assert!(body.next().is_none());
 
@@ -178,11 +178,11 @@ mod tests {
             panic!("Expected expression to be a function.");
         };
 
-        let mut branches = function.branches.inner.into_values();
+        let mut branches = function.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.inner.into_values();
+        let mut body = branch.body.into_values();
         let typed_fragment = body.next().unwrap();
         assert!(body.next().is_none());
 
