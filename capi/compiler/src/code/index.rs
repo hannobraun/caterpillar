@@ -16,6 +16,29 @@ pub struct IndexMap<T> {
     pub inner: IndexMapInner<T>,
 }
 
+impl<T> IndexMap<T> {
+    /// # Add another value to the map
+    ///
+    /// Creates an index based on the index of the last value in the map. Please
+    /// note that this is not guaranteed to be a unique index, if you have
+    /// previously removed the last entry.
+    pub fn push(&mut self, value: T) -> Index<T> {
+        let index = self
+            .inner
+            .last_key_value()
+            .map(|(&Index { value: index, .. }, _)| index + 1)
+            .unwrap_or(0);
+        let index = Index {
+            value: index,
+            t: PhantomData,
+        };
+
+        self.inner.insert(index, value);
+
+        index
+    }
+}
+
 impl<T> Default for IndexMap<T> {
     fn default() -> Self {
         Self {

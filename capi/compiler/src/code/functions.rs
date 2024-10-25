@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, marker::PhantomData};
+use std::collections::BTreeSet;
 
 use capi_runtime::Value;
 
@@ -37,20 +37,7 @@ impl NamedFunctions {
             name."
         );
 
-        let index = self
-            .inner
-            .inner
-            .last_key_value()
-            .map(|(&Index { value: index, .. }, _)| index + 1)
-            .unwrap_or(0);
-
-        self.inner.inner.insert(
-            Index {
-                value: index,
-                t: PhantomData,
-            },
-            function,
-        );
+        self.inner.push(function);
     }
 
     /// # Access the named function at the given index
@@ -236,20 +223,7 @@ pub struct Function {
 impl Function {
     /// # Add a branch to this function
     pub fn add_branch(&mut self, branch: Branch) {
-        let index = self
-            .branches
-            .inner
-            .last_key_value()
-            .map(|(&Index { value: index, .. }, _)| index + 1)
-            .unwrap_or(0);
-
-        self.branches.inner.insert(
-            Index {
-                value: index,
-                t: PhantomData,
-            },
-            branch,
-        );
+        self.branches.push(branch);
     }
 
     /// # Expect the function to have one branch and access that
@@ -311,23 +285,10 @@ pub struct Branch {
 impl Branch {
     /// # Add a fragment to the body of this branch
     pub fn add_fragment(&mut self, fragment: Fragment) {
-        let index = self
-            .body
-            .inner
-            .last_key_value()
-            .map(|(&Index { value: index, .. }, _)| index + 1)
-            .unwrap_or(0);
-
-        self.body.inner.insert(
-            Index {
-                value: index,
-                t: PhantomData,
-            },
-            TypedFragment {
-                fragment,
-                signature: None,
-            },
-        );
+        self.body.push(TypedFragment {
+            fragment,
+            signature: None,
+        });
     }
 }
 

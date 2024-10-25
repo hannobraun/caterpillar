@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, iter, marker::PhantomData};
+use std::collections::BTreeMap;
 
 use petgraph::{
     algo::{condensation, toposort},
@@ -50,17 +50,13 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
                     .iter()
                     .map(|(_, named_function_index)| named_function_index)
                     .copied();
-                let functions = iter::successors(Some(0), |i| Some(i + 1))
-                    .map(|index| Index {
-                        value: index,
-                        t: PhantomData,
-                    })
-                    .zip(named_function_indices)
-                    .collect();
 
-                Cluster {
-                    functions: IndexMap { inner: functions },
+                let mut functions = IndexMap::default();
+                for index in named_function_indices {
+                    functions.push(index);
                 }
+
+                Cluster { functions }
             });
 
     clusters.collect()
