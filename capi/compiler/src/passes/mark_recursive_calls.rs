@@ -80,7 +80,10 @@ fn mark_recursive_calls_in_function(
 mod tests {
 
     use crate::{
-        code::{Fragment, NamedFunctions, UnresolvedCallToUserDefinedFunction},
+        code::{
+            Fragment, Index, NamedFunctions,
+            UnresolvedCallToUserDefinedFunction,
+        },
         host::NoHost,
         passes::{
             create_call_graph, parse, resolve_most_identifiers, tokenize,
@@ -139,7 +142,8 @@ mod tests {
             };
 
             assert_eq!(
-                index.value, 0,
+                index,
+                Index::from(0),
                 "Function is only self-recursive, not mutually recursive. \
                 Expecting it to be alone in a cluster, hence index referring \
                 to it must be `0`."
