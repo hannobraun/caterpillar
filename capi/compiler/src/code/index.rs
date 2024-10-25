@@ -26,7 +26,7 @@ impl<'r, T, I> IntoIterator for &'r IndexMap<T, I> {
 type IndexMapInner<T, I> = BTreeMap<Index<I>, T>;
 
 /// # The index of a named function in the root context
-#[derive(Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Debug, Ord, PartialOrd)]
 pub struct Index<T> {
     pub value: u32,
     pub t: PhantomData<T>,
@@ -39,6 +39,14 @@ impl<T> Clone for Index<T> {
 }
 
 impl<T> Copy for Index<T> {}
+
+impl<T> Eq for Index<T> {}
+
+impl<T> PartialEq for Index<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.value.eq(&other.value)
+    }
+}
 
 impl<'de, T> serde::Deserialize<'de> for Index<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
