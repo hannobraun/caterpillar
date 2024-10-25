@@ -7,7 +7,7 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Fragment, Function, Index, NamedFunctions,
+    CallGraph, Cluster, Fragment, Function, Index, IndexMap, NamedFunctions,
 };
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
@@ -58,7 +58,9 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
                     .zip(named_function_indices)
                     .collect();
 
-                Cluster { functions }
+                Cluster {
+                    functions: IndexMap { inner: functions },
+                }
             });
 
     clusters.collect()
@@ -100,7 +102,7 @@ mod tests {
     use std::{collections::BTreeMap, marker::PhantomData};
 
     use crate::{
-        code::{CallGraph, Cluster, Index},
+        code::{CallGraph, Cluster, Index, IndexMap},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -150,7 +152,9 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: BTreeMap::from([indices]),
+                functions: IndexMap {
+                    inner: BTreeMap::from([indices])
+                },
             })
             .collect::<Vec<_>>(),
         );
@@ -201,7 +205,9 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: BTreeMap::from([indices])
+                functions: IndexMap {
+                    inner: BTreeMap::from([indices])
+                }
             })
             .collect::<Vec<_>>(),
         );
@@ -271,7 +277,9 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: IndexMap {
+                    inner: indices.iter().copied().collect(),
+                }
             })
             .collect::<Vec<_>>(),
         );
@@ -360,7 +368,9 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: IndexMap {
+                    inner: indices.iter().copied().collect()
+                },
             })
             .collect::<Vec<_>>(),
         );
@@ -458,7 +468,9 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: IndexMap {
+                    inner: indices.iter().copied().collect()
+                },
             })
             .collect::<Vec<_>>(),
         );

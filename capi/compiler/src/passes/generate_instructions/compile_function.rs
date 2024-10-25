@@ -252,7 +252,8 @@ fn compile_fragment(
             is_tail_call,
         } => {
             let hash = {
-                let function_index_in_root_context = cluster.functions[&index];
+                let function_index_in_root_context =
+                    cluster.functions.inner[&index];
 
                 let called_function = named_functions_context
                     .named_functions

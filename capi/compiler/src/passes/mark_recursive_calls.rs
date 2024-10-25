@@ -12,6 +12,7 @@ pub fn mark_recursive_calls(
     for cluster in call_graph.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
             .functions
+            .inner
             .iter()
             .filter_map(|(&function_index_in_cluster, named_function_index)| {
                 functions
@@ -26,7 +27,7 @@ pub fn mark_recursive_calls(
             })
             .collect::<BTreeMap<_, _>>();
 
-        for named_function_index in cluster.functions.values() {
+        for named_function_index in cluster.functions.inner.values() {
             let function = functions
                 .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
