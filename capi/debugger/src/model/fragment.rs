@@ -158,7 +158,6 @@ impl DebugFragmentKind {
             Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
                 let called_function_index = cluster
                     .functions
-                    .inner
                     .get(&index)
                     .expect(
                     "The index of a recursive call must be valid within the \
