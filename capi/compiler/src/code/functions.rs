@@ -1,7 +1,4 @@
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    marker::PhantomData,
-};
+use std::{collections::BTreeSet, marker::PhantomData};
 
 use capi_runtime::Value;
 
@@ -118,7 +115,7 @@ impl NamedFunctions {
         location: &FragmentLocation,
     ) -> Option<&TypedFragment> {
         let branch = self.find_branch_by_location(&location.parent)?;
-        branch.body.get(&location.index)
+        branch.body.inner.get(&location.index)
     }
 
     /// # Find the function at the given location
@@ -294,7 +291,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: BTreeMap<Index<TypedFragment>, TypedFragment>,
+    pub body: IndexMap<TypedFragment>,
 
     /// # The signature of the branch
     ///
@@ -316,11 +313,12 @@ impl Branch {
     pub fn add_fragment(&mut self, fragment: Fragment) {
         let index = self
             .body
+            .inner
             .last_key_value()
             .map(|(&Index { value: index, .. }, _)| index + 1)
             .unwrap_or(0);
 
-        self.body.insert(
+        self.body.inner.insert(
             Index {
                 value: index,
                 t: PhantomData,

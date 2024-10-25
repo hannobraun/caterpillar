@@ -13,7 +13,7 @@ fn analyze_function(function: &mut Function) {
 }
 
 fn analyze_branch(branch: &mut Branch) {
-    for typed_fragment in branch.body.values_mut().rev() {
+    for typed_fragment in branch.body.inner.values_mut().rev() {
         if let Fragment::Comment { .. } = typed_fragment.fragment {
             continue;
         }
@@ -29,7 +29,7 @@ fn analyze_branch(branch: &mut Branch) {
         break;
     }
 
-    for typed_fragment in branch.body.values_mut() {
+    for typed_fragment in branch.body.inner.values_mut() {
         if let Fragment::Function { function } = &mut typed_fragment.fragment {
             analyze_function(function);
         }
@@ -68,7 +68,7 @@ mod tests {
             .inner
             .pop_first()
             .unwrap();
-        let identifiers = branch.body.to_identifiers();
+        let identifiers = branch.body.inner.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
@@ -95,7 +95,7 @@ mod tests {
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.inner.pop_first().unwrap();
         let Fragment::Function { function } =
-            &branch.body.values().nth(1).unwrap().fragment
+            &branch.body.inner.values().nth(1).unwrap().fragment
         else {
             panic!("Expected block.");
         };
@@ -106,6 +106,7 @@ mod tests {
             .map(|(_, branch)| branch)
             .unwrap()
             .body
+            .inner
             .to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -128,7 +129,7 @@ mod tests {
 
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.inner.pop_first().unwrap();
-        let identifiers = branch.body.to_identifiers();
+        let identifiers = branch.body.inner.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 

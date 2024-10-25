@@ -47,7 +47,7 @@ fn mark_recursive_calls_in_function(
     >,
 ) {
     for branch in function.branches.inner.values_mut() {
-        for typed_fragment in branch.body.values_mut() {
+        for typed_fragment in branch.body.inner.values_mut() {
             match &mut typed_fragment.fragment {
                 Fragment::Function { function } => {
                     mark_recursive_calls_in_function(
@@ -120,6 +120,7 @@ mod tests {
                 .map(|(_, branch)| branch)
                 .unwrap()
                 .body
+                .inner
                 .pop_first()
                 .map(|(_, typed_fragment)| typed_fragment.fragment)
                 .unwrap()
@@ -167,7 +168,7 @@ mod tests {
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.into_values();
+        let mut body = branch.body.inner.into_values();
         let typed_fragment = body.next().unwrap();
         assert!(body.next().is_none());
 
@@ -179,7 +180,7 @@ mod tests {
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 
-        let mut body = branch.body.into_values();
+        let mut body = branch.body.inner.into_values();
         let typed_fragment = body.next().unwrap();
         assert!(body.next().is_none());
 

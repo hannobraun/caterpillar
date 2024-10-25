@@ -71,7 +71,7 @@ fn include_calls_from_function_in_call_graph(
     call_graph: &mut Graph<(&Function, Index<Function>), ()>,
 ) {
     for branch in function.branches.inner.values() {
-        for typed_fragment in branch.body.values() {
+        for typed_fragment in branch.body.inner.values() {
             match &typed_fragment.fragment {
                 Fragment::Function { function } => {
                     include_calls_from_function_in_call_graph(

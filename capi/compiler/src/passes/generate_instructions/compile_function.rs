@@ -99,7 +99,7 @@ fn compile_branch(
         compile_binding(parameters, named_functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
-        branch.body,
+        branch.body.inner,
         location,
         cluster,
         cluster_context,

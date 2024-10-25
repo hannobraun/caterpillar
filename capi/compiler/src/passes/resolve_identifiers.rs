@@ -75,7 +75,7 @@ fn resolve_in_branch<H: Host>(
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
 ) {
-    for typed_fragment in branch.body.values_mut() {
+    for typed_fragment in branch.body.inner.values_mut() {
         match &mut typed_fragment.fragment {
             Fragment::Function { function } => {
                 resolve_in_function::<H>(
@@ -196,6 +196,7 @@ mod tests {
             functions
                 .remove(0)
                 .body
+                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::UnresolvedIdentifier {
@@ -225,6 +226,7 @@ mod tests {
             functions
                 .remove(0)
                 .body
+                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::CallToHostFunction { effect_number: 0 })
@@ -250,6 +252,7 @@ mod tests {
             functions
                 .remove(0)
                 .body
+                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::CallToIntrinsicFunction {
@@ -281,6 +284,7 @@ mod tests {
             functions
                 .remove(0)
                 .body
+                .inner
                 .last_key_value()
                 .map(|(_, typed_fragment)| &typed_fragment.fragment),
             Some(&Fragment::UnresolvedIdentifier {

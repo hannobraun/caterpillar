@@ -27,7 +27,7 @@ fn resolve_calls_in_function(
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
     for branch in function.branches.inner.values_mut() {
-        for typed_fragment in branch.body.values_mut() {
+        for typed_fragment in branch.body.inner.values_mut() {
             resolve_calls_in_fragment(
                 &mut typed_fragment.fragment,
                 resolved_hashes_by_name,
