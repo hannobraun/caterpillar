@@ -30,13 +30,13 @@ pub async fn build_and_watch_game(
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
-    let (game_tx, game_rx) = mpsc::channel(1);
+    let (events_tx, game_rx) = mpsc::channel(1);
 
     let mut ignored_error = None;
 
     task::spawn(async move {
         loop {
-            if game_tx.send(Event::ChangeDetected).await.is_err() {
+            if events_tx.send(Event::ChangeDetected).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
                 return;
             }
@@ -75,7 +75,7 @@ pub async fn build_and_watch_game(
                 timestamp: timestamp.0,
                 inner: code,
             };
-            if game_tx.send(Event::BuildFinished(code)).await.is_err() {
+            if events_tx.send(Event::BuildFinished(code)).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
                 return;
             }
