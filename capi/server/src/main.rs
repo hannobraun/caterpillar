@@ -1,7 +1,7 @@
+use capi_server::server;
 use capi_watch::Watcher;
 
 mod args;
-mod server;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
