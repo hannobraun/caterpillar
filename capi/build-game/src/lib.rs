@@ -1,10 +1,12 @@
 use std::{io, str, time::SystemTime};
 
-use capi_compiler::{Compiler, CompilerOutput};
+use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
 use tokio::{fs, sync::watch, task};
+
+pub use capi_compiler::CompilerOutput;
 
 pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
 
