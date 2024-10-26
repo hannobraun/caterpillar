@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use capi_build_game::build_and_watch_game;
 use capi_server::server;
 use capi_watch::Watcher;
 
@@ -9,8 +10,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
     let watcher = Watcher::new(PathBuf::from("games"))?;
-    let game =
-        capi_build_game::build_and_watch_game("snake", watcher.changes).await?;
+    let game = build_and_watch_game("snake", watcher.changes).await?;
     server::start(args.address, args.serve_dir, game).await?;
 
     tracing::info!("`capi-server` shutting down.");
