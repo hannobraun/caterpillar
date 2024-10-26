@@ -1,4 +1,4 @@
-pub mod server;
+mod server;
 
 pub async fn start(
     address: String,
