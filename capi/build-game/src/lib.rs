@@ -8,7 +8,12 @@ use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
 
-pub type CodeRx = mpsc::Receiver<Versioned<CompilerOutput>>;
+pub type CodeRx = mpsc::Receiver<Event>;
+
+pub enum Event {
+    ChangeDetected,
+    BuildFinished(Versioned<CompilerOutput>),
+}
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     let mut compiler = Compiler::default();
@@ -31,7 +36,11 @@ pub async fn build_and_watch_game(
 
     task::spawn(async move {
         loop {
-            println!("build:change");
+            if game_tx.send(Event::ChangeDetected).await.is_err() {
+                // Receiver dropped. We must be in the process of shutting down.
+                return;
+            }
+
             let code = match build_game_once_with_compiler(&game, &mut compiler)
                 .await
             {
@@ -57,7 +66,6 @@ pub async fn build_and_watch_game(
                     }
                 },
             };
-            println!("build:finish");
 
             ignored_error = None;
 
@@ -67,7 +75,7 @@ pub async fn build_and_watch_game(
                 timestamp: timestamp.0,
                 inner: code,
             };
-            if game_tx.send(code).await.is_err() {
+            if game_tx.send(Event::BuildFinished(code)).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
                 return;
             }
