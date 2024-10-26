@@ -18,9 +18,14 @@ impl Watcher {
         let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {
-            if let Err(err) = event {
-                error!("Error watching for changes: {err}");
-                return;
+            match event {
+                Err(err) => {
+                    error!("Error watching for changes: {err}");
+                    return;
+                }
+                _ => {
+                    // This is the kind of event we want to watch. Proceed.
+                }
             }
 
             if tx.send(()).is_err() {
