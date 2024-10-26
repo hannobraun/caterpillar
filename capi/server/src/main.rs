@@ -8,7 +8,7 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
-    let watcher = Watcher::new(std::path::PathBuf::from("games"))?;
+    let watcher = Watcher::new(PathBuf::from("games"))?;
     let game =
         capi_build_game::build_and_watch_game("snake", watcher.changes).await?;
     server::start(args.address, args.serve_dir, game).await?;
