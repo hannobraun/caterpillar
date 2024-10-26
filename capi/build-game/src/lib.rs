@@ -30,7 +30,7 @@ pub async fn build_and_watch_game(
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
-    let (events_tx, game_rx) = mpsc::channel(1);
+    let (events_tx, events_rx) = mpsc::channel(1);
 
     let mut ignored_error = None;
 
@@ -88,7 +88,7 @@ pub async fn build_and_watch_game(
         }
     });
 
-    Ok(game_rx)
+    Ok(events_rx)
 }
 
 async fn build_game_once_with_compiler(
