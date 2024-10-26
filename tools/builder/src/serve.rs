@@ -81,11 +81,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                 "build:change" => {
                     print!(
                         "\n\
-                        \t⏳ Change detected. Rebuilding game...\n"
+                        \t⏳ Change detected. Building game...\n"
                     );
                 }
                 "build:finish" => {
-                    println!("\t✅ Finished rebuilding game.");
+                    println!("\t✅ Finished building game.");
                 }
                 _ => {
                     continue;
