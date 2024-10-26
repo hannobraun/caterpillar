@@ -5,10 +5,7 @@ use capi_watch::Watcher;
 
 use crate::server;
 
-pub async fn start(
-    address: String,
-    serve_dir: std::path::PathBuf,
-) -> anyhow::Result<()> {
+pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
     let watcher = Watcher::new(PathBuf::from("games"))?;
     let game = build_and_watch_game("snake", watcher.changes).await?;
     server::start(address, serve_dir, game).await?;
