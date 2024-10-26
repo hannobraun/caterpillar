@@ -25,23 +25,12 @@ pub async fn build_and_watch_game(
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
-    println!("build:initial:start");
-    let code = build_game_once_with_compiler(&game, &mut compiler).await?;
-    println!("build:initial:finish");
-
-    timestamp.update();
     let (game_tx, game_rx) = mpsc::channel(1);
-    game_tx
-        .send(Versioned {
-            timestamp: timestamp.0,
-            inner: code,
-        })
-        .await?;
 
     let mut ignored_error = None;
 
     task::spawn(async move {
-        while changes.wait_for_change().await {
+        loop {
             println!("build:change");
             let code = match build_game_once_with_compiler(&game, &mut compiler)
                 .await
@@ -81,6 +70,12 @@ pub async fn build_and_watch_game(
             if game_tx.send(code).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
                 return;
+            }
+
+            if changes.wait_for_change().await {
+                continue;
+            } else {
+                break;
             }
         }
     });
