@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use notify::{RecursiveMode, Watcher as _};
+use notify::{Event, EventKind, RecursiveMode, Watcher as _};
 use tokio::sync::watch;
 use tracing::error;
 
@@ -19,6 +19,13 @@ impl Watcher {
 
         let mut watcher = notify::recommended_watcher(move |event| {
             match event {
+                Ok(Event {
+                    kind: EventKind::Access(_),
+                    ..
+                }) => {
+                    // We're not interested in read access to any files.
+                    return;
+                }
                 Err(err) => {
                     error!("Error watching for changes: {err}");
                     return;
