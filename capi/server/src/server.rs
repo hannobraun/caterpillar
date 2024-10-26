@@ -7,9 +7,10 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_build_game::CodeRx;
 use capi_protocol::Versioned;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
+
+use crate::start::CodeRx;
 
 pub async fn start(
     address: String,

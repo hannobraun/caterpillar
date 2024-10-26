@@ -4,11 +4,11 @@ use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
-use tokio::{fs, sync::watch, task};
+use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
 
-pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
+pub type CodeRx = mpsc::Receiver<Versioned<CompilerOutput>>;
 
 pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     let mut compiler = Compiler::default();
@@ -30,10 +30,13 @@ pub async fn build_and_watch_game(
     println!("build:initial:finish");
 
     timestamp.update();
-    let (game_tx, game_rx) = watch::channel(Versioned {
-        timestamp: timestamp.0,
-        inner: code,
-    });
+    let (game_tx, game_rx) = mpsc::channel(1);
+    game_tx
+        .send(Versioned {
+            timestamp: timestamp.0,
+            inner: code,
+        })
+        .await?;
 
     let mut ignored_error = None;
 
@@ -75,7 +78,7 @@ pub async fn build_and_watch_game(
                 timestamp: timestamp.0,
                 inner: code,
             };
-            if game_tx.send(code).is_err() {
+            if game_tx.send(code).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
                 return;
             }
