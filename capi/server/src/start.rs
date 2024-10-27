@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{net::SocketAddr, path::PathBuf};
 
 use capi_build_game::build_and_watch_game;
 use capi_watch::Watcher;
@@ -43,7 +43,10 @@ async fn start_inner(
     let mut build_events =
         build_and_watch_game("snake", watcher.changes).await?;
 
-    let mut server_task = ServerTask::Uninitialized { address, serve_dir };
+    let mut server_task = ServerTask::Uninitialized {
+        address: address.parse().unwrap(),
+        serve_dir,
+    };
 
     while let Some(event) = build_events.recv().await {
         match event {
@@ -55,11 +58,8 @@ async fn start_inner(
 
                 match server_task {
                     ServerTask::Uninitialized { address, serve_dir } => {
-                        let (ready_rx, code_tx) = server::start(
-                            address.parse().unwrap(),
-                            serve_dir,
-                            code,
-                        );
+                        let (ready_rx, code_tx) =
+                            server::start(address, serve_dir, code);
 
                         ready_rx.await?;
                         events.send(Event::ServerReady).await?;
@@ -81,6 +81,11 @@ async fn start_inner(
 }
 
 enum ServerTask {
-    Uninitialized { address: String, serve_dir: PathBuf },
-    Initialized { code_tx: CodeTx },
+    Uninitialized {
+        address: SocketAddr,
+        serve_dir: PathBuf,
+    },
+    Initialized {
+        code_tx: CodeTx,
+    },
 }
