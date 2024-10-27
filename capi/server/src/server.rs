@@ -14,11 +14,13 @@ use tracing::error;
 
 use crate::start::CodeRx;
 
+pub type CodeTx = watch::Sender<Versioned<CompilerOutput>>;
+
 pub fn start(
     address: String,
     serve_dir: PathBuf,
     code: Versioned<CompilerOutput>,
-) -> watch::Sender<Versioned<CompilerOutput>> {
+) -> CodeTx {
     let (code_tx, code_rx) = watch::channel(code);
 
     task::spawn(async {
