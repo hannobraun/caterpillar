@@ -9,7 +9,10 @@ use tokio::{
 use crate::build::UpdatesRx;
 
 pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
-    let address = "localhost:34480";
+    // Yes, I too think it seems wrong to not use IPv6 here. But if I do, my
+    // terminal does no longer recognize it as a URL, so I can no longer just
+    // CTRL-click to open it.
+    let address = "127.0.0.1:34480";
 
     let mut current_server: Option<Child> = None;
 
