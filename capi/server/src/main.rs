@@ -14,6 +14,9 @@ async fn main() -> anyhow::Result<()> {
             Event::ServerReady => {
                 println!("ready");
             }
+            Event::ChangeDetected => {
+                println!("build:change");
+            }
         }
     }
 

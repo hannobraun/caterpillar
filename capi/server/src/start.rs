@@ -9,6 +9,7 @@ use crate::server::{self, CodeTx};
 
 pub enum Event {
     ServerReady,
+    ChangeDetected,
 }
 
 type EventsTx = mpsc::Sender<Event>;
@@ -46,7 +47,7 @@ async fn start_inner(
     while let Some(event) = build_events.recv().await {
         match event {
             capi_build_game::Event::ChangeDetected => {
-                println!("build:change");
+                events.send(Event::ChangeDetected).await?;
             }
             capi_build_game::Event::BuildFinished(code) => {
                 println!("build:finish");
