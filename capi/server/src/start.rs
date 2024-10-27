@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use capi_build_game::build_and_watch_game;
 use capi_watch::Watcher;
+use tokio::select;
 
 use crate::server::{self, CodeTx};
 
@@ -13,7 +14,13 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
     let mut server_task = ServerTask::Uninitialized { address, serve_dir };
 
     loop {
-        let Some(event) = build_events.recv().await else {
+        let event = select! {
+            event = build_events.recv() => {
+                event
+            }
+        };
+
+        let Some(event) = event else {
             break;
         };
 
