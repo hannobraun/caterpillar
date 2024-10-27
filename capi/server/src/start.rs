@@ -55,8 +55,11 @@ async fn start_inner(
 
                 match server_task {
                     ServerTask::Uninitialized { address, serve_dir } => {
-                        let (ready_rx, code_tx) =
-                            server::start(address, serve_dir, code);
+                        let (ready_rx, code_tx) = server::start(
+                            address.parse().unwrap(),
+                            serve_dir,
+                            code,
+                        );
 
                         ready_rx.await?;
                         events.send(Event::ServerReady).await?;

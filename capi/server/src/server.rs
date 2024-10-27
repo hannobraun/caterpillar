@@ -27,7 +27,7 @@ type ReadyTx = oneshot::Sender<()>;
 pub type ReadyRx = oneshot::Receiver<()>;
 
 pub fn start(
-    address: String,
+    address: SocketAddr,
     serve_dir: PathBuf,
     code: Code,
 ) -> (ReadyRx, CodeTx) {
@@ -36,8 +36,7 @@ pub fn start(
 
     task::spawn(async move {
         if let Err(err) =
-            start_inner(address.parse().unwrap(), serve_dir, ready_tx, code_rx)
-                .await
+            start_inner(address, serve_dir, ready_tx, code_rx).await
         {
             error!("Error serving game code: {err:?}");
 
