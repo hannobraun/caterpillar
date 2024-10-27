@@ -12,7 +12,11 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
 
     let mut server_task = ServerTask::Uninitialized { address, serve_dir };
 
-    while let Some(event) = build_events.recv().await {
+    loop {
+        let Some(event) = build_events.recv().await else {
+            break;
+        };
+
         match event {
             capi_build_game::Event::ChangeDetected => {
                 println!("build:change");
