@@ -22,7 +22,7 @@ pub async fn start(
 ) -> anyhow::Result<EventsRx> {
     let (events_tx, events_rx) = mpsc::channel(1);
 
-    task::spawn(async {
+    task::spawn(async move {
         if let Err(err) = start_inner(address, serve_dir, events_tx).await {
             error!("Error while running server: {err:?}");
 
