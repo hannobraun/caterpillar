@@ -2,16 +2,38 @@ use std::path::PathBuf;
 
 use capi_build_game::build_and_watch_game;
 use capi_watch::Watcher;
+use tokio::{sync::mpsc, task};
+use tracing::error;
 
 use crate::server::{self, CodeTx};
 
-pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
-    start_inner(address, serve_dir).await
+pub enum Event {}
+
+type EventsTx = mpsc::Sender<Event>;
+pub type EventsRx = mpsc::Receiver<Event>;
+
+pub async fn start(
+    address: String,
+    serve_dir: PathBuf,
+) -> anyhow::Result<EventsRx> {
+    let (events_tx, events_rx) = mpsc::channel(1);
+
+    task::spawn(async {
+        if let Err(err) = start_inner(address, serve_dir, events_tx).await {
+            error!("Error while running server: {err:?}");
+
+            // This tasks sender has already been dropped, which will cause the
+            // shutdown to propagate to other tasks.
+        }
+    });
+
+    Ok(events_rx)
 }
 
 async fn start_inner(
     address: String,
     serve_dir: PathBuf,
+    _events: EventsTx,
 ) -> anyhow::Result<()> {
     let watcher = Watcher::new(PathBuf::from("games"))?;
     let mut build_events =
