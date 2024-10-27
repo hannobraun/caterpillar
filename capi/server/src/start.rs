@@ -4,6 +4,7 @@ use capi_build_game::{build_and_watch_game, CompilerOutput, Event};
 use capi_protocol::Versioned;
 use capi_watch::Watcher;
 use tokio::{sync::watch, task};
+use tracing::error;
 
 use crate::server;
 
@@ -24,24 +25,29 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
     println!("build:finish");
     let (code_tx, code_rx) = watch::channel(code);
 
-    task::spawn(async move {
-        while let Some(event) = build_events.recv().await {
-            match event {
-                capi_build_game::Event::ChangeDetected => {
-                    println!("build:change");
-                }
-                capi_build_game::Event::BuildFinished(code) => {
-                    println!("build:finish");
+    task::spawn(async {
+        if let Err(err) = server::start(address, serve_dir, code_rx).await {
+            error!("Error serving game code: {err:?}");
 
-                    if code_tx.send(code).is_err() {
-                        return;
-                    }
-                }
-            }
+            // The rest of the system will start shutting down, as messages to
+            // this task's channel start to fail.
         }
     });
 
-    server::start(address, serve_dir, code_rx).await?;
+    while let Some(event) = build_events.recv().await {
+        match event {
+            capi_build_game::Event::ChangeDetected => {
+                println!("build:change");
+            }
+            capi_build_game::Event::BuildFinished(code) => {
+                println!("build:finish");
+
+                if code_tx.send(code).is_err() {
+                    return Ok(());
+                }
+            }
+        }
+    }
 
     Ok(())
 }
