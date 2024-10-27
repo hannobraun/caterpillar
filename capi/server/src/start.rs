@@ -6,6 +6,13 @@ use capi_watch::Watcher;
 use crate::server::{self, CodeTx};
 
 pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
+    start_inner(address, serve_dir).await
+}
+
+async fn start_inner(
+    address: String,
+    serve_dir: PathBuf,
+) -> anyhow::Result<()> {
     let watcher = Watcher::new(PathBuf::from("games"))?;
     let mut build_events =
         build_and_watch_game("snake", watcher.changes).await?;
