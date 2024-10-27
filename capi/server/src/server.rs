@@ -9,7 +9,13 @@ use axum::{
 };
 use capi_build_game::CompilerOutput;
 use capi_protocol::Versioned;
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
+use tokio::{
+    fs::File,
+    io::AsyncReadExt,
+    net::TcpListener,
+    sync::{oneshot, watch},
+    task,
+};
 use tracing::error;
 
 pub type Code = Versioned<CompilerOutput>;
@@ -17,11 +23,21 @@ pub type Code = Versioned<CompilerOutput>;
 pub type CodeTx = watch::Sender<Code>;
 type CodeRx = watch::Receiver<Code>;
 
-pub fn start(address: String, serve_dir: PathBuf, code: Code) -> CodeTx {
+type ReadyTx = oneshot::Sender<()>;
+pub type ReadyRx = oneshot::Receiver<()>;
+
+pub fn start(
+    address: String,
+    serve_dir: PathBuf,
+    code: Code,
+) -> (ReadyRx, CodeTx) {
     let (code_tx, code_rx) = watch::channel(code);
+    let (ready_tx, ready_rx) = oneshot::channel();
 
     task::spawn(async {
-        if let Err(err) = start_inner(address, serve_dir, code_rx).await {
+        if let Err(err) =
+            start_inner(address, serve_dir, ready_tx, code_rx).await
+        {
             error!("Error serving game code: {err:?}");
 
             // The rest of the system will start shutting down, as messages to
@@ -29,12 +45,13 @@ pub fn start(address: String, serve_dir: PathBuf, code: Code) -> CodeTx {
         }
     });
 
-    code_tx
+    (ready_rx, code_tx)
 }
 
 async fn start_inner(
     address: String,
     serve_dir: PathBuf,
+    ready: ReadyTx,
     code: CodeRx,
 ) -> anyhow::Result<()> {
     let router = Router::new()
@@ -47,7 +64,12 @@ async fn start_inner(
         .with_state(ServerState { serve_dir, code });
 
     let listener = TcpListener::bind(address).await?;
-    println!("ready"); // signal the builder we're ready
+
+    if let Err(()) = ready.send(()) {
+        // Looks like we're already shutting down.
+        return Ok(());
+    }
+
     axum::serve(listener, router).await?;
 
     Ok(())

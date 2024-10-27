@@ -33,7 +33,12 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
 
                 match server_task {
                     ServerTask::Uninitialized { address, serve_dir } => {
-                        let code_tx = server::start(address, serve_dir, code);
+                        let (ready_rx, code_tx) =
+                            server::start(address, serve_dir, code);
+
+                        ready_rx.await?;
+                        println!("ready"); // signal the builder we're ready
+
                         server_task = ServerTask::Initialized { code_tx };
                     }
                     ServerTask::Initialized { code_tx } => {
