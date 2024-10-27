@@ -12,9 +12,8 @@ use capi_protocol::Versioned;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
 use tracing::error;
 
-use crate::start::CodeRx;
-
 pub type CodeTx = watch::Sender<Versioned<CompilerOutput>>;
+pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
 
 pub fn start(
     address: String,

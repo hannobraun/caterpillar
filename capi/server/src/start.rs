@@ -1,9 +1,7 @@
 use std::path::PathBuf;
 
-use capi_build_game::{build_and_watch_game, CompilerOutput, Event};
-use capi_protocol::Versioned;
+use capi_build_game::{build_and_watch_game, Event};
 use capi_watch::Watcher;
-use tokio::sync::watch;
 
 use crate::server;
 
@@ -42,5 +40,3 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
 
     Ok(())
 }
-
-pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
