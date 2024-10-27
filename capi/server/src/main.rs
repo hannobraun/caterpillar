@@ -11,14 +11,14 @@ async fn main() -> anyhow::Result<()> {
 
     while let Some(event) = events.recv().await {
         match event {
-            Event::ServerReady => {
-                println!("ready");
-            }
             Event::ChangeDetected => {
                 println!("build:change");
             }
             Event::BuildFinished => {
                 println!("build:finish");
+            }
+            Event::ServerReady => {
+                println!("ready");
             }
         }
     }

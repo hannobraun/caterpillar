@@ -8,9 +8,9 @@ use tracing::error;
 use crate::server::{self, CodeTx};
 
 pub enum Event {
-    ServerReady,
     ChangeDetected,
     BuildFinished,
+    ServerReady,
 }
 
 type EventsTx = mpsc::Sender<Event>;
