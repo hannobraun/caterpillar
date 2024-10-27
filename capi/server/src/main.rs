@@ -7,7 +7,9 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
-    let mut events = capi_server::start(args.address, args.serve_dir).await?;
+    let mut events =
+        capi_server::start(args.address.parse().unwrap(), args.serve_dir)
+            .await?;
 
     while let Some(event) = events.recv().await {
         match event {

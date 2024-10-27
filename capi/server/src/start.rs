@@ -17,15 +17,13 @@ type EventsTx = mpsc::Sender<Event>;
 pub type EventsRx = mpsc::Receiver<Event>;
 
 pub async fn start(
-    address: String,
+    address: SocketAddr,
     serve_dir: PathBuf,
 ) -> anyhow::Result<EventsRx> {
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
-        if let Err(err) =
-            start_inner(address.parse().unwrap(), serve_dir, events_tx).await
-        {
+        if let Err(err) = start_inner(address, serve_dir, events_tx).await {
             error!("Error while running server: {err:?}");
 
             // This tasks sender has already been dropped, which will cause the
