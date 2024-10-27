@@ -35,7 +35,7 @@ pub async fn start(
 async fn start_inner(
     address: String,
     serve_dir: PathBuf,
-    _events: EventsTx,
+    events: EventsTx,
 ) -> anyhow::Result<()> {
     let watcher = Watcher::new(PathBuf::from("games"))?;
     let mut build_events =
@@ -57,7 +57,7 @@ async fn start_inner(
                             server::start(address, serve_dir, code);
 
                         ready_rx.await?;
-                        _events.send(Event::ServerReady).await?;
+                        events.send(Event::ServerReady).await?;
 
                         server_task = ServerTask::Initialized { code_tx };
                     }
