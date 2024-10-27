@@ -10,6 +10,7 @@ use crate::server::{self, CodeTx};
 pub enum Event {
     ServerReady,
     ChangeDetected,
+    BuildFinished,
 }
 
 type EventsTx = mpsc::Sender<Event>;
@@ -50,7 +51,7 @@ async fn start_inner(
                 events.send(Event::ChangeDetected).await?;
             }
             capi_build_game::Event::BuildFinished(code) => {
-                println!("build:finish");
+                events.send(Event::BuildFinished).await?;
 
                 match server_task {
                     ServerTask::Uninitialized { address, serve_dir } => {
