@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{net::SocketAddr, path::PathBuf};
 
 use capi_server::Event;
 
@@ -7,9 +7,7 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
-    let mut events =
-        capi_server::start(args.address.parse().unwrap(), args.serve_dir)
-            .await?;
+    let mut events = capi_server::start(args.address, args.serve_dir).await?;
 
     while let Some(event) = events.recv().await {
         match event {
@@ -34,7 +32,7 @@ async fn main() -> anyhow::Result<()> {
 pub struct Args {
     /// Address to serve at
     #[arg(short, long)]
-    pub address: String,
+    pub address: SocketAddr,
 
     /// Directory to serve from
     #[arg(short, long)]
