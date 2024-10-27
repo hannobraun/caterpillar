@@ -23,7 +23,9 @@ pub async fn start(
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
-        if let Err(err) = start_inner(address, serve_dir, events_tx).await {
+        if let Err(err) =
+            start_inner(address.parse().unwrap(), serve_dir, events_tx).await
+        {
             error!("Error while running server: {err:?}");
 
             // This tasks sender has already been dropped, which will cause the
@@ -35,7 +37,7 @@ pub async fn start(
 }
 
 async fn start_inner(
-    address: String,
+    address: SocketAddr,
     serve_dir: PathBuf,
     events: EventsTx,
 ) -> anyhow::Result<()> {
@@ -43,10 +45,7 @@ async fn start_inner(
     let mut build_events =
         build_and_watch_game("snake", watcher.changes).await?;
 
-    let mut server_task = ServerTask::Uninitialized {
-        address: address.parse().unwrap(),
-        serve_dir,
-    };
+    let mut server_task = ServerTask::Uninitialized { address, serve_dir };
 
     while let Some(event) = build_events.recv().await {
         match event {
