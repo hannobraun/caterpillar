@@ -12,14 +12,12 @@ use capi_protocol::Versioned;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
 use tracing::error;
 
-pub type CodeTx = watch::Sender<Versioned<CompilerOutput>>;
-type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
+pub type Code = Versioned<CompilerOutput>;
 
-pub fn start(
-    address: String,
-    serve_dir: PathBuf,
-    code: Versioned<CompilerOutput>,
-) -> CodeTx {
+pub type CodeTx = watch::Sender<Code>;
+type CodeRx = watch::Receiver<Code>;
+
+pub fn start(address: String, serve_dir: PathBuf, code: Code) -> CodeTx {
     let (code_tx, code_rx) = watch::channel(code);
 
     task::spawn(async {
