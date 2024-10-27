@@ -22,9 +22,8 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
         return Ok(());
     };
     println!("build:finish");
-    let (code_tx, code_rx) = watch::channel(code);
 
-    server::start(address, serve_dir, code_rx);
+    let code_tx = server::start(address, serve_dir, code);
 
     while let Some(event) = build_events.recv().await {
         match event {

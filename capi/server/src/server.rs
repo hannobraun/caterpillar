@@ -7,21 +7,30 @@ use axum::{
     routing::get,
     Router,
 };
+use capi_build_game::CompilerOutput;
 use capi_protocol::Versioned;
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, task};
+use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
 use tracing::error;
 
 use crate::start::CodeRx;
 
-pub fn start(address: String, serve_dir: PathBuf, code: CodeRx) {
+pub fn start(
+    address: String,
+    serve_dir: PathBuf,
+    code: Versioned<CompilerOutput>,
+) -> watch::Sender<Versioned<CompilerOutput>> {
+    let (code_tx, code_rx) = watch::channel(code);
+
     task::spawn(async {
-        if let Err(err) = start_inner(address, serve_dir, code).await {
+        if let Err(err) = start_inner(address, serve_dir, code_rx).await {
             error!("Error serving game code: {err:?}");
 
             // The rest of the system will start shutting down, as messages to
             // this task's channel start to fail.
         }
     });
+
+    code_tx
 }
 
 async fn start_inner(
