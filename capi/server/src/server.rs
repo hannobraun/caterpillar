@@ -34,7 +34,7 @@ pub fn start(
     let (code_tx, code_rx) = watch::channel(code);
     let (ready_tx, ready_rx) = oneshot::channel();
 
-    task::spawn(async {
+    task::spawn(async move {
         if let Err(err) =
             start_inner(address, serve_dir, ready_tx, code_rx).await
         {
