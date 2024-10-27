@@ -13,7 +13,7 @@ use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
 use tracing::error;
 
 pub type CodeTx = watch::Sender<Versioned<CompilerOutput>>;
-pub type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
+type CodeRx = watch::Receiver<Versioned<CompilerOutput>>;
 
 pub fn start(
     address: String,
