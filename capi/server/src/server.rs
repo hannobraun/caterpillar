@@ -17,6 +17,14 @@ pub async fn start(
     serve_dir: PathBuf,
     code: CodeRx,
 ) -> anyhow::Result<()> {
+    start_inner(address, serve_dir, code).await
+}
+
+async fn start_inner(
+    address: String,
+    serve_dir: PathBuf,
+    code: CodeRx,
+) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
