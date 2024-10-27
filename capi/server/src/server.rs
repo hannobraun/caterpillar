@@ -8,16 +8,20 @@ use axum::{
     Router,
 };
 use capi_protocol::Versioned;
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
+use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, task};
+use tracing::error;
 
 use crate::start::CodeRx;
 
-pub async fn start(
-    address: String,
-    serve_dir: PathBuf,
-    code: CodeRx,
-) -> anyhow::Result<()> {
-    start_inner(address, serve_dir, code).await
+pub fn start(address: String, serve_dir: PathBuf, code: CodeRx) {
+    task::spawn(async {
+        if let Err(err) = start_inner(address, serve_dir, code).await {
+            error!("Error serving game code: {err:?}");
+
+            // The rest of the system will start shutting down, as messages to
+            // this task's channel start to fail.
+        }
+    });
 }
 
 async fn start_inner(

@@ -3,8 +3,7 @@ use std::path::PathBuf;
 use capi_build_game::{build_and_watch_game, CompilerOutput, Event};
 use capi_protocol::Versioned;
 use capi_watch::Watcher;
-use tokio::{sync::watch, task};
-use tracing::error;
+use tokio::sync::watch;
 
 use crate::server;
 
@@ -25,14 +24,7 @@ pub async fn start(address: String, serve_dir: PathBuf) -> anyhow::Result<()> {
     println!("build:finish");
     let (code_tx, code_rx) = watch::channel(code);
 
-    task::spawn(async {
-        if let Err(err) = server::start(address, serve_dir, code_rx).await {
-            error!("Error serving game code: {err:?}");
-
-            // The rest of the system will start shutting down, as messages to
-            // this task's channel start to fail.
-        }
-    });
+    server::start(address, serve_dir, code_rx);
 
     while let Some(event) = build_events.recv().await {
         match event {
