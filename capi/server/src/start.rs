@@ -7,7 +7,9 @@ use tracing::error;
 
 use crate::server::{self, CodeTx};
 
-pub enum Event {}
+pub enum Event {
+    ServerReady,
+}
 
 type EventsTx = mpsc::Sender<Event>;
 pub type EventsRx = mpsc::Receiver<Event>;
@@ -55,7 +57,7 @@ async fn start_inner(
                             server::start(address, serve_dir, code);
 
                         ready_rx.await?;
-                        println!("ready"); // signal the builder we're ready
+                        _events.send(Event::ServerReady).await?;
 
                         server_task = ServerTask::Initialized { code_tx };
                     }

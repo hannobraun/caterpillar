@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+use capi_server::Event;
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
@@ -7,7 +9,13 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let mut events = capi_server::start(args.address, args.serve_dir).await?;
 
-    events.recv().await;
+    while let Some(event) = events.recv().await {
+        match event {
+            Event::ServerReady => {
+                println!("ready");
+            }
+        }
+    }
 
     tracing::info!("`capi-server` shutting down.");
     Ok(())
