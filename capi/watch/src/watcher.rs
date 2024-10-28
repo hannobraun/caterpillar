@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use anyhow::Context;
 use notify::{Event, EventKind, RecursiveMode, Watcher as _};
 use tokio::sync::watch;
 use tracing::error;
@@ -40,7 +41,9 @@ impl Watcher {
                 // thread this is running on will probably also end soon.
             }
         })?;
-        watcher.watch(&crates_dir, RecursiveMode::Recursive)?;
+        watcher
+            .watch(&crates_dir, RecursiveMode::Recursive)
+            .with_context(|| format!("Watching `{}`", crates_dir.display()))?;
 
         let changes = DebouncedChanges::new(rx);
 
