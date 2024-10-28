@@ -452,6 +452,7 @@ dependencies = [
  "capi-watch",
  "clap",
  "ron",
+ "tempfile",
  "tokio",
  "tracing",
  "tracing-subscriber",
