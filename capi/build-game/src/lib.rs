@@ -24,6 +24,7 @@ pub async fn build_game_once(
 }
 
 pub fn build_and_watch_game(
+    games_path: PathBuf,
     game: impl Into<String>,
     changes: DebouncedChanges,
 ) -> EventsRx {
@@ -33,7 +34,8 @@ pub fn build_and_watch_game(
 
     task::spawn(async move {
         if let Err(err) =
-            build_and_watch_game_inner("games", game, changes, events_tx).await
+            build_and_watch_game_inner(&games_path, game, changes, events_tx)
+                .await
         {
             tracing::error!("Error building and watching game: {err}");
 
