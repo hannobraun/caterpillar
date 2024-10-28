@@ -79,7 +79,7 @@ async fn build_and_watch_game_inner(
                         }
                     }
                     _ => {
-                        panic!("Unexpected error while building game: {err:?}");
+                        return Err(err.into());
                     }
                 },
             };
