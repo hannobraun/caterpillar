@@ -113,7 +113,7 @@ async fn build_game_once_with_compiler(
     compiler: &mut Compiler,
 ) -> io::Result<CompilerOutput> {
     let path = format!("games/{game}/{game}.capi");
-    let source = fs::read_to_string(path).await?;
+    let source = fs::read_to_string(&path).await?;
     let output = compiler.compile::<GameEngineHost>(&source);
 
     Ok(output)
