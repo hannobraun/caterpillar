@@ -1,4 +1,9 @@
-use std::{io, path::Path, str, time::SystemTime};
+use std::{
+    io,
+    path::{Path, PathBuf},
+    str,
+    time::SystemTime,
+};
 
 use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
@@ -123,22 +128,19 @@ async fn build_game_once_with_compiler(
     compiler: &mut Compiler,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
     let path = games_path.as_ref().join(format!("{game}/{game}.capi"));
-    let source = fs::read_to_string(&path).await.map_err(|source| {
-        BuildGameOnceError {
-            source,
-            path: path.display().to_string(),
-        }
-    })?;
+    let source = fs::read_to_string(&path)
+        .await
+        .map_err(|source| BuildGameOnceError { source, path })?;
     let output = compiler.compile::<GameEngineHost>(&source);
 
     Ok(output)
 }
 
 #[derive(Debug, Snafu)]
-#[snafu(display("Error while building `{}`: {source}", path))]
+#[snafu(display("Error while building `{}`: {source}", path.display()))]
 pub struct BuildGameOnceError {
     pub source: io::Error,
-    pub path: String,
+    pub path: PathBuf,
 }
 
 struct Timestamp(u64);
