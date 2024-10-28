@@ -69,10 +69,10 @@ async fn build_and_watch_game_inner(
                         // file is being saved.
                         if let Some(old_err) = ignored_error {
                             whatever!(
-                                "{err:?}\n\
+                                "{err}\n\
                                 \n\
                                 Previously ignored an error, because a false \
-                                positive was suspected: {old_err:?}"
+                                positive was suspected: {old_err}"
                             );
                         } else {
                             ignored_error = Some(err);
