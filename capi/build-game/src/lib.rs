@@ -27,12 +27,12 @@ pub fn build_and_watch_game(
 ) -> anyhow::Result<CodeRx> {
     let game = game.into();
 
-    let mut compiler = Compiler::default();
-    let mut timestamp = Timestamp(0);
-
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
+        let mut compiler = Compiler::default();
+        let mut timestamp = Timestamp(0);
+
         let mut ignored_error = None;
 
         loop {
