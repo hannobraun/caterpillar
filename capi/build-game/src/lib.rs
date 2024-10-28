@@ -135,7 +135,7 @@ async fn build_game_once_with_compiler(
 }
 
 #[derive(Debug, Snafu)]
-#[snafu(display("Error while building `{path}`: {source}"))]
+#[snafu(display("Error while building `{}`: {source}", path))]
 pub struct BuildGameOnceError {
     pub source: io::Error,
     pub path: String,
