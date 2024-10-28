@@ -1,5 +1,5 @@
 use capi_compiler::CompilerOutput;
-use capi_protocol::{command::CommandExt, Versioned};
+use capi_protocol::{command::CommandExt, ron_options, Versioned};
 use gloo_net::http::{Request, Response};
 
 use crate::{commands::CommandsToRuntimeTx, model::PersistentState};
@@ -42,7 +42,7 @@ async fn on_new_code(
     state: &mut PersistentState,
 ) -> anyhow::Result<u64> {
     let code = code?.text().await?;
-    let code: Versioned<CompilerOutput> = ron::from_str(&code)?;
+    let code: Versioned<CompilerOutput> = ron_options().from_str(&code)?;
 
     let command = state.on_new_code(code.inner);
     commands_to_runtime_tx.send(command.serialize()).expect(
