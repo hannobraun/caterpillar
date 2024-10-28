@@ -9,13 +9,6 @@ use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
 
-pub type EventsRx = mpsc::Receiver<Event>;
-
-pub enum Event {
-    ChangeDetected,
-    BuildFinished(Versioned<CompilerOutput>),
-}
-
 pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     let mut compiler = Compiler::default();
     let output = build_game_once_with_compiler(game, &mut compiler).await?;
@@ -42,6 +35,13 @@ pub fn build_and_watch_game(
     });
 
     events_rx
+}
+
+pub type EventsRx = mpsc::Receiver<Event>;
+
+pub enum Event {
+    ChangeDetected,
+    BuildFinished(Versioned<CompilerOutput>),
 }
 
 async fn build_and_watch_game_inner(
