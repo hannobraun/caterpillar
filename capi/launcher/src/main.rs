@@ -8,7 +8,7 @@ use rand::random;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let code = build_game_once("snake").await?;
+    let code = build_game_once("games", "snake").await?;
 
     let mut pixels = [0; NUM_PIXEL_BYTES];
     let mut game_engine = GameEngine::new();

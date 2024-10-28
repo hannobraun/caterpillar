@@ -15,11 +15,12 @@ use tokio::{fs, sync::mpsc, task};
 pub use capi_compiler::CompilerOutput;
 
 pub async fn build_game_once(
+    games_path: impl AsRef<Path>,
     game: &str,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
     let mut compiler = Compiler::default();
     let output =
-        build_game_once_with_compiler("games", game, &mut compiler).await?;
+        build_game_once_with_compiler(games_path, game, &mut compiler).await?;
     Ok(output)
 }
 
