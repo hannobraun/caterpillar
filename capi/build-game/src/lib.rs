@@ -39,7 +39,7 @@ pub fn build_and_watch_game(
 async fn build_and_watch_game_inner(
     game: String,
     mut changes: DebouncedChanges,
-    events_tx: mpsc::Sender<Event>,
+    events: mpsc::Sender<Event>,
 ) {
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
@@ -47,7 +47,7 @@ async fn build_and_watch_game_inner(
     let mut ignored_error = None;
 
     loop {
-        if events_tx.send(Event::ChangeDetected).await.is_err() {
+        if events.send(Event::ChangeDetected).await.is_err() {
             // Receiver dropped. We must be in the process of shutting down.
             return;
         }
@@ -85,7 +85,7 @@ async fn build_and_watch_game_inner(
             timestamp: timestamp.0,
             inner: code,
         };
-        if events_tx.send(Event::BuildFinished(code)).await.is_err() {
+        if events.send(Event::BuildFinished(code)).await.is_err() {
             // Receiver dropped. We must be in the process of shutting down.
             return;
         }
