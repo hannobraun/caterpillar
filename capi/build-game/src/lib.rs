@@ -28,7 +28,7 @@ pub fn build_and_watch_game(
 
     task::spawn(async move {
         if let Err(err) =
-            build_and_watch_game_inner(game, changes, events_tx).await
+            build_and_watch_game_inner("games", game, changes, events_tx).await
         {
             tracing::error!("Error building and watching game: {err}");
 
@@ -48,6 +48,7 @@ pub enum Event {
 }
 
 async fn build_and_watch_game_inner(
+    games_path: &str,
     game: String,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
@@ -63,32 +64,35 @@ async fn build_and_watch_game_inner(
             return Ok(());
         }
 
-        let code =
-            match build_game_once_with_compiler("games", &game, &mut compiler)
-                .await
-            {
-                Ok(code) => code,
-                Err(err) => match err.source.kind() {
-                    io::ErrorKind::NotFound => {
-                        // Depending on the editor, this can happen while the
-                        // file is being saved.
-                        if let Some(old_err) = ignored_error {
-                            whatever!(
-                                "{err}\n\
-                                \n\
-                                Previously ignored an error, because a false \
-                                positive was suspected: {old_err}"
-                            );
-                        } else {
-                            ignored_error = Some(err);
-                            continue;
-                        }
+        let code = match build_game_once_with_compiler(
+            games_path,
+            &game,
+            &mut compiler,
+        )
+        .await
+        {
+            Ok(code) => code,
+            Err(err) => match err.source.kind() {
+                io::ErrorKind::NotFound => {
+                    // Depending on the editor, this can happen while the file
+                    // is being saved.
+                    if let Some(old_err) = ignored_error {
+                        whatever!(
+                            "{err}\n\
+                            \n\
+                            Previously ignored an error, because a false \
+                            positive was suspected: {old_err}"
+                        );
+                    } else {
+                        ignored_error = Some(err);
+                        continue;
                     }
-                    _ => {
-                        whatever!("{err}");
-                    }
-                },
-            };
+                }
+                _ => {
+                    whatever!("{err}");
+                }
+            },
+        };
 
         ignored_error = None;
 
