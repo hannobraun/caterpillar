@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{fmt::Write, path::PathBuf};
 
 use anyhow::Context;
 use notify::{Event, EventKind, RecursiveMode, Watcher as _};
@@ -43,7 +43,30 @@ impl Watcher {
         })?;
         watcher
             .watch(&crates_dir, RecursiveMode::Recursive)
-            .with_context(|| format!("Watching `{}`", crates_dir.display()))?;
+            .with_context(|| {
+                let (path, additional_error) = match crates_dir.canonicalize() {
+                    Ok(path) => (path, None),
+                    Err(err) => (
+                        crates_dir,
+                        Some(format!("failed to canonicalize path: {err}")),
+                    ),
+                };
+
+                let mut context = String::new();
+                write!(context, "Watching `{}`", path.display())
+                    .and_then(|()| {
+                        if let Some(msg) = additional_error {
+                            writeln!(context, " ({msg})")
+                        } else {
+                            Ok(())
+                        }
+                    })
+                    .expect(
+                        "Writing to `String` should not result in an error",
+                    );
+
+                context
+            })?;
 
         let changes = DebouncedChanges::new(rx);
 
