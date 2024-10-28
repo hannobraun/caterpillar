@@ -1,5 +1,6 @@
 use std::{net::SocketAddr, path::PathBuf};
 
+use anyhow::Context;
 use capi_build_game::build_and_watch_game;
 use capi_watch::Watcher;
 use tokio::{sync::mpsc, task};
@@ -39,9 +40,11 @@ async fn start_inner(
     serve_dir: PathBuf,
     events: EventsTx,
 ) -> anyhow::Result<()> {
-    let watcher = Watcher::new(PathBuf::from("games"))?;
-    let mut build_events =
-        build_and_watch_game("snake", watcher.changes).await?;
+    let watcher = Watcher::new(PathBuf::from("games"))
+        .context("Creating watcher for game")?;
+    let mut build_events = build_and_watch_game("snake", watcher.changes)
+        .await
+        .context("Build and watch game")?;
 
     let mut server_task = ServerTask::Uninitialized { address, serve_dir };
 
