@@ -8,7 +8,7 @@ use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
 
-pub type CodeRx = mpsc::Receiver<Event>;
+pub type EventsRx = mpsc::Receiver<Event>;
 
 pub enum Event {
     ChangeDetected,
@@ -24,7 +24,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
 pub fn build_and_watch_game(
     game: impl Into<String>,
     changes: DebouncedChanges,
-) -> anyhow::Result<CodeRx> {
+) -> anyhow::Result<EventsRx> {
     let game = game.into();
 
     let (events_tx, events_rx) = mpsc::channel(1);
