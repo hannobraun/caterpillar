@@ -21,7 +21,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
     Ok(output)
 }
 
-pub async fn build_and_watch_game(
+pub fn build_and_watch_game(
     game: impl Into<String>,
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<CodeRx> {
