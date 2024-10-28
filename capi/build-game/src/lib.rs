@@ -30,7 +30,14 @@ pub fn build_and_watch_game(
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
-        build_and_watch_game_inner(game, changes, events_tx).await;
+        if let Err(err) =
+            build_and_watch_game_inner(game, changes, events_tx).await
+        {
+            tracing::error!("Error building and watching game: {err:?}");
+
+            // This task's channel sender has been dropped, which will cause the
+            // shutdown to propagate through the rest of the system.
+        }
     });
 
     Ok(events_rx)
@@ -40,7 +47,7 @@ async fn build_and_watch_game_inner(
     game: String,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
-) {
+) -> anyhow::Result<()> {
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
@@ -49,7 +56,7 @@ async fn build_and_watch_game_inner(
     loop {
         if events.send(Event::ChangeDetected).await.is_err() {
             // Receiver dropped. We must be in the process of shutting down.
-            return;
+            return Ok(());
         }
 
         let code =
@@ -87,7 +94,7 @@ async fn build_and_watch_game_inner(
         };
         if events.send(Event::BuildFinished(code)).await.is_err() {
             // Receiver dropped. We must be in the process of shutting down.
-            return;
+            return Ok(());
         }
 
         if changes.wait_for_change().await {
@@ -96,6 +103,8 @@ async fn build_and_watch_game_inner(
             break;
         }
     }
+
+    Ok(())
 }
 
 async fn build_game_once_with_compiler(
