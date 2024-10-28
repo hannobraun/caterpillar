@@ -114,9 +114,7 @@ async fn serve_code(
             inner: &code.inner,
         };
 
-        let ron_options = ron_options();
-
-        return ron_options
+        return ron_options()
             .to_string(&code)
             .unwrap()
             .as_bytes()
