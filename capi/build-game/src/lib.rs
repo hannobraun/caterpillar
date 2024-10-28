@@ -4,7 +4,7 @@ use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
-use snafu::{whatever, Whatever};
+use snafu::{whatever, Snafu, Whatever};
 use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
@@ -63,7 +63,7 @@ async fn build_and_watch_game_inner(
         let code =
             match build_game_once_with_compiler(&game, &mut compiler).await {
                 Ok(code) => code,
-                Err(err) => match err.kind() {
+                Err(err) => match err.source.kind() {
                     io::ErrorKind::NotFound => {
                         // Depending on the editor, this can happen while the
                         // file is being saved.
@@ -111,12 +111,20 @@ async fn build_and_watch_game_inner(
 async fn build_game_once_with_compiler(
     game: &str,
     compiler: &mut Compiler,
-) -> io::Result<CompilerOutput> {
+) -> Result<CompilerOutput, BuildGameOnceError> {
     let path = format!("games/{game}/{game}.capi");
-    let source = fs::read_to_string(&path).await?;
+    let source = fs::read_to_string(&path)
+        .await
+        .map_err(|source| BuildGameOnceError { source, path })?;
     let output = compiler.compile::<GameEngineHost>(&source);
 
     Ok(output)
+}
+
+#[derive(Debug, Snafu)]
+pub struct BuildGameOnceError {
+    pub source: io::Error,
+    pub path: String,
 }
 
 struct Timestamp(u64);
