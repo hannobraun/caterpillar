@@ -1,4 +1,4 @@
-use std::{io, str, time::SystemTime};
+use std::{io, path::Path, str, time::SystemTime};
 
 use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
@@ -118,14 +118,17 @@ async fn build_and_watch_game_inner(
 }
 
 async fn build_game_once_with_compiler(
-    games_path: &str,
+    games_path: impl AsRef<Path>,
     game: &str,
     compiler: &mut Compiler,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
-    let path = format!("{games_path}/{game}/{game}.capi");
-    let source = fs::read_to_string(&path)
-        .await
-        .map_err(|source| BuildGameOnceError { source, path })?;
+    let path = games_path.as_ref().join(format!("{game}/{game}.capi"));
+    let source = fs::read_to_string(&path).await.map_err(|source| {
+        BuildGameOnceError {
+            source,
+            path: path.display().to_string(),
+        }
+    })?;
     let output = compiler.compile::<GameEngineHost>(&source);
 
     Ok(output)
