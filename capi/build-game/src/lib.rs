@@ -1,5 +1,6 @@
 use std::{io, str, time::SystemTime};
 
+use anyhow::anyhow;
 use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
@@ -67,12 +68,12 @@ async fn build_and_watch_game_inner(
                         // Depending on the editor, this can happen while the
                         // file is being saved.
                         if let Some(old_err) = ignored_error {
-                            panic!(
+                            return Err(anyhow!(
                                 "Unexpected error: {err:?}\n\
                                 \n\
                                 Previously ignored an error, because a false \
                                 positive was suspected: {old_err:?}"
-                            );
+                            ));
                         } else {
                             ignored_error = Some(err);
                             continue;
