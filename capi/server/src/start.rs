@@ -18,6 +18,7 @@ type EventsTx = mpsc::Sender<Event>;
 pub type EventsRx = mpsc::Receiver<Event>;
 
 pub async fn start(
+    games_path: PathBuf,
     address: SocketAddr,
     serve_dir: PathBuf,
 ) -> anyhow::Result<EventsRx> {
@@ -25,8 +26,7 @@ pub async fn start(
 
     task::spawn(async move {
         if let Err(err) =
-            start_inner(PathBuf::from("games"), address, serve_dir, events_tx)
-                .await
+            start_inner(games_path, address, serve_dir, events_tx).await
         {
             error!("Error while running server: {err:?}");
 
