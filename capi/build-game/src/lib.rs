@@ -53,11 +53,13 @@ pub enum Event {
 }
 
 async fn build_and_watch_game_inner(
-    games_path: &str,
+    games_path: impl AsRef<Path>,
     game: String,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
 ) -> Result<(), Whatever> {
+    let games_path = games_path.as_ref();
+
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
