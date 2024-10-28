@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::{env, path::Path};
 
 use anyhow::Context;
 use notify::{Event, EventKind, RecursiveMode, Watcher as _};
@@ -15,7 +15,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(crates_dir: PathBuf) -> anyhow::Result<Self> {
+    pub fn new(crates_dir: &Path) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {
@@ -42,7 +42,7 @@ impl Watcher {
             }
         })?;
         watcher
-            .watch(&crates_dir, RecursiveMode::Recursive)
+            .watch(crates_dir, RecursiveMode::Recursive)
             .with_context(|| match crates_dir.canonicalize() {
                 Ok(path) => {
                     format!("Watching `{}`", path.display())
