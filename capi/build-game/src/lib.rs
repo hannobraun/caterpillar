@@ -13,7 +13,8 @@ pub async fn build_game_once(
     game: &str,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
     let mut compiler = Compiler::default();
-    let output = build_game_once_with_compiler(game, &mut compiler).await?;
+    let output =
+        build_game_once_with_compiler("games", game, &mut compiler).await?;
     Ok(output)
 }
 
@@ -63,7 +64,9 @@ async fn build_and_watch_game_inner(
         }
 
         let code =
-            match build_game_once_with_compiler(&game, &mut compiler).await {
+            match build_game_once_with_compiler("games", &game, &mut compiler)
+                .await
+            {
                 Ok(code) => code,
                 Err(err) => match err.source.kind() {
                     io::ErrorKind::NotFound => {
@@ -111,10 +114,11 @@ async fn build_and_watch_game_inner(
 }
 
 async fn build_game_once_with_compiler(
+    games_path: &str,
     game: &str,
     compiler: &mut Compiler,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
-    let path = format!("games/{game}/{game}.capi");
+    let path = format!("{games_path}/{game}/{game}.capi");
     let source = fs::read_to_string(&path)
         .await
         .map_err(|source| BuildGameOnceError { source, path })?;
