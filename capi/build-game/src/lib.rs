@@ -32,9 +32,9 @@ pub async fn build_and_watch_game(
 
     let (events_tx, events_rx) = mpsc::channel(1);
 
-    let mut ignored_error = None;
-
     task::spawn(async move {
+        let mut ignored_error = None;
+
         loop {
             if events_tx.send(Event::ChangeDetected).await.is_err() {
                 // Receiver dropped. We must be in the process of shutting down.
