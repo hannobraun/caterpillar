@@ -9,7 +9,9 @@ use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
 
-pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
+pub async fn build_game_once(
+    game: &str,
+) -> Result<CompilerOutput, BuildGameOnceError> {
     let mut compiler = Compiler::default();
     let output = build_game_once_with_compiler(game, &mut compiler).await?;
     Ok(output)
