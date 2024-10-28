@@ -25,7 +25,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<CompilerOutput> {
 pub fn build_and_watch_game(
     game: impl Into<String>,
     changes: DebouncedChanges,
-) -> anyhow::Result<EventsRx> {
+) -> EventsRx {
     let game = game.into();
 
     let (events_tx, events_rx) = mpsc::channel(1);
@@ -41,7 +41,7 @@ pub fn build_and_watch_game(
         }
     });
 
-    Ok(events_rx)
+    events_rx
 }
 
 async fn build_and_watch_game_inner(
