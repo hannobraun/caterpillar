@@ -351,6 +351,7 @@ dependencies = [
  "capi-watch",
  "ron",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
