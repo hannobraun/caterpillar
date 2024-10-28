@@ -350,6 +350,7 @@ dependencies = [
  "capi-protocol",
  "capi-watch",
  "ron",
+ "snafu",
  "tokio",
  "tracing",
 ]

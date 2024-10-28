@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 ron = "*"
+snafu = "*"
 tracing = "*"
 
 [dependencies.capi-compiler]
