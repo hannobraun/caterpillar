@@ -34,7 +34,7 @@ pub fn build_and_watch_game(
         if let Err(err) =
             build_and_watch_game_inner(game, changes, events_tx).await
         {
-            tracing::error!("Error building and watching game: {err:?}");
+            tracing::error!("Error building and watching game: {err}");
 
             // This task's channel sender has been dropped, which will cause the
             // shutdown to propagate through the rest of the system.
