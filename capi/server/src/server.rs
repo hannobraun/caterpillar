@@ -114,7 +114,9 @@ async fn serve_code(
             inner: &code.inner,
         };
 
-        return ron::to_string(&code)
+        let ron_options = ron::Options::default();
+        return ron_options
+            .to_string(&code)
             .unwrap()
             .as_bytes()
             .to_vec()
