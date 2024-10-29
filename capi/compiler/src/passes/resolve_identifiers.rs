@@ -195,7 +195,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| typed_fragment),
+                .map(|(_, fragment)| fragment),
             Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
@@ -224,7 +224,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| typed_fragment),
+                .map(|(_, fragment)| fragment),
             Some(&Fragment::CallToHostFunction { effect_number: 0 })
         );
     }
@@ -249,7 +249,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| typed_fragment),
+                .map(|(_, fragment)| fragment),
             Some(&Fragment::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
@@ -280,7 +280,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| typed_fragment),
+                .map(|(_, fragment)| fragment),
             Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
