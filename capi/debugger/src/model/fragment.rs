@@ -83,7 +83,7 @@ pub struct DebugFragmentData {
     /// # The location of the fragment
     pub location: FragmentLocation,
 
-    /// # The static of the fragment
+    /// # The state of the fragment
     pub state: DebugFragmentState,
 
     pub has_durable_breakpoint: bool,
