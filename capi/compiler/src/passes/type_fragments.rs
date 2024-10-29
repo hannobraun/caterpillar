@@ -64,7 +64,7 @@ fn type_fragments_in_function(
                 so."
             );
 
-            match fragment {
+            let signature = match fragment {
                 Fragment::Binding { name, .. } => {
                     let Some(type_) = bindings.get(name).copied() else {
                         unreachable!(
@@ -84,13 +84,11 @@ fn type_fragments_in_function(
                         outputs: vec![type_],
                     };
 
-                    for &output in &signature.outputs {
-                        stack.push(output);
-                    }
-                    types.for_fragments.insert(location, signature);
+                    Some(signature)
                 }
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
+                    None
                 }
                 Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
                     match (intrinsic, intrinsic.signature()) {
@@ -132,7 +130,9 @@ fn type_fragments_in_function(
                                 stack.push(index);
                             }
 
-                            types.for_fragments.insert(location, signature);
+                            types
+                                .for_fragments
+                                .insert(location.clone(), signature);
                         }
                         (IntrinsicFunction::Eval, None) => {
                             // Not supported by inference yet.
@@ -145,33 +145,48 @@ fn type_fragments_in_function(
                             );
                         }
                     }
+
+                    None
                 }
                 Fragment::CallToUserDefinedFunction {
                     hash: _,
                     is_tail_call: _,
                 } => {
                     // Not supported by inference yet.
+                    None
                 }
                 Fragment::CallToUserDefinedFunctionRecursive {
                     index: _,
                     is_tail_call: _,
                 } => {
                     // Not supported by inference yet.
+                    None
                 }
                 Fragment::Comment { .. } => {
                     // Comments have no bearing on type inference.
+                    None
                 }
                 Fragment::Function { function: _ } => {
                     // Not supported by inference yet.
+                    None
                 }
                 Fragment::UnresolvedIdentifier { .. } => {
                     // There nothing we can do here, really. This has already
                     // been identified as a problem.
+                    None
                 }
                 Fragment::Value(value) => {
                     // Not supported by inference yet.
                     let _ = value;
+                    None
                 }
+            };
+
+            if let Some(signature) = signature {
+                for &output in &signature.outputs {
+                    stack.push(output);
+                }
+                types.for_fragments.insert(location, signature);
             }
         }
     }
