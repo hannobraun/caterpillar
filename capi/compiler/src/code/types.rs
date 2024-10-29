@@ -1,7 +1,7 @@
 use super::{Index, IndexMap};
 
 /// # The types that were inferred in the code
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Types {
     pub inner: IndexMap<Type>,
 }
