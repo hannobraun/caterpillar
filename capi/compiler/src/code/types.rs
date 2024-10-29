@@ -1,9 +1,53 @@
-use super::{Index, IndexMap};
+use std::collections::BTreeMap;
+
+use super::{
+    BranchLocation, FragmentLocation, FunctionLocation, Index, IndexMap,
+};
 
 /// # The types that were inferred in the code
+///
+/// ## Separation of Types from `Function`
+///
+/// This stores not only the types themselves, but associates them with
+/// fragments, branches, and functions. It is necessary to store the types
+/// separately like this.
+///
+/// When type inference happens, functions must have been resolved already. If
+/// the inferred types were then stored within `Function` (which includes
+/// `Branch` and `Fragment`), the hash of the function would change, making the
+/// previous function resolution invalid.
+///
+/// This might raise the question, whether it's okay to exclude the types from
+/// the hash. And the answer is yes, that's perfectly fine. Type inference is
+/// deterministic. It can only change if anything else about the function (which
+/// would be included in the hash) changes first.
+///
+/// ## Implementation Note
+///
+/// This type refers to fragments, branches, and hashes by location. This is a
+/// bit dubious, as a code update could put a different function in that
+/// location, and then it wouldn't be possible to have type information for both
+/// the old and new versions of the function.
+///
+/// Right now, this is fine. All calls to a function are updated when the
+/// function is updated. So it's not necessary to keep type information for old
+/// versions of functions.
+///
+/// But eventually, it will be possible for code to still call old versions of
+/// functions (so refactorings can happen in smaller steps, for example). Then
+/// referring to functions by location is no longer any good.
+///
+/// For now, referring to functions by hash here would cause too many problems
+/// though. While referring to a function itself by hash should be easy, we'd
+/// also need equivalents of `BranchLocation` and `FragmentLocation` that refer
+/// to the function by hash instead of location.
 #[derive(Debug, Default)]
 pub struct Types {
     pub inner: IndexMap<Type>,
+
+    pub for_fragments: BTreeMap<FragmentLocation, Signature>,
+    pub for_branches: BTreeMap<BranchLocation, Signature>,
+    pub for_functions: BTreeMap<FunctionLocation, Signature>,
 }
 
 /// # The signature of an expression
