@@ -9,7 +9,7 @@ use crate::{
         create_call_graph, detect_changes, determine_tail_positions,
         generate_instructions, mark_recursive_calls, parse,
         resolve_calls_to_user_defined_functions, resolve_most_identifiers,
-        tokenize,
+        tokenize, type_fragments,
     },
     source_map::SourceMap,
     Instructions,
@@ -39,6 +39,8 @@ impl Compiler {
             &mut named_functions,
             &call_graph,
         );
+        let types = type_fragments(&named_functions, &call_graph);
+        dbg!(types);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
 

@@ -7,6 +7,7 @@ mod resolve_functions;
 mod resolve_identifiers;
 mod tail_position;
 mod tokenize;
+mod type_fragments;
 
 pub use {
     create_call_graph::create_call_graph, detect_changes::detect_changes,
@@ -15,4 +16,5 @@ pub use {
     resolve_functions::resolve_calls_to_user_defined_functions,
     resolve_identifiers::resolve_most_identifiers,
     tail_position::determine_tail_positions, tokenize::tokenize,
+    type_fragments::type_fragments,
 };
