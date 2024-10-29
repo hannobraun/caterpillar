@@ -115,9 +115,8 @@ impl NamedFunctions {
         match location {
             FunctionLocation::NamedFunction { index } => self.inner.get(index),
             FunctionLocation::AnonymousFunction { location } => {
-                let typed_fragment =
-                    self.find_fragment_by_location(location)?;
-                typed_fragment.as_function()
+                let fragment = self.find_fragment_by_location(location)?;
+                fragment.as_function()
             }
         }
     }
