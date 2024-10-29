@@ -111,12 +111,10 @@ impl DebugFragmentSignature {
         let mut outputs = Vec::new();
 
         if let Some(signature) = types.for_fragments.get(location) {
-            for input in &signature.inputs {
-                inputs.push(format!("{input:?}"));
-            }
-            for output in &signature.outputs {
-                outputs.push(format!("{output:?}"));
-            }
+            let convert = |index| format!("{index:?}");
+
+            inputs.extend(signature.inputs.iter().map(convert));
+            outputs.extend(signature.outputs.iter().map(convert));
         }
 
         Self { inputs, outputs }
