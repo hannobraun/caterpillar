@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{CallGraph, Function, Hash, NamedFunctions},
+    code::{CallGraph, Function, Hash, NamedFunctions, Types},
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
@@ -40,7 +40,6 @@ impl Compiler {
             &call_graph,
         );
         let types = type_fragments(&named_functions, &call_graph);
-        dbg!(types);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
 
@@ -59,6 +58,7 @@ impl Compiler {
         CompilerOutput {
             named_functions,
             call_graph,
+            types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
         }
@@ -74,6 +74,7 @@ pub struct CallInstructionsByCallee {
 pub struct CompilerOutput {
     pub named_functions: NamedFunctions,
     pub call_graph: CallGraph,
+    pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,
 }
