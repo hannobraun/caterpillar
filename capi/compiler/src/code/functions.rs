@@ -6,7 +6,7 @@ use crate::code::Index;
 
 use super::{
     search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
-    FunctionLocation, Hash, IndexMap, Signature,
+    FunctionLocation, Hash, IndexMap,
 };
 
 /// # All named functions in a program
@@ -205,17 +205,6 @@ pub struct Function {
     /// This is defined for named functions only. The value is `None` for
     /// anonymous functions.
     pub index_in_cluster: Option<Index<(Function, Cluster)>>,
-
-    /// # The signature of the function
-    ///
-    /// Starts out as `None`, and is later filled in by the respective compiler
-    /// pass.
-    ///
-    /// ## Implementation Note
-    ///
-    /// As of this writing, the compiler pass mentioned above does not exist
-    /// yet.
-    pub signature: Option<Signature>,
 }
 
 impl Function {
@@ -258,29 +247,12 @@ pub struct Branch {
 
     /// # The body of the branch
     pub body: IndexMap<TypedFragment>,
-
-    /// # The signature of the branch
-    ///
-    /// Starts out as `None`, and is later filled in by the respective compiler
-    /// pass.
-    ///
-    /// This must be identical for all branches of the function, for the
-    /// function to be valid.
-    ///
-    /// ## Implementation Note
-    ///
-    /// As of this writing, the compiler pass mentioned above does not exist
-    /// yet.
-    pub signature: Option<Signature>,
 }
 
 impl Branch {
     /// # Add a fragment to the body of this branch
     pub fn add_fragment(&mut self, fragment: Fragment) {
-        self.body.push(TypedFragment {
-            fragment,
-            signature: None,
-        });
+        self.body.push(TypedFragment { fragment });
     }
 }
 
@@ -315,15 +287,4 @@ pub enum Pattern {
 pub struct TypedFragment {
     /// # The fragment
     pub fragment: Fragment,
-
-    /// # The signature of the fragment
-    ///
-    /// This starts out as `None`, and is later filled in by the respective
-    /// compiler pass.
-    ///
-    /// ## Implementation Note
-    ///
-    /// As of this writing, the compiler pass that provides this information
-    /// does not exist yet.
-    pub signature: Option<Signature>,
 }
