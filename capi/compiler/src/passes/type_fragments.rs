@@ -1,8 +1,11 @@
 use std::{collections::BTreeMap, iter};
 
-use crate::code::{
-    BranchLocation, CallGraph, Fragment, FragmentLocation, Function,
-    FunctionLocation, NamedFunctions, Pattern, Signature, Type, Types,
+use crate::{
+    code::{
+        BranchLocation, CallGraph, Fragment, FragmentLocation, Function,
+        FunctionLocation, NamedFunctions, Pattern, Signature, Type, Types,
+    },
+    intrinsics::IntrinsicFunction,
 };
 
 pub fn type_fragments(
@@ -86,8 +89,36 @@ fn type_fragments_in_function(
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
                 }
-                Fragment::CallToIntrinsicFunction { intrinsic: _, .. } => {
-                    // Not supported by inference yet.
+                Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
+                    match (intrinsic, intrinsic.signature()) {
+                        (_, Some([inputs, outputs])) => {
+                            let mut signature = Signature {
+                                inputs: Vec::new(),
+                                outputs: Vec::new(),
+                            };
+
+                            for input in inputs {
+                                let index = types.inner.push(input.clone());
+                                signature.inputs.push(index);
+                            }
+                            for output in outputs {
+                                let index = types.inner.push(output.clone());
+                                signature.outputs.push(index);
+                            }
+
+                            types.for_fragments.insert(location, signature);
+                        }
+                        (IntrinsicFunction::Eval, None) => {
+                            // Not supported by inference yet.
+                        }
+                        (intrinsic, signature) => {
+                            unreachable!(
+                                "Invalid combination of intrinsic \
+                                (`{intrinsic:?}`) and signature \
+                                (`{signature:?}`"
+                            );
+                        }
+                    }
                 }
                 Fragment::CallToUserDefinedFunction {
                     hash: _,
