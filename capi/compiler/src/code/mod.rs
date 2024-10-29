@@ -19,5 +19,5 @@ pub use self::{
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, FragmentLocation, FunctionLocation},
-    types::{Signature, Type},
+    types::{Signature, Type, Types},
 };

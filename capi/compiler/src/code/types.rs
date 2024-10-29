@@ -1,3 +1,11 @@
+use super::IndexMap;
+
+/// # The types that were inferred in the code
+#[derive(Default)]
+pub struct Types {
+    pub inner: IndexMap<Type>,
+}
+
 /// # The signature of an expression
 #[derive(
     Clone,
