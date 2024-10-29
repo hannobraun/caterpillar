@@ -13,15 +13,15 @@ fn analyze_function(function: &mut Function) {
 }
 
 fn analyze_branch(branch: &mut Branch) {
-    for typed_fragment in branch.body.values_mut().rev() {
-        if let Fragment::Comment { .. } = typed_fragment {
+    for fragment in branch.body.values_mut().rev() {
+        if let Fragment::Comment { .. } = fragment {
             continue;
         }
 
         if let Fragment::UnresolvedIdentifier {
             is_known_to_be_in_tail_position,
             ..
-        } = typed_fragment
+        } = fragment
         {
             *is_known_to_be_in_tail_position = true;
         }
