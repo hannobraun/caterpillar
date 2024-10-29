@@ -289,8 +289,8 @@ fn reconstruct_function(
     let tail_call = if let Some(branch) = function.find_single_branch() {
         let mut tail_call = None;
 
-        for typed_fragment in branch.body() {
-            tail_call = Some(typed_fragment.into_location());
+        for fragment in branch.body() {
+            tail_call = Some(fragment.into_location());
         }
 
         tail_call
