@@ -79,13 +79,12 @@ fn type_fragments_in_function(
                         );
                     };
 
-                    types.for_fragments.insert(
-                        location,
-                        Signature {
-                            inputs: vec![],
-                            outputs: vec![type_],
-                        },
-                    );
+                    let signature = Signature {
+                        inputs: vec![],
+                        outputs: vec![type_],
+                    };
+
+                    types.for_fragments.insert(location, signature);
                     stack.push(type_);
                 }
                 Fragment::CallToHostFunction { effect_number: _ } => {
