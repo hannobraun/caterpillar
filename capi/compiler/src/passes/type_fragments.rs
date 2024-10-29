@@ -79,12 +79,10 @@ fn type_fragments_in_function(
                         );
                     };
 
-                    let signature = Signature {
+                    Some(Signature {
                         inputs: vec![],
                         outputs: vec![type_],
-                    };
-
-                    Some(signature)
+                    })
                 }
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
