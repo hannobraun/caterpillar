@@ -84,8 +84,8 @@ fn type_fragments_in_function(
                         outputs: vec![type_],
                     };
 
-                    types.for_fragments.insert(location, signature);
                     stack.push(type_);
+                    types.for_fragments.insert(location, signature);
                 }
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
