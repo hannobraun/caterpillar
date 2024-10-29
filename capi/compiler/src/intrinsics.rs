@@ -44,7 +44,7 @@ macro_rules! intrinsics {
                 Some(intrinsic)
             }
 
-            /// Access the type signature of this intrinsic function
+            /// # Access the type signature of this intrinsic function
             ///
             /// Not all intrinsic functions can provide a type signature, as the
             /// type system is not advanced enough to express them. In this
