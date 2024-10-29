@@ -49,6 +49,7 @@ fn type_fragments_in_function(
             })
             .zip(iter::from_fn(|| Some(types.inner.push(Type::Unknown))))
             .collect::<BTreeMap<_, _>>();
+        let mut stack = Vec::new();
 
         for (&index, fragment) in branch.body.iter() {
             let location = FragmentLocation {
@@ -85,6 +86,7 @@ fn type_fragments_in_function(
                             outputs: vec![type_],
                         },
                     );
+                    stack.push(type_);
                 }
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
@@ -97,6 +99,28 @@ fn type_fragments_in_function(
                                 outputs: Vec::new(),
                             };
 
+                            for input in inputs.iter().rev() {
+                                if let Some(index) = stack.pop() {
+                                    let type_ =
+                                        types.inner.get_mut(&index).expect(
+                                            "Type that is referenced from \
+                                            stack must exist.",
+                                        );
+                                    *type_ = input.clone();
+                                } else {
+                                    // It looks like we don't have enough types
+                                    // on the stack for the number of inputs
+                                    // this fragment has.
+                                    //
+                                    // Typically, this would be an error in type
+                                    // checking, but since the inference is not
+                                    // fully implemented yet, it could also be
+                                    // due to that.
+                                    //
+                                    // Let's ignore it for now.
+                                }
+                            }
+
                             for input in inputs {
                                 let index = types.inner.push(input.clone());
                                 signature.inputs.push(index);
@@ -104,6 +128,7 @@ fn type_fragments_in_function(
                             for output in outputs {
                                 let index = types.inner.push(output.clone());
                                 signature.outputs.push(index);
+                                stack.push(index);
                             }
 
                             types.for_fragments.insert(location, signature);
