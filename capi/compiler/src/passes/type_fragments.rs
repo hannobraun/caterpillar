@@ -125,14 +125,9 @@ fn type_fragments_in_function(
                             for output in outputs {
                                 let index = types.inner.push(output.clone());
                                 signature.outputs.push(index);
-                                stack.push(index);
                             }
 
-                            types
-                                .for_fragments
-                                .insert(location.clone(), signature);
-
-                            None
+                            Some(signature)
                         }
                         (IntrinsicFunction::Eval, None) => {
                             // Not supported by inference yet.
