@@ -1,4 +1,4 @@
-use super::IndexMap;
+use super::{Index, IndexMap};
 
 /// # The types that were inferred in the code
 #[derive(Default)]
@@ -20,10 +20,10 @@ pub struct Types {
 )]
 pub struct Signature {
     /// # The inputs that the expression consumes
-    pub inputs: Vec<Type>,
+    pub inputs: Vec<Index<Type>>,
 
     /// # The outputs that the expression produces
-    pub outputs: Vec<Type>,
+    pub outputs: Vec<Index<Type>>,
 }
 
 /// # The type of a value
