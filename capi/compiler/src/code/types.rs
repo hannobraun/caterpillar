@@ -41,7 +41,7 @@ use super::{
 /// though. While referring to a function itself by hash should be easy, we'd
 /// also need equivalents of `BranchLocation` and `FragmentLocation` that refer
 /// to the function by hash instead of location.
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Types {
     pub inner: IndexMap<Type>,
 
