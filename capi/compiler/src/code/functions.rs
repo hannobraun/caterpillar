@@ -70,6 +70,18 @@ impl NamedFunctions {
         })
     }
 
+    /// # Find the named function with the provided index
+    pub fn find_by_index(
+        &self,
+        index: &Index<Function>,
+    ) -> Option<Find<Function, FunctionLocation>> {
+        let function = self.inner.get(index)?;
+        Some(Find {
+            find: function.clone(),
+            metadata: FunctionLocation::NamedFunction { index: *index },
+        })
+    }
+
     /// # Find the function with the provided name
     pub fn find_by_name(
         &self,
