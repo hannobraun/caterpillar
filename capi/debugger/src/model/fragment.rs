@@ -111,7 +111,12 @@ impl DebugFragmentSignature {
         let mut outputs = Vec::new();
 
         if let Some(signature) = types.for_fragments.get(location) {
-            let convert = |index| format!("{index:?}");
+            let convert = |index| {
+                let type_ = types.inner.get(index).expect(
+                    "Got type index from signature; must exist in `types`.",
+                );
+                format!("{type_:?}")
+            };
 
             inputs.extend(signature.inputs.iter().map(convert));
             outputs.extend(signature.outputs.iter().map(convert));
