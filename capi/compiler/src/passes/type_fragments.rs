@@ -131,9 +131,12 @@ fn type_fragments_in_function(
                             types
                                 .for_fragments
                                 .insert(location.clone(), signature);
+
+                            None
                         }
                         (IntrinsicFunction::Eval, None) => {
                             // Not supported by inference yet.
+                            None
                         }
                         (intrinsic, signature) => {
                             unreachable!(
@@ -143,8 +146,6 @@ fn type_fragments_in_function(
                             );
                         }
                     }
-
-                    None
                 }
                 Fragment::CallToUserDefinedFunction {
                     hash: _,
