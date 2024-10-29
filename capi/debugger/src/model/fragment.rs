@@ -31,6 +31,8 @@ impl DebugFragment {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
+        let signature = DebugFragmentSignature::new(&location, types);
+
         let state = if Some(&location) == active_fragment {
             if is_in_innermost_active_function {
                 DebugFragmentState::InnermostActiveFragment
@@ -57,6 +59,7 @@ impl DebugFragment {
         let data = DebugFragmentData {
             fragment: fragment.clone(),
             location: location.clone(),
+            signature,
             state,
             has_durable_breakpoint,
             effect: active_effect,
@@ -86,11 +89,38 @@ pub struct DebugFragmentData {
     /// # The location of the fragment
     pub location: FragmentLocation,
 
+    /// # The type signature of the fragment
+    pub signature: DebugFragmentSignature,
+
     /// # The state of the fragment
     pub state: DebugFragmentState,
 
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DebugFragmentSignature {
+    pub inputs: Vec<String>,
+    pub outputs: Vec<String>,
+}
+
+impl DebugFragmentSignature {
+    pub fn new(location: &FragmentLocation, types: &Types) -> Self {
+        let mut inputs = Vec::new();
+        let mut outputs = Vec::new();
+
+        if let Some(signature) = types.for_fragments.get(location) {
+            for input in &signature.inputs {
+                inputs.push(format!("{input:?}"));
+            }
+            for output in &signature.outputs {
+                outputs.push(format!("{output:?}"));
+            }
+        }
+
+        Self { inputs, outputs }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
