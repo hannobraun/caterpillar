@@ -182,6 +182,11 @@ fn make_single_expression(
     class_outer: &mut String,
     actions_tx: ActionsTx,
 ) -> (View, Option<HtmlElement<Span>>, Option<HtmlElement<Span>>) {
+    let expression = format!(
+        "{expression}: {:?} -> {:?}",
+        data.signature.inputs, data.signature.outputs
+    );
+
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
