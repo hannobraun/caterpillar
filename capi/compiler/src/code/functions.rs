@@ -263,20 +263,3 @@ pub enum Pattern {
     Identifier { name: String },
     Literal { value: Value },
 }
-
-/// # A fragment with an attached signature
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct TypedFragment {
-    /// # The fragment
-    pub fragment: Fragment,
-}
