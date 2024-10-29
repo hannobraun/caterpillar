@@ -44,6 +44,12 @@ macro_rules! intrinsics {
                 Some(intrinsic)
             }
 
+            /// Access the type signature of this intrinsic function
+            ///
+            /// Not all intrinsic functions can provide a type signature, as the
+            /// type system is not advanced enough to express them. In this
+            /// case, this method return `None`, and the caller needs to
+            /// implement special handling.
             pub fn signature(&self) -> Option<[&'static [Type]; 2]> {
                 match self {
                     $(Self::$variant => $signature,)*
