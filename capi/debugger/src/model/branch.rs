@@ -33,13 +33,13 @@ impl DebugBranch {
         let body = branch
             .body
             .into_iter()
-            .map(|(index, typed_fragment)| {
+            .map(|(index, fragment)| {
                 let location = FragmentLocation {
                     parent: Box::new(location.clone()),
                     index,
                 };
                 DebugFragment::new(
-                    typed_fragment,
+                    fragment,
                     location,
                     active_fragment,
                     is_in_innermost_active_function,
