@@ -70,7 +70,7 @@ fn include_calls_from_function_in_call_graph(
 ) {
     for branch in function.branches.values() {
         for typed_fragment in branch.body.values() {
-            match &typed_fragment.fragment {
+            match &typed_fragment {
                 Fragment::Function { function } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,

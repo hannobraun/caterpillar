@@ -1,4 +1,4 @@
-use super::{Branch, Function, Index, TypedFragment};
+use super::{Branch, Fragment, Function, Index};
 
 #[derive(
     Clone,
@@ -12,7 +12,7 @@ use super::{Branch, Function, Index, TypedFragment};
 )]
 pub struct FragmentLocation {
     pub parent: Box<BranchLocation>,
-    pub index: Index<TypedFragment>,
+    pub index: Index<Fragment>,
 }
 
 #[derive(

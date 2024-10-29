@@ -329,7 +329,7 @@ fn function_call_to_function_name(
         .named_functions
         .find_fragment_by_location(function_call)
         .expect("Fragment referenced by active function must exist.");
-    let hash = typed_fragment.fragment.as_call_to_function()?;
+    let hash = typed_fragment.as_call_to_function()?;
     let function = code.named_functions.find_by_hash(hash)?;
 
     function.name.clone()

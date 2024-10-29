@@ -76,7 +76,7 @@ fn resolve_in_branch<H: Host>(
     known_named_functions: &BTreeSet<String>,
 ) {
     for typed_fragment in branch.body.values_mut() {
-        match &mut typed_fragment.fragment {
+        match typed_fragment {
             Fragment::Function { function } => {
                 resolve_in_function::<H>(
                     function,
@@ -130,22 +130,21 @@ fn resolve_in_branch<H: Host>(
                         index += 1;
                     }
 
-                    typed_fragment.fragment = Fragment::Binding {
+                    *typed_fragment = Fragment::Binding {
                         name: name.clone(),
                         index,
                     }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    typed_fragment.fragment =
-                        Fragment::CallToIntrinsicFunction {
-                            intrinsic,
-                            is_tail_call: *is_known_to_be_in_tail_position,
-                        };
+                    *typed_fragment = Fragment::CallToIntrinsicFunction {
+                        intrinsic,
+                        is_tail_call: *is_known_to_be_in_tail_position,
+                    };
                 } else if let Some(effect_number) =
                     H::function_name_to_effect_number(name)
                 {
-                    typed_fragment.fragment =
+                    *typed_fragment =
                         Fragment::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
@@ -197,7 +196,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| &typed_fragment.fragment),
+                .map(|(_, typed_fragment)| typed_fragment),
             Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
@@ -226,7 +225,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| &typed_fragment.fragment),
+                .map(|(_, typed_fragment)| typed_fragment),
             Some(&Fragment::CallToHostFunction { effect_number: 0 })
         );
     }
@@ -251,7 +250,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| &typed_fragment.fragment),
+                .map(|(_, typed_fragment)| typed_fragment),
             Some(&Fragment::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
@@ -282,7 +281,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, typed_fragment)| &typed_fragment.fragment),
+                .map(|(_, typed_fragment)| typed_fragment),
             Some(&Fragment::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,

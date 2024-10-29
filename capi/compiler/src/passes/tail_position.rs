@@ -14,14 +14,14 @@ fn analyze_function(function: &mut Function) {
 
 fn analyze_branch(branch: &mut Branch) {
     for typed_fragment in branch.body.values_mut().rev() {
-        if let Fragment::Comment { .. } = typed_fragment.fragment {
+        if let Fragment::Comment { .. } = typed_fragment {
             continue;
         }
 
         if let Fragment::UnresolvedIdentifier {
             is_known_to_be_in_tail_position,
             ..
-        } = &mut typed_fragment.fragment
+        } = typed_fragment
         {
             *is_known_to_be_in_tail_position = true;
         }
@@ -30,7 +30,7 @@ fn analyze_branch(branch: &mut Branch) {
     }
 
     for typed_fragment in branch.body.values_mut() {
-        if let Fragment::Function { function } = &mut typed_fragment.fragment {
+        if let Fragment::Function { function } = typed_fragment {
             analyze_function(function);
         }
     }
@@ -39,7 +39,7 @@ fn analyze_branch(branch: &mut Branch) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Fragment, IndexMap, NamedFunctions, TypedFragment},
+        code::{Fragment, IndexMap, NamedFunctions},
         passes::{parse, tokenize},
     };
 
@@ -92,7 +92,7 @@ mod tests {
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
         let Fragment::Function { function } =
-            &branch.body.values().nth(1).unwrap().fragment
+            &branch.body.values().nth(1).unwrap()
         else {
             panic!("Expected block.");
         };
@@ -140,7 +140,7 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for IndexMap<TypedFragment> {
+    impl ToIdentifiers for IndexMap<Fragment> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
                 .filter_map(|typed_fragment| {
@@ -148,7 +148,7 @@ mod tests {
                         name,
                         is_known_to_be_in_tail_position,
                         ..
-                    } = &typed_fragment.fragment
+                    } = typed_fragment
                     {
                         Some((name.as_str(), *is_known_to_be_in_tail_position))
                     } else {

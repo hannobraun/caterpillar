@@ -100,7 +100,7 @@ impl NamedFunctions {
     pub fn find_fragment_by_location(
         &self,
         location: &FragmentLocation,
-    ) -> Option<&TypedFragment> {
+    ) -> Option<&Fragment> {
         let branch = self.find_branch_by_location(&location.parent)?;
         branch.body.get(&location.index)
     }
@@ -117,7 +117,7 @@ impl NamedFunctions {
             FunctionLocation::AnonymousFunction { location } => {
                 let typed_fragment =
                     self.find_fragment_by_location(location)?;
-                typed_fragment.fragment.as_function()
+                typed_fragment.as_function()
             }
         }
     }
@@ -246,13 +246,13 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<TypedFragment>,
+    pub body: IndexMap<Fragment>,
 }
 
 impl Branch {
     /// # Add a fragment to the body of this branch
     pub fn add_fragment(&mut self, fragment: Fragment) {
-        self.body.push(TypedFragment { fragment });
+        self.body.push(fragment);
     }
 }
 

@@ -6,8 +6,8 @@
 use std::ops::Deref;
 
 use super::{
-    Branch, BranchLocation, FragmentLocation, Function, FunctionLocation,
-    Index, TypedFragment,
+    Branch, BranchLocation, Fragment, FragmentLocation, Function,
+    FunctionLocation, Index,
 };
 
 /// # The result of a search, alongside search-specific metadata
@@ -101,7 +101,7 @@ impl Find<Branch, BranchLocation> {
     /// # Iterate over the fragments in the branch's body
     pub fn body(
         &self,
-    ) -> impl Iterator<Item = Find<TypedFragment, FragmentLocation>> {
+    ) -> impl Iterator<Item = Find<Fragment, FragmentLocation>> {
         let location = self.metadata.clone();
         self.body
             .clone()
@@ -116,7 +116,7 @@ impl Find<Branch, BranchLocation> {
     }
 }
 
-impl Find<TypedFragment, FragmentLocation> {
+impl Find<Fragment, FragmentLocation> {
     /// # Consume the found fragment, returning its location
     pub fn into_location(self) -> FragmentLocation {
         self.metadata
