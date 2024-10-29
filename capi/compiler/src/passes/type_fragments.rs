@@ -86,10 +86,7 @@ fn type_fragments_in_function(
                 Fragment::CallToHostFunction { effect_number: _ } => {
                     // Not supported by inference yet.
                 }
-                Fragment::CallToIntrinsicFunction {
-                    intrinsic: _,
-                    is_tail_call: _,
-                } => {
+                Fragment::CallToIntrinsicFunction { intrinsic: _, .. } => {
                     // Not supported by inference yet.
                 }
                 Fragment::CallToUserDefinedFunction {
