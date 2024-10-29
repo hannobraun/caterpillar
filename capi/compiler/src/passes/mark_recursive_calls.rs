@@ -123,7 +123,7 @@ mod tests {
                 .unwrap()
                 .body
                 .pop_first()
-                .map(|(_, typed_fragment)| typed_fragment)
+                .map(|(_, fragment)| fragment)
                 .unwrap()
             else {
                 panic!("Expected expression to be an identifier.");
