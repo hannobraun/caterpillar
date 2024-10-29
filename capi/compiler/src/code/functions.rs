@@ -248,13 +248,6 @@ pub struct Branch {
     pub body: IndexMap<Fragment>,
 }
 
-impl Branch {
-    /// # Add a fragment to the body of this branch
-    pub fn add_fragment(&mut self, fragment: Fragment) {
-        self.body.push(fragment);
-    }
-}
-
 #[derive(
     Clone,
     Debug,
