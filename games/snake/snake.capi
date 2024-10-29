@@ -75,10 +75,11 @@ _draw_snake_inner: fn
         vec_buf_len
         index
         greater_s8
-        fn \ index_is_within_bounds ->
-            index_is_within_bounds
-            index
-            _draw_snake_draw_rest_of_snake
+        fn
+            \ index_is_within_bounds ->
+                index_is_within_bounds
+                index
+                _draw_snake_draw_rest_of_snake
         end
             eval
 end
