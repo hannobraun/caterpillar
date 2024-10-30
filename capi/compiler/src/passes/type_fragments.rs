@@ -3,8 +3,8 @@ use std::{collections::BTreeMap, iter};
 use crate::{
     code::{
         BranchLocation, CallGraph, ConcreteSignature, Fragment,
-        FragmentLocation, Function, FunctionLocation, NamedFunctions, Pattern,
-        Signature, Type, Types,
+        FragmentLocation, Function, FunctionLocation, Index, NamedFunctions,
+        Pattern, Signature, Type, Types,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -91,45 +91,9 @@ fn type_fragments_in_function(
                 }
                 Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
                     match (intrinsic, intrinsic.signature()) {
-                        (_, Some(ConcreteSignature { inputs, outputs })) => {
-                            let mut signature = Signature {
-                                inputs: Vec::new(),
-                                outputs: Vec::new(),
-                            };
-
-                            for input in inputs.iter().rev() {
-                                if let Some(index) = stack.pop() {
-                                    let type_ =
-                                        types.inner.get_mut(&index).expect(
-                                            "Type that is referenced from \
-                                            stack must exist.",
-                                        );
-                                    *type_ = input.clone();
-                                } else {
-                                    // It looks like we don't have enough types
-                                    // on the stack for the number of inputs
-                                    // this fragment has.
-                                    //
-                                    // Typically, this would be an error in type
-                                    // checking, but since the inference is not
-                                    // fully implemented yet, it could also be
-                                    // due to that.
-                                    //
-                                    // Let's ignore it for now.
-                                }
-                            }
-
-                            for input in inputs {
-                                let index = types.inner.push(input.clone());
-                                signature.inputs.push(index);
-                            }
-                            for output in outputs {
-                                let index = types.inner.push(output.clone());
-                                signature.outputs.push(index);
-                            }
-
-                            Some(signature)
-                        }
+                        (_, Some(signature)) => handle_concrete_signature(
+                            signature, &mut stack, types,
+                        ),
                         (IntrinsicFunction::Eval, None) => {
                             // Not supported by inference yet.
                             None
@@ -185,4 +149,45 @@ fn type_fragments_in_function(
             }
         }
     }
+}
+
+fn handle_concrete_signature(
+    ConcreteSignature { inputs, outputs }: ConcreteSignature,
+    stack: &mut Vec<Index<Type>>,
+    types: &mut Types,
+) -> Option<Signature> {
+    let mut signature = Signature {
+        inputs: Vec::new(),
+        outputs: Vec::new(),
+    };
+
+    for input in inputs.iter().rev() {
+        if let Some(index) = stack.pop() {
+            let type_ = types.inner.get_mut(&index).expect(
+                "Type that is referenced from \
+                                            stack must exist.",
+            );
+            *type_ = input.clone();
+        } else {
+            // It looks like we don't have enough types on the stack for the
+            // number of inputs this fragment has.
+            //
+            // Typically, this would be an error in type checking, but since the
+            // inference is not fully implemented yet, it could also be due to
+            // that.
+            //
+            // Let's ignore it for now.
+        }
+    }
+
+    for input in inputs {
+        let index = types.inner.push(input.clone());
+        signature.inputs.push(index);
+    }
+    for output in outputs {
+        let index = types.inner.push(output.clone());
+        signature.outputs.push(index);
+    }
+
+    Some(signature)
 }
