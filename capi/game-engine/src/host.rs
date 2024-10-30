@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 
-use capi_compiler::host::{Host, HostFunction};
+use capi_compiler::{
+    code::ConcreteSignature,
+    host::{Host, HostFunction},
+};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost {
@@ -174,6 +177,22 @@ impl HostFunction for GameEngineFunction {
             Self::ReadRandom => "read_random",
             Self::SetPixel => "set_pixel",
             Self::SubmitFrame => "submit_frame",
+        }
+    }
+
+    fn signature(&self) -> ConcreteSignature {
+        use capi_compiler::code::Type::*;
+
+        match self {
+            GameEngineFunction::Halt => ([], []).into(),
+            GameEngineFunction::Load => ([Number], [Number]).into(),
+            GameEngineFunction::Store => ([Number, Number], []).into(),
+            GameEngineFunction::ReadInput => ([], [Number]).into(),
+            GameEngineFunction::ReadRandom => ([], [Number]).into(),
+            GameEngineFunction::SetPixel => {
+                ([Number, Number, Number, Number, Number, Number], []).into()
+            }
+            GameEngineFunction::SubmitFrame => ([], []).into(),
         }
     }
 }

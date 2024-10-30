@@ -1,6 +1,7 @@
 use capi_runtime::{Effect, Heap, Runtime};
 
 use crate::{
+    code::{ConcreteSignature, Type},
     host::{Host, HostFunction},
     Compiler, Instructions,
 };
@@ -114,5 +115,9 @@ impl HostFunction for TestFunction {
 
     fn name(&self) -> &'static str {
         "send"
+    }
+
+    fn signature(&self) -> ConcreteSignature {
+        ([Type::Number], []).into()
     }
 }

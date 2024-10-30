@@ -1,3 +1,5 @@
+use crate::code::ConcreteSignature;
+
 /// # A host into which a Caterpillar application is embedded
 pub trait Host {
     /// # Access a host function by its number
@@ -18,6 +20,9 @@ pub trait HostFunction {
 
     /// # The name that identifies the function in input code
     fn name(&self) -> &'static str;
+
+    /// # The type signature of the function
+    fn signature(&self) -> ConcreteSignature;
 }
 
 pub struct NoHost {}

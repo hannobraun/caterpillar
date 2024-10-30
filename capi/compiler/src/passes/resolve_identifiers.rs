@@ -178,7 +178,10 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Branch, Fragment, UnresolvedCallToUserDefinedFunction},
+        code::{
+            Branch, ConcreteSignature, Fragment,
+            UnresolvedCallToUserDefinedFunction,
+        },
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -343,6 +346,10 @@ mod tests {
 
         fn name(&self) -> &'static str {
             "host_fn"
+        }
+
+        fn signature(&self) -> ConcreteSignature {
+            ([], []).into()
         }
     }
 }
