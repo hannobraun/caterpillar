@@ -91,7 +91,7 @@ impl TestRuntime {
 struct TestHost {}
 
 impl Host for TestHost {
-    fn function_by_number(&self, number: u8) -> Option<&dyn HostFunction> {
+    fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction> {
         match number {
             0 => Some(&TestFunction),
             _ => None,

@@ -29,8 +29,8 @@ impl Default for GameEngineHost {
 }
 
 impl Host for GameEngineHost {
-    fn function_by_number(&self, number: u8) -> Option<&dyn HostFunction> {
-        let function = self.functions_by_number.get(&number)?;
+    fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction> {
+        let function = self.functions_by_number.get(number)?;
         Some(function)
     }
 

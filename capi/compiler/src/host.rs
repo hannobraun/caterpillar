@@ -5,7 +5,7 @@ pub trait Host {
     /// # Access a host function by its number
     ///
     /// Return `None`, if the provided number does not identify a host function.
-    fn function_by_number(&self, number: u8) -> Option<&dyn HostFunction>;
+    fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction>;
 
     /// # Access a host function by its name
     ///
@@ -28,7 +28,7 @@ pub trait HostFunction {
 pub struct NoHost {}
 
 impl Host for NoHost {
-    fn function_by_number(&self, _: u8) -> Option<&dyn HostFunction> {
+    fn function_by_number(&self, _: &u8) -> Option<&dyn HostFunction> {
         None
     }
 
