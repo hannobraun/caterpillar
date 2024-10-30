@@ -179,7 +179,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         code::{Branch, Fragment, UnresolvedCallToUserDefinedFunction},
-        host::Host,
+        host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
     };
@@ -324,16 +324,28 @@ mod tests {
             effect: u8,
         ) -> Option<&'static str> {
             match effect {
-                0 => Some("host_fn"),
+                0 => Some(TestFunction.name()),
                 _ => None,
             }
         }
 
         fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
             match name {
-                "host_fn" => Some(0),
+                "host_fn" => Some(TestFunction.number()),
                 _ => None,
             }
+        }
+    }
+
+    struct TestFunction;
+
+    impl HostFunction for TestFunction {
+        fn number(&self) -> u8 {
+            0
+        }
+
+        fn name(&self) -> &'static str {
+            "host_fn"
         }
     }
 }
