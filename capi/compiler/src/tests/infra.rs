@@ -16,7 +16,7 @@ pub struct TestRuntime {
 
 impl TestRuntime {
     pub fn update_code(&mut self, source: &str) -> &mut Self {
-        let output = self.compiler.compile::<TestHost>(source, &TestHost {});
+        let output = self.compiler.compile(source, &TestHost {});
         self.instructions = Some(output.instructions);
         self
     }
