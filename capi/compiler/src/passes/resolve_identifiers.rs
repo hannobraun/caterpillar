@@ -35,7 +35,7 @@ pub fn resolve_most_identifiers<H: Host>(
             );
         }
 
-        resolve_in_function::<H>(
+        resolve_in_function(
             function,
             &mut scopes,
             &known_named_functions,
