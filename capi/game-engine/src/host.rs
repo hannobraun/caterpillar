@@ -6,9 +6,9 @@ pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
     fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
-        let effect = GameEngineFunction::try_from_primitive(effect).ok()?;
+        let function = GameEngineFunction::try_from_primitive(effect).ok()?;
 
-        Some(effect.name())
+        Some(function.name())
     }
 
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
