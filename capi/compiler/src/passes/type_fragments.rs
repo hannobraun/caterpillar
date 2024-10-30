@@ -2,8 +2,9 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     code::{
-        BranchLocation, CallGraph, Fragment, FragmentLocation, Function,
-        FunctionLocation, NamedFunctions, Pattern, Signature, Type, Types,
+        BranchLocation, CallGraph, ConcreteSignature, Fragment,
+        FragmentLocation, Function, FunctionLocation, NamedFunctions, Pattern,
+        Signature, Type, Types,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -90,7 +91,7 @@ fn type_fragments_in_function(
                 }
                 Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
                     match (intrinsic, intrinsic.signature()) {
-                        (_, Some([inputs, outputs])) => {
+                        (_, Some(ConcreteSignature { inputs, outputs })) => {
                             let mut signature = Signature {
                                 inputs: Vec::new(),
                                 outputs: Vec::new(),

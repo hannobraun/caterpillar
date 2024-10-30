@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::code::Type;
+use crate::code::{ConcreteSignature, Type};
 
 macro_rules! intrinsics {
     (
@@ -50,9 +50,13 @@ macro_rules! intrinsics {
             /// type system is not advanced enough to express them. In this
             /// case, this method returns `None`, and the caller needs to
             /// implement special handling.
-            pub fn signature(&self) -> Option<[&'static [Type]; 2]> {
+            pub fn signature(&self) -> Option<ConcreteSignature> {
                 match self {
-                    $(Self::$variant => $signature,)*
+                    $(
+                        Self::$variant => {
+                            $signature.map(ConcreteSignature::from)
+                        }
+                    )*
                 }
             }
         }
@@ -71,77 +75,77 @@ use Type::*;
 
 intrinsics! {
     /// # Add two signed 8-bit integers, triggering an error on overflow
-    "add_s8", AddS8, Some([&[Number, Number], &[Number]]);
+    "add_s8", AddS8, Some(([Number, Number], [Number]));
 
     /// # Add two signed 32-bit integers, triggering an error on overflow
-    "add_s32", AddS32, Some([&[Number, Number], &[Number]]);
+    "add_s32", AddS32, Some(([Number, Number], [Number]));
 
     /// # Add two unsigned 8-bit integers, triggering an error on overflow
-    "add_u8", AddU8, Some([&[Number, Number], &[Number]]);
+    "add_u8", AddU8, Some(([Number, Number], [Number]));
 
     /// # Add two unsigned 8-bit integers, wrapping on overflow
-    "add_u8_wrap", AddU8Wrap, Some([&[Number, Number], &[Number]]);
+    "add_u8_wrap", AddU8Wrap, Some(([Number, Number], [Number]));
 
     /// # Logical and
-    "and", And, Some([&[Number, Number], &[Number]]);
+    "and", And, Some(([Number, Number], [Number]));
 
     /// # Trigger a breakpoint
-    "brk", Brk, Some([&[], &[]]);
+    "brk", Brk, Some(([], []));
 
     /// # Copy a value
-    "copy", Copy, Some([&[Unknown], &[Unknown, Unknown]]);
+    "copy", Copy, Some(([Unknown], [Unknown, Unknown]));
 
     /// # Divide two signed 32-bit integers
-    "div_s32", DivS32, Some([&[Number, Number], &[Number]]);
+    "div_s32", DivS32, Some(([Number, Number], [Number]));
 
     /// # Divide two unsigned 8-bit integers
-    "div_u8", DivU8, Some([&[Number, Number], &[Number]]);
+    "div_u8", DivU8, Some(([Number, Number], [Number]));
 
     /// # Drop a value
-    "drop", Drop, Some([&[Unknown], &[]]);
+    "drop", Drop, Some(([Unknown], []));
 
     /// # Compare two values for equality
-    "eq", Eq, Some([&[Number, Number], &[Number]]);
+    "eq", Eq, Some(([Number, Number], [Number]));
 
     /// # Evaluate an anonymous function
-    "eval", Eval, None;
+    "eval", Eval, Option::<([Type; 0], [Type; 0])>::None;
 
     /// # Determine if the first of two signed 8-bit numbers is greater
-    "greater_s8", GreaterS8, Some([&[Number, Number], &[Number]]);
+    "greater_s8", GreaterS8, Some(([Number, Number], [Number]));
 
     /// # Determine if the first of two signed 32-bit numbers is greater
-    "greater_s32", GreaterS32, Some([&[Number, Number], &[Number]]);
+    "greater_s32", GreaterS32, Some(([Number, Number], [Number]));
 
     /// # Determine if the first of two unsigned 8-bit numbers is greater
-    "greater_u8", GreaterU8, Some([&[Number, Number], &[Number]]);
+    "greater_u8", GreaterU8, Some(([Number, Number], [Number]));
 
     /// # Multiply two signed 32-bit numbers, triggering an error on overflow
-    "mul_s32", MulS32, Some([&[Number, Number], &[Number]]);
+    "mul_s32", MulS32, Some(([Number, Number], [Number]));
 
     /// # Multiply two unsigned 8-bit numbers, wrapping on overflow
-    "mul_u8_wrap", MulU8Wrap, Some([&[Number, Number], &[Number]]);
+    "mul_u8_wrap", MulU8Wrap, Some(([Number, Number], [Number]));
 
     /// # Negate a signed 32-bit number
-    "neg_s32", NegS32, Some([&[Number], &[Number]]);
+    "neg_s32", NegS32, Some(([Number], [Number]));
 
     /// No operation
-    "nop", Nop, Some([&[], &[]]);
+    "nop", Nop, Some(([], []));
 
     /// # Logical not
-    "not", Not, Some([&[Number], &[Number]]);
+    "not", Not, Some(([Number], [Number]));
 
     /// # Compute the remainder of the division of two signed 32-bit numbers
-    "remainder_s32", RemainderS32, Some([&[Number, Number], &[Number]]);
+    "remainder_s32", RemainderS32, Some(([Number, Number], [Number]));
 
     /// # Convert a signed 32-bit number to a signed 8-bit number
-    "s32_to_s8", S32ToS8, Some([&[Number], &[Number]]);
+    "s32_to_s8", S32ToS8, Some(([Number], [Number]));
 
     /// # Subtract two signed 32-bit numbers, triggering an error on overflow
-    "sub_s32", SubS32, Some([&[Number, Number], &[Number]]);
+    "sub_s32", SubS32, Some(([Number, Number], [Number]));
 
     /// # Subtract two unsigned 8-bit numbers, triggering an error on overflow
-    "sub_u8", SubU8, Some([&[Number, Number], &[Number]]);
+    "sub_u8", SubU8, Some(([Number, Number], [Number]));
 
     /// # Subtract two unsigned 8-bit numbers, wrapping on overflow
-    "sub_u8_wrap", SubU8Wrap, Some([&[Number, Number], &[Number]]);
+    "sub_u8_wrap", SubU8Wrap, Some(([Number, Number], [Number]));
 }
