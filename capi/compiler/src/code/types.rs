@@ -87,6 +87,19 @@ pub struct ConcreteSignature {
     pub outputs: Vec<Type>,
 }
 
+impl<I, O> From<(I, O)> for ConcreteSignature
+where
+    I: IntoIterator<Item = Type>,
+    O: IntoIterator<Item = Type>,
+{
+    fn from((inputs, outputs): (I, O)) -> Self {
+        Self {
+            inputs: inputs.into_iter().collect(),
+            outputs: outputs.into_iter().collect(),
+        }
+    }
+}
+
 /// # The type of a value
 #[derive(
     Clone,
