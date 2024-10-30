@@ -3,6 +3,12 @@ pub trait Host {
     fn function_name_to_effect_number(name: &str) -> Option<u8>;
 }
 
+/// # A function that is provided by the host
+pub trait HostFunction {
+    /// # The name of the function
+    fn name(&self) -> &'static str;
+}
+
 pub struct NoHost {}
 
 impl Host for NoHost {
