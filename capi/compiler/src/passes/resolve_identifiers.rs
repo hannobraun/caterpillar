@@ -153,9 +153,7 @@ fn resolve_in_branch(
                         intrinsic,
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
-                } else if let Some(function) =
-                    host.function_name_to_effect_number(name)
-                {
+                } else if let Some(function) = host.function_by_name(name) {
                     *fragment = Fragment::CallToHostFunction {
                         number: function.number(),
                     }
@@ -331,10 +329,7 @@ mod tests {
             }
         }
 
-        fn function_name_to_effect_number(
-            &self,
-            name: &str,
-        ) -> Option<&dyn HostFunction> {
+        fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
             match name {
                 "host_fn" => Some(&TestFunction),
                 _ => None,

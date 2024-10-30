@@ -4,10 +4,7 @@ pub trait Host {
         effect: u8,
     ) -> Option<&'static str>;
 
-    fn function_name_to_effect_number(
-        &self,
-        name: &str,
-    ) -> Option<&dyn HostFunction>;
+    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction>;
 }
 
 /// # A function that is provided by the host
@@ -26,10 +23,7 @@ impl Host for NoHost {
         None
     }
 
-    fn function_name_to_effect_number(
-        &self,
-        _: &str,
-    ) -> Option<&dyn HostFunction> {
+    fn function_by_name(&self, _: &str) -> Option<&dyn HostFunction> {
         None
     }
 }

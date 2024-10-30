@@ -29,10 +29,7 @@ impl Host for GameEngineHost {
         Some(function.name())
     }
 
-    fn function_name_to_effect_number(
-        &self,
-        name: &str,
-    ) -> Option<&dyn HostFunction> {
+    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
         let function = self.functions_by_name.get(name)?;
         Some(function)
     }

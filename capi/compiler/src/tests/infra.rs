@@ -100,10 +100,7 @@ impl Host for TestHost {
         }
     }
 
-    fn function_name_to_effect_number(
-        &self,
-        name: &str,
-    ) -> Option<&dyn HostFunction> {
+    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
         match name {
             "send" => Some(&TestFunction),
             _ => None,
