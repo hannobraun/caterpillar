@@ -70,6 +70,22 @@ pub struct Signature {
     pub outputs: Vec<Index<Type>>,
 }
 
+/// # A concrete signature
+///
+/// Most code should use `Signature` instead, which references into signatures
+/// stored in `Types`.
+///
+/// This type is only intended for type signatures that have a lifetime
+/// extending beyond that of a running compiler. Like those of intrinsic or host
+/// functions.
+pub struct ConcreteSignature {
+    /// # The inputs that the function consumes
+    pub inputs: Vec<Type>,
+
+    /// # The outputs that the function produces
+    pub outputs: Vec<Type>,
+}
+
 /// # The type of a value
 #[derive(
     Clone,
