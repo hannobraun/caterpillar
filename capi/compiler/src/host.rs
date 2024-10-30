@@ -11,7 +11,7 @@ pub trait HostFunction {
     /// # The number that identifies the function in the host effect
     fn number(&self) -> u8;
 
-    /// # The name of the function
+    /// # The name that identifies the function in input code
     fn name(&self) -> &'static str;
 }
 
