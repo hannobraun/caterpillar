@@ -33,8 +33,8 @@ impl Host for GameEngineHost {
         &self,
         name: &str,
     ) -> Option<&dyn HostFunction> {
-        let effect = self.functions_by_name.get(name)?;
-        Some(effect)
+        let function = self.functions_by_name.get(name)?;
+        Some(function)
     }
 }
 
