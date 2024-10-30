@@ -322,9 +322,9 @@ mod tests {
         fn effect_number_to_function_name(
             &self,
             effect: u8,
-        ) -> Option<&'static str> {
+        ) -> Option<&dyn HostFunction> {
             match effect {
-                0 => Some(TestFunction.name()),
+                0 => Some(&TestFunction),
                 _ => None,
             }
         }

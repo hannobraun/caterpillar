@@ -2,7 +2,7 @@ pub trait Host {
     fn effect_number_to_function_name(
         &self,
         effect: u8,
-    ) -> Option<&'static str>;
+    ) -> Option<&dyn HostFunction>;
 
     /// # Access a host function by its name
     ///
@@ -22,7 +22,10 @@ pub trait HostFunction {
 pub struct NoHost {}
 
 impl Host for NoHost {
-    fn effect_number_to_function_name(&self, _: u8) -> Option<&'static str> {
+    fn effect_number_to_function_name(
+        &self,
+        _: u8,
+    ) -> Option<&dyn HostFunction> {
         None
     }
 

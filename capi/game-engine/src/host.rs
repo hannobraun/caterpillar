@@ -29,9 +29,9 @@ impl Host for GameEngineHost {
     fn effect_number_to_function_name(
         &self,
         effect: u8,
-    ) -> Option<&'static str> {
+    ) -> Option<&dyn HostFunction> {
         let function = self.functions_by_number.get(&effect)?;
-        Some(function.name())
+        Some(function)
     }
 
     fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
