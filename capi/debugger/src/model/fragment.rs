@@ -214,7 +214,7 @@ impl DebugFragmentKind {
             }
             Fragment::CallToHostFunction { number } => {
                 let name = GameEngineHost::default()
-                    .effect_number_to_function_name(number)
+                    .function_by_number(number)
                     .expect("Expected effect number in code to be valid.")
                     .name()
                     .to_string();

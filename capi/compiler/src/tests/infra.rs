@@ -90,7 +90,7 @@ impl TestRuntime {
 struct TestHost {}
 
 impl Host for TestHost {
-    fn effect_number_to_function_name(
+    fn function_by_number(
         &self,
         effect: u8,
     ) -> Option<&dyn HostFunction> {
