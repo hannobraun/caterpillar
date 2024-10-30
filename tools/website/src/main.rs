@@ -55,7 +55,7 @@ fn serve(path: &Path) -> anyhow::Result<()> {
 
     if !exit_status.success() {
         return Err(anyhow!(
-            "`deno task start` return exit code `{:?}`",
+            "`deno task start` returned exit code `{:?}`",
             exit_status.code()
         ));
     }
