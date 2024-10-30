@@ -1,7 +1,9 @@
 use capi_compiler::host::{Host, HostFunction};
 use num_enum::TryFromPrimitive;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
