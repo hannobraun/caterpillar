@@ -28,10 +28,10 @@ pub struct Compiler {
 
 impl Compiler {
     /// # Compile the provided source code
-    pub fn compile<H: Host>(
+    pub fn compile(
         &mut self,
         source: &str,
-        host: &H,
+        host: &impl Host,
     ) -> CompilerOutput {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
