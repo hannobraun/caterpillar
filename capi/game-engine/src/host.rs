@@ -6,16 +6,16 @@ pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
     fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
-        let effect = GameEngineEffect::try_from_primitive(effect).ok()?;
+        let effect = GameEngineFunction::try_from_primitive(effect).ok()?;
 
         let name = match effect {
-            GameEngineEffect::Halt => "halt",
-            GameEngineEffect::Load => "load",
-            GameEngineEffect::Store => "store",
-            GameEngineEffect::ReadInput => "read_input",
-            GameEngineEffect::ReadRandom => "read_random",
-            GameEngineEffect::SetPixel => "set_pixel",
-            GameEngineEffect::SubmitFrame => "submit_frame",
+            GameEngineFunction::Halt => "halt",
+            GameEngineFunction::Load => "load",
+            GameEngineFunction::Store => "store",
+            GameEngineFunction::ReadInput => "read_input",
+            GameEngineFunction::ReadRandom => "read_random",
+            GameEngineFunction::SetPixel => "set_pixel",
+            GameEngineFunction::SubmitFrame => "submit_frame",
         };
 
         Some(name)
@@ -23,13 +23,13 @@ impl Host for GameEngineHost {
 
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         let effect = match name {
-            "halt" => GameEngineEffect::Halt,
-            "load" => GameEngineEffect::Load,
-            "read_input" => GameEngineEffect::ReadInput,
-            "read_random" => GameEngineEffect::ReadRandom,
-            "set_pixel" => GameEngineEffect::SetPixel,
-            "store" => GameEngineEffect::Store,
-            "submit_frame" => GameEngineEffect::SubmitFrame,
+            "halt" => GameEngineFunction::Halt,
+            "load" => GameEngineFunction::Load,
+            "read_input" => GameEngineFunction::ReadInput,
+            "read_random" => GameEngineFunction::ReadRandom,
+            "set_pixel" => GameEngineFunction::SetPixel,
+            "store" => GameEngineFunction::Store,
+            "submit_frame" => GameEngineFunction::SubmitFrame,
 
             _ => {
                 return None;
@@ -64,7 +64,7 @@ impl Host for GameEngineHost {
     serde::Serialize,
 )]
 #[repr(u8)]
-pub enum GameEngineEffect {
+pub enum GameEngineFunction {
     /// # Halt the game
     ///
     /// This essentially works like the `brk` intrinsic. It was added

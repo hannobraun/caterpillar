@@ -6,7 +6,7 @@ use capi_runtime::{Effect, Heap, Runtime, Value};
 use crate::{
     command::Command,
     display::{self, TILES_PER_AXIS},
-    host::GameEngineEffect,
+    host::GameEngineFunction,
     memory::Memory,
 };
 
@@ -235,7 +235,7 @@ impl GameEngine {
                 let effect = self.runtime.stack_mut().pop_operand()?;
                 let effect =
                     effect.to_u8().map_err(|_| Effect::InvalidHostEffect)?;
-                GameEngineEffect::try_from(effect)
+                GameEngineFunction::try_from(effect)
                     .map_err(|_| Effect::InvalidHostEffect)?
             }
             _ => {
@@ -244,14 +244,14 @@ impl GameEngine {
         };
 
         match host_effect {
-            GameEngineEffect::Halt => {
+            GameEngineFunction::Halt => {
                 return Ok(EffectOutcome::Unhandled);
             }
-            GameEngineEffect::SubmitFrame => {
+            GameEngineFunction::SubmitFrame => {
                 return Ok(EffectOutcome::WasSubmit);
             }
 
-            GameEngineEffect::Load => {
+            GameEngineFunction::Load => {
                 let address = self.runtime.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
@@ -261,7 +261,7 @@ impl GameEngine {
 
                 self.runtime.stack_mut().push_operand(value);
             }
-            GameEngineEffect::Store => {
+            GameEngineFunction::Store => {
                 let address = self.runtime.stack_mut().pop_operand()?;
                 let value = self.runtime.stack_mut().pop_operand()?;
 
@@ -271,16 +271,16 @@ impl GameEngine {
                 let address: usize = address.into();
                 self.memory.inner[address] = value;
             }
-            GameEngineEffect::ReadInput => {
+            GameEngineFunction::ReadInput => {
                 let input = self.input.pop_front().unwrap_or(0);
                 self.runtime.stack_mut().push_operand(input);
             }
-            GameEngineEffect::ReadRandom => {
+            GameEngineFunction::ReadRandom => {
                 // See `GameEngine::push_random` for context.
                 let random = self.random.pop_front().unwrap();
                 self.runtime.stack_mut().push_operand(random);
             }
-            GameEngineEffect::SetPixel => {
+            GameEngineFunction::SetPixel => {
                 let a = self.runtime.stack_mut().pop_operand()?;
                 let b = self.runtime.stack_mut().pop_operand()?;
                 let g = self.runtime.stack_mut().pop_operand()?;
