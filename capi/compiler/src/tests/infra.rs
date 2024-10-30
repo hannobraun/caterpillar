@@ -1,6 +1,9 @@
 use capi_runtime::{Effect, Heap, Runtime};
 
-use crate::{host::Host, Compiler, Instructions};
+use crate::{
+    host::{Host, HostFunction},
+    Compiler, Instructions,
+};
 
 pub fn runtime() -> TestRuntime {
     TestRuntime::default()
@@ -92,15 +95,27 @@ impl Host for TestHost {
         effect: u8,
     ) -> Option<&'static str> {
         match effect {
-            0 => Some("send"),
+            0 => Some(TestFunction.name()),
             _ => None,
         }
     }
 
     fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
         match name {
-            "send" => Some(0),
+            "send" => Some(TestFunction.number()),
             _ => None,
         }
+    }
+}
+
+struct TestFunction;
+
+impl HostFunction for TestFunction {
+    fn number(&self) -> u8 {
+        0
+    }
+
+    fn name(&self) -> &'static str {
+        "send"
     }
 }
