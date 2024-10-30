@@ -167,10 +167,10 @@ fn handle_concrete_signature(
 
     for input in inputs.iter().rev() {
         if let Some(index) = stack.pop() {
-            let type_ = types.inner.get_mut(&index).expect(
-                "Type that is referenced from \
-                                            stack must exist.",
-            );
+            let type_ = types
+                .inner
+                .get_mut(&index)
+                .expect("Type that is referenced from stack must exist.");
             *type_ = input.clone();
         } else {
             // It looks like we don't have enough types on the stack for the
