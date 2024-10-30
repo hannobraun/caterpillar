@@ -136,7 +136,8 @@ async fn build_game_once_with_compiler(
     let source = fs::read_to_string(&path)
         .await
         .map_err(|source| BuildGameOnceError { source, path })?;
-    let output = compiler.compile::<GameEngineHost>(&source);
+    let output =
+        compiler.compile::<GameEngineHost>(&source, &GameEngineHost::default());
 
     Ok(output)
 }

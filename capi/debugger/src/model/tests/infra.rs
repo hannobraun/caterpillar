@@ -32,7 +32,8 @@ pub struct TestDebugger {
 impl TestDebugger {
     pub fn provide_source_code(&mut self, source: &str) -> &mut Self {
         let mut compiler = Compiler::default();
-        let output = compiler.compile::<GameEngineHost>(source);
+        let output = compiler
+            .compile::<GameEngineHost>(source, &GameEngineHost::default());
 
         let command = self.persistent.on_new_code(output);
         self.queued_commands.push(command);

@@ -14,7 +14,10 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_most_identifiers<H: Host>(named_functions: &mut NamedFunctions) {
+pub fn resolve_most_identifiers<H: Host>(
+    named_functions: &mut NamedFunctions,
+    host: &H,
+) {
     let mut scopes = Scopes::new();
     let known_named_functions = named_functions
         .functions()
@@ -32,7 +35,12 @@ pub fn resolve_most_identifiers<H: Host>(named_functions: &mut NamedFunctions) {
             );
         }
 
-        resolve_in_function::<H>(function, &mut scopes, &known_named_functions);
+        resolve_in_function::<H>(
+            function,
+            &mut scopes,
+            &known_named_functions,
+            host,
+        );
     }
 }
 
@@ -40,6 +48,7 @@ fn resolve_in_function<H: Host>(
     function: &mut Function,
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
+    host: &H,
 ) {
     for branch in function.branches.values_mut() {
         scopes.push(
@@ -65,6 +74,7 @@ fn resolve_in_function<H: Host>(
             scopes,
             &mut function.environment,
             known_named_functions,
+            host,
         );
     }
 }
@@ -74,6 +84,7 @@ fn resolve_in_branch<H: Host>(
     scopes: &mut Scopes,
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
+    host: &H,
 ) {
     for fragment in branch.body.values_mut() {
         match fragment {
@@ -82,6 +93,7 @@ fn resolve_in_branch<H: Host>(
                     function,
                     scopes,
                     known_named_functions,
+                    host,
                 );
 
                 for name in &function.environment {
@@ -296,7 +308,10 @@ mod tests {
     fn resolve_identifiers(source: &str) -> Vec<Branch> {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
-        super::resolve_most_identifiers::<TestHost>(&mut named_functions);
+        super::resolve_most_identifiers::<TestHost>(
+            &mut named_functions,
+            &TestHost {},
+        );
 
         named_functions
             .into_functions()
