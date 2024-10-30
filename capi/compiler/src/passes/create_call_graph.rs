@@ -319,7 +319,7 @@ mod tests {
     fn create_call_graph(source: &str) -> CallGraph {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
-        resolve_most_identifiers::<NoHost>(&mut named_functions, &NoHost {});
+        resolve_most_identifiers(&mut named_functions, &NoHost {});
         super::create_call_graph(&named_functions)
     }
 }
