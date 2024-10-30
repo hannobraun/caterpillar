@@ -299,12 +299,10 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToHostFunction {
-            number: effect_number,
-        } => {
+        Fragment::CallToHostFunction { number } => {
             let address = generate_instruction(
                 Instruction::Push {
-                    value: effect_number.into(),
+                    value: number.into(),
                 },
                 named_functions_context.instructions,
                 Some(&mut mapping),
