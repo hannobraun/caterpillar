@@ -6,12 +6,14 @@ use crate::{
         FragmentLocation, Function, FunctionLocation, Index, NamedFunctions,
         Pattern, Signature, Type, Types,
     },
+    host::Host,
     intrinsics::IntrinsicFunction,
 };
 
 pub fn type_fragments(
     named_functions: &NamedFunctions,
     call_graph: &CallGraph,
+    host: &impl Host,
 ) -> Types {
     let mut types = Types::default();
 
@@ -23,6 +25,7 @@ pub fn type_fragments(
         type_fragments_in_function(
             &function.find,
             function.metadata,
+            host,
             &mut types,
         );
     }
@@ -33,6 +36,7 @@ pub fn type_fragments(
 fn type_fragments_in_function(
     function: &Function,
     location: FunctionLocation,
+    _host: &impl Host,
     types: &mut Types,
 ) {
     for (&index, branch) in function.branches.iter() {

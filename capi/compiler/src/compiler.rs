@@ -43,7 +43,7 @@ impl Compiler {
             &mut named_functions,
             &call_graph,
         );
-        let types = type_fragments(&named_functions, &call_graph);
+        let types = type_fragments(&named_functions, &call_graph, host);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
 
