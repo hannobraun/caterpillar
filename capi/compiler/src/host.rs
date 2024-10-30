@@ -8,6 +8,9 @@ pub trait Host {
 
 /// # A function that is provided by the host
 pub trait HostFunction {
+    /// # The number that identifies the function in the host effect
+    fn number(&self) -> u8;
+
     /// # The name of the function
     fn name(&self) -> &'static str;
 }

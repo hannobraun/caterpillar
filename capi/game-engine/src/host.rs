@@ -159,6 +159,10 @@ pub enum GameEngineFunction {
 }
 
 impl HostFunction for GameEngineFunction {
+    fn number(&self) -> u8 {
+        (*self).into()
+    }
+
     fn name(&self) -> &'static str {
         match self {
             Self::Halt => "halt",
