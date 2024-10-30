@@ -4,6 +4,9 @@ pub trait Host {
         effect: u8,
     ) -> Option<&'static str>;
 
+    /// # Access a host function by its name
+    ///
+    /// Returns `None`, if the name does not identify a host function.
     fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction>;
 }
 
