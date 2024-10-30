@@ -308,10 +308,7 @@ mod tests {
     fn resolve_identifiers(source: &str) -> Vec<Branch> {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
-        super::resolve_most_identifiers::<TestHost>(
-            &mut named_functions,
-            &TestHost {},
-        );
+        super::resolve_most_identifiers(&mut named_functions, &TestHost {});
 
         named_functions
             .into_functions()
