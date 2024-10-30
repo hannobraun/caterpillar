@@ -69,7 +69,7 @@ fn resolve_in_function<H: Host>(
                 .collect(),
         );
 
-        resolve_in_branch::<H>(
+        resolve_in_branch(
             branch,
             scopes,
             &mut function.environment,
@@ -89,7 +89,7 @@ fn resolve_in_branch<H: Host>(
     for fragment in branch.body.values_mut() {
         match fragment {
             Fragment::Function { function } => {
-                resolve_in_function::<H>(
+                resolve_in_function(
                     function,
                     scopes,
                     known_named_functions,
