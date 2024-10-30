@@ -299,7 +299,9 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToHostFunction { effect_number } => {
+        Fragment::CallToHostFunction {
+            number: effect_number,
+        } => {
             let address = generate_instruction(
                 Instruction::Push {
                     value: effect_number.into(),

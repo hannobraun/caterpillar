@@ -84,7 +84,7 @@ fn type_fragments_in_function(
                         outputs: vec![type_],
                     })
                 }
-                Fragment::CallToHostFunction { effect_number: _ } => {
+                Fragment::CallToHostFunction { number: _ } => {
                     // Not supported by inference yet.
                     None
                 }

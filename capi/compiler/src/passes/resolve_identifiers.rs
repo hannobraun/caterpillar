@@ -157,7 +157,7 @@ fn resolve_in_branch(
                     host.function_name_to_effect_number(name)
                 {
                     let effect_number = function.number();
-                    *fragment = Fragment::CallToHostFunction { effect_number }
+                    *fragment = Fragment::CallToHostFunction { number: effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
@@ -238,7 +238,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Fragment::CallToHostFunction { effect_number: 0 })
+            Some(&Fragment::CallToHostFunction { number: 0 })
         );
     }
 

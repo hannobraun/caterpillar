@@ -69,7 +69,7 @@ pub enum Fragment {
         ///
         /// The meaning of this number is only known to the host. The compiler
         /// doesn't know, nor doesn't need to know, what it means.
-        effect_number: u8,
+        number: u8,
     },
 
     /// # A call to a compiler-intrinsic function
