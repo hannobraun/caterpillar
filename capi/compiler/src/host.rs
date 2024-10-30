@@ -3,7 +3,7 @@ pub trait Host {
         &self,
         effect: u8,
     ) -> Option<&'static str>;
-    fn function_name_to_effect_number(name: &str) -> Option<u8>;
+    fn function_name_to_effect_number(&self, name: &str) -> Option<u8>;
 }
 
 /// # A function that is provided by the host
@@ -19,7 +19,7 @@ impl Host for NoHost {
         None
     }
 
-    fn function_name_to_effect_number(_: &str) -> Option<u8> {
+    fn function_name_to_effect_number(&self, _: &str) -> Option<u8> {
         None
     }
 }

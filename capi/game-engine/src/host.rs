@@ -15,7 +15,7 @@ impl Host for GameEngineHost {
         Some(function.name())
     }
 
-    fn function_name_to_effect_number(name: &str) -> Option<u8> {
+    fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
         let effect = match name {
             "halt" => GameEngineFunction::Halt,
             "load" => GameEngineFunction::Load,

@@ -154,7 +154,7 @@ fn resolve_in_branch<H: Host>(
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
                 } else if let Some(effect_number) =
-                    H::function_name_to_effect_number(name)
+                    host.function_name_to_effect_number(name)
                 {
                     *fragment = Fragment::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
@@ -329,7 +329,7 @@ mod tests {
             }
         }
 
-        fn function_name_to_effect_number(name: &str) -> Option<u8> {
+        fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
             match name {
                 "host_fn" => Some(0),
                 _ => None,

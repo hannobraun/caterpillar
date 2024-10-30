@@ -97,7 +97,7 @@ impl Host for TestHost {
         }
     }
 
-    fn function_name_to_effect_number(name: &str) -> Option<u8> {
+    fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
         match name {
             "send" => Some(0),
             _ => None,
