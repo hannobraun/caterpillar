@@ -156,8 +156,9 @@ fn resolve_in_branch(
                 } else if let Some(function) =
                     host.function_name_to_effect_number(name)
                 {
-                    let effect_number = function.number();
-                    *fragment = Fragment::CallToHostFunction { number: effect_number }
+                    *fragment = Fragment::CallToHostFunction {
+                        number: function.number(),
+                    }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
                         Some(UnresolvedCallToUserDefinedFunction {
