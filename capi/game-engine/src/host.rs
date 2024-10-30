@@ -1,10 +1,24 @@
+use std::collections::BTreeMap;
+
 use capi_compiler::host::{Host, HostFunction};
 use num_enum::TryFromPrimitive;
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct GameEngineHost {}
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct GameEngineHost {
+    functions_by_name: BTreeMap<String, GameEngineFunction>,
+}
+
+impl Default for GameEngineHost {
+    fn default() -> Self {
+        let mut functions_by_name = BTreeMap::new();
+
+        for function in enum_iterator::all::<GameEngineFunction>() {
+            functions_by_name.insert(function.name().to_owned(), function);
+        }
+
+        Self { functions_by_name }
+    }
+}
 
 impl Host for GameEngineHost {
     fn effect_number_to_function_name(
@@ -16,20 +30,7 @@ impl Host for GameEngineHost {
     }
 
     fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
-        let effect = match name {
-            "halt" => GameEngineFunction::Halt,
-            "load" => GameEngineFunction::Load,
-            "read_input" => GameEngineFunction::ReadInput,
-            "read_random" => GameEngineFunction::ReadRandom,
-            "set_pixel" => GameEngineFunction::SetPixel,
-            "store" => GameEngineFunction::Store,
-            "submit_frame" => GameEngineFunction::SubmitFrame,
-
-            _ => {
-                return None;
-            }
-        };
-
+        let effect = self.functions_by_name.get(name).copied()?;
         Some(effect.into())
     }
 }
