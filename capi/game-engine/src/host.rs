@@ -29,9 +29,12 @@ impl Host for GameEngineHost {
         Some(function.name())
     }
 
-    fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
-        let effect = self.functions_by_name.get(name).copied()?;
-        Some(effect.into())
+    fn function_name_to_effect_number(
+        &self,
+        name: &str,
+    ) -> Option<&dyn HostFunction> {
+        let effect = self.functions_by_name.get(name)?;
+        Some(effect)
     }
 }
 

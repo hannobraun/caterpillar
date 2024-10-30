@@ -153,9 +153,10 @@ fn resolve_in_branch(
                         intrinsic,
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
-                } else if let Some(effect_number) =
+                } else if let Some(function) =
                     host.function_name_to_effect_number(name)
                 {
+                    let effect_number = function.number();
                     *fragment = Fragment::CallToHostFunction { effect_number }
                 } else if known_named_functions.contains(name) {
                     *is_known_to_be_call_to_user_defined_function =
@@ -329,9 +330,12 @@ mod tests {
             }
         }
 
-        fn function_name_to_effect_number(&self, name: &str) -> Option<u8> {
+        fn function_name_to_effect_number(
+            &self,
+            name: &str,
+        ) -> Option<&dyn HostFunction> {
             match name {
-                "host_fn" => Some(TestFunction.number()),
+                "host_fn" => Some(&TestFunction),
                 _ => None,
             }
         }
