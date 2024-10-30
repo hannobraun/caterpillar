@@ -7,7 +7,10 @@ use num_enum::TryFromPrimitive;
 pub struct GameEngineHost {}
 
 impl Host for GameEngineHost {
-    fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
+    fn effect_number_to_function_name(
+        &self,
+        effect: u8,
+    ) -> Option<&'static str> {
         let function = GameEngineFunction::try_from_primitive(effect).ok()?;
         Some(function.name())
     }

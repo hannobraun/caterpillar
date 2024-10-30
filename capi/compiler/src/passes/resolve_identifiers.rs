@@ -307,7 +307,10 @@ mod tests {
     struct TestHost {}
 
     impl Host for TestHost {
-        fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
+        fn effect_number_to_function_name(
+            &self,
+            effect: u8,
+        ) -> Option<&'static str> {
             match effect {
                 0 => Some("host_fn"),
                 _ => None,
