@@ -4,7 +4,7 @@ use num_enum::TryFromPrimitive;
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct GameEngineHost;
+pub struct GameEngineHost {}
 
 impl Host for GameEngineHost {
     fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
