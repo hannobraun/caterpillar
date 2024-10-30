@@ -8,9 +8,7 @@ impl Host for GameEngineHost {
     fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
         let effect = GameEngineFunction::try_from_primitive(effect).ok()?;
 
-        let name = effect.name();
-
-        Some(name)
+        Some(effect.name())
     }
 
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
