@@ -44,11 +44,11 @@ pub fn resolve_most_identifiers(
     }
 }
 
-fn resolve_in_function<H: Host>(
+fn resolve_in_function(
     function: &mut Function,
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
-    host: &H,
+    host: &impl Host,
 ) {
     for branch in function.branches.values_mut() {
         scopes.push(
@@ -79,12 +79,12 @@ fn resolve_in_function<H: Host>(
     }
 }
 
-fn resolve_in_branch<H: Host>(
+fn resolve_in_branch(
     branch: &mut Branch,
     scopes: &mut Scopes,
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
-    host: &H,
+    host: &impl Host,
 ) {
     for fragment in branch.body.values_mut() {
         match fragment {
