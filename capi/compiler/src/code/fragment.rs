@@ -65,10 +65,7 @@ pub enum Fragment {
     /// trigger a specific effect. This effect is then handled by the host in
     /// whatever way it deems appropriate.
     CallToHostFunction {
-        /// # A number that identifies the specific effect
-        ///
-        /// The meaning of this number is only known to the host. The compiler
-        /// doesn't know, nor doesn't need to know, what it means.
+        /// # The number that identifies the host function
         number: u8,
     },
 
