@@ -36,7 +36,7 @@ impl Compiler {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         determine_tail_positions(&mut named_functions);
-        resolve_most_identifiers::<H>(&mut named_functions, host);
+        resolve_most_identifiers(&mut named_functions, host);
         let call_graph = create_call_graph(&named_functions);
         mark_recursive_calls(&mut named_functions, &call_graph);
         resolve_calls_to_user_defined_functions(
