@@ -3,6 +3,7 @@ pub trait Host {
         &self,
         effect: u8,
     ) -> Option<&'static str>;
+
     fn function_name_to_effect_number(&self, name: &str) -> Option<u8>;
 }
 
