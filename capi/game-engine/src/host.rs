@@ -1,4 +1,4 @@
-use capi_compiler::host::Host;
+use capi_compiler::host::{Host, HostFunction};
 use num_enum::TryFromPrimitive;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -8,15 +8,7 @@ impl Host for GameEngineHost {
     fn effect_number_to_function_name(effect: u8) -> Option<&'static str> {
         let effect = GameEngineFunction::try_from_primitive(effect).ok()?;
 
-        let name = match effect {
-            GameEngineFunction::Halt => "halt",
-            GameEngineFunction::Load => "load",
-            GameEngineFunction::Store => "store",
-            GameEngineFunction::ReadInput => "read_input",
-            GameEngineFunction::ReadRandom => "read_random",
-            GameEngineFunction::SetPixel => "set_pixel",
-            GameEngineFunction::SubmitFrame => "submit_frame",
-        };
+        let name = effect.name();
 
         Some(name)
     }
@@ -160,4 +152,18 @@ pub enum GameEngineFunction {
     /// in the following issue:
     /// <https://github.com/hannobraun/caterpillar/issues/42>
     SubmitFrame,
+}
+
+impl HostFunction for GameEngineFunction {
+    fn name(&self) -> &'static str {
+        match self {
+            Self::Halt => "halt",
+            Self::Load => "load",
+            Self::Store => "store",
+            Self::ReadInput => "read_input",
+            Self::ReadRandom => "read_random",
+            Self::SetPixel => "set_pixel",
+            Self::SubmitFrame => "submit_frame",
+        }
+    }
 }
