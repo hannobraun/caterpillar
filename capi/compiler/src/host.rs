@@ -1,5 +1,5 @@
 pub trait Host {
-    fn function_by_number(&self, effect: u8) -> Option<&dyn HostFunction>;
+    fn function_by_number(&self, number: u8) -> Option<&dyn HostFunction>;
 
     /// # Access a host function by its name
     ///
