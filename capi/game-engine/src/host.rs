@@ -1,22 +1,27 @@
 use std::collections::BTreeMap;
 
 use capi_compiler::host::{Host, HostFunction};
-use num_enum::TryFromPrimitive;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost {
     functions_by_name: BTreeMap<String, GameEngineFunction>,
+    functions_by_number: BTreeMap<u8, GameEngineFunction>,
 }
 
 impl Default for GameEngineHost {
     fn default() -> Self {
         let mut functions_by_name = BTreeMap::new();
+        let mut functions_by_number = BTreeMap::new();
 
         for function in enum_iterator::all::<GameEngineFunction>() {
             functions_by_name.insert(function.name().to_owned(), function);
+            functions_by_number.insert(function.number(), function);
         }
 
-        Self { functions_by_name }
+        Self {
+            functions_by_name,
+            functions_by_number,
+        }
     }
 }
 
@@ -25,7 +30,7 @@ impl Host for GameEngineHost {
         &self,
         effect: u8,
     ) -> Option<&'static str> {
-        let function = GameEngineFunction::try_from_primitive(effect).ok()?;
+        let function = self.functions_by_number.get(&effect)?;
         Some(function.name())
     }
 
