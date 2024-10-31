@@ -198,9 +198,23 @@ fn infer_type_of_fragment(
                 }
             }
         }
-        Fragment::CallToUserDefinedFunction { hash: _, .. } => {
-            // Not supported by inference yet.
-            None
+        Fragment::CallToUserDefinedFunction { hash, .. } => {
+            let function = named_functions
+                .find_by_hash(hash)
+                .expect("Function referred to by resolved call must exist.");
+
+            let signature = types
+                .for_functions
+                .get(&function.location())
+                .expect(
+                    "This compiler pass infers function types by call graph, \
+                    from the leaves up. Thus, the signature of a function must \
+                    have been inferred, before a call for it is being \
+                    inferred.",
+                )
+                .clone();
+
+            Some(signature)
         }
         Fragment::CallToUserDefinedFunctionRecursive { index: _, .. } => {
             // Not supported by inference yet.
