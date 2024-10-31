@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     code::{
-        BranchLocation, CallGraph, ConcreteSignature, Fragment,
+        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
         FragmentLocation, Function, FunctionLocation, Index, NamedFunctions,
         Pattern, Signature, Type, Types,
     },
@@ -45,35 +45,45 @@ fn type_fragments_in_function(
             index,
         };
 
-        let bindings = branch
-            .parameters
-            .iter()
-            .filter_map(|pattern| match pattern {
-                Pattern::Identifier { name } => Some(name),
-                Pattern::Literal { .. } => None,
-            })
-            .zip(iter::from_fn(|| Some(types.inner.push(Type::Unknown))))
-            .collect::<BTreeMap<_, _>>();
-        let mut stack = Vec::new();
+        type_fragments_in_branch(branch, location, host, types);
+    }
+}
 
-        for (&index, fragment) in branch.body.iter() {
-            let location = FragmentLocation {
-                parent: Box::new(location.clone()),
-                index,
-            };
+fn type_fragments_in_branch(
+    branch: &Branch,
+    location: BranchLocation,
+    host: &impl Host,
+    types: &mut Types,
+) {
+    let bindings = branch
+        .parameters
+        .iter()
+        .filter_map(|pattern| match pattern {
+            Pattern::Identifier { name } => Some(name),
+            Pattern::Literal { .. } => None,
+        })
+        .zip(iter::from_fn(|| Some(types.inner.push(Type::Unknown))))
+        .collect::<BTreeMap<_, _>>();
+    let mut stack = Vec::new();
 
-            assert!(
-                !types.for_fragments.contains_key(&location),
-                "Encountered a fragment whose type signature has already been \
+    for (&index, fragment) in branch.body.iter() {
+        let location = FragmentLocation {
+            parent: Box::new(location.clone()),
+            index,
+        };
+
+        assert!(
+            !types.for_fragments.contains_key(&location),
+            "Encountered a fragment whose type signature has already been \
                 inferred. But this is the first compiler pass that should do \
                 so."
-            );
+        );
 
-            let signature = match fragment {
-                Fragment::Binding { name, .. } => {
-                    let Some(type_) = bindings.get(name).copied() else {
-                        unreachable!(
-                            "Can't find binding `{name}` in `bindings`, but \n\
+        let signature = match fragment {
+            Fragment::Binding { name, .. } => {
+                let Some(type_) = bindings.get(name).copied() else {
+                    unreachable!(
+                        "Can't find binding `{name}` in `bindings`, but \n\
                             \n\
                             a) all local bindings are added to `bindings` \
                                above, and\n\
@@ -81,83 +91,82 @@ fn type_fragments_in_function(
                                are here, that was put there by an earlier \
                                compiler pass _because_ it resolves to a local \
                                binding."
-                        );
-                    };
+                    );
+                };
 
-                    Some(Signature {
-                        inputs: vec![],
-                        outputs: vec![type_],
-                    })
-                }
-                Fragment::CallToHostFunction { number } => {
-                    let signature = host
-                        .function_by_number(*number)
-                        .expect(
-                            "Call to host function has already been resolved. \
+                Some(Signature {
+                    inputs: vec![],
+                    outputs: vec![type_],
+                })
+            }
+            Fragment::CallToHostFunction { number } => {
+                let signature = host
+                    .function_by_number(*number)
+                    .expect(
+                        "Call to host function has already been resolved. \
                             Must refer to a host function.",
-                        )
-                        .signature();
+                    )
+                    .signature();
 
-                    handle_concrete_signature(signature, &mut stack, types)
-                }
-                Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
-                    match (intrinsic, intrinsic.signature()) {
-                        (_, Some(signature)) => handle_concrete_signature(
-                            signature, &mut stack, types,
-                        ),
-                        (IntrinsicFunction::Eval, None) => {
-                            // Not supported by inference yet.
-                            None
-                        }
-                        (intrinsic, signature) => {
-                            unreachable!(
-                                "Invalid combination of intrinsic \
+                handle_concrete_signature(signature, &mut stack, types)
+            }
+            Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
+                match (intrinsic, intrinsic.signature()) {
+                    (_, Some(signature)) => {
+                        handle_concrete_signature(signature, &mut stack, types)
+                    }
+                    (IntrinsicFunction::Eval, None) => {
+                        // Not supported by inference yet.
+                        None
+                    }
+                    (intrinsic, signature) => {
+                        unreachable!(
+                            "Invalid combination of intrinsic \
                                 (`{intrinsic:?}`) and signature \
                                 (`{signature:?}`"
-                            );
-                        }
+                        );
                     }
                 }
-                Fragment::CallToUserDefinedFunction {
-                    hash: _,
-                    is_tail_call: _,
-                } => {
-                    // Not supported by inference yet.
-                    None
-                }
-                Fragment::CallToUserDefinedFunctionRecursive {
-                    index: _,
-                    is_tail_call: _,
-                } => {
-                    // Not supported by inference yet.
-                    None
-                }
-                Fragment::Comment { .. } => {
-                    // Comments have no bearing on type inference.
-                    None
-                }
-                Fragment::Function { function: _ } => {
-                    // Not supported by inference yet.
-                    None
-                }
-                Fragment::UnresolvedIdentifier { .. } => {
-                    // There nothing we can do here, really. This has already
-                    // been identified as a problem.
-                    None
-                }
-                Fragment::Value(value) => {
-                    // Not supported by inference yet.
-                    let _ = value;
-                    None
-                }
-            };
-
-            if let Some(signature) = signature {
-                for &output in &signature.outputs {
-                    stack.push(output);
-                }
-                types.for_fragments.insert(location, signature);
             }
+            Fragment::CallToUserDefinedFunction {
+                hash: _,
+                is_tail_call: _,
+            } => {
+                // Not supported by inference yet.
+                None
+            }
+            Fragment::CallToUserDefinedFunctionRecursive {
+                index: _,
+                is_tail_call: _,
+            } => {
+                // Not supported by inference yet.
+                None
+            }
+            Fragment::Comment { .. } => {
+                // Comments have no bearing on type inference.
+                None
+            }
+            Fragment::Function { function: _ } => {
+                // Not supported by inference yet.
+                None
+            }
+            Fragment::UnresolvedIdentifier { .. } => {
+                // There nothing we can do here, really. This has already
+                // been identified as a problem.
+                None
+            }
+            Fragment::Value(value) => {
+                // Not supported by inference yet.
+                let _ = value;
+                None
+            }
+        };
+
+        if let Some(signature) = signature {
+            for &output in &signature.outputs {
+                stack.push(output);
+            }
+            types.for_fragments.insert(location, signature);
         }
     }
 }
