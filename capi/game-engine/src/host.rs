@@ -3,9 +3,7 @@ use capi_compiler::{
     host::{Host, HostFunction},
 };
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
