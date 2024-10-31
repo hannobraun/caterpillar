@@ -45,11 +45,11 @@ fn infer_types_in_function(
             index,
         };
 
-        type_fragments_in_branch(branch, location, host, types);
+        infer_types_in_branch(branch, location, host, types);
     }
 }
 
-fn type_fragments_in_branch(
+fn infer_types_in_branch(
     branch: &Branch,
     location: BranchLocation,
     host: &impl Host,
