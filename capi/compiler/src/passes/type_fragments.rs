@@ -89,9 +89,16 @@ fn type_fragments_in_function(
                         outputs: vec![type_],
                     })
                 }
-                Fragment::CallToHostFunction { number: _ } => {
-                    // Not supported by inference yet.
-                    None
+                Fragment::CallToHostFunction { number } => {
+                    let signature = _host
+                        .function_by_number(*number)
+                        .expect(
+                            "Call to host function has already been resolved. \
+                            Must refer to a host function.",
+                        )
+                        .signature();
+
+                    handle_concrete_signature(signature, &mut stack, types)
                 }
                 Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
                     match (intrinsic, intrinsic.signature()) {
@@ -194,4 +201,87 @@ fn handle_concrete_signature(
     }
 
     Some(signature)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        code::{ConcreteSignature, NamedFunctions, Type, Types},
+        host::{Host, HostFunction},
+        passes::{
+            create_call_graph, parse, resolve_most_identifiers, tokenize,
+        },
+    };
+
+    #[test]
+    fn fail() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ n ->
+                        n number_to_nothing
+                end
+            ",
+        );
+
+        let mut fragments = named_functions
+            .find_by_name("f")
+            .unwrap()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|fragment| {
+                types
+                    .for_fragments
+                    .get(fragment.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            });
+
+        let n = fragments.next().unwrap();
+        let host_fn = fragments.next().unwrap();
+
+        use Type::*;
+        assert_eq!(n, ConcreteSignature::from(([], [Number])));
+        assert_eq!(host_fn, ConcreteSignature::from(([Number], [])));
+    }
+
+    fn type_fragments(source: &str) -> (NamedFunctions, Types) {
+        let tokens = tokenize(source);
+        let mut named_functions = parse(tokens);
+        resolve_most_identifiers(&mut named_functions, &TestHost);
+        let call_graph = create_call_graph(&named_functions);
+        let types =
+            super::type_fragments(&named_functions, &call_graph, &TestHost);
+
+        (named_functions, types)
+    }
+
+    struct TestHost;
+
+    impl Host for TestHost {
+        fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
+            [&NumberToNothing as &_]
+        }
+    }
+
+    struct NumberToNothing;
+
+    impl HostFunction for NumberToNothing {
+        fn number(&self) -> u8 {
+            0
+        }
+
+        fn name(&self) -> &'static str {
+            "number_to_nothing"
+        }
+
+        fn signature(&self) -> ConcreteSignature {
+            ConcreteSignature {
+                inputs: vec![Type::Number],
+                outputs: vec![],
+            }
+        }
+    }
 }
