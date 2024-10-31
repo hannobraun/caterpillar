@@ -54,6 +54,7 @@ pub struct Types {
 #[derive(
     Clone,
     Debug,
+    Default,
     Eq,
     PartialEq,
     Ord,
