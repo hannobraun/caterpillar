@@ -10,7 +10,8 @@ pub trait Host {
 
     /// # Access a host function by its number
     ///
-    /// Return `None`, if the provided number does not identify a host function.
+    /// Returns `None`, if the provided number does not identify a host
+    /// function.
     fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction>;
 
     /// # Access a host function by its name
