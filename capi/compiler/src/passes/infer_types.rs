@@ -77,7 +77,7 @@ fn infer_types_in_branch(
     host: &impl Host,
     types: &mut Types,
 ) -> Signature {
-    let bindings = branch
+    let local_bindings = branch
         .parameters
         .iter()
         .filter_map(|pattern| match pattern {
@@ -95,7 +95,12 @@ fn infer_types_in_branch(
         };
 
         let signature = infer_type_of_fragment(
-            fragment, &location, host, &bindings, &mut stack, types,
+            fragment,
+            &location,
+            host,
+            &local_bindings,
+            &mut stack,
+            types,
         );
 
         if let Some(signature) = signature {
@@ -107,7 +112,7 @@ fn infer_types_in_branch(
     }
 
     Signature {
-        inputs: bindings.into_values().collect(),
+        inputs: local_bindings.into_values().collect(),
         outputs: stack,
     }
 }
