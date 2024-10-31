@@ -25,7 +25,7 @@ pub trait HostFunction {
     fn signature(&self) -> ConcreteSignature;
 }
 
-pub struct NoHost {}
+pub struct NoHost;
 
 impl Host for NoHost {
     fn function_by_number(&self, _: &u8) -> Option<&dyn HostFunction> {
