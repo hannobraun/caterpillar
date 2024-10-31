@@ -36,7 +36,7 @@ pub fn type_fragments(
 fn type_fragments_in_function(
     function: &Function,
     location: FunctionLocation,
-    _host: &impl Host,
+    host: &impl Host,
     types: &mut Types,
 ) {
     for (&index, branch) in function.branches.iter() {
@@ -90,7 +90,7 @@ fn type_fragments_in_function(
                     })
                 }
                 Fragment::CallToHostFunction { number } => {
-                    let signature = _host
+                    let signature = host
                         .function_by_number(*number)
                         .expect(
                             "Call to host function has already been resolved. \
