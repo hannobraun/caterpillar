@@ -101,8 +101,8 @@ fn type_fragments_in_branch(
                 let signature = host
                     .function_by_number(*number)
                     .expect(
-                        "Call to host function has already been resolved. \
-                            Must refer to a host function.",
+                        "Call to host function has already been resolved. Must \
+                        refer to a host function.",
                     )
                     .signature();
 
