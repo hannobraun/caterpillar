@@ -205,9 +205,16 @@ fn infer_type_of_fragment(
             // Comments have no bearing on type inference.
             None
         }
-        Fragment::Function { function: _ } => {
-            // Not supported by inference yet.
-            None
+        Fragment::Function { function } => {
+            let location = FunctionLocation::AnonymousFunction {
+                location: location.clone(),
+            };
+
+            let signature = infer_types_in_function(
+                function, location, bindings, host, types,
+            );
+
+            Some(signature)
         }
         Fragment::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
