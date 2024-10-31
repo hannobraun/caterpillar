@@ -41,7 +41,6 @@ impl Host for GameEngineHost {
     Debug,
     Eq,
     PartialEq,
-    enum_iterator::Sequence,
     num_enum::IntoPrimitive,
     num_enum::TryFromPrimitive,
     serde::Deserialize,
