@@ -2,9 +2,9 @@ use std::{collections::BTreeMap, iter};
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
-        FragmentLocation, Function, FunctionLocation, Index, NamedFunctions,
-        Pattern, Signature, Type, Types,
+        Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
+        Fragment, FragmentLocation, Function, FunctionLocation, Index,
+        NamedFunctions, Pattern, Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -17,7 +17,7 @@ pub fn infer_types(
 ) -> Types {
     let mut types = Types::default();
 
-    for (index, _) in call_graph.functions_from_leaves() {
+    for (index, cluster) in call_graph.functions_from_leaves() {
         let function = named_functions
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
@@ -26,6 +26,7 @@ pub fn infer_types(
         let signature = infer_types_in_function(
             &function.find,
             function.location(),
+            cluster,
             named_functions,
             &environment,
             host,
@@ -41,6 +42,7 @@ pub fn infer_types(
 fn infer_types_in_function(
     function: &Function,
     location: FunctionLocation,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
@@ -57,6 +59,7 @@ fn infer_types_in_function(
         let branch_signature = infer_types_in_branch(
             branch,
             &location,
+            cluster,
             named_functions,
             environment,
             host,
@@ -85,6 +88,7 @@ fn infer_types_in_function(
 fn infer_types_in_branch(
     branch: &Branch,
     location: &BranchLocation,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
@@ -116,6 +120,7 @@ fn infer_types_in_branch(
         let signature = infer_type_of_fragment(
             fragment,
             &location,
+            cluster,
             named_functions,
             &all_bindings,
             host,
@@ -137,9 +142,11 @@ fn infer_types_in_branch(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
@@ -232,6 +239,7 @@ fn infer_type_of_fragment(
             let signature = infer_types_in_function(
                 function,
                 location,
+                cluster,
                 named_functions,
                 bindings,
                 host,
