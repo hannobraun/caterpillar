@@ -75,8 +75,7 @@ fn type_fragments_in_branch(
         assert!(
             !types.for_fragments.contains_key(&location),
             "Encountered a fragment whose type signature has already been \
-                inferred. But this is the first compiler pass that should do \
-                so."
+            inferred. But this is the first compiler pass that should do so."
         );
 
         let signature = match fragment {
