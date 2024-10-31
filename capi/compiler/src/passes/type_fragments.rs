@@ -87,7 +87,7 @@ fn type_fragment(
     assert!(
         !types.for_fragments.contains_key(&location),
         "Encountered a fragment whose type signature has already been \
-            inferred. But this is the first compiler pass that should do so."
+        inferred. But this is the first compiler pass that should do so."
     );
 
     let signature = match fragment {
@@ -95,12 +95,11 @@ fn type_fragment(
             let Some(type_) = bindings.get(name).copied() else {
                 unreachable!(
                     "Can't find binding `{name}` in `bindings`, but \n\
-                        \n\
-                        a) all local bindings are added to `bindings` above, \
-                           and\n\
-                        b) if we encounter a `Fragment::Binding`, as we are \
-                           here, that was put there by an earlier compiler \
-                           pass _because_ it resolves to a local binding."
+                    \n\
+                    a) all local bindings are added to `bindings` above, and \n\
+                    b) if we encounter a `Fragment::Binding`, as we are here, \
+                       that was put there by an earlier compiler pass \
+                       _because_ it resolves to a local binding."
                 );
             };
 
@@ -114,7 +113,7 @@ fn type_fragment(
                 .function_by_number(*number)
                 .expect(
                     "Call to host function has already been resolved. Must \
-                        refer to a host function.",
+                    refer to a host function.",
                 )
                 .signature();
 
@@ -131,8 +130,8 @@ fn type_fragment(
                 }
                 (intrinsic, signature) => {
                     unreachable!(
-                        "Invalid combination of intrinsic \
-                            (`{intrinsic:?}`) and signature (`{signature:?}`"
+                        "Invalid combination of intrinsic (`{intrinsic:?}`) \
+                        and signature (`{signature:?}`"
                     );
                 }
             }
