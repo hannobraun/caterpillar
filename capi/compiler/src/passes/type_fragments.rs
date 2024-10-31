@@ -83,13 +83,12 @@ fn type_fragments_in_branch(
                 let Some(type_) = bindings.get(name).copied() else {
                     unreachable!(
                         "Can't find binding `{name}` in `bindings`, but \n\
-                            \n\
-                            a) all local bindings are added to `bindings` \
-                               above, and\n\
-                            b) if we encounter a `Fragment::Binding`, as we \
-                               are here, that was put there by an earlier \
-                               compiler pass _because_ it resolves to a local \
-                               binding."
+                        \n\
+                        a) all local bindings are added to `bindings` above, \
+                           and\n\
+                        b) if we encounter a `Fragment::Binding`, as we are \
+                           here, that was put there by an earlier compiler \
+                           pass _because_ it resolves to a local binding."
                     );
                 };
 
