@@ -107,7 +107,7 @@ impl Signature {
 /// This type is only intended for type signatures that have a lifetime
 /// extending beyond that of a running compiler. Like those of intrinsic or host
 /// functions.
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct ConcreteSignature {
     /// # The inputs that the function consumes
     pub inputs: Vec<Type>,
