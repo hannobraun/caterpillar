@@ -26,6 +26,7 @@ pub fn infer_types(
         let signature = infer_types_in_function(
             &function.find,
             function.location(),
+            named_functions,
             &environment,
             host,
             &mut types,
@@ -40,6 +41,7 @@ pub fn infer_types(
 fn infer_types_in_function(
     function: &Function,
     location: FunctionLocation,
+    named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
     types: &mut Types,
@@ -52,8 +54,14 @@ fn infer_types_in_function(
             index,
         };
 
-        let branch_signature =
-            infer_types_in_branch(branch, &location, environment, host, types);
+        let branch_signature = infer_types_in_branch(
+            branch,
+            &location,
+            named_functions,
+            environment,
+            host,
+            types,
+        );
 
         types
             .for_branches
@@ -77,6 +85,7 @@ fn infer_types_in_function(
 fn infer_types_in_branch(
     branch: &Branch,
     location: &BranchLocation,
+    named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
     types: &mut Types,
@@ -107,6 +116,7 @@ fn infer_types_in_branch(
         let signature = infer_type_of_fragment(
             fragment,
             &location,
+            named_functions,
             host,
             &all_bindings,
             &mut stack,
@@ -130,6 +140,7 @@ fn infer_types_in_branch(
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
+    named_functions: &NamedFunctions,
     host: &impl Host,
     bindings: &BTreeMap<&String, Index<Type>>,
     stack: &mut Vec<Index<Type>>,
@@ -205,7 +216,12 @@ fn infer_type_of_fragment(
             };
 
             let signature = infer_types_in_function(
-                function, location, bindings, host, types,
+                function,
+                location,
+                named_functions,
+                bindings,
+                host,
+                types,
             );
 
             Some(signature)
