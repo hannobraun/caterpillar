@@ -148,8 +148,8 @@ fn type_fragments_in_branch(
                 None
             }
             Fragment::UnresolvedIdentifier { .. } => {
-                // There nothing we can do here, really. This has already
-                // been identified as a problem.
+                // There nothing we can do here, really. This has already been
+                // identified as a problem.
                 None
             }
             Fragment::Value(value) => {
