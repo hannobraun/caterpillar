@@ -24,7 +24,7 @@ pub fn infer_types(
 
         infer_types_in_function(
             &function.find,
-            function.metadata,
+            function.location(),
             host,
             &mut types,
         );
