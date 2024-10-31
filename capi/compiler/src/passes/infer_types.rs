@@ -22,12 +22,14 @@ pub fn infer_types(
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
 
-        infer_types_in_function(
+        let signature = infer_types_in_function(
             &function.find,
             function.location(),
             host,
             &mut types,
         );
+
+        types.for_functions.insert(function.location(), signature);
     }
 
     types
