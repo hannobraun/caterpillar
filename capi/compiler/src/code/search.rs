@@ -117,6 +117,11 @@ impl Find<Branch, BranchLocation> {
 }
 
 impl Find<Fragment, FragmentLocation> {
+    /// # Access the found fragment's location
+    pub fn location(&self) -> &FragmentLocation {
+        &self.metadata
+    }
+
     /// # Consume the found fragment, returning its location
     pub fn into_location(self) -> FragmentLocation {
         self.metadata
