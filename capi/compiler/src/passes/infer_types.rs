@@ -22,7 +22,7 @@ pub fn infer_types(
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
 
-        type_fragments_in_function(
+        infer_types_in_function(
             &function.find,
             function.metadata,
             host,
@@ -33,7 +33,7 @@ pub fn infer_types(
     types
 }
 
-fn type_fragments_in_function(
+fn infer_types_in_function(
     function: &Function,
     location: FunctionLocation,
     host: &impl Host,
