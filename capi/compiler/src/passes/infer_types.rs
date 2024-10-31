@@ -22,9 +22,11 @@ pub fn infer_types(
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
 
+        let environment = BTreeMap::new();
         let signature = infer_types_in_function(
             &function.find,
             function.location(),
+            &environment,
             host,
             &mut types,
         );
@@ -38,6 +40,7 @@ pub fn infer_types(
 fn infer_types_in_function(
     function: &Function,
     location: FunctionLocation,
+    environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
     types: &mut Types,
 ) -> Signature {
@@ -50,7 +53,7 @@ fn infer_types_in_function(
         };
 
         let branch_signature =
-            infer_types_in_branch(branch, &location, host, types);
+            infer_types_in_branch(branch, &location, environment, host, types);
 
         types
             .for_branches
@@ -74,6 +77,7 @@ fn infer_types_in_function(
 fn infer_types_in_branch(
     branch: &Branch,
     location: &BranchLocation,
+    environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
     types: &mut Types,
 ) -> Signature {
@@ -86,6 +90,12 @@ fn infer_types_in_branch(
         })
         .zip(iter::from_fn(|| Some(types.inner.push(Type::Unknown))))
         .collect::<BTreeMap<_, _>>();
+    let all_bindings = {
+        let mut all_bindings = local_bindings.clone();
+        all_bindings.extend(environment.iter());
+        all_bindings
+    };
+
     let mut stack = Vec::new();
 
     for (&index, fragment) in branch.body.iter() {
@@ -98,7 +108,7 @@ fn infer_types_in_branch(
             fragment,
             &location,
             host,
-            &local_bindings,
+            &all_bindings,
             &mut stack,
             types,
         );
