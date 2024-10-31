@@ -29,6 +29,21 @@ impl Default for GameEngineHost {
 }
 
 impl Host for GameEngineHost {
+    fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
+        use GameEngineFunction::*;
+
+        [
+            &Halt,
+            &Load,
+            &Store,
+            &ReadInput,
+            &ReadRandom,
+            &SetPixel,
+            &SubmitFrame,
+        ]
+        .map(|function| function as &_)
+    }
+
     fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction> {
         let function = self.functions_by_number.get(number)?;
         Some(function)

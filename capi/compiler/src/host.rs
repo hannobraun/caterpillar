@@ -2,6 +2,12 @@ use crate::code::ConcreteSignature;
 
 /// # A host into which a Caterpillar application is embedded
 pub trait Host {
+    /// # Iterate over all of the host's functions
+    ///
+    /// Implementations must guarantee that each function has a unique number
+    /// (see [`HostFunction::number`]) and name (see [`HostFunction::name`]).
+    fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction>;
+
     /// # Access a host function by its number
     ///
     /// Return `None`, if the provided number does not identify a host function.
@@ -28,6 +34,10 @@ pub trait HostFunction {
 pub struct NoHost;
 
 impl Host for NoHost {
+    fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
+        None
+    }
+
     fn function_by_number(&self, _: &u8) -> Option<&dyn HostFunction> {
         None
     }
