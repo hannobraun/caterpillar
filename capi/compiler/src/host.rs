@@ -21,7 +21,11 @@ pub trait Host {
     /// # Access a host function by its name
     ///
     /// Returns `None`, if the provided name does not identify a host function.
-    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction>;
+    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
+        self.functions()
+            .into_iter()
+            .find(|function| function.name() == name)
+    }
 }
 
 /// # A function that is provided by the host
@@ -40,10 +44,6 @@ pub struct NoHost;
 
 impl Host for NoHost {
     fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
-        None
-    }
-
-    fn function_by_name(&self, _: &str) -> Option<&dyn HostFunction> {
         None
     }
 }

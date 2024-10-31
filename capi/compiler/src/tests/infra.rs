@@ -94,13 +94,6 @@ impl Host for TestHost {
     fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
         [&TestFunction as &_]
     }
-
-    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
-        match name {
-            "send" => Some(&TestFunction),
-            _ => None,
-        }
-    }
 }
 
 struct TestFunction;

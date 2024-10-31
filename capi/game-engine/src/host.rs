@@ -43,11 +43,6 @@ impl Host for GameEngineHost {
         ]
         .map(|function| function as &_)
     }
-
-    fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
-        let function = self.functions_by_name.get(name)?;
-        Some(function)
-    }
 }
 
 /// # An effect handled by the game engine host
