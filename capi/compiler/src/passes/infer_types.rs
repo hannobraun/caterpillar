@@ -47,9 +47,12 @@ fn infer_types_in_function(
             index,
         };
 
-        let signature = infer_types_in_branch(branch, &location, host, types);
+        let branch_signature =
+            infer_types_in_branch(branch, &location, host, types);
 
-        types.for_branches.insert(location, signature.clone());
+        types
+            .for_branches
+            .insert(location, branch_signature.clone());
 
         // If this isn't the first branch we're looking at, there already is a
         // function signature. We should compare that to the new branch
@@ -60,7 +63,7 @@ fn infer_types_in_function(
         // time.
         //
         // Let's just ignore any mismatches, for the time being.
-        function_signature = Some(signature);
+        function_signature = Some(branch_signature);
     }
 
     function_signature.unwrap_or_default()
