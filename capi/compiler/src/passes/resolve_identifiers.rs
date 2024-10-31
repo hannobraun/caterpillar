@@ -326,13 +326,6 @@ mod tests {
             [&TestFunction as &_]
         }
 
-        fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction> {
-            match number {
-                0 => Some(&TestFunction),
-                _ => None,
-            }
-        }
-
         fn function_by_name(&self, name: &str) -> Option<&dyn HostFunction> {
             match name {
                 "host_fn" => Some(&TestFunction),
