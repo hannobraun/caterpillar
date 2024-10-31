@@ -6,7 +6,7 @@ use capi_compiler::{
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct GameEngineHost {}
+pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
     fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {

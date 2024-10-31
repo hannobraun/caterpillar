@@ -213,7 +213,7 @@ impl DebugFragmentKind {
                 Self::CallToFunctionRecursive { name }
             }
             Fragment::CallToHostFunction { number } => {
-                let name = GameEngineHost::default()
+                let name = GameEngineHost
                     .function_by_number(number)
                     .expect("Expected effect number in code to be valid.")
                     .name()
