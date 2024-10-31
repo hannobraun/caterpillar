@@ -1,32 +1,12 @@
-use std::collections::BTreeMap;
-
 use capi_compiler::{
     code::ConcreteSignature,
     host::{Host, HostFunction},
 };
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct GameEngineHost {
-    functions_by_name: BTreeMap<String, GameEngineFunction>,
-    functions_by_number: BTreeMap<u8, GameEngineFunction>,
-}
-
-impl Default for GameEngineHost {
-    fn default() -> Self {
-        let mut functions_by_name = BTreeMap::new();
-        let mut functions_by_number = BTreeMap::new();
-
-        for function in enum_iterator::all::<GameEngineFunction>() {
-            functions_by_name.insert(function.name().to_owned(), function);
-            functions_by_number.insert(function.number(), function);
-        }
-
-        Self {
-            functions_by_name,
-            functions_by_number,
-        }
-    }
-}
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
+pub struct GameEngineHost {}
 
 impl Host for GameEngineHost {
     fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
