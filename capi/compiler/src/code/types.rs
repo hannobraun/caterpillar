@@ -70,6 +70,35 @@ pub struct Signature {
     pub outputs: Vec<Index<Type>>,
 }
 
+impl Signature {
+    /// # Convert this signature to a [`ConcreteSignature`]
+    ///
+    /// Can return `None`, if the indices in this signature are not available in
+    /// the provided [`Types`] instance.
+    pub fn to_concrete_signature(
+        &self,
+        types: &Types,
+    ) -> Option<ConcreteSignature> {
+        let Self { inputs, outputs } = self;
+
+        // This would be a case for `try_map` instead of `map`, but alas, that's
+        // not stable.
+        let [inputs, outputs] = [inputs, outputs].map(|indices| {
+            // This does a weird conversion from `Option` to `Result` and then
+            // back, because we can `collect` into a `Result`, but not an
+            // `Option`.
+            indices
+                .iter()
+                .map(|index| types.inner.get(index).cloned().ok_or(()))
+                .collect::<Result<Vec<_>, _>>()
+                .ok()
+        });
+        let [inputs, outputs] = [inputs?, outputs?];
+
+        Some(ConcreteSignature { inputs, outputs })
+    }
+}
+
 /// # A concrete signature
 ///
 /// Most code should use `Signature` instead, which references into signatures
