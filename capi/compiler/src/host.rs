@@ -12,10 +12,10 @@ pub trait Host {
     ///
     /// Returns `None`, if the provided number does not identify a host
     /// function.
-    fn function_by_number(&self, number: &u8) -> Option<&dyn HostFunction> {
+    fn function_by_number(&self, number: u8) -> Option<&dyn HostFunction> {
         self.functions()
             .into_iter()
-            .find(|function| function.number() == *number)
+            .find(|function| function.number() == number)
     }
 
     /// # Access a host function by its name
