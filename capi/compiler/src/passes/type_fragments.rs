@@ -10,7 +10,7 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-pub fn type_fragments(
+pub fn infer_types(
     named_functions: &NamedFunctions,
     call_graph: &CallGraph,
     host: &impl Host,
@@ -269,7 +269,7 @@ mod tests {
         resolve_most_identifiers(&mut named_functions, &TestHost);
         let call_graph = create_call_graph(&named_functions);
         let types =
-            super::type_fragments(&named_functions, &call_graph, &TestHost);
+            super::infer_types(&named_functions, &call_graph, &TestHost);
 
         (named_functions, types)
     }

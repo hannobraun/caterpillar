@@ -7,9 +7,9 @@ use crate::{
     host::Host,
     passes::{
         create_call_graph, detect_changes, determine_tail_positions,
-        generate_instructions, mark_recursive_calls, parse,
+        generate_instructions, infer_types, mark_recursive_calls, parse,
         resolve_calls_to_user_defined_functions, resolve_most_identifiers,
-        tokenize, type_fragments,
+        tokenize,
     },
     source_map::SourceMap,
     Instructions,
@@ -43,7 +43,7 @@ impl Compiler {
             &mut named_functions,
             &call_graph,
         );
-        let types = type_fragments(&named_functions, &call_graph, host);
+        let types = infer_types(&named_functions, &call_graph, host);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
 

@@ -16,5 +16,5 @@ pub use {
     resolve_functions::resolve_calls_to_user_defined_functions,
     resolve_identifiers::resolve_most_identifiers,
     tail_position::determine_tail_positions, tokenize::tokenize,
-    type_fragments::type_fragments,
+    type_fragments::infer_types,
 };
