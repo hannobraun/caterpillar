@@ -222,8 +222,11 @@ fn infer_type_of_fragment(
             None
         }
         Fragment::Value(_) => {
-            // Not supported by inference yet.
-            None
+            let signature = Signature {
+                inputs: vec![],
+                outputs: vec![types.inner.push(Type::Number)],
+            };
+            Some(signature)
         }
     }
 }
