@@ -187,17 +187,11 @@ fn infer_type_of_fragment(
                 }
             }
         }
-        Fragment::CallToUserDefinedFunction {
-            hash: _,
-            is_tail_call: _,
-        } => {
+        Fragment::CallToUserDefinedFunction { hash: _, .. } => {
             // Not supported by inference yet.
             None
         }
-        Fragment::CallToUserDefinedFunctionRecursive {
-            index: _,
-            is_tail_call: _,
-        } => {
+        Fragment::CallToUserDefinedFunctionRecursive { index: _, .. } => {
             // Not supported by inference yet.
             None
         }
