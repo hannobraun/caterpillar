@@ -73,12 +73,7 @@ fn infer_types_in_branch(
         };
 
         let signature = infer_type_of_fragment(
-            fragment,
-            location.clone(),
-            host,
-            &bindings,
-            &mut stack,
-            types,
+            fragment, &location, host, &bindings, &mut stack, types,
         );
 
         if let Some(signature) = signature {
@@ -92,14 +87,14 @@ fn infer_types_in_branch(
 
 fn infer_type_of_fragment(
     fragment: &Fragment,
-    location: FragmentLocation,
+    location: &FragmentLocation,
     host: &impl Host,
     bindings: &BTreeMap<&String, Index<Type>>,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
 ) -> Option<Signature> {
     assert!(
-        !types.for_fragments.contains_key(&location),
+        !types.for_fragments.contains_key(location),
         "Encountered a fragment whose type signature has already been \
         inferred. But this is the first compiler pass that should do so."
     );
