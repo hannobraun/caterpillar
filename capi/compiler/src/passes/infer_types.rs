@@ -45,13 +45,13 @@ fn infer_types_in_function(
             index,
         };
 
-        infer_types_in_branch(branch, location, host, types);
+        infer_types_in_branch(branch, &location, host, types);
     }
 }
 
 fn infer_types_in_branch(
     branch: &Branch,
-    location: BranchLocation,
+    location: &BranchLocation,
     host: &impl Host,
     types: &mut Types,
 ) -> Signature {
