@@ -117,8 +117,8 @@ fn infer_types_in_branch(
             fragment,
             &location,
             named_functions,
-            host,
             &all_bindings,
+            host,
             &mut stack,
             types,
         );
@@ -141,8 +141,8 @@ fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
     named_functions: &NamedFunctions,
-    host: &impl Host,
     bindings: &BTreeMap<&String, Index<Type>>,
+    host: &impl Host,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
 ) -> Option<Signature> {
