@@ -120,8 +120,7 @@ fn type_fragments_in_branch(
                     (intrinsic, signature) => {
                         unreachable!(
                             "Invalid combination of intrinsic \
-                                (`{intrinsic:?}`) and signature \
-                                (`{signature:?}`"
+                            (`{intrinsic:?}`) and signature (`{signature:?}`"
                         );
                     }
                 }
