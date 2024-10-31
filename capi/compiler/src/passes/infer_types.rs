@@ -221,9 +221,8 @@ fn infer_type_of_fragment(
             // identified as a problem.
             None
         }
-        Fragment::Value(value) => {
+        Fragment::Value(_) => {
             // Not supported by inference yet.
-            let _ = value;
             None
         }
     }
