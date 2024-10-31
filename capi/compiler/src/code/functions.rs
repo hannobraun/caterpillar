@@ -218,29 +218,6 @@ pub struct Function {
     pub index_in_cluster: Option<Index<(Function, Cluster)>>,
 }
 
-impl Function {
-    /// # Expect the function to have one branch and access that
-    ///
-    /// This is a convenience method, designed for tests and such. It should not
-    /// be used in code that requires proper error handling.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if the function does not have exactly one branch.
-    pub fn expect_one_branch(&self) -> &Branch {
-        assert_eq!(
-            self.branches.len(),
-            1,
-            "Expected function to have exactly one branch."
-        );
-
-        self.branches
-            .first_key_value()
-            .map(|(_index, branch)| branch)
-            .expect("Just checked that there is exactly one branch.")
-    }
-}
-
 #[derive(
     Clone,
     Debug,
