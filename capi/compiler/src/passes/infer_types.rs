@@ -72,11 +72,13 @@ fn infer_types_in_branch(
             index,
         };
 
-        type_fragment(fragment, location, host, &bindings, &mut stack, types);
+        infer_type_of_fragment(
+            fragment, location, host, &bindings, &mut stack, types,
+        );
     }
 }
 
-fn type_fragment(
+fn infer_type_of_fragment(
     fragment: &Fragment,
     location: FragmentLocation,
     host: &impl Host,
