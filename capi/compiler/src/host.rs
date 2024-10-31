@@ -40,6 +40,10 @@ pub trait HostFunction {
     fn signature(&self) -> ConcreteSignature;
 }
 
+/// # A [`Host`] implementation that can be used where no host is required
+///
+/// Does not provide any functions. This is used by compiler unit tests, but
+/// might also come in handy elsewhere.
 pub struct NoHost;
 
 impl Host for NoHost {
