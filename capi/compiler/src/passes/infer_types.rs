@@ -45,7 +45,9 @@ fn infer_types_in_function(
             index,
         };
 
-        infer_types_in_branch(branch, &location, host, types);
+        let signature = infer_types_in_branch(branch, &location, host, types);
+
+        types.for_branches.insert(location, signature);
     }
 }
 
