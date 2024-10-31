@@ -54,7 +54,7 @@ fn infer_types_in_branch(
     location: BranchLocation,
     host: &impl Host,
     types: &mut Types,
-) {
+) -> Signature {
     let bindings = branch
         .parameters
         .iter()
@@ -82,6 +82,11 @@ fn infer_types_in_branch(
             }
             types.for_fragments.insert(location, signature);
         }
+    }
+
+    Signature {
+        inputs: bindings.into_values().collect(),
+        outputs: stack,
     }
 }
 
