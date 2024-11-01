@@ -92,7 +92,7 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
 
     clustered_and_sorted_call_graph
         .into_iter()
-        .map(|graph_index| {
+        .map(move |graph_index| {
             let named_function_indices = clustered_call_graph[graph_index]
                 .iter()
                 .map(|(_, named_function_index)| named_function_index)
