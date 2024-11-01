@@ -70,9 +70,6 @@ impl CallGraph {
     serde::Serialize,
 )]
 pub struct Cluster {
-    /// # Indices that refer to the functions in the cluster
-    ///
-    /// The indices refer to the functions in their original order within the
-    /// list of all named functions.
+    /// # The functions in this cluster
     pub functions: IndexMap<Index<Function>>,
 }
