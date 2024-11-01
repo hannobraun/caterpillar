@@ -89,7 +89,7 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
     call_graph: PetCallGraph,
 ) -> impl Iterator<Item = Vec<Index<Function>>> + '_ {
     let make_acyclic = true;
-    let clustered_call_graph = condensation(call_graph, make_acyclic);
+    let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
     let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
         .expect(
@@ -101,7 +101,7 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
         .into_iter()
         .map(move |graph_index| {
             clustered_call_graph
-                .node_weight(graph_index)
+                .remove_node(graph_index)
                 .expect(
                     "Graph index from sorted call graph must exist in its \
                     unsorted version.",
