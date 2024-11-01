@@ -98,6 +98,11 @@ where
 }
 
 impl Find<Branch, BranchLocation> {
+    /// # Access the branch's location
+    pub fn location(&self) -> &BranchLocation {
+        &self.metadata
+    }
+
     /// # Iterate over the fragments in the branch's body
     pub fn body(
         &self,
