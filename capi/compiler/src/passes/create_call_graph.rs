@@ -17,7 +17,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     );
     let clusters = clusters.map(|named_function_indices| {
         let mut functions = IndexMap::default();
-        for index in named_function_indices {
+        for (_, index) in named_function_indices {
             functions.push(index);
         }
 
@@ -87,7 +87,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_topologically_sorted_list_of_clusters(
     call_graph: PetCallGraph,
-) -> impl Iterator<Item = Vec<Index<Function>>> + '_ {
+) -> impl Iterator<Item = Vec<(&Function, Index<Function>)>> + '_ {
     let make_acyclic = true;
     let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
@@ -110,7 +110,6 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
                     work.",
                 )
                 .into_iter()
-                .map(|(_, named_function_index)| named_function_index)
                 .collect()
         })
 }
