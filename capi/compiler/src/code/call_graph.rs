@@ -9,6 +9,13 @@ pub struct CallGraph {
 }
 
 impl CallGraph {
+    /// # Construct an instance of `CallGraph`
+    pub fn from_clusters(clusters: impl IntoIterator<Item = Cluster>) -> Self {
+        Self {
+            clusters: clusters.into_iter().collect(),
+        }
+    }
+
     /// # Iterate over the function clusters, from the leaves up
     ///
     /// Guarantees that any cluster that is yielded by the iterator only has
@@ -47,9 +54,7 @@ impl CallGraph {
 
 impl FromIterator<Cluster> for CallGraph {
     fn from_iter<T: IntoIterator<Item = Cluster>>(clusters: T) -> Self {
-        Self {
-            clusters: clusters.into_iter().collect(),
-        }
+        Self::from_clusters(clusters)
     }
 }
 
