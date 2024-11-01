@@ -12,7 +12,10 @@ use crate::code::{
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_call_graph(named_functions);
-    collect_functions_into_topologically_sorted_list_of_clusters(call_graph)
+    let clusters = collect_functions_into_topologically_sorted_list_of_clusters(
+        call_graph,
+    );
+    CallGraph::from_clusters(clusters)
 }
 
 fn build_call_graph(named_functions: &NamedFunctions) -> PetCallGraph {
@@ -76,7 +79,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_topologically_sorted_list_of_clusters(
     call_graph: PetCallGraph,
-) -> CallGraph {
+) -> Vec<Cluster> {
     let make_acyclic = true;
     let clustered_call_graph = condensation(call_graph, make_acyclic);
     let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
@@ -84,24 +87,24 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
             "The previous operation should have made the call graph acyclic. \
             Hence, topologically sorting the graph should not fail.",
         );
-    let clusters =
-        clustered_and_sorted_call_graph
-            .into_iter()
-            .map(|graph_index| {
-                let named_function_indices = clustered_call_graph[graph_index]
-                    .iter()
-                    .map(|(_, named_function_index)| named_function_index)
-                    .copied();
+    let clusters = clustered_and_sorted_call_graph
+        .into_iter()
+        .map(|graph_index| {
+            let named_function_indices = clustered_call_graph[graph_index]
+                .iter()
+                .map(|(_, named_function_index)| named_function_index)
+                .copied();
 
-                let mut functions = IndexMap::default();
-                for index in named_function_indices {
-                    functions.push(index);
-                }
+            let mut functions = IndexMap::default();
+            for index in named_function_indices {
+                functions.push(index);
+            }
 
-                Cluster { functions }
-            });
+            Cluster { functions }
+        })
+        .collect();
 
-    CallGraph::from_clusters(clusters)
+    clusters
 }
 
 type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
