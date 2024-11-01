@@ -12,9 +12,8 @@ use crate::code::{
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
-    let clusters = collect_functions_into_topologically_sorted_list_of_clusters(
-        call_graph,
-    );
+    let clusters =
+        collect_functions_into_topologically_sorted_function_groups(call_graph);
     let clusters = clusters.map(|named_function_indices| {
         let mut functions = IndexMap::default();
         for (_, index) in named_function_indices {
@@ -85,7 +84,7 @@ fn include_calls_from_function_in_call_graph(
     }
 }
 
-fn collect_functions_into_topologically_sorted_list_of_clusters(
+fn collect_functions_into_topologically_sorted_function_groups(
     call_graph: PetCallGraph,
 ) -> impl Iterator<Item = Vec<(&Function, Index<Function>)>> + '_ {
     let make_acyclic = true;
