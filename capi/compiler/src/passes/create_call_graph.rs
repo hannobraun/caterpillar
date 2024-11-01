@@ -12,7 +12,7 @@ use crate::code::{
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_call_graph(named_functions);
-    collect_functions_into_topologically_sorted_clusters(call_graph)
+    collect_functions_into_topologically_sorted_list_of_clusters(call_graph)
 }
 
 fn build_call_graph(named_functions: &NamedFunctions) -> PetCallGraph {
@@ -74,7 +74,7 @@ fn include_calls_from_function_in_call_graph(
     }
 }
 
-fn collect_functions_into_topologically_sorted_clusters(
+fn collect_functions_into_topologically_sorted_list_of_clusters(
     call_graph: PetCallGraph,
 ) -> CallGraph {
     let make_acyclic = true;
