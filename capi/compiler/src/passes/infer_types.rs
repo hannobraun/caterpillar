@@ -315,7 +315,7 @@ mod tests {
     };
 
     #[test]
-    fn fail() {
+    fn infer_fragment_signatures_based_on_host_function() {
         let (named_functions, types) = type_fragments(
             r"
                 f: fn
