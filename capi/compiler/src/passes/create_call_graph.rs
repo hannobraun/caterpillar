@@ -101,7 +101,7 @@ fn collect_functions_into_topologically_sorted_clusters(
                 Cluster { functions }
             });
 
-    clusters.collect()
+    CallGraph::from_clusters(clusters)
 }
 
 type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
