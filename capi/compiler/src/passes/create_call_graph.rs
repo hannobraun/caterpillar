@@ -15,7 +15,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let clusters = collect_functions_into_topologically_sorted_list_of_clusters(
         call_graph,
     );
-    let clusters = clusters.into_iter().map(|functions| Cluster { functions });
+    let clusters = clusters.map(|functions| Cluster { functions });
     CallGraph::from_clusters(clusters)
 }
 
@@ -80,7 +80,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_topologically_sorted_list_of_clusters(
     call_graph: PetCallGraph,
-) -> Vec<IndexMap<Index<Function>>> {
+) -> impl Iterator<Item = IndexMap<Index<Function>>> + '_ {
     let make_acyclic = true;
     let clustered_call_graph = condensation(call_graph, make_acyclic);
 
@@ -105,7 +105,6 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
 
             functions
         })
-        .collect()
 }
 
 type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
