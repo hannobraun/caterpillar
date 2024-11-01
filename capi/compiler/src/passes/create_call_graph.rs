@@ -15,9 +15,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     collect_functions_into_topologically_sorted_clusters(call_graph)
 }
 
-fn build_call_graph(
-    named_functions: &NamedFunctions,
-) -> Graph<(&Function, Index<Function>), ()> {
+fn build_call_graph(named_functions: &NamedFunctions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
@@ -49,7 +47,7 @@ fn include_calls_from_function_in_call_graph(
     caller_index: NodeIndex,
     function: &Function,
     graph_index_by_function_name: &BTreeMap<&String, NodeIndex>,
-    call_graph: &mut Graph<(&Function, Index<Function>), ()>,
+    call_graph: &mut PetCallGraph,
 ) {
     for branch in function.branches.values() {
         for fragment in branch.body.values() {
@@ -77,7 +75,7 @@ fn include_calls_from_function_in_call_graph(
 }
 
 fn collect_functions_into_topologically_sorted_clusters(
-    call_graph: Graph<(&Function, Index<Function>), ()>,
+    call_graph: PetCallGraph,
 ) -> CallGraph {
     let make_acyclic = true;
     let clustered_call_graph = condensation(call_graph, make_acyclic);
@@ -105,6 +103,8 @@ fn collect_functions_into_topologically_sorted_clusters(
 
     clusters.collect()
 }
+
+type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
 
 #[cfg(test)]
 mod tests {
