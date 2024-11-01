@@ -100,17 +100,11 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
     clustered_and_sorted_call_graph
         .into_iter()
         .map(move |graph_index| {
-            let named_function_indices = clustered_call_graph[graph_index]
+            clustered_call_graph[graph_index]
                 .iter()
                 .map(|(_, named_function_index)| named_function_index)
-                .copied();
-
-            let mut functions = Vec::default();
-            for index in named_function_indices {
-                functions.push(index);
-            }
-
-            functions
+                .copied()
+                .collect()
         })
 }
 
