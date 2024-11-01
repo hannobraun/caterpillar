@@ -103,8 +103,11 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
             clustered_call_graph
                 .remove_node(graph_index)
                 .expect(
-                    "Graph index from sorted call graph must exist in its \
-                    unsorted version.",
+                    "Each entry in the sorted version of the call graph must \
+                    correspond to exactly one node in the unsorted version. So \
+                    using every node from the sorted version once, to remove
+                    its respective node in the unsorted version, should always \
+                    work.",
                 )
                 .iter()
                 .map(|(_, named_function_index)| named_function_index)
