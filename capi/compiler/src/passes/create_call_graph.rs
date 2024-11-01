@@ -35,31 +35,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
         );
     }
 
-    let make_acyclic = true;
-    let clustered_call_graph = condensation(call_graph, make_acyclic);
-    let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
-        .expect(
-            "The previous operation should have made the call graph acyclic. \
-            Hence, topologically sorting the graph should not fail.",
-        );
-    let clusters =
-        clustered_and_sorted_call_graph
-            .into_iter()
-            .map(|graph_index| {
-                let named_function_indices = clustered_call_graph[graph_index]
-                    .iter()
-                    .map(|(_, named_function_index)| named_function_index)
-                    .copied();
-
-                let mut functions = IndexMap::default();
-                for index in named_function_indices {
-                    functions.push(index);
-                }
-
-                Cluster { functions }
-            });
-
-    clusters.collect()
+    collect_functions_into_topologically_sorted_clusters(call_graph)
 }
 
 fn include_calls_from_function_in_call_graph(
@@ -91,6 +67,36 @@ fn include_calls_from_function_in_call_graph(
             }
         }
     }
+}
+
+fn collect_functions_into_topologically_sorted_clusters(
+    call_graph: Graph<(&Function, Index<Function>), ()>,
+) -> CallGraph {
+    let make_acyclic = true;
+    let clustered_call_graph = condensation(call_graph, make_acyclic);
+    let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
+        .expect(
+            "The previous operation should have made the call graph acyclic. \
+            Hence, topologically sorting the graph should not fail.",
+        );
+    let clusters =
+        clustered_and_sorted_call_graph
+            .into_iter()
+            .map(|graph_index| {
+                let named_function_indices = clustered_call_graph[graph_index]
+                    .iter()
+                    .map(|(_, named_function_index)| named_function_index)
+                    .copied();
+
+                let mut functions = IndexMap::default();
+                for index in named_function_indices {
+                    functions.push(index);
+                }
+
+                Cluster { functions }
+            });
+
+    clusters.collect()
 }
 
 #[cfg(test)]
