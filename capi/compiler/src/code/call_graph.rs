@@ -52,12 +52,6 @@ impl CallGraph {
     }
 }
 
-impl FromIterator<Cluster> for CallGraph {
-    fn from_iter<T: IntoIterator<Item = Cluster>>(clusters: T) -> Self {
-        Self::from_clusters(clusters)
-    }
-}
-
 /// # A cluster of functions
 ///
 /// During compilation, all functions are grouped into clusters. A cluster can
