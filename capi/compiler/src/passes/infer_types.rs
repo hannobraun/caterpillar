@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, iter};
+use std::collections::BTreeMap;
 
 use crate::{
     code::{
@@ -94,15 +94,22 @@ fn infer_types_in_branch(
     host: &impl Host,
     types: &mut Types,
 ) -> Signature {
-    let local_bindings = branch
-        .parameters
-        .iter()
-        .filter_map(|pattern| match pattern {
-            Pattern::Identifier { name } => Some(name),
-            Pattern::Literal { .. } => None,
-        })
-        .zip(iter::from_fn(|| Some(types.inner.push(Type::Unknown))))
-        .collect::<BTreeMap<_, _>>();
+    let mut parameters = Vec::new();
+    let mut local_bindings = BTreeMap::new();
+
+    for pattern in branch.parameters.iter() {
+        let type_ = match pattern {
+            Pattern::Identifier { name } => {
+                let type_ = types.inner.push(Type::Unknown);
+                local_bindings.insert(name, type_);
+                type_
+            }
+            Pattern::Literal { .. } => types.inner.push(Type::Number),
+        };
+
+        parameters.push(type_);
+    }
+
     let all_bindings = {
         let mut all_bindings = local_bindings.clone();
         all_bindings.extend(environment.iter());
@@ -137,7 +144,7 @@ fn infer_types_in_branch(
     }
 
     Signature {
-        inputs: local_bindings.into_values().collect(),
+        inputs: parameters.into_iter().collect(),
         outputs: stack,
     }
 }
@@ -346,6 +353,39 @@ mod tests {
         use Type::*;
         assert_eq!(n, ConcreteSignature::from(([], [Number])));
         assert_eq!(host_fn, ConcreteSignature::from(([Number], [])));
+    }
+
+    #[test]
+    fn infer_branch_signature() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ a, b, 0 ->
+                        a number_to_nothing
+                        b
+                end
+            ",
+        );
+
+        let branch = named_functions
+            .find_by_name("f")
+            .unwrap()
+            .find_single_branch()
+            .map(|branch| {
+                types
+                    .for_branches
+                    .get(branch.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
+
+        use Type::*;
+        assert_eq!(
+            branch,
+            ConcreteSignature::from(([Number, Unknown, Number], [Unknown]))
+        );
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
