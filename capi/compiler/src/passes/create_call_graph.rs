@@ -14,14 +14,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
     let function_groups =
         collect_functions_into_topologically_sorted_function_groups(call_graph);
-    let clusters = function_groups.map(|function_group| {
-        let mut functions = IndexMap::default();
-        for (_, index) in function_group {
-            functions.push(index);
-        }
-
-        Cluster { functions }
-    });
+    let clusters = collect_function_groups_into_clusters(function_groups);
     CallGraph::from_clusters(clusters)
 }
 
@@ -111,6 +104,21 @@ fn collect_functions_into_topologically_sorted_function_groups(
                 .into_iter()
                 .collect()
         })
+}
+
+fn collect_function_groups_into_clusters<'r>(
+    function_groups: impl Iterator<Item = FunctionGroup<'r>>,
+) -> Vec<Cluster> {
+    function_groups
+        .map(|function_group| {
+            let mut functions = IndexMap::default();
+            for (_, index) in function_group {
+                functions.push(index);
+            }
+
+            Cluster { functions }
+        })
+        .collect()
 }
 
 type PetCallGraph<'r> = Graph<FunctionWithIndex<'r>, ()>;
