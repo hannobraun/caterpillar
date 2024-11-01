@@ -4,6 +4,31 @@ use crate::code::{Branch, Fragment, Function, NamedFunctions, Pattern};
 
 use super::tokenize::Token;
 
+/// # Parse the provided tokens
+///
+/// ## Implementation Note
+///
+/// This compiler pass currently panics when it encounters an unexpected token.
+/// It would be better, if it encoded the error into its output instead. This is
+/// non-trivial though, compared to other compiler passes that do that.
+///
+/// For example, if an identifier can not be resolved, this only affects that
+/// identifier, and it is quite easy to encode that by having a [`Fragment`]
+/// variant for unresolved identifiers.
+///
+/// In the case of parsing, however, an unexpected token would likely result in
+/// the parser not knowing what to do with the following tokens, even it can be
+/// taught to recover eventually. Those tokens would also have to be encoded
+/// into the code representation. Otherwise, viewing that representation (which
+/// would include the error) makes no sense to a user.
+///
+/// I'm inclined to leave this be for now. Panicking certainly works well enough
+/// in the current setup. Once we have a code database, it will no longer do.
+/// But then we also need a completely different parser architecture.
+///
+/// It's probably not worth solving this non-trivial problem for the current
+/// architecture, for little gain, only to re-solve it again for the new
+/// architecture, once that is necessary.
 pub fn parse(tokens: Vec<Token>) -> NamedFunctions {
     let mut tokens = Tokens {
         inner: tokens.into(),
