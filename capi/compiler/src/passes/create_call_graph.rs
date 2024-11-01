@@ -109,9 +109,8 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
                     its respective node in the unsorted version, should always \
                     work.",
                 )
-                .iter()
+                .into_iter()
                 .map(|(_, named_function_index)| named_function_index)
-                .copied()
                 .collect()
         })
 }
