@@ -87,7 +87,7 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
             "The previous operation should have made the call graph acyclic. \
             Hence, topologically sorting the graph should not fail.",
         );
-    let clusters = clustered_and_sorted_call_graph
+    clustered_and_sorted_call_graph
         .into_iter()
         .map(|graph_index| {
             let named_function_indices = clustered_call_graph[graph_index]
@@ -102,9 +102,7 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
 
             Cluster { functions }
         })
-        .collect();
-
-    clusters
+        .collect()
 }
 
 type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
