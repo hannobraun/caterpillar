@@ -11,6 +11,13 @@ use crate::code::{
 };
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
+    let call_graph = build_call_graph(named_functions);
+    collect_functions_into_topologically_sorted_clusters(call_graph)
+}
+
+fn build_call_graph(
+    named_functions: &NamedFunctions,
+) -> Graph<(&Function, Index<Function>), ()> {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
@@ -35,7 +42,7 @@ pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
         );
     }
 
-    collect_functions_into_topologically_sorted_clusters(call_graph)
+    call_graph
 }
 
 fn include_calls_from_function_in_call_graph(
