@@ -12,9 +12,9 @@ use crate::code::{
 
 pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
-    let clusters =
+    let function_groups =
         collect_functions_into_topologically_sorted_function_groups(call_graph);
-    let clusters = clusters.map(|named_function_indices| {
+    let clusters = function_groups.map(|named_function_indices| {
         let mut functions = IndexMap::default();
         for (_, index) in named_function_indices {
             functions.push(index);
