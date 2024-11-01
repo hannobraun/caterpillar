@@ -86,7 +86,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_topologically_sorted_function_groups(
     call_graph: PetCallGraph,
-) -> impl Iterator<Item = Vec<(&Function, Index<Function>)>> + '_ {
+) -> impl Iterator<Item = Vec<FunctionWithIndex>> + '_ {
     let make_acyclic = true;
     let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
@@ -113,7 +113,8 @@ fn collect_functions_into_topologically_sorted_function_groups(
         })
 }
 
-type PetCallGraph<'r> = Graph<(&'r Function, Index<Function>), ()>;
+type PetCallGraph<'r> = Graph<FunctionWithIndex<'r>, ()>;
+type FunctionWithIndex<'r> = (&'r Function, Index<Function>);
 
 #[cfg(test)]
 mod tests {
