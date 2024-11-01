@@ -122,7 +122,7 @@ impl Find<Branch, BranchLocation> {
 }
 
 impl Find<Fragment, FragmentLocation> {
-    /// # Access the found fragment's location
+    /// # Access the fragment's location
     pub fn location(&self) -> &FragmentLocation {
         &self.metadata
     }
