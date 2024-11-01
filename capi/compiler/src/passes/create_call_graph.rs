@@ -100,7 +100,12 @@ fn collect_functions_into_topologically_sorted_list_of_clusters(
     clustered_and_sorted_call_graph
         .into_iter()
         .map(move |graph_index| {
-            clustered_call_graph[graph_index]
+            clustered_call_graph
+                .node_weight(graph_index)
+                .expect(
+                    "Graph index from sorted call graph must exist in its \
+                    unsorted version.",
+                )
                 .iter()
                 .map(|(_, named_function_index)| named_function_index)
                 .copied()
