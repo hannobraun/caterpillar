@@ -1,4 +1,4 @@
-mod create_call_graph;
+mod build_call_graph;
 mod detect_changes;
 mod generate_instructions;
 mod infer_types;
@@ -10,7 +10,7 @@ mod tail_position;
 mod tokenize;
 
 pub use {
-    create_call_graph::build_call_graph, detect_changes::detect_changes,
+    build_call_graph::build_call_graph, detect_changes::detect_changes,
     generate_instructions::generate_instructions, infer_types::infer_types,
     mark_recursive_calls::mark_recursive_calls, parse::parse,
     resolve_functions::resolve_calls_to_user_defined_functions,
