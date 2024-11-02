@@ -12,9 +12,8 @@ use crate::code::{
 
 pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
-    let function_groups =
+    let clusters =
         collect_functions_into_topologically_sorted_function_groups(call_graph);
-    let clusters = function_groups;
     CallGraph::from_clusters(clusters)
 }
 
