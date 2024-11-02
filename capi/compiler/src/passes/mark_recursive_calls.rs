@@ -84,9 +84,7 @@ mod tests {
             UnresolvedCallToUserDefinedFunction,
         },
         host::NoHost,
-        passes::{
-            create_call_graph, parse, resolve_most_identifiers, tokenize,
-        },
+        passes::{build_call_graph, parse, resolve_most_identifiers, tokenize},
     };
 
     #[test]
@@ -202,7 +200,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         resolve_most_identifiers(&mut named_functions, &NoHost);
-        let call_graph = create_call_graph(&named_functions);
+        let call_graph = build_call_graph(&named_functions);
         super::mark_recursive_calls(&mut named_functions, &call_graph);
 
         named_functions

@@ -316,9 +316,7 @@ mod tests {
     use crate::{
         code::{ConcreteSignature, NamedFunctions, Type, Types},
         host::{Host, HostFunction},
-        passes::{
-            create_call_graph, parse, resolve_most_identifiers, tokenize,
-        },
+        passes::{build_call_graph, parse, resolve_most_identifiers, tokenize},
     };
 
     #[test]
@@ -392,7 +390,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         resolve_most_identifiers(&mut named_functions, &TestHost);
-        let call_graph = create_call_graph(&named_functions);
+        let call_graph = build_call_graph(&named_functions);
         let types =
             super::infer_types(&named_functions, &call_graph, &TestHost);
 

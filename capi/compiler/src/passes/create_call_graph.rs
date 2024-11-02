@@ -10,7 +10,7 @@ use crate::code::{
     CallGraph, Cluster, Fragment, Function, Index, IndexMap, NamedFunctions,
 };
 
-pub fn create_call_graph(named_functions: &NamedFunctions) -> CallGraph {
+pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
     let function_groups =
         collect_functions_into_topologically_sorted_function_groups(call_graph);
@@ -352,6 +352,6 @@ mod tests {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         resolve_most_identifiers(&mut named_functions, &NoHost);
-        super::create_call_graph(&named_functions)
+        super::build_call_graph(&named_functions)
     }
 }
