@@ -179,7 +179,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: [indices].into_iter().collect()
+                functions: [indices].into_iter().collect(),
             })
             .collect::<Vec<_>>(),
         );
@@ -270,7 +270,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect()
+                functions: indices.iter().copied().collect(),
             })
             .collect::<Vec<_>>(),
         );
@@ -328,7 +328,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect()
+                functions: indices.iter().copied().collect(),
             })
             .collect::<Vec<_>>(),
         );
