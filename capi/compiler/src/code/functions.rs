@@ -5,7 +5,7 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
+    search::Find, BranchLocation, FunctionCluster, Fragment, FragmentLocation,
     FunctionLocation, Hash, IndexMap,
 };
 
@@ -215,7 +215,7 @@ pub struct Function {
     ///
     /// This is defined for named functions only. The value is `None` for
     /// anonymous functions.
-    pub index_in_cluster: Option<Index<(Function, Cluster)>>,
+    pub index_in_cluster: Option<Index<(Function, FunctionCluster)>>,
 }
 
 #[derive(

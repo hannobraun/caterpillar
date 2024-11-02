@@ -12,7 +12,7 @@ mod location;
 mod types;
 
 pub use self::{
-    call_graph::{CallGraph, Cluster},
+    call_graph::{CallGraph, FunctionCluster},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     fragment::{Fragment, UnresolvedCallToUserDefinedFunction},
     functions::{Branch, Function, NamedFunctions, Pattern},

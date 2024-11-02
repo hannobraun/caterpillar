@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
+        Branch, BranchLocation, FunctionCluster, Fragment, FragmentLocation, Function,
         FunctionLocation, Hash, IndexMap, Pattern,
     },
     intrinsics::IntrinsicFunction,
@@ -21,7 +21,7 @@ pub fn compile_function(
     function: Function,
     location: FunctionLocation,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> capi_runtime::Function {
@@ -79,7 +79,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: Branch,
     location: BranchLocation,
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -131,7 +131,7 @@ fn compile_branch(
 fn compile_branch_body(
     body: IndexMap<Fragment>,
     location: BranchLocation,
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> [InstructionAddress; 2] {
@@ -185,7 +185,7 @@ fn compile_branch_body(
 fn compile_fragment(
     fragment: Fragment,
     location: FragmentLocation,
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,
 ) -> Option<InstructionAddress> {

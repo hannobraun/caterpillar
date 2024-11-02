@@ -7,7 +7,8 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Fragment, Function, Index, IndexMap, NamedFunctions,
+    CallGraph, Fragment, Function, FunctionCluster, Index, IndexMap,
+    NamedFunctions,
 };
 
 pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
@@ -77,7 +78,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_clusters(
     call_graph: PetCallGraph,
-) -> impl Iterator<Item = Cluster> + '_ {
+) -> impl Iterator<Item = FunctionCluster> + '_ {
     let make_acyclic = true;
     let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
@@ -104,7 +105,7 @@ fn collect_functions_into_clusters(
                 functions.push(index);
             }
 
-            Cluster {
+            FunctionCluster {
                 functions,
                 recursive_branch_call_graph: None,
             }
@@ -117,7 +118,7 @@ type FunctionWithIndex<'r> = (&'r Function, Index<Function>);
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{CallGraph, Cluster, Index},
+        code::{CallGraph, FunctionCluster, Index},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -148,7 +149,7 @@ mod tests {
                 (Index::from(0), Index::from(0)),
             ]
             .into_iter()
-            .map(|indices| Cluster {
+            .map(|indices| FunctionCluster {
                 functions: [indices].into_iter().collect(),
                 recursive_branch_call_graph: None,
             })
@@ -182,7 +183,7 @@ mod tests {
                 (Index::from(0), Index::from(0)),
             ]
             .into_iter()
-            .map(|indices| Cluster {
+            .map(|indices| FunctionCluster {
                 functions: [indices].into_iter().collect(),
                 recursive_branch_call_graph: None,
             })
@@ -225,7 +226,7 @@ mod tests {
                 [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
+            .map(|indices| FunctionCluster {
                 functions: indices.iter().copied().collect(),
                 recursive_branch_call_graph: None,
             })
@@ -275,7 +276,7 @@ mod tests {
                 [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
+            .map(|indices| FunctionCluster {
                 functions: indices.iter().copied().collect(),
                 recursive_branch_call_graph: None,
             })
@@ -334,7 +335,7 @@ mod tests {
                 [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
+            .map(|indices| FunctionCluster {
                 functions: indices.iter().copied().collect(),
                 recursive_branch_call_graph: None,
             })

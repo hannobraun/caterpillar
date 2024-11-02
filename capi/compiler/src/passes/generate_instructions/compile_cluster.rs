@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use crate::code::{Changes, Cluster, Function, FunctionLocation, Hash};
+use crate::code::{Changes, FunctionCluster, Function, FunctionLocation, Hash};
 
 use super::{
     compile_function::{
@@ -34,7 +34,7 @@ pub struct ClusterContext {
 }
 
 pub fn compile_cluster(
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     changes: &Changes,
     named_functions_context: &mut NamedFunctionsContext,
 ) {
@@ -82,7 +82,7 @@ pub fn compile_cluster(
 
 fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
-    cluster: &Cluster,
+    cluster: &FunctionCluster,
     changes: &Changes,
 ) {
     let functions_in_cluster_to_compile =
