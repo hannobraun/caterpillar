@@ -62,11 +62,12 @@ impl CallGraph {
 
 /// # A cluster of functions
 ///
-/// During compilation, all functions are grouped into clusters. A cluster can
-/// consist of a single function, or a group of mutually recursive functions.
+/// A cluster either contains a single function that might or might not be
+/// recursive, or multiple mutually recursive functions. During compilation, all
+/// functions are grouped into clusters.
 ///
-/// All mutually recursive functions are grouped into a single clusters with the
-/// other functions in their recursive group.
+/// A group of mutually recursive functions is guaranteed to be part of a single
+/// cluster, without any other functions.
 #[derive(
     Clone,
     Debug,
