@@ -12,8 +12,7 @@ use crate::code::{
 
 pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
-    let clusters =
-        collect_functions_into_topologically_sorted_function_groups(call_graph);
+    let clusters = collect_functions_into_clusters(call_graph);
     CallGraph::from_clusters(clusters)
 }
 
@@ -76,7 +75,7 @@ fn include_calls_from_function_in_call_graph(
     }
 }
 
-fn collect_functions_into_topologically_sorted_function_groups(
+fn collect_functions_into_clusters(
     call_graph: PetCallGraph,
 ) -> impl Iterator<Item = Cluster> + '_ {
     let make_acyclic = true;
