@@ -14,14 +14,7 @@ pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
     let call_graph = build_pet_call_graph(named_functions);
     let function_groups =
         collect_functions_into_topologically_sorted_function_groups(call_graph);
-    let clusters = function_groups.map(|function_group| {
-        let mut functions = IndexMap::default();
-        for (_, index) in function_group {
-            functions.push(index);
-        }
-
-        Cluster { functions }
-    });
+    let clusters = function_groups;
     CallGraph::from_clusters(clusters)
 }
 
@@ -86,7 +79,7 @@ fn include_calls_from_function_in_call_graph(
 
 fn collect_functions_into_topologically_sorted_function_groups(
     call_graph: PetCallGraph,
-) -> impl Iterator<Item = FunctionGroup> + '_ {
+) -> impl Iterator<Item = Cluster> + '_ {
     let make_acyclic = true;
     let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
@@ -99,7 +92,7 @@ fn collect_functions_into_topologically_sorted_function_groups(
     clustered_and_sorted_call_graph
         .into_iter()
         .map(move |graph_index| {
-            clustered_call_graph
+            let function_group = clustered_call_graph
                 .remove_node(graph_index)
                 .expect(
                     "Each entry in the sorted version of the call graph must \
@@ -108,13 +101,18 @@ fn collect_functions_into_topologically_sorted_function_groups(
                     its respective node in the unsorted version, should always \
                     work.",
                 )
-                .into_iter()
-                .collect()
+                .into_iter();
+
+            let mut functions = IndexMap::default();
+            for (_, index) in function_group {
+                functions.push(index);
+            }
+
+            Cluster { functions }
         })
 }
 
 type PetCallGraph<'r> = Graph<FunctionWithIndex<'r>, ()>;
-type FunctionGroup<'r> = Vec<FunctionWithIndex<'r>>;
 type FunctionWithIndex<'r> = (&'r Function, Index<Function>);
 
 #[cfg(test)]
