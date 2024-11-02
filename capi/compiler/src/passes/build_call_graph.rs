@@ -90,16 +90,14 @@ fn collect_functions_into_clusters(
     clustered_and_sorted_call_graph
         .into_iter()
         .map(move |graph_index| {
-            let function_group = clustered_call_graph
-                .remove_node(graph_index)
-                .expect(
+            let function_group =
+                clustered_call_graph.remove_node(graph_index).expect(
                     "Each entry in the sorted version of the call graph must \
                     correspond to exactly one node in the unsorted version. So \
                     using every node from the sorted version once, to remove
                     its respective node in the unsorted version, should always \
                     work.",
-                )
-                .into_iter();
+                );
 
             let mut functions = IndexMap::default();
             for (_, index) in function_group {
