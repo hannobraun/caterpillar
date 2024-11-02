@@ -11,8 +11,8 @@ use crate::code::{
 };
 
 pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
-    let call_graph = build_pet_call_graph(named_functions);
-    let clusters = collect_functions_into_clusters(call_graph);
+    let pet_call_graph = build_pet_call_graph(named_functions);
+    let clusters = collect_functions_into_clusters(pet_call_graph);
     CallGraph::from_clusters(clusters)
 }
 
