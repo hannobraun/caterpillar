@@ -17,23 +17,25 @@ pub fn infer_types(
 ) -> Types {
     let mut types = Types::default();
 
-    for (index, cluster) in call_graph.functions_from_leaves() {
-        let function = named_functions
-            .find_by_index(index)
-            .expect("Function referred to from call graph must exist.");
+    for cluster in call_graph.clusters_from_leaves() {
+        for index in cluster.functions.values() {
+            let function = named_functions
+                .find_by_index(index)
+                .expect("Function referred to from call graph must exist.");
 
-        let environment = BTreeMap::new();
-        let signature = infer_types_in_function(
-            &function.find,
-            function.location(),
-            cluster,
-            named_functions,
-            &environment,
-            host,
-            &mut types,
-        );
+            let environment = BTreeMap::new();
+            let signature = infer_types_in_function(
+                &function.find,
+                function.location(),
+                cluster,
+                named_functions,
+                &environment,
+                host,
+                &mut types,
+            );
 
-        types.for_functions.insert(function.location(), signature);
+            types.for_functions.insert(function.location(), signature);
+        }
     }
 
     types
