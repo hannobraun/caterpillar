@@ -18,27 +18,36 @@ pub fn infer_types(
     let mut types = Types::default();
 
     for cluster in call_graph.clusters_from_leaves() {
-        for index in cluster.functions.values() {
-            let function = named_functions
-                .find_by_index(index)
-                .expect("Function referred to from call graph must exist.");
-
-            let environment = BTreeMap::new();
-            let signature = infer_types_in_function(
-                &function.find,
-                function.location(),
-                cluster,
-                named_functions,
-                &environment,
-                host,
-                &mut types,
-            );
-
-            types.for_functions.insert(function.location(), signature);
-        }
+        infer_types_in_cluster(cluster, named_functions, host, &mut types);
     }
 
     types
+}
+
+fn infer_types_in_cluster(
+    cluster: &Cluster,
+    named_functions: &NamedFunctions,
+    host: &impl Host,
+    types: &mut Types,
+) {
+    for index in cluster.functions.values() {
+        let function = named_functions
+            .find_by_index(index)
+            .expect("Function referred to from call graph must exist.");
+
+        let environment = BTreeMap::new();
+        let signature = infer_types_in_function(
+            &function.find,
+            function.location(),
+            cluster,
+            named_functions,
+            &environment,
+            host,
+            types,
+        );
+
+        types.for_functions.insert(function.location(), signature);
+    }
 }
 
 fn infer_types_in_function(
