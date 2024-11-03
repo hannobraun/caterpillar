@@ -51,6 +51,22 @@ fn infer_types_in_cluster(
         }
     }
 
+    infer_types_in_branches_of_cluster(
+        queue,
+        cluster,
+        named_functions,
+        host,
+        types,
+    );
+}
+
+fn infer_types_in_branches_of_cluster(
+    queue: VecDeque<QueuedBranch>,
+    cluster: &Cluster,
+    named_functions: &NamedFunctions,
+    host: &impl Host,
+    types: &mut Types,
+) {
     for queued_branch in queue {
         let environment = BTreeMap::new();
         let signature = infer_types_in_branch(
