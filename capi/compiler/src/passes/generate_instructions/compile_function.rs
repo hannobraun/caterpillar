@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Branch, BranchLocation, FunctionCluster, Fragment, FragmentLocation, Function,
-        FunctionLocation, Hash, IndexMap, Pattern,
+        Branch, BranchLocation, Fragment, FragmentLocation, Function,
+        FunctionCluster, FunctionLocation, Hash, IndexMap, Pattern,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,

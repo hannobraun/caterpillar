@@ -5,7 +5,7 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Find, BranchLocation, FunctionCluster, Fragment, FragmentLocation,
+    search::Find, BranchLocation, Fragment, FragmentLocation, FunctionCluster,
     FunctionLocation, Hash, IndexMap,
 };
 

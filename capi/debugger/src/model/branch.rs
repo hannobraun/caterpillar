@@ -1,8 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        Branch, BranchLocation, FunctionCluster, FragmentLocation, NamedFunctions,
-        Pattern, Types,
+        Branch, BranchLocation, FragmentLocation, FunctionCluster,
+        NamedFunctions, Pattern, Types,
     },
     source_map::SourceMap,
 };

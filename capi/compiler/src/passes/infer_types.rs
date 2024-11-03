@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, FunctionCluster, ConcreteSignature,
-        Fragment, FragmentLocation, Function, FunctionLocation, Index,
+        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
+        FragmentLocation, Function, FunctionCluster, FunctionLocation, Index,
         NamedFunctions, Pattern, Signature, Type, Types,
     },
     host::Host,

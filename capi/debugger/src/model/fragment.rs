@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
-        FunctionCluster, Fragment, FragmentLocation, FunctionLocation, NamedFunctions,
-        Types,
+        Fragment, FragmentLocation, FunctionCluster, FunctionLocation,
+        NamedFunctions, Types,
     },
     host::Host,
     source_map::SourceMap,
