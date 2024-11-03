@@ -283,13 +283,13 @@ fn infer_type_of_fragment(
                         .for_branches
                         .insert(location, branch_signature.clone());
 
-                    // If this isn't the first branch we're looking at, there already is a
-                    // function signature. We should compare that to the new branch
-                    // signature and make sure they're equal.
+                    // If this isn't the first branch we're looking at, there
+                    // already is a function signature. We should compare that
+                    // to the new branch signature and make sure they're equal.
                     //
-                    // As of this writing, type inference is only partially implemented
-                    // though, and as a result, this would trigger false positives all the
-                    // time.
+                    // As of this writing, type inference is only partially
+                    // implemented though, and as a result, this would trigger
+                    // false positives all the time.
                     //
                     // Let's just ignore any mismatches, for the time being.
                     function_signature = Some(branch_signature);
