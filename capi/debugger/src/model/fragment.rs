@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
-        Fragment, FragmentLocation, FunctionCluster, FunctionLocation,
-        NamedFunctions, Types,
+        Cluster, Fragment, FragmentLocation, FunctionLocation, NamedFunctions,
+        Types,
     },
     host::Host,
     source_map::SourceMap,
@@ -24,7 +24,7 @@ impl DebugFragment {
         location: FragmentLocation,
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
-        cluster: &FunctionCluster,
+        cluster: &Cluster,
         named_functions: &NamedFunctions,
         types: &Types,
         source_map: &SourceMap,
@@ -172,7 +172,7 @@ impl DebugFragmentKind {
         location: FragmentLocation,
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
-        cluster: &FunctionCluster,
+        cluster: &Cluster,
         named_functions: &NamedFunctions,
         types: &Types,
         source_map: &SourceMap,

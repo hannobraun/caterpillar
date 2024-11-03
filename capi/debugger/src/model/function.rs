@@ -1,8 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        self, BranchLocation, FragmentLocation, FunctionCluster,
-        FunctionLocation, NamedFunctions, Types,
+        self, BranchLocation, Cluster, FragmentLocation, FunctionLocation,
+        NamedFunctions, Types,
     },
     source_map::SourceMap,
 };
@@ -23,7 +23,7 @@ impl DebugFunction {
         location: FunctionLocation,
         active_fragment: Option<&FragmentLocation>,
         is_innermost_active_function: bool,
-        cluster: &FunctionCluster,
+        cluster: &Cluster,
         named_functions: &NamedFunctions,
         types: &Types,
         source_map: &SourceMap,

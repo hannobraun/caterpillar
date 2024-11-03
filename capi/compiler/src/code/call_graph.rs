@@ -5,7 +5,7 @@ use super::{Function, Index, IndexMap};
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct CallGraph {
-    clusters: Vec<FunctionCluster>,
+    clusters: Vec<Cluster>,
 }
 
 impl CallGraph {
@@ -14,9 +14,7 @@ impl CallGraph {
     /// Expects the provided clusters to be sorted topologically: The iterator
     /// must yield any cluster that contains calls to another cluster before it
     /// yields that other cluster.
-    pub fn from_clusters(
-        clusters: impl IntoIterator<Item = FunctionCluster>,
-    ) -> Self {
+    pub fn from_clusters(clusters: impl IntoIterator<Item = Cluster>) -> Self {
         Self {
             clusters: clusters.into_iter().collect(),
         }
@@ -27,9 +25,7 @@ impl CallGraph {
     /// Guarantees that any cluster that is yielded by the iterator only has
     /// non-recursive calls to functions in clusters that have already been
     /// yielded before.
-    pub fn clusters_from_leaves(
-        &self,
-    ) -> impl Iterator<Item = &FunctionCluster> {
+    pub fn clusters_from_leaves(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
 
@@ -39,7 +35,7 @@ impl CallGraph {
     /// non-recursive calls to functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
-    ) -> impl Iterator<Item = (&Index<Function>, &FunctionCluster)> {
+    ) -> impl Iterator<Item = (&Index<Function>, &Cluster)> {
         self.clusters_from_leaves().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
@@ -53,7 +49,7 @@ impl CallGraph {
     pub fn find_cluster_by_named_function(
         &self,
         index: &Index<Function>,
-    ) -> Option<&FunctionCluster> {
+    ) -> Option<&Cluster> {
         self.clusters
             .iter()
             .find(|cluster| cluster.functions.values().any(|i| i == index))
@@ -78,7 +74,7 @@ impl CallGraph {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct FunctionCluster {
+pub struct Cluster {
     /// # The functions in this cluster
     pub functions: IndexMap<Index<Function>>,
 

@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
-        FragmentLocation, Function, FunctionCluster, FunctionLocation, Index,
+        Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
+        Fragment, FragmentLocation, Function, FunctionLocation, Index,
         NamedFunctions, Pattern, Signature, Type, Types,
     },
     host::Host,
@@ -42,7 +42,7 @@ pub fn infer_types(
 fn infer_types_in_function(
     function: &Function,
     location: FunctionLocation,
-    cluster: &FunctionCluster,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
@@ -88,7 +88,7 @@ fn infer_types_in_function(
 fn infer_types_in_branch(
     branch: &Branch,
     location: &BranchLocation,
-    cluster: &FunctionCluster,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
@@ -153,7 +153,7 @@ fn infer_types_in_branch(
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
-    cluster: &FunctionCluster,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
