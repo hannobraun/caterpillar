@@ -69,8 +69,8 @@ fn infer_types_in_cluster(
             // Let's just ignore any mismatches, for the time being.
             function_signature = Some(branch_signature);
         }
-        let signature = function_signature.unwrap_or_default();
 
+        let signature = function_signature.unwrap_or_default();
         types.for_functions.insert(function.location(), signature);
     }
 }
