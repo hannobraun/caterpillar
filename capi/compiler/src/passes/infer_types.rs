@@ -3,8 +3,8 @@ use std::collections::BTreeMap;
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Fragment, FragmentLocation, FunctionLocation, Index,
-        NamedFunctions, Pattern, Signature, Type, Types,
+        Fragment, FragmentLocation, FunctionLocation, Index, NamedFunctions,
+        Pattern, Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
