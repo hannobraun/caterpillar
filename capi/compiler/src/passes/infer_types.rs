@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Fragment, FragmentLocation, Function, FunctionLocation, Index,
+        Fragment, FragmentLocation, FunctionLocation, Index,
         NamedFunctions, Pattern, Signature, Type, Types,
     },
     host::Host,
@@ -35,65 +35,44 @@ fn infer_types_in_cluster(
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
 
-        let environment = BTreeMap::new();
-        let signature = infer_types_in_function(
-            &function.find,
-            function.location(),
-            cluster,
-            named_functions,
-            &environment,
-            host,
-            types,
-        );
+        let mut function_signature = None;
+
+        for (&index, branch) in function.branches.iter() {
+            let location = BranchLocation {
+                parent: Box::new(function.location().clone()),
+                index,
+            };
+
+            let environment = BTreeMap::new();
+            let branch_signature = infer_types_in_branch(
+                branch,
+                &location,
+                cluster,
+                named_functions,
+                &environment,
+                host,
+                types,
+            );
+
+            types
+                .for_branches
+                .insert(location, branch_signature.clone());
+
+            // If this isn't the first branch we're looking at, there already is
+            // a function signature. We should compare that to the new branch
+            // signature and make sure they're equal.
+            //
+            // As of this writing, type inference is only partially implemented
+            // though, and as a result, this would trigger false positives all
+            // the time.
+            //
+            // Let's just ignore any mismatches, for the time being.
+            function_signature = Some(branch_signature);
+        }
+        let signature = function_signature.unwrap_or_default();
 
         types.for_functions.insert(function.location(), signature);
     }
-}
-
-fn infer_types_in_function(
-    function: &Function,
-    location: FunctionLocation,
-    cluster: &Cluster,
-    named_functions: &NamedFunctions,
-    environment: &BTreeMap<&String, Index<Type>>,
-    host: &impl Host,
-    types: &mut Types,
-) -> Signature {
-    let mut function_signature = None;
-
-    for (&index, branch) in function.branches.iter() {
-        let location = BranchLocation {
-            parent: Box::new(location.clone()),
-            index,
-        };
-
-        let branch_signature = infer_types_in_branch(
-            branch,
-            &location,
-            cluster,
-            named_functions,
-            environment,
-            host,
-            types,
-        );
-
-        types
-            .for_branches
-            .insert(location, branch_signature.clone());
-
-        // If this isn't the first branch we're looking at, there already is a
-        // function signature. We should compare that to the new branch
-        // signature and make sure they're equal.
-        //
-        // As of this writing, type inference is only partially implemented
-        // though, and as a result, this would trigger false positives all the
-        // time.
-        //
-        // Let's just ignore any mismatches, for the time being.
-        function_signature = Some(branch_signature);
-    }
-
-    function_signature.unwrap_or_default()
 }
 
 fn infer_types_in_branch(
@@ -254,15 +233,43 @@ fn infer_type_of_fragment(
                 location: location.clone(),
             };
 
-            let signature = infer_types_in_function(
-                function,
-                location,
-                cluster,
-                named_functions,
-                bindings,
-                host,
-                types,
-            );
+            let signature = {
+                let mut function_signature = None;
+
+                for (&index, branch) in function.branches.iter() {
+                    let location = BranchLocation {
+                        parent: Box::new(location.clone()),
+                        index,
+                    };
+
+                    let branch_signature = infer_types_in_branch(
+                        branch,
+                        &location,
+                        cluster,
+                        named_functions,
+                        bindings,
+                        host,
+                        types,
+                    );
+
+                    types
+                        .for_branches
+                        .insert(location, branch_signature.clone());
+
+                    // If this isn't the first branch we're looking at, there already is a
+                    // function signature. We should compare that to the new branch
+                    // signature and make sure they're equal.
+                    //
+                    // As of this writing, type inference is only partially implemented
+                    // though, and as a result, this would trigger false positives all the
+                    // time.
+                    //
+                    // Let's just ignore any mismatches, for the time being.
+                    function_signature = Some(branch_signature);
+                }
+
+                function_signature.unwrap_or_default()
+            };
 
             Some(signature)
         }
