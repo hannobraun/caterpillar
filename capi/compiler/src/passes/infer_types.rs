@@ -1,3 +1,4 @@
+use std::collections::{btree_map::Entry, BTreeMap};
 
 use crate::{
     code::{
@@ -41,7 +42,7 @@ fn infer_types_in_cluster(
             };
 
             let environment = BTreeMap::new();
-            let branch_signature = infer_types_in_branch(
+            let signature = infer_types_in_branch(
                 branch,
                 &location,
                 cluster,
@@ -51,13 +52,11 @@ fn infer_types_in_cluster(
                 types,
             );
 
-            types
-                .for_branches
-                .insert(location, branch_signature.clone());
+            types.for_branches.insert(location, signature.clone());
 
             match types.for_functions.entry(function.location()) {
                 Entry::Vacant(vacant_entry) => {
-                    vacant_entry.insert(branch_signature);
+                    vacant_entry.insert(signature);
                 }
                 Entry::Occupied(_occupied_entry) => {
                     // If this isn't the first branch we're looking at, there
