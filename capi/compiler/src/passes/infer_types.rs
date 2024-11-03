@@ -35,8 +35,6 @@ fn infer_types_in_cluster(
             .find_by_index(index)
             .expect("Function referred to from call graph must exist.");
 
-        let mut function_signature = None;
-
         for (&index, branch) in function.branches.iter() {
             let location = BranchLocation {
                 parent: Box::new(function.location().clone()),
@@ -67,11 +65,10 @@ fn infer_types_in_cluster(
             // the time.
             //
             // Let's just ignore any mismatches, for the time being.
-            function_signature = Some(branch_signature);
+            types
+                .for_functions
+                .insert(function.location(), branch_signature);
         }
-
-        let signature = function_signature.unwrap_or_default();
-        types.for_functions.insert(function.location(), signature);
     }
 }
 
