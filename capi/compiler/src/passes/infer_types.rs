@@ -89,12 +89,12 @@ fn infer_types_in_branches_of_cluster(
             }
             Entry::Occupied(_occupied_entry) => {
                 // If this isn't the first branch we're looking at, there
-                // already is a function signature. We should compare that
-                // to the new branch signature and make sure they're equal.
+                // already is a function signature. We should compare that to
+                // the new branch signature and make sure they're equal.
                 //
                 // As of this writing, type inference is only partially
-                // implemented though, and as a result, this would trigger
-                // false positives all the time.
+                // implemented though, and as a result, this would trigger false
+                // positives all the time.
                 //
                 // Let's just ignore any mismatches, for the time being.
             }
