@@ -33,7 +33,7 @@ impl<T, M> Deref for Find<T, M> {
     }
 }
 
-impl Find<Function, Index<Function>> {
+impl<F> Find<F, Index<Function>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
