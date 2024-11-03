@@ -405,6 +405,48 @@ mod tests {
     }
 
     #[test]
+    #[should_panic] // known bug; not currently tracked in an issue
+    fn infer_type_of_function_literal() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ ->
+                        fn
+                            \ 0 ->
+                                0
+
+                            \ n ->
+                                n
+                        end
+                end
+            ",
+        );
+
+        let mut fragments = named_functions
+            .find_by_name("f")
+            .unwrap()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|fragment| {
+                types
+                    .for_fragments
+                    .get(fragment.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            });
+
+        let anonymous_function = fragments.next().unwrap();
+
+        use Type::*;
+        assert_eq!(
+            anonymous_function,
+            ConcreteSignature::from(([Number], [Number])),
+        );
+    }
+
+    #[test]
     fn infer_branch_signature() {
         let (named_functions, types) = type_fragments(
             r"
