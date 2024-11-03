@@ -1,4 +1,4 @@
-use std::collections::{btree_map::Entry, BTreeMap};
+use std::collections::{btree_map::Entry, BTreeMap, VecDeque};
 
 use crate::{
     code::{
@@ -30,6 +30,8 @@ fn infer_types_in_cluster(
     host: &impl Host,
     types: &mut Types,
 ) {
+    let mut queue = VecDeque::new();
+
     for index in cluster.functions.values() {
         let function = named_functions
             .find_by_index(index)
@@ -41,34 +43,44 @@ fn infer_types_in_cluster(
                 index,
             };
 
-            let environment = BTreeMap::new();
-            let signature = infer_types_in_branch(
+            queue.push_back(QueuedBranch {
                 branch,
-                &location,
-                cluster,
-                named_functions,
-                &environment,
-                host,
-                types,
-            );
+                location,
+                function: function.location(),
+            });
+        }
+    }
 
-            types.for_branches.insert(location, signature.clone());
+    for queued_branch in queue {
+        let environment = BTreeMap::new();
+        let signature = infer_types_in_branch(
+            queued_branch.branch,
+            &queued_branch.location,
+            cluster,
+            named_functions,
+            &environment,
+            host,
+            types,
+        );
 
-            match types.for_functions.entry(function.location()) {
-                Entry::Vacant(vacant_entry) => {
-                    vacant_entry.insert(signature);
-                }
-                Entry::Occupied(_occupied_entry) => {
-                    // If this isn't the first branch we're looking at, there
-                    // already is a function signature. We should compare that
-                    // to the new branch signature and make sure they're equal.
-                    //
-                    // As of this writing, type inference is only partially
-                    // implemented though, and as a result, this would trigger
-                    // false positives all the time.
-                    //
-                    // Let's just ignore any mismatches, for the time being.
-                }
+        types
+            .for_branches
+            .insert(queued_branch.location, signature.clone());
+
+        match types.for_functions.entry(queued_branch.function) {
+            Entry::Vacant(vacant_entry) => {
+                vacant_entry.insert(signature);
+            }
+            Entry::Occupied(_occupied_entry) => {
+                // If this isn't the first branch we're looking at, there
+                // already is a function signature. We should compare that
+                // to the new branch signature and make sure they're equal.
+                //
+                // As of this writing, type inference is only partially
+                // implemented though, and as a result, this would trigger
+                // false positives all the time.
+                //
+                // Let's just ignore any mismatches, for the time being.
             }
         }
     }
@@ -326,6 +338,12 @@ fn handle_concrete_signature(
     }
 
     Some(signature)
+}
+
+struct QueuedBranch<'r> {
+    branch: &'r Branch,
+    location: BranchLocation,
+    function: FunctionLocation,
 }
 
 #[cfg(test)]
