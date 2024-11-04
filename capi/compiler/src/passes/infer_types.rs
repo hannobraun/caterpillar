@@ -1,6 +1,9 @@
-use std::collections::{
-    btree_map::{self, Entry},
-    BTreeMap, VecDeque,
+use std::{
+    collections::{
+        btree_map::{self, Entry},
+        BTreeMap, VecDeque,
+    },
+    iter,
 };
 
 use crate::{
@@ -344,7 +347,7 @@ fn handle_concrete_signature(
 type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 
 struct QueueItem<'r> {
-    branch_body: btree_map::Iter<'r, Index<Fragment>, Fragment>,
+    branch_body: iter::Peekable<btree_map::Iter<'r, Index<Fragment>, Fragment>>,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
@@ -377,7 +380,7 @@ impl<'r> QueueItem<'r> {
         }
 
         Self {
-            branch_body: branch.body.iter(),
+            branch_body: branch.body.iter().peekable(),
             branch_location,
             function_location,
             parameters,
