@@ -43,7 +43,7 @@ fn infer_types_in_cluster(
                 index,
             };
 
-            queue.push_back(QueuedBranch {
+            queue.push_back(QueueItem {
                 branch,
                 location,
                 function: function.location(),
@@ -104,7 +104,7 @@ fn infer_types_in_branches_of_cluster(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
-    queued_branch: &QueuedBranch,
+    queued_branch: &QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
@@ -273,7 +273,7 @@ fn infer_type_of_fragment(
                     };
 
                     let branch_signature = infer_types_in_branch(
-                        &QueuedBranch {
+                        &QueueItem {
                             branch,
                             location: branch_location.clone(),
                             function: function_location.clone(),
@@ -370,9 +370,9 @@ fn handle_concrete_signature(
     Some(signature)
 }
 
-type BranchQueue<'r> = VecDeque<QueuedBranch<'r>>;
+type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 
-struct QueuedBranch<'r> {
+struct QueueItem<'r> {
     branch: &'r Branch,
     location: BranchLocation,
     function: FunctionLocation,
