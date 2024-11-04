@@ -57,18 +57,11 @@ fn infer_types_in_cluster(
         }
     }
 
-    infer_types_in_branches_of_cluster(
-        queue,
-        cluster,
-        named_functions,
-        host,
-        types,
-    );
+    infer_types_in_branches_of_cluster(queue, named_functions, host, types);
 }
 
 fn infer_types_in_branches_of_cluster(
     mut queue: BranchQueue,
-    _: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     types: &mut Types,
