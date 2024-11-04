@@ -45,7 +45,7 @@ impl<F> Find<F, Index<Function>> {
     /// # Access the location of the found function
     pub fn location(&self) -> FunctionLocation {
         let index = self.metadata;
-        FunctionLocation::NamedFunction { index }
+        index.into()
     }
 }
 
