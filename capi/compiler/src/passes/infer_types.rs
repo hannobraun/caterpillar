@@ -43,10 +43,12 @@ fn infer_types_in_cluster(
                 index,
             };
 
+            let environment = BTreeMap::new();
             queue.push_back(QueueItem::new(
                 branch,
                 location,
                 function.location(),
+                &environment,
             ));
         }
     }
@@ -68,12 +70,10 @@ fn infer_types_in_branches_of_cluster(
     types: &mut Types,
 ) {
     while let Some(queue_item) = queue.pop_front() {
-        let environment = BTreeMap::new();
         infer_types_in_branch(
             queue_item,
             cluster,
             named_functions,
-            &environment,
             host,
             &mut queue,
             types,
@@ -86,18 +86,15 @@ fn infer_types_in_branch(
     mut queue_item: QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
-    environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    let mut bindings = environment.clone();
-
     for pattern in queue_item.branch.parameters.iter() {
         let type_ = match pattern {
             Pattern::Identifier { name } => {
                 let type_ = types.inner.push(Type::Unknown);
-                bindings.insert(name, type_);
+                queue_item.bindings.insert(name, type_);
                 type_
             }
             Pattern::Literal { .. } => types.inner.push(Type::Number),
@@ -119,7 +116,7 @@ fn infer_types_in_branch(
             &location,
             cluster,
             named_functions,
-            &bindings,
+            &queue_item.bindings,
             host,
             queue,
             &mut stack,
@@ -272,10 +269,10 @@ fn infer_type_of_fragment(
                             branch,
                             branch_location.clone(),
                             function_location.clone(),
+                            bindings,
                         ),
                         cluster,
                         named_functions,
-                        bindings,
                         host,
                         queue,
                         types,
@@ -363,6 +360,7 @@ struct QueueItem<'r> {
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
+    bindings: BTreeMap<&'r String, Index<Type>>,
 }
 
 impl<'r> QueueItem<'r> {
@@ -370,12 +368,14 @@ impl<'r> QueueItem<'r> {
         branch: &'r Branch,
         branch_location: BranchLocation,
         function_location: FunctionLocation,
+        environment: &BTreeMap<&'r String, Index<Type>>,
     ) -> Self {
         Self {
             branch,
             branch_location,
             function_location,
             parameters: Vec::new(),
+            bindings: environment.clone(),
         }
     }
 }
