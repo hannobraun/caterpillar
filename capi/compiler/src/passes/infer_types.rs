@@ -93,7 +93,7 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    for (&index, fragment) in queue_item.branch {
+    for (&index, fragment) in queue_item.branch_body {
         let location = FragmentLocation {
             parent: Box::new(queue_item.branch_location.clone()),
             index,
@@ -342,7 +342,7 @@ fn handle_concrete_signature(
 type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 
 struct QueueItem<'r> {
-    branch: btree_map::Iter<'r, Index<Fragment>, Fragment>,
+    branch_body: btree_map::Iter<'r, Index<Fragment>, Fragment>,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
@@ -375,7 +375,7 @@ impl<'r> QueueItem<'r> {
         }
 
         Self {
-            branch: branch.body.iter(),
+            branch_body: branch.body.iter(),
             branch_location,
             function_location,
             parameters,
