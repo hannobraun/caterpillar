@@ -421,8 +421,23 @@ mod tests {
                 end
             ",
         );
+        let (named_functions_b, types_b) = type_fragments(
+            r"
+                f: fn
+                    \ ->
+                        fn
+                            \ n ->
+                                n
+
+                            \ 0 ->
+                                0
+                        end
+                end
+            ",
+        );
 
         check(&named_functions_a, &types_a);
+        check(&named_functions_b, &types_b);
 
         fn check(named_functions: &NamedFunctions, types: &Types) {
             let mut fragments = named_functions
