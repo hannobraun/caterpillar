@@ -407,7 +407,7 @@ mod tests {
     #[test]
     #[should_panic] // known bug; not currently tracked in an issue
     fn infer_type_of_function_literal() {
-        let (named_functions_a, types) = type_fragments(
+        let (named_functions_a, types_a) = type_fragments(
             r"
                 f: fn
                     \ ->
@@ -429,11 +429,11 @@ mod tests {
             .unwrap()
             .body()
             .map(|fragment| {
-                types
+                types_a
                     .for_fragments
                     .get(fragment.location())
                     .unwrap()
-                    .to_concrete_signature(&types)
+                    .to_concrete_signature(&types_a)
                     .unwrap()
             });
 
