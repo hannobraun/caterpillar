@@ -61,7 +61,7 @@ fn infer_types_in_cluster(
 }
 
 fn infer_types_in_branches_of_cluster(
-    queue: VecDeque<QueuedBranch>,
+    queue: BranchQueue,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
@@ -362,6 +362,8 @@ fn handle_concrete_signature(
 
     Some(signature)
 }
+
+type BranchQueue<'r> = VecDeque<QueuedBranch<'r>>;
 
 struct QueuedBranch<'r> {
     branch: &'r Branch,
