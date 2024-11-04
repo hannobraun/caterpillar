@@ -156,7 +156,7 @@ fn infer_types_in_branch(
 
     match types.for_functions.entry(queue_item.function_location) {
         Entry::Vacant(vacant_entry) => {
-            vacant_entry.insert(signature.clone());
+            vacant_entry.insert(signature);
         }
         Entry::Occupied(_occupied_entry) => {
             // If this isn't the first branch we're looking at, there
