@@ -410,28 +410,22 @@ mod tests {
         let (named_functions_a, types_a) = type_fragments(
             r"
                 f: fn
-                    \ ->
-                        fn
-                            \ 0 ->
-                                0
+                    \ 0 ->
+                        0
 
-                            \ n ->
-                                n
-                        end
+                    \ n ->
+                        n
                 end
             ",
         );
         let (named_functions_b, types_b) = type_fragments(
             r"
                 f: fn
-                    \ ->
-                        fn
-                            \ n ->
-                                n
+                    \ n ->
+                        n
 
-                            \ 0 ->
-                                0
-                        end
+                    \ 0 ->
+                        0
                 end
             ",
         );
@@ -440,28 +434,20 @@ mod tests {
         check(&named_functions_b, &types_b);
 
         fn check(named_functions: &NamedFunctions, types: &Types) {
-            let mut fragments = named_functions
+            let f = named_functions
                 .find_by_name("f")
-                .unwrap()
-                .find_single_branch()
-                .unwrap()
-                .body()
-                .map(|fragment| {
+                .map(|function| {
                     types
-                        .for_fragments
-                        .get(fragment.location())
+                        .for_functions
+                        .get(&function.location())
                         .unwrap()
                         .to_concrete_signature(types)
                         .unwrap()
-                });
-
-            let anonymous_function = fragments.next().unwrap();
+                })
+                .unwrap();
 
             use Type::*;
-            assert_eq!(
-                anonymous_function,
-                ConcreteSignature::from(([Number], [Number])),
-            );
+            assert_eq!(f, ConcreteSignature::from(([Number], [Number])),);
         }
     }
 
