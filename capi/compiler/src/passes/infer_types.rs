@@ -43,11 +43,11 @@ fn infer_types_in_cluster(
                 index,
             };
 
-            queue.push_back(QueueItem {
+            queue.push_back(QueueItem::new(
                 branch,
                 location,
-                function: function.location(),
-            });
+                function.location(),
+            ));
         }
     }
 
@@ -273,11 +273,11 @@ fn infer_type_of_fragment(
                     };
 
                     let branch_signature = infer_types_in_branch(
-                        &QueueItem {
+                        &QueueItem::new(
                             branch,
-                            location: branch_location.clone(),
-                            function: function_location.clone(),
-                        },
+                            branch_location.clone(),
+                            function_location.clone(),
+                        ),
                         cluster,
                         named_functions,
                         bindings,
@@ -376,6 +376,20 @@ struct QueueItem<'r> {
     branch: &'r Branch,
     location: BranchLocation,
     function: FunctionLocation,
+}
+
+impl<'r> QueueItem<'r> {
+    fn new(
+        branch: &'r Branch,
+        location: BranchLocation,
+        function: FunctionLocation,
+    ) -> Self {
+        Self {
+            branch,
+            location,
+            function,
+        }
+    }
 }
 
 #[cfg(test)]
