@@ -163,7 +163,7 @@ fn infer_type_of_fragment(
     location: &FragmentLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
-    bindings: &BTreeMap<&String, Index<Type>>,
+    bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
     queue: &mut BranchQueue,
     stack: &mut Vec<Index<Type>>,
@@ -346,23 +346,23 @@ fn handle_concrete_signature(
     signature
 }
 
-type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
+type BranchQueue<'r> = VecDeque<QueueItem>;
 
-struct QueueItem<'r> {
+struct QueueItem {
     branch_body: iter::Peekable<vec::IntoIter<(Index<Fragment>, Fragment)>>,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
-    bindings: BTreeMap<&'r String, Index<Type>>,
+    bindings: BTreeMap<String, Index<Type>>,
     stack: Vec<Index<Type>>,
 }
 
-impl<'r> QueueItem<'r> {
+impl<'r> QueueItem {
     fn new(
         branch: &'r Branch,
         branch_location: BranchLocation,
         function_location: FunctionLocation,
-        environment: &BTreeMap<&'r String, Index<Type>>,
+        environment: &BTreeMap<String, Index<Type>>,
         types: &mut Types,
     ) -> Self {
         let mut parameters = Vec::new();
@@ -372,7 +372,7 @@ impl<'r> QueueItem<'r> {
             let type_ = match pattern {
                 Pattern::Identifier { name } => {
                     let type_ = types.inner.push(Type::Unknown);
-                    bindings.insert(name, type_);
+                    bindings.insert(name.clone(), type_);
                     type_
                 }
                 Pattern::Literal { .. } => types.inner.push(Type::Number),
