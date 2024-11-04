@@ -96,7 +96,7 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    for (&index, fragment) in queue_item.branch_body {
+    while let Some((&index, fragment)) = queue_item.branch_body.peek() {
         let location = FragmentLocation {
             parent: Box::new(queue_item.branch_location.clone()),
             index,
@@ -122,6 +122,11 @@ fn infer_types_in_branch(
             }
             types.for_fragments.insert(location, signature);
         }
+
+        queue_item.branch_body.next().expect(
+            "Just used `peek` to confirm there is an item in the queue; it \
+            must still be there.",
+        );
     }
 
     let signature = Signature {
