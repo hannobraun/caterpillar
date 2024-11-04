@@ -154,7 +154,7 @@ fn infer_types_in_branch(
         .for_branches
         .insert(queue_item.branch_location, signature.clone());
 
-    match types.for_functions.entry(queue_item.function) {
+    match types.for_functions.entry(queue_item.function_location) {
         Entry::Vacant(vacant_entry) => {
             vacant_entry.insert(signature.clone());
         }
@@ -377,7 +377,7 @@ type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 struct QueueItem<'r> {
     branch: &'r Branch,
     branch_location: BranchLocation,
-    function: FunctionLocation,
+    function_location: FunctionLocation,
 }
 
 impl<'r> QueueItem<'r> {
@@ -389,7 +389,7 @@ impl<'r> QueueItem<'r> {
         Self {
             branch,
             branch_location: location,
-            function,
+            function_location: function,
         }
     }
 }
