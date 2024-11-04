@@ -357,9 +357,9 @@ struct QueueItem {
     stack: Vec<Index<Type>>,
 }
 
-impl<'r> QueueItem {
+impl QueueItem {
     fn new(
-        branch: &'r Branch,
+        branch: &Branch,
         branch_location: BranchLocation,
         function_location: FunctionLocation,
         environment: &BTreeMap<String, Index<Type>>,
