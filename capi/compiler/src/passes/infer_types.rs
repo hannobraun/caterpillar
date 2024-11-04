@@ -67,10 +67,10 @@ fn infer_types_in_branches_of_cluster(
     host: &impl Host,
     types: &mut Types,
 ) {
-    while let Some(queued_branch) = queue.pop_front() {
+    while let Some(queue_item) = queue.pop_front() {
         let environment = BTreeMap::new();
         let signature = infer_types_in_branch(
-            &queued_branch,
+            &queue_item,
             cluster,
             named_functions,
             &environment,
@@ -81,9 +81,9 @@ fn infer_types_in_branches_of_cluster(
 
         types
             .for_branches
-            .insert(queued_branch.location, signature.clone());
+            .insert(queue_item.location, signature.clone());
 
-        match types.for_functions.entry(queued_branch.function) {
+        match types.for_functions.entry(queue_item.function) {
             Entry::Vacant(vacant_entry) => {
                 vacant_entry.insert(signature);
             }
