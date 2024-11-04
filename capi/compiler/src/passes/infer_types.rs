@@ -260,16 +260,9 @@ fn infer_type_of_fragment(
                 location: location.clone(),
             };
 
-            if let Some(signature) =
+            let Some(signature) =
                 types.for_functions.get(&function_location).cloned()
-            {
-                let type_ = types.inner.push(Type::Function { signature });
-
-                Signature {
-                    inputs: vec![],
-                    outputs: vec![type_],
-                }
-            } else {
+            else {
                 let mut queue_items = Vec::new();
 
                 for (&index, branch) in function.branches.iter() {
@@ -290,6 +283,13 @@ fn infer_type_of_fragment(
                 return Some(FragmentInference::NeedToInferMoreBranchesFirst {
                     queue_items,
                 });
+            };
+
+            let type_ = types.inner.push(Type::Function { signature });
+
+            Signature {
+                inputs: vec![],
+                outputs: vec![type_],
             }
         }
         Fragment::UnresolvedIdentifier { .. } => {
