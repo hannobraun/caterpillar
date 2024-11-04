@@ -91,13 +91,13 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    let mut local_bindings = BTreeMap::new();
+    let mut all_bindings = environment.clone();
 
     for pattern in queue_item.branch.parameters.iter() {
         let type_ = match pattern {
             Pattern::Identifier { name } => {
                 let type_ = types.inner.push(Type::Unknown);
-                local_bindings.insert(name, type_);
+                all_bindings.insert(name, type_);
                 type_
             }
             Pattern::Literal { .. } => types.inner.push(Type::Number),
@@ -105,12 +105,6 @@ fn infer_types_in_branch(
 
         queue_item.parameters.push(type_);
     }
-
-    let all_bindings = {
-        let mut all_bindings = local_bindings.clone();
-        all_bindings.extend(environment.iter());
-        all_bindings
-    };
 
     let mut stack = Vec::new();
 
