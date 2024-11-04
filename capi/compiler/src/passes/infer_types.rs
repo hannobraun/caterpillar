@@ -1,4 +1,7 @@
-use std::collections::{btree_map::Entry, BTreeMap, VecDeque};
+use std::collections::{
+    btree_map::{self, Entry},
+    BTreeMap, VecDeque,
+};
 
 use crate::{
     code::{
@@ -90,7 +93,7 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    for (&index, fragment) in queue_item.branch.body.iter() {
+    for (&index, fragment) in queue_item.branch {
         let location = FragmentLocation {
             parent: Box::new(queue_item.branch_location.clone()),
             index,
@@ -339,7 +342,7 @@ fn handle_concrete_signature(
 type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 
 struct QueueItem<'r> {
-    branch: &'r Branch,
+    branch: btree_map::Iter<'r, Index<Fragment>, Fragment>,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
@@ -372,7 +375,7 @@ impl<'r> QueueItem<'r> {
         }
 
         Self {
-            branch,
+            branch: branch.body.iter(),
             branch_location,
             function_location,
             parameters,
