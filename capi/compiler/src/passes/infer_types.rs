@@ -295,7 +295,14 @@ fn infer_type_of_fragment(
                     function_signature = Some(branch_signature);
                 }
 
-                function_signature.unwrap_or_default()
+                let type_ = types.inner.push(Type::Function {
+                    signature: function_signature.unwrap_or_default(),
+                });
+
+                Signature {
+                    inputs: vec![],
+                    outputs: vec![type_],
+                }
             };
 
             Some(signature)
@@ -402,6 +409,49 @@ mod tests {
         use Type::*;
         assert_eq!(n, ConcreteSignature::from(([], [Number])));
         assert_eq!(host_fn, ConcreteSignature::from(([Number], [])));
+    }
+
+    #[test]
+    fn infer_type_of_function_literal() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ ->
+                        fn
+                            \ 0 ->
+                                0
+                        end
+                end
+            ",
+        );
+
+        let mut fragments = named_functions
+            .find_by_name("f")
+            .unwrap()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|fragment| {
+                types
+                    .for_fragments
+                    .get(fragment.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            });
+
+        let function = fragments.next().unwrap();
+
+        assert_eq!(function.inputs, []);
+
+        let [Type::Function { signature }] = &function.outputs.as_slice()
+        else {
+            panic!("Unexpected outputs: {:?}", function.outputs);
+        };
+        let signature = signature.to_concrete_signature(&types).unwrap();
+
+        use Type::*;
+        assert_eq!(signature, ConcreteSignature::from(([Number], [Number])));
     }
 
     #[test]
