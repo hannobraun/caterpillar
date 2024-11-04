@@ -111,7 +111,9 @@ fn infer_types_in_branch(
             types,
         );
 
-        if let Some(FragmentInference::Inferred { signature }) = inference {
+        if let Some(inference) = inference {
+            let FragmentInference::Inferred { signature } = inference;
+
             for &output in &signature.outputs {
                 queue_item.stack.push(output);
             }
