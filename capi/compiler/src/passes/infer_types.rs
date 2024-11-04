@@ -346,7 +346,7 @@ fn handle_concrete_signature(
     signature
 }
 
-type BranchQueue<'r> = VecDeque<QueueItem>;
+type BranchQueue = VecDeque<QueueItem>;
 
 struct QueueItem {
     branch_body: iter::Peekable<vec::IntoIter<(Index<Fragment>, Fragment)>>,
