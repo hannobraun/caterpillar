@@ -202,8 +202,27 @@ fn infer_type_of_fragment(
                     handle_concrete_signature(signature, stack, types)
                 }
                 (IntrinsicFunction::Eval, None) => {
-                    // Not supported by inference yet.
-                    return None;
+                    let function = stack
+                        .last()
+                        .expect("`eval` takes at least one argument");
+                    let function = types
+                        .inner
+                        .get(function)
+                        .expect("Type referred to from stack must exist.");
+
+                    let Type::Function { signature } = function else {
+                        panic!("`eval` expects function on stack");
+                    };
+
+                    // `eval` has the same signature as the function it
+                    // consumes, except that it consumes that function in
+                    // addition.
+                    let mut signature = signature.clone();
+                    signature.inputs.push(types.inner.push(Type::Function {
+                        signature: signature.clone(),
+                    }));
+
+                    signature
                 }
                 (intrinsic, signature) => {
                     unreachable!(
