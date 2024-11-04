@@ -165,7 +165,7 @@ fn infer_type_of_fragment(
         inferred. But this is the first compiler pass that should do so."
     );
 
-    match fragment {
+    let signature = match fragment {
         Fragment::Binding { name, .. } => {
             let Some(type_) = bindings.get(name).copied() else {
                 unreachable!(
@@ -178,10 +178,10 @@ fn infer_type_of_fragment(
                 );
             };
 
-            Some(Signature {
+            Signature {
                 inputs: vec![],
                 outputs: vec![type_],
-            })
+            }
         }
         Fragment::CallToHostFunction { number } => {
             let signature = host
@@ -192,16 +192,16 @@ fn infer_type_of_fragment(
                 )
                 .signature();
 
-            Some(handle_concrete_signature(signature, stack, types))
+            handle_concrete_signature(signature, stack, types)
         }
         Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
             match (intrinsic, intrinsic.signature()) {
                 (_, Some(signature)) => {
-                    Some(handle_concrete_signature(signature, stack, types))
+                    handle_concrete_signature(signature, stack, types)
                 }
                 (IntrinsicFunction::Eval, None) => {
                     // Not supported by inference yet.
-                    None
+                    return None;
                 }
                 (intrinsic, signature) => {
                     unreachable!(
@@ -216,7 +216,7 @@ fn infer_type_of_fragment(
                 .find_by_hash(hash)
                 .expect("Function referred to by resolved call must exist.");
 
-            let signature = types
+            types
                 .for_functions
                 .get(&function.location())
                 .expect(
@@ -225,17 +225,15 @@ fn infer_type_of_fragment(
                     have been inferred, before a call for it is being \
                     inferred.",
                 )
-                .clone();
-
-            Some(signature)
+                .clone()
         }
         Fragment::CallToUserDefinedFunctionRecursive { index: _, .. } => {
             // Not supported by inference yet.
-            None
+            return None;
         }
         Fragment::Comment { .. } => {
             // Comments have no bearing on type inference.
-            None
+            return None;
         }
         Fragment::Function { function } => {
             let function_location = FunctionLocation::AnonymousFunction {
@@ -281,21 +279,20 @@ fn infer_type_of_fragment(
                 }
             };
 
-            Some(signature)
+            signature
         }
         Fragment::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.
-            None
+            return None;
         }
-        Fragment::Value(_) => {
-            let signature = Signature {
-                inputs: vec![],
-                outputs: vec![types.inner.push(Type::Number)],
-            };
-            Some(signature)
-        }
-    }
+        Fragment::Value(_) => Signature {
+            inputs: vec![],
+            outputs: vec![types.inner.push(Type::Number)],
+        },
+    };
+
+    Some(signature)
 }
 
 fn handle_concrete_signature(
