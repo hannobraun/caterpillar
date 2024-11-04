@@ -167,7 +167,6 @@ fn infer_types_in_branch(
     }
 }
 
-#[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
