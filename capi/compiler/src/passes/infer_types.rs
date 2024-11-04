@@ -383,12 +383,12 @@ struct QueueItem<'r> {
 impl<'r> QueueItem<'r> {
     fn new(
         branch: &'r Branch,
-        location: BranchLocation,
+        branch_location: BranchLocation,
         function: FunctionLocation,
     ) -> Self {
         Self {
             branch,
-            branch_location: location,
+            branch_location,
             function_location: function,
         }
     }
