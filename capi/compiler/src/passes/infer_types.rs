@@ -261,7 +261,7 @@ fn infer_type_of_fragment(
             None
         }
         Fragment::Function { function } => {
-            let location = FunctionLocation::AnonymousFunction {
+            let function_location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };
 
@@ -270,7 +270,7 @@ fn infer_type_of_fragment(
 
                 for (&index, branch) in function.branches.iter() {
                     let location = BranchLocation {
-                        parent: Box::new(location.clone()),
+                        parent: Box::new(function_location.clone()),
                         index,
                     };
 
