@@ -69,7 +69,7 @@ fn infer_types_in_branches_of_cluster(
 ) {
     while let Some(queue_item) = queue.pop_front() {
         let environment = BTreeMap::new();
-        let signature = infer_types_in_branch(
+        infer_types_in_branch(
             &queue_item,
             cluster,
             named_functions,
@@ -78,23 +78,6 @@ fn infer_types_in_branches_of_cluster(
             &mut queue,
             types,
         );
-
-        match types.for_functions.entry(queue_item.function) {
-            Entry::Vacant(vacant_entry) => {
-                vacant_entry.insert(signature);
-            }
-            Entry::Occupied(_occupied_entry) => {
-                // If this isn't the first branch we're looking at, there
-                // already is a function signature. We should compare that to
-                // the new branch signature and make sure they're equal.
-                //
-                // As of this writing, type inference is only partially
-                // implemented though, and as a result, this would trigger false
-                // positives all the time.
-                //
-                // Let's just ignore any mismatches, for the time being.
-            }
-        }
     }
 }
 
@@ -166,6 +149,27 @@ fn infer_types_in_branch(
     types
         .for_branches
         .insert(queue_item.location.clone(), signature.clone());
+
+    types
+        .for_branches
+        .insert(queue_item.location.clone(), signature.clone());
+
+    match types.for_functions.entry(queue_item.function.clone()) {
+        Entry::Vacant(vacant_entry) => {
+            vacant_entry.insert(signature.clone());
+        }
+        Entry::Occupied(_occupied_entry) => {
+            // If this isn't the first branch we're looking at, there
+            // already is a function signature. We should compare that to
+            // the new branch signature and make sure they're equal.
+            //
+            // As of this writing, type inference is only partially
+            // implemented though, and as a result, this would trigger false
+            // positives all the time.
+            //
+            // Let's just ignore any mismatches, for the time being.
+        }
+    }
 
     signature
 }
