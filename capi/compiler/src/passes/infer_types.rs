@@ -138,7 +138,7 @@ fn infer_types_in_branch(
             for &output in &signature.outputs {
                 queue_item.stack.push(output);
             }
-            types.for_fragments.insert(location, signature);
+            types.of_fragments.insert(location, signature);
         }
 
         queue_item.branch_body.next().expect(
@@ -190,7 +190,7 @@ fn infer_type_of_fragment(
     types: &mut Types,
 ) -> Option<FragmentInference> {
     assert!(
-        !types.for_fragments.contains_key(location),
+        !types.of_fragments.contains_key(location),
         "Encountered a fragment whose type signature has already been \
         inferred:\n\
         {fragment:#?}\n\
@@ -463,7 +463,7 @@ mod tests {
             .body()
             .map(|fragment| {
                 types
-                    .for_fragments
+                    .of_fragments
                     .get(fragment.location())
                     .unwrap()
                     .to_concrete_signature(&types)
@@ -500,7 +500,7 @@ mod tests {
             .body()
             .map(|fragment| {
                 types
-                    .for_fragments
+                    .of_fragments
                     .get(fragment.location())
                     .unwrap()
                     .to_concrete_signature(&types)
