@@ -79,10 +79,6 @@ fn infer_types_in_branches_of_cluster(
             types,
         );
 
-        types
-            .for_branches
-            .insert(queue_item.location, signature.clone());
-
         match types.for_functions.entry(queue_item.function) {
             Entry::Vacant(vacant_entry) => {
                 vacant_entry.insert(signature);
@@ -162,10 +158,16 @@ fn infer_types_in_branch(
         }
     }
 
-    Signature {
+    let signature = Signature {
         inputs: parameters.into_iter().collect(),
         outputs: stack,
-    }
+    };
+
+    types
+        .for_branches
+        .insert(queue_item.location.clone(), signature.clone());
+
+    signature
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -285,10 +287,6 @@ fn infer_type_of_fragment(
                         queue,
                         types,
                     );
-
-                    types
-                        .for_branches
-                        .insert(branch_location, branch_signature.clone());
 
                     // If this isn't the first branch we're looking at, there
                     // already is a function signature. We should compare that
