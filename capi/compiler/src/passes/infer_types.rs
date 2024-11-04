@@ -76,6 +76,7 @@ fn infer_types_in_branches_of_cluster(
             named_functions,
             &environment,
             host,
+            &mut queue,
             types,
         );
 
@@ -102,6 +103,7 @@ fn infer_types_in_branches_of_cluster(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
     branch: &Branch,
     location: &BranchLocation,
@@ -109,6 +111,7 @@ fn infer_types_in_branch(
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
+    queue: &mut BranchQueue,
     types: &mut Types,
 ) -> Signature {
     let mut parameters = Vec::new();
@@ -148,6 +151,7 @@ fn infer_types_in_branch(
             named_functions,
             &all_bindings,
             host,
+            queue,
             &mut stack,
             types,
         );
@@ -174,6 +178,7 @@ fn infer_type_of_fragment(
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<&String, Index<Type>>,
     host: &impl Host,
+    queue: &mut BranchQueue,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
 ) -> Option<Signature> {
@@ -276,6 +281,7 @@ fn infer_type_of_fragment(
                         named_functions,
                         bindings,
                         host,
+                        queue,
                         types,
                     );
 
