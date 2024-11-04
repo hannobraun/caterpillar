@@ -154,7 +154,7 @@ fn infer_types_in_branch(
         .for_branches
         .insert(queue_item.location, signature.clone());
 
-    match types.for_functions.entry(queue_item.function.clone()) {
+    match types.for_functions.entry(queue_item.function) {
         Entry::Vacant(vacant_entry) => {
             vacant_entry.insert(signature.clone());
         }
