@@ -81,7 +81,6 @@ fn infer_types_in_branches_of_cluster(
     }
 }
 
-#[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
     cluster: &Cluster,
