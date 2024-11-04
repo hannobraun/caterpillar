@@ -269,14 +269,14 @@ fn infer_type_of_fragment(
                 let mut function_signature = None;
 
                 for (&index, branch) in function.branches.iter() {
-                    let location = BranchLocation {
+                    let branch_location = BranchLocation {
                         parent: Box::new(function_location.clone()),
                         index,
                     };
 
                     let branch_signature = infer_types_in_branch(
                         branch,
-                        &location,
+                        &branch_location,
                         cluster,
                         named_functions,
                         bindings,
@@ -287,7 +287,7 @@ fn infer_type_of_fragment(
 
                     types
                         .for_branches
-                        .insert(location, branch_signature.clone());
+                        .insert(branch_location, branch_signature.clone());
 
                     // If this isn't the first branch we're looking at, there
                     // already is a function signature. We should compare that
