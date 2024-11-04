@@ -83,7 +83,7 @@ fn infer_types_in_branches_of_cluster(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
-    queue_item: QueueItem,
+    mut queue_item: QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
@@ -91,7 +91,6 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    let mut parameters = Vec::new();
     let mut local_bindings = BTreeMap::new();
 
     for pattern in queue_item.branch.parameters.iter() {
@@ -104,7 +103,7 @@ fn infer_types_in_branch(
             Pattern::Literal { .. } => types.inner.push(Type::Number),
         };
 
-        parameters.push(type_);
+        queue_item.parameters.push(type_);
     }
 
     let all_bindings = {
@@ -142,7 +141,7 @@ fn infer_types_in_branch(
     }
 
     let signature = Signature {
-        inputs: parameters.into_iter().collect(),
+        inputs: queue_item.parameters.into_iter().collect(),
         outputs: stack,
     };
 
@@ -369,6 +368,7 @@ struct QueueItem<'r> {
     branch: &'r Branch,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
+    parameters: Vec<Index<Type>>,
 }
 
 impl<'r> QueueItem<'r> {
@@ -381,6 +381,7 @@ impl<'r> QueueItem<'r> {
             branch,
             branch_location,
             function_location,
+            parameters: Vec::new(),
         }
     }
 }
