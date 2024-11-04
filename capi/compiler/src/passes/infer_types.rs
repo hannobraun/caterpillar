@@ -260,7 +260,7 @@ fn infer_type_of_fragment(
                 location: location.clone(),
             };
 
-            let signature = if let Some(signature) =
+            if let Some(signature) =
                 types.for_functions.get(&function_location).cloned()
             {
                 let type_ = types.inner.push(Type::Function { signature });
@@ -290,9 +290,7 @@ fn infer_type_of_fragment(
                 return Some(FragmentInference::NeedToInferMoreBranchesFirst {
                     queue_items,
                 });
-            };
-
-            signature
+            }
         }
         Fragment::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
