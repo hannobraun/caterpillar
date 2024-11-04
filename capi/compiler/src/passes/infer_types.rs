@@ -68,7 +68,7 @@ fn infer_types_in_cluster(
 
 fn infer_types_in_branches_of_cluster(
     mut queue: BranchQueue,
-    cluster: &Cluster,
+    _: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     types: &mut Types,
@@ -76,7 +76,6 @@ fn infer_types_in_branches_of_cluster(
     while let Some(queue_item) = queue.pop_front() {
         infer_types_in_branch(
             queue_item,
-            cluster,
             named_functions,
             host,
             &mut queue,
@@ -87,7 +86,6 @@ fn infer_types_in_branches_of_cluster(
 
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
-    _: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
