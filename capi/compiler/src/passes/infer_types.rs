@@ -260,40 +260,36 @@ fn infer_type_of_fragment(
                 location: location.clone(),
             };
 
-            let signature = {
-                if let Some(signature) =
-                    types.for_functions.get(&function_location).cloned()
-                {
-                    let type_ = types.inner.push(Type::Function { signature });
+            let signature = if let Some(signature) =
+                types.for_functions.get(&function_location).cloned()
+            {
+                let type_ = types.inner.push(Type::Function { signature });
 
-                    Signature {
-                        inputs: vec![],
-                        outputs: vec![type_],
-                    }
-                } else {
-                    let mut queue_items = Vec::new();
-
-                    for (&index, branch) in function.branches.iter() {
-                        let branch_location = BranchLocation {
-                            parent: Box::new(function_location.clone()),
-                            index,
-                        };
-
-                        queue_items.push(QueueItem::new(
-                            branch,
-                            branch_location.clone(),
-                            function_location.clone(),
-                            bindings,
-                            types,
-                        ));
-                    }
-
-                    return Some(
-                        FragmentInference::NeedToInferMoreBranchesFirst {
-                            queue_items,
-                        },
-                    );
+                Signature {
+                    inputs: vec![],
+                    outputs: vec![type_],
                 }
+            } else {
+                let mut queue_items = Vec::new();
+
+                for (&index, branch) in function.branches.iter() {
+                    let branch_location = BranchLocation {
+                        parent: Box::new(function_location.clone()),
+                        index,
+                    };
+
+                    queue_items.push(QueueItem::new(
+                        branch,
+                        branch_location.clone(),
+                        function_location.clone(),
+                        bindings,
+                        types,
+                    ));
+                }
+
+                return Some(FragmentInference::NeedToInferMoreBranchesFirst {
+                    queue_items,
+                });
             };
 
             signature
