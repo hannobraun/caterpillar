@@ -407,7 +407,7 @@ mod tests {
     #[test]
     #[should_panic] // known bug; not currently tracked in an issue
     fn infer_type_of_function_literal() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions_a, types) = type_fragments(
             r"
                 f: fn
                     \ ->
@@ -422,7 +422,7 @@ mod tests {
             ",
         );
 
-        let mut fragments = named_functions
+        let mut fragments = named_functions_a
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
