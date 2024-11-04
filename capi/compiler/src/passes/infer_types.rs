@@ -406,7 +406,7 @@ mod tests {
 
     #[test]
     #[should_panic] // known bug; not currently tracked in an issue
-    fn infer_type_of_function_literal() {
+    fn infer_type_of_function_based_on_most_specific_branch() {
         let (named_functions_a, types_a) = type_fragments(
             r"
                 f: fn
