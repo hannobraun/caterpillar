@@ -160,7 +160,7 @@ fn infer_types_in_branch(
         .of_branches
         .insert(queue_item.branch_location, signature.clone());
 
-    match types.for_functions.entry(queue_item.function_location) {
+    match types.of_functions.entry(queue_item.function_location) {
         Entry::Vacant(vacant_entry) => {
             vacant_entry.insert(signature);
         }
@@ -269,7 +269,7 @@ fn infer_type_of_fragment(
                 .expect("Function referred to by resolved call must exist.");
 
             types
-                .for_functions
+                .of_functions
                 .get(&function.location())
                 .expect(
                     "This compiler pass infers function types by call graph, \
@@ -293,7 +293,7 @@ fn infer_type_of_fragment(
             };
 
             let Some(signature) =
-                types.for_functions.get(&function_location).cloned()
+                types.of_functions.get(&function_location).cloned()
             else {
                 let mut queue_items = Vec::new();
 
@@ -555,7 +555,7 @@ mod tests {
                 .find_by_name("f")
                 .map(|function| {
                     types
-                        .for_functions
+                        .of_functions
                         .get(&function.location())
                         .unwrap()
                         .to_concrete_signature(types)

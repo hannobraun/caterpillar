@@ -47,7 +47,7 @@ pub struct Types {
 
     pub of_fragments: BTreeMap<FragmentLocation, Signature>,
     pub of_branches: BTreeMap<BranchLocation, Signature>,
-    pub for_functions: BTreeMap<FunctionLocation, Signature>,
+    pub of_functions: BTreeMap<FunctionLocation, Signature>,
 }
 
 /// # The type of a value
