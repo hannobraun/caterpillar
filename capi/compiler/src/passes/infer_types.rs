@@ -172,7 +172,10 @@ fn infer_type_of_fragment(
     assert!(
         !types.for_fragments.contains_key(location),
         "Encountered a fragment whose type signature has already been \
-        inferred. But this is the first compiler pass that should do so."
+        inferred:\n\
+        {fragment:#?}\n\
+        \n\
+        The type of a fragment should be inferred only once."
     );
 
     let signature = match fragment {
