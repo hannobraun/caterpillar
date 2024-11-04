@@ -96,7 +96,7 @@ fn infer_types_in_branch(
             index,
         };
 
-        let signature = infer_type_of_fragment(
+        let inference = infer_type_of_fragment(
             fragment,
             &location,
             cluster,
@@ -108,7 +108,7 @@ fn infer_types_in_branch(
             types,
         );
 
-        if let Some(FragmentInference::Inferred { signature }) = signature {
+        if let Some(FragmentInference::Inferred { signature }) = inference {
             for &output in &signature.outputs {
                 queue_item.stack.push(output);
             }
