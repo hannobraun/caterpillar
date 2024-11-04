@@ -192,12 +192,12 @@ fn infer_type_of_fragment(
                 )
                 .signature();
 
-            handle_concrete_signature(signature, stack, types)
+            Some(handle_concrete_signature(signature, stack, types))
         }
         Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
             match (intrinsic, intrinsic.signature()) {
                 (_, Some(signature)) => {
-                    handle_concrete_signature(signature, stack, types)
+                    Some(handle_concrete_signature(signature, stack, types))
                 }
                 (IntrinsicFunction::Eval, None) => {
                     // Not supported by inference yet.
@@ -302,7 +302,7 @@ fn handle_concrete_signature(
     ConcreteSignature { inputs, outputs }: ConcreteSignature,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
-) -> Option<Signature> {
+) -> Signature {
     let mut signature = Signature {
         inputs: Vec::new(),
         outputs: Vec::new(),
@@ -336,7 +336,7 @@ fn handle_concrete_signature(
         signature.outputs.push(index);
     }
 
-    Some(signature)
+    signature
 }
 
 type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
