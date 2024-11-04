@@ -422,28 +422,32 @@ mod tests {
             ",
         );
 
-        let mut fragments = named_functions_a
-            .find_by_name("f")
-            .unwrap()
-            .find_single_branch()
-            .unwrap()
-            .body()
-            .map(|fragment| {
-                types_a
-                    .for_fragments
-                    .get(fragment.location())
-                    .unwrap()
-                    .to_concrete_signature(&types_a)
-                    .unwrap()
-            });
+        check(&named_functions_a, &types_a);
 
-        let anonymous_function = fragments.next().unwrap();
+        fn check(named_functions: &NamedFunctions, types: &Types) {
+            let mut fragments = named_functions
+                .find_by_name("f")
+                .unwrap()
+                .find_single_branch()
+                .unwrap()
+                .body()
+                .map(|fragment| {
+                    types
+                        .for_fragments
+                        .get(fragment.location())
+                        .unwrap()
+                        .to_concrete_signature(types)
+                        .unwrap()
+                });
 
-        use Type::*;
-        assert_eq!(
-            anonymous_function,
-            ConcreteSignature::from(([Number], [Number])),
-        );
+            let anonymous_function = fragments.next().unwrap();
+
+            use Type::*;
+            assert_eq!(
+                anonymous_function,
+                ConcreteSignature::from(([Number], [Number])),
+            );
+        }
     }
 
     #[test]
