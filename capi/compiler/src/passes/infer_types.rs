@@ -61,13 +61,13 @@ fn infer_types_in_cluster(
 }
 
 fn infer_types_in_branches_of_cluster(
-    queue: BranchQueue,
+    mut queue: BranchQueue,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     types: &mut Types,
 ) {
-    for queued_branch in queue {
+    while let Some(queued_branch) = queue.pop_front() {
         let environment = BTreeMap::new();
         let signature = infer_types_in_branch(
             queued_branch.branch,
