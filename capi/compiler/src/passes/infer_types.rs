@@ -384,12 +384,12 @@ impl<'r> QueueItem<'r> {
     fn new(
         branch: &'r Branch,
         branch_location: BranchLocation,
-        function: FunctionLocation,
+        function_location: FunctionLocation,
     ) -> Self {
         Self {
             branch,
             branch_location,
-            function_location: function,
+            function_location,
         }
     }
 }
