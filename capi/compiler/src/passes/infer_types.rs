@@ -45,32 +45,18 @@ pub fn infer_types(
             }
         }
 
-        infer_types_in_branches_of_cluster(
-            queue,
-            named_functions,
-            host,
-            &mut types,
-        );
+        while let Some(queue_item) = queue.pop_front() {
+            infer_types_in_branch(
+                queue_item,
+                named_functions,
+                host,
+                &mut queue,
+                &mut types,
+            );
+        }
     }
 
     types
-}
-
-fn infer_types_in_branches_of_cluster(
-    mut queue: BranchQueue,
-    named_functions: &NamedFunctions,
-    host: &impl Host,
-    types: &mut Types,
-) {
-    while let Some(queue_item) = queue.pop_front() {
-        infer_types_in_branch(
-            queue_item,
-            named_functions,
-            host,
-            &mut queue,
-            types,
-        );
-    }
 }
 
 fn infer_types_in_branch(
