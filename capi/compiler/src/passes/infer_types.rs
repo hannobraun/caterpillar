@@ -96,7 +96,6 @@ fn infer_types_in_branch(
             named_functions,
             &queue_item.bindings,
             host,
-            queue,
             &mut queue_item.stack,
             types,
         );
@@ -175,7 +174,6 @@ fn infer_type_of_fragment(
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
-    _: &mut BranchQueue,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
 ) -> Option<FragmentInference> {
