@@ -70,8 +70,7 @@ fn infer_types_in_branches_of_cluster(
     while let Some(queued_branch) = queue.pop_front() {
         let environment = BTreeMap::new();
         let signature = infer_types_in_branch(
-            queued_branch.branch,
-            &queued_branch.location,
+            &queued_branch,
             cluster,
             named_functions,
             &environment,
@@ -105,8 +104,7 @@ fn infer_types_in_branches_of_cluster(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
-    branch: &Branch,
-    location: &BranchLocation,
+    queued_branch: &QueuedBranch,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
@@ -117,7 +115,7 @@ fn infer_types_in_branch(
     let mut parameters = Vec::new();
     let mut local_bindings = BTreeMap::new();
 
-    for pattern in branch.parameters.iter() {
+    for pattern in queued_branch.branch.parameters.iter() {
         let type_ = match pattern {
             Pattern::Identifier { name } => {
                 let type_ = types.inner.push(Type::Unknown);
@@ -138,9 +136,9 @@ fn infer_types_in_branch(
 
     let mut stack = Vec::new();
 
-    for (&index, fragment) in branch.body.iter() {
+    for (&index, fragment) in queued_branch.branch.body.iter() {
         let location = FragmentLocation {
-            parent: Box::new(location.clone()),
+            parent: Box::new(queued_branch.location.clone()),
             index,
         };
 
@@ -275,8 +273,11 @@ fn infer_type_of_fragment(
                     };
 
                     let branch_signature = infer_types_in_branch(
-                        branch,
-                        &branch_location,
+                        &QueuedBranch {
+                            branch,
+                            location: branch_location.clone(),
+                            function: function_location.clone(),
+                        },
                         cluster,
                         named_functions,
                         bindings,
