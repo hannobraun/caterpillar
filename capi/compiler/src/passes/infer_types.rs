@@ -91,13 +91,13 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    let mut all_bindings = environment.clone();
+    let mut bindings = environment.clone();
 
     for pattern in queue_item.branch.parameters.iter() {
         let type_ = match pattern {
             Pattern::Identifier { name } => {
                 let type_ = types.inner.push(Type::Unknown);
-                all_bindings.insert(name, type_);
+                bindings.insert(name, type_);
                 type_
             }
             Pattern::Literal { .. } => types.inner.push(Type::Number),
@@ -119,7 +119,7 @@ fn infer_types_in_branch(
             &location,
             cluster,
             named_functions,
-            &all_bindings,
+            &bindings,
             host,
             queue,
             &mut stack,
