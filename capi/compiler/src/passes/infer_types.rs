@@ -270,15 +270,13 @@ fn infer_type_of_fragment(
             };
 
             let signature = {
-                let mut function_signature = None;
-
                 for (&index, branch) in function.branches.iter() {
                     let branch_location = BranchLocation {
                         parent: Box::new(function_location.clone()),
                         index,
                     };
 
-                    let branch_signature = infer_types_in_branch(
+                    infer_types_in_branch(
                         QueueItem::new(
                             branch,
                             branch_location.clone(),
@@ -291,25 +289,21 @@ fn infer_type_of_fragment(
                         queue,
                         types,
                     );
-
-                    // If this isn't the first branch we're looking at, there
-                    // already is a function signature. We should compare that
-                    // to the new branch signature and make sure they're equal.
-                    //
-                    // As of this writing, type inference is only partially
-                    // implemented though, and as a result, this would trigger
-                    // false positives all the time.
-                    //
-                    // Let's just ignore any mismatches, for the time being.
-                    function_signature = Some(branch_signature);
                 }
 
-                let signature = function_signature.unwrap_or_default();
-                let type_ = types.inner.push(Type::Function { signature });
+                if let Some(signature) =
+                    types.for_functions.get(&function_location).cloned()
+                {
+                    let type_ = types.inner.push(Type::Function { signature });
 
-                Signature {
-                    inputs: vec![],
-                    outputs: vec![type_],
+                    Signature {
+                        inputs: vec![],
+                        outputs: vec![type_],
+                    }
+                } else {
+                    unreachable!(
+                        "Just inferred type of function; must be available."
+                    );
                 }
             };
 
