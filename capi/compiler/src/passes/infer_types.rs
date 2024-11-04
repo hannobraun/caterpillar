@@ -96,10 +96,10 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    while let Some((&index, fragment)) = queue_item.branch_body.peek() {
+    while let Some((index, fragment)) = queue_item.branch_body.peek() {
         let location = FragmentLocation {
             parent: Box::new(queue_item.branch_location.clone()),
-            index,
+            index: **index,
         };
 
         let inference = infer_type_of_fragment(
