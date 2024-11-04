@@ -112,7 +112,28 @@ fn infer_types_in_branch(
         );
 
         if let Some(inference) = inference {
-            let FragmentInference::Inferred { signature } = inference;
+            let signature = match inference {
+                FragmentInference::Inferred { signature } => signature,
+                FragmentInference::NeedToInferMoreBranchesFirst {
+                    queue_items,
+                } => {
+                    // The fragment is a function literal. We need to infer the
+                    // types of its branches before we can proceed.
+                    //
+                    // Let's schedule those to be inferred next, and pick up the
+                    // inference of the current branch right after.
+                    for queue_item in
+                        [queue_item].into_iter().chain(queue_items)
+                    {
+                        queue.push_front(queue_item);
+                    }
+
+                    // Abort the inference of the current branch. Since we used
+                    // `peek` above, we'll resume with the current fragment,
+                    // once this branch is up again.
+                    return;
+                }
+            };
 
             for &output in &signature.outputs {
                 queue_item.stack.push(output);
@@ -161,11 +182,11 @@ fn infer_types_in_branch(
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
-    cluster: &Cluster,
+    _: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
-    queue: &mut BranchQueue,
+    _: &mut BranchQueue,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
 ) -> Option<FragmentInference> {
@@ -254,28 +275,6 @@ fn infer_type_of_fragment(
             };
 
             let signature = {
-                for (&index, branch) in function.branches.iter() {
-                    let branch_location = BranchLocation {
-                        parent: Box::new(function_location.clone()),
-                        index,
-                    };
-
-                    infer_types_in_branch(
-                        QueueItem::new(
-                            branch,
-                            branch_location.clone(),
-                            function_location.clone(),
-                            bindings,
-                            types,
-                        ),
-                        cluster,
-                        named_functions,
-                        host,
-                        queue,
-                        types,
-                    );
-                }
-
                 if let Some(signature) =
                     types.for_functions.get(&function_location).cloned()
                 {
@@ -286,8 +285,27 @@ fn infer_type_of_fragment(
                         outputs: vec![type_],
                     }
                 } else {
-                    unreachable!(
-                        "Just inferred type of function; must be available."
+                    let mut queue_items = Vec::new();
+
+                    for (&index, branch) in function.branches.iter() {
+                        let branch_location = BranchLocation {
+                            parent: Box::new(function_location.clone()),
+                            index,
+                        };
+
+                        queue_items.push(QueueItem::new(
+                            branch,
+                            branch_location.clone(),
+                            function_location.clone(),
+                            bindings,
+                            types,
+                        ));
+                    }
+
+                    return Some(
+                        FragmentInference::NeedToInferMoreBranchesFirst {
+                            queue_items,
+                        },
                     );
                 }
             };
@@ -403,6 +421,7 @@ impl QueueItem {
 
 enum FragmentInference {
     Inferred { signature: Signature },
+    NeedToInferMoreBranchesFirst { queue_items: Vec<QueueItem> },
 }
 
 #[cfg(test)]
