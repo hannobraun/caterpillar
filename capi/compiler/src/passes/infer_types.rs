@@ -117,7 +117,7 @@ fn infer_types_in_branch(
 
     for (&index, fragment) in queue_item.branch.body.iter() {
         let location = FragmentLocation {
-            parent: Box::new(queue_item.location.clone()),
+            parent: Box::new(queue_item.branch_location.clone()),
             index,
         };
 
@@ -148,11 +148,11 @@ fn infer_types_in_branch(
 
     types
         .for_branches
-        .insert(queue_item.location.clone(), signature.clone());
+        .insert(queue_item.branch_location.clone(), signature.clone());
 
     types
         .for_branches
-        .insert(queue_item.location, signature.clone());
+        .insert(queue_item.branch_location, signature.clone());
 
     match types.for_functions.entry(queue_item.function) {
         Entry::Vacant(vacant_entry) => {
@@ -376,7 +376,7 @@ type BranchQueue<'r> = VecDeque<QueueItem<'r>>;
 
 struct QueueItem<'r> {
     branch: &'r Branch,
-    location: BranchLocation,
+    branch_location: BranchLocation,
     function: FunctionLocation,
 }
 
@@ -388,7 +388,7 @@ impl<'r> QueueItem<'r> {
     ) -> Self {
         Self {
             branch,
-            location,
+            branch_location: location,
             function,
         }
     }
