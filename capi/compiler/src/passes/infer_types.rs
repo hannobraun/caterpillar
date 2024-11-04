@@ -5,9 +5,9 @@ use std::{
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
-        FragmentLocation, FunctionLocation, Index, NamedFunctions, Pattern,
-        Signature, Type, Types,
+        Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
+        Fragment, FragmentLocation, FunctionLocation, Index, NamedFunctions,
+        Pattern, Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -74,6 +74,7 @@ pub fn infer_types(
         while let Some(queue_item) = queue.pop_front() {
             infer_types_in_branch(
                 queue_item,
+                cluster,
                 named_functions,
                 host,
                 &mut queue,
@@ -87,6 +88,7 @@ pub fn infer_types(
 
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
@@ -101,6 +103,7 @@ fn infer_types_in_branch(
         let inference = infer_type_of_fragment(
             fragment,
             &location,
+            cluster,
             named_functions,
             &queue_item.bindings,
             host,
@@ -175,9 +178,11 @@ fn infer_types_in_branch(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
+    _: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
