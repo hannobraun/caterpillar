@@ -46,7 +46,7 @@ pub struct Types {
     pub inner: IndexMap<Type>,
 
     pub of_fragments: BTreeMap<FragmentLocation, Signature>,
-    pub for_branches: BTreeMap<BranchLocation, Signature>,
+    pub of_branches: BTreeMap<BranchLocation, Signature>,
     pub for_functions: BTreeMap<FunctionLocation, Signature>,
 }
 

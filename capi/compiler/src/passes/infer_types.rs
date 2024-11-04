@@ -153,11 +153,11 @@ fn infer_types_in_branch(
     };
 
     types
-        .for_branches
+        .of_branches
         .insert(queue_item.branch_location.clone(), signature.clone());
 
     types
-        .for_branches
+        .of_branches
         .insert(queue_item.branch_location, signature.clone());
 
     match types.for_functions.entry(queue_item.function_location) {
@@ -586,7 +586,7 @@ mod tests {
             .find_single_branch()
             .map(|branch| {
                 types
-                    .for_branches
+                    .of_branches
                     .get(branch.location())
                     .unwrap()
                     .to_concrete_signature(&types)
