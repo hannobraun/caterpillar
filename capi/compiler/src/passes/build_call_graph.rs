@@ -104,10 +104,7 @@ fn collect_functions_into_clusters(
                 functions.push(index);
             }
 
-            Cluster {
-                functions,
-                recursive_branch_call_graph: None,
-            }
+            Cluster { functions }
         })
 }
 
@@ -150,7 +147,6 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
-                recursive_branch_call_graph: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -184,7 +180,6 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
-                recursive_branch_call_graph: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -227,7 +222,6 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
-                recursive_branch_call_graph: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -277,7 +271,6 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
-                recursive_branch_call_graph: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -336,7 +329,6 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
-                recursive_branch_call_graph: None,
             })
             .collect::<Vec<_>>(),
         );

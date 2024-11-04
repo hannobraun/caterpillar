@@ -77,30 +77,4 @@ impl CallGraph {
 pub struct Cluster {
     /// # The functions in this cluster
     pub functions: IndexMap<Index<Function>>,
-
-    /// # The recursive call graph of the branches within this cluster
-    ///
-    /// Starts out as `None`, until the respective compiler pass fills it in.
-    pub recursive_branch_call_graph: Option<RecursiveBranchCallGraphInCluster>,
 }
-
-/// # A call graph of branches within a cluster, for only recursive calls
-///
-/// This is rather specific information, required for type inference of
-/// recursive function calls.
-///
-/// ## Implementation Note
-///
-/// The call graph that provides this information does not exist yet, and this
-/// type is just a placeholder.
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub struct RecursiveBranchCallGraphInCluster {}
