@@ -104,7 +104,7 @@ fn infer_types_in_branches_of_cluster(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
-    queued_branch: &QueueItem,
+    queue_item: &QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
@@ -115,7 +115,7 @@ fn infer_types_in_branch(
     let mut parameters = Vec::new();
     let mut local_bindings = BTreeMap::new();
 
-    for pattern in queued_branch.branch.parameters.iter() {
+    for pattern in queue_item.branch.parameters.iter() {
         let type_ = match pattern {
             Pattern::Identifier { name } => {
                 let type_ = types.inner.push(Type::Unknown);
@@ -136,9 +136,9 @@ fn infer_types_in_branch(
 
     let mut stack = Vec::new();
 
-    for (&index, fragment) in queued_branch.branch.body.iter() {
+    for (&index, fragment) in queue_item.branch.body.iter() {
         let location = FragmentLocation {
-            parent: Box::new(queued_branch.location.clone()),
+            parent: Box::new(queue_item.location.clone()),
             index,
         };
 
