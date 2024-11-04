@@ -90,7 +90,7 @@ fn infer_types_in_branch(
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
-) -> Signature {
+) {
     let mut parameters = Vec::new();
     let mut local_bindings = BTreeMap::new();
 
@@ -170,8 +170,6 @@ fn infer_types_in_branch(
             // Let's just ignore any mismatches, for the time being.
         }
     }
-
-    signature
 }
 
 #[allow(clippy::too_many_arguments)]
