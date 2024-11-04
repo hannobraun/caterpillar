@@ -83,15 +83,13 @@ fn infer_types_in_branches_of_cluster(
 }
 
 fn infer_types_in_branch(
-    queue_item: QueueItem,
+    mut queue_item: QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    let mut stack = Vec::new();
-
     for (&index, fragment) in queue_item.branch.body.iter() {
         let location = FragmentLocation {
             parent: Box::new(queue_item.branch_location.clone()),
@@ -106,13 +104,13 @@ fn infer_types_in_branch(
             &queue_item.bindings,
             host,
             queue,
-            &mut stack,
+            &mut queue_item.stack,
             types,
         );
 
         if let Some(signature) = signature {
             for &output in &signature.outputs {
-                stack.push(output);
+                queue_item.stack.push(output);
             }
             types.for_fragments.insert(location, signature);
         }
@@ -120,7 +118,7 @@ fn infer_types_in_branch(
 
     let signature = Signature {
         inputs: queue_item.parameters.into_iter().collect(),
-        outputs: stack,
+        outputs: queue_item.stack,
     };
 
     types
@@ -349,6 +347,7 @@ struct QueueItem<'r> {
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,
     bindings: BTreeMap<&'r String, Index<Type>>,
+    stack: Vec<Index<Type>>,
 }
 
 impl<'r> QueueItem<'r> {
@@ -381,6 +380,7 @@ impl<'r> QueueItem<'r> {
             function_location,
             parameters,
             bindings,
+            stack: Vec::new(),
         }
     }
 }
