@@ -108,7 +108,7 @@ fn infer_types_in_branch(
             types,
         );
 
-        if let Some(signature) = signature {
+        if let Some(FragmentInference::Inferred { signature }) = signature {
             for &output in &signature.outputs {
                 queue_item.stack.push(output);
             }
@@ -158,7 +158,7 @@ fn infer_type_of_fragment(
     queue: &mut BranchQueue,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
-) -> Option<Signature> {
+) -> Option<FragmentInference> {
     assert!(
         !types.for_fragments.contains_key(location),
         "Encountered a fragment whose type signature has already been \
@@ -292,7 +292,7 @@ fn infer_type_of_fragment(
         },
     };
 
-    Some(signature)
+    Some(FragmentInference::Inferred { signature })
 }
 
 fn handle_concrete_signature(
@@ -380,6 +380,10 @@ impl<'r> QueueItem<'r> {
             stack: Vec::new(),
         }
     }
+}
+
+enum FragmentInference {
+    Inferred { signature: Signature },
 }
 
 #[cfg(test)]
