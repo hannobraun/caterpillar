@@ -21,6 +21,32 @@ pub fn infer_types(
     let mut types = Types::default();
 
     for cluster in call_graph.clusters_from_leaves() {
+        // For every cluster, we create a queue of the branches within that
+        // cluster. This queue is not processed in its initial order. Processing
+        // of a branch can be paused, and other branches can be processed first.
+        //
+        // The purpose of this is to provide full support for inferring the type
+        // of recursive calls within a cluster. To infer such a type, another
+        // branch might need to be processed first. In that case, we can queue
+        // other branches of the called function first, before continuing with
+        // the current branch.
+        //
+        // Or, in cases of endless recursion (mutual or self), the call can be
+        // diverging. Using the queue, we can detect this by watching out for
+        // repeated processing of the same branch.
+        //
+        // This approach has drawbacks. It is complex, and it introduces the
+        // risk of an endless loop, if implemented incorrectly. You might think
+        // that another approach, based on a call graph of functions within a
+        // cluster, might be better.
+        //
+        // This could very well be. I went down this road, and kept running into
+        // problems. Looking back, I might have ended this exploration too
+        // early, as I no longer think the problems I ran into were intractable.
+        //
+        // Or I might have forgotten a critical details that actually _did_ make
+        // those problems intractable. Either way, the queue approach works for
+        // now.
         let mut queue = VecDeque::new();
 
         for index in cluster.functions.values() {
