@@ -70,7 +70,7 @@ fn infer_types_in_branches_of_cluster(
     while let Some(queue_item) = queue.pop_front() {
         let environment = BTreeMap::new();
         infer_types_in_branch(
-            &queue_item,
+            queue_item,
             cluster,
             named_functions,
             &environment,
@@ -83,7 +83,7 @@ fn infer_types_in_branches_of_cluster(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_types_in_branch(
-    queue_item: &QueueItem,
+    queue_item: QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     environment: &BTreeMap<&String, Index<Type>>,
@@ -279,7 +279,7 @@ fn infer_type_of_fragment(
                     };
 
                     let branch_signature = infer_types_in_branch(
-                        &QueueItem::new(
+                        QueueItem::new(
                             branch,
                             branch_location.clone(),
                             function_location.clone(),
