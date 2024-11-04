@@ -87,7 +87,7 @@ fn infer_types_in_branches_of_cluster(
 
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
-    cluster: &Cluster,
+    _: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
@@ -102,7 +102,6 @@ fn infer_types_in_branch(
         let inference = infer_type_of_fragment(
             fragment,
             &location,
-            cluster,
             named_functions,
             &queue_item.bindings,
             host,
@@ -182,7 +181,6 @@ fn infer_types_in_branch(
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
-    _: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
