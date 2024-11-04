@@ -5,9 +5,9 @@ use std::{
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Fragment, FragmentLocation, FunctionLocation, Index, NamedFunctions,
-        Pattern, Signature, Type, Types,
+        Branch, BranchLocation, CallGraph, ConcreteSignature, Fragment,
+        FragmentLocation, FunctionLocation, Index, NamedFunctions, Pattern,
+        Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -21,43 +21,39 @@ pub fn infer_types(
     let mut types = Types::default();
 
     for cluster in call_graph.clusters_from_leaves() {
-        infer_types_in_cluster(cluster, named_functions, host, &mut types);
+        let mut queue = VecDeque::new();
+
+        for index in cluster.functions.values() {
+            let function = named_functions
+                .find_by_index(index)
+                .expect("Function referred to from call graph must exist.");
+
+            for (&index, branch) in function.branches.iter() {
+                let location = BranchLocation {
+                    parent: Box::new(function.location().clone()),
+                    index,
+                };
+
+                let environment = BTreeMap::new();
+                queue.push_back(QueueItem::new(
+                    branch,
+                    location,
+                    function.location(),
+                    &environment,
+                    &mut types,
+                ));
+            }
+        }
+
+        infer_types_in_branches_of_cluster(
+            queue,
+            named_functions,
+            host,
+            &mut types,
+        );
     }
 
     types
-}
-
-fn infer_types_in_cluster(
-    cluster: &Cluster,
-    named_functions: &NamedFunctions,
-    host: &impl Host,
-    types: &mut Types,
-) {
-    let mut queue = VecDeque::new();
-
-    for index in cluster.functions.values() {
-        let function = named_functions
-            .find_by_index(index)
-            .expect("Function referred to from call graph must exist.");
-
-        for (&index, branch) in function.branches.iter() {
-            let location = BranchLocation {
-                parent: Box::new(function.location().clone()),
-                index,
-            };
-
-            let environment = BTreeMap::new();
-            queue.push_back(QueueItem::new(
-                branch,
-                location,
-                function.location(),
-                &environment,
-                types,
-            ));
-        }
-    }
-
-    infer_types_in_branches_of_cluster(queue, named_functions, host, types);
 }
 
 fn infer_types_in_branches_of_cluster(
