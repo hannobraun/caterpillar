@@ -304,9 +304,8 @@ fn infer_type_of_fragment(
                     function_signature = Some(branch_signature);
                 }
 
-                let type_ = types.inner.push(Type::Function {
-                    signature: function_signature.unwrap_or_default(),
-                });
+                let signature = function_signature.unwrap_or_default();
+                let type_ = types.inner.push(Type::Function { signature });
 
                 Signature {
                     inputs: vec![],
