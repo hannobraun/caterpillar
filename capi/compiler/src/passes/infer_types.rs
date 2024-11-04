@@ -369,13 +369,14 @@ impl<'r> QueueItem<'r> {
         function_location: FunctionLocation,
         environment: &BTreeMap<&'r String, Index<Type>>,
     ) -> Self {
+        let parameters = Vec::new();
         let bindings = environment.clone();
 
         Self {
             branch,
             branch_location,
             function_location,
-            parameters: Vec::new(),
+            parameters,
             bindings,
         }
     }
