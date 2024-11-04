@@ -49,6 +49,7 @@ fn infer_types_in_cluster(
                 location,
                 function.location(),
                 &environment,
+                types,
             ));
         }
     }
@@ -82,26 +83,13 @@ fn infer_types_in_branches_of_cluster(
 }
 
 fn infer_types_in_branch(
-    mut queue_item: QueueItem,
+    queue_item: QueueItem,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    for pattern in queue_item.branch.parameters.iter() {
-        let type_ = match pattern {
-            Pattern::Identifier { name } => {
-                let type_ = types.inner.push(Type::Unknown);
-                queue_item.bindings.insert(name, type_);
-                type_
-            }
-            Pattern::Literal { .. } => types.inner.push(Type::Number),
-        };
-
-        queue_item.parameters.push(type_);
-    }
-
     let mut stack = Vec::new();
 
     for (&index, fragment) in queue_item.branch.body.iter() {
@@ -269,6 +257,7 @@ fn infer_type_of_fragment(
                             branch_location.clone(),
                             function_location.clone(),
                             bindings,
+                            types,
                         ),
                         cluster,
                         named_functions,
@@ -368,9 +357,23 @@ impl<'r> QueueItem<'r> {
         branch_location: BranchLocation,
         function_location: FunctionLocation,
         environment: &BTreeMap<&'r String, Index<Type>>,
+        types: &mut Types,
     ) -> Self {
-        let parameters = Vec::new();
-        let bindings = environment.clone();
+        let mut parameters = Vec::new();
+        let mut bindings = environment.clone();
+
+        for pattern in branch.parameters.iter() {
+            let type_ = match pattern {
+                Pattern::Identifier { name } => {
+                    let type_ = types.inner.push(Type::Unknown);
+                    bindings.insert(name, type_);
+                    type_
+                }
+                Pattern::Literal { .. } => types.inner.push(Type::Number),
+            };
+
+            parameters.push(type_);
+        }
 
         Self {
             branch,
