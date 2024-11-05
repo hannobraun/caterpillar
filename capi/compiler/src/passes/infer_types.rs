@@ -593,12 +593,24 @@ mod tests {
                     .unwrap()
             })
             .unwrap();
+        let function = named_functions
+            .find_by_name("f")
+            .map(|function| {
+                types
+                    .of_functions
+                    .get(&function.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
 
         use Type::*;
-        assert_eq!(
-            branch,
-            ConcreteSignature::from(([Number, Unknown, Number], [Unknown]))
-        );
+        let expected_signature =
+            ConcreteSignature::from(([Number, Unknown, Number], [Unknown]));
+
+        assert_eq!(branch, expected_signature);
+        assert_eq!(function, expected_signature);
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
