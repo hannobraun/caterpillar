@@ -1,3 +1,5 @@
+use std::fmt;
+
 use super::{Branch, Fragment, Function, Index};
 
 #[derive(
@@ -28,6 +30,12 @@ pub struct FragmentLocation {
 pub struct BranchLocation {
     pub parent: Box<FunctionLocation>,
     pub index: Index<Branch>,
+}
+
+impl fmt::Display for BranchLocation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "branch {} in {:?}", self.index, self.parent)
+    }
 }
 
 #[derive(
