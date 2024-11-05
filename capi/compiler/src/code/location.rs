@@ -17,9 +17,28 @@ pub struct FragmentLocation {
     pub index: Index<Fragment>,
 }
 
-impl fmt::Display for FragmentLocation {
+impl FragmentLocation {
+    /// # Create a helper that implements [`fmt::Display`]
+    pub fn display(&self) -> FragmentLocationDisplay {
+        FragmentLocationDisplay { location: self }
+    }
+}
+
+/// # Helper struct to display [`FragmentLocation`]
+///
+/// Implements [`fmt::Display`], which [`FragmentLocation`] itself doesn't.
+pub struct FragmentLocationDisplay<'r> {
+    location: &'r FragmentLocation,
+}
+
+impl fmt::Display for FragmentLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "fragment {} in {}", self.index, self.parent.display())
+        write!(
+            f,
+            "fragment {} in {}",
+            self.location.index,
+            self.location.parent.display()
+        )
     }
 }
 
@@ -105,7 +124,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 write!(f, "named function {index}")?;
             }
             FunctionLocation::AnonymousFunction { location } => {
-                write!(f, "anonymous function at {}", location)?;
+                write!(f, "anonymous function at {}", location.display())?;
             }
         }
 
