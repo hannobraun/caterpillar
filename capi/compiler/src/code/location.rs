@@ -42,7 +42,7 @@ impl fmt::Display for FragmentLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "fragment {} in {}",
+            "fragment {}\n    in {}",
             self.location.index,
             self.location.parent.display(self.named_functions)
         )
