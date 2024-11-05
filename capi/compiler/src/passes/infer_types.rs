@@ -754,20 +754,21 @@ mod tests {
     #[test]
     #[should_panic] // missing feature
     fn infer_mutually_recursive_functions_as_empty() {
-        let (named_functions, types) = type_fragments(
-            r"
-                f: fn
-                    \ a, b, 0 ->
-                        a number_to_nothing
-                        0 b 1 g
-                end
+        let f = r"
+            f: fn
+                \ a, b, 0 ->
+                    a number_to_nothing
+                    0 b 1 g
+            end
+        ";
+        let g = r"
+            g: fn
+                \ a, b, 1 ->
+                    0 b 0 f
+            end
+        ";
 
-                g: fn
-                    \ a, b, 1 ->
-                        0 b 0 f
-                end
-            ",
-        );
+        let (named_functions, types) = type_fragments(&format!("{f}{g}"));
 
         let f = named_functions
             .find_by_name("f")
