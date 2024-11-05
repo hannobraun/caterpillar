@@ -40,7 +40,7 @@ pub struct BranchLocation {
 
 impl fmt::Display for BranchLocation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "branch {} in {}", self.index, self.parent)
+        write!(f, "branch {} in {}", self.index, self.parent.display())
     }
 }
 
@@ -59,15 +59,29 @@ pub enum FunctionLocation {
     AnonymousFunction { location: FragmentLocation },
 }
 
+impl FunctionLocation {
+    /// # Create a helper that implements [`fmt::Display`]
+    pub fn display(&self) -> FunctionLocationDisplay {
+        FunctionLocationDisplay { location: self }
+    }
+}
+
 impl From<Index<Function>> for FunctionLocation {
     fn from(index: Index<Function>) -> Self {
         Self::NamedFunction { index }
     }
 }
 
-impl fmt::Display for FunctionLocation {
+/// # Helper struct to display [`FunctionLocation`]
+///
+/// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
+pub struct FunctionLocationDisplay<'r> {
+    location: &'r FunctionLocation,
+}
+
+impl fmt::Display for FunctionLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
+        match self.location {
             FunctionLocation::NamedFunction { index } => {
                 write!(f, "named function {index}")?;
             }
