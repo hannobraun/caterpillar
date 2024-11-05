@@ -280,8 +280,15 @@ fn infer_type_of_fragment(
                 .clone()
         }
         Fragment::CallToUserDefinedFunctionRecursive { index: _, .. } => {
-            // Not supported by inference yet.
-            return None;
+            // Type inference of recursive function calls is not fully
+            // implemented yet. This is just a starting point.
+
+            let empty = types.inner.push(Type::Empty);
+
+            Signature {
+                inputs: vec![],
+                outputs: vec![empty],
+            }
         }
         Fragment::Comment { .. } => {
             // Comments have no bearing on type inference.
@@ -615,6 +622,34 @@ mod tests {
 
         assert_eq!(branch, expected_signature);
         assert_eq!(function, expected_signature);
+    }
+
+    #[test]
+    fn infer_self_recursive_function_as_empty() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ ->
+                        f
+                end
+            ",
+        );
+        dbg!(&named_functions);
+
+        let f = named_functions
+            .find_by_name("f")
+            .map(|function| {
+                types
+                    .of_functions
+                    .get(&function.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
+
+        use Type::*;
+        assert_eq!(f, ConcreteSignature::from(([], [Empty])));
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
