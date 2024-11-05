@@ -283,7 +283,11 @@ fn infer_type_of_fragment(
             // Type inference of recursive function calls is not fully
             // implemented yet. This is just a starting point.
 
-            let inputs = vec![];
+            let inputs = {
+                let inputs = stack.clone();
+                stack.clear();
+                inputs
+            };
             let outputs = {
                 let empty = types.inner.push(Type::Empty);
                 vec![empty]
@@ -630,8 +634,9 @@ mod tests {
         let (named_functions, types) = type_fragments(
             r"
                 f: fn
-                    \ ->
-                        f
+                    \ a, b, 0 ->
+                        a number_to_nothing
+                        0 b 0 f
                 end
             ",
         );
@@ -650,7 +655,10 @@ mod tests {
             .unwrap();
 
         use Type::*;
-        assert_eq!(f, ConcreteSignature::from(([], [Empty])));
+        assert_eq!(
+            f,
+            ConcreteSignature::from(([Number, Unknown, Number], [Empty])),
+        );
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
