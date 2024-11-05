@@ -769,6 +769,7 @@ mod tests {
         ";
 
         check(&format!("{f}{g}"));
+        check(&format!("{g}{f}"));
 
         fn check(code: &str) {
             let (named_functions, types) = type_fragments(code);
