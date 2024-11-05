@@ -751,6 +751,55 @@ mod tests {
         }
     }
 
+    #[test]
+    #[should_panic] // missing feature
+    fn infer_mutually_recursive_functions_as_empty() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ a, b, 0 ->
+                        a number_to_nothing
+                        0 b 1 g
+                end
+
+                g: fn
+                    \ a, b, 1 ->
+                        0 b 0 f
+                end
+            ",
+        );
+
+        let f = named_functions
+            .find_by_name("f")
+            .map(|function| {
+                types
+                    .of_functions
+                    .get(&function.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
+        let g = named_functions
+            .find_by_name("f")
+            .map(|function| {
+                types
+                    .of_functions
+                    .get(&function.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
+
+        use Type::*;
+        let expected_signature =
+            ConcreteSignature::from(([Number, Unknown, Number], [Empty]));
+
+        assert_eq!(f, expected_signature);
+        assert_eq!(g, expected_signature);
+    }
+
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
