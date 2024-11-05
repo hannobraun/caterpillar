@@ -105,7 +105,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 write!(f, "named function {index}")?;
             }
             FunctionLocation::AnonymousFunction { location } => {
-                write!(f, "anonymous function at {location}")?;
+                write!(f, "anonymous function at {}", location)?;
             }
         }
 
