@@ -142,7 +142,15 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.location {
             FunctionLocation::NamedFunction { index } => {
-                write!(f, "named function {index}")?;
+                let name = self
+                    .named_functions
+                    .find_by_index(index)
+                    .expect("Named function referred to be index must exist")
+                    .name
+                    .as_ref()
+                    .expect("Named function must have a name");
+
+                write!(f, "named function `{name}`")?;
             }
             FunctionLocation::AnonymousFunction { location } => {
                 write!(
