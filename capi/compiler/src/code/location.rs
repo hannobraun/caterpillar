@@ -19,7 +19,7 @@ pub struct FragmentLocation {
 
 impl fmt::Display for FragmentLocation {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "fragment {} in {}", self.index, self.parent)
+        write!(f, "fragment {} in {}", self.index, self.parent.display())
     }
 }
 
@@ -38,9 +38,28 @@ pub struct BranchLocation {
     pub index: Index<Branch>,
 }
 
-impl fmt::Display for BranchLocation {
+impl BranchLocation {
+    /// # Create a helper that implements [`fmt::Display`]
+    pub fn display(&self) -> BranchLocationDisplay {
+        BranchLocationDisplay { location: self }
+    }
+}
+
+/// # Helper struct to display [`BranchLocation`]
+///
+/// Implements [`fmt::Display`], which [`BranchLocation`] itself doesn't.
+pub struct BranchLocationDisplay<'r> {
+    location: &'r BranchLocation,
+}
+
+impl fmt::Display for BranchLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "branch {} in {}", self.index, self.parent.display())
+        write!(
+            f,
+            "branch {} in {}",
+            self.location.index,
+            self.location.parent.display(),
+        )
     }
 }
 
