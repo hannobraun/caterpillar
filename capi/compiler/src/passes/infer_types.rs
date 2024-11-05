@@ -673,7 +673,7 @@ mod tests {
 
     #[test]
     fn infer_self_recursive_non_empty_function() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions_a, types) = type_fragments(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -686,7 +686,7 @@ mod tests {
             ",
         );
 
-        check(&named_functions, &types);
+        check(&named_functions_a, &types);
 
         fn check(named_functions: &NamedFunctions, types: &Types) {
             let f = named_functions
