@@ -182,7 +182,7 @@ fn infer_types_in_branch(
 fn infer_type_of_fragment(
     fragment: &Fragment,
     location: &FragmentLocation,
-    _: &Cluster,
+    cluster: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
@@ -279,21 +279,31 @@ fn infer_type_of_fragment(
                 )
                 .clone()
         }
-        Fragment::CallToUserDefinedFunctionRecursive { index: _, .. } => {
+        Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
             // Type inference of recursive function calls is not fully
             // implemented yet. This is just a starting point.
 
-            let inputs = {
-                let inputs = stack.clone();
-                stack.clear();
-                inputs
-            };
-            let outputs = {
-                let empty = types.inner.push(Type::Empty);
-                vec![empty]
-            };
+            let index = *cluster.functions.get(index).expect(
+                "Function referred to by recursive call must exist in cluster.",
+            );
+            let location = FunctionLocation::from(index);
 
-            Signature { inputs, outputs }
+            match types.of_functions.get(&location).cloned() {
+                Some(signature) => signature,
+                None => {
+                    let inputs = {
+                        let inputs = stack.clone();
+                        stack.clear();
+                        inputs
+                    };
+                    let outputs = {
+                        let empty = types.inner.push(Type::Empty);
+                        vec![empty]
+                    };
+
+                    Signature { inputs, outputs }
+                }
+            }
         }
         Fragment::Comment { .. } => {
             // Comments have no bearing on type inference.
@@ -658,6 +668,40 @@ mod tests {
         assert_eq!(
             f,
             ConcreteSignature::from(([Number, Unknown, Number], [Empty])),
+        );
+    }
+
+    #[test]
+    fn infer_self_recursive_non_empty_function() {
+        let (named_functions, types) = type_fragments(
+            r"
+                f: fn
+                    \ a, b, 0 ->
+                        a number_to_nothing
+                        0
+
+                    \ a, b, 1 ->
+                        0 b 0 f
+                end
+            ",
+        );
+
+        let f = named_functions
+            .find_by_name("f")
+            .map(|function| {
+                types
+                    .of_functions
+                    .get(&function.location())
+                    .unwrap()
+                    .to_concrete_signature(&types)
+                    .unwrap()
+            })
+            .unwrap();
+
+        use Type::*;
+        assert_eq!(
+            f,
+            ConcreteSignature::from(([Number, Unknown, Number], [Number])),
         );
     }
 
