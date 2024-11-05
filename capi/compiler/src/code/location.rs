@@ -1,6 +1,6 @@
 use std::fmt;
 
-use super::{Branch, Fragment, Function, Index};
+use super::{Branch, Fragment, Function, Index, NamedFunctions};
 
 #[derive(
     Clone,
@@ -19,8 +19,14 @@ pub struct FragmentLocation {
 
 impl FragmentLocation {
     /// # Create a helper that implements [`fmt::Display`]
-    pub fn display(&self) -> FragmentLocationDisplay {
-        FragmentLocationDisplay { location: self }
+    pub fn display<'r>(
+        &'r self,
+        named_functions: &'r NamedFunctions,
+    ) -> FragmentLocationDisplay<'r> {
+        FragmentLocationDisplay {
+            location: self,
+            named_functions,
+        }
     }
 }
 
@@ -29,6 +35,7 @@ impl FragmentLocation {
 /// Implements [`fmt::Display`], which [`FragmentLocation`] itself doesn't.
 pub struct FragmentLocationDisplay<'r> {
     location: &'r FragmentLocation,
+    named_functions: &'r NamedFunctions,
 }
 
 impl fmt::Display for FragmentLocationDisplay<'_> {
@@ -37,7 +44,7 @@ impl fmt::Display for FragmentLocationDisplay<'_> {
             f,
             "fragment {} in {}",
             self.location.index,
-            self.location.parent.display()
+            self.location.parent.display(self.named_functions)
         )
     }
 }
@@ -59,8 +66,14 @@ pub struct BranchLocation {
 
 impl BranchLocation {
     /// # Create a helper that implements [`fmt::Display`]
-    pub fn display(&self) -> BranchLocationDisplay {
-        BranchLocationDisplay { location: self }
+    pub fn display<'r>(
+        &'r self,
+        named_functions: &'r NamedFunctions,
+    ) -> BranchLocationDisplay<'r> {
+        BranchLocationDisplay {
+            location: self,
+            named_functions,
+        }
     }
 }
 
@@ -69,6 +82,7 @@ impl BranchLocation {
 /// Implements [`fmt::Display`], which [`BranchLocation`] itself doesn't.
 pub struct BranchLocationDisplay<'r> {
     location: &'r BranchLocation,
+    named_functions: &'r NamedFunctions,
 }
 
 impl fmt::Display for BranchLocationDisplay<'_> {
@@ -77,7 +91,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
             f,
             "branch {} in {}",
             self.location.index,
-            self.location.parent.display(),
+            self.location.parent.display(self.named_functions),
         )
     }
 }
@@ -99,8 +113,14 @@ pub enum FunctionLocation {
 
 impl FunctionLocation {
     /// # Create a helper that implements [`fmt::Display`]
-    pub fn display(&self) -> FunctionLocationDisplay {
-        FunctionLocationDisplay { location: self }
+    pub fn display<'r>(
+        &'r self,
+        named_functions: &'r NamedFunctions,
+    ) -> FunctionLocationDisplay<'r> {
+        FunctionLocationDisplay {
+            location: self,
+            named_functions,
+        }
     }
 }
 
@@ -115,6 +135,7 @@ impl From<Index<Function>> for FunctionLocation {
 /// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
 pub struct FunctionLocationDisplay<'r> {
     location: &'r FunctionLocation,
+    named_functions: &'r NamedFunctions,
 }
 
 impl fmt::Display for FunctionLocationDisplay<'_> {
@@ -124,7 +145,11 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 write!(f, "named function {index}")?;
             }
             FunctionLocation::AnonymousFunction { location } => {
-                write!(f, "anonymous function at {}", location.display())?;
+                write!(
+                    f,
+                    "anonymous function at {}",
+                    location.display(self.named_functions),
+                )?;
             }
         }
 
