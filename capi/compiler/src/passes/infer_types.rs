@@ -325,12 +325,12 @@ fn infer_type_of_fragment(
 
             let location = FunctionLocation::from(index);
 
-            match types.of_functions.get(&location).cloned() {
-                Some(signature) => signature,
-                None => {
-                    return Some(FragmentInference::Defer);
-                }
-            }
+            let Some(signature) = types.of_functions.get(&location).cloned()
+            else {
+                return Some(FragmentInference::Defer);
+            };
+
+            signature
         }
         Fragment::Comment { .. } => {
             // Comments have no bearing on type inference.
