@@ -135,6 +135,25 @@ fn infer_types_in_branch(
                     // once this branch is up again.
                     return;
                 }
+                FragmentInference::Defer => {
+                    if queue_item.deferred {
+                        let inputs = {
+                            let inputs = queue_item.stack.clone();
+                            queue_item.stack.clear();
+                            inputs
+                        };
+                        let outputs = {
+                            let empty = types.inner.push(Type::Empty);
+                            vec![empty]
+                        };
+
+                        Signature { inputs, outputs }
+                    } else {
+                        queue_item.deferred = true;
+                        queue.push_back(queue_item);
+                        return;
+                    }
+                }
             };
 
             for &output in &signature.outputs {
@@ -312,17 +331,7 @@ fn infer_type_of_fragment(
             match types.of_functions.get(&location).cloned() {
                 Some(signature) => signature,
                 None => {
-                    let inputs = {
-                        let inputs = stack.clone();
-                        stack.clear();
-                        inputs
-                    };
-                    let outputs = {
-                        let empty = types.inner.push(Type::Empty);
-                        vec![empty]
-                    };
-
-                    Signature { inputs, outputs }
+                    return Some(FragmentInference::Defer);
                 }
             }
         }
@@ -431,6 +440,7 @@ struct QueueItem {
     parameters: Vec<Index<Type>>,
     bindings: BTreeMap<String, Index<Type>>,
     stack: Vec<Index<Type>>,
+    deferred: bool,
 }
 
 impl QueueItem {
@@ -470,6 +480,7 @@ impl QueueItem {
             parameters,
             bindings,
             stack: Vec::new(),
+            deferred: false,
         }
     }
 }
@@ -477,6 +488,7 @@ impl QueueItem {
 enum FragmentInference {
     Inferred { signature: Signature },
     NeedToInferMoreBranchesFirst { queue_items: Vec<QueueItem> },
+    Defer,
 }
 
 #[cfg(test)]
@@ -706,8 +718,21 @@ mod tests {
                 end
             ",
         );
+        let (named_functions_b, types_b) = type_fragments(
+            r"
+                f: fn
+                    \ a, b, 1 ->
+                        0 b 0 f
+
+                    \ a, b, 0 ->
+                        a number_to_nothing
+                        0
+                end
+            ",
+        );
 
         check(&named_functions_a, &types_a);
+        check(&named_functions_b, &types_b);
 
         fn check(named_functions: &NamedFunctions, types: &Types) {
             let f = named_functions
