@@ -680,7 +680,6 @@ mod tests {
                 end
             ",
         );
-        dbg!(&named_functions);
 
         let f = named_functions
             .find_by_name("f")
