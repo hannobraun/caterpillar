@@ -283,15 +283,13 @@ fn infer_type_of_fragment(
             // Type inference of recursive function calls is not fully
             // implemented yet. This is just a starting point.
 
+            let inputs = vec![];
             let outputs = {
                 let empty = types.inner.push(Type::Empty);
                 vec![empty]
             };
 
-            Signature {
-                inputs: vec![],
-                outputs,
-            }
+            Signature { inputs, outputs }
         }
         Fragment::Comment { .. } => {
             // Comments have no bearing on type inference.
