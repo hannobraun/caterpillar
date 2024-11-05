@@ -89,7 +89,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "branch {} in {}",
+            "branch {} of {}",
             self.location.index,
             self.location.parent.display(self.named_functions),
         )
