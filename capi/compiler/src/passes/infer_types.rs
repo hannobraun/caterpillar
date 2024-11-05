@@ -686,23 +686,27 @@ mod tests {
             ",
         );
 
-        let f = named_functions
-            .find_by_name("f")
-            .map(|function| {
-                types
-                    .of_functions
-                    .get(&function.location())
-                    .unwrap()
-                    .to_concrete_signature(&types)
-                    .unwrap()
-            })
-            .unwrap();
+        check(&named_functions, &types);
 
-        use Type::*;
-        assert_eq!(
-            f,
-            ConcreteSignature::from(([Number, Unknown, Number], [Number])),
-        );
+        fn check(named_functions: &NamedFunctions, types: &Types) {
+            let f = named_functions
+                .find_by_name("f")
+                .map(|function| {
+                    types
+                        .of_functions
+                        .get(&function.location())
+                        .unwrap()
+                        .to_concrete_signature(types)
+                        .unwrap()
+                })
+                .unwrap();
+
+            use Type::*;
+            assert_eq!(
+                f,
+                ConcreteSignature::from(([Number, Unknown, Number], [Number])),
+            );
+        }
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
