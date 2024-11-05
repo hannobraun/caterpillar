@@ -1,7 +1,5 @@
 use std::{
-    collections::BTreeMap,
-    marker::PhantomData,
-    ops::{Deref, DerefMut},
+    collections::BTreeMap, fmt, marker::PhantomData, ops::{Deref, DerefMut}
 };
 
 /// # A collection of values, in a defined order, accessible through their index
@@ -139,6 +137,12 @@ impl<T> PartialEq for Index<T> {
 impl<T> PartialOrd for Index<T> {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
+    }
+}
+
+impl<T> fmt::Display for Index<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "#{}", self.value)
     }
 }
 
