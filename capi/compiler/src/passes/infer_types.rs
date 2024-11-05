@@ -768,39 +768,41 @@ mod tests {
             end
         ";
 
-        let code = &format!("{f}{g}");
+        check(&format!("{f}{g}"));
 
-        let (named_functions, types) = type_fragments(code);
+        fn check(code: &str) {
+            let (named_functions, types) = type_fragments(code);
 
-        let f = named_functions
-            .find_by_name("f")
-            .map(|function| {
-                types
-                    .of_functions
-                    .get(&function.location())
-                    .unwrap()
-                    .to_concrete_signature(&types)
-                    .unwrap()
-            })
-            .unwrap();
-        let g = named_functions
-            .find_by_name("f")
-            .map(|function| {
-                types
-                    .of_functions
-                    .get(&function.location())
-                    .unwrap()
-                    .to_concrete_signature(&types)
-                    .unwrap()
-            })
-            .unwrap();
+            let f = named_functions
+                .find_by_name("f")
+                .map(|function| {
+                    types
+                        .of_functions
+                        .get(&function.location())
+                        .unwrap()
+                        .to_concrete_signature(&types)
+                        .unwrap()
+                })
+                .unwrap();
+            let g = named_functions
+                .find_by_name("f")
+                .map(|function| {
+                    types
+                        .of_functions
+                        .get(&function.location())
+                        .unwrap()
+                        .to_concrete_signature(&types)
+                        .unwrap()
+                })
+                .unwrap();
 
-        use Type::*;
-        let expected_signature =
-            ConcreteSignature::from(([Number, Unknown, Number], [Empty]));
+            use Type::*;
+            let expected_signature =
+                ConcreteSignature::from(([Number, Unknown, Number], [Empty]));
 
-        assert_eq!(f, expected_signature);
-        assert_eq!(g, expected_signature);
+            assert_eq!(f, expected_signature);
+            assert_eq!(g, expected_signature);
+        }
     }
 
     fn type_fragments(source: &str) -> (NamedFunctions, Types) {
