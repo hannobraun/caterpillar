@@ -768,7 +768,9 @@ mod tests {
             end
         ";
 
-        let (named_functions, types) = type_fragments(&format!("{f}{g}"));
+        let code = &format!("{f}{g}");
+
+        let (named_functions, types) = type_fragments(code);
 
         let f = named_functions
             .find_by_name("f")
