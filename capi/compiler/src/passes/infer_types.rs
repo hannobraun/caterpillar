@@ -569,7 +569,7 @@ mod tests {
     }
 
     #[test]
-    fn infer_branch_signature() {
+    fn infer_signatures_of_branch_and_function() {
         let (named_functions, types) = type_fragments(
             r"
                 f: fn
