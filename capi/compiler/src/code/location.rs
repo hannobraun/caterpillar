@@ -17,6 +17,12 @@ pub struct FragmentLocation {
     pub index: Index<Fragment>,
 }
 
+impl fmt::Display for FragmentLocation {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "fragment {} in {}", self.index, self.parent)
+    }
+}
+
 #[derive(
     Clone,
     Debug,
@@ -66,7 +72,7 @@ impl fmt::Display for FunctionLocation {
                 write!(f, "named function {index}")?;
             }
             FunctionLocation::AnonymousFunction { location } => {
-                write!(f, "anonymous function at {location:?}")?;
+                write!(f, "anonymous function at {location}")?;
             }
         }
 
