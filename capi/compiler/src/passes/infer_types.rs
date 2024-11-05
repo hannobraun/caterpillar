@@ -301,9 +301,6 @@ fn infer_type_of_fragment(
                 .clone()
         }
         Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
-            // Type inference of recursive function calls is not fully
-            // implemented yet. This is just a starting point.
-
             let mut fragment_location = location;
             let current_function = loop {
                 match fragment_location.parent.parent.deref() {
