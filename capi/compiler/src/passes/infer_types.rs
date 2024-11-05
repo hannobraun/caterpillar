@@ -1,6 +1,8 @@
 use std::{
     collections::{btree_map::Entry, BTreeMap, VecDeque},
-    iter, vec,
+    iter,
+    ops::Deref,
+    vec,
 };
 
 use crate::{
@@ -283,9 +285,28 @@ fn infer_type_of_fragment(
             // Type inference of recursive function calls is not fully
             // implemented yet. This is just a starting point.
 
+            let mut fragment_location = location;
+            let current_function = loop {
+                match fragment_location.parent.parent.deref() {
+                    FunctionLocation::NamedFunction { index } => {
+                        break *index;
+                    }
+                    FunctionLocation::AnonymousFunction { location } => {
+                        fragment_location = location;
+                    }
+                }
+            };
+
             let index = *cluster.functions.get(index).expect(
                 "Function referred to by recursive call must exist in cluster.",
             );
+
+            if current_function != index {
+                // Inference of mutually recursive functions is not supported
+                // yet.
+                return None;
+            }
+
             let location = FunctionLocation::from(index);
 
             match types.of_functions.get(&location).cloned() {
