@@ -7,9 +7,9 @@ use crate::{
     host::Host,
     passes::{
         build_call_graph, detect_changes, determine_tail_positions,
-        generate_instructions, infer_types, mark_recursive_calls, parse,
-        resolve_calls_to_user_defined_functions, resolve_most_identifiers,
-        tokenize,
+        find_divergent_functions, generate_instructions, infer_types,
+        mark_recursive_calls, parse, resolve_calls_to_user_defined_functions,
+        resolve_most_identifiers, tokenize,
     },
     source_map::SourceMap,
     Instructions,
@@ -37,12 +37,13 @@ impl Compiler {
         let mut named_functions = parse(tokens);
         determine_tail_positions(&mut named_functions);
         resolve_most_identifiers(&mut named_functions, host);
-        let call_graph = build_call_graph(&named_functions);
+        let mut call_graph = build_call_graph(&named_functions);
         mark_recursive_calls(&mut named_functions, &call_graph);
         resolve_calls_to_user_defined_functions(
             &mut named_functions,
             &call_graph,
         );
+        find_divergent_functions(&named_functions, &mut call_graph);
         let types = infer_types(&named_functions, &call_graph, host);
         let changes =
             detect_changes(self.old_functions.take(), &named_functions);
