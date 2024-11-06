@@ -12,6 +12,10 @@ features = ["alloc", "derive"]
 version = "*"
 default-features = false
 
+[dependencies.thiserror]
+version = "*"
+default-features = false
+
 [dependencies.udigest]
 version = "*"
 features = ["derive"]
