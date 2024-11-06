@@ -1,6 +1,8 @@
 use std::{collections::BTreeSet, iter};
 
-use super::{BranchLocation, Function, Index, IndexMap};
+use super::{
+    search::Find, BranchLocation, Function, Index, IndexMap, NamedFunctions,
+};
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -102,4 +104,25 @@ pub struct Cluster {
     /// (and those all [`Cluster`]s does not have the information required to do
     /// this analysis. It is later filled in by another compiler pass.
     pub non_diverging_branches: Option<Vec<BranchLocation>>,
+}
+
+impl Cluster {
+    /// # Iterate over the functions in the cluster
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if the provided [`NamedFunctions`] instance does not contain a
+    /// function referenced in this cluster. Unless you're mixing data
+    /// structures from different compiler passes, this should never happen. If
+    /// it still does, that's a bug.
+    pub fn functions<'r>(
+        &'r self,
+        named_functions: &'r NamedFunctions,
+    ) -> impl Iterator<Item = Find<&'r Function, Index<Function>>> + 'r {
+        self.functions.values().copied().map(|index| {
+            named_functions
+                .find_by_index(&index)
+                .expect("Function referred to from cluster must exist.")
+        })
+    }
 }
