@@ -31,6 +31,17 @@ impl CallGraph {
         self.clusters.iter().rev()
     }
 
+    /// # Iterate over the function clusters, from the leaves up, mutably
+    ///
+    /// Guarantees that any cluster that is yielded by the iterator only has
+    /// non-recursive calls to functions in clusters that have already been
+    /// yielded before.
+    pub fn clusters_from_leaves_mut(
+        &mut self,
+    ) -> impl Iterator<Item = &mut Cluster> {
+        self.clusters.iter_mut().rev()
+    }
+
     /// # Iterate over all named functions, from the leaves up
     ///
     /// Guarantees that any function that is yielded by the iterator only has
