@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 ron = "*"
 snafu = "*"
+thiserror = "*"
 tracing = "*"
 
 [dependencies.capi-compiler]

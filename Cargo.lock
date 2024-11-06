@@ -350,6 +350,7 @@ dependencies = [
  "capi-watch",
  "ron",
  "snafu",
+ "thiserror 2.0.0",
  "tokio",
  "tracing",
 ]
