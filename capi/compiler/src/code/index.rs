@@ -1,5 +1,8 @@
 use std::{
-    collections::BTreeMap, fmt, marker::PhantomData, ops::{Deref, DerefMut}
+    collections::BTreeMap,
+    fmt,
+    marker::PhantomData,
+    ops::{Deref, DerefMut},
 };
 
 /// # A collection of values, in a defined order, accessible through their index
