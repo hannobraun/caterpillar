@@ -142,7 +142,7 @@ async fn build_game_once_with_compiler(
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Error while building `{}`: {source}", path.display())]
+#[error("Error while building `{path}`: {source}")]
 pub struct BuildGameOnceError {
     pub source: io::Error,
     pub path: PathBuf,
