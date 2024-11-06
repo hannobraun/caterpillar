@@ -86,11 +86,11 @@ impl NamedFunctions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<Function, Index<Function>>> {
+    ) -> Option<Find<&Function, Index<Function>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name.as_deref() == Some(name) {
                 Some(Find {
-                    find: function.clone(),
+                    find: function,
                     metadata: index,
                 })
             } else {
