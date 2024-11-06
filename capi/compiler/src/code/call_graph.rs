@@ -114,7 +114,7 @@ pub struct Cluster {
     /// Starts out as `None`, as the compiler pass that creates the call graph
     /// (and those all [`Cluster`]s does not have the information required to do
     /// this analysis. It is later filled in by another compiler pass.
-    pub non_diverging_branches: Option<Vec<BranchLocation>>,
+    pub non_divergent_branches: Option<Vec<BranchLocation>>,
 }
 
 impl Cluster {

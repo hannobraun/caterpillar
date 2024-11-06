@@ -107,7 +107,7 @@ fn collect_functions_into_clusters(
             Cluster {
                 functions,
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             }
         })
 }
@@ -152,7 +152,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -187,7 +187,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -231,7 +231,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -282,7 +282,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -342,7 +342,7 @@ mod tests {
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
                 divergent_functions: None,
-                non_diverging_branches: None,
+                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
