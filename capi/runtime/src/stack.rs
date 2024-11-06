@@ -249,7 +249,7 @@ pub type Bindings = BTreeMap<String, Value>;
 )]
 pub enum PushStackFrameError {
     #[error(transparent)]
-    PopOperand { source: PopOperandError },
+    PopOperand(PopOperandError),
 
     #[error("Reached recursion limit")]
     Overflow,
