@@ -1,6 +1,6 @@
 use std::{collections::BTreeSet, iter};
 
-use super::{Function, Index, IndexMap};
+use super::{BranchLocation, Function, Index, IndexMap};
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -90,4 +90,16 @@ pub struct Cluster {
     /// (and those all [`Cluster`]s does not have the information required to do
     /// this analysis. It is later filled in by another compiler pass.
     pub diverging_functions: Option<BTreeSet<Index<Function>>>,
+
+    /// # The branches in this cluster that are _not_ diverging
+    ///
+    /// Contains any branches in this cluster from functions that are _not_
+    /// known to diverge. The branches are sorted topologically, meaning any
+    /// branch in this list is guaranteed to only call branches that come later
+    /// in the list.
+    ///
+    /// Starts out as `None`, as the compiler pass that creates the call graph
+    /// (and those all [`Cluster`]s does not have the information required to do
+    /// this analysis. It is later filled in by another compiler pass.
+    pub non_diverging_branches: Option<Vec<BranchLocation>>,
 }
