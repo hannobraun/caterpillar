@@ -5,11 +5,12 @@ use std::{
     time::SystemTime,
 };
 
+use anyhow::anyhow;
 use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
-use snafu::{whatever, Snafu, Whatever};
+use snafu::Snafu;
 use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
@@ -60,7 +61,7 @@ async fn build_and_watch_game_inner(
     game: String,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
-) -> Result<(), Whatever> {
+) -> anyhow::Result<()> {
     let games_path = games_path.as_ref();
 
     let mut compiler = Compiler::default();
@@ -87,19 +88,19 @@ async fn build_and_watch_game_inner(
                     // Depending on the editor, this can happen while the file
                     // is being saved.
                     if let Some(old_err) = ignored_error {
-                        whatever!(
+                        return Err(anyhow!(
                             "{err}\n\
                             \n\
                             Previously ignored an error, because a false \
                             positive was suspected: {old_err}"
-                        );
+                        ));
                     } else {
                         ignored_error = Some(err);
                         continue;
                     }
                 }
                 _ => {
-                    whatever!("{err}");
+                    return Err(err.into());
                 }
             },
         };
