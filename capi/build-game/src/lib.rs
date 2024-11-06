@@ -10,7 +10,6 @@ use capi_compiler::Compiler;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
-use snafu::Snafu;
 use tokio::{fs, sync::mpsc, task};
 
 pub use capi_compiler::CompilerOutput;
@@ -142,8 +141,8 @@ async fn build_game_once_with_compiler(
     Ok(output)
 }
 
-#[derive(Debug, Snafu)]
-#[snafu(display("Error while building `{}`: {source}", path.display()))]
+#[derive(Debug, thiserror::Error)]
+#[error("Error while building `{}`: {source}", path.display())]
 pub struct BuildGameOnceError {
     pub source: io::Error,
     pub path: PathBuf,
