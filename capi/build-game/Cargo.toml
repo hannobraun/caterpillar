@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 ron = "*"
-snafu = "*"
 thiserror = "*"
 tracing = "*"
 
