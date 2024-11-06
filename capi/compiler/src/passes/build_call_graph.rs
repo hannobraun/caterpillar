@@ -104,7 +104,10 @@ fn collect_functions_into_clusters(
                 functions.push(index);
             }
 
-            Cluster { functions }
+            Cluster {
+                functions,
+                diverging_functions: None,
+            }
         })
 }
 
@@ -147,6 +150,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
+                diverging_functions: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -180,6 +184,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: [indices].into_iter().collect(),
+                diverging_functions: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -222,6 +227,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
+                diverging_functions: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -271,6 +277,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
+                diverging_functions: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -329,6 +336,7 @@ mod tests {
             .into_iter()
             .map(|indices| Cluster {
                 functions: indices.iter().copied().collect(),
+                diverging_functions: None,
             })
             .collect::<Vec<_>>(),
         );
