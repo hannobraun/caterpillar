@@ -8,10 +8,6 @@ version = "*"
 default-features = false
 features = ["alloc", "derive"]
 
-[dependencies.snafu]
-version = "*"
-default-features = false
-
 [dependencies.thiserror]
 version = "*"
 default-features = false
