@@ -104,7 +104,7 @@ pub struct Cluster {
     /// this analysis. It is later filled in by another compiler pass.
     pub divergent_functions: Option<BTreeSet<Index<Function>>>,
 
-    /// # The branches in this cluster that are _not_ diverging
+    /// # The branches in this cluster that are _not_ divergent
     ///
     /// Contains any branches in this cluster from functions that are _not_
     /// known to diverge. The branches are sorted topologically, meaning any
