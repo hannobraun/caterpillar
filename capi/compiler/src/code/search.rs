@@ -49,6 +49,31 @@ impl<F> Find<F, Index<Function>> {
     }
 }
 
+impl<M> Find<&Function, M>
+where
+    M: Clone + Into<FunctionLocation>,
+{
+    /// # Iterate over the function's branches
+    pub fn branches(
+        &self,
+    ) -> impl Iterator<Item = Find<Branch, BranchLocation>> {
+        let function = &self.find;
+        let location = self.metadata.clone().into();
+
+        function
+            .branches
+            .clone()
+            .into_iter()
+            .map(move |(index, branch)| Find {
+                find: branch,
+                metadata: BranchLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            })
+    }
+}
+
 impl<M> Find<Function, M>
 where
     M: Clone + Into<FunctionLocation>,
