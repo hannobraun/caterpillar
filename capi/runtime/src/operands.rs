@@ -36,9 +36,9 @@ impl Operands {
     PartialEq,
     serde::Deserialize,
     serde::Serialize,
-    snafu::Snafu,
+    thiserror::Error,
 )]
 pub enum PopOperandError {
-    #[snafu(display("Missing operand"))]
+    #[error("Missing operand")]
     MissingOperand,
 }
