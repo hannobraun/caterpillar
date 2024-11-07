@@ -122,7 +122,7 @@ impl TestDebugger {
                 })
             })
         else {
-            panic!("Expected to find fragment with ID `{location:?}`");
+            panic!("Expected to find expression with location `{location:?}`");
         };
 
         expression
