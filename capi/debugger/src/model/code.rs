@@ -14,7 +14,7 @@ impl DebugCode {
             .ok_or_else(|| anyhow!("Code is not available yet."))
     }
 
-    pub fn fragment_to_instruction(
+    pub fn expression_to_instruction(
         &self,
         fragment: &ExpressionLocation,
     ) -> anyhow::Result<InstructionAddress> {
