@@ -224,7 +224,6 @@ impl DebugFunctionExt for DebugFunction {
 }
 
 pub trait DebugBranchExt {
-    #[allow(unused)] // currently unused, but might come in handy later
     fn expression(&self, i: usize) -> DebugExpression;
 }
 
