@@ -327,7 +327,7 @@ fn step_into_function() {
 }
 
 #[test]
-fn step_out_of_function_if_at_last_fragment() {
+fn step_out_of_function_if_at_last_expression() {
     // When stopping at the last expression in a function and then stepping, we
     // expect to land at the expression after the function call.
 
