@@ -408,7 +408,7 @@ fn handle_concrete_signature(
             *type_ = input.clone();
         } else {
             // It looks like we don't have enough types on the stack for the
-            // number of inputs this fragment has.
+            // number of inputs this expression has.
             //
             // Typically, this would be an error in type checking, but since the
             // inference is not fully implemented yet, it could also be due to
