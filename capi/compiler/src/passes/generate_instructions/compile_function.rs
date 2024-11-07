@@ -183,7 +183,7 @@ fn compile_branch_body(
 }
 
 fn compile_fragment(
-    fragment: Expression,
+    expression: Expression,
     location: ExpressionLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -193,7 +193,7 @@ fn compile_fragment(
         .source_map
         .map_fragment_to_instructions(location.clone());
 
-    match fragment {
+    match expression {
         Expression::Binding { name, .. } => {
             let address = generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
