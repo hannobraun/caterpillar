@@ -467,9 +467,9 @@ fn step_over_function_call() {
             .body();
 
         array::from_fn(|_| {
-            body.find_map(|fragment| {
-                if fragment.as_comment().is_none() {
-                    Some(fragment.into_location())
+            body.find_map(|expression| {
+                if expression.as_comment().is_none() {
+                    Some(expression.into_location())
                 } else {
                     None
                 }
