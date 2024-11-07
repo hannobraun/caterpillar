@@ -23,7 +23,7 @@ impl DebugCode {
             .expression_to_instructions(expression)
             .first()
             .copied()
-            .ok_or_else(|| anyhow!("Fragment does not map to instruction."))
+            .ok_or_else(|| anyhow!("Expression does not map to instruction."))
     }
 
     pub fn instruction(
