@@ -152,7 +152,7 @@ impl ActiveFunctionsEntries {
         )
     }
 
-    pub fn find_next_fragment_or_next_after_caller(
+    pub fn find_next_expression_or_next_after_caller(
         &self,
         branch: &DebugBranch,
         expression: &ExpressionLocation,
@@ -189,7 +189,7 @@ impl ActiveFunctionsEntries {
 
         let caller = caller_branch.active_fragment()?;
 
-        self.find_next_fragment_or_next_after_caller(
+        self.find_next_expression_or_next_after_caller(
             caller_branch,
             &caller.data.location,
         )
