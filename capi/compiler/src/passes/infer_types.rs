@@ -511,7 +511,7 @@ mod tests {
             ",
         );
 
-        let mut fragments = named_functions
+        let mut expressions = named_functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -526,8 +526,8 @@ mod tests {
                     .unwrap()
             });
 
-        let n = fragments.next().unwrap();
-        let host_fn = fragments.next().unwrap();
+        let n = expressions.next().unwrap();
+        let host_fn = expressions.next().unwrap();
 
         use Type::*;
         assert_eq!(n, ConcreteSignature::from(([], [Number])));
