@@ -31,7 +31,7 @@ impl DebugExpression {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        let signature = DebugFragmentSignature::new(&location, types);
+        let signature = DebugExpressionSignature::new(&location, types);
 
         let state = if Some(&location) == active_fragment {
             if is_in_innermost_active_function {
@@ -85,19 +85,19 @@ impl DebugExpression {
 pub struct DebugExpressionData {
     pub expression: Expression,
     pub location: ExpressionLocation,
-    pub signature: DebugFragmentSignature,
+    pub signature: DebugExpressionSignature,
     pub state: DebugFragmentState,
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugFragmentSignature {
+pub struct DebugExpressionSignature {
     pub inputs: Vec<String>,
     pub outputs: Vec<String>,
 }
 
-impl DebugFragmentSignature {
+impl DebugExpressionSignature {
     pub fn new(location: &ExpressionLocation, types: &Types) -> Self {
         let mut inputs = Vec::new();
         let mut outputs = Vec::new();
