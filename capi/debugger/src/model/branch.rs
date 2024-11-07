@@ -78,7 +78,7 @@ impl DebugBranch {
             .find(|expression| expression.data.state.is_active())
             .ok_or_else(|| {
                 anyhow!(
-                    "Expected active fragment in branch, bud could not find \
+                    "Expected active expression in branch, but could not find \
                     any. Branch:\n\
                     {self:#?}"
                 )
