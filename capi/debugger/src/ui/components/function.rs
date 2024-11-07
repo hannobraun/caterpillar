@@ -239,7 +239,7 @@ fn make_single_expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let fragment = {
+        let expression = {
             let Some(fragment) = element.get_attribute("data-fragment") else {
                 // This happens, if the user clicks on a comment.
                 return;
@@ -251,13 +251,9 @@ fn make_single_expression(
         };
 
         let action = if element.has_attribute("data-breakpoint") {
-            UserAction::BreakpointClear {
-                expression: fragment,
-            }
+            UserAction::BreakpointClear { expression }
         } else {
-            UserAction::BreakpointSet {
-                expression: fragment,
-            }
+            UserAction::BreakpointSet { expression }
         };
 
         leptos::spawn_local(send_action(action, actions_tx.clone()));
