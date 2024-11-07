@@ -20,7 +20,7 @@ pub struct DebugExpression {
 impl DebugExpression {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        fragment: Expression,
+        expression: Expression,
         location: ExpressionLocation,
         active_fragment: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
@@ -57,7 +57,7 @@ impl DebugExpression {
         });
 
         let data = DebugFragmentData {
-            fragment: fragment.clone(),
+            fragment: expression.clone(),
             location: location.clone(),
             signature,
             state,
@@ -65,7 +65,7 @@ impl DebugExpression {
             effect: active_effect,
         };
         let kind = DebugFragmentKind::new(
-            fragment,
+            expression,
             location,
             active_fragment,
             is_in_innermost_active_function,
