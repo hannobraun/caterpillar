@@ -255,7 +255,9 @@ fn make_single_expression(
                 expression: fragment,
             }
         } else {
-            UserAction::BreakpointSet { expression: fragment }
+            UserAction::BreakpointSet {
+                expression: fragment,
+            }
         };
 
         leptos::spawn_local(send_action(action, actions_tx.clone()));
