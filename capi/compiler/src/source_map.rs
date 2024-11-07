@@ -17,9 +17,9 @@ pub struct SourceMap {
 }
 
 impl SourceMap {
-    /// # Define a mapping between a fragment and a number of instructions
+    /// # Define a mapping between an expression and a number of instructions
     ///
-    /// This function only accepts the location of the fragment. To append the
+    /// This function only accepts the location of the expression. To append the
     /// associated instructions, use the returned [`Mapping`].
     pub fn map_fragment_to_instructions(
         &mut self,
@@ -44,7 +44,7 @@ impl SourceMap {
         self.function_to_instructions.insert(function, range);
     }
 
-    /// Get the ID of the fragment that the given instruction maps to
+    /// # Get the location of the expression that the given instruction maps to
     ///
     /// Can return `None`, as there are a few compiler-generated instructions
     /// that call the `main` function.
@@ -55,7 +55,7 @@ impl SourceMap {
         self.instruction_to_expression.get(instruction)
     }
 
-    /// Get the address of the instruction that the given fragment maps to
+    /// # Get the address of the instruction that the given expression maps to
     ///
     /// Can return a reference to an empty `Vec`, as comments have no mapping to
     /// instructions.
