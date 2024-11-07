@@ -92,8 +92,8 @@ impl ActiveFunctions {
             }
 
             expected_next_function =
-                active_expression.and_then(|active_fragment| {
-                    function_call_to_function_name(active_fragment, code)
+                active_expression.and_then(|active_expression| {
+                    function_call_to_function_name(active_expression, code)
                 });
 
             let cluster = code
