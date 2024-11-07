@@ -61,12 +61,12 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        fragment: &ExpressionLocation,
+        expression: &ExpressionLocation,
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
         self.expression_to_instructions
-            .get(fragment)
+            .get(expression)
             .unwrap_or(&EMPTY)
     }
 
