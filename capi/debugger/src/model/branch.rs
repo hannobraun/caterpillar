@@ -105,8 +105,9 @@ impl DebugBranch {
             .iter()
             .skip_while(|f| f.data.location != *expression);
 
-        // This is the fragment we've been passed as an argument. Need to ignore
-        // it, to advance the iterator to the one we're actually looking for.
+        // This is the expression we've been passed as an argument. Need to
+        // ignore it, to advance the iterator to the one we're actually looking
+        // for.
         assert_eq!(
             expressions
                 .next()
