@@ -212,11 +212,11 @@ fn infer_type_of_fragment(
 ) -> Option<FragmentInference> {
     assert!(
         !types.of_fragments.contains_key(location),
-        "Encountered a fragment whose type signature has already been \
+        "Encountered an expression whose type signature has already been \
         inferred:\n\
         {expression:#?}\n\
         \n\
-        The type of a fragment should be inferred only once."
+        The type of an expression should be inferred only once."
     );
 
     let signature = match expression {
