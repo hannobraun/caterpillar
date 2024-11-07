@@ -34,13 +34,13 @@ impl DebugBranch {
         let body = branch
             .body
             .into_iter()
-            .map(|(index, fragment)| {
+            .map(|(index, expression)| {
                 let location = ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index,
                 };
                 DebugExpression::new(
-                    fragment,
+                    expression,
                     location,
                     active_fragment,
                     is_in_innermost_active_function,
