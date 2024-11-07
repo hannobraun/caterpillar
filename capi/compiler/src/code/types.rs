@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    BranchLocation, FragmentLocation, FunctionLocation, Index, IndexMap,
+    BranchLocation, ExpressionLocation, FunctionLocation, Index, IndexMap,
 };
 
 /// # The types that were inferred in the code
@@ -45,7 +45,7 @@ use super::{
 pub struct Types {
     pub inner: IndexMap<Type>,
 
-    pub of_fragments: BTreeMap<FragmentLocation, Signature>,
+    pub of_fragments: BTreeMap<ExpressionLocation, Signature>,
     pub of_branches: BTreeMap<BranchLocation, Signature>,
     pub of_functions: BTreeMap<FunctionLocation, Signature>,
 }

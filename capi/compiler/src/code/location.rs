@@ -12,12 +12,12 @@ use super::{Branch, Expression, Function, Index, NamedFunctions};
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct FragmentLocation {
+pub struct ExpressionLocation {
     pub parent: Box<BranchLocation>,
     pub index: Index<Expression>,
 }
 
-impl FragmentLocation {
+impl ExpressionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
@@ -34,7 +34,7 @@ impl FragmentLocation {
 ///
 /// Implements [`fmt::Display`], which [`FragmentLocation`] itself doesn't.
 pub struct FragmentLocationDisplay<'r> {
-    location: &'r FragmentLocation,
+    location: &'r ExpressionLocation,
     named_functions: &'r NamedFunctions,
 }
 
@@ -108,7 +108,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
 )]
 pub enum FunctionLocation {
     NamedFunction { index: Index<Function> },
-    AnonymousFunction { location: FragmentLocation },
+    AnonymousFunction { location: ExpressionLocation },
 }
 
 impl FunctionLocation {

@@ -5,7 +5,7 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Find, BranchLocation, Cluster, Expression, FragmentLocation,
+    search::Find, BranchLocation, Cluster, Expression, ExpressionLocation,
     FunctionLocation, Hash, IndexMap,
 };
 
@@ -111,7 +111,7 @@ impl NamedFunctions {
     /// # Find the expression at the given location
     pub fn find_expression_by_location(
         &self,
-        location: &FragmentLocation,
+        location: &ExpressionLocation,
     ) -> Option<&Expression> {
         let branch = self.find_branch_by_location(&location.parent)?;
         branch.body.get(&location.index)

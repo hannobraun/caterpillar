@@ -8,8 +8,8 @@ use std::{
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Expression, FragmentLocation, FunctionLocation, Index, NamedFunctions,
-        Pattern, Signature, Type, Types,
+        Expression, ExpressionLocation, FunctionLocation, Index,
+        NamedFunctions, Pattern, Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -97,7 +97,7 @@ fn infer_types_in_branch(
     types: &mut Types,
 ) {
     while let Some((index, fragment)) = queue_item.branch_body.peek() {
-        let location = FragmentLocation {
+        let location = ExpressionLocation {
             parent: Box::new(queue_item.branch_location.clone()),
             index: *index,
         };
@@ -202,7 +202,7 @@ fn infer_types_in_branch(
 #[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
     fragment: &Expression,
-    location: &FragmentLocation,
+    location: &ExpressionLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
     bindings: &BTreeMap<String, Index<Type>>,

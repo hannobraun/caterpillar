@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        self, BranchLocation, Cluster, FragmentLocation, FunctionLocation,
+        self, BranchLocation, Cluster, ExpressionLocation, FunctionLocation,
         NamedFunctions, Types,
     },
     source_map::SourceMap,
@@ -21,7 +21,7 @@ impl DebugFunction {
     pub fn new(
         function: code::Function,
         location: FunctionLocation,
-        active_fragment: Option<&FragmentLocation>,
+        active_fragment: Option<&ExpressionLocation>,
         is_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,

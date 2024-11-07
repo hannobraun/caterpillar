@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{code::FragmentLocation, CompilerOutput};
+use capi_compiler::{code::ExpressionLocation, CompilerOutput};
 use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
@@ -16,7 +16,7 @@ impl DebugCode {
 
     pub fn fragment_to_instruction(
         &self,
-        fragment: &FragmentLocation,
+        fragment: &ExpressionLocation,
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map

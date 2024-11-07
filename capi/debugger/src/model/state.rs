@@ -1,4 +1,4 @@
-use capi_compiler::{code::FragmentLocation, CompilerOutput, Instructions};
+use capi_compiler::{code::ExpressionLocation, CompilerOutput, Instructions};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Value};
@@ -260,8 +260,8 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        origin: &FragmentLocation,
-        targets: Vec<FragmentLocation>,
+        origin: &ExpressionLocation,
+        targets: Vec<ExpressionLocation>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.fragment_to_instruction(origin)?;

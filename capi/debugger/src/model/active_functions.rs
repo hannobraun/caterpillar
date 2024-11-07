@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::{
-    code::{self, FragmentLocation, Function, FunctionLocation, Index},
+    code::{self, ExpressionLocation, Function, FunctionLocation, Index},
     CompilerOutput,
 };
 use capi_protocol::host_state::HostState;
@@ -155,7 +155,7 @@ impl ActiveFunctionsEntries {
     pub fn find_next_fragment_or_next_after_caller(
         &self,
         branch: &DebugBranch,
-        fragment: &FragmentLocation,
+        fragment: &ExpressionLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
         if let Some(after) = branch.fragment_after(fragment)? {
             return Ok(Some(after.clone()));
@@ -166,7 +166,7 @@ impl ActiveFunctionsEntries {
 
     pub fn find_next_fragment_after_caller(
         &self,
-        fragment: &FragmentLocation,
+        fragment: &ExpressionLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
@@ -324,7 +324,7 @@ fn reconstruct_function(
 }
 
 fn function_call_to_function_name(
-    function_call: &FragmentLocation,
+    function_call: &ExpressionLocation,
     code: &CompilerOutput,
 ) -> Option<String> {
     let fragment = code

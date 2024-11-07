@@ -2,15 +2,15 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::code::{FragmentLocation, FunctionLocation};
+use crate::code::{ExpressionLocation, FunctionLocation};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
     fragment_to_instructions:
-        BTreeMap<FragmentLocation, Vec<InstructionAddress>>,
-    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentLocation>,
+        BTreeMap<ExpressionLocation, Vec<InstructionAddress>>,
+    instruction_to_fragment: BTreeMap<InstructionAddress, ExpressionLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
@@ -22,7 +22,7 @@ impl SourceMap {
     /// associated instructions, use the returned [`Mapping`].
     pub fn map_fragment_to_instructions(
         &mut self,
-        fragment: FragmentLocation,
+        fragment: ExpressionLocation,
     ) -> Mapping {
         // Make sure we don't have a previous mapping whose leftovers might
         // corrupt the new one.
@@ -50,7 +50,7 @@ impl SourceMap {
     pub fn instruction_to_fragment(
         &self,
         instruction: &InstructionAddress,
-    ) -> Option<&FragmentLocation> {
+    ) -> Option<&ExpressionLocation> {
         self.instruction_to_fragment.get(instruction)
     }
 
@@ -60,7 +60,7 @@ impl SourceMap {
     /// instructions.
     pub fn fragment_to_instructions(
         &self,
-        fragment: &FragmentLocation,
+        fragment: &ExpressionLocation,
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
@@ -95,7 +95,7 @@ impl SourceMap {
 ///
 /// Returned by [`SourceMap::define_mapping`].
 pub struct Mapping<'r> {
-    fragment: FragmentLocation,
+    fragment: ExpressionLocation,
     source_map: &'r mut SourceMap,
 }
 

@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Branch, BranchLocation, Cluster, Expression, FragmentLocation,
+        Branch, BranchLocation, Cluster, Expression, ExpressionLocation,
         Function, FunctionLocation, Hash, IndexMap, Pattern,
     },
     intrinsics::IntrinsicFunction,
@@ -140,7 +140,7 @@ fn compile_branch_body(
     for (index, fragment) in body {
         let addr = compile_fragment(
             fragment,
-            FragmentLocation {
+            ExpressionLocation {
                 parent: Box::new(location.clone()),
                 index,
             },
@@ -184,7 +184,7 @@ fn compile_branch_body(
 
 fn compile_fragment(
     fragment: Expression,
-    location: FragmentLocation,
+    location: ExpressionLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     named_functions_context: &mut NamedFunctionsContext,

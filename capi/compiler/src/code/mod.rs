@@ -18,6 +18,6 @@ pub use self::{
     functions::{Branch, Function, NamedFunctions, Pattern},
     hash::Hash,
     index::{Index, IndexMap},
-    location::{BranchLocation, FragmentLocation, FunctionLocation},
+    location::{BranchLocation, ExpressionLocation, FunctionLocation},
     types::{ConcreteSignature, Signature, Type, Types},
 };

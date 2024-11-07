@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::{FragmentLocation, NamedFunctions},
+    code::{ExpressionLocation, NamedFunctions},
     Compiler,
 };
 use capi_game_engine::{
@@ -102,7 +102,7 @@ impl TestDebugger {
 
     pub fn expect_fragment(
         &mut self,
-        location: &FragmentLocation,
+        location: &ExpressionLocation,
     ) -> DebugFragment {
         let Some(fragment) = self
             .transient_state()

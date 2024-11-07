@@ -1,6 +1,6 @@
 use capi_compiler::{
     code::{
-        Cluster, Expression, FragmentLocation, FunctionLocation,
+        Cluster, Expression, ExpressionLocation, FunctionLocation,
         NamedFunctions, Types,
     },
     host::Host,
@@ -21,8 +21,8 @@ impl DebugFragment {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         fragment: Expression,
-        location: FragmentLocation,
-        active_fragment: Option<&FragmentLocation>,
+        location: ExpressionLocation,
+        active_fragment: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,
@@ -87,7 +87,7 @@ pub struct DebugFragmentData {
     pub fragment: Expression,
 
     /// # The location of the fragment
-    pub location: FragmentLocation,
+    pub location: ExpressionLocation,
 
     /// # The type signature of the fragment
     pub signature: DebugFragmentSignature,
@@ -106,7 +106,7 @@ pub struct DebugFragmentSignature {
 }
 
 impl DebugFragmentSignature {
-    pub fn new(location: &FragmentLocation, types: &Types) -> Self {
+    pub fn new(location: &ExpressionLocation, types: &Types) -> Self {
         let mut inputs = Vec::new();
         let mut outputs = Vec::new();
 
@@ -169,8 +169,8 @@ impl DebugFragmentKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         fragment: Expression,
-        location: FragmentLocation,
-        active_fragment: Option<&FragmentLocation>,
+        location: ExpressionLocation,
+        active_fragment: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,

@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        Branch, BranchLocation, Cluster, FragmentLocation, NamedFunctions,
+        Branch, BranchLocation, Cluster, ExpressionLocation, NamedFunctions,
         Pattern, Types,
     },
     source_map::SourceMap,
@@ -22,7 +22,7 @@ impl DebugBranch {
     pub fn new(
         branch: Branch,
         location: BranchLocation,
-        active_fragment: Option<&FragmentLocation>,
+        active_fragment: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,
@@ -35,7 +35,7 @@ impl DebugBranch {
             .body
             .into_iter()
             .map(|(index, fragment)| {
-                let location = FragmentLocation {
+                let location = ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index,
                 };
@@ -87,7 +87,7 @@ impl DebugBranch {
 
     pub fn fragment_after(
         &self,
-        fragment: &FragmentLocation,
+        fragment: &ExpressionLocation,
     ) -> anyhow::Result<Option<&DebugFragment>> {
         if !self.body.iter().any(|f| f.data.location == *fragment) {
             return Err(anyhow!(
