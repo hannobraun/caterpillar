@@ -70,7 +70,7 @@ fn Branch(
             view! {
                 <li class="ml-8">
                     <Expression
-                        fragment=expression
+                        expression=expression
                         actions=actions.clone() />
                 </li>
             }
@@ -89,28 +89,28 @@ fn Branch(
 
 #[component]
 pub fn Expression(
-    fragment: DebugExpression,
+    expression: DebugExpression,
     actions: ActionsTx,
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (fragment, actions, error) = match fragment.kind {
+    let (fragment, actions, error) = match expression.kind {
         DebugExpressionKind::Binding { name } => make_single_expression(
             name,
-            fragment.data,
+            expression.data,
             &mut class_outer,
             actions,
         ),
         DebugExpressionKind::CallToFunction { name } => make_single_expression(
             name,
-            fragment.data,
+            expression.data,
             &mut class_outer,
             actions,
         ),
         DebugExpressionKind::CallToFunctionRecursive { name } => {
             make_single_expression(
                 name,
-                fragment.data,
+                expression.data,
                 &mut class_outer,
                 actions,
             )
@@ -118,7 +118,7 @@ pub fn Expression(
         DebugExpressionKind::CallToHostFunction { name } => {
             make_single_expression(
                 name,
-                fragment.data,
+                expression.data,
                 &mut class_outer,
                 actions,
             )
@@ -126,7 +126,7 @@ pub fn Expression(
         DebugExpressionKind::CallToIntrinsic { name } => {
             make_single_expression(
                 name,
-                fragment.data,
+                expression.data,
                 &mut class_outer,
                 actions,
             )
@@ -157,14 +157,14 @@ pub fn Expression(
         DebugExpressionKind::UnresolvedIdentifier { name } => {
             make_single_expression(
                 name,
-                fragment.data,
+                expression.data,
                 &mut class_outer,
                 actions,
             )
         }
         DebugExpressionKind::Value { as_string } => make_single_expression(
             as_string,
-            fragment.data,
+            expression.data,
             &mut class_outer,
             actions,
         ),
