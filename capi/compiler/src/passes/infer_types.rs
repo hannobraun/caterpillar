@@ -96,14 +96,14 @@ fn infer_types_in_branch(
     queue: &mut BranchQueue,
     types: &mut Types,
 ) {
-    while let Some((index, fragment)) = queue_item.branch_body.peek() {
+    while let Some((index, expression)) = queue_item.branch_body.peek() {
         let location = ExpressionLocation {
             parent: Box::new(queue_item.branch_location.clone()),
             index: *index,
         };
 
         let inference = infer_type_of_expression(
-            fragment,
+            expression,
             &location,
             cluster,
             named_functions,
