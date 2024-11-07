@@ -87,13 +87,13 @@ impl DebugBranch {
 
     pub fn expression_after(
         &self,
-        fragment: &ExpressionLocation,
+        expression: &ExpressionLocation,
     ) -> anyhow::Result<Option<&DebugFragment>> {
-        if !self.body.iter().any(|f| f.data.location == *fragment) {
+        if !self.body.iter().any(|f| f.data.location == *expression) {
             return Err(anyhow!(
                 "Expected fragment to be in branch, but could not find it. \
                 Fragment:\n\
-                {fragment:#?}\n\
+                {expression:#?}\n\
                 Branch:\n\
                 {self:#?}"
             ));
@@ -102,7 +102,7 @@ impl DebugBranch {
         let mut fragments = self
             .body
             .iter()
-            .skip_while(|f| f.data.location != *fragment);
+            .skip_while(|f| f.data.location != *expression);
 
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
@@ -111,7 +111,7 @@ impl DebugBranch {
                 .next()
                 .as_ref()
                 .map(|fragment| &fragment.data.location),
-            Some(fragment)
+            Some(expression)
         );
 
         Ok(fragments.next())
