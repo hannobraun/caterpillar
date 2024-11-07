@@ -75,7 +75,7 @@ impl DebugBranch {
     pub fn active_expression(&self) -> anyhow::Result<&DebugExpression> {
         self.body
             .iter()
-            .find(|fragment| fragment.data.state.is_active())
+            .find(|expression| expression.data.state.is_active())
             .ok_or_else(|| {
                 anyhow!(
                     "Expected active fragment in branch, bud could not find \
