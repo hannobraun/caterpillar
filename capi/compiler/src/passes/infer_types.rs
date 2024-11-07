@@ -102,7 +102,7 @@ fn infer_types_in_branch(
             index: *index,
         };
 
-        let inference = infer_type_of_fragment(
+        let inference = infer_type_of_expression(
             fragment,
             &location,
             cluster,
@@ -200,7 +200,7 @@ fn infer_types_in_branch(
 }
 
 #[allow(clippy::too_many_arguments)]
-fn infer_type_of_fragment(
+fn infer_type_of_expression(
     expression: &Expression,
     location: &ExpressionLocation,
     cluster: &Cluster,
