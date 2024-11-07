@@ -9,7 +9,7 @@ use capi_game_engine::{
 use capi_protocol::updates::Updates;
 
 use crate::model::{
-    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFragment,
+    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugExpression,
     DebugFragmentKind, DebugFunction, PersistentState, TransientState,
     UserAction,
 };
@@ -103,7 +103,7 @@ impl TestDebugger {
     pub fn expect_fragment(
         &mut self,
         location: &ExpressionLocation,
-    ) -> DebugFragment {
+    ) -> DebugExpression {
         let Some(fragment) = self
             .transient_state()
             .active_functions
@@ -194,12 +194,12 @@ impl FunctionsExt for Vec<DebugFunction> {
 }
 
 pub trait DebugFunctionExt {
-    fn active_fragment(self) -> DebugFragment;
+    fn active_fragment(self) -> DebugExpression;
     fn only_branch(self) -> DebugBranch;
 }
 
 impl DebugFunctionExt for DebugFunction {
-    fn active_fragment(self) -> DebugFragment {
+    fn active_fragment(self) -> DebugExpression {
         self.branches
             .into_iter()
             .find_map(|branch| {
@@ -225,11 +225,11 @@ impl DebugFunctionExt for DebugFunction {
 
 pub trait DebugBranchExt {
     #[allow(unused)] // currently unused, but might come in handy later
-    fn fragment(&self, i: usize) -> DebugFragment;
+    fn fragment(&self, i: usize) -> DebugExpression;
 }
 
 impl DebugBranchExt for DebugBranch {
-    fn fragment(&self, i: usize) -> DebugFragment {
+    fn fragment(&self, i: usize) -> DebugExpression {
         let Some(fragment) = self.body.get(i) else {
             panic!("{i}-th fragment in `{:?}` not available", self.body);
         };
@@ -245,7 +245,7 @@ pub trait DebugFragmentExt {
     fn expect_function(self) -> DebugFunction;
 }
 
-impl DebugFragmentExt for DebugFragment {
+impl DebugFragmentExt for DebugExpression {
     fn expect_call_to_function(self, called_fn: &str) -> Self {
         let DebugFragmentKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");

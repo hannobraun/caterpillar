@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugFragment, DebugFragmentData, DebugFragmentKind,
+        DebugBranch, DebugExpression, DebugFragmentData, DebugFragmentKind,
         UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -60,7 +60,7 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
 #[component]
 fn Branch(
     parameters: Vec<String>,
-    body: Vec<DebugFragment>,
+    body: Vec<DebugExpression>,
     actions: ActionsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
@@ -88,7 +88,10 @@ fn Branch(
 }
 
 #[component]
-pub fn Fragment(fragment: DebugFragment, actions: ActionsTx) -> impl IntoView {
+pub fn Fragment(
+    fragment: DebugExpression,
+    actions: ActionsTx,
+) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
     let (fragment, actions, error) = match fragment.kind {

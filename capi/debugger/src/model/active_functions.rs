@@ -8,7 +8,7 @@ use capi_compiler::{
 use capi_protocol::host_state::HostState;
 use capi_runtime::{Effect, InstructionAddress};
 
-use super::{Breakpoints, DebugBranch, DebugFragment, DebugFunction};
+use super::{Breakpoints, DebugBranch, DebugExpression, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
@@ -156,7 +156,7 @@ impl ActiveFunctionsEntries {
         &self,
         branch: &DebugBranch,
         expression: &ExpressionLocation,
-    ) -> anyhow::Result<Option<DebugFragment>> {
+    ) -> anyhow::Result<Option<DebugExpression>> {
         if let Some(after) = branch.expression_after(expression)? {
             return Ok(Some(after.clone()));
         }
@@ -167,7 +167,7 @@ impl ActiveFunctionsEntries {
     pub fn find_next_expression_after_caller(
         &self,
         expression: &ExpressionLocation,
-    ) -> anyhow::Result<Option<DebugFragment>> {
+    ) -> anyhow::Result<Option<DebugExpression>> {
         let caller_branch = self
             .inner
             .iter()

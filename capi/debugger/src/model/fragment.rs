@@ -12,12 +12,12 @@ use capi_runtime::Effect;
 use super::{Breakpoints, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugFragment {
+pub struct DebugExpression {
     pub data: DebugFragmentData,
     pub kind: DebugFragmentKind,
 }
 
-impl DebugFragment {
+impl DebugExpression {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         fragment: Expression,
