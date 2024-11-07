@@ -191,7 +191,7 @@ fn compile_expression(
 ) -> Option<InstructionAddress> {
     let mut mapping = named_functions_context
         .source_map
-        .map_fragment_to_instructions(location.clone());
+        .map_expression_to_instructions(location.clone());
 
     match expression {
         Expression::Binding { name, .. } => {

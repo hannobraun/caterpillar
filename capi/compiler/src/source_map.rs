@@ -21,7 +21,7 @@ impl SourceMap {
     ///
     /// This function only accepts the location of the expression. To append the
     /// associated instructions, use the returned [`Mapping`].
-    pub fn map_fragment_to_instructions(
+    pub fn map_expression_to_instructions(
         &mut self,
         expression: ExpressionLocation,
     ) -> Mapping {
