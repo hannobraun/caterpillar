@@ -100,7 +100,7 @@ impl TestDebugger {
         &self.persistent.code.inner.as_ref().unwrap().named_functions
     }
 
-    pub fn expect_fragment(
+    pub fn expect_expression(
         &mut self,
         location: &ExpressionLocation,
     ) -> DebugExpression {

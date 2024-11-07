@@ -36,12 +36,12 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .unwrap()
         .into_location();
 
-    assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
+    assert!(!debugger.expect_expression(&nop).data.has_durable_breakpoint);
 
     debugger.on_user_action(UserAction::BreakpointSet {
         expression: nop.clone(),
     })?;
-    assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
+    assert!(debugger.expect_expression(&nop).data.has_durable_breakpoint);
 
     Ok(())
 }
