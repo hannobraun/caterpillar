@@ -47,8 +47,8 @@ fn mark_recursive_calls_in_function(
     >,
 ) {
     for branch in function.branches.values_mut() {
-        for fragment in branch.body.values_mut() {
-            match fragment {
+        for expression in branch.body.values_mut() {
+            match expression {
                 Expression::Function { function } => {
                     mark_recursive_calls_in_function(
                         function,
