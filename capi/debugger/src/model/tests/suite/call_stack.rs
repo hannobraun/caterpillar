@@ -261,7 +261,7 @@ fn instruction_on_call_stack_with_no_associated_expression() {
     // currently active instruction is a return instruction, if that is located
     // right after the call to the host function.
     //
-    // Since a return is not associated with a fragment, the debugger must not
+    // Since a return is not associated with a expression, the debugger must not
     // rely on that being the case. Everything should work normally in this
     // case.
     //
