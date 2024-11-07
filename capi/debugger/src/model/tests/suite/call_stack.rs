@@ -90,10 +90,10 @@ fn stopped_in_anonymous_function() {
         .expect_functions()
         .with_name("main")
         .only_branch()
-        .fragment(0)
+        .expression(0)
         .expect_function()
         .only_branch()
-        .fragment(0);
+        .expression(0);
     assert_eq!(fragment.data.effect, Some(Effect::Breakpoint));
 
     fragment.expect_call_to_intrinsic("brk");
