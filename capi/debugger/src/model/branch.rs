@@ -22,7 +22,7 @@ impl DebugBranch {
     pub fn new(
         branch: Branch,
         location: BranchLocation,
-        active_fragment: Option<&ExpressionLocation>,
+        active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,
@@ -42,7 +42,7 @@ impl DebugBranch {
                 DebugExpression::new(
                     expression,
                     location,
-                    active_fragment,
+                    active_expression,
                     is_in_innermost_active_function,
                     cluster,
                     named_functions,
