@@ -126,6 +126,34 @@ pub struct Cluster {
 }
 
 impl Cluster {
+    /// # Find the function with the provided index into the cluster
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if the provided index does not refer to a function in the
+    /// cluster. This can only happen, if you use an index from a different
+    /// cluster. Avoid this, by only passing indices to this function, that you
+    /// have gotten from the cluster itself, in some way.
+    ///
+    /// Panics, if the index refers to a function that is not available in the
+    /// provided instance of [`NamedFunctions`]. This can happen, if you mix up
+    /// data structures produced by different compiler passes. Otherwise, it's a
+    /// bug.
+    pub fn find_function_by_index<'r>(
+        &'r self,
+        index: &Index<Index<Function>>,
+        named_functions: &'r NamedFunctions,
+    ) -> Find<&'r Function, Index<Function>> {
+        let index = self
+            .functions
+            .get(index)
+            .expect("Expecting index that refers to function in cluster.");
+
+        named_functions
+            .find_by_index(index)
+            .expect("Expecting index in cluster to refer to existing function")
+    }
+
     /// # Iterate over the functions in the cluster
     ///
     /// ## Panics
