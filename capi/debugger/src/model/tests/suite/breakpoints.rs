@@ -231,7 +231,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_branch()?
             .body
             .iter()
-            .find(|fragment| fragment.data.location == a)
+            .find(|expression| expression.data.location == a)
             .unwrap()
             .data
             .has_durable_breakpoint
