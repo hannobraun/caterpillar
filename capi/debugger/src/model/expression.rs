@@ -35,7 +35,7 @@ impl DebugExpression {
 
         let state = if Some(&location) == active_fragment {
             if is_in_innermost_active_function {
-                DebugExpressionState::InnermostActiveFragment
+                DebugExpressionState::InnermostActiveExpression
             } else {
                 DebugExpressionState::ActiveCaller
             }
@@ -120,7 +120,7 @@ impl DebugExpressionSignature {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugExpressionState {
-    InnermostActiveFragment,
+    InnermostActiveExpression,
     ActiveCaller,
     NotActive,
 }
@@ -132,7 +132,7 @@ impl DebugExpressionState {
     /// innermost active function. The expression where the process is currently
     /// stopped at.
     pub fn is_innermost_active_expression(&self) -> bool {
-        matches!(self, Self::InnermostActiveFragment)
+        matches!(self, Self::InnermostActiveExpression)
     }
 
     /// # Indicate whether the expression is active
@@ -141,7 +141,7 @@ impl DebugExpressionState {
     /// or if it calls an active function (which is a function that contains an
     /// active expression).
     pub fn is_active(&self) -> bool {
-        matches!(self, Self::InnermostActiveFragment | Self::ActiveCaller)
+        matches!(self, Self::InnermostActiveExpression | Self::ActiveCaller)
     }
 }
 
