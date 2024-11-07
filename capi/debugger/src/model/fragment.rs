@@ -83,18 +83,10 @@ impl DebugExpression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpressionData {
-    /// # The fragment that the `DebugFragment` was built from
     pub expression: Expression,
-
-    /// # The location of the fragment
     pub location: ExpressionLocation,
-
-    /// # The type signature of the fragment
     pub signature: DebugFragmentSignature,
-
-    /// # The state of the fragment
     pub state: DebugFragmentState,
-
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
 }
