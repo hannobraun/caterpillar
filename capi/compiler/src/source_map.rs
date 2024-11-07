@@ -59,7 +59,7 @@ impl SourceMap {
     ///
     /// Can return a reference to an empty `Vec`, as comments have no mapping to
     /// instructions.
-    pub fn fragment_to_instructions(
+    pub fn expression_to_instructions(
         &self,
         expression: &ExpressionLocation,
     ) -> &Vec<InstructionAddress> {

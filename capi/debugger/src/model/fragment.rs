@@ -44,7 +44,7 @@ impl DebugFragment {
         };
 
         let has_durable_breakpoint = source_map
-            .fragment_to_instructions(&location)
+            .expression_to_instructions(&location)
             .iter()
             .any(|instruction| breakpoints.durable_at(instruction));
 
