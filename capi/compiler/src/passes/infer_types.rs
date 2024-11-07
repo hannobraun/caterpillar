@@ -115,8 +115,8 @@ fn infer_types_in_branch(
 
         if let Some(inference) = inference {
             let signature = match inference {
-                FragmentInference::Inferred { signature } => signature,
-                FragmentInference::NeedToInferMoreBranchesFirst {
+                ExpressionInference::Inferred { signature } => signature,
+                ExpressionInference::NeedToInferMoreBranchesFirst {
                     queue_items,
                 } => {
                     // The fragment is a function literal. We need to infer the
@@ -135,7 +135,7 @@ fn infer_types_in_branch(
                     // once this branch is up again.
                     return;
                 }
-                FragmentInference::Defer => {
+                ExpressionInference::Defer => {
                     if queue_item.deferred {
                         let inputs = {
                             let inputs = queue_item.stack.clone();
@@ -209,7 +209,7 @@ fn infer_type_of_expression(
     host: &impl Host,
     stack: &mut Vec<Index<Type>>,
     types: &mut Types,
-) -> Option<FragmentInference> {
+) -> Option<ExpressionInference> {
     assert!(
         !types.of_expressions.contains_key(location),
         "Encountered an expression whose type signature has already been \
@@ -327,7 +327,7 @@ fn infer_type_of_expression(
 
             let Some(signature) = types.of_functions.get(&location).cloned()
             else {
-                return Some(FragmentInference::Defer);
+                return Some(ExpressionInference::Defer);
             };
 
             signature
@@ -361,9 +361,11 @@ fn infer_type_of_expression(
                     ));
                 }
 
-                return Some(FragmentInference::NeedToInferMoreBranchesFirst {
-                    queue_items,
-                });
+                return Some(
+                    ExpressionInference::NeedToInferMoreBranchesFirst {
+                        queue_items,
+                    },
+                );
             };
 
             let type_ = types.inner.push(Type::Function { signature });
@@ -384,7 +386,7 @@ fn infer_type_of_expression(
         },
     };
 
-    Some(FragmentInference::Inferred { signature })
+    Some(ExpressionInference::Inferred { signature })
 }
 
 fn handle_concrete_signature(
@@ -482,7 +484,7 @@ impl QueueItem {
     }
 }
 
-enum FragmentInference {
+enum ExpressionInference {
     Inferred { signature: Signature },
     NeedToInferMoreBranchesFirst { queue_items: Vec<QueueItem> },
     Defer,
