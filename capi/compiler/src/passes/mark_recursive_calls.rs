@@ -169,10 +169,10 @@ mod tests {
         assert!(branches.next().is_none());
 
         let mut body = branch.body.into_values();
-        let fragment = body.next().unwrap();
+        let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::Function { function } = fragment else {
+        let Expression::Function { function } = expression else {
             panic!("Expected expression to be a function.");
         };
 
