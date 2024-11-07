@@ -210,7 +210,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, fragment)| fragment),
+                .map(|(_, expression)| expression),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
@@ -239,7 +239,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, fragment)| fragment),
+                .map(|(_, expression)| expression),
             Some(&Expression::CallToHostFunction { number: 0 })
         );
     }
@@ -264,7 +264,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, fragment)| fragment),
+                .map(|(_, expression)| expression),
             Some(&Expression::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
@@ -295,7 +295,7 @@ mod tests {
                 .remove(0)
                 .body
                 .last_key_value()
-                .map(|(_, fragment)| fragment),
+                .map(|(_, expression)| expression),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
