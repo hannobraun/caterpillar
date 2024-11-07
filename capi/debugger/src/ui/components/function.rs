@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugExpression, DebugFragmentData, DebugFragmentKind,
+        DebugBranch, DebugExpression, DebugExpressionData, DebugFragmentKind,
         UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -181,7 +181,7 @@ pub fn Fragment(
 
 fn make_single_expression(
     expression: String,
-    data: DebugFragmentData,
+    data: DebugExpressionData,
     class_outer: &mut String,
     actions_tx: ActionsTx,
 ) -> (View, Option<HtmlElement<Span>>, Option<HtmlElement<Span>>) {

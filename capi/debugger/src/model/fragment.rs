@@ -13,7 +13,7 @@ use super::{Breakpoints, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpression {
-    pub data: DebugFragmentData,
+    pub data: DebugExpressionData,
     pub kind: DebugFragmentKind,
 }
 
@@ -56,7 +56,7 @@ impl DebugExpression {
             }
         });
 
-        let data = DebugFragmentData {
+        let data = DebugExpressionData {
             fragment: expression.clone(),
             location: location.clone(),
             signature,
@@ -82,7 +82,7 @@ impl DebugExpression {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugFragmentData {
+pub struct DebugExpressionData {
     /// # The fragment that the `DebugFragment` was built from
     pub fragment: Expression,
 
