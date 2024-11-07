@@ -92,7 +92,7 @@ impl SourceMap {
     }
 }
 
-/// # A mapping of a fragment to a number of instructions
+/// # A mapping of an expression to a number of instructions
 ///
 /// Returned by [`SourceMap::define_mapping`].
 pub struct Mapping<'r> {
