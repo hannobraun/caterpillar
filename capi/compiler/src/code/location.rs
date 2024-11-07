@@ -1,6 +1,6 @@
 use std::fmt;
 
-use super::{Branch, Fragment, Function, Index, NamedFunctions};
+use super::{Branch, Expression, Function, Index, NamedFunctions};
 
 #[derive(
     Clone,
@@ -14,7 +14,7 @@ use super::{Branch, Fragment, Function, Index, NamedFunctions};
 )]
 pub struct FragmentLocation {
     pub parent: Box<BranchLocation>,
-    pub index: Index<Fragment>,
+    pub index: Index<Expression>,
 }
 
 impl FragmentLocation {

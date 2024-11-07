@@ -7,7 +7,7 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Fragment, Function, Index, IndexMap, NamedFunctions,
+    CallGraph, Cluster, Expression, Function, Index, IndexMap, NamedFunctions,
 };
 
 pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
@@ -53,7 +53,7 @@ fn include_calls_from_function_in_call_graph(
     for branch in function.branches.values() {
         for fragment in branch.body.values() {
             match fragment {
-                Fragment::Function { function } => {
+                Expression::Function { function } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,
                         function,
@@ -61,7 +61,7 @@ fn include_calls_from_function_in_call_graph(
                         call_graph,
                     );
                 }
-                Fragment::UnresolvedIdentifier {
+                Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function: Some(_),
                     ..

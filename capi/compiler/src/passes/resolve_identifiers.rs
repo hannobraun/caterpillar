@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     code::{
-        Branch, Fragment, Function, NamedFunctions, Pattern,
+        Branch, Expression, Function, NamedFunctions, Pattern,
         UnresolvedCallToUserDefinedFunction,
     },
     host::Host,
@@ -88,7 +88,7 @@ fn resolve_in_branch(
 ) {
     for fragment in branch.body.values_mut() {
         match fragment {
-            Fragment::Function { function } => {
+            Expression::Function { function } => {
                 resolve_in_function(
                     function,
                     scopes,
@@ -108,7 +108,7 @@ fn resolve_in_branch(
                     }
                 }
             }
-            Fragment::UnresolvedIdentifier {
+            Expression::UnresolvedIdentifier {
                 name,
                 is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function,
@@ -142,19 +142,19 @@ fn resolve_in_branch(
                         index += 1;
                     }
 
-                    *fragment = Fragment::Binding {
+                    *fragment = Expression::Binding {
                         name: name.clone(),
                         index,
                     }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    *fragment = Fragment::CallToIntrinsicFunction {
+                    *fragment = Expression::CallToIntrinsicFunction {
                         intrinsic,
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
                 } else if let Some(function) = host.function_by_name(name) {
-                    *fragment = Fragment::CallToHostFunction {
+                    *fragment = Expression::CallToHostFunction {
                         number: function.number(),
                     }
                 } else if known_named_functions.contains(name) {
@@ -179,7 +179,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         code::{
-            Branch, ConcreteSignature, Fragment,
+            Branch, ConcreteSignature, Expression,
             UnresolvedCallToUserDefinedFunction,
         },
         host::{Host, HostFunction},
@@ -211,7 +211,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Fragment::UnresolvedIdentifier {
+            Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: None,
@@ -240,7 +240,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Fragment::CallToHostFunction { number: 0 })
+            Some(&Expression::CallToHostFunction { number: 0 })
         );
     }
 
@@ -265,7 +265,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Fragment::CallToIntrinsicFunction {
+            Some(&Expression::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
                 is_tail_call: false
             })
@@ -296,7 +296,7 @@ mod tests {
                 .body
                 .last_key_value()
                 .map(|(_, fragment)| fragment),
-            Some(&Fragment::UnresolvedIdentifier {
+            Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: Some(

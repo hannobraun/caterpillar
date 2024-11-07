@@ -35,7 +35,7 @@ use super::{Function, Hash, Index};
     serde::Serialize,
     udigest::Digestable,
 )]
-pub enum Fragment {
+pub enum Expression {
     /// # A reference to a local binding
     Binding {
         /// # The name of the binding
@@ -176,9 +176,9 @@ pub enum Fragment {
     Value(Value),
 }
 
-impl Fragment {
+impl Expression {
     pub fn as_call_to_function(&self) -> Option<&Hash<Function>> {
-        let Fragment::CallToUserDefinedFunction { hash, .. } = self else {
+        let Expression::CallToUserDefinedFunction { hash, .. } = self else {
             return None;
         };
 
@@ -186,7 +186,7 @@ impl Fragment {
     }
 
     pub fn as_comment(&self) -> Option<&String> {
-        let Fragment::Comment { text } = self else {
+        let Expression::Comment { text } = self else {
             return None;
         };
 
@@ -197,7 +197,7 @@ impl Fragment {
     ///
     /// Return `None`, if this is a different kind of fragment.
     pub fn as_function(&self) -> Option<&Function> {
-        let Fragment::Function { function } = self else {
+        let Expression::Function { function } = self else {
             return None;
         };
 

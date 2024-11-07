@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::code::{CallGraph, Fragment, Function, Hash, NamedFunctions};
+use crate::code::{CallGraph, Expression, Function, Hash, NamedFunctions};
 
 pub fn resolve_calls_to_user_defined_functions(
     named_functions: &mut NamedFunctions,
@@ -34,14 +34,14 @@ fn resolve_calls_in_function(
 }
 
 fn resolve_calls_in_fragment(
-    fragment: &mut Fragment,
+    fragment: &mut Expression,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
     match fragment {
-        Fragment::Function { function } => {
+        Expression::Function { function } => {
             resolve_calls_in_function(function, resolved_hashes_by_name);
         }
-        Fragment::UnresolvedIdentifier {
+        Expression::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
             is_known_to_be_call_to_user_defined_function,
@@ -57,7 +57,7 @@ fn resolve_calls_in_fragment(
                     call.is_known_to_be_recursive_call;
 
                 if let Some(index) = is_recursive_call_to_index {
-                    *fragment = Fragment::CallToUserDefinedFunctionRecursive {
+                    *fragment = Expression::CallToUserDefinedFunctionRecursive {
                         index,
                         is_tail_call: *is_in_tail_position,
                     }
@@ -71,7 +71,7 @@ fn resolve_calls_in_fragment(
                         );
                     };
 
-                    *fragment = Fragment::CallToUserDefinedFunction {
+                    *fragment = Expression::CallToUserDefinedFunction {
                         hash,
                         is_tail_call: *is_in_tail_position,
                     };

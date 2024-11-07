@@ -1,4 +1,4 @@
-use crate::code::{Branch, Fragment, Function, NamedFunctions};
+use crate::code::{Branch, Expression, Function, NamedFunctions};
 
 pub fn determine_tail_positions(named_functions: &mut NamedFunctions) {
     for function in named_functions.functions_mut() {
@@ -14,11 +14,11 @@ fn analyze_function(function: &mut Function) {
 
 fn analyze_branch(branch: &mut Branch) {
     for fragment in branch.body.values_mut().rev() {
-        if let Fragment::Comment { .. } = fragment {
+        if let Expression::Comment { .. } = fragment {
             continue;
         }
 
-        if let Fragment::UnresolvedIdentifier {
+        if let Expression::UnresolvedIdentifier {
             is_known_to_be_in_tail_position,
             ..
         } = fragment
@@ -30,7 +30,7 @@ fn analyze_branch(branch: &mut Branch) {
     }
 
     for fragment in branch.body.values_mut() {
-        if let Fragment::Function { function } = fragment {
+        if let Expression::Function { function } = fragment {
             analyze_function(function);
         }
     }
@@ -39,7 +39,7 @@ fn analyze_branch(branch: &mut Branch) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Fragment, IndexMap, NamedFunctions},
+        code::{Expression, IndexMap, NamedFunctions},
         passes::{parse, tokenize},
     };
 
@@ -91,7 +91,7 @@ mod tests {
 
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
-        let Fragment::Function { function } =
+        let Expression::Function { function } =
             &branch.body.values().nth(1).unwrap()
         else {
             panic!("Expected block.");
@@ -140,11 +140,11 @@ mod tests {
         fn to_identifiers(&self) -> Vec<(&str, bool)>;
     }
 
-    impl ToIdentifiers for IndexMap<Fragment> {
+    impl ToIdentifiers for IndexMap<Expression> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
                 .filter_map(|fragment| {
-                    if let Fragment::UnresolvedIdentifier {
+                    if let Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position,
                         ..

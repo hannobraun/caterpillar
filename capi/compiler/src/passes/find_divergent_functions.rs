@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use petgraph::{algo::condensation, visit::EdgeRef, Direction, Graph};
 
-use crate::code::{CallGraph, Fragment, NamedFunctions};
+use crate::code::{CallGraph, Expression, NamedFunctions};
 
 pub fn find_divergent_functions(
     named_functions: &NamedFunctions,
@@ -24,7 +24,7 @@ pub fn find_divergent_functions(
         for function in cluster.functions(named_functions) {
             for branch in function.branches() {
                 for fragment in branch.body() {
-                    if let Fragment::CallToUserDefinedFunctionRecursive {
+                    if let Expression::CallToUserDefinedFunctionRecursive {
                         index,
                         ..
                     } = fragment.find

@@ -5,7 +5,7 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Find, BranchLocation, Cluster, Fragment, FragmentLocation,
+    search::Find, BranchLocation, Cluster, Expression, FragmentLocation,
     FunctionLocation, Hash, IndexMap,
 };
 
@@ -112,7 +112,7 @@ impl NamedFunctions {
     pub fn find_fragment_by_location(
         &self,
         location: &FragmentLocation,
-    ) -> Option<&Fragment> {
+    ) -> Option<&Expression> {
         let branch = self.find_branch_by_location(&location.parent)?;
         branch.body.get(&location.index)
     }
@@ -234,7 +234,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<Fragment>,
+    pub body: IndexMap<Expression>,
 }
 
 #[derive(

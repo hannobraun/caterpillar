@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::code::{Branch, Fragment, Function, NamedFunctions, Pattern};
+use crate::code::{Branch, Expression, Function, NamedFunctions, Pattern};
 
 use super::tokenize::Token;
 
@@ -167,7 +167,7 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
         match token {
             Token::KeywordFn => {
                 if let Some(function) = parse_function(tokens) {
-                    branch.body.push(Fragment::Function { function });
+                    branch.body.push(Expression::Function { function });
                 }
             }
             Token::BranchStart | Token::KeywordEnd => {
@@ -175,17 +175,17 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
             }
             _ => match tokens.take()? {
                 Token::Comment { text } => {
-                    branch.body.push(Fragment::Comment { text });
+                    branch.body.push(Expression::Comment { text });
                 }
                 Token::Identifier { name } => {
-                    branch.body.push(Fragment::UnresolvedIdentifier {
+                    branch.body.push(Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position: false,
                         is_known_to_be_call_to_user_defined_function: None,
                     });
                 }
                 Token::IntegerLiteral { value } => {
-                    branch.body.push(Fragment::Value(value.into()));
+                    branch.body.push(Expression::Value(value.into()));
                 }
                 token => {
                     panic!("Unexpected token: {token:?}");

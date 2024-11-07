@@ -8,7 +8,7 @@ use std::{
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Fragment, FragmentLocation, FunctionLocation, Index, NamedFunctions,
+        Expression, FragmentLocation, FunctionLocation, Index, NamedFunctions,
         Pattern, Signature, Type, Types,
     },
     host::Host,
@@ -201,7 +201,7 @@ fn infer_types_in_branch(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
-    fragment: &Fragment,
+    fragment: &Expression,
     location: &FragmentLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
@@ -220,7 +220,7 @@ fn infer_type_of_fragment(
     );
 
     let signature = match fragment {
-        Fragment::Binding { name, .. } => {
+        Expression::Binding { name, .. } => {
             let Some(type_) = bindings.get(name).copied() else {
                 unreachable!(
                     "Can't find binding `{name}` in `bindings`, but \n\
@@ -237,7 +237,7 @@ fn infer_type_of_fragment(
                 outputs: vec![type_],
             }
         }
-        Fragment::CallToHostFunction { number } => {
+        Expression::CallToHostFunction { number } => {
             let signature = host
                 .function_by_number(*number)
                 .expect(
@@ -248,7 +248,7 @@ fn infer_type_of_fragment(
 
             handle_concrete_signature(signature, stack, types)
         }
-        Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
+        Expression::CallToIntrinsicFunction { intrinsic, .. } => {
             match (intrinsic, intrinsic.signature()) {
                 (_, Some(signature)) => {
                     handle_concrete_signature(signature, stack, types)
@@ -284,7 +284,7 @@ fn infer_type_of_fragment(
                 }
             }
         }
-        Fragment::CallToUserDefinedFunction { hash, .. } => {
+        Expression::CallToUserDefinedFunction { hash, .. } => {
             let function = named_functions
                 .find_by_hash(hash)
                 .expect("Function referred to by resolved call must exist.");
@@ -300,7 +300,7 @@ fn infer_type_of_fragment(
                 )
                 .clone()
         }
-        Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
+        Expression::CallToUserDefinedFunctionRecursive { index, .. } => {
             let mut fragment_location = location;
             let current_function = loop {
                 match fragment_location.parent.parent.deref() {
@@ -332,11 +332,11 @@ fn infer_type_of_fragment(
 
             signature
         }
-        Fragment::Comment { .. } => {
+        Expression::Comment { .. } => {
             // Comments have no bearing on type inference.
             return None;
         }
-        Fragment::Function { function } => {
+        Expression::Function { function } => {
             let function_location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };
@@ -373,12 +373,12 @@ fn infer_type_of_fragment(
                 outputs: vec![type_],
             }
         }
-        Fragment::UnresolvedIdentifier { .. } => {
+        Expression::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.
             return None;
         }
-        Fragment::Value(_) => Signature {
+        Expression::Value(_) => Signature {
             inputs: vec![],
             outputs: vec![types.inner.push(Type::Number)],
         },
@@ -431,7 +431,7 @@ fn handle_concrete_signature(
 type BranchQueue = VecDeque<QueueItem>;
 
 struct QueueItem {
-    branch_body: iter::Peekable<vec::IntoIter<(Index<Fragment>, Fragment)>>,
+    branch_body: iter::Peekable<vec::IntoIter<(Index<Expression>, Expression)>>,
     branch_location: BranchLocation,
     function_location: FunctionLocation,
     parameters: Vec<Index<Type>>,

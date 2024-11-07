@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Branch, BranchLocation, Cluster, Fragment, FragmentLocation, Function,
-        FunctionLocation, Hash, IndexMap, Pattern,
+        Branch, BranchLocation, Cluster, Expression, FragmentLocation,
+        Function, FunctionLocation, Hash, IndexMap, Pattern,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -129,7 +129,7 @@ fn compile_branch(
 }
 
 fn compile_branch_body(
-    body: IndexMap<Fragment>,
+    body: IndexMap<Expression>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -183,7 +183,7 @@ fn compile_branch_body(
 }
 
 fn compile_fragment(
-    fragment: Fragment,
+    fragment: Expression,
     location: FragmentLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -194,7 +194,7 @@ fn compile_fragment(
         .map_fragment_to_instructions(location.clone());
 
     match fragment {
-        Fragment::Binding { name, .. } => {
+        Expression::Binding { name, .. } => {
             let address = generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
                 named_functions_context.instructions,
@@ -202,7 +202,7 @@ fn compile_fragment(
             );
             Some(address)
         }
-        Fragment::CallToUserDefinedFunction { hash, is_tail_call } => {
+        Expression::CallToUserDefinedFunction { hash, is_tail_call } => {
             let Some(function) = named_functions_context
                 .compiled_functions_by_hash
                 .get(&hash)
@@ -247,7 +247,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToUserDefinedFunctionRecursive {
+        Expression::CallToUserDefinedFunctionRecursive {
             index,
             is_tail_call,
         } => {
@@ -299,7 +299,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::CallToHostFunction { number } => {
+        Expression::CallToHostFunction { number } => {
             let address = generate_instruction(
                 Instruction::Push {
                     value: number.into(),
@@ -316,7 +316,7 @@ fn compile_fragment(
             );
             Some(address)
         }
-        Fragment::CallToIntrinsicFunction {
+        Expression::CallToIntrinsicFunction {
             intrinsic,
             is_tail_call,
         } => {
@@ -328,8 +328,8 @@ fn compile_fragment(
             );
             Some(address)
         }
-        Fragment::Comment { .. } => None,
-        Fragment::Function { function } => {
+        Expression::Comment { .. } => None,
+        Expression::Function { function } => {
             assert!(
                 function.name.is_none(),
                 "Encountered an anonymous function, but it has a name."
@@ -374,7 +374,7 @@ fn compile_fragment(
 
             Some(address)
         }
-        Fragment::UnresolvedIdentifier { .. } => {
+        Expression::UnresolvedIdentifier { .. } => {
             let address = generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
@@ -384,7 +384,7 @@ fn compile_fragment(
             );
             Some(address)
         }
-        Fragment::Value(value) => {
+        Expression::Value(value) => {
             let address = generate_instruction(
                 Instruction::Push { value },
                 named_functions_context.instructions,

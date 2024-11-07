@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
-        Cluster, Fragment, FragmentLocation, FunctionLocation, NamedFunctions,
-        Types,
+        Cluster, Expression, FragmentLocation, FunctionLocation,
+        NamedFunctions, Types,
     },
     host::Host,
     source_map::SourceMap,
@@ -20,7 +20,7 @@ pub struct DebugFragment {
 impl DebugFragment {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        fragment: Fragment,
+        fragment: Expression,
         location: FragmentLocation,
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
@@ -84,7 +84,7 @@ impl DebugFragment {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFragmentData {
     /// # The fragment that the `DebugFragment` was built from
-    pub fragment: Fragment,
+    pub fragment: Expression,
 
     /// # The location of the fragment
     pub location: FragmentLocation,
@@ -168,7 +168,7 @@ pub enum DebugFragmentKind {
 impl DebugFragmentKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        fragment: Fragment,
+        fragment: Expression,
         location: FragmentLocation,
         active_fragment: Option<&FragmentLocation>,
         is_in_innermost_active_function: bool,
@@ -180,8 +180,8 @@ impl DebugFragmentKind {
         effect: Option<&Effect>,
     ) -> Self {
         match fragment {
-            Fragment::Binding { name, .. } => Self::Binding { name },
-            Fragment::CallToUserDefinedFunction { hash, .. } => {
+            Expression::Binding { name, .. } => Self::Binding { name },
+            Expression::CallToUserDefinedFunction { hash, .. } => {
                 let function = named_functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
@@ -192,7 +192,9 @@ impl DebugFragmentKind {
 
                 Self::CallToFunction { name }
             }
-            Fragment::CallToUserDefinedFunctionRecursive { index, .. } => {
+            Expression::CallToUserDefinedFunctionRecursive {
+                index, ..
+            } => {
                 let called_function_index = cluster
                     .functions
                     .get(&index)
@@ -212,7 +214,7 @@ impl DebugFragmentKind {
 
                 Self::CallToFunctionRecursive { name }
             }
-            Fragment::CallToHostFunction { number } => {
+            Expression::CallToHostFunction { number } => {
                 let name = GameEngineHost
                     .function_by_number(number)
                     .expect("Expected effect number in code to be valid.")
@@ -221,15 +223,15 @@ impl DebugFragmentKind {
 
                 Self::CallToHostFunction { name }
             }
-            Fragment::CallToIntrinsicFunction { intrinsic, .. } => {
+            Expression::CallToIntrinsicFunction { intrinsic, .. } => {
                 Self::CallToIntrinsic {
                     name: intrinsic.to_string(),
                 }
             }
-            Fragment::Comment { text } => Self::Comment {
+            Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
-            Fragment::Function { function } => {
+            Expression::Function { function } => {
                 let function = DebugFunction::new(
                     function,
                     FunctionLocation::AnonymousFunction { location },
@@ -245,10 +247,10 @@ impl DebugFragmentKind {
 
                 Self::Function { function }
             }
-            Fragment::UnresolvedIdentifier { name, .. } => {
+            Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Fragment::Value(value) => Self::Value {
+            Expression::Value(value) => Self::Value {
                 as_string: value.to_string(),
             },
         }
