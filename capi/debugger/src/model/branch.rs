@@ -100,7 +100,7 @@ impl DebugBranch {
             ));
         }
 
-        let mut fragments = self
+        let mut expressions = self
             .body
             .iter()
             .skip_while(|f| f.data.location != *expression);
@@ -108,13 +108,13 @@ impl DebugBranch {
         // This is the fragment we've been passed as an argument. Need to ignore
         // it, to advance the iterator to the one we're actually looking for.
         assert_eq!(
-            fragments
+            expressions
                 .next()
                 .as_ref()
                 .map(|fragment| &fragment.data.location),
             Some(expression)
         );
 
-        Ok(fragments.next())
+        Ok(expressions.next())
     }
 }
