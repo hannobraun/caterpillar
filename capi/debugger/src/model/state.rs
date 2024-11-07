@@ -153,7 +153,7 @@ impl PersistentState {
 
                     loop {
                         let Some(after) = entries
-                            .find_next_fragment_after_caller(
+                            .find_next_expression_after_caller(
                                 &fragment.data.location,
                             )?
                         else {

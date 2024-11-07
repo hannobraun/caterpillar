@@ -161,10 +161,10 @@ impl ActiveFunctionsEntries {
             return Ok(Some(after.clone()));
         }
 
-        self.find_next_fragment_after_caller(expression)
+        self.find_next_expression_after_caller(expression)
     }
 
-    pub fn find_next_fragment_after_caller(
+    pub fn find_next_expression_after_caller(
         &self,
         expression: &ExpressionLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
