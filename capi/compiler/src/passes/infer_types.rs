@@ -517,10 +517,10 @@ mod tests {
             .find_single_branch()
             .unwrap()
             .body()
-            .map(|fragment| {
+            .map(|expression| {
                 types
                     .of_expressions
-                    .get(fragment.location())
+                    .get(expression.location())
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
