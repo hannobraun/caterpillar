@@ -112,7 +112,7 @@ impl DebugBranch {
             expressions
                 .next()
                 .as_ref()
-                .map(|fragment| &fragment.data.location),
+                .map(|expression| &expression.data.location),
             Some(expression)
         );
 
