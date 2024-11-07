@@ -166,7 +166,7 @@ impl ActiveFunctionsEntries {
 
     pub fn find_next_fragment_after_caller(
         &self,
-        fragment: &ExpressionLocation,
+        expression: &ExpressionLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
         let caller_branch = self
             .inner
@@ -180,7 +180,7 @@ impl ActiveFunctionsEntries {
                 Err(_) => None,
             })
             .find(|branch| {
-                !branch.body.iter().any(|f| f.data.location == *fragment)
+                !branch.body.iter().any(|f| f.data.location == *expression)
             });
 
         let Some(caller_branch) = caller_branch else {
