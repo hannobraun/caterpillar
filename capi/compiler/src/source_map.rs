@@ -23,14 +23,14 @@ impl SourceMap {
     /// associated instructions, use the returned [`Mapping`].
     pub fn map_fragment_to_instructions(
         &mut self,
-        fragment: ExpressionLocation,
+        expression: ExpressionLocation,
     ) -> Mapping {
         // Make sure we don't have a previous mapping whose leftovers might
         // corrupt the new one.
-        self.expression_to_instructions.remove(&fragment);
+        self.expression_to_instructions.remove(&expression);
 
         Mapping {
-            fragment,
+            fragment: expression,
             source_map: self,
         }
     }
