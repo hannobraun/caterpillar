@@ -104,7 +104,7 @@ impl TestDebugger {
         &mut self,
         location: &ExpressionLocation,
     ) -> DebugExpression {
-        let Some(fragment) = self
+        let Some(expression) = self
             .transient_state()
             .active_functions
             .expect_entries()
@@ -125,7 +125,7 @@ impl TestDebugger {
             panic!("Expected to find fragment with ID `{location:?}`");
         };
 
-        fragment
+        expression
     }
 
     pub fn transient_state(&mut self) -> TransientState {
