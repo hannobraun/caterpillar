@@ -34,10 +34,10 @@ fn resolve_calls_in_function(
 }
 
 fn resolve_calls_in_fragment(
-    fragment: &mut Expression,
+    expression: &mut Expression,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
-    match fragment {
+    match expression {
         Expression::Function { function } => {
             resolve_calls_in_function(function, resolved_hashes_by_name);
         }
@@ -57,10 +57,11 @@ fn resolve_calls_in_fragment(
                     call.is_known_to_be_recursive_call;
 
                 if let Some(index) = is_recursive_call_to_index {
-                    *fragment = Expression::CallToUserDefinedFunctionRecursive {
-                        index,
-                        is_tail_call: *is_in_tail_position,
-                    }
+                    *expression =
+                        Expression::CallToUserDefinedFunctionRecursive {
+                            index,
+                            is_tail_call: *is_in_tail_position,
+                        }
                 } else {
                     let Some(hash) = resolved_hashes_by_name.get(name).copied()
                     else {
@@ -71,7 +72,7 @@ fn resolve_calls_in_fragment(
                         );
                     };
 
-                    *fragment = Expression::CallToUserDefinedFunction {
+                    *expression = Expression::CallToUserDefinedFunction {
                         hash,
                         is_tail_call: *is_in_tail_position,
                     };
