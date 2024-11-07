@@ -230,7 +230,7 @@ pub trait DebugBranchExt {
 impl DebugBranchExt for DebugBranch {
     fn expression(&self, i: usize) -> DebugExpression {
         let Some(expression) = self.body.get(i) else {
-            panic!("{i}-th fragment in `{:?}` not available", self.body);
+            panic!("{i}-th expression in `{:?}` not available", self.body);
         };
 
         expression.clone()
