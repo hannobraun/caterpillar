@@ -53,7 +53,9 @@ impl PersistentState {
                     instructions: self.apply_breakpoints(code),
                 });
             }
-            UserAction::BreakpointSet { fragment } => {
+            UserAction::BreakpointSet {
+                expression: fragment,
+            } => {
                 let code = self.code.get()?;
                 let address = self.code.expression_to_instruction(&fragment)?;
 

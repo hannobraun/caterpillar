@@ -39,7 +39,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     assert!(!debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop.clone(),
+        expression: nop.clone(),
     })?;
     assert!(debugger.expect_fragment(&nop).data.has_durable_breakpoint);
 
@@ -71,7 +71,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .unwrap()
         .into_location();
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: nop.clone(),
+        expression: nop.clone(),
     })?;
 
     debugger.run_program();
@@ -190,7 +190,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
 
     // Set a durable breakpoint at `a`. The program should stop there.
     debugger.on_user_action(UserAction::BreakpointSet {
-        fragment: a.clone(),
+        expression: a.clone(),
     })?;
     debugger.run_program();
     assert_eq!(
@@ -306,7 +306,7 @@ fn step_into_function() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f })
+        .on_user_action(UserAction::BreakpointSet { expression: f })
         .unwrap();
 
     debugger.run_program();
@@ -373,7 +373,9 @@ fn step_out_of_function_if_at_last_fragment() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: nop_in_f })
+        .on_user_action(UserAction::BreakpointSet {
+            expression: nop_in_f,
+        })
         .unwrap();
 
     debugger.run_program();
@@ -422,7 +424,7 @@ fn step_out_of_main_function() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: nop })
+        .on_user_action(UserAction::BreakpointSet { expression: nop })
         .unwrap();
     debugger.run_program();
 
@@ -477,7 +479,7 @@ fn step_over_function_call() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: f })
+        .on_user_action(UserAction::BreakpointSet { expression: f })
         .unwrap();
     debugger.run_program();
 
@@ -541,7 +543,7 @@ fn step_out_of_function() {
     };
 
     debugger
-        .on_user_action(UserAction::BreakpointSet { fragment: a })
+        .on_user_action(UserAction::BreakpointSet { expression: a })
         .unwrap();
     debugger.run_program();
 
