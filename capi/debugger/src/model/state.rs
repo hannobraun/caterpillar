@@ -68,7 +68,7 @@ impl PersistentState {
                     .leaf()
                     .function()?
                     .active_branch()?
-                    .active_fragment()?
+                    .active_expression()?
                     .data;
                 let targets = Vec::new();
 
@@ -87,7 +87,7 @@ impl PersistentState {
                 let entries = transient.active_functions.entries()?;
                 let branch = entries.leaf().function()?.active_branch()?;
 
-                let origin = branch.active_fragment()?;
+                let origin = branch.active_expression()?;
                 let targets = if let Some(hash) =
                     origin.data.fragment.as_call_to_function()
                 {
@@ -146,7 +146,7 @@ impl PersistentState {
                     .leaf()
                     .function()?
                     .active_branch()?
-                    .active_fragment()?;
+                    .active_expression()?;
 
                 let targets = {
                     let mut fragment = origin.clone();
@@ -190,7 +190,7 @@ impl PersistentState {
                 let entries = transient.active_functions.entries()?;
                 let branch = entries.leaf().function()?.active_branch()?;
 
-                let origin = branch.active_fragment()?;
+                let origin = branch.active_expression()?;
 
                 let targets = {
                     let mut fragment = origin.clone();

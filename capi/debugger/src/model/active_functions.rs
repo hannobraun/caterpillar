@@ -187,7 +187,7 @@ impl ActiveFunctionsEntries {
             return Ok(None);
         };
 
-        let caller = caller_branch.active_fragment()?;
+        let caller = caller_branch.active_expression()?;
 
         self.find_next_expression_or_next_after_caller(
             caller_branch,

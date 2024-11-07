@@ -72,7 +72,7 @@ impl DebugBranch {
         }
     }
 
-    pub fn active_fragment(&self) -> anyhow::Result<&DebugExpression> {
+    pub fn active_expression(&self) -> anyhow::Result<&DebugExpression> {
         self.body
             .iter()
             .find(|fragment| fragment.data.state.is_active())
