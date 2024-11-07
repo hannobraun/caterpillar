@@ -152,7 +152,7 @@ fn compile_branch_body(
     }
 
     // Unconditionally generating a return instruction, like we do here, is
-    // redundant. If the previous fragment was a tail call, it didn't create a
+    // redundant. If the previous expression was a tail call, it didn't create a
     // new stack frame.
     //
     // In this case, the return instruction at the end of the called function
