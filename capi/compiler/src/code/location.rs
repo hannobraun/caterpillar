@@ -43,7 +43,7 @@ impl fmt::Display for ExpressionLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "fragment {}\n    in {}",
+            "expression {}\n    in {}",
             self.location.index,
             self.location.parent.display(self.named_functions)
         )
