@@ -160,7 +160,7 @@ pub enum DebugExpressionKind {
 impl DebugExpressionKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        fragment: Expression,
+        expression: Expression,
         location: ExpressionLocation,
         active_fragment: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
@@ -171,7 +171,7 @@ impl DebugExpressionKind {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        match fragment {
+        match expression {
             Expression::Binding { name, .. } => Self::Binding { name },
             Expression::CallToUserDefinedFunction { hash, .. } => {
                 let function = named_functions
