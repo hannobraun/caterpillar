@@ -207,7 +207,7 @@ fn make_single_expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_fragment = ron::to_string(&data.location).expect(
+    let data_expression = ron::to_string(&data.location).expect(
         "Expecting serialization of `FragmentLocation` to always work.",
     );
     let data_breakpoint = data.has_durable_breakpoint;
@@ -265,7 +265,7 @@ fn make_single_expression(
         view! {
             <span
                 class=class_inner
-                data-expression=data_fragment
+                data-expression=data_expression
                 data-breakpoint=data_breakpoint
                 on:click=toggle_breakpoint>
                 {expression}
