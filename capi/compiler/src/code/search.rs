@@ -17,6 +17,7 @@ use super::{
 ///
 /// In addition, it provides a target for attaching addition result-specific
 /// APIs to, that would otherwise be very inconvenient to access.
+#[derive(Debug)]
 pub struct Find<T, M> {
     /// # The result of the search
     pub find: T,
