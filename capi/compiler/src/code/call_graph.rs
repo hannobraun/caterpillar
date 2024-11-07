@@ -107,9 +107,17 @@ pub struct Cluster {
     /// # The branches in this cluster that are _not_ divergent
     ///
     /// Contains any branches in this cluster from functions that are _not_
-    /// known to diverge. The branches are sorted topologically, meaning any
-    /// branch in this list is guaranteed to only call branches that come later
-    /// in the list.
+    /// known to diverge. Those are the branches from all the functions that are
+    /// not tracked in `divergent_functions`.
+    ///
+    /// The branches are arrange such, that they can be processed by the type
+    /// inference algorithm in order. The first branch will have no recursive
+    /// function calls. If no such branch exists, this list is empty, and all
+    /// functions in the cluster are divergent.
+    ///
+    /// Every following branch in the list will only have recursive calls to
+    /// functions with at least one branch that came before in the list. This
+    /// makes it possible to infer the types for all functions in order.
     ///
     /// Starts out as `None`, as the compiler pass that creates the call graph
     /// (and those all [`Cluster`]s does not have the information required to do
