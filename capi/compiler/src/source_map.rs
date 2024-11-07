@@ -11,7 +11,7 @@ use crate::code::{ExpressionLocation, FunctionLocation};
 pub struct SourceMap {
     expression_to_instructions:
         BTreeMap<ExpressionLocation, Vec<InstructionAddress>>,
-    instruction_to_fragment: BTreeMap<InstructionAddress, ExpressionLocation>,
+    instruction_to_expression: BTreeMap<InstructionAddress, ExpressionLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
@@ -52,7 +52,7 @@ impl SourceMap {
         &self,
         instruction: &InstructionAddress,
     ) -> Option<&ExpressionLocation> {
-        self.instruction_to_fragment.get(instruction)
+        self.instruction_to_expression.get(instruction)
     }
 
     /// Get the address of the instruction that the given fragment maps to
@@ -108,7 +108,7 @@ impl Mapping<'_> {
             .or_default()
             .push(instruction);
         self.source_map
-            .instruction_to_fragment
+            .instruction_to_expression
             .insert(instruction, self.fragment.clone());
     }
 }
