@@ -208,7 +208,7 @@ impl DebugFunctionExt for DebugFunction {
                     .into_iter()
                     .find(|expression| expression.data.state.is_active())
             })
-            .expect("Expected to find an active fragment")
+            .expect("Expected to find an active expression")
     }
 
     fn only_branch(mut self) -> DebugBranch {
