@@ -75,7 +75,7 @@ impl ActiveFunctions {
             let (named_function, function_index_in_root_context) =
                 instruction_to_named_function(&address, code);
             let active_fragment =
-                code.source_map.instruction_to_fragment(&address);
+                code.source_map.instruction_to_expression(&address);
 
             if let Some(expected_name) = &expected_next_function {
                 if Some(expected_name) != named_function.name.as_ref() {

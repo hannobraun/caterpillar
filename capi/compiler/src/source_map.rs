@@ -48,7 +48,7 @@ impl SourceMap {
     ///
     /// Can return `None`, as there are a few compiler-generated instructions
     /// that call the `main` function.
-    pub fn instruction_to_fragment(
+    pub fn instruction_to_expression(
         &self,
         instruction: &InstructionAddress,
     ) -> Option<&ExpressionLocation> {
