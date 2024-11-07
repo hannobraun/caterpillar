@@ -247,7 +247,8 @@ fn make_single_expression(
             };
 
             ron::from_str(&expression).expect(
-                "Expecting serialized fragment IDs in DOM to always be valid.",
+                "Expecting serialized expression locations in DOM to always be \
+                valid.",
             )
         };
 
