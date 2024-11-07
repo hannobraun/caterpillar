@@ -23,11 +23,11 @@ pub fn find_divergent_functions(
 
         for function in cluster.functions(named_functions) {
             for branch in function.branches() {
-                for fragment in branch.body() {
+                for expression in branch.body() {
                     if let Expression::CallToUserDefinedFunctionRecursive {
                         index,
                         ..
-                    } = fragment.find
+                    } = expression.find
                     {
                         let called_function_index =
                             cluster.functions.get(&index).expect(
