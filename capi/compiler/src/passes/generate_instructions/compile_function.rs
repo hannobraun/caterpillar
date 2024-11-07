@@ -138,7 +138,7 @@ fn compile_branch_body(
     let mut first_instruction = None;
 
     for (index, fragment) in body {
-        let addr = compile_fragment(
+        let addr = compile_expression(
             fragment,
             ExpressionLocation {
                 parent: Box::new(location.clone()),
@@ -182,7 +182,7 @@ fn compile_branch_body(
     [first_instruction, last_instruction]
 }
 
-fn compile_fragment(
+fn compile_expression(
     expression: Expression,
     location: ExpressionLocation,
     cluster: &Cluster,
