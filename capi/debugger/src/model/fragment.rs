@@ -110,7 +110,7 @@ impl DebugFragmentSignature {
         let mut inputs = Vec::new();
         let mut outputs = Vec::new();
 
-        if let Some(signature) = types.of_fragments.get(location) {
+        if let Some(signature) = types.of_expressions.get(location) {
             let convert = |index| {
                 let type_ = types.inner.get(index).expect(
                     "Got type index from signature; must exist in `types`.",

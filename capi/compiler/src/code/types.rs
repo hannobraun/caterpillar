@@ -45,7 +45,7 @@ use super::{
 pub struct Types {
     pub inner: IndexMap<Type>,
 
-    pub of_fragments: BTreeMap<ExpressionLocation, Signature>,
+    pub of_expressions: BTreeMap<ExpressionLocation, Signature>,
     pub of_branches: BTreeMap<BranchLocation, Signature>,
     pub of_functions: BTreeMap<FunctionLocation, Signature>,
 }
