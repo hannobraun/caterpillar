@@ -15,7 +15,7 @@ pub use self::{
     branch::DebugBranch,
     breakpoints::Breakpoints,
     code::DebugCode,
-    fragment::{DebugExpression, DebugExpressionData, DebugFragmentKind},
+    fragment::{DebugExpression, DebugExpressionData, DebugExpressionKind},
     function::DebugFunction,
     state::{PersistentState, TransientState},
     user_action::UserAction,

@@ -4,7 +4,7 @@ use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Value};
 
 use super::{
-    ActiveFunctions, Breakpoints, DebugCode, DebugFragmentKind, UserAction,
+    ActiveFunctions, Breakpoints, DebugCode, DebugExpressionKind, UserAction,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -124,7 +124,8 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugFragmentKind::Comment { .. } = after.kind {
+                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        {
                             // Can't step to comments! Need to ignore them.
                             fragment = after.clone();
                             continue;
@@ -170,7 +171,8 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugFragmentKind::Comment { .. } = after.kind {
+                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        {
                             // Can't step to comments! Need to ignore them.
                             fragment = after.clone();
                             continue;
@@ -215,7 +217,8 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugFragmentKind::Comment { .. } = after.kind {
+                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        {
                             // Can't step to comments! Need to ignore them.
                             fragment = after.clone();
                             continue;

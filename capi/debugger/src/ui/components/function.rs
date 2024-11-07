@@ -6,7 +6,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugExpression, DebugExpressionData, DebugFragmentKind,
+        DebugBranch, DebugExpression, DebugExpressionData, DebugExpressionKind,
         UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -95,19 +95,19 @@ pub fn Fragment(
     let mut class_outer = String::from("py-1");
 
     let (fragment, actions, error) = match fragment.kind {
-        DebugFragmentKind::Binding { name } => make_single_expression(
+        DebugExpressionKind::Binding { name } => make_single_expression(
             name,
             fragment.data,
             &mut class_outer,
             actions,
         ),
-        DebugFragmentKind::CallToFunction { name } => make_single_expression(
+        DebugExpressionKind::CallToFunction { name } => make_single_expression(
             name,
             fragment.data,
             &mut class_outer,
             actions,
         ),
-        DebugFragmentKind::CallToFunctionRecursive { name } => {
+        DebugExpressionKind::CallToFunctionRecursive { name } => {
             make_single_expression(
                 name,
                 fragment.data,
@@ -115,7 +115,7 @@ pub fn Fragment(
                 actions,
             )
         }
-        DebugFragmentKind::CallToHostFunction { name } => {
+        DebugExpressionKind::CallToHostFunction { name } => {
             make_single_expression(
                 name,
                 fragment.data,
@@ -123,13 +123,15 @@ pub fn Fragment(
                 actions,
             )
         }
-        DebugFragmentKind::CallToIntrinsic { name } => make_single_expression(
-            name,
-            fragment.data,
-            &mut class_outer,
-            actions,
-        ),
-        DebugFragmentKind::Comment { text } => {
+        DebugExpressionKind::CallToIntrinsic { name } => {
+            make_single_expression(
+                name,
+                fragment.data,
+                &mut class_outer,
+                actions,
+            )
+        }
+        DebugExpressionKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
             (
                 view! {
@@ -142,7 +144,7 @@ pub fn Fragment(
                 None,
             )
         }
-        DebugFragmentKind::Function { function } => (
+        DebugExpressionKind::Function { function } => (
             view! {
                 <Function
                     branches=function.branches
@@ -152,7 +154,7 @@ pub fn Fragment(
             None,
             None,
         ),
-        DebugFragmentKind::UnresolvedIdentifier { name } => {
+        DebugExpressionKind::UnresolvedIdentifier { name } => {
             make_single_expression(
                 name,
                 fragment.data,
@@ -160,7 +162,7 @@ pub fn Fragment(
                 actions,
             )
         }
-        DebugFragmentKind::Value { as_string } => make_single_expression(
+        DebugExpressionKind::Value { as_string } => make_single_expression(
             as_string,
             fragment.data,
             &mut class_outer,

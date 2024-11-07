@@ -10,7 +10,7 @@ use capi_protocol::updates::Updates;
 
 use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugExpression,
-    DebugFragmentKind, DebugFunction, PersistentState, TransientState,
+    DebugExpressionKind, DebugFunction, PersistentState, TransientState,
     UserAction,
 };
 
@@ -247,7 +247,7 @@ pub trait DebugFragmentExt {
 
 impl DebugFragmentExt for DebugExpression {
     fn expect_call_to_function(self, called_fn: &str) -> Self {
-        let DebugFragmentKind::CallToFunction { name } = &self.kind else {
+        let DebugExpressionKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
         assert_eq!(called_fn, name);
@@ -256,7 +256,8 @@ impl DebugFragmentExt for DebugExpression {
     }
 
     fn expect_call_to_host_function(self, called_host_fn: &str) -> Self {
-        let DebugFragmentKind::CallToHostFunction { name } = &self.kind else {
+        let DebugExpressionKind::CallToHostFunction { name } = &self.kind
+        else {
             panic!("Expected call to function.");
         };
         assert_eq!(called_host_fn, name);
@@ -265,7 +266,7 @@ impl DebugFragmentExt for DebugExpression {
     }
 
     fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self {
-        let DebugFragmentKind::CallToIntrinsic { name } = &self.kind else {
+        let DebugExpressionKind::CallToIntrinsic { name } = &self.kind else {
             panic!("Expected call to function.");
         };
         assert_eq!(called_intrinsic, name);
@@ -274,7 +275,7 @@ impl DebugFragmentExt for DebugExpression {
     }
 
     fn expect_function(self) -> DebugFunction {
-        let DebugFragmentKind::Function { function } = self.kind else {
+        let DebugExpressionKind::Function { function } = self.kind else {
             panic!("Expected function");
         };
 

@@ -14,7 +14,7 @@ use super::{Breakpoints, DebugFunction};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpression {
     pub data: DebugExpressionData,
-    pub kind: DebugFragmentKind,
+    pub kind: DebugExpressionKind,
 }
 
 impl DebugExpression {
@@ -64,7 +64,7 @@ impl DebugExpression {
             has_durable_breakpoint,
             effect: active_effect,
         };
-        let kind = DebugFragmentKind::new(
+        let kind = DebugExpressionKind::new(
             expression,
             location,
             active_fragment,
@@ -145,7 +145,7 @@ impl DebugExpressionState {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum DebugFragmentKind {
+pub enum DebugExpressionKind {
     Binding { name: String },
     CallToFunction { name: String },
     CallToFunctionRecursive { name: String },
@@ -157,7 +157,7 @@ pub enum DebugFragmentKind {
     Value { as_string: String },
 }
 
-impl DebugFragmentKind {
+impl DebugExpressionKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         fragment: Expression,
