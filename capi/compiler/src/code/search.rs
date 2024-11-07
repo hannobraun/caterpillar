@@ -104,7 +104,7 @@ impl Find<Branch, BranchLocation> {
         &self.metadata
     }
 
-    /// # Iterate over the fragments in the branch's body
+    /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,
     ) -> impl Iterator<Item = Find<Expression, ExpressionLocation>> {
