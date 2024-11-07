@@ -108,7 +108,7 @@ impl NamedFunctions {
         function.branches.get(&location.index)
     }
 
-    /// # Find the fragment at the given location
+    /// # Find the expression at the given location
     pub fn find_expression_by_location(
         &self,
         location: &FragmentLocation,
