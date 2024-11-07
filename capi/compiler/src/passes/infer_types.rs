@@ -470,7 +470,7 @@ impl QueueItem {
             branch_body: branch
                 .body
                 .iter()
-                .map(|(index, fragment)| (*index, fragment.clone()))
+                .map(|(index, expression)| (*index, expression.clone()))
                 .collect::<Vec<_>>()
                 .into_iter()
                 .peekable(),
