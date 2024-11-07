@@ -208,7 +208,7 @@ fn make_single_expression(
     }
 
     let data_expression = ron::to_string(&data.location).expect(
-        "Expecting serialization of `FragmentLocation` to always work.",
+        "Expecting serialization of `ExpressionLocation` to always work.",
     );
     let data_breakpoint = data.has_durable_breakpoint;
 
