@@ -2,6 +2,7 @@ use std::fmt;
 
 use super::{Branch, Expression, Function, Index, NamedFunctions};
 
+/// # The location of an expression in the source code
 #[derive(
     Clone,
     Debug,
@@ -49,6 +50,7 @@ impl fmt::Display for FragmentLocationDisplay<'_> {
     }
 }
 
+/// # The location of a branch in the source code
 #[derive(
     Clone,
     Debug,
@@ -96,6 +98,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
     }
 }
 
+/// # The location of a function in the source code
 #[derive(
     Clone,
     Debug,
