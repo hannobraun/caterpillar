@@ -119,8 +119,8 @@ fn infer_types_in_branch(
                 ExpressionInference::NeedToInferMoreBranchesFirst {
                     queue_items,
                 } => {
-                    // The fragment is a function literal. We need to infer the
-                    // types of its branches before we can proceed.
+                    // The expression is a function literal. We need to infer
+                    // the types of its branches before we can proceed.
                     //
                     // Let's schedule those to be inferred next, and pick up the
                     // inference of the current branch right after.
@@ -131,7 +131,7 @@ fn infer_types_in_branch(
                     }
 
                     // Abort the inference of the current branch. Since we used
-                    // `peek` above, we'll resume with the current fragment,
+                    // `peek` above, we'll resume with the current expression,
                     // once this branch is up again.
                     return;
                 }
