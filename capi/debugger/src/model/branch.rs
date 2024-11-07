@@ -85,7 +85,7 @@ impl DebugBranch {
             })
     }
 
-    pub fn fragment_after(
+    pub fn expression_after(
         &self,
         fragment: &ExpressionLocation,
     ) -> anyhow::Result<Option<&DebugFragment>> {

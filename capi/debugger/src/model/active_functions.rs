@@ -157,7 +157,7 @@ impl ActiveFunctionsEntries {
         branch: &DebugBranch,
         expression: &ExpressionLocation,
     ) -> anyhow::Result<Option<DebugFragment>> {
-        if let Some(after) = branch.fragment_after(expression)? {
+        if let Some(after) = branch.expression_after(expression)? {
             return Ok(Some(after.clone()));
         }
 
