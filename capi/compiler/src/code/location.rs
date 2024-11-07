@@ -31,9 +31,9 @@ impl ExpressionLocation {
     }
 }
 
-/// # Helper struct to display [`FragmentLocation`]
+/// # Helper struct to display [`ExpressionLocation`]
 ///
-/// Implements [`fmt::Display`], which [`FragmentLocation`] itself doesn't.
+/// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
 pub struct ExpressionLocationDisplay<'r> {
     location: &'r ExpressionLocation,
     named_functions: &'r NamedFunctions,
