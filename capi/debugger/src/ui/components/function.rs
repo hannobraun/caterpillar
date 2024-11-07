@@ -240,12 +240,13 @@ fn make_single_expression(
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
         let expression = {
-            let Some(fragment) = element.get_attribute("data-fragment") else {
+            let Some(expression) = element.get_attribute("data-fragment")
+            else {
                 // This happens, if the user clicks on a comment.
                 return;
             };
 
-            ron::from_str(&fragment).expect(
+            ron::from_str(&expression).expect(
                 "Expecting serialized fragment IDs in DOM to always be valid.",
             )
         };
