@@ -9,7 +9,7 @@ use crate::code::{ExpressionLocation, FunctionLocation};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    fragment_to_instructions:
+    expression_to_instructions:
         BTreeMap<ExpressionLocation, Vec<InstructionAddress>>,
     instruction_to_fragment: BTreeMap<InstructionAddress, ExpressionLocation>,
     function_to_instructions:
@@ -27,7 +27,7 @@ impl SourceMap {
     ) -> Mapping {
         // Make sure we don't have a previous mapping whose leftovers might
         // corrupt the new one.
-        self.fragment_to_instructions.remove(&fragment);
+        self.expression_to_instructions.remove(&fragment);
 
         Mapping {
             fragment,
@@ -65,7 +65,7 @@ impl SourceMap {
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
-        self.fragment_to_instructions
+        self.expression_to_instructions
             .get(fragment)
             .unwrap_or(&EMPTY)
     }
@@ -103,7 +103,7 @@ pub struct Mapping<'r> {
 impl Mapping<'_> {
     pub fn append_instruction(&mut self, instruction: InstructionAddress) {
         self.source_map
-            .fragment_to_instructions
+            .expression_to_instructions
             .entry(self.fragment.clone())
             .or_default()
             .push(instruction);
