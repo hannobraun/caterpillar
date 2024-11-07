@@ -330,7 +330,7 @@ fn function_call_to_function_name(
     let expression = code
         .named_functions
         .find_expression_by_location(function_call)
-        .expect("Fragment referenced by active function must exist.");
+        .expect("Expression referenced by active function must exist.");
     let hash = expression.as_call_to_function()?;
     let function = code.named_functions.find_by_hash(hash)?;
 
