@@ -4,25 +4,17 @@ use crate::intrinsics::IntrinsicFunction;
 
 use super::{Function, Hash, Index};
 
-/// # A pre-compiled piece of code
-///
-/// Fragments are the core of Caterpillar's code representation, the smallest
-/// units of code.
-///
-/// They are the result of a partial compilation process. This is called
-/// pre-compilation, because it happens before the actual translation into
-/// instructions that the runtime can interpret.
-///
+/// # An expression within a function
 ///
 /// ## Error Handling
 ///
-/// An important feature of this code representation is, that it can be the
-/// result of a failed compilation process. If, for example, an identifier can't
-/// be resolved, this is still encoded as a fragment.
+/// An important feature of Caterpillar's code representation is, that it can be
+/// the result of a failed compilation process. If, for example, an identifier
+/// can't be resolved, this is still encoded as a valid [`Expression`].
 ///
 /// As a result, other code that is not affected can still be executed (as part
 /// of automated testing, for example). But also, the rich representation
-/// produced by the pre-compilation process is still available for display by
+/// produced by the compilation process is still available for display by
 /// tooling, regardless of any isolated errors.
 #[derive(
     Clone,
