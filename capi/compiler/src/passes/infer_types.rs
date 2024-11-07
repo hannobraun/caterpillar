@@ -301,14 +301,14 @@ fn infer_type_of_expression(
                 .clone()
         }
         Expression::CallToUserDefinedFunctionRecursive { index, .. } => {
-            let mut fragment_location = location;
+            let mut expression_location = location;
             let current_function = loop {
-                match fragment_location.parent.parent.deref() {
+                match expression_location.parent.parent.deref() {
                     FunctionLocation::NamedFunction { index } => {
                         break *index;
                     }
                     FunctionLocation::AnonymousFunction { location } => {
-                        fragment_location = location;
+                        expression_location = location;
                     }
                 }
             };
