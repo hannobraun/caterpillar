@@ -9,13 +9,13 @@ use super::{
 /// ## Separation of Types from `Function`
 ///
 /// This stores not only the types themselves, but associates them with
-/// fragments, branches, and functions. It is necessary to store the types
+/// expressions, branches, and functions. It is necessary to store the types
 /// separately like this.
 ///
 /// When type inference happens, functions must have been resolved already. If
 /// the inferred types were then stored within `Function` (which includes
-/// `Branch` and `Fragment`), the hash of the function would change, making the
-/// previous function resolution invalid.
+/// `Branch` and `Expression`), the hash of the function would change, making
+/// the previous function resolution invalid.
 ///
 /// This might raise the question, whether it's okay to exclude the types from
 /// the hash. And the answer is yes, that's perfectly fine. Type inference is
@@ -24,7 +24,7 @@ use super::{
 ///
 /// ## Implementation Note
 ///
-/// This type refers to fragments, branches, and hashes by location. This is a
+/// This type refers to expressions, branches, and hashes by location. This is a
 /// bit dubious, as a code update could put a different function in that
 /// location, and then it wouldn't be possible to have type information for both
 /// the old and new versions of the function.
@@ -39,8 +39,8 @@ use super::{
 ///
 /// For now, referring to functions by hash here would cause too many problems
 /// though. While referring to a function itself by hash should be easy, we'd
-/// also need equivalents of `BranchLocation` and `FragmentLocation` that refer
-/// to the function by hash instead of location.
+/// also need equivalents of `BranchLocation` and `ExpressionLocation` that
+/// refer to the function by hash instead of location.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Types {
     pub inner: IndexMap<Type>,
