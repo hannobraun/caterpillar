@@ -109,7 +109,7 @@ impl NamedFunctions {
     }
 
     /// # Find the fragment at the given location
-    pub fn find_fragment_by_location(
+    pub fn find_expression_by_location(
         &self,
         location: &FragmentLocation,
     ) -> Option<&Expression> {
@@ -127,7 +127,7 @@ impl NamedFunctions {
         match location {
             FunctionLocation::NamedFunction { index } => self.inner.get(index),
             FunctionLocation::AnonymousFunction { location } => {
-                let fragment = self.find_fragment_by_location(location)?;
+                let fragment = self.find_expression_by_location(location)?;
                 fragment.as_function()
             }
         }
