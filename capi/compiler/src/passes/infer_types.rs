@@ -226,8 +226,8 @@ fn infer_type_of_expression(
                     "Can't find binding `{name}` in `bindings`, but \n\
                     \n\
                     a) all local bindings are added to `bindings` above, and \n\
-                    b) if we encounter a `Fragment::Binding`, as we are here, \
-                       that was put there by an earlier compiler pass \
+                    b) if we encounter a `Expression::Binding`, as we are \
+                       here, that was put there by an earlier compiler pass \
                        _because_ it resolves to a local binding."
                 );
             };
