@@ -28,12 +28,12 @@ fn resolve_calls_in_function(
 ) {
     for branch in function.branches.values_mut() {
         for fragment in branch.body.values_mut() {
-            resolve_calls_in_fragment(fragment, resolved_hashes_by_name);
+            resolve_calls_in_expression(fragment, resolved_hashes_by_name);
         }
     }
 }
 
-fn resolve_calls_in_fragment(
+fn resolve_calls_in_expression(
     expression: &mut Expression,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
