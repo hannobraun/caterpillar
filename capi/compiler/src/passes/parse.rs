@@ -13,7 +13,7 @@ use super::tokenize::Token;
 /// non-trivial though, compared to other compiler passes that do that.
 ///
 /// For example, if an identifier can not be resolved, this only affects that
-/// identifier, and it is quite easy to encode that by having a [`Fragment`]
+/// identifier, and it is quite easy to encode that by having a [`Expression`]
 /// variant for unresolved identifiers.
 ///
 /// In the case of parsing, however, an unexpected token would likely result in
