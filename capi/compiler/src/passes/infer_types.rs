@@ -548,7 +548,7 @@ mod tests {
             ",
         );
 
-        let mut fragments = named_functions
+        let mut expressions = named_functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -563,7 +563,7 @@ mod tests {
                     .unwrap()
             });
 
-        let function = fragments.next().unwrap();
+        let function = expressions.next().unwrap();
 
         assert_eq!(function.inputs, []);
 
