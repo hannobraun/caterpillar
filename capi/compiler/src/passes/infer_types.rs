@@ -503,7 +503,7 @@ mod tests {
     };
 
     #[test]
-    fn infer_fragment_signatures_based_on_host_function() {
+    fn infer_expression_signatures_based_on_host_function() {
         let (named_functions, types) = type_fragments(
             r"
                 f: fn
