@@ -201,7 +201,7 @@ fn infer_types_in_branch(
 
 #[allow(clippy::too_many_arguments)]
 fn infer_type_of_fragment(
-    fragment: &Expression,
+    expression: &Expression,
     location: &ExpressionLocation,
     cluster: &Cluster,
     named_functions: &NamedFunctions,
@@ -214,12 +214,12 @@ fn infer_type_of_fragment(
         !types.of_fragments.contains_key(location),
         "Encountered a fragment whose type signature has already been \
         inferred:\n\
-        {fragment:#?}\n\
+        {expression:#?}\n\
         \n\
         The type of a fragment should be inferred only once."
     );
 
-    let signature = match fragment {
+    let signature = match expression {
         Expression::Binding { name, .. } => {
             let Some(type_) = bindings.get(name).copied() else {
                 unreachable!(
