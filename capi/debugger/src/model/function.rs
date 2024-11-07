@@ -21,7 +21,7 @@ impl DebugFunction {
     pub fn new(
         function: code::Function,
         location: FunctionLocation,
-        active_fragment: Option<&ExpressionLocation>,
+        active_expression: Option<&ExpressionLocation>,
         is_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,
@@ -41,7 +41,7 @@ impl DebugFunction {
                         parent: Box::new(location.clone()),
                         index,
                     },
-                    active_fragment,
+                    active_expression,
                     is_innermost_active_function,
                     cluster,
                     named_functions,
