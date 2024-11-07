@@ -116,7 +116,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .find_single_branch()
             .unwrap()
             .body()
-            .map(|fragment| fragment.into_location());
+            .map(|expression| expression.into_location());
 
         array::from_fn(|_| body.next().unwrap())
     };
