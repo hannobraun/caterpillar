@@ -3,7 +3,7 @@ use capi_runtime::Effect;
 use crate::model::{
     tests::infra::{
         debugger, ActiveFunctionsEntriesExt, ActiveFunctionsExt,
-        DebugBranchExt, DebugFragmentExt, DebugFunctionExt, FunctionsExt,
+        DebugBranchExt, DebugExpressionExt, DebugFunctionExt, FunctionsExt,
     },
     ActiveFunctionsEntry, UserAction,
 };

@@ -237,14 +237,14 @@ impl DebugBranchExt for DebugBranch {
     }
 }
 
-pub trait DebugFragmentExt {
+pub trait DebugExpressionExt {
     fn expect_call_to_function(self, called_fn: &str) -> Self;
     fn expect_call_to_host_function(self, called_host_fn: &str) -> Self;
     fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self;
     fn expect_function(self) -> DebugFunction;
 }
 
-impl DebugFragmentExt for DebugExpression {
+impl DebugExpressionExt for DebugExpression {
     fn expect_call_to_function(self, called_fn: &str) -> Self {
         let DebugExpressionKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
