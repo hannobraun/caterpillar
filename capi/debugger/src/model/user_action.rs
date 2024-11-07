@@ -2,7 +2,7 @@ use capi_compiler::code::ExpressionLocation;
 
 #[derive(Clone)]
 pub enum UserAction {
-    BreakpointClear { fragment: ExpressionLocation },
+    BreakpointClear { expression: ExpressionLocation },
     BreakpointSet { fragment: ExpressionLocation },
     Continue,
     Reset,

@@ -41,7 +41,9 @@ impl PersistentState {
         let mut commands = Vec::new();
 
         match action {
-            UserAction::BreakpointClear { fragment } => {
+            UserAction::BreakpointClear {
+                expression: fragment,
+            } => {
                 let code = self.code.get()?;
                 let address = self.code.expression_to_instruction(&fragment)?;
 
