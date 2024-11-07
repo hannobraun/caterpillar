@@ -206,7 +206,7 @@ impl DebugFunctionExt for DebugFunction {
                 branch
                     .body
                     .into_iter()
-                    .find(|fragment| fragment.data.state.is_active())
+                    .find(|expression| expression.data.state.is_active())
             })
             .expect("Expected to find an active fragment")
     }
