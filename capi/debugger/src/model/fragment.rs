@@ -57,7 +57,7 @@ impl DebugExpression {
         });
 
         let data = DebugExpressionData {
-            fragment: expression.clone(),
+            expression: expression.clone(),
             location: location.clone(),
             signature,
             state,
@@ -84,7 +84,7 @@ impl DebugExpression {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpressionData {
     /// # The fragment that the `DebugFragment` was built from
-    pub fragment: Expression,
+    pub expression: Expression,
 
     /// # The location of the fragment
     pub location: ExpressionLocation,

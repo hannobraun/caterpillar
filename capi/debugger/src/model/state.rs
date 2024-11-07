@@ -89,7 +89,7 @@ impl PersistentState {
 
                 let origin = branch.active_expression()?;
                 let targets = if let Some(hash) =
-                    origin.data.fragment.as_call_to_function()
+                    origin.data.expression.as_call_to_function()
                 {
                     let function =
                         code.named_functions.find_by_hash(hash).expect(
