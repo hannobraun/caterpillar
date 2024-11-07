@@ -112,8 +112,8 @@ impl Find<Branch, BranchLocation> {
         self.body
             .clone()
             .into_iter()
-            .map(move |(index, typed_fragment)| Find {
-                find: typed_fragment,
+            .map(move |(index, expression)| Find {
+                find: expression,
                 metadata: ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index,
