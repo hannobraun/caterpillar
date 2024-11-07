@@ -66,11 +66,11 @@ fn Branch(
     let parameters = parameters.join(" ");
     let expressions = body
         .into_iter()
-        .map(|fragment| {
+        .map(|expression| {
             view! {
                 <li class="ml-8">
                     <Expression
-                        fragment=fragment
+                        fragment=expression
                         actions=actions.clone() />
                 </li>
             }
