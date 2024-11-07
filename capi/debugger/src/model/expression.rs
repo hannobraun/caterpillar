@@ -126,19 +126,20 @@ pub enum DebugExpressionState {
 }
 
 impl DebugExpressionState {
-    /// # Indicate whether this is the innermost active fragment
+    /// # Indicate whether this is the innermost active expression
     ///
-    /// The innermost active fragment is the active fragment in the innermost
-    /// active function. The fragment where the process is currently stopped at.
+    /// The innermost active expression is the active expression in the
+    /// innermost active function. The expression where the process is currently
+    /// stopped at.
     pub fn is_innermost_active_expression(&self) -> bool {
         matches!(self, Self::InnermostActiveFragment)
     }
 
-    /// # Indicate whether the fragment is active
+    /// # Indicate whether the expression is active
     ///
-    /// A fragment is active, either if the process is currently stopped here,
+    /// A expression is active, either if the process is currently stopped here,
     /// or if it calls an active function (which is a function that contains an
-    /// active fragment).
+    /// active expression).
     pub fn is_active(&self) -> bool {
         matches!(self, Self::InnermostActiveFragment | Self::ActiveCaller)
     }
