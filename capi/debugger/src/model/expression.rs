@@ -197,7 +197,7 @@ impl DebugExpressionKind {
                 );
                 let called_function =
                     named_functions.get(called_function_index).expect(
-                        "Expecting to find fragment referred to from a \
+                        "Expecting to find expression referred to from a \
                         cluster.",
                     );
                 let name = called_function.name.clone().expect(
