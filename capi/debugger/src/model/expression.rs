@@ -49,7 +49,7 @@ impl DebugExpression {
             .any(|instruction| breakpoints.durable_at(instruction));
 
         let active_effect = effect.and_then(|effect| {
-            if state.is_innermost_active_fragment() {
+            if state.is_innermost_active_expression() {
                 Some(*effect)
             } else {
                 None
@@ -130,7 +130,7 @@ impl DebugExpressionState {
     ///
     /// The innermost active fragment is the active fragment in the innermost
     /// active function. The fragment where the process is currently stopped at.
-    pub fn is_innermost_active_fragment(&self) -> bool {
+    pub fn is_innermost_active_expression(&self) -> bool {
         matches!(self, Self::InnermostActiveFragment)
     }
 

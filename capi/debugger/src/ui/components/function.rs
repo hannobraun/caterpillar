@@ -212,7 +212,7 @@ fn make_single_expression(
     );
     let data_breakpoint = data.has_durable_breakpoint;
 
-    let actions = if data.state.is_innermost_active_fragment() {
+    let actions = if data.state.is_innermost_active_expression() {
         Some(view! {
             <span>
                 <Button
