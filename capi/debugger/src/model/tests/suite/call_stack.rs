@@ -84,7 +84,7 @@ fn stopped_in_anonymous_function() {
         .run_program()
         .transient_state();
 
-    let fragment = transient
+    let expression = transient
         .active_functions
         .expect_entries()
         .expect_functions()
@@ -94,9 +94,9 @@ fn stopped_in_anonymous_function() {
         .expect_function()
         .only_branch()
         .expression(0);
-    assert_eq!(fragment.data.effect, Some(Effect::Breakpoint));
+    assert_eq!(expression.data.effect, Some(Effect::Breakpoint));
 
-    fragment.expect_call_to_intrinsic("brk");
+    expression.expect_call_to_intrinsic("brk");
 }
 
 #[test]
