@@ -240,7 +240,7 @@ fn make_single_expression(
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
         let expression = {
-            let Some(expression) = element.get_attribute("data-fragment")
+            let Some(expression) = element.get_attribute("data-expression")
             else {
                 // This happens, if the user clicks on a comment.
                 return;
@@ -265,7 +265,7 @@ fn make_single_expression(
         view! {
             <span
                 class=class_inner
-                data-fragment=data_fragment
+                data-expression=data_fragment
                 data-breakpoint=data_breakpoint
                 on:click=toggle_breakpoint>
                 {expression}
