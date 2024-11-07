@@ -91,8 +91,8 @@ impl DebugBranch {
     ) -> anyhow::Result<Option<&DebugFragment>> {
         if !self.body.iter().any(|f| f.data.location == *expression) {
             return Err(anyhow!(
-                "Expected fragment to be in branch, but could not find it. \
-                Fragment:\n\
+                "Expected expression to be in branch, but could not find it. \
+                Expression:\n\
                 {expression:#?}\n\
                 Branch:\n\
                 {self:#?}"
