@@ -16,11 +16,11 @@ impl DebugCode {
 
     pub fn expression_to_instruction(
         &self,
-        fragment: &ExpressionLocation,
+        expression: &ExpressionLocation,
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map
-            .fragment_to_instructions(fragment)
+            .fragment_to_instructions(expression)
             .first()
             .copied()
             .ok_or_else(|| anyhow!("Fragment does not map to instruction."))
