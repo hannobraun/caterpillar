@@ -162,7 +162,7 @@ impl DebugExpressionKind {
     pub fn new(
         expression: Expression,
         location: ExpressionLocation,
-        active_fragment: Option<&ExpressionLocation>,
+        active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         named_functions: &NamedFunctions,
@@ -227,7 +227,7 @@ impl DebugExpressionKind {
                 let function = DebugFunction::new(
                     function,
                     FunctionLocation::AnonymousFunction { location },
-                    active_fragment,
+                    active_expression,
                     is_in_innermost_active_function,
                     cluster,
                     named_functions,
