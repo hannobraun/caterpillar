@@ -23,8 +23,8 @@ impl ExpressionLocation {
     pub fn display<'r>(
         &'r self,
         named_functions: &'r NamedFunctions,
-    ) -> FragmentLocationDisplay<'r> {
-        FragmentLocationDisplay {
+    ) -> ExpressionLocationDisplay<'r> {
+        ExpressionLocationDisplay {
             location: self,
             named_functions,
         }
@@ -34,12 +34,12 @@ impl ExpressionLocation {
 /// # Helper struct to display [`FragmentLocation`]
 ///
 /// Implements [`fmt::Display`], which [`FragmentLocation`] itself doesn't.
-pub struct FragmentLocationDisplay<'r> {
+pub struct ExpressionLocationDisplay<'r> {
     location: &'r ExpressionLocation,
     named_functions: &'r NamedFunctions,
 }
 
-impl fmt::Display for FragmentLocationDisplay<'_> {
+impl fmt::Display for ExpressionLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
