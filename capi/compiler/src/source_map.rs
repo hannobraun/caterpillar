@@ -30,7 +30,7 @@ impl SourceMap {
         self.expression_to_instructions.remove(&expression);
 
         Mapping {
-            fragment: expression,
+            expression,
             source_map: self,
         }
     }
@@ -96,7 +96,7 @@ impl SourceMap {
 ///
 /// Returned by [`SourceMap::define_mapping`].
 pub struct Mapping<'r> {
-    fragment: ExpressionLocation,
+    expression: ExpressionLocation,
     source_map: &'r mut SourceMap,
 }
 
@@ -104,11 +104,11 @@ impl Mapping<'_> {
     pub fn append_instruction(&mut self, instruction: InstructionAddress) {
         self.source_map
             .expression_to_instructions
-            .entry(self.fragment.clone())
+            .entry(self.expression.clone())
             .or_default()
             .push(instruction);
         self.source_map
             .instruction_to_expression
-            .insert(instruction, self.fragment.clone());
+            .insert(instruction, self.expression.clone());
     }
 }
