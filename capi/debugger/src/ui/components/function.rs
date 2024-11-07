@@ -94,7 +94,7 @@ pub fn Expression(
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (fragment, actions, error) = match expression.kind {
+    let (expression, actions, error) = match expression.kind {
         DebugExpressionKind::Binding { name } => make_single_expression(
             name,
             expression.data,
@@ -173,7 +173,7 @@ pub fn Expression(
     view! {
         <span>
             <span class=class_outer>
-                {fragment}
+                {expression}
             </span>
             {actions}
             {error}
