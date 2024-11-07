@@ -86,8 +86,8 @@ fn resolve_in_branch(
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
-    for fragment in branch.body.values_mut() {
-        match fragment {
+    for expression in branch.body.values_mut() {
+        match expression {
             Expression::Function { function } => {
                 resolve_in_function(
                     function,
@@ -142,19 +142,19 @@ fn resolve_in_branch(
                         index += 1;
                     }
 
-                    *fragment = Expression::Binding {
+                    *expression = Expression::Binding {
                         name: name.clone(),
                         index,
                     }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    *fragment = Expression::CallToIntrinsicFunction {
+                    *expression = Expression::CallToIntrinsicFunction {
                         intrinsic,
                         is_tail_call: *is_known_to_be_in_tail_position,
                     };
                 } else if let Some(function) = host.function_by_name(name) {
-                    *fragment = Expression::CallToHostFunction {
+                    *expression = Expression::CallToHostFunction {
                         number: function.number(),
                     }
                 } else if known_named_functions.contains(name) {
