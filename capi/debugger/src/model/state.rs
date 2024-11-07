@@ -113,7 +113,7 @@ impl PersistentState {
                                 &expression.data.location,
                             )?
                         else {
-                            // Can't find a next fragment _or_ a caller, which
+                            // Can't find a next expression _or_ a caller, which
                             // means we must be at the top-level function.
                             //
                             // Let's just tell the runtime to continue, so the
@@ -160,7 +160,7 @@ impl PersistentState {
                                 &fragment.data.location,
                             )?
                         else {
-                            // Can't find a next fragment _or_ a caller, which
+                            // Can't find a next expression _or_ a caller, which
                             // means we must be at the top-level function.
                             //
                             // Let's just tell the runtime to continue, so the
@@ -206,7 +206,7 @@ impl PersistentState {
                                 &fragment.data.location,
                             )?
                         else {
-                            // Can't find a next fragment _or_ a caller, which
+                            // Can't find a next expression _or_ a caller, which
                             // means we must be at the top-level function.
                             //
                             // Let's just tell the runtime to continue, so the
