@@ -258,7 +258,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
 #[test]
 fn step_into_function() {
     // When stopping at a function call and then stepping, we expect to land at
-    // the first fragment in the function.
+    // the first expression in the function.
 
     let mut debugger = debugger();
     debugger.provide_source_code(
@@ -328,8 +328,8 @@ fn step_into_function() {
 
 #[test]
 fn step_out_of_function_if_at_last_fragment() {
-    // When stopping at the last fragment in a function and then stepping, we
-    // expect to land at the fragment after the function call.
+    // When stopping at the last expression in a function and then stepping, we
+    // expect to land at the expression after the function call.
 
     let mut debugger = debugger();
     debugger.provide_source_code(
