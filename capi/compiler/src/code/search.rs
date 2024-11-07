@@ -128,12 +128,12 @@ impl Find<Branch, BranchLocation> {
 }
 
 impl Find<Expression, ExpressionLocation> {
-    /// # Access the fragment's location
+    /// # Access the expression's location
     pub fn location(&self) -> &ExpressionLocation {
         &self.metadata
     }
 
-    /// # Consume the found fragment, returning its location
+    /// # Consume the found expression, returning its location
     pub fn into_location(self) -> ExpressionLocation {
         self.metadata
     }
