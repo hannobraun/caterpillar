@@ -62,8 +62,9 @@ impl DebugBranch {
             })
             .collect();
 
-        let is_active =
-            body.iter().any(|fragment| fragment.data.state.is_active());
+        let is_active = body
+            .iter()
+            .any(|expression| expression.data.state.is_active());
 
         Self {
             parameters,
