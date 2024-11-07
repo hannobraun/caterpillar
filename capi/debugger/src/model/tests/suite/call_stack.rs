@@ -256,7 +256,7 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
 }
 
 #[test]
-fn instruction_on_call_stack_with_no_associated_fragment() {
+fn instruction_on_call_stack_with_no_associated_expression() {
     // If a host function has just been executed, it is possible that the
     // currently active instruction is a return instruction, if that is located
     // right after the call to the host function.
