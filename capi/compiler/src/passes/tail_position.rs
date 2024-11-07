@@ -143,12 +143,12 @@ mod tests {
     impl ToIdentifiers for IndexMap<Expression> {
         fn to_identifiers(&self) -> Vec<(&str, bool)> {
             self.values()
-                .filter_map(|fragment| {
+                .filter_map(|expression| {
                     if let Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_in_tail_position,
                         ..
-                    } = fragment
+                    } = expression
                     {
                         Some((name.as_str(), *is_known_to_be_in_tail_position))
                     } else {
