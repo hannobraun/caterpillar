@@ -4,6 +4,7 @@ use capi_runtime::InstructionAddress;
 
 use crate::code::{ExpressionLocation, FunctionLocation};
 
+/// # Mapping of pre-compiled source code to fully compiled instructions
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
