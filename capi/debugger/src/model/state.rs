@@ -152,12 +152,12 @@ impl PersistentState {
                     .active_expression()?;
 
                 let targets = {
-                    let mut fragment = origin.clone();
+                    let mut expression = origin.clone();
 
                     loop {
                         let Some(after) = entries
                             .find_next_expression_after_caller(
-                                &fragment.data.location,
+                                &expression.data.location,
                             )?
                         else {
                             // Can't find a next expression _or_ a caller, which
@@ -176,7 +176,7 @@ impl PersistentState {
                         if let DebugExpressionKind::Comment { .. } = after.kind
                         {
                             // Can't step to comments! Need to ignore them.
-                            fragment = after.clone();
+                            expression = after.clone();
                             continue;
                         }
 
