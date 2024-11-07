@@ -202,9 +202,9 @@ impl Expression {
         Some(text)
     }
 
-    /// # Convert the fragment to a `Function`
+    /// # Convert the expression to a `Function`
     ///
-    /// Return `None`, if this is a different kind of fragment.
+    /// Return `None`, if this is a different kind of expression.
     pub fn as_function(&self) -> Option<&Function> {
         let Expression::Function { function } = self else {
             return None;
