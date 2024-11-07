@@ -504,7 +504,7 @@ mod tests {
 
     #[test]
     fn infer_expression_signatures_based_on_host_function() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions, types) = infer_types(
             r"
                 f: fn
                     \ n ->
@@ -538,7 +538,7 @@ mod tests {
 
     #[test]
     fn infer_type_of_function_literal() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions, types) = infer_types(
             r"
                 f: fn
                     \ ->
@@ -582,7 +582,7 @@ mod tests {
     #[test]
     #[should_panic] // known bug; not currently tracked in an issue
     fn infer_type_of_function_based_on_most_specific_branch() {
-        let (named_functions_a, types_a) = type_fragments(
+        let (named_functions_a, types_a) = infer_types(
             r"
                 f: fn
                     \ 0 ->
@@ -593,7 +593,7 @@ mod tests {
                 end
             ",
         );
-        let (named_functions_b, types_b) = type_fragments(
+        let (named_functions_b, types_b) = infer_types(
             r"
                 f: fn
                     \ n ->
@@ -628,7 +628,7 @@ mod tests {
 
     #[test]
     fn infer_signatures_of_branch_and_function() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions, types) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -673,7 +673,7 @@ mod tests {
 
     #[test]
     fn infer_self_recursive_function_as_empty() {
-        let (named_functions, types) = type_fragments(
+        let (named_functions, types) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -704,7 +704,7 @@ mod tests {
 
     #[test]
     fn infer_self_recursive_non_empty_function() {
-        let (named_functions_a, types_a) = type_fragments(
+        let (named_functions_a, types_a) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -716,7 +716,7 @@ mod tests {
                 end
             ",
         );
-        let (named_functions_b, types_b) = type_fragments(
+        let (named_functions_b, types_b) = infer_types(
             r"
                 f: fn
                     \ a, b, 1 ->
@@ -774,7 +774,7 @@ mod tests {
         check(&format!("{g}{f}"));
 
         fn check(code: &str) {
-            let (named_functions, types) = type_fragments(code);
+            let (named_functions, types) = infer_types(code);
 
             let f = named_functions
                 .find_by_name("f")
@@ -808,7 +808,7 @@ mod tests {
         }
     }
 
-    fn type_fragments(source: &str) -> (NamedFunctions, Types) {
+    fn infer_types(source: &str) -> (NamedFunctions, Types) {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         resolve_most_identifiers(&mut named_functions, &TestHost);
