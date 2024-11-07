@@ -83,7 +83,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .with_name("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         nop,
@@ -128,7 +128,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         brk,
@@ -142,7 +142,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         nop,
@@ -200,7 +200,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         a,
@@ -216,7 +216,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         b,
@@ -246,7 +246,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         c,
@@ -319,7 +319,7 @@ fn step_into_function() {
             .expect_entries()
             .expect_functions()
             .expect_leaf("f")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         a,
@@ -386,7 +386,7 @@ fn step_out_of_function_if_at_last_fragment() {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         nop_in_main,
@@ -488,7 +488,7 @@ fn step_over_function_call() {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         nop,
@@ -552,7 +552,7 @@ fn step_out_of_function() {
             .expect_entries()
             .expect_functions()
             .expect_leaf("main")
-            .active_fragment()
+            .active_expression()
             .data
             .location,
         b,

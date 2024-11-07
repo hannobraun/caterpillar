@@ -63,7 +63,7 @@ fn stopped_at_host_function() {
         .expect_entries()
         .expect_functions()
         .with_name("main")
-        .active_fragment()
+        .active_expression()
         .expect_call_to_host_function("halt");
 }
 
@@ -127,7 +127,7 @@ fn call_stack_reconstruction_missing_main() {
         .expect_entries()
         .expect_functions()
         .with_name("main")
-        .active_fragment()
+        .active_expression()
         .expect_call_to_function("f");
 }
 
@@ -165,7 +165,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
         .expect_entries()
         .expect_functions()
         .with_name("f")
-        .active_fragment()
+        .active_expression()
         .expect_call_to_function("g");
 }
 

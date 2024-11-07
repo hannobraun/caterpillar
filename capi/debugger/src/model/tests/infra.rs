@@ -194,12 +194,12 @@ impl FunctionsExt for Vec<DebugFunction> {
 }
 
 pub trait DebugFunctionExt {
-    fn active_fragment(self) -> DebugExpression;
+    fn active_expression(self) -> DebugExpression;
     fn only_branch(self) -> DebugBranch;
 }
 
 impl DebugFunctionExt for DebugFunction {
-    fn active_fragment(self) -> DebugExpression {
+    fn active_expression(self) -> DebugExpression {
         self.branches
             .into_iter()
             .find_map(|branch| {
