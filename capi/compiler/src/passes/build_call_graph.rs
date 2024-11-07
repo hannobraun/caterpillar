@@ -51,8 +51,8 @@ fn include_calls_from_function_in_call_graph(
     call_graph: &mut PetCallGraph,
 ) {
     for branch in function.branches.values() {
-        for fragment in branch.body.values() {
-            match fragment {
+        for expression in branch.body.values() {
+            match expression {
                 Expression::Function { function } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,
