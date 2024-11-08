@@ -22,18 +22,18 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .collect();
 
     for function in functions.named_functions_mut() {
-        if !function.environment.is_empty() {
+        if !function.inner.environment.is_empty() {
             panic!(
                 "Named functions do not have an environment that they could \
                 access.\n\
                 \n\
                 Environment: {:#?}",
-                function.environment,
+                function.inner.environment,
             );
         }
 
         resolve_in_function(
-            function,
+            &mut function.inner,
             &mut scopes,
             &known_named_functions,
             host,

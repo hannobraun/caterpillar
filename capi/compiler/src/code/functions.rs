@@ -147,8 +147,8 @@ impl Functions {
     /// # Iterate over the named functions mutably
     pub fn named_functions_mut(
         &mut self,
-    ) -> impl Iterator<Item = &mut Function> {
-        self.inner.values_mut().map(|function| &mut function.inner)
+    ) -> impl Iterator<Item = &mut NamedFunction> {
+        self.inner.values_mut()
     }
 
     /// # Consume this instance and return an iterator over the named functions
