@@ -20,13 +20,13 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for (named_function_index, function) in functions {
+    for function in functions.named_functions() {
         let name = function
             .name
             .as_ref()
             .expect("Top-level function must have a name");
         let graph_index =
-            call_graph.add_node((function, *named_function_index));
+            call_graph.add_node((function.find, function.index()));
         graph_index_by_function_name.insert(name, graph_index);
     }
 
