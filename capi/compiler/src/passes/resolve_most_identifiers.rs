@@ -21,7 +21,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .filter_map(|function| function.name.clone())
         .collect();
 
-    for function in functions.functions_mut() {
+    for function in functions.named_functions_mut() {
         if !function.environment.is_empty() {
             panic!(
                 "Named functions do not have an environment that they could \

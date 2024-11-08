@@ -139,7 +139,9 @@ impl Functions {
     }
 
     /// # Iterate over the named functions mutably
-    pub fn functions_mut(&mut self) -> impl Iterator<Item = &mut Function> {
+    pub fn named_functions_mut(
+        &mut self,
+    ) -> impl Iterator<Item = &mut Function> {
         self.inner.values_mut()
     }
 
