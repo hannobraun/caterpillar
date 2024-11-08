@@ -533,7 +533,7 @@ mod tests {
 
     #[test]
     fn infer_type_of_function_literal() {
-        let (named_functions, types) = infer_types(
+        let (functions, types) = infer_types(
             r"
                 f: fn
                     \ ->
@@ -545,7 +545,7 @@ mod tests {
             ",
         );
 
-        let mut expressions = named_functions
+        let mut expressions = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
