@@ -51,19 +51,21 @@ where
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
-    ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
+    ) -> impl Iterator<Item = Located<&Branch, BranchLocation>> {
         let function = &self.fragment;
         let location = self.location.clone().into();
 
-        function.inner.branches.clone().into_iter().map(
-            move |(index, branch)| Located {
+        function
+            .inner
+            .branches
+            .iter()
+            .map(move |(&index, branch)| Located {
                 fragment: branch,
                 location: BranchLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },
-            },
-        )
+            })
     }
 
     /// # Access the function's single branch
