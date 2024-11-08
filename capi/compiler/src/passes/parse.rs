@@ -33,13 +33,13 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
-    let mut named_functions = Functions::default();
+    let mut functions = Functions::default();
 
     while let Some(function) = parse_named_function(&mut tokens) {
-        named_functions.insert(function);
+        functions.insert(function);
     }
 
-    named_functions
+    functions
 }
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
