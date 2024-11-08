@@ -452,8 +452,8 @@ fn step_over_function_call() {
     );
 
     let (f, nop) = {
-        let functions = debugger.expect_code();
-        functions
+        debugger
+            .expect_code()
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
