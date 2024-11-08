@@ -312,7 +312,7 @@ mod tests {
 
         functions
             .into_named_functions()
-            .flat_map(|function| function.branches.into_values())
+            .flat_map(|function| function.inner.branches.into_values())
             .collect()
     }
 

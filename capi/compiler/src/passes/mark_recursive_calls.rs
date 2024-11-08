@@ -112,6 +112,7 @@ mod tests {
                 is_known_to_be_call_to_user_defined_function,
                 ..
             } = function
+                .inner
                 .branches
                 .pop_first()
                 .map(|(_, branch)| branch)
@@ -161,7 +162,7 @@ mod tests {
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
-        let mut branches = f.branches.into_values();
+        let mut branches = f.inner.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 

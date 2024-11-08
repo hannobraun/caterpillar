@@ -152,8 +152,8 @@ impl Functions {
     }
 
     /// # Consume this instance and return an iterator over the named functions
-    pub fn into_named_functions(self) -> impl Iterator<Item = Function> {
-        self.inner.into_values().map(|function| function.inner)
+    pub fn into_named_functions(self) -> impl Iterator<Item = NamedFunction> {
+        self.inner.into_values()
     }
 }
 
