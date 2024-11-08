@@ -12,12 +12,12 @@ use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 /// In addition, it provides a target for attaching addition result-specific
 /// APIs to, that would otherwise be very inconvenient to access.
 #[derive(Debug)]
-pub struct Located<'r, T: HasLocation, M = <T as HasLocation>::Location> {
+pub struct Located<'r, T: HasLocation> {
     /// # The result of the search
     pub fragment: &'r T,
 
     /// # The additional search-specific metadata
-    pub location: M,
+    pub location: T::Location,
 }
 
 impl<T: HasLocation> Deref for Located<'_, T> {
