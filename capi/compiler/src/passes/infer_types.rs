@@ -375,7 +375,7 @@ fn infer_type_of_expression(
                 outputs: vec![type_],
             }
         }
-        Expression::LiteralNumber(_) => Signature {
+        Expression::LiteralNumber { .. } => Signature {
             inputs: vec![],
             outputs: vec![types.inner.push(Type::Number)],
         },

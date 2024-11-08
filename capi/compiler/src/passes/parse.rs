@@ -185,7 +185,9 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
                     });
                 }
                 Token::IntegerLiteral { value } => {
-                    branch.body.push(Expression::LiteralNumber(value.into()));
+                    branch.body.push(Expression::LiteralNumber {
+                        value: value.into(),
+                    });
                 }
                 token => {
                     panic!("Unexpected token: {token:?}");

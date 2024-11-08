@@ -240,7 +240,7 @@ impl DebugExpressionKind {
 
                 Self::Function { function }
             }
-            Expression::LiteralNumber(value) => Self::Value {
+            Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
             Expression::UnresolvedIdentifier { name, .. } => {

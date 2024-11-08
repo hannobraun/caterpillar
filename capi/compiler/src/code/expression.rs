@@ -151,7 +151,10 @@ pub enum Expression {
     },
 
     /// # A number literal
-    LiteralNumber(Value),
+    LiteralNumber {
+        /// The number defined by this literal
+        value: Value,
+    },
 
     /// # An unresolved identifier
     ///
