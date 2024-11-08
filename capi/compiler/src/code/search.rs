@@ -18,7 +18,7 @@ use super::{
 /// In addition, it provides a target for attaching addition result-specific
 /// APIs to, that would otherwise be very inconvenient to access.
 #[derive(Debug)]
-pub struct Find<T, M> {
+pub struct Located<T, M> {
     /// # The result of the search
     pub find: T,
 
@@ -26,7 +26,7 @@ pub struct Find<T, M> {
     pub metadata: M,
 }
 
-impl<T, M> Deref for Find<T, M> {
+impl<T, M> Deref for Located<T, M> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
@@ -34,7 +34,7 @@ impl<T, M> Deref for Find<T, M> {
     }
 }
 
-impl<F> Find<F, Index<NamedFunction>> {
+impl<F> Located<F, Index<NamedFunction>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
@@ -50,19 +50,19 @@ impl<F> Find<F, Index<NamedFunction>> {
     }
 }
 
-impl<M> Find<&NamedFunction, M>
+impl<M> Located<&NamedFunction, M>
 where
     M: Clone + Into<FunctionLocation>,
 {
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
-    ) -> impl Iterator<Item = Find<Branch, BranchLocation>> {
+    ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
         let function = &self.find;
         let location = self.metadata.clone().into();
 
         function.inner.branches.clone().into_iter().map(
-            move |(index, branch)| Find {
+            move |(index, branch)| Located {
                 find: branch,
                 metadata: BranchLocation {
                     parent: Box::new(location.clone()),
@@ -75,7 +75,9 @@ where
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(&self) -> Option<Find<Branch, BranchLocation>> {
+    pub fn find_single_branch(
+        &self,
+    ) -> Option<Located<Branch, BranchLocation>> {
         let function = &self.find;
         let location = self.metadata.clone().into();
 
@@ -87,7 +89,7 @@ where
             .inner
             .branches
             .first_key_value()
-            .map(|(&index, branch)| Find {
+            .map(|(&index, branch)| Located {
                 find: branch.clone(),
                 metadata: BranchLocation {
                     parent: Box::new(location),
@@ -97,7 +99,7 @@ where
     }
 }
 
-impl Find<Branch, BranchLocation> {
+impl Located<Branch, BranchLocation> {
     /// # Access the branch's location
     pub fn location(&self) -> &BranchLocation {
         &self.metadata
@@ -106,12 +108,12 @@ impl Find<Branch, BranchLocation> {
     /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,
-    ) -> impl Iterator<Item = Find<Expression, ExpressionLocation>> {
+    ) -> impl Iterator<Item = Located<Expression, ExpressionLocation>> {
         let location = self.metadata.clone();
         self.body
             .clone()
             .into_iter()
-            .map(move |(index, expression)| Find {
+            .map(move |(index, expression)| Located {
                 find: expression,
                 metadata: ExpressionLocation {
                     parent: Box::new(location.clone()),
@@ -126,7 +128,7 @@ impl Find<Branch, BranchLocation> {
     }
 }
 
-impl Find<Expression, ExpressionLocation> {
+impl Located<Expression, ExpressionLocation> {
     /// # Access the expression's location
     pub fn location(&self) -> &ExpressionLocation {
         &self.metadata

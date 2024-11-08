@@ -5,7 +5,7 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Find, BranchLocation, Cluster, Expression, ExpressionLocation,
+    search::Located, BranchLocation, Cluster, Expression, ExpressionLocation,
     FunctionLocation, Hash, IndexMap,
 };
 
@@ -54,10 +54,10 @@ impl Functions {
     pub fn find_named_by_hash(
         &self,
         hash: &Hash<Function>,
-    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
+    ) -> Option<Located<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
-                Some(Find {
+                Some(Located {
                     find: function,
                     metadata: index,
                 })
@@ -71,9 +71,9 @@ impl Functions {
     pub fn find_named_by_index(
         &self,
         index: &Index<NamedFunction>,
-    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
+    ) -> Option<Located<&NamedFunction, Index<NamedFunction>>> {
         let function = self.inner.get(index)?;
-        Some(Find {
+        Some(Located {
             find: function,
             metadata: *index,
         })
@@ -83,10 +83,10 @@ impl Functions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
+    ) -> Option<Located<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
-                Some(Find {
+                Some(Located {
                     find: function,
                     metadata: index,
                 })
@@ -135,8 +135,9 @@ impl Functions {
     /// # Iterate over the named functions
     pub fn named_functions(
         &self,
-    ) -> impl Iterator<Item = Find<&NamedFunction, Index<NamedFunction>>> {
-        self.inner.iter().map(|(index, function)| Find {
+    ) -> impl Iterator<Item = Located<&NamedFunction, Index<NamedFunction>>>
+    {
+        self.inner.iter().map(|(index, function)| Located {
             find: function,
             metadata: *index,
         })
