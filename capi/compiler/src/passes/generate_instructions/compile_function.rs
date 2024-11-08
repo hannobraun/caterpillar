@@ -257,7 +257,7 @@ fn compile_expression(
                     .get(&function_index_in_root_context)
                     .expect("Function referred to from cluster must exist.");
 
-                Hash::new(called_function)
+                Hash::new(&called_function.inner)
             };
 
             // For recursive calls, we can't generally assume that the called

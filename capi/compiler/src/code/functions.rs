@@ -37,8 +37,8 @@ impl Functions {
     }
 
     /// # Access the named function at the given index
-    pub fn get(&self, index: &Index<NamedFunction>) -> Option<&Function> {
-        self.inner.get(index).map(|function| &function.inner)
+    pub fn get(&self, index: &Index<NamedFunction>) -> Option<&NamedFunction> {
+        self.inner.get(index)
     }
 
     /// # Access the named function at the given index mutably

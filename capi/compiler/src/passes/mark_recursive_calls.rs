@@ -17,6 +17,7 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
                         "Expecting function referenced from call graph to \
                         exist.",
                     )
+                    .inner
                     .name
                     .clone()
                     .map(|name| (name, function_index_in_cluster))

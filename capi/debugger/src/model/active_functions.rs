@@ -267,7 +267,7 @@ fn instruction_to_named_function(
                     )
                     .clone();
 
-                return (function, index);
+                return (function.inner, index);
             }
             FunctionLocation::AnonymousFunction { location } => {
                 current_location = *location.parent.parent;
