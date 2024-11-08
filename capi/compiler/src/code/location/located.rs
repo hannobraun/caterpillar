@@ -111,3 +111,22 @@ impl Located<Branch, BranchLocation> {
             })
     }
 }
+
+impl Located<&Branch, BranchLocation> {
+    /// # Iterate over the expressions in the branch's body
+    pub fn body(
+        &self,
+    ) -> impl Iterator<Item = Located<Expression, ExpressionLocation>> {
+        let location = self.location.clone();
+        self.body
+            .clone()
+            .into_iter()
+            .map(move |(index, expression)| Located {
+                fragment: expression,
+                location: ExpressionLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            })
+    }
+}
