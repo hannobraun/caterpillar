@@ -110,18 +110,16 @@ fn step_over_brk() -> anyhow::Result<()> {
         )
         .run_program();
 
-    let (brk, nop) = {
-        debugger
-            .expect_code()
-            .find_by_name("main")
-            .unwrap()
-            .find_single_branch()
-            .unwrap()
-            .body()
-            .map(|expression| expression.location)
-            .collect_tuple()
-            .unwrap()
-    };
+    let (brk, nop) = debugger
+        .expect_code()
+        .find_by_name("main")
+        .unwrap()
+        .find_single_branch()
+        .unwrap()
+        .body()
+        .map(|expression| expression.location)
+        .collect_tuple()
+        .unwrap();
 
     assert_eq!(
         debugger
