@@ -711,7 +711,7 @@ mod tests {
                 end
             ",
         );
-        let (named_functions_b, types_b) = infer_types(
+        let (functions_b, types_b) = infer_types(
             r"
                 f: fn
                     \ a, b, 1 ->
@@ -725,7 +725,7 @@ mod tests {
         );
 
         check(&functions_a, &types_a);
-        check(&named_functions_b, &types_b);
+        check(&functions_b, &types_b);
 
         fn check(named_functions: &Functions, types: &Types) {
             let f = named_functions
