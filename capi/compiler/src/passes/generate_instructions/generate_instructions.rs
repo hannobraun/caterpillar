@@ -70,14 +70,14 @@ fn create_placeholder_for_call_to_main(
 
 fn compile_call_to_main(
     call_to_main: InstructionAddress,
-    named_functions: &Functions,
+    functions: &Functions,
     instructions: &mut Instructions,
     compiled_functions_by_hash: &mut BTreeMap<
         Hash<Function>,
         capi_runtime::Function,
     >,
 ) {
-    let Some(main) = named_functions.find_by_name("main") else {
+    let Some(main) = functions.find_by_name("main") else {
         // If we can't find the call to `main`, that is a result of invalid
         // code. Leaving the placeholder instruction is appropriate in that
         // case.
