@@ -109,7 +109,7 @@ impl ActiveFunctions {
                     active_expression,
                     active_instructions.is_empty(),
                     cluster,
-                    &code.named_functions,
+                    &code.functions,
                     &code.types,
                     &code.source_map,
                     breakpoints,
@@ -259,7 +259,7 @@ fn instruction_to_named_function(
         match current_location {
             FunctionLocation::NamedFunction { index } => {
                 let function = code
-                    .named_functions
+                    .functions
                     .get(&index)
                     .expect(
                         "Function location in source map should refer to \
@@ -283,7 +283,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effect: Option<&Effect>,
 ) -> Option<String> {
-    let Some(function) = code.named_functions.find_by_name(name) else {
+    let Some(function) = code.functions.find_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
 
@@ -313,7 +313,7 @@ fn reconstruct_function(
         tail_call.as_ref(),
         false,
         cluster,
-        &code.named_functions,
+        &code.functions,
         &code.types,
         &code.source_map,
         breakpoints,
@@ -328,11 +328,11 @@ fn function_call_to_function_name(
     code: &CompilerOutput,
 ) -> Option<String> {
     let expression = code
-        .named_functions
+        .functions
         .find_expression_by_location(function_call)
         .expect("Expression referenced by active function must exist.");
     let hash = expression.as_call_to_function()?;
-    let function = code.named_functions.find_by_hash(hash)?;
+    let function = code.functions.find_by_hash(hash)?;
 
     function.name.clone()
 }

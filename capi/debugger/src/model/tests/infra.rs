@@ -97,7 +97,7 @@ impl TestDebugger {
     }
 
     pub fn expect_code(&self) -> &Functions {
-        &self.persistent.code.inner.as_ref().unwrap().named_functions
+        &self.persistent.code.inner.as_ref().unwrap().functions
     }
 
     pub fn expect_expression(

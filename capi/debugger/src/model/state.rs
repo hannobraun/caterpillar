@@ -93,10 +93,9 @@ impl PersistentState {
                 let targets = if let Some(hash) =
                     origin.data.expression.as_call_to_function()
                 {
-                    let function =
-                        code.named_functions.find_by_hash(hash).expect(
-                            "Expecting function referenced from call to exist.",
-                        );
+                    let function = code.functions.find_by_hash(hash).expect(
+                        "Expecting function referenced from call to exist.",
+                    );
 
                     function
                         .branches()

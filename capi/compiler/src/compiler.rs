@@ -61,7 +61,7 @@ impl Compiler {
         );
 
         CompilerOutput {
-            named_functions,
+            functions: named_functions,
             call_graph,
             types,
             instructions: self.instructions.clone(),
@@ -77,7 +77,7 @@ pub struct CallInstructionsByCallee {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
-    pub named_functions: Functions,
+    pub functions: Functions,
     pub call_graph: CallGraph,
     pub types: Types,
     pub instructions: Instructions,
