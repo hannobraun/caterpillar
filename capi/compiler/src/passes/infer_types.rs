@@ -16,7 +16,7 @@ use crate::{
 };
 
 pub fn infer_types(
-    named_functions: &Functions,
+    functions: &Functions,
     call_graph: &CallGraph,
     host: &impl Host,
 ) -> Types {
@@ -52,7 +52,7 @@ pub fn infer_types(
         let mut queue = VecDeque::new();
 
         for index in cluster.functions.values() {
-            let function = named_functions
+            let function = functions
                 .find_by_index(index)
                 .expect("Function referred to from call graph must exist.");
 
@@ -75,12 +75,7 @@ pub fn infer_types(
 
         while let Some(queue_item) = queue.pop_front() {
             infer_types_in_branch(
-                queue_item,
-                cluster,
-                named_functions,
-                host,
-                &mut queue,
-                &mut types,
+                queue_item, cluster, functions, host, &mut queue, &mut types,
             );
         }
     }
