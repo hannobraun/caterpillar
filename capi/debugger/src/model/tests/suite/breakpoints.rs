@@ -168,8 +168,8 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     );
 
     let (a, b, c) = {
-        let functions = debugger.expect_code();
-        functions
+        debugger
+            .expect_code()
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
