@@ -36,7 +36,7 @@ pub enum Expression {
         /// # The index of the binding
         ///
         /// The index is derived from the index of the binding in the parameter
-        /// list of its branch. Non-identifiers are ignored in this.
+        /// list of its branch. Only identifiers are counted.
         ///
         /// The index determines the position within the local stack frame,
         /// where the binding is stored.
