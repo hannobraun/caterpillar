@@ -208,7 +208,7 @@ fn compile_expression(
                 let function = functions_context
                     .functions
                     .named_functions()
-                    .find(|&function| Hash::new(function) == hash);
+                    .find(|function| Hash::new(function.find) == hash);
 
                 panic!(
                     "Compiling call to user-defined function `{hash}`. \
