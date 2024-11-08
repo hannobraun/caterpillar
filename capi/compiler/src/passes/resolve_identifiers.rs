@@ -14,17 +14,14 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_most_identifiers(
-    named_functions: &mut Functions,
-    host: &impl Host,
-) {
+pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
     let mut scopes = Scopes::new();
-    let known_named_functions = named_functions
+    let known_named_functions = functions
         .functions()
         .filter_map(|function| function.name.clone())
         .collect();
 
-    for function in named_functions.functions_mut() {
+    for function in functions.functions_mut() {
         if !function.environment.is_empty() {
             panic!(
                 "Named functions do not have an environment that they could \
