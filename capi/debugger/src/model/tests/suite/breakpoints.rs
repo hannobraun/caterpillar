@@ -167,24 +167,22 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         ",
     );
 
-    let (a, b, c) = {
-        debugger
-            .expect_code()
-            .find_by_name("main")
-            .unwrap()
-            .find_single_branch()
-            .unwrap()
-            .body()
-            .filter_map(|expression| {
-                if expression.as_comment().is_none() {
-                    Some(expression.location)
-                } else {
-                    None
-                }
-            })
-            .collect_tuple()
-            .unwrap()
-    };
+    let (a, b, c) = debugger
+        .expect_code()
+        .find_by_name("main")
+        .unwrap()
+        .find_single_branch()
+        .unwrap()
+        .body()
+        .filter_map(|expression| {
+            if expression.as_comment().is_none() {
+                Some(expression.location)
+            } else {
+                None
+            }
+        })
+        .collect_tuple()
+        .unwrap();
 
     // Set a durable breakpoint at `a`. The program should stop there.
     debugger.on_user_action(UserAction::BreakpointSet {
