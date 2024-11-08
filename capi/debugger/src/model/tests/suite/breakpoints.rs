@@ -410,9 +410,9 @@ fn step_out_of_main_function() {
     );
 
     let nop = {
-        let named_functions = debugger.expect_code();
+        let functions = debugger.expect_code();
 
-        named_functions
+        functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
