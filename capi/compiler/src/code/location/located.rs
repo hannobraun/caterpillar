@@ -20,7 +20,7 @@ pub struct Located<'r, T: HasLocation, M = <T as HasLocation>::Location> {
     pub location: M,
 }
 
-impl<T: HasLocation, M> Deref for Located<'_, T, M> {
+impl<T: HasLocation> Deref for Located<'_, T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
@@ -28,7 +28,7 @@ impl<T: HasLocation, M> Deref for Located<'_, T, M> {
     }
 }
 
-impl Located<'_, NamedFunction, Index<NamedFunction>> {
+impl Located<'_, NamedFunction> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
@@ -44,9 +44,7 @@ impl Located<'_, NamedFunction, Index<NamedFunction>> {
     }
 
     /// # Iterate over the function's branches
-    pub fn branches(
-        &self,
-    ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
+    pub fn branches(&self) -> impl Iterator<Item = Located<Branch>> {
         let function = &self.fragment;
 
         function
@@ -65,9 +63,7 @@ impl Located<'_, NamedFunction, Index<NamedFunction>> {
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(
-        &self,
-    ) -> Option<Located<Branch, BranchLocation>> {
+    pub fn find_single_branch(&self) -> Option<Located<Branch>> {
         let function = &self.fragment;
         let location = self.location.into();
 
@@ -89,11 +85,9 @@ impl Located<'_, NamedFunction, Index<NamedFunction>> {
     }
 }
 
-impl Located<'_, Branch, BranchLocation> {
+impl Located<'_, Branch> {
     /// # Iterate over the expressions in the branch's body
-    pub fn body(
-        &self,
-    ) -> impl Iterator<Item = Located<Expression, ExpressionLocation>> {
+    pub fn body(&self) -> impl Iterator<Item = Located<Expression>> {
         let location = self.location.clone();
         self.body.iter().map(move |(&index, expression)| Located {
             fragment: expression,

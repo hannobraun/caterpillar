@@ -54,7 +54,7 @@ impl Functions {
     pub fn find_named_by_hash(
         &self,
         hash: &Hash<Function>,
-    ) -> Option<Located<NamedFunction, Index<NamedFunction>>> {
+    ) -> Option<Located<NamedFunction>> {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
                 Some(Located {
@@ -71,7 +71,7 @@ impl Functions {
     pub fn find_named_by_index(
         &self,
         index: &Index<NamedFunction>,
-    ) -> Option<Located<NamedFunction, Index<NamedFunction>>> {
+    ) -> Option<Located<NamedFunction>> {
         let function = self.inner.get(index)?;
         Some(Located {
             fragment: function,
@@ -80,10 +80,7 @@ impl Functions {
     }
 
     /// # Find the function with the provided name
-    pub fn find_by_name(
-        &self,
-        name: &str,
-    ) -> Option<Located<NamedFunction, Index<NamedFunction>>> {
+    pub fn find_by_name(&self, name: &str) -> Option<Located<NamedFunction>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
                 Some(Located {
@@ -135,8 +132,7 @@ impl Functions {
     /// # Iterate over the named functions
     pub fn named_functions(
         &self,
-    ) -> impl Iterator<Item = Located<NamedFunction, Index<NamedFunction>>>
-    {
+    ) -> impl Iterator<Item = Located<NamedFunction>> {
         self.inner.iter().map(|(index, function)| Located {
             fragment: function,
             location: *index,
