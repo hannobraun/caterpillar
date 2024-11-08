@@ -36,7 +36,7 @@ pub struct ClusterContext {
 pub fn compile_cluster(
     cluster: &Cluster,
     changes: &Changes,
-    named_functions_context: &mut FunctionsContext,
+    functions_context: &mut FunctionsContext,
 ) {
     let mut context = ClusterContext {
         queue_of_functions_to_compile: VecDeque::new(),
@@ -60,10 +60,10 @@ pub fn compile_cluster(
             function_to_compile.address_of_instruction_to_make_anon_function,
             cluster,
             &mut context,
-            named_functions_context,
+            functions_context,
         );
 
-        named_functions_context
+        functions_context
             .compiled_functions_by_hash
             .insert(hash, runtime_function);
     }
@@ -73,8 +73,8 @@ pub fn compile_cluster(
             compile_call_to_function(
                 &hash,
                 call,
-                named_functions_context.compiled_functions_by_hash,
-                named_functions_context.instructions,
+                functions_context.compiled_functions_by_hash,
+                functions_context.instructions,
             );
         }
     }
