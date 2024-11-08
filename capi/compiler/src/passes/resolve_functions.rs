@@ -3,13 +3,13 @@ use std::collections::BTreeMap;
 use crate::code::{CallGraph, Expression, Function, Functions, Hash};
 
 pub fn resolve_calls_to_user_defined_functions(
-    named_functions: &mut Functions,
+    functions: &mut Functions,
     call_graph: &CallGraph,
 ) {
     let mut resolved_hashes_by_name = BTreeMap::new();
 
     for (index, _) in call_graph.functions_from_leaves() {
-        let function = named_functions
+        let function = functions
             .get_mut(index)
             .expect("Function referred to from call graph must exist.");
 
