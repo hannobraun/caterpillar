@@ -1,5 +1,3 @@
-use std::array;
-
 use itertools::Itertools;
 
 use crate::model::{
@@ -453,9 +451,9 @@ fn step_over_function_call() {
         ",
     );
 
-    let [f, nop] = {
+    let (f, nop) = {
         let functions = debugger.expect_code();
-        let mut body = functions
+        functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
@@ -467,9 +465,9 @@ fn step_over_function_call() {
                 } else {
                     None
                 }
-            });
-
-        array::from_fn(|_| body.next().unwrap())
+            })
+            .collect_tuple()
+            .unwrap()
     };
 
     debugger
