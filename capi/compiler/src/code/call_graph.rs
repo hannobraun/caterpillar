@@ -142,14 +142,14 @@ impl Cluster {
     pub fn find_function_by_index<'r>(
         &'r self,
         index: &Index<Index<Function>>,
-        named_functions: &'r Functions,
+        functions: &'r Functions,
     ) -> Find<&'r Function, Index<Function>> {
         let index = self
             .functions
             .get(index)
             .expect("Expecting index that refers to function in cluster.");
 
-        named_functions
+        functions
             .find_by_index(index)
             .expect("Expecting index in cluster to refer to existing function")
     }
