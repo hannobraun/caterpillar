@@ -12,23 +12,23 @@ use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 /// In addition, it provides a target for attaching addition result-specific
 /// APIs to, that would otherwise be very inconvenient to access.
 #[derive(Debug)]
-pub struct Located<T, M> {
+pub struct Located<'r, T, M> {
     /// # The result of the search
-    pub fragment: T,
+    pub fragment: &'r T,
 
     /// # The additional search-specific metadata
     pub location: M,
 }
 
-impl<T, M> Deref for Located<T, M> {
+impl<T, M> Deref for Located<'_, T, M> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        &self.fragment
+        self.fragment
     }
 }
 
-impl<F> Located<F, Index<NamedFunction>> {
+impl<F> Located<'_, F, Index<NamedFunction>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
@@ -44,14 +44,14 @@ impl<F> Located<F, Index<NamedFunction>> {
     }
 }
 
-impl<M> Located<&NamedFunction, M>
+impl<M> Located<'_, NamedFunction, M>
 where
     M: Clone + Into<FunctionLocation>,
 {
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
-    ) -> impl Iterator<Item = Located<&Branch, BranchLocation>> {
+    ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
         let function = &self.fragment;
         let location = self.location.clone().into();
 
@@ -73,7 +73,7 @@ where
     /// Returns `None`, if the function does not have exactly one branch.
     pub fn find_single_branch(
         &self,
-    ) -> Option<Located<&Branch, BranchLocation>> {
+    ) -> Option<Located<Branch, BranchLocation>> {
         let function = &self.fragment;
         let location = self.location.clone().into();
 
@@ -95,11 +95,11 @@ where
     }
 }
 
-impl Located<&Branch, BranchLocation> {
+impl Located<'_, Branch, BranchLocation> {
     /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,
-    ) -> impl Iterator<Item = Located<&Expression, ExpressionLocation>> {
+    ) -> impl Iterator<Item = Located<Expression, ExpressionLocation>> {
         let location = self.location.clone();
         self.body.iter().map(move |(&index, expression)| Located {
             fragment: expression,

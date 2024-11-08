@@ -143,7 +143,7 @@ impl Cluster {
         &'r self,
         index: &Index<Index<NamedFunction>>,
         functions: &'r Functions,
-    ) -> Located<&'r NamedFunction, Index<NamedFunction>> {
+    ) -> Located<'r, NamedFunction, Index<NamedFunction>> {
         let index = self
             .functions
             .get(index)
@@ -165,7 +165,7 @@ impl Cluster {
     pub fn functions<'r>(
         &'r self,
         functions: &'r Functions,
-    ) -> impl Iterator<Item = Located<&'r NamedFunction, Index<NamedFunction>>> + 'r
+    ) -> impl Iterator<Item = Located<'r, NamedFunction, Index<NamedFunction>>> + 'r
     {
         self.functions.values().copied().map(|index| {
             functions
