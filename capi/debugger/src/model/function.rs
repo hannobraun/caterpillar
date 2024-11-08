@@ -20,6 +20,7 @@ impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         function: code::Function,
+        name: Option<String>,
         location: FunctionLocation,
         active_expression: Option<&ExpressionLocation>,
         is_innermost_active_function: bool,
@@ -30,7 +31,6 @@ impl DebugFunction {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        let name = function.name;
         let branches = function
             .branches
             .into_iter()
