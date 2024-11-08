@@ -13,7 +13,7 @@ pub fn detect_changes(
 
     for new_function in new_functions.named_functions() {
         if old_functions
-            .find_named_by_hash(&Hash::new(new_function.find))
+            .find_named_by_hash(&Hash::new(&new_function.find.inner))
             .is_some()
         {
             // Function has not changed. We can forget about it.
@@ -21,6 +21,7 @@ pub fn detect_changes(
         }
 
         let name = new_function
+            .inner
             .name
             .as_deref()
             .expect("Named function should have a name.");
@@ -35,7 +36,7 @@ pub fn detect_changes(
                 },
                 new: FunctionInUpdate {
                     index: new_function.index(),
-                    function: new_function.clone(),
+                    function: new_function.inner.clone(),
                 },
             });
 
@@ -44,7 +45,7 @@ pub fn detect_changes(
 
         // If we make it here, there was neither an identical function before,
         // nor one with the same name. This must mean this function is new.
-        added.insert(new_function.index(), new_function.clone());
+        added.insert(new_function.index(), new_function.inner.clone());
     }
 
     Changes { added, updated }

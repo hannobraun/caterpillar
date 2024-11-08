@@ -137,9 +137,9 @@ impl Functions {
     /// # Iterate over the named functions
     pub fn named_functions(
         &self,
-    ) -> impl Iterator<Item = Find<&Function, Index<NamedFunction>>> {
+    ) -> impl Iterator<Item = Find<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().map(|(index, function)| Find {
-            find: &function.inner,
+            find: function,
             metadata: *index,
         })
     }

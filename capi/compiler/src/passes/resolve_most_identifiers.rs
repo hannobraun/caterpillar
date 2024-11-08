@@ -18,7 +18,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
     let mut scopes = Scopes::new();
     let known_named_functions = functions
         .named_functions()
-        .filter_map(|function| function.name.clone())
+        .filter_map(|function| function.inner.name.clone())
         .collect();
 
     for function in functions.named_functions_mut() {

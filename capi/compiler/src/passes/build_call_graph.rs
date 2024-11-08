@@ -23,11 +23,12 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
     for function in functions.named_functions() {
         let name = function
+            .inner
             .name
             .as_ref()
             .expect("Top-level function must have a name");
         let graph_index =
-            call_graph.add_node((function.find, function.index()));
+            call_graph.add_node((&function.find.inner, function.index()));
         graph_index_by_function_name.insert(name, graph_index);
     }
 
