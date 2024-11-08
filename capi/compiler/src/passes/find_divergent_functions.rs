@@ -27,7 +27,7 @@ pub fn find_divergent_functions(
                     if let Expression::CallToUserDefinedFunctionRecursive {
                         index,
                         ..
-                    } = expression.find
+                    } = expression.fragment
                     {
                         let called_function_index =
                             cluster.functions.get(&index).expect(

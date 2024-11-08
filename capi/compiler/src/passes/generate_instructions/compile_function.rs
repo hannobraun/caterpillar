@@ -205,10 +205,10 @@ fn compile_expression(
             let Some(function) =
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {
-                let function = functions_context
-                    .functions
-                    .named_functions()
-                    .find(|function| Hash::new(&function.find.inner) == hash);
+                let function =
+                    functions_context.functions.named_functions().find(
+                        |function| Hash::new(&function.fragment.inner) == hash,
+                    );
 
                 panic!(
                     "Compiling call to user-defined function `{hash}`. \

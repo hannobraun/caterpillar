@@ -23,7 +23,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
     for function in functions.named_functions() {
         let graph_index =
-            call_graph.add_node((&function.find.inner, function.index()));
+            call_graph.add_node((&function.fragment.inner, function.index()));
         graph_index_by_function_name.insert(&function.name, graph_index);
     }
 

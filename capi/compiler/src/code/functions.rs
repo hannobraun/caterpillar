@@ -58,7 +58,7 @@ impl Functions {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
                 Some(Located {
-                    find: function,
+                    fragment: function,
                     metadata: index,
                 })
             } else {
@@ -74,7 +74,7 @@ impl Functions {
     ) -> Option<Located<&NamedFunction, Index<NamedFunction>>> {
         let function = self.inner.get(index)?;
         Some(Located {
-            find: function,
+            fragment: function,
             metadata: *index,
         })
     }
@@ -87,7 +87,7 @@ impl Functions {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
                 Some(Located {
-                    find: function,
+                    fragment: function,
                     metadata: index,
                 })
             } else {
@@ -138,7 +138,7 @@ impl Functions {
     ) -> impl Iterator<Item = Located<&NamedFunction, Index<NamedFunction>>>
     {
         self.inner.iter().map(|(index, function)| Located {
-            find: function,
+            fragment: function,
             metadata: *index,
         })
     }

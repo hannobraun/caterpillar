@@ -20,7 +20,7 @@ use super::{
 #[derive(Debug)]
 pub struct Located<T, M> {
     /// # The result of the search
-    pub find: T,
+    pub fragment: T,
 
     /// # The additional search-specific metadata
     pub metadata: M,
@@ -30,7 +30,7 @@ impl<T, M> Deref for Located<T, M> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        &self.find
+        &self.fragment
     }
 }
 
@@ -58,12 +58,12 @@ where
     pub fn branches(
         &self,
     ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
-        let function = &self.find;
+        let function = &self.fragment;
         let location = self.metadata.clone().into();
 
         function.inner.branches.clone().into_iter().map(
             move |(index, branch)| Located {
-                find: branch,
+                fragment: branch,
                 metadata: BranchLocation {
                     parent: Box::new(location.clone()),
                     index,
@@ -78,7 +78,7 @@ where
     pub fn find_single_branch(
         &self,
     ) -> Option<Located<Branch, BranchLocation>> {
-        let function = &self.find;
+        let function = &self.fragment;
         let location = self.metadata.clone().into();
 
         if function.inner.branches.len() > 1 {
@@ -90,7 +90,7 @@ where
             .branches
             .first_key_value()
             .map(|(&index, branch)| Located {
-                find: branch.clone(),
+                fragment: branch.clone(),
                 metadata: BranchLocation {
                     parent: Box::new(location),
                     index,
@@ -114,7 +114,7 @@ impl Located<Branch, BranchLocation> {
             .clone()
             .into_iter()
             .map(move |(index, expression)| Located {
-                find: expression,
+                fragment: expression,
                 metadata: ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index,
