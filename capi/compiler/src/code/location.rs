@@ -70,11 +70,11 @@ impl BranchLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        named_functions: &'r Functions,
+        functions: &'r Functions,
     ) -> BranchLocationDisplay<'r> {
         BranchLocationDisplay {
             location: self,
-            named_functions,
+            named_functions: functions,
         }
     }
 }
