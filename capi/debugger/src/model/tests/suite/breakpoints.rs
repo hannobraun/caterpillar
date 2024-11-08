@@ -348,9 +348,9 @@ fn step_out_of_function_if_at_last_expression() {
     );
 
     let (nop_in_main, nop_in_f) = {
-        let named_functions = debugger.expect_code();
+        let functions = debugger.expect_code();
 
-        let nop_in_main = named_functions
+        let nop_in_main = functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
@@ -359,7 +359,7 @@ fn step_out_of_function_if_at_last_expression() {
             .nth(1)
             .unwrap()
             .into_location();
-        let nop_in_f = named_functions
+        let nop_in_f = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
