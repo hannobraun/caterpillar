@@ -547,7 +547,7 @@ mod tests {
             ",
         );
 
-        let mut expressions = functions
+        let function = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -560,9 +560,9 @@ mod tests {
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
-            });
-
-        let function = expressions.next().unwrap();
+            })
+            .next()
+            .unwrap();
 
         assert_eq!(function.inputs, []);
 
