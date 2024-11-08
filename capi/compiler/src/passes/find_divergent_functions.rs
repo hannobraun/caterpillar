@@ -5,14 +5,14 @@ use petgraph::{algo::condensation, visit::EdgeRef, Direction, Graph};
 use crate::code::{CallGraph, Expression, Functions};
 
 pub fn find_divergent_functions(
-    named_functions: &Functions,
+    functions: &Functions,
     call_graph: &mut CallGraph,
 ) {
     for cluster in call_graph.clusters_from_leaves_mut() {
         let mut branch_call_graph = Graph::new();
         let mut node_index_by_branch_location = BTreeMap::new();
 
-        for function in cluster.functions(named_functions) {
+        for function in cluster.functions(functions) {
             for branch in function.branches() {
                 let location = branch.location().clone();
 
@@ -21,7 +21,7 @@ pub fn find_divergent_functions(
             }
         }
 
-        for function in cluster.functions(named_functions) {
+        for function in cluster.functions(functions) {
             for branch in function.branches() {
                 for expression in branch.body() {
                     if let Expression::CallToUserDefinedFunctionRecursive {
@@ -34,7 +34,7 @@ pub fn find_divergent_functions(
                                 "Function referred to from recursive call must \
                                 exist in same cluster.",
                             );
-                        let called_function = named_functions
+                        let called_function = functions
                             .find_by_index(called_function_index)
                             .expect(
                                 "Function referred to from cluster must exist.",
@@ -78,7 +78,7 @@ pub fn find_divergent_functions(
         }
 
         let diverging_functions = cluster
-            .functions(named_functions)
+            .functions(functions)
             .filter_map(|function| {
                 let all_branches_are_diverging =
                     function.branches().all(|branch| {
