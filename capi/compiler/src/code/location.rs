@@ -26,7 +26,7 @@ impl ExpressionLocation {
     ) -> ExpressionLocationDisplay<'r> {
         ExpressionLocationDisplay {
             location: self,
-            named_functions: functions,
+            functions,
         }
     }
 }
@@ -36,7 +36,7 @@ impl ExpressionLocation {
 /// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
 pub struct ExpressionLocationDisplay<'r> {
     location: &'r ExpressionLocation,
-    named_functions: &'r Functions,
+    functions: &'r Functions,
 }
 
 impl fmt::Display for ExpressionLocationDisplay<'_> {
@@ -45,7 +45,7 @@ impl fmt::Display for ExpressionLocationDisplay<'_> {
             f,
             "expression {}\n    in {}",
             self.location.index,
-            self.location.parent.display(self.named_functions)
+            self.location.parent.display(self.functions)
         )
     }
 }
