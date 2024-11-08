@@ -44,16 +44,12 @@ impl Located<'_, NamedFunction, Index<NamedFunction>> {
     }
 }
 
-impl<M> Located<'_, NamedFunction, M>
-where
-    M: Clone + Into<FunctionLocation>,
-{
+impl Located<'_, NamedFunction, Index<NamedFunction>> {
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
     ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
         let function = &self.fragment;
-        let location = self.location.clone().into();
 
         function
             .inner
@@ -62,7 +58,7 @@ where
             .map(move |(&index, branch)| Located {
                 fragment: branch,
                 location: BranchLocation {
-                    parent: Box::new(location.clone()),
+                    parent: Box::new(self.location.into()),
                     index,
                 },
             })
@@ -75,7 +71,7 @@ where
         &self,
     ) -> Option<Located<Branch, BranchLocation>> {
         let function = &self.fragment;
-        let location = self.location.clone().into();
+        let location = self.location.into();
 
         if function.inner.branches.len() > 1 {
             return None;
