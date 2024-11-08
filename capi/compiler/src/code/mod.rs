@@ -1,5 +1,3 @@
-#![allow(clippy::module_inception)]
-
 mod call_graph;
 mod changes;
 mod expression;
