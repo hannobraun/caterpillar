@@ -174,18 +174,16 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .body();
-
-        array::from_fn(|_| {
-            body.find_map(|expression| {
+            .body()
+            .filter_map(|expression| {
                 if expression.as_comment().is_none() {
                     Some(expression.location)
                 } else {
                     None
                 }
-            })
-            .unwrap()
-        })
+            });
+
+        array::from_fn(|_| body.next().unwrap())
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
