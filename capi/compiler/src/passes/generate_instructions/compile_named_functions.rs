@@ -12,7 +12,7 @@ use crate::{
 use super::compile_cluster::compile_cluster;
 
 pub struct NamedFunctionsContext<'r> {
-    pub named_functions: &'r Functions,
+    pub functions: &'r Functions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
@@ -33,7 +33,7 @@ pub fn compile_named_functions(
     >,
 ) {
     let mut context = NamedFunctionsContext {
-        named_functions,
+        functions: named_functions,
         instructions,
         source_map,
         call_instructions_by_callee,

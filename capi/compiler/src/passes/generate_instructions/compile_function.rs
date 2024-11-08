@@ -208,7 +208,7 @@ fn compile_expression(
                 .get(&hash)
             else {
                 let function = named_functions_context
-                    .named_functions
+                    .functions
                     .functions()
                     .find(|&function| Hash::new(function) == hash);
 
@@ -255,7 +255,7 @@ fn compile_expression(
                 let function_index_in_root_context = cluster.functions[&index];
 
                 let called_function = named_functions_context
-                    .named_functions
+                    .functions
                     .get(&function_index_in_root_context)
                     .expect("Function referred to from cluster must exist.");
 
