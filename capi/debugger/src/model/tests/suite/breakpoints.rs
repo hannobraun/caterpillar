@@ -25,8 +25,8 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         )
         .run_program();
 
-    let named_functions = debugger.expect_code();
-    let nop = named_functions
+    let functions = debugger.expect_code();
+    let nop = functions
         .find_by_name("main")
         .unwrap()
         .find_single_branch()
