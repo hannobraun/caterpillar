@@ -699,7 +699,7 @@ mod tests {
 
     #[test]
     fn infer_self_recursive_non_empty_function() {
-        let (named_functions_a, types_a) = infer_types(
+        let (functions_a, types_a) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -724,7 +724,7 @@ mod tests {
             ",
         );
 
-        check(&named_functions_a, &types_a);
+        check(&functions_a, &types_a);
         check(&named_functions_b, &types_b);
 
         fn check(named_functions: &Functions, types: &Types) {
