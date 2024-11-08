@@ -487,6 +487,8 @@ enum ExpressionInference {
 
 #[cfg(test)]
 mod tests {
+    use itertools::Itertools;
+
     use crate::{
         code::{ConcreteSignature, Functions, Type, Types},
         host::{Host, HostFunction},
@@ -508,7 +510,7 @@ mod tests {
             ",
         );
 
-        let mut expressions = functions
+        let (n, host_fn) = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -521,10 +523,10 @@ mod tests {
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
-            });
-
-        let n = expressions.next().unwrap();
-        let host_fn = expressions.next().unwrap();
+            })
+            .take(2)
+            .collect_tuple()
+            .unwrap();
 
         use Type::*;
         assert_eq!(n, ConcreteSignature::from(([], [Number])));
