@@ -167,9 +167,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         ",
     );
 
-    let [a, b, c] = {
+    let (a, b, c) = {
         let functions = debugger.expect_code();
-        let mut body = functions
+        functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
@@ -181,9 +181,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
                 } else {
                     None
                 }
-            });
-
-        array::from_fn(|_| body.next().unwrap())
+            })
+            .collect_tuple()
+            .unwrap()
     };
 
     // Set a durable breakpoint at `a`. The program should stop there.
