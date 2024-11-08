@@ -53,7 +53,7 @@ impl Functions {
     }
 
     /// # Find the named function with the provided hash
-    pub fn find_by_hash(
+    pub fn find_named_by_hash(
         &self,
         hash: &Hash<Function>,
     ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
