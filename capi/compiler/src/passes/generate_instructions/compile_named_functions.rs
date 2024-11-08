@@ -21,7 +21,7 @@ pub struct FunctionsContext<'r> {
 }
 
 pub fn compile_named_functions(
-    named_functions: &Functions,
+    functions: &Functions,
     changes: &Changes,
     call_graph: &CallGraph,
     instructions: &mut Instructions,
@@ -33,7 +33,7 @@ pub fn compile_named_functions(
     >,
 ) {
     let mut context = FunctionsContext {
-        functions: named_functions,
+        functions,
         instructions,
         source_map,
         call_instructions_by_callee,
