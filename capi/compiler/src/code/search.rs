@@ -129,11 +129,6 @@ impl Located<Branch, BranchLocation> {
 }
 
 impl Located<Expression, ExpressionLocation> {
-    /// # Access the expression's location
-    pub fn location(&self) -> &ExpressionLocation {
-        &self.location
-    }
-
     /// # Consume the found expression, returning its location
     pub fn into_location(self) -> ExpressionLocation {
         self.location

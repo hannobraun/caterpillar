@@ -517,7 +517,7 @@ mod tests {
             .map(|expression| {
                 types
                     .of_expressions
-                    .get(expression.location())
+                    .get(&expression.location)
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
@@ -554,7 +554,7 @@ mod tests {
             .map(|expression| {
                 types
                     .of_expressions
-                    .get(expression.location())
+                    .get(&expression.location)
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
