@@ -28,7 +28,7 @@ impl<T: HasLocation, M> Deref for Located<'_, T, M> {
     }
 }
 
-impl<F: HasLocation> Located<'_, F, Index<NamedFunction>> {
+impl Located<'_, NamedFunction, Index<NamedFunction>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
