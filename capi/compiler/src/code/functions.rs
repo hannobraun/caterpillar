@@ -156,15 +156,6 @@ impl Functions {
     }
 }
 
-impl<'r> IntoIterator for &'r Functions {
-    type Item = <&'r FunctionsInner as IntoIterator>::Item;
-    type IntoIter = <&'r FunctionsInner as IntoIterator>::IntoIter;
-
-    fn into_iter(self) -> Self::IntoIter {
-        (&self.inner).into_iter()
-    }
-}
-
 type FunctionsInner = IndexMap<Function>;
 
 #[derive(
