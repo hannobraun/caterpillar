@@ -62,8 +62,7 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<NamedFunction> {
         }
     };
 
-    let mut function = parse_function(tokens)?;
-    function.name = Some(name.clone());
+    let function = parse_function(tokens)?;
 
     Some(NamedFunction {
         name,

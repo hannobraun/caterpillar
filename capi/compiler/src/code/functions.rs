@@ -31,8 +31,6 @@ impl Functions {
     ///
     /// Panics, if the added function does not have a name.
     pub fn insert_named(&mut self, function: NamedFunction) {
-        assert_eq!(Some(&function.name), function.inner.name.as_ref(),);
-
         self.inner.push(function);
     }
 
@@ -184,22 +182,6 @@ pub struct NamedFunction {
     udigest::Digestable,
 )]
 pub struct Function {
-    /// # The name of this function, if available
-    ///
-    /// A name is not available for anonymous functions.
-    ///
-    /// ## Implementation Note
-    ///
-    /// This happens to work for now, but it is a stopgap. It makes more sense
-    /// to associate a name with a function where it is defined. As of this
-    /// writing, this would be the root scope for all named functions. In the
-    /// future, it could be any module.
-    ///
-    /// This would also allow supporting function aliases. Right now, these
-    /// would break the assumption that is encoded here, that all functions have
-    /// at most one name.
-    pub name: Option<String>,
-
     /// # The branches of this function
     ///
     /// A function is made up of one or more branches. When a function is

@@ -328,11 +328,6 @@ fn compile_expression(
         }
         Expression::Comment { .. } => None,
         Expression::LiteralFunction { function } => {
-            assert!(
-                function.name.is_none(),
-                "Encountered an anonymous function, but it has a name."
-            );
-
             // We have encountered an anonymous function. We need to emit an
             // instruction that allocates it, and takes care of its environment.
             //
