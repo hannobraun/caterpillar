@@ -11,9 +11,9 @@ pub fn detect_changes(
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for (new_index, new_function) in new_functions {
+    for new_function in new_functions.named_functions() {
         if old_functions
-            .find_by_hash(&Hash::new(new_function))
+            .find_by_hash(&Hash::new(new_function.find))
             .is_some()
         {
             // Function has not changed. We can forget about it.
@@ -34,7 +34,7 @@ pub fn detect_changes(
                     function: old_function.clone(),
                 },
                 new: FunctionInUpdate {
-                    index: *new_index,
+                    index: new_function.index(),
                     function: new_function.clone(),
                 },
             });
@@ -44,7 +44,7 @@ pub fn detect_changes(
 
         // If we make it here, there was neither an identical function before,
         // nor one with the same name. This must mean this function is new.
-        added.insert(*new_index, new_function.clone());
+        added.insert(new_function.index(), new_function.clone());
     }
 
     Changes { added, updated }
