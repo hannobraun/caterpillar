@@ -6,8 +6,8 @@
 use std::ops::Deref;
 
 use super::{
-    Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Index, NamedFunction,
+    Branch, BranchLocation, Expression, ExpressionLocation, FunctionLocation,
+    Index, NamedFunction,
 };
 
 /// # The result of a search, alongside search-specific metadata
@@ -85,54 +85,6 @@ where
 
         function
             .inner
-            .branches
-            .first_key_value()
-            .map(|(&index, branch)| Find {
-                find: branch.clone(),
-                metadata: BranchLocation {
-                    parent: Box::new(location),
-                    index,
-                },
-            })
-    }
-}
-
-impl<M> Find<&Function, M>
-where
-    M: Clone + Into<FunctionLocation>,
-{
-    /// # Iterate over the function's branches
-    pub fn branches(
-        &self,
-    ) -> impl Iterator<Item = Find<Branch, BranchLocation>> {
-        let function = &self.find;
-        let location = self.metadata.clone().into();
-
-        function
-            .branches
-            .clone()
-            .into_iter()
-            .map(move |(index, branch)| Find {
-                find: branch,
-                metadata: BranchLocation {
-                    parent: Box::new(location.clone()),
-                    index,
-                },
-            })
-    }
-
-    /// # Access the function's single branch
-    ///
-    /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(&self) -> Option<Find<Branch, BranchLocation>> {
-        let function = &self.find;
-        let location = self.metadata.clone().into();
-
-        if function.branches.len() > 1 {
-            return None;
-        }
-
-        function
             .branches
             .first_key_value()
             .map(|(&index, branch)| Find {
