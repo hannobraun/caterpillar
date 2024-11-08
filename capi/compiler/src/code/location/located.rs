@@ -4,19 +4,13 @@ use crate::code::{Branch, Expression, Index, NamedFunction};
 
 use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 
-/// # The result of a search, alongside search-specific metadata
-///
-/// This type provides a convenient way for searches to return that additional
-/// metadata, without complicating the handling of the return value too much.
-///
-/// In addition, it provides a target for attaching addition result-specific
-/// APIs to, that would otherwise be very inconvenient to access.
+/// # A fragment of code, with its location attached
 #[derive(Debug)]
 pub struct Located<'r, T: HasLocation> {
-    /// # The result of the search
+    /// # The code fragment
     pub fragment: &'r T,
 
-    /// # The additional search-specific metadata
+    /// # The location of the code fragment
     pub location: T::Location,
 }
 
