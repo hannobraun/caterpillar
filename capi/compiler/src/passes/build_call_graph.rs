@@ -10,8 +10,8 @@ use crate::code::{
     CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
 };
 
-pub fn build_call_graph(named_functions: &Functions) -> CallGraph {
-    let pet_call_graph = build_pet_call_graph(named_functions);
+pub fn build_call_graph(functions: &Functions) -> CallGraph {
+    let pet_call_graph = build_pet_call_graph(functions);
     let clusters = collect_functions_into_clusters(pet_call_graph);
     CallGraph::from_clusters(clusters)
 }
