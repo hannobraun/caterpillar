@@ -350,8 +350,8 @@ mod tests {
 
     fn create_call_graph(source: &str) -> CallGraph {
         let tokens = tokenize(source);
-        let mut named_functions = parse(tokens);
-        resolve_most_identifiers(&mut named_functions, &NoHost);
-        super::build_call_graph(&named_functions)
+        let mut functions = parse(tokens);
+        resolve_most_identifiers(&mut functions, &NoHost);
+        super::build_call_graph(&functions)
     }
 }
