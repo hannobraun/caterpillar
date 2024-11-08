@@ -623,7 +623,7 @@ mod tests {
 
     #[test]
     fn infer_signatures_of_branch_and_function() {
-        let (named_functions, types) = infer_types(
+        let (functions, types) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -633,7 +633,7 @@ mod tests {
             ",
         );
 
-        let branch = named_functions
+        let branch = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -646,7 +646,7 @@ mod tests {
                     .unwrap()
             })
             .unwrap();
-        let function = named_functions
+        let function = functions
             .find_by_name("f")
             .map(|function| {
                 types
