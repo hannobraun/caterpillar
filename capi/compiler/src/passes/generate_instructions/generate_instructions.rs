@@ -72,7 +72,10 @@ fn compile_call_to_main(
     call_to_main: InstructionAddress,
     named_functions: &Functions,
     instructions: &mut Instructions,
-    functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
+    compiled_functions_by_hash: &mut BTreeMap<
+        Hash<Function>,
+        capi_runtime::Function,
+    >,
 ) {
     let Some(main) = named_functions.find_by_name("main") else {
         // If we can't find the call to `main`, that is a result of invalid
@@ -87,7 +90,7 @@ fn compile_call_to_main(
             address: call_to_main,
             is_tail_call: true,
         },
-        functions,
+        compiled_functions_by_hash,
         instructions,
     );
 }
