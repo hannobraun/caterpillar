@@ -13,12 +13,15 @@ pub fn resolve_calls_to_user_defined_functions(
             .get_mut(index)
             .expect("Function referred to from call graph must exist.");
 
-        resolve_calls_in_function(function, &mut resolved_hashes_by_name);
+        resolve_calls_in_function(
+            &mut function.inner,
+            &mut resolved_hashes_by_name,
+        );
 
-        let name = function.name.clone().expect(
+        let name = function.inner.name.clone().expect(
             "Just compiled a named function; should have its name set.",
         );
-        resolved_hashes_by_name.insert(name, Hash::new(function));
+        resolved_hashes_by_name.insert(name, Hash::new(&function.inner));
     }
 }
 

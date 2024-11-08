@@ -48,10 +48,8 @@ impl Functions {
     pub fn get_mut(
         &mut self,
         index: &Index<NamedFunction>,
-    ) -> Option<&mut Function> {
-        self.inner
-            .get_mut(index)
-            .map(|function| &mut function.inner)
+    ) -> Option<&mut NamedFunction> {
+        self.inner.get_mut(index)
     }
 
     /// # Find the named function with the provided hash

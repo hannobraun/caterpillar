@@ -30,7 +30,7 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
                 .expect("Functions referred to from clusters must exist.");
 
             mark_recursive_calls_in_function(
-                function,
+                &mut function.inner,
                 &indices_in_cluster_by_function_name,
             );
         }
