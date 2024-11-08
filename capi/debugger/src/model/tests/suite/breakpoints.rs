@@ -451,24 +451,22 @@ fn step_over_function_call() {
         ",
     );
 
-    let (f, nop) = {
-        debugger
-            .expect_code()
-            .find_by_name("main")
-            .unwrap()
-            .find_single_branch()
-            .unwrap()
-            .body()
-            .filter_map(|expression| {
-                if expression.as_comment().is_none() {
-                    Some(expression.location)
-                } else {
-                    None
-                }
-            })
-            .collect_tuple()
-            .unwrap()
-    };
+    let (f, nop) = debugger
+        .expect_code()
+        .find_by_name("main")
+        .unwrap()
+        .find_single_branch()
+        .unwrap()
+        .body()
+        .filter_map(|expression| {
+            if expression.as_comment().is_none() {
+                Some(expression.location)
+            } else {
+                None
+            }
+        })
+        .collect_tuple()
+        .unwrap();
 
     debugger
         .on_user_action(UserAction::BreakpointSet { expression: f })
