@@ -166,7 +166,7 @@ impl DebugExpressionKind {
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        named_functions: &Functions,
+        functions: &Functions,
         types: &Types,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -175,7 +175,7 @@ impl DebugExpressionKind {
         match expression {
             Expression::Binding { name, .. } => Self::Binding { name },
             Expression::CallToUserDefinedFunction { hash, .. } => {
-                let function = named_functions
+                let function = functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone().expect(
@@ -196,7 +196,7 @@ impl DebugExpressionKind {
                     calling function's cluster.",
                 );
                 let called_function =
-                    named_functions.get(called_function_index).expect(
+                    functions.get(called_function_index).expect(
                         "Expecting to find expression referred to from a \
                         cluster.",
                     );
@@ -231,7 +231,7 @@ impl DebugExpressionKind {
                     active_expression,
                     is_in_innermost_active_function,
                     cluster,
-                    named_functions,
+                    functions,
                     types,
                     source_map,
                     breakpoints,
