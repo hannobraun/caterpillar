@@ -60,8 +60,8 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         ",
     );
 
-    let named_functions = debugger.expect_code();
-    let nop = named_functions
+    let functions = debugger.expect_code();
+    let nop = functions
         .find_by_name("main")
         .unwrap()
         .find_single_branch()
