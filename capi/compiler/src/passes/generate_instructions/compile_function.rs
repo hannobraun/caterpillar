@@ -186,9 +186,9 @@ fn compile_expression(
     location: ExpressionLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut FunctionsContext,
+    functions_context: &mut FunctionsContext,
 ) -> Option<InstructionAddress> {
-    let mut mapping = named_functions_context
+    let mut mapping = functions_context
         .source_map
         .map_expression_to_instructions(location.clone());
 
@@ -196,17 +196,16 @@ fn compile_expression(
         Expression::Binding { name, .. } => {
             let address = generate_instruction(
                 Instruction::BindingEvaluate { name: name.clone() },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
         }
         Expression::CallToUserDefinedFunction { hash, is_tail_call } => {
-            let Some(function) = named_functions_context
-                .compiled_functions_by_hash
-                .get(&hash)
+            let Some(function) =
+                functions_context.compiled_functions_by_hash.get(&hash)
             else {
-                let function = named_functions_context
+                let function = functions_context
                     .functions
                     .functions()
                     .find(|&function| Hash::new(function) == hash);
@@ -227,7 +226,7 @@ fn compile_expression(
                     function: function.clone(),
                     is_tail_call,
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
 
@@ -237,7 +236,7 @@ fn compile_expression(
             // them.
             //
             // Let's make sure that information is going to be available.
-            named_functions_context
+            functions_context
                 .call_instructions_by_callee
                 .inner
                 .entry(hash)
@@ -253,7 +252,7 @@ fn compile_expression(
             let hash = {
                 let function_index_in_root_context = cluster.functions[&index];
 
-                let called_function = named_functions_context
+                let called_function = functions_context
                     .functions
                     .get(&function_index_in_root_context)
                     .expect("Function referred to from cluster must exist.");
@@ -271,7 +270,7 @@ fn compile_expression(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             cluster_context
@@ -289,7 +288,7 @@ fn compile_expression(
             // them.
             //
             // Let's make sure that information is going to be available.
-            named_functions_context
+            functions_context
                 .call_instructions_by_callee
                 .inner
                 .entry(hash)
@@ -303,14 +302,14 @@ fn compile_expression(
                 Instruction::Push {
                     value: number.into(),
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::Host,
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
@@ -322,7 +321,7 @@ fn compile_expression(
             let address = compile_intrinsic(
                 intrinsic,
                 is_tail_call,
-                named_functions_context.instructions,
+                functions_context.instructions,
                 &mut mapping,
             );
             Some(address)
@@ -356,7 +355,7 @@ fn compile_expression(
                 Instruction::TriggerEffect {
                     effect: Effect::CompilerBug,
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
 
@@ -376,7 +375,7 @@ fn compile_expression(
         Expression::LiteralNumber { value } => {
             let address = generate_instruction(
                 Instruction::Push { value },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
@@ -386,7 +385,7 @@ fn compile_expression(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,
                 },
-                named_functions_context.instructions,
+                functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
