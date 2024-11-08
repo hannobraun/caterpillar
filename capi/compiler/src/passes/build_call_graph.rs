@@ -16,11 +16,11 @@ pub fn build_call_graph(functions: &Functions) -> CallGraph {
     CallGraph::from_clusters(clusters)
 }
 
-fn build_pet_call_graph(named_functions: &Functions) -> PetCallGraph {
+fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for (named_function_index, function) in named_functions {
+    for (named_function_index, function) in functions {
         let name = function
             .name
             .as_ref()
