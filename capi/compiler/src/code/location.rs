@@ -74,7 +74,7 @@ impl BranchLocation {
     ) -> BranchLocationDisplay<'r> {
         BranchLocationDisplay {
             location: self,
-            named_functions: functions,
+            functions,
         }
     }
 }
@@ -84,7 +84,7 @@ impl BranchLocation {
 /// Implements [`fmt::Display`], which [`BranchLocation`] itself doesn't.
 pub struct BranchLocationDisplay<'r> {
     location: &'r BranchLocation,
-    named_functions: &'r Functions,
+    functions: &'r Functions,
 }
 
 impl fmt::Display for BranchLocationDisplay<'_> {
@@ -93,7 +93,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
             f,
             "branch {} of {}",
             self.location.index,
-            self.location.parent.display(self.named_functions),
+            self.location.parent.display(self.functions),
         )
     }
 }
