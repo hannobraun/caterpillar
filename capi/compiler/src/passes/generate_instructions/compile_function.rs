@@ -80,7 +80,7 @@ fn compile_branch(
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut FunctionsContext,
+    functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
         match pattern {
@@ -95,14 +95,14 @@ fn compile_branch(
         }
     });
     let bindings_address =
-        compile_binding(parameters, named_functions_context.instructions);
+        compile_binding(parameters, functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
         branch.body,
         location,
         cluster,
         cluster_context,
-        named_functions_context,
+        functions_context,
     );
 
     let first_address = bindings_address.unwrap_or(branch_address);
