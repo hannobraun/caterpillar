@@ -98,3 +98,17 @@ pub trait HasLocation {
     /// # The location of this fragment
     type Location;
 }
+
+impl<T> HasLocation for &T
+where
+    T: HasLocation,
+{
+    type Location = T::Location;
+}
+
+impl<T> HasLocation for &mut T
+where
+    T: HasLocation,
+{
+    type Location = T::Location;
+}
