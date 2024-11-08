@@ -122,7 +122,7 @@ impl FunctionLocation {
     ) -> FunctionLocationDisplay<'r> {
         FunctionLocationDisplay {
             location: self,
-            named_functions: functions,
+            functions,
         }
     }
 }
@@ -138,7 +138,7 @@ impl From<Index<Function>> for FunctionLocation {
 /// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
 pub struct FunctionLocationDisplay<'r> {
     location: &'r FunctionLocation,
-    named_functions: &'r Functions,
+    functions: &'r Functions,
 }
 
 impl fmt::Display for FunctionLocationDisplay<'_> {
@@ -146,7 +146,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
         match self.location {
             FunctionLocation::NamedFunction { index } => {
                 let name = self
-                    .named_functions
+                    .functions
                     .find_by_index(index)
                     .expect("Named function referred to be index must exist")
                     .name
@@ -159,7 +159,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 write!(
                     f,
                     "anonymous function at {}",
-                    location.display(self.named_functions),
+                    location.display(self.functions),
                 )?;
             }
         }
