@@ -1,7 +1,5 @@
 #![allow(clippy::module_inception)]
 
-pub mod search;
-
 mod call_graph;
 mod changes;
 mod expression;
@@ -18,7 +16,6 @@ pub use self::{
     functions::{Branch, Function, Functions, NamedFunction, Pattern},
     hash::Hash,
     index::{Index, IndexMap},
-    location::{BranchLocation, ExpressionLocation, FunctionLocation},
-    search::Located,
+    location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
     types::{ConcreteSignature, Signature, Type, Types},
 };
