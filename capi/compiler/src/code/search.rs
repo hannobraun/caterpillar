@@ -71,6 +71,30 @@ where
             },
         )
     }
+
+    /// # Access the function's single branch
+    ///
+    /// Returns `None`, if the function does not have exactly one branch.
+    pub fn find_single_branch(&self) -> Option<Find<Branch, BranchLocation>> {
+        let function = &self.find;
+        let location = self.metadata.clone().into();
+
+        if function.inner.branches.len() > 1 {
+            return None;
+        }
+
+        function
+            .inner
+            .branches
+            .first_key_value()
+            .map(|(&index, branch)| Find {
+                find: branch.clone(),
+                metadata: BranchLocation {
+                    parent: Box::new(location),
+                    index,
+                },
+            })
+    }
 }
 
 impl<M> Find<&Function, M>
