@@ -197,10 +197,7 @@ impl DebugExpressionKind {
                         "Expecting to find expression referred to from a \
                         cluster.",
                     );
-                let name = called_function.inner.name.clone().expect(
-                    "Calling anonymous functions recursively is not possible. \
-                    Target of recursive function call must have a name.",
-                );
+                let name = called_function.name.clone();
 
                 Self::CallToFunctionRecursive { name }
             }
