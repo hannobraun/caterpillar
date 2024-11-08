@@ -1,8 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::code::{
-    search::Find, Changes, FunctionInUpdate, FunctionUpdate, Functions, Hash,
-};
+use crate::code::{Changes, FunctionInUpdate, FunctionUpdate, Functions, Hash};
 
 pub fn detect_changes(
     old_functions: Option<Functions>,
@@ -26,17 +24,13 @@ pub fn detect_changes(
             .name
             .as_deref()
             .expect("Named function should have a name.");
-        if let Some(Find {
-            find: old_function,
-            metadata: old_index,
-        }) = old_functions.find_by_name(name)
-        {
+        if let Some(old_function) = old_functions.find_by_name(name) {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function
             // is an updated version of the old.
             updated.push(FunctionUpdate {
                 old: FunctionInUpdate {
-                    index: old_index,
+                    index: old_function.index(),
                     function: old_function.clone(),
                 },
                 new: FunctionInUpdate {
