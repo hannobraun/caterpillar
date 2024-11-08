@@ -78,7 +78,7 @@ impl ActiveFunctions {
                 code.source_map.instruction_to_expression(&address);
 
             if let Some(expected_name) = &expected_next_function {
-                if Some(expected_name) != named_function.inner.name.as_ref() {
+                if expected_name != &named_function.name {
                     reconstruct_function(
                         expected_name,
                         &mut entries,
