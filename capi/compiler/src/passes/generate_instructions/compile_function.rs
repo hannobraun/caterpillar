@@ -22,7 +22,7 @@ pub fn compile_function(
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut FunctionsContext,
+    functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
@@ -36,7 +36,7 @@ pub fn compile_function(
             },
             cluster,
             cluster_context,
-            named_functions_context,
+            functions_context,
         );
 
         runtime_function.branches.push(runtime_branch);
@@ -50,13 +50,13 @@ pub fn compile_function(
     }
 
     if let Some(instruction_range) = instruction_range {
-        named_functions_context
+        functions_context
             .source_map
             .map_function_to_instructions(location, instruction_range);
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {
-        named_functions_context.instructions.replace(
+        functions_context.instructions.replace(
             &address,
             Instruction::MakeAnonymousFunction {
                 branches: runtime_function.branches.clone(),
