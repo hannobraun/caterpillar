@@ -21,7 +21,7 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    inner: NamedFunctionsInner,
+    inner: FunctionsInner,
 }
 
 impl Functions {
@@ -150,8 +150,8 @@ impl Functions {
 }
 
 impl IntoIterator for Functions {
-    type Item = <NamedFunctionsInner as IntoIterator>::Item;
-    type IntoIter = <NamedFunctionsInner as IntoIterator>::IntoIter;
+    type Item = <FunctionsInner as IntoIterator>::Item;
+    type IntoIter = <FunctionsInner as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
@@ -159,15 +159,15 @@ impl IntoIterator for Functions {
 }
 
 impl<'r> IntoIterator for &'r Functions {
-    type Item = <&'r NamedFunctionsInner as IntoIterator>::Item;
-    type IntoIter = <&'r NamedFunctionsInner as IntoIterator>::IntoIter;
+    type Item = <&'r FunctionsInner as IntoIterator>::Item;
+    type IntoIter = <&'r FunctionsInner as IntoIterator>::IntoIter;
 
     fn into_iter(self) -> Self::IntoIter {
         (&self.inner).into_iter()
     }
 }
 
-type NamedFunctionsInner = IndexMap<Function>;
+type FunctionsInner = IndexMap<Function>;
 
 #[derive(
     Clone,
