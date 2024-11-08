@@ -34,7 +34,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .body()
         .next()
         .unwrap()
-        .into_location();
+        .location;
 
     assert!(!debugger.expect_expression(&nop).data.has_durable_breakpoint);
 
@@ -69,7 +69,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .body()
         .next()
         .unwrap()
-        .into_location();
+        .location;
     debugger.on_user_action(UserAction::BreakpointSet {
         expression: nop.clone(),
     })?;
@@ -116,7 +116,7 @@ fn step_over_brk() -> anyhow::Result<()> {
             .find_single_branch()
             .unwrap()
             .body()
-            .map(|expression| expression.into_location());
+            .map(|expression| expression.location);
 
         array::from_fn(|_| body.next().unwrap())
     };
@@ -179,7 +179,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         array::from_fn(|_| {
             body.find_map(|expression| {
                 if expression.as_comment().is_none() {
-                    Some(expression.into_location())
+                    Some(expression.location)
                 } else {
                     None
                 }
@@ -290,7 +290,7 @@ fn step_into_function() {
             .body()
             .nth(2)
             .unwrap()
-            .into_location();
+            .location;
         let a = functions
             .find_by_name("f")
             .unwrap()
@@ -300,7 +300,7 @@ fn step_into_function() {
             .body()
             .next()
             .unwrap()
-            .into_location();
+            .location;
 
         (f, a)
     };
@@ -358,7 +358,7 @@ fn step_out_of_function_if_at_last_expression() {
             .body()
             .nth(1)
             .unwrap()
-            .into_location();
+            .location;
         let nop_in_f = functions
             .find_by_name("f")
             .unwrap()
@@ -367,7 +367,7 @@ fn step_out_of_function_if_at_last_expression() {
             .body()
             .next()
             .unwrap()
-            .into_location();
+            .location;
 
         (nop_in_main, nop_in_f)
     };
@@ -420,7 +420,7 @@ fn step_out_of_main_function() {
             .body()
             .next()
             .unwrap()
-            .into_location()
+            .location
     };
 
     debugger
@@ -469,7 +469,7 @@ fn step_over_function_call() {
         array::from_fn(|_| {
             body.find_map(|expression| {
                 if expression.as_comment().is_none() {
-                    Some(expression.into_location())
+                    Some(expression.location)
                 } else {
                     None
                 }
@@ -528,7 +528,7 @@ fn step_out_of_function() {
             .body()
             .next()
             .unwrap()
-            .into_location();
+            .location;
         let b = functions
             .find_by_name("main")
             .unwrap()
@@ -537,7 +537,7 @@ fn step_out_of_function() {
             .body()
             .nth(1)
             .unwrap()
-            .into_location();
+            .location;
 
         (a, b)
     };

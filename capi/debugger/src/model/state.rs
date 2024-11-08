@@ -101,7 +101,7 @@ impl PersistentState {
                     function
                         .branches()
                         .filter_map(|branch| branch.body().next())
-                        .map(|expression| expression.into_location())
+                        .map(|expression| expression.location)
                         .collect()
                 } else {
                     let mut expression = origin.clone();
