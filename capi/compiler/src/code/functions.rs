@@ -144,7 +144,7 @@ impl Functions {
     }
 
     /// # Consume this instance and return an iterator over the functions
-    pub fn into_functions(self) -> impl Iterator<Item = Function> {
+    pub fn into_named_functions(self) -> impl Iterator<Item = Function> {
         self.inner.into_values()
     }
 }

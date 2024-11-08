@@ -106,7 +106,7 @@ mod tests {
             ",
         );
 
-        for mut function in functions.into_functions() {
+        for mut function in functions.into_named_functions() {
             let Expression::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
@@ -156,7 +156,7 @@ mod tests {
             ",
         );
 
-        let mut functions = functions.into_functions();
+        let mut functions = functions.into_named_functions();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 

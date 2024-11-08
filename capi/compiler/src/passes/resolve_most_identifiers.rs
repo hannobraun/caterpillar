@@ -311,7 +311,7 @@ mod tests {
         super::resolve_most_identifiers(&mut functions, &TestHost {});
 
         functions
-            .into_functions()
+            .into_named_functions()
             .flat_map(|function| function.branches.into_values())
             .collect()
     }
