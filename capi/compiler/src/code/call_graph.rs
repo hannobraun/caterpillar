@@ -1,7 +1,7 @@
 use std::{collections::BTreeSet, iter};
 
 use super::{
-    search::Located, BranchLocation, Functions, Index, IndexMap, NamedFunction,
+    BranchLocation, Functions, Index, IndexMap, Located, NamedFunction,
 };
 
 /// # The program's named functions, organized as a call graph

@@ -5,8 +5,8 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    search::Located, BranchLocation, Cluster, Expression, ExpressionLocation,
-    FunctionLocation, Hash, IndexMap,
+    BranchLocation, Cluster, Expression, ExpressionLocation, FunctionLocation,
+    Hash, IndexMap, Located,
 };
 
 /// # All named functions in a program

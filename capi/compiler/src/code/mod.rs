@@ -19,5 +19,6 @@ pub use self::{
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation},
+    search::Located,
     types::{ConcreteSignature, Signature, Type, Types},
 };
