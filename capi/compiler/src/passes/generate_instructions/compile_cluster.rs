@@ -7,7 +7,7 @@ use super::{
         compile_call_to_function, compile_function, CallToFunction,
         FunctionToCompile,
     },
-    compile_named_functions::NamedFunctionsContext,
+    compile_named_functions::FunctionsContext,
 };
 
 pub struct ClusterContext {
@@ -36,7 +36,7 @@ pub struct ClusterContext {
 pub fn compile_cluster(
     cluster: &Cluster,
     changes: &Changes,
-    named_functions_context: &mut NamedFunctionsContext,
+    named_functions_context: &mut FunctionsContext,
 ) {
     let mut context = ClusterContext {
         queue_of_functions_to_compile: VecDeque::new(),

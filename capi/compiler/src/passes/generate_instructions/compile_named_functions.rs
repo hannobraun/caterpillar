@@ -11,7 +11,7 @@ use crate::{
 
 use super::compile_cluster::compile_cluster;
 
-pub struct NamedFunctionsContext<'r> {
+pub struct FunctionsContext<'r> {
     pub functions: &'r Functions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
@@ -32,7 +32,7 @@ pub fn compile_named_functions(
         capi_runtime::Function,
     >,
 ) {
-    let mut context = NamedFunctionsContext {
+    let mut context = FunctionsContext {
         functions: named_functions,
         instructions,
         source_map,

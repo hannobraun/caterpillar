@@ -13,8 +13,7 @@ use crate::{
 };
 
 use super::{
-    compile_cluster::ClusterContext,
-    compile_named_functions::NamedFunctionsContext,
+    compile_cluster::ClusterContext, compile_named_functions::FunctionsContext,
 };
 
 pub fn compile_function(
@@ -23,7 +22,7 @@ pub fn compile_function(
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut NamedFunctionsContext,
+    named_functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
@@ -81,7 +80,7 @@ fn compile_branch(
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut NamedFunctionsContext,
+    named_functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.iter().filter_map(|pattern| {
         match pattern {
@@ -133,7 +132,7 @@ fn compile_branch_body(
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut NamedFunctionsContext,
+    named_functions_context: &mut FunctionsContext,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -187,7 +186,7 @@ fn compile_expression(
     location: ExpressionLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut NamedFunctionsContext,
+    named_functions_context: &mut FunctionsContext,
 ) -> Option<InstructionAddress> {
     let mut mapping = named_functions_context
         .source_map
