@@ -668,7 +668,7 @@ mod tests {
 
     #[test]
     fn infer_self_recursive_function_as_empty() {
-        let (named_functions, types) = infer_types(
+        let (functions, types) = infer_types(
             r"
                 f: fn
                     \ a, b, 0 ->
@@ -678,7 +678,7 @@ mod tests {
             ",
         );
 
-        let f = named_functions
+        let f = functions
             .find_by_name("f")
             .map(|function| {
                 types
