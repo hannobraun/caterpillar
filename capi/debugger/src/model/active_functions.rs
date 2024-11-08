@@ -60,7 +60,7 @@ impl ActiveFunctions {
 
         if let Some(outer) = active_instructions.front() {
             let (outer, _) = instruction_to_named_function(outer, code);
-            if outer.inner.name != expected_next_function {
+            if Some(outer.name) != expected_next_function {
                 expected_next_function = reconstruct_function(
                     "main",
                     &mut entries,
