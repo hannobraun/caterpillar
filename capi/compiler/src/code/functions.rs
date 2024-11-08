@@ -21,7 +21,7 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    inner: FunctionsInner,
+    inner: IndexMap<Function>,
 }
 
 impl Functions {
@@ -155,8 +155,6 @@ impl Functions {
         self.inner.into_values()
     }
 }
-
-type FunctionsInner = IndexMap<Function>;
 
 #[derive(
     Clone,
