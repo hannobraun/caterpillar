@@ -1,6 +1,8 @@
 use std::collections::VecDeque;
 
-use crate::code::{Branch, Expression, Function, Functions, Pattern};
+use crate::code::{
+    Branch, Expression, Function, Functions, NamedFunction, Pattern,
+};
 
 use super::tokenize::Token;
 
@@ -36,13 +38,13 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut functions = Functions::default();
 
     while let Some(function) = parse_named_function(&mut tokens) {
-        functions.insert_named(function);
+        functions.insert_named(function.inner);
     }
 
     functions
 }
 
-fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
+fn parse_named_function(tokens: &mut Tokens) -> Option<NamedFunction> {
     let name = loop {
         if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
@@ -61,9 +63,12 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
     };
 
     let mut function = parse_function(tokens)?;
-    function.name = Some(name);
+    function.name = Some(name.clone());
 
-    Some(function)
+    Some(NamedFunction {
+        name,
+        inner: function,
+    })
 }
 
 fn parse_function(tokens: &mut Tokens) -> Option<Function> {
