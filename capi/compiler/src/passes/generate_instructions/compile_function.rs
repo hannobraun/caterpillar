@@ -207,7 +207,7 @@ fn compile_expression(
             else {
                 let function = functions_context
                     .functions
-                    .functions()
+                    .named_functions()
                     .find(|&function| Hash::new(function) == hash);
 
                 panic!(

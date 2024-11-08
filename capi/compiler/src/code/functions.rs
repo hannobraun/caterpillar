@@ -134,7 +134,7 @@ impl Functions {
     }
 
     /// # Iterate over the named functions
-    pub fn functions(&self) -> impl Iterator<Item = &Function> {
+    pub fn named_functions(&self) -> impl Iterator<Item = &Function> {
         self.inner.values()
     }
 
