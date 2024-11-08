@@ -27,7 +27,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         graph_index_by_function_name.insert(&function.name, graph_index);
     }
 
-    for &caller_index in graph_index_by_function_name.values() {
+    for caller_index in call_graph.node_indices() {
         let (function, _) = call_graph[caller_index];
 
         include_calls_from_function_in_call_graph(
