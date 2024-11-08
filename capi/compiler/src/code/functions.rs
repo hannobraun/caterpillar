@@ -143,7 +143,7 @@ impl Functions {
         self.inner.values_mut()
     }
 
-    /// # Consume this instance and return an iterator over the functions
+    /// # Consume this instance and return an iterator over the named functions
     pub fn into_named_functions(self) -> impl Iterator<Item = Function> {
         self.inner.into_values()
     }
