@@ -87,7 +87,7 @@ impl Functions {
         name: &str,
     ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
-            if function.inner.name.as_deref() == Some(name) {
+            if function.name == name {
                 Some(Find {
                     find: function,
                     metadata: index,
