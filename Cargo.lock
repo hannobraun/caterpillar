@@ -380,6 +380,7 @@ dependencies = [
  "console_error_panic_hook",
  "console_log",
  "gloo-net",
+ "itertools",
  "leptos",
  "log",
  "ron",

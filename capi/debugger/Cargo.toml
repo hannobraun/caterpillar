@@ -3,6 +3,7 @@ name = "capi-debugger"
 version = "0.1.0"
 edition = "2021"
 
+
 [dependencies]
 anyhow = "*"
 console_error_panic_hook = "*"
@@ -33,3 +34,7 @@ features = ["csr"]
 [dependencies.tokio]
 version = "*"
 features = ["macros", "sync"]
+
+
+[dev-dependencies]
+itertools = "*"
