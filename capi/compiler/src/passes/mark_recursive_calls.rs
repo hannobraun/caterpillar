@@ -10,17 +10,16 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
-            .filter_map(|(&function_index_in_cluster, named_function_index)| {
-                functions
+            .map(|(&function_index_in_cluster, named_function_index)| {
+                let name = functions
                     .get_named(named_function_index)
                     .expect(
                         "Expecting function referenced from call graph to \
                         exist.",
                     )
-                    .inner
                     .name
-                    .clone()
-                    .map(|name| (name, function_index_in_cluster))
+                    .clone();
+                (name, function_index_in_cluster)
             })
             .collect::<BTreeMap<_, _>>();
 
