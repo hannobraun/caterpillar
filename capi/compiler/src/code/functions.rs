@@ -45,7 +45,7 @@ impl Functions {
     }
 
     /// # Access the named function at the given index mutably
-    pub fn get_mut(
+    pub fn get_named_mut(
         &mut self,
         index: &Index<NamedFunction>,
     ) -> Option<&mut NamedFunction> {
