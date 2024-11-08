@@ -380,7 +380,7 @@ fn infer_type_of_expression(
             // identified as a problem.
             return None;
         }
-        Expression::Value(_) => Signature {
+        Expression::LiteralNumber(_) => Signature {
             inputs: vec![],
             outputs: vec![types.inner.push(Type::Number)],
         },

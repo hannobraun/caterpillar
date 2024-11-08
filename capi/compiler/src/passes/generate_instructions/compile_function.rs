@@ -384,7 +384,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::Value(value) => {
+        Expression::LiteralNumber(value) => {
             let address = generate_instruction(
                 Instruction::Push { value },
                 named_functions_context.instructions,

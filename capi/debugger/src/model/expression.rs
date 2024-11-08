@@ -243,7 +243,7 @@ impl DebugExpressionKind {
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Expression::Value(value) => Self::Value {
+            Expression::LiteralNumber(value) => Self::Value {
                 as_string: value.to_string(),
             },
         }

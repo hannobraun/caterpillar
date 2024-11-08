@@ -178,7 +178,7 @@ pub enum Expression {
     },
 
     /// # A literal value
-    Value(Value),
+    LiteralNumber(Value),
 }
 
 impl Expression {
