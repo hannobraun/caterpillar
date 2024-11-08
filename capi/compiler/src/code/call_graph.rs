@@ -164,10 +164,10 @@ impl Cluster {
     /// it still does, that's a bug.
     pub fn functions<'r>(
         &'r self,
-        named_functions: &'r Functions,
+        functions: &'r Functions,
     ) -> impl Iterator<Item = Find<&'r Function, Index<Function>>> + 'r {
         self.functions.values().copied().map(|index| {
-            named_functions
+            functions
                 .find_by_index(&index)
                 .expect("Function referred to from cluster must exist.")
         })
