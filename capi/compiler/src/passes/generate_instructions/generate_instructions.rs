@@ -11,7 +11,7 @@ use crate::{
 
 use super::{
     compile_function::{compile_call_to_function, CallToFunction},
-    compile_named_functions::compile_named_functions,
+    compile_named_functions::compile_functions,
 };
 
 pub fn generate_instructions(
@@ -39,7 +39,7 @@ pub fn generate_instructions(
     // means to track whether simplifications are beneficial or not.
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
-    compile_named_functions(
+    compile_functions(
         named_functions,
         changes,
         call_graph,

@@ -20,7 +20,7 @@ pub struct FunctionsContext<'r> {
         &'r mut BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
 
-pub fn compile_named_functions(
+pub fn compile_functions(
     functions: &Functions,
     changes: &Changes,
     call_graph: &CallGraph,
