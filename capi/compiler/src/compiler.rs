@@ -34,24 +34,20 @@ impl Compiler {
         host: &impl Host,
     ) -> CompilerOutput {
         let tokens = tokenize(source);
-        let mut named_functions = parse(tokens);
-        determine_tail_positions(&mut named_functions);
-        resolve_most_identifiers(&mut named_functions, host);
-        let mut call_graph = build_call_graph(&named_functions);
-        mark_recursive_calls(&mut named_functions, &call_graph);
-        resolve_calls_to_user_defined_functions(
-            &mut named_functions,
-            &call_graph,
-        );
-        find_divergent_functions(&named_functions, &mut call_graph);
-        let types = infer_types(&named_functions, &call_graph, host);
-        let changes =
-            detect_changes(self.old_functions.take(), &named_functions);
+        let mut functions = parse(tokens);
+        determine_tail_positions(&mut functions);
+        resolve_most_identifiers(&mut functions, host);
+        let mut call_graph = build_call_graph(&functions);
+        mark_recursive_calls(&mut functions, &call_graph);
+        resolve_calls_to_user_defined_functions(&mut functions, &call_graph);
+        find_divergent_functions(&functions, &mut call_graph);
+        let types = infer_types(&functions, &call_graph, host);
+        let changes = detect_changes(self.old_functions.take(), &functions);
 
-        self.old_functions = Some(named_functions.clone());
+        self.old_functions = Some(functions.clone());
 
         generate_instructions(
-            &named_functions,
+            &functions,
             &call_graph,
             &changes,
             &mut self.instructions,
@@ -61,7 +57,7 @@ impl Compiler {
         );
 
         CompilerOutput {
-            functions: named_functions,
+            functions,
             call_graph,
             types,
             instructions: self.instructions.clone(),
