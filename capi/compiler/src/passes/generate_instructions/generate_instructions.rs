@@ -11,7 +11,7 @@ use crate::{
 
 use super::{
     compile_function::{compile_call_to_function, CallToFunction},
-    compile_named_functions::compile_functions,
+    compile_functions::compile_functions,
 };
 
 pub fn generate_instructions(

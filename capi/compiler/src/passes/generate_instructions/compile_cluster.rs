@@ -7,7 +7,7 @@ use super::{
         compile_call_to_function, compile_function, CallToFunction,
         FunctionToCompile,
     },
-    compile_named_functions::FunctionsContext,
+    compile_functions::FunctionsContext,
 };
 
 pub struct ClusterContext {

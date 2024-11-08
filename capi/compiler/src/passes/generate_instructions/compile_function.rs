@@ -13,7 +13,7 @@ use crate::{
 };
 
 use super::{
-    compile_cluster::ClusterContext, compile_named_functions::FunctionsContext,
+    compile_cluster::ClusterContext, compile_functions::FunctionsContext,
 };
 
 pub fn compile_function(
