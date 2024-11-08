@@ -805,18 +805,14 @@ mod tests {
 
     fn infer_types(source: &str) -> (Functions, Types) {
         let tokens = tokenize(source);
-        let mut named_functions = parse(tokens);
-        resolve_most_identifiers(&mut named_functions, &TestHost);
-        let call_graph = build_call_graph(&named_functions);
-        mark_recursive_calls(&mut named_functions, &call_graph);
-        resolve_calls_to_user_defined_functions(
-            &mut named_functions,
-            &call_graph,
-        );
-        let types =
-            super::infer_types(&named_functions, &call_graph, &TestHost);
+        let mut functions = parse(tokens);
+        resolve_most_identifiers(&mut functions, &TestHost);
+        let call_graph = build_call_graph(&functions);
+        mark_recursive_calls(&mut functions, &call_graph);
+        resolve_calls_to_user_defined_functions(&mut functions, &call_graph);
+        let types = super::infer_types(&functions, &call_graph, &TestHost);
 
-        (named_functions, types)
+        (functions, types)
     }
 
     struct TestHost;
