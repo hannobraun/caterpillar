@@ -60,7 +60,7 @@ impl ActiveFunctions {
 
         if let Some(outer) = active_instructions.front() {
             let (outer, _) = instruction_to_named_function(outer, code);
-            if outer.name != expected_next_function {
+            if outer.inner.name != expected_next_function {
                 expected_next_function = reconstruct_function(
                     "main",
                     &mut entries,
@@ -78,7 +78,7 @@ impl ActiveFunctions {
                 code.source_map.instruction_to_expression(&address);
 
             if let Some(expected_name) = &expected_next_function {
-                if Some(expected_name) != named_function.name.as_ref() {
+                if Some(expected_name) != named_function.inner.name.as_ref() {
                     reconstruct_function(
                         expected_name,
                         &mut entries,
@@ -102,7 +102,7 @@ impl ActiveFunctions {
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugFunction::new(
-                    named_function,
+                    named_function.inner,
                     FunctionLocation::NamedFunction {
                         index: function_index_in_root_context,
                     },
@@ -248,7 +248,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &CompilerOutput,
-) -> (code::Function, Index<NamedFunction>) {
+) -> (code::NamedFunction, Index<NamedFunction>) {
     let location = code.source_map.instruction_to_function(address).expect(
         "Expecting instructions on call stack to all map to a function.",
     );
@@ -267,7 +267,7 @@ fn instruction_to_named_function(
                     )
                     .clone();
 
-                return (function.inner, index);
+                return (function, index);
             }
             FunctionLocation::AnonymousFunction { location } => {
                 current_location = *location.parent.parent;
