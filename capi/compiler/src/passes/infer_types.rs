@@ -56,7 +56,7 @@ pub fn infer_types(
                 .find_by_index(index)
                 .expect("Function referred to from call graph must exist.");
 
-            for (&index, branch) in function.branches.iter() {
+            for (&index, branch) in function.inner.branches.iter() {
                 let location = BranchLocation {
                     parent: Box::new(function.location().clone()),
                     index,

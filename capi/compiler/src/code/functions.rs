@@ -73,10 +73,10 @@ impl Functions {
     pub fn find_by_index(
         &self,
         index: &Index<NamedFunction>,
-    ) -> Option<Find<&Function, Index<NamedFunction>>> {
+    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
         let function = self.inner.get(index)?;
         Some(Find {
-            find: &function.inner,
+            find: function,
             metadata: *index,
         })
     }

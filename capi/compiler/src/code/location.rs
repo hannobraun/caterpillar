@@ -149,6 +149,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                     .functions
                     .find_by_index(index)
                     .expect("Named function referred to be index must exist")
+                    .inner
                     .name
                     .as_ref()
                     .expect("Named function must have a name");
