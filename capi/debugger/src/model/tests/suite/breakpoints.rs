@@ -518,9 +518,9 @@ fn step_out_of_function() {
     );
 
     let (a, b) = {
-        let named_functions = debugger.expect_code();
+        let functions = debugger.expect_code();
 
-        let a = named_functions
+        let a = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
@@ -529,7 +529,7 @@ fn step_out_of_function() {
             .next()
             .unwrap()
             .into_location();
-        let b = named_functions
+        let b = functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
