@@ -150,7 +150,7 @@ pub enum Expression {
         function: Function,
     },
 
-    /// # A literal value
+    /// # A number literal
     LiteralNumber(Value),
 
     /// # An unresolved identifier
