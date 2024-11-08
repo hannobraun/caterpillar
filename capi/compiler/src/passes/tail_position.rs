@@ -30,7 +30,7 @@ fn analyze_branch(branch: &mut Branch) {
     }
 
     for expression in branch.body.values_mut() {
-        if let Expression::Function { function } = expression {
+        if let Expression::LiteralFunction { function } = expression {
             analyze_function(function);
         }
     }
@@ -91,7 +91,7 @@ mod tests {
 
         let mut function = functions.into_functions().next().unwrap();
         let (_, branch) = function.branches.pop_first().unwrap();
-        let Expression::Function { function } =
+        let Expression::LiteralFunction { function } =
             &branch.body.values().nth(1).unwrap()
         else {
             panic!("Expected block.");

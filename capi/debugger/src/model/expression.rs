@@ -224,7 +224,7 @@ impl DebugExpressionKind {
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
-            Expression::Function { function } => {
+            Expression::LiteralFunction { function } => {
                 let function = DebugFunction::new(
                     function,
                     FunctionLocation::AnonymousFunction { location },

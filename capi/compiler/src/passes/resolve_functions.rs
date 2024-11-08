@@ -38,7 +38,7 @@ fn resolve_calls_in_expression(
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
 ) {
     match expression {
-        Expression::Function { function } => {
+        Expression::LiteralFunction { function } => {
             resolve_calls_in_function(function, resolved_hashes_by_name);
         }
         Expression::UnresolvedIdentifier {

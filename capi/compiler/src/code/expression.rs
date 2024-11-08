@@ -145,7 +145,7 @@ pub enum Expression {
     },
 
     /// # A function literal
-    Function {
+    LiteralFunction {
         /// # The function defined by this literal
         function: Function,
     },
@@ -202,7 +202,7 @@ impl Expression {
     ///
     /// Return `None`, if this is a different kind of expression.
     pub fn as_function(&self) -> Option<&Function> {
-        let Expression::Function { function } = self else {
+        let Expression::LiteralFunction { function } = self else {
             return None;
         };
 

@@ -329,7 +329,7 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
-        Expression::Function { function } => {
+        Expression::LiteralFunction { function } => {
             assert!(
                 function.name.is_none(),
                 "Encountered an anonymous function, but it has a name."

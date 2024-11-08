@@ -167,7 +167,7 @@ fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
         match token {
             Token::KeywordFn => {
                 if let Some(function) = parse_function(tokens) {
-                    branch.body.push(Expression::Function { function });
+                    branch.body.push(Expression::LiteralFunction { function });
                 }
             }
             Token::BranchStart | Token::KeywordEnd => {
