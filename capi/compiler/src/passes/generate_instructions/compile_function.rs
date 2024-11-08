@@ -132,7 +132,7 @@ fn compile_branch_body(
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
-    named_functions_context: &mut FunctionsContext,
+    functions_context: &mut FunctionsContext,
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
@@ -145,7 +145,7 @@ fn compile_branch_body(
             },
             cluster,
             cluster_context,
-            named_functions_context,
+            functions_context,
         );
         first_instruction = first_instruction.or(addr);
     }
@@ -172,7 +172,7 @@ fn compile_branch_body(
     //   complicated, so it needs to be justified.
     let last_instruction = generate_instruction(
         Instruction::Return,
-        named_functions_context.instructions,
+        functions_context.instructions,
         None,
     );
 
