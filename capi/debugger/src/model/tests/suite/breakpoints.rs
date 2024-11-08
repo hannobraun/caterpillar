@@ -460,18 +460,16 @@ fn step_over_function_call() {
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .body();
-
-        array::from_fn(|_| {
-            body.find_map(|expression| {
+            .body()
+            .filter_map(|expression| {
                 if expression.as_comment().is_none() {
                     Some(expression.location)
                 } else {
                     None
                 }
-            })
-            .unwrap()
-        })
+            });
+
+        array::from_fn(|_| body.next().unwrap())
     };
 
     debugger
