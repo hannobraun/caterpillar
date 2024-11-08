@@ -12,7 +12,7 @@ use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 /// In addition, it provides a target for attaching addition result-specific
 /// APIs to, that would otherwise be very inconvenient to access.
 #[derive(Debug)]
-pub struct Located<'r, T, M> {
+pub struct Located<'r, T: HasLocation, M = <T as HasLocation>::Location> {
     /// # The result of the search
     pub fragment: &'r T,
 
@@ -20,7 +20,7 @@ pub struct Located<'r, T, M> {
     pub location: M,
 }
 
-impl<T, M> Deref for Located<'_, T, M> {
+impl<T: HasLocation, M> Deref for Located<'_, T, M> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
@@ -28,7 +28,7 @@ impl<T, M> Deref for Located<'_, T, M> {
     }
 }
 
-impl<F> Located<'_, F, Index<NamedFunction>> {
+impl<F: HasLocation> Located<'_, F, Index<NamedFunction>> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
@@ -109,4 +109,10 @@ impl Located<'_, Branch, BranchLocation> {
             },
         })
     }
+}
+
+/// # Implemented by all code fragments, to abstract over their location
+pub trait HasLocation {
+    /// # The location of this fragment
+    type Location;
 }

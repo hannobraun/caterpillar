@@ -2,7 +2,11 @@ use std::fmt;
 
 use crate::code::{Expression, Functions, Index};
 
-use super::BranchLocation;
+use super::{located::HasLocation, BranchLocation};
+
+impl HasLocation for Expression {
+    type Location = ExpressionLocation;
+}
 
 /// # The location of an expression in the source code
 #[derive(

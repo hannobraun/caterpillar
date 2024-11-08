@@ -2,7 +2,11 @@ use std::fmt;
 
 use crate::code::{Branch, Functions, Index};
 
-use super::FunctionLocation;
+use super::{located::HasLocation, FunctionLocation};
+
+impl HasLocation for Branch {
+    type Location = BranchLocation;
+}
 
 /// # The location of a branch in the source code
 #[derive(

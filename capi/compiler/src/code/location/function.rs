@@ -1,8 +1,16 @@
 use std::fmt;
 
-use crate::code::{Functions, Index, NamedFunction};
+use crate::code::{Function, Functions, Index, NamedFunction};
 
-use super::ExpressionLocation;
+use super::{located::HasLocation, ExpressionLocation};
+
+impl HasLocation for NamedFunction {
+    type Location = Index<NamedFunction>;
+}
+
+impl HasLocation for Function {
+    type Location = FunctionLocation;
+}
 
 /// # The location of a function in the source code
 #[derive(
