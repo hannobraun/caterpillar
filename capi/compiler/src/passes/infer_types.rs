@@ -577,7 +577,7 @@ mod tests {
     #[test]
     #[should_panic] // known bug; not currently tracked in an issue
     fn infer_type_of_function_based_on_most_specific_branch() {
-        let (named_functions_a, types_a) = infer_types(
+        let (functions_a, types_a) = infer_types(
             r"
                 f: fn
                     \ 0 ->
@@ -600,7 +600,7 @@ mod tests {
             ",
         );
 
-        check(&named_functions_a, &types_a);
+        check(&functions_a, &types_a);
         check(&named_functions_b, &types_b);
 
         fn check(named_functions: &Functions, types: &Types) {
