@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Expression, Function, Functions, Index,
+    CallGraph, Expression, Function, Functions, Index, NamedFunction,
     UnresolvedCallToUserDefinedFunction,
 };
 
@@ -40,7 +40,7 @@ fn mark_recursive_calls_in_function(
     function: &mut Function,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
-        Index<Index<Function>>,
+        Index<Index<NamedFunction>>,
     >,
 ) {
     for branch in function.branches.values_mut() {

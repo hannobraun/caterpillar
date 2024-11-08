@@ -21,7 +21,7 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    inner: IndexMap<Function>,
+    inner: IndexMap<NamedFunction>,
 }
 
 impl Functions {
@@ -33,31 +33,33 @@ impl Functions {
     pub fn insert_named(&mut self, function: NamedFunction) {
         assert_eq!(Some(&function.name), function.inner.name.as_ref(),);
 
-        self.inner.push(function.inner);
+        self.inner.push(function);
     }
 
     /// # Access the named function at the given index
-    pub fn get(&self, index: &Index<Function>) -> Option<&Function> {
-        self.inner.get(index)
+    pub fn get(&self, index: &Index<NamedFunction>) -> Option<&Function> {
+        self.inner.get(index).map(|function| &function.inner)
     }
 
     /// # Access the named function at the given index mutably
     pub fn get_mut(
         &mut self,
-        index: &Index<Function>,
+        index: &Index<NamedFunction>,
     ) -> Option<&mut Function> {
-        self.inner.get_mut(index)
+        self.inner
+            .get_mut(index)
+            .map(|function| &mut function.inner)
     }
 
     /// # Find the named function with the provided hash
     pub fn find_by_hash(
         &self,
         hash: &Hash<Function>,
-    ) -> Option<Find<&Function, Index<Function>>> {
+    ) -> Option<Find<&Function, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
-            if &Hash::new(function) == hash {
+            if &Hash::new(&function.inner) == hash {
                 Some(Find {
-                    find: function,
+                    find: &function.inner,
                     metadata: index,
                 })
             } else {
@@ -69,11 +71,11 @@ impl Functions {
     /// # Find the named function with the provided index
     pub fn find_by_index(
         &self,
-        index: &Index<Function>,
-    ) -> Option<Find<&Function, Index<Function>>> {
+        index: &Index<NamedFunction>,
+    ) -> Option<Find<&Function, Index<NamedFunction>>> {
         let function = self.inner.get(index)?;
         Some(Find {
-            find: function,
+            find: &function.inner,
             metadata: *index,
         })
     }
@@ -82,11 +84,11 @@ impl Functions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<&Function, Index<Function>>> {
+    ) -> Option<Find<&Function, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
-            if function.name.as_deref() == Some(name) {
+            if function.inner.name.as_deref() == Some(name) {
                 Some(Find {
-                    find: function,
+                    find: &function.inner,
                     metadata: index,
                 })
             } else {
@@ -121,7 +123,9 @@ impl Functions {
         location: &FunctionLocation,
     ) -> Option<&Function> {
         match location {
-            FunctionLocation::NamedFunction { index } => self.inner.get(index),
+            FunctionLocation::NamedFunction { index } => {
+                self.inner.get(index).map(|function| &function.inner)
+            }
             FunctionLocation::AnonymousFunction { location } => {
                 let expression = self.find_expression_by_location(location)?;
                 expression.as_function()
@@ -132,9 +136,9 @@ impl Functions {
     /// # Iterate over the named functions
     pub fn named_functions(
         &self,
-    ) -> impl Iterator<Item = Find<&Function, Index<Function>>> {
+    ) -> impl Iterator<Item = Find<&Function, Index<NamedFunction>>> {
         self.inner.iter().map(|(index, function)| Find {
-            find: function,
+            find: &function.inner,
             metadata: *index,
         })
     }
@@ -143,12 +147,12 @@ impl Functions {
     pub fn named_functions_mut(
         &mut self,
     ) -> impl Iterator<Item = &mut Function> {
-        self.inner.values_mut()
+        self.inner.values_mut().map(|function| &mut function.inner)
     }
 
     /// # Consume this instance and return an iterator over the named functions
     pub fn into_named_functions(self) -> impl Iterator<Item = Function> {
-        self.inner.into_values()
+        self.inner.into_values().map(|function| function.inner)
     }
 }
 

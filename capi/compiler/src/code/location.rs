@@ -1,6 +1,6 @@
 use std::fmt;
 
-use super::{Branch, Expression, Function, Functions, Index};
+use super::{Branch, Expression, Functions, Index, NamedFunction};
 
 /// # The location of an expression in the source code
 #[derive(
@@ -110,7 +110,7 @@ impl fmt::Display for BranchLocationDisplay<'_> {
     serde::Serialize,
 )]
 pub enum FunctionLocation {
-    NamedFunction { index: Index<Function> },
+    NamedFunction { index: Index<NamedFunction> },
     AnonymousFunction { location: ExpressionLocation },
 }
 
@@ -127,8 +127,8 @@ impl FunctionLocation {
     }
 }
 
-impl From<Index<Function>> for FunctionLocation {
-    fn from(index: Index<Function>) -> Self {
+impl From<Index<NamedFunction>> for FunctionLocation {
+    fn from(index: Index<NamedFunction>) -> Self {
         Self::NamedFunction { index }
     }
 }

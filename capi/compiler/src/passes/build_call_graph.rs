@@ -8,6 +8,7 @@ use petgraph::{
 
 use crate::code::{
     CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
+    NamedFunction,
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
@@ -113,7 +114,7 @@ fn collect_functions_into_clusters(
 }
 
 type PetCallGraph<'r> = Graph<FunctionWithIndex<'r>, ()>;
-type FunctionWithIndex<'r> = (&'r Function, Index<Function>);
+type FunctionWithIndex<'r> = (&'r Function, Index<NamedFunction>);
 
 #[cfg(test)]
 mod tests {

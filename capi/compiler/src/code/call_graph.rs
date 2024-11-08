@@ -2,6 +2,7 @@ use std::{collections::BTreeSet, iter};
 
 use super::{
     search::Find, BranchLocation, Function, Functions, Index, IndexMap,
+    NamedFunction,
 };
 
 /// # The program's named functions, organized as a call graph
@@ -48,7 +49,7 @@ impl CallGraph {
     /// non-recursive calls to functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
-    ) -> impl Iterator<Item = (&Index<Function>, &Cluster)> {
+    ) -> impl Iterator<Item = (&Index<NamedFunction>, &Cluster)> {
         self.clusters_from_leaves().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
@@ -61,7 +62,7 @@ impl CallGraph {
     /// Panics, if the provided location does not refer to a named function.
     pub fn find_cluster_by_named_function(
         &self,
-        index: &Index<Function>,
+        index: &Index<NamedFunction>,
     ) -> Option<&Cluster> {
         self.clusters
             .iter()
@@ -89,7 +90,7 @@ impl CallGraph {
 )]
 pub struct Cluster {
     /// # The functions in this cluster
-    pub functions: IndexMap<Index<Function>>,
+    pub functions: IndexMap<Index<NamedFunction>>,
 
     /// # The functions in this cluster that never terminate (diverge)
     ///
@@ -102,7 +103,7 @@ pub struct Cluster {
     /// Starts out as `None`, as the compiler pass that creates the call graph
     /// (and those all [`Cluster`]s does not have the information required to do
     /// this analysis. It is later filled in by another compiler pass.
-    pub divergent_functions: Option<BTreeSet<Index<Function>>>,
+    pub divergent_functions: Option<BTreeSet<Index<NamedFunction>>>,
 
     /// # The branches in this cluster that are _not_ divergent
     ///
@@ -141,9 +142,9 @@ impl Cluster {
     /// bug.
     pub fn find_function_by_index<'r>(
         &'r self,
-        index: &Index<Index<Function>>,
+        index: &Index<Index<NamedFunction>>,
         functions: &'r Functions,
-    ) -> Find<&'r Function, Index<Function>> {
+    ) -> Find<&'r Function, Index<NamedFunction>> {
         let index = self
             .functions
             .get(index)
@@ -165,7 +166,8 @@ impl Cluster {
     pub fn functions<'r>(
         &'r self,
         functions: &'r Functions,
-    ) -> impl Iterator<Item = Find<&'r Function, Index<Function>>> + 'r {
+    ) -> impl Iterator<Item = Find<&'r Function, Index<NamedFunction>>> + 'r
+    {
         self.functions.values().copied().map(|index| {
             functions
                 .find_by_index(&index)
