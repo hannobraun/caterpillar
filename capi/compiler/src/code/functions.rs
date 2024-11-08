@@ -30,14 +30,10 @@ impl Functions {
     /// ## Panics
     ///
     /// Panics, if the added function does not have a name.
-    pub fn insert_named(&mut self, function: Function) {
-        assert!(
-            function.name.is_some(),
-            "Trying to insert named function that does not actually have a \
-            name."
-        );
+    pub fn insert_named(&mut self, function: NamedFunction) {
+        assert_eq!(Some(function.name), function.inner.name,);
 
-        self.inner.push(function);
+        self.inner.push(function.inner);
     }
 
     /// # Access the named function at the given index
