@@ -280,9 +280,9 @@ fn step_into_function() {
     );
 
     let (f, a) = {
-        let named_functions = debugger.expect_code();
+        let functions = debugger.expect_code();
 
-        let f = named_functions
+        let f = functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
@@ -291,7 +291,7 @@ fn step_into_function() {
             .nth(2)
             .unwrap()
             .into_location();
-        let a = named_functions
+        let a = functions
             .find_by_name("f")
             .unwrap()
             .branches()
