@@ -603,8 +603,8 @@ mod tests {
         check(&functions_a, &types_a);
         check(&functions_b, &types_b);
 
-        fn check(named_functions: &Functions, types: &Types) {
-            let f = named_functions
+        fn check(functions: &Functions, types: &Types) {
+            let f = functions
                 .find_by_name("f")
                 .map(|function| {
                     types
