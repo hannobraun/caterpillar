@@ -145,10 +145,6 @@ pub enum Expression {
     },
 
     /// # A function literal
-    ///
-    /// This is used to represent both anonymous functions that are used where
-    /// an expression is accepted, as well as named functions defined in the
-    /// top-level context.
     Function {
         /// # The function defined by this literal
         function: Function,
