@@ -499,7 +499,7 @@ mod tests {
 
     #[test]
     fn infer_expression_signatures_based_on_host_function() {
-        let (named_functions, types) = infer_types(
+        let (functions, types) = infer_types(
             r"
                 f: fn
                     \ n ->
@@ -508,7 +508,7 @@ mod tests {
             ",
         );
 
-        let mut expressions = named_functions
+        let mut expressions = functions
             .find_by_name("f")
             .unwrap()
             .find_single_branch()
