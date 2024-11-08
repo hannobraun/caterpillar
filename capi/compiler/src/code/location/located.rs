@@ -42,9 +42,7 @@ impl Located<'_, NamedFunction, Index<NamedFunction>> {
         let index = self.location;
         index.into()
     }
-}
 
-impl Located<'_, NamedFunction, Index<NamedFunction>> {
     /// # Iterate over the function's branches
     pub fn branches(
         &self,
