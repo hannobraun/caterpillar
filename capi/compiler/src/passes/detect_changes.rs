@@ -20,11 +20,7 @@ pub fn detect_changes(
             continue;
         }
 
-        let name = new_function
-            .inner
-            .name
-            .as_deref()
-            .expect("Named function should have a name.");
+        let name = &new_function.name;
         if let Some(old_function) = old_functions.find_by_name(name) {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function
