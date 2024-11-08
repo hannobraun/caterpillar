@@ -36,7 +36,7 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut functions = Functions::default();
 
     while let Some(function) = parse_named_function(&mut tokens) {
-        functions.insert(function);
+        functions.insert_named(function);
     }
 
     functions

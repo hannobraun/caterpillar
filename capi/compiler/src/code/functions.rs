@@ -30,7 +30,7 @@ impl Functions {
     /// ## Panics
     ///
     /// Panics, if the added function does not have a name.
-    pub fn insert(&mut self, function: Function) {
+    pub fn insert_named(&mut self, function: Function) {
         assert!(
             function.name.is_some(),
             "Trying to insert named function that does not actually have a \
