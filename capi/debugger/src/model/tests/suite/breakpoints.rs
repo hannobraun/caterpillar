@@ -458,8 +458,8 @@ fn step_over_function_call() {
     );
 
     let [f, nop] = {
-        let named_functions = debugger.expect_code();
-        let mut body = named_functions
+        let functions = debugger.expect_code();
+        let mut body = functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
