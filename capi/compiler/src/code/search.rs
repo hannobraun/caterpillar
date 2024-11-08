@@ -100,11 +100,6 @@ where
 }
 
 impl Located<Branch, BranchLocation> {
-    /// # Access the branch's location
-    pub fn location(&self) -> &BranchLocation {
-        &self.location
-    }
-
     /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,

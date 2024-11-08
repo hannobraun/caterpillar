@@ -640,7 +640,7 @@ mod tests {
             .map(|branch| {
                 types
                     .of_branches
-                    .get(branch.location())
+                    .get(&branch.location)
                     .unwrap()
                     .to_concrete_signature(&types)
                     .unwrap()
