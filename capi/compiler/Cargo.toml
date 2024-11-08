@@ -3,6 +3,7 @@ name = "capi-compiler"
 version = "0.1.0"
 edition = "2021"
 
+
 [dependencies]
 petgraph = "*"
 
@@ -20,3 +21,7 @@ features = ["derive"]
 [dependencies.udigest]
 version = "*"
 features = ["derive"]
+
+
+[dev-dependencies]
+itertools = "*"

@@ -361,6 +361,7 @@ version = "0.1.0"
 dependencies = [
  "blake3",
  "capi-runtime",
+ "itertools",
  "petgraph",
  "serde",
  "udigest",
