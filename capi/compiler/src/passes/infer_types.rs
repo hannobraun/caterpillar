@@ -86,7 +86,7 @@ pub fn infer_types(
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
     cluster: &Cluster,
-    named_functions: &Functions,
+    functions: &Functions,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
@@ -101,7 +101,7 @@ fn infer_types_in_branch(
             expression,
             &location,
             cluster,
-            named_functions,
+            functions,
             &queue_item.bindings,
             host,
             &mut queue_item.stack,
