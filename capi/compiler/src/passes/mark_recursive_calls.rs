@@ -12,7 +12,7 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
             .iter()
             .filter_map(|(&function_index_in_cluster, named_function_index)| {
                 functions
-                    .get(named_function_index)
+                    .get_named(named_function_index)
                     .expect(
                         "Expecting function referenced from call graph to \
                         exist.",
