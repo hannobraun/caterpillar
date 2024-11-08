@@ -20,11 +20,11 @@ use super::{
 /// function to be fully pre-compiled (or the hash would not remain stable), but
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct NamedFunctions {
+pub struct Functions {
     inner: NamedFunctionsInner,
 }
 
-impl NamedFunctions {
+impl Functions {
     /// # Insert the provided named function
     ///
     /// ## Panics
@@ -149,7 +149,7 @@ impl NamedFunctions {
     }
 }
 
-impl IntoIterator for NamedFunctions {
+impl IntoIterator for Functions {
     type Item = <NamedFunctionsInner as IntoIterator>::Item;
     type IntoIter = <NamedFunctionsInner as IntoIterator>::IntoIter;
 
@@ -158,7 +158,7 @@ impl IntoIterator for NamedFunctions {
     }
 }
 
-impl<'r> IntoIterator for &'r NamedFunctions {
+impl<'r> IntoIterator for &'r Functions {
     type Item = <&'r NamedFunctionsInner as IntoIterator>::Item;
     type IntoIter = <&'r NamedFunctionsInner as IntoIterator>::IntoIter;
 

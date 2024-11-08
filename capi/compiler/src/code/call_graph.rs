@@ -1,7 +1,7 @@
 use std::{collections::BTreeSet, iter};
 
 use super::{
-    search::Find, BranchLocation, Function, Index, IndexMap, NamedFunctions,
+    search::Find, BranchLocation, Function, Functions, Index, IndexMap,
 };
 
 /// # The program's named functions, organized as a call graph
@@ -142,7 +142,7 @@ impl Cluster {
     pub fn find_function_by_index<'r>(
         &'r self,
         index: &Index<Index<Function>>,
-        named_functions: &'r NamedFunctions,
+        named_functions: &'r Functions,
     ) -> Find<&'r Function, Index<Function>> {
         let index = self
             .functions
@@ -164,7 +164,7 @@ impl Cluster {
     /// it still does, that's a bug.
     pub fn functions<'r>(
         &'r self,
-        named_functions: &'r NamedFunctions,
+        named_functions: &'r Functions,
     ) -> impl Iterator<Item = Find<&'r Function, Index<Function>>> + 'r {
         self.functions.values().copied().map(|index| {
             named_functions

@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     code::{
-        Branch, Expression, Function, NamedFunctions, Pattern,
+        Branch, Expression, Function, Functions, Pattern,
         UnresolvedCallToUserDefinedFunction,
     },
     host::Host,
@@ -15,7 +15,7 @@ use crate::{
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
 pub fn resolve_most_identifiers(
-    named_functions: &mut NamedFunctions,
+    named_functions: &mut Functions,
     host: &impl Host,
 ) {
     let mut scopes = Scopes::new();

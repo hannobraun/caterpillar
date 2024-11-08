@@ -7,16 +7,16 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, Function, Index, IndexMap, NamedFunctions,
+    CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
 };
 
-pub fn build_call_graph(named_functions: &NamedFunctions) -> CallGraph {
+pub fn build_call_graph(named_functions: &Functions) -> CallGraph {
     let pet_call_graph = build_pet_call_graph(named_functions);
     let clusters = collect_functions_into_clusters(pet_call_graph);
     CallGraph::from_clusters(clusters)
 }
 
-fn build_pet_call_graph(named_functions: &NamedFunctions) -> PetCallGraph {
+fn build_pet_call_graph(named_functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 

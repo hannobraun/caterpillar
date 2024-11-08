@@ -1,6 +1,6 @@
 use std::fmt;
 
-use super::{Branch, Expression, Function, Index, NamedFunctions};
+use super::{Branch, Expression, Function, Functions, Index};
 
 /// # The location of an expression in the source code
 #[derive(
@@ -22,7 +22,7 @@ impl ExpressionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        named_functions: &'r NamedFunctions,
+        named_functions: &'r Functions,
     ) -> ExpressionLocationDisplay<'r> {
         ExpressionLocationDisplay {
             location: self,
@@ -36,7 +36,7 @@ impl ExpressionLocation {
 /// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
 pub struct ExpressionLocationDisplay<'r> {
     location: &'r ExpressionLocation,
-    named_functions: &'r NamedFunctions,
+    named_functions: &'r Functions,
 }
 
 impl fmt::Display for ExpressionLocationDisplay<'_> {
@@ -70,7 +70,7 @@ impl BranchLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        named_functions: &'r NamedFunctions,
+        named_functions: &'r Functions,
     ) -> BranchLocationDisplay<'r> {
         BranchLocationDisplay {
             location: self,
@@ -84,7 +84,7 @@ impl BranchLocation {
 /// Implements [`fmt::Display`], which [`BranchLocation`] itself doesn't.
 pub struct BranchLocationDisplay<'r> {
     location: &'r BranchLocation,
-    named_functions: &'r NamedFunctions,
+    named_functions: &'r Functions,
 }
 
 impl fmt::Display for BranchLocationDisplay<'_> {
@@ -118,7 +118,7 @@ impl FunctionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        named_functions: &'r NamedFunctions,
+        named_functions: &'r Functions,
     ) -> FunctionLocationDisplay<'r> {
         FunctionLocationDisplay {
             location: self,
@@ -138,7 +138,7 @@ impl From<Index<Function>> for FunctionLocation {
 /// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
 pub struct FunctionLocationDisplay<'r> {
     location: &'r FunctionLocation,
-    named_functions: &'r NamedFunctions,
+    named_functions: &'r Functions,
 }
 
 impl fmt::Display for FunctionLocationDisplay<'_> {

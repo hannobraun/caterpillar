@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{CallGraph, Function, Hash, NamedFunctions, Types},
+    code::{CallGraph, Function, Functions, Hash, Types},
     host::Host,
     passes::{
         build_call_graph, detect_changes, determine_tail_positions,
@@ -18,7 +18,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    old_functions: Option<NamedFunctions>,
+    old_functions: Option<Functions>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_hash:
@@ -77,7 +77,7 @@ pub struct CallInstructionsByCallee {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
-    pub named_functions: NamedFunctions,
+    pub named_functions: Functions,
     pub call_graph: CallGraph,
     pub types: Types,
     pub instructions: Instructions,

@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::code::{CallGraph, Expression, Function, Hash, NamedFunctions};
+use crate::code::{CallGraph, Expression, Function, Functions, Hash};
 
 pub fn resolve_calls_to_user_defined_functions(
-    named_functions: &mut NamedFunctions,
+    named_functions: &mut Functions,
     call_graph: &CallGraph,
 ) {
     let mut resolved_hashes_by_name = BTreeMap::new();

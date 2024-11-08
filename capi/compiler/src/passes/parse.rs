@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::code::{Branch, Expression, Function, NamedFunctions, Pattern};
+use crate::code::{Branch, Expression, Function, Functions, Pattern};
 
 use super::tokenize::Token;
 
@@ -29,11 +29,11 @@ use super::tokenize::Token;
 /// It's probably not worth solving this non-trivial problem for the current
 /// architecture, for little gain, only to re-solve it again for the new
 /// architecture, once that is necessary.
-pub fn parse(tokens: Vec<Token>) -> NamedFunctions {
+pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut tokens = Tokens {
         inner: tokens.into(),
     };
-    let mut named_functions = NamedFunctions::default();
+    let mut named_functions = Functions::default();
 
     while let Some(function) = parse_named_function(&mut tokens) {
         named_functions.insert(function);

@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
-    code::{CallGraph, Changes, Function, Hash, NamedFunctions},
+    code::{CallGraph, Changes, Function, Functions, Hash},
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
     Instructions,
@@ -15,7 +15,7 @@ use super::{
 };
 
 pub fn generate_instructions(
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
@@ -70,7 +70,7 @@ fn create_placeholder_for_call_to_main(
 
 fn compile_call_to_main(
     call_to_main: InstructionAddress,
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     instructions: &mut Instructions,
     functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
 ) {

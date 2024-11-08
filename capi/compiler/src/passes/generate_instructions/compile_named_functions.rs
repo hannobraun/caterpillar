@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::Instruction;
 
 use crate::{
-    code::{CallGraph, Changes, Function, Hash, NamedFunctions},
+    code::{CallGraph, Changes, Function, Functions, Hash},
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
     Instructions,
@@ -12,7 +12,7 @@ use crate::{
 use super::compile_cluster::compile_cluster;
 
 pub struct NamedFunctionsContext<'r> {
-    pub named_functions: &'r NamedFunctions,
+    pub named_functions: &'r Functions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
@@ -21,7 +21,7 @@ pub struct NamedFunctionsContext<'r> {
 }
 
 pub fn compile_named_functions(
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     changes: &Changes,
     call_graph: &CallGraph,
     instructions: &mut Instructions,

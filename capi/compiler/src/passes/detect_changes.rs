@@ -1,13 +1,12 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    search::Find, Changes, FunctionInUpdate, FunctionUpdate, Hash,
-    NamedFunctions,
+    search::Find, Changes, FunctionInUpdate, FunctionUpdate, Functions, Hash,
 };
 
 pub fn detect_changes(
-    old_functions: Option<NamedFunctions>,
-    new_functions: &NamedFunctions,
+    old_functions: Option<Functions>,
+    new_functions: &Functions,
 ) -> Changes {
     let old_functions = old_functions.unwrap_or_default();
 

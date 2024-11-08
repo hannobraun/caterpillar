@@ -8,15 +8,15 @@ use std::{
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Expression, ExpressionLocation, FunctionLocation, Index,
-        NamedFunctions, Pattern, Signature, Type, Types,
+        Expression, ExpressionLocation, FunctionLocation, Functions, Index,
+        Pattern, Signature, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
 };
 
 pub fn infer_types(
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     call_graph: &CallGraph,
     host: &impl Host,
 ) -> Types {
@@ -91,7 +91,7 @@ pub fn infer_types(
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
     cluster: &Cluster,
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
@@ -204,7 +204,7 @@ fn infer_type_of_expression(
     expression: &Expression,
     location: &ExpressionLocation,
     cluster: &Cluster,
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
     stack: &mut Vec<Index<Type>>,
@@ -493,7 +493,7 @@ enum ExpressionInference {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{ConcreteSignature, NamedFunctions, Type, Types},
+        code::{ConcreteSignature, Functions, Type, Types},
         host::{Host, HostFunction},
         passes::{
             build_call_graph, mark_recursive_calls, parse,
@@ -608,7 +608,7 @@ mod tests {
         check(&named_functions_a, &types_a);
         check(&named_functions_b, &types_b);
 
-        fn check(named_functions: &NamedFunctions, types: &Types) {
+        fn check(named_functions: &Functions, types: &Types) {
             let f = named_functions
                 .find_by_name("f")
                 .map(|function| {
@@ -732,7 +732,7 @@ mod tests {
         check(&named_functions_a, &types_a);
         check(&named_functions_b, &types_b);
 
-        fn check(named_functions: &NamedFunctions, types: &Types) {
+        fn check(named_functions: &Functions, types: &Types) {
             let f = named_functions
                 .find_by_name("f")
                 .map(|function| {
@@ -808,7 +808,7 @@ mod tests {
         }
     }
 
-    fn infer_types(source: &str) -> (NamedFunctions, Types) {
+    fn infer_types(source: &str) -> (Functions, Types) {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         resolve_most_identifiers(&mut named_functions, &TestHost);

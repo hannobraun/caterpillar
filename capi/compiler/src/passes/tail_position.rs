@@ -1,6 +1,6 @@
-use crate::code::{Branch, Expression, Function, NamedFunctions};
+use crate::code::{Branch, Expression, Function, Functions};
 
-pub fn determine_tail_positions(named_functions: &mut NamedFunctions) {
+pub fn determine_tail_positions(named_functions: &mut Functions) {
     for function in named_functions.functions_mut() {
         analyze_function(function);
     }
@@ -39,7 +39,7 @@ fn analyze_branch(branch: &mut Branch) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Expression, IndexMap, NamedFunctions},
+        code::{Expression, Functions, IndexMap},
         passes::{parse, tokenize},
     };
 
@@ -128,7 +128,7 @@ mod tests {
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
-    pub fn determine_tail_positions(source: &str) -> NamedFunctions {
+    pub fn determine_tail_positions(source: &str) -> Functions {
         let tokens = tokenize(source);
         let mut named_functions = parse(tokens);
         super::determine_tail_positions(&mut named_functions);

@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::{ExpressionLocation, NamedFunctions},
+    code::{ExpressionLocation, Functions},
     Compiler,
 };
 use capi_game_engine::{
@@ -96,7 +96,7 @@ impl TestDebugger {
         self.transient = Some(self.persistent.generate_transient_state());
     }
 
-    pub fn expect_code(&self) -> &NamedFunctions {
+    pub fn expect_code(&self) -> &Functions {
         &self.persistent.code.inner.as_ref().unwrap().named_functions
     }
 

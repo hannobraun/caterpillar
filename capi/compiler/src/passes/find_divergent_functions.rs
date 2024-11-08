@@ -2,10 +2,10 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use petgraph::{algo::condensation, visit::EdgeRef, Direction, Graph};
 
-use crate::code::{CallGraph, Expression, NamedFunctions};
+use crate::code::{CallGraph, Expression, Functions};
 
 pub fn find_divergent_functions(
-    named_functions: &NamedFunctions,
+    named_functions: &Functions,
     call_graph: &mut CallGraph,
 ) {
     for cluster in call_graph.clusters_from_leaves_mut() {
