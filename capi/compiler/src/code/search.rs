@@ -23,7 +23,7 @@ pub struct Located<T, M> {
     pub fragment: T,
 
     /// # The additional search-specific metadata
-    pub metadata: M,
+    pub location: M,
 }
 
 impl<T, M> Deref for Located<T, M> {
@@ -40,12 +40,12 @@ impl<F> Located<F, Index<NamedFunction>> {
     /// This is a convenience accessor, to make code that would otherwise access
     /// `metadata` directly more readable.
     pub fn index(&self) -> Index<NamedFunction> {
-        self.metadata
+        self.location
     }
 
     /// # Access the location of the found function
     pub fn location(&self) -> FunctionLocation {
-        let index = self.metadata;
+        let index = self.location;
         index.into()
     }
 }
@@ -59,12 +59,12 @@ where
         &self,
     ) -> impl Iterator<Item = Located<Branch, BranchLocation>> {
         let function = &self.fragment;
-        let location = self.metadata.clone().into();
+        let location = self.location.clone().into();
 
         function.inner.branches.clone().into_iter().map(
             move |(index, branch)| Located {
                 fragment: branch,
-                metadata: BranchLocation {
+                location: BranchLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },
@@ -79,7 +79,7 @@ where
         &self,
     ) -> Option<Located<Branch, BranchLocation>> {
         let function = &self.fragment;
-        let location = self.metadata.clone().into();
+        let location = self.location.clone().into();
 
         if function.inner.branches.len() > 1 {
             return None;
@@ -91,7 +91,7 @@ where
             .first_key_value()
             .map(|(&index, branch)| Located {
                 fragment: branch.clone(),
-                metadata: BranchLocation {
+                location: BranchLocation {
                     parent: Box::new(location),
                     index,
                 },
@@ -102,20 +102,20 @@ where
 impl Located<Branch, BranchLocation> {
     /// # Access the branch's location
     pub fn location(&self) -> &BranchLocation {
-        &self.metadata
+        &self.location
     }
 
     /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,
     ) -> impl Iterator<Item = Located<Expression, ExpressionLocation>> {
-        let location = self.metadata.clone();
+        let location = self.location.clone();
         self.body
             .clone()
             .into_iter()
             .map(move |(index, expression)| Located {
                 fragment: expression,
-                metadata: ExpressionLocation {
+                location: ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },
@@ -124,18 +124,18 @@ impl Located<Branch, BranchLocation> {
 
     /// # Consume the found branch, returning its location
     pub fn into_location(self) -> BranchLocation {
-        self.metadata
+        self.location
     }
 }
 
 impl Located<Expression, ExpressionLocation> {
     /// # Access the expression's location
     pub fn location(&self) -> &ExpressionLocation {
-        &self.metadata
+        &self.location
     }
 
     /// # Consume the found expression, returning its location
     pub fn into_location(self) -> ExpressionLocation {
-        self.metadata
+        self.location
     }
 }

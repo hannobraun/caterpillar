@@ -59,7 +59,7 @@ impl Functions {
             if &Hash::new(&function.inner) == hash {
                 Some(Located {
                     fragment: function,
-                    metadata: index,
+                    location: index,
                 })
             } else {
                 None
@@ -75,7 +75,7 @@ impl Functions {
         let function = self.inner.get(index)?;
         Some(Located {
             fragment: function,
-            metadata: *index,
+            location: *index,
         })
     }
 
@@ -88,7 +88,7 @@ impl Functions {
             if function.name == name {
                 Some(Located {
                     fragment: function,
-                    metadata: index,
+                    location: index,
                 })
             } else {
                 None
@@ -139,7 +139,7 @@ impl Functions {
     {
         self.inner.iter().map(|(index, function)| Located {
             fragment: function,
-            metadata: *index,
+            location: *index,
         })
     }
 
