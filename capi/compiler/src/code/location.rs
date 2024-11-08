@@ -22,11 +22,11 @@ impl ExpressionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        named_functions: &'r Functions,
+        functions: &'r Functions,
     ) -> ExpressionLocationDisplay<'r> {
         ExpressionLocationDisplay {
             location: self,
-            named_functions,
+            named_functions: functions,
         }
     }
 }
