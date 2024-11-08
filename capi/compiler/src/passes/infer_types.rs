@@ -199,7 +199,7 @@ fn infer_type_of_expression(
     expression: &Expression,
     location: &ExpressionLocation,
     cluster: &Cluster,
-    named_functions: &Functions,
+    functions: &Functions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
     stack: &mut Vec<Index<Type>>,
@@ -280,7 +280,7 @@ fn infer_type_of_expression(
             }
         }
         Expression::CallToUserDefinedFunction { hash, .. } => {
-            let function = named_functions
+            let function = functions
                 .find_by_hash(hash)
                 .expect("Function referred to by resolved call must exist.");
 
