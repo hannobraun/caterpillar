@@ -240,12 +240,12 @@ impl DebugExpressionKind {
 
                 Self::Function { function }
             }
-            Expression::UnresolvedIdentifier { name, .. } => {
-                Self::UnresolvedIdentifier { name }
-            }
             Expression::LiteralNumber(value) => Self::Value {
                 as_string: value.to_string(),
             },
+            Expression::UnresolvedIdentifier { name, .. } => {
+                Self::UnresolvedIdentifier { name }
+            }
         }
     }
 }

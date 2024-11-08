@@ -375,15 +375,15 @@ fn infer_type_of_expression(
                 outputs: vec![type_],
             }
         }
+        Expression::LiteralNumber(_) => Signature {
+            inputs: vec![],
+            outputs: vec![types.inner.push(Type::Number)],
+        },
         Expression::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.
             return None;
         }
-        Expression::LiteralNumber(_) => Signature {
-            inputs: vec![],
-            outputs: vec![types.inner.push(Type::Number)],
-        },
     };
 
     Some(ExpressionInference::Inferred { signature })

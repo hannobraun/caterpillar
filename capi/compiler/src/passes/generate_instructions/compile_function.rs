@@ -374,19 +374,19 @@ fn compile_expression(
 
             Some(address)
         }
-        Expression::UnresolvedIdentifier { .. } => {
+        Expression::LiteralNumber(value) => {
             let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::BuildError,
-                },
+                Instruction::Push { value },
                 named_functions_context.instructions,
                 Some(&mut mapping),
             );
             Some(address)
         }
-        Expression::LiteralNumber(value) => {
+        Expression::UnresolvedIdentifier { .. } => {
             let address = generate_instruction(
-                Instruction::Push { value },
+                Instruction::TriggerEffect {
+                    effect: Effect::BuildError,
+                },
                 named_functions_context.instructions,
                 Some(&mut mapping),
             );

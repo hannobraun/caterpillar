@@ -150,6 +150,9 @@ pub enum Expression {
         function: Function,
     },
 
+    /// # A literal value
+    LiteralNumber(Value),
+
     /// # An unresolved identifier
     ///
     /// This is the result of a compiler error.
@@ -176,9 +179,6 @@ pub enum Expression {
         is_known_to_be_call_to_user_defined_function:
             Option<UnresolvedCallToUserDefinedFunction>,
     },
-
-    /// # A literal value
-    LiteralNumber(Value),
 }
 
 impl Expression {
