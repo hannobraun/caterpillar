@@ -18,9 +18,7 @@ pub fn resolve_calls_to_user_defined_functions(
             &mut resolved_hashes_by_name,
         );
 
-        let name = function.inner.name.clone().expect(
-            "Just compiled a named function; should have its name set.",
-        );
+        let name = function.name.clone();
         resolved_hashes_by_name.insert(name, Hash::new(&function.inner));
     }
 }
