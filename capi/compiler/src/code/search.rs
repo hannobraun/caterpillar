@@ -121,9 +121,4 @@ impl Located<Branch, BranchLocation> {
                 },
             })
     }
-
-    /// # Consume the found branch, returning its location
-    pub fn into_location(self) -> BranchLocation {
-        self.location
-    }
 }
