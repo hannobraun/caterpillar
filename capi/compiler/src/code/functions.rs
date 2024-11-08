@@ -156,6 +156,19 @@ impl Functions {
     }
 }
 
+/// # A function that has a name
+///
+/// Named functions are defined in the top-level context. Functions that do not
+/// have a name are anonymous, and are defined as literal values within other
+/// functions.
+pub struct NamedFunction {
+    /// # The name of the function
+    pub name: String,
+
+    /// # The function
+    pub inner: Function,
+}
+
 #[derive(
     Clone,
     Debug,
