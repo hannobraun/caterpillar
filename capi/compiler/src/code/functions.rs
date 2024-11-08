@@ -85,11 +85,11 @@ impl Functions {
     pub fn find_by_name(
         &self,
         name: &str,
-    ) -> Option<Find<&Function, Index<NamedFunction>>> {
+    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.inner.name.as_deref() == Some(name) {
                 Some(Find {
-                    find: &function.inner,
+                    find: function,
                     metadata: index,
                 })
             } else {

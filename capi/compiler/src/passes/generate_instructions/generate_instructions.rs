@@ -85,7 +85,7 @@ fn compile_call_to_main(
     };
 
     compile_call_to_function(
-        &Hash::new(&main),
+        &Hash::new(&main.inner),
         CallToFunction {
             address: call_to_main,
             is_tail_call: true,

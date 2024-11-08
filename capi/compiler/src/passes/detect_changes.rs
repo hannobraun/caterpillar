@@ -31,7 +31,7 @@ pub fn detect_changes(
             updated.push(FunctionUpdate {
                 old: FunctionInUpdate {
                     index: old_function.index(),
-                    function: old_function.clone(),
+                    function: old_function.inner.clone(),
                 },
                 new: FunctionInUpdate {
                     index: new_function.index(),

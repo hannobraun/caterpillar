@@ -308,7 +308,7 @@ fn reconstruct_function(
         .find_cluster_by_named_function(&function.index())
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
-        function.clone(),
+        function.inner.clone(),
         function.location(),
         tail_call.as_ref(),
         false,
