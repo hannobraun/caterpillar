@@ -70,7 +70,7 @@ impl Functions {
     }
 
     /// # Find the named function with the provided index
-    pub fn find_by_index(
+    pub fn find_named_by_index(
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {

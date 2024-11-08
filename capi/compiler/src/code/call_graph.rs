@@ -150,7 +150,7 @@ impl Cluster {
             .expect("Expecting index that refers to function in cluster.");
 
         functions
-            .find_by_index(index)
+            .find_named_by_index(index)
             .expect("Expecting index in cluster to refer to existing function")
     }
 
@@ -169,7 +169,7 @@ impl Cluster {
     {
         self.functions.values().copied().map(|index| {
             functions
-                .find_by_index(&index)
+                .find_named_by_index(&index)
                 .expect("Function referred to from cluster must exist.")
         })
     }

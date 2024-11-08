@@ -53,7 +53,7 @@ pub fn infer_types(
 
         for index in cluster.functions.values() {
             let function = functions
-                .find_by_index(index)
+                .find_named_by_index(index)
                 .expect("Function referred to from call graph must exist.");
 
             for (&index, branch) in function.inner.branches.iter() {
