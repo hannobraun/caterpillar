@@ -100,8 +100,10 @@ impl PersistentState {
 
                     function
                         .branches()
-                        .filter_map(|branch| branch.body().next())
-                        .map(|expression| expression.location)
+                        .filter_map(|branch| {
+                            let expression = branch.body().next()?;
+                            Some(expression.location)
+                        })
                         .collect()
                 } else {
                     let mut expression = origin.clone();
