@@ -334,5 +334,5 @@ fn function_call_to_function_name(
     let hash = expression.as_call_to_function()?;
     let function = code.functions.find_by_hash(hash)?;
 
-    function.name.clone()
+    function.inner.name.clone()
 }

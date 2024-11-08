@@ -178,7 +178,7 @@ impl DebugExpressionKind {
                 let function = functions
                     .find_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
-                let name = function.name.clone().expect(
+                let name = function.inner.name.clone().expect(
                     "Got this function from search for named function. It must \
                     has a name.",
                 );

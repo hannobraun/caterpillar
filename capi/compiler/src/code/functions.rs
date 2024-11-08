@@ -56,11 +56,11 @@ impl Functions {
     pub fn find_by_hash(
         &self,
         hash: &Hash<Function>,
-    ) -> Option<Find<&Function, Index<NamedFunction>>> {
+    ) -> Option<Find<&NamedFunction, Index<NamedFunction>>> {
         self.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
                 Some(Find {
-                    find: &function.inner,
+                    find: function,
                     metadata: index,
                 })
             } else {
