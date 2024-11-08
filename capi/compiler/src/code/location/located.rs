@@ -73,7 +73,7 @@ where
     /// Returns `None`, if the function does not have exactly one branch.
     pub fn find_single_branch(
         &self,
-    ) -> Option<Located<Branch, BranchLocation>> {
+    ) -> Option<Located<&Branch, BranchLocation>> {
         let function = &self.fragment;
         let location = self.location.clone().into();
 
@@ -86,7 +86,7 @@ where
             .branches
             .first_key_value()
             .map(|(&index, branch)| Located {
-                fragment: branch.clone(),
+                fragment: branch,
                 location: BranchLocation {
                     parent: Box::new(location),
                     index,
