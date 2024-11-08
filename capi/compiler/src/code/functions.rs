@@ -149,15 +149,6 @@ impl Functions {
     }
 }
 
-impl IntoIterator for Functions {
-    type Item = <FunctionsInner as IntoIterator>::Item;
-    type IntoIter = <FunctionsInner as IntoIterator>::IntoIter;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.inner.into_iter()
-    }
-}
-
 impl<'r> IntoIterator for &'r Functions {
     type Item = <&'r FunctionsInner as IntoIterator>::Item;
     type IntoIter = <&'r FunctionsInner as IntoIterator>::IntoIter;
