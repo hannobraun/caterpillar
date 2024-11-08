@@ -111,8 +111,8 @@ fn step_over_brk() -> anyhow::Result<()> {
         .run_program();
 
     let (brk, nop) = {
-        let functions = debugger.expect_code();
-        functions
+        debugger
+            .expect_code()
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
