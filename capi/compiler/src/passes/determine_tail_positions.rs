@@ -130,10 +130,10 @@ mod tests {
 
     pub fn determine_tail_positions(source: &str) -> Functions {
         let tokens = tokenize(source);
-        let mut named_functions = parse(tokens);
-        super::determine_tail_positions(&mut named_functions);
+        let mut functions = parse(tokens);
+        super::determine_tail_positions(&mut functions);
 
-        named_functions
+        functions
     }
 
     trait ToIdentifiers {
