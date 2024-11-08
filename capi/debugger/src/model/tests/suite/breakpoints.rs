@@ -109,8 +109,8 @@ fn step_over_brk() -> anyhow::Result<()> {
         .run_program();
 
     let [brk, nop] = {
-        let named_functions = debugger.expect_code();
-        let mut body = named_functions
+        let functions = debugger.expect_code();
+        let mut body = functions
             .find_by_name("main")
             .unwrap()
             .find_single_branch()
