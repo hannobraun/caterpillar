@@ -15,7 +15,7 @@ use super::{
 };
 
 pub fn generate_instructions(
-    named_functions: &Functions,
+    functions: &Functions,
     call_graph: &CallGraph,
     changes: &Changes,
     instructions: &mut Instructions,
@@ -40,7 +40,7 @@ pub fn generate_instructions(
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     compile_functions(
-        named_functions,
+        functions,
         changes,
         call_graph,
         instructions,
@@ -50,7 +50,7 @@ pub fn generate_instructions(
     );
     compile_call_to_main(
         call_to_main,
-        named_functions,
+        functions,
         instructions,
         compiled_functions_by_hash,
     );
