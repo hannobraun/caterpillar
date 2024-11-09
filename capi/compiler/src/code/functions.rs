@@ -21,7 +21,8 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    named: IndexMap<NamedFunction>,
+    /// # The named functions
+    pub named: IndexMap<NamedFunction>,
 }
 
 impl Functions {
