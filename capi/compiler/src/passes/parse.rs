@@ -217,10 +217,15 @@ fn parse_branch_body(
 
                 if let Some(function) = parse_function(
                     tokens,
-                    FunctionLocation::AnonymousFunction { location },
+                    FunctionLocation::AnonymousFunction {
+                        location: location.clone(),
+                    },
                     functions,
                 ) {
-                    branch.body.push(Expression::LiteralFunction { function });
+                    branch.body.push(Expression::LiteralFunction {
+                        function: function.clone(),
+                    });
+                    functions.anonymous.insert(location, function);
                 }
             }
             Token::BranchStart | Token::KeywordEnd => {
