@@ -205,7 +205,7 @@ impl Expression {
     ///
     /// Return `None`, if this is a different kind of expression.
     pub fn as_function(&self) -> Option<&Function> {
-        let Expression::LiteralFunction { function } = self else {
+        let Expression::LiteralFunction { function, .. } = self else {
             return None;
         };
 

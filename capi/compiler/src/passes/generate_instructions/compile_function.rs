@@ -328,7 +328,7 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
-        Expression::LiteralFunction { function } => {
+        Expression::LiteralFunction { function, .. } => {
             // We have encountered an anonymous function. We need to emit an
             // instruction that allocates it, and takes care of its environment.
             //

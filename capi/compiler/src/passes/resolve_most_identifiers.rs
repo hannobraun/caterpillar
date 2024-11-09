@@ -85,7 +85,7 @@ fn resolve_in_branch(
 ) {
     for expression in branch.body.values_mut() {
         match expression {
-            Expression::LiteralFunction { function } => {
+            Expression::LiteralFunction { function, .. } => {
                 resolve_in_function(
                     function,
                     scopes,

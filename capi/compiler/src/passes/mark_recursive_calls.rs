@@ -48,7 +48,7 @@ fn mark_recursive_calls_in_function(
     for branch in function.branches.values_mut() {
         for expression in branch.body.values_mut() {
             match expression {
-                Expression::LiteralFunction { function } => {
+                Expression::LiteralFunction { function, .. } => {
                     mark_recursive_calls_in_function(
                         function,
                         indices_in_cluster_by_function_name,
@@ -171,7 +171,7 @@ mod tests {
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::LiteralFunction { function } = expression else {
+        let Expression::LiteralFunction { function, .. } = expression else {
             panic!("Expected expression to be a function.");
         };
 

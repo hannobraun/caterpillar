@@ -331,7 +331,7 @@ fn infer_type_of_expression(
             // Comments have no bearing on type inference.
             return None;
         }
-        Expression::LiteralFunction { function } => {
+        Expression::LiteralFunction { function, .. } => {
             let function_location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };

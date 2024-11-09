@@ -50,7 +50,7 @@ fn include_calls_from_function_in_call_graph(
     for branch in function.branches.values() {
         for expression in branch.body.values() {
             match expression {
-                Expression::LiteralFunction { function } => {
+                Expression::LiteralFunction { function, .. } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,
                         function,
