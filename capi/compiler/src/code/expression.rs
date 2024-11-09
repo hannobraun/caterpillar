@@ -147,6 +147,12 @@ pub enum Expression {
     /// # A function literal
     LiteralFunction {
         /// # The function defined by this literal
+        ///
+        /// ## Implementation Note
+        ///
+        /// This field is on its way out, as part of an ongoing cleanup to
+        /// simplify the handling of functions in the compiler pipeline. The
+        /// `hash` field is the new way of accessing anonymous functions.
         function: Function,
 
         /// # The hash of the literal function that is defined here
