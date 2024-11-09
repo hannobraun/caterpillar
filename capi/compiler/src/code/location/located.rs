@@ -40,6 +40,7 @@ impl Located<'_, NamedFunction> {
     /// # Iterate over the function's branches
     pub fn branches(&self) -> impl Iterator<Item = Located<Branch>> {
         let function = self.fragment;
+        let location = self.location;
 
         function
             .inner
@@ -48,7 +49,7 @@ impl Located<'_, NamedFunction> {
             .map(move |(&index, branch)| Located {
                 fragment: branch,
                 location: BranchLocation {
-                    parent: Box::new(self.location.into()),
+                    parent: Box::new(location.into()),
                     index,
                 },
             })
