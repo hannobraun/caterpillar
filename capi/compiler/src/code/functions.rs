@@ -21,13 +21,13 @@ use super::{
 /// is the more future-proof way of referring to functions.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    inner: IndexMap<NamedFunction>,
+    named: IndexMap<NamedFunction>,
 }
 
 impl Functions {
     /// # Compute the index of the next named function to be inserted
     pub fn next_named_index(&self) -> Index<NamedFunction> {
-        self.inner.next_index()
+        self.named.next_index()
     }
 
     /// # Insert the provided named function
@@ -36,7 +36,7 @@ impl Functions {
     ///
     /// Panics, if the added function does not have a name.
     pub fn insert_named(&mut self, function: NamedFunction) {
-        self.inner.push(function);
+        self.named.push(function);
     }
 
     /// # Access the named function at the given index
@@ -44,7 +44,7 @@ impl Functions {
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<&NamedFunction> {
-        self.inner.get(index)
+        self.named.get(index)
     }
 
     /// # Access the named function at the given index mutably
@@ -52,7 +52,7 @@ impl Functions {
         &mut self,
         index: &Index<NamedFunction>,
     ) -> Option<&mut NamedFunction> {
-        self.inner.get_mut(index)
+        self.named.get_mut(index)
     }
 
     /// # Find the named function with the provided hash
@@ -60,7 +60,7 @@ impl Functions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Located<&NamedFunction>> {
-        self.inner.iter().find_map(|(&index, function)| {
+        self.named.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
                 Some(Located {
                     fragment: function,
@@ -77,7 +77,7 @@ impl Functions {
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<Located<&NamedFunction>> {
-        let function = self.inner.get(index)?;
+        let function = self.named.get(index)?;
         Some(Located {
             fragment: function,
             location: *index,
@@ -86,7 +86,7 @@ impl Functions {
 
     /// # Find the function with the provided name
     pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
-        self.inner.iter().find_map(|(&index, function)| {
+        self.named.iter().find_map(|(&index, function)| {
             if function.name == name {
                 Some(Located {
                     fragment: function,
@@ -125,7 +125,7 @@ impl Functions {
     ) -> Option<&Function> {
         match location {
             FunctionLocation::NamedFunction { index } => {
-                self.inner.get(index).map(|function| &function.inner)
+                self.named.get(index).map(|function| &function.inner)
             }
             FunctionLocation::AnonymousFunction { location } => {
                 let expression = self.find_expression_by_location(location)?;
@@ -138,7 +138,7 @@ impl Functions {
     pub fn named_functions(
         &self,
     ) -> impl Iterator<Item = Located<&NamedFunction>> {
-        self.inner.iter().map(|(index, function)| Located {
+        self.named.iter().map(|(index, function)| Located {
             fragment: function,
             location: *index,
         })
@@ -148,12 +148,12 @@ impl Functions {
     pub fn named_functions_mut(
         &mut self,
     ) -> impl Iterator<Item = &mut NamedFunction> {
-        self.inner.values_mut()
+        self.named.values_mut()
     }
 
     /// # Consume this instance and return an iterator over the named functions
     pub fn into_named_functions(self) -> impl Iterator<Item = NamedFunction> {
-        self.inner.into_values()
+        self.named.into_values()
     }
 }
 
