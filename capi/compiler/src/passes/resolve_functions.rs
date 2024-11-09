@@ -1,11 +1,13 @@
 use std::collections::BTreeMap;
 
-use crate::code::{CallGraph, Expression, Function, Functions, Hash};
+use crate::code::{
+    CallGraph, Expression, Function, Functions, Hash, StableFunctions,
+};
 
 pub fn resolve_calls_to_user_defined_functions(
-    functions: &mut Functions,
+    mut functions: Functions,
     call_graph: &CallGraph,
-) {
+) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
 
     for (index, _) in call_graph.functions_from_leaves() {
@@ -22,6 +24,11 @@ pub fn resolve_calls_to_user_defined_functions(
         resolved_hashes_by_name
             .insert(function.name.clone(), Hash::new(&function.inner));
     }
+
+    // We have resolved the function calls, creating hashes to refer to the
+    // resolved functions. From here on, the functions must not be allowed to
+    // change, or those hashes will become invalid.
+    StableFunctions::from(functions)
 }
 
 fn resolve_calls_in_function(

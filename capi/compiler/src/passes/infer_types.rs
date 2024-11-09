@@ -490,7 +490,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{ConcreteSignature, Functions, Type, Types},
+        code::{ConcreteSignature, Functions, StableFunctions, Type, Types},
         host::{Host, HostFunction},
         passes::{
             build_call_graph, mark_recursive_calls, parse,
@@ -805,13 +805,14 @@ mod tests {
         }
     }
 
-    fn infer_types(source: &str) -> (Functions, Types) {
+    fn infer_types(source: &str) -> (StableFunctions, Types) {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &TestHost);
         let call_graph = build_call_graph(&functions);
         mark_recursive_calls(&mut functions, &call_graph);
-        resolve_calls_to_user_defined_functions(&mut functions, &call_graph);
+        let functions =
+            resolve_calls_to_user_defined_functions(functions, &call_graph);
         let types = super::infer_types(&functions, &call_graph, &TestHost);
 
         (functions, types)

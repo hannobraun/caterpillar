@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{CallGraph, Function, Functions, Hash, Types},
+    code::{CallGraph, Function, Hash, StableFunctions, Types},
     host::Host,
     passes::{
         build_call_graph, detect_changes, determine_tail_positions,
@@ -18,7 +18,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    old_functions: Option<Functions>,
+    old_functions: Option<StableFunctions>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_hash:
@@ -39,7 +39,8 @@ impl Compiler {
         resolve_most_identifiers(&mut functions, host);
         let mut call_graph = build_call_graph(&functions);
         mark_recursive_calls(&mut functions, &call_graph);
-        resolve_calls_to_user_defined_functions(&mut functions, &call_graph);
+        let functions =
+            resolve_calls_to_user_defined_functions(functions, &call_graph);
         find_divergent_functions(&functions, &mut call_graph);
         let types = infer_types(&functions, &call_graph, host);
         let changes = detect_changes(self.old_functions.take(), &functions);
@@ -73,7 +74,7 @@ pub struct CallInstructionsByCallee {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
-    pub functions: Functions,
+    pub functions: StableFunctions,
     pub call_graph: CallGraph,
     pub types: Types,
     pub instructions: Instructions,
