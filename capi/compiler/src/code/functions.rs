@@ -117,11 +117,6 @@ impl Functions {
     ) -> impl Iterator<Item = &mut NamedFunction> {
         self.named.values_mut()
     }
-
-    /// # Consume this instance and return an iterator over the named functions
-    pub fn into_named_functions(self) -> impl Iterator<Item = NamedFunction> {
-        self.named.into_values()
-    }
 }
 
 /// # A function that has a name

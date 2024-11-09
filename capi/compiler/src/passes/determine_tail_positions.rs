@@ -59,7 +59,8 @@ mod tests {
         );
 
         let (_, branch) = functions
-            .into_named_functions()
+            .named
+            .into_values()
             .next()
             .unwrap()
             .inner
@@ -90,7 +91,7 @@ mod tests {
             ",
         );
 
-        let mut function = functions.into_named_functions().next().unwrap();
+        let mut function = functions.named.into_values().next().unwrap();
         let (_, branch) = function.inner.branches.pop_first().unwrap();
         let Expression::LiteralFunction { function } =
             &branch.body.values().nth(1).unwrap()
@@ -123,7 +124,7 @@ mod tests {
             ",
         );
 
-        let mut function = functions.into_named_functions().next().unwrap();
+        let mut function = functions.named.into_values().next().unwrap();
         let (_, branch) = function.inner.branches.pop_first().unwrap();
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
