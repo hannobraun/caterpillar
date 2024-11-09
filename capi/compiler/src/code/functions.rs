@@ -72,6 +72,23 @@ impl Functions {
         })
     }
 
+    /// # Find the function at the given location
+    ///
+    /// This includes both named and anonymous functions.
+    pub fn find_function_by_location(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<&Function> {
+        match location {
+            FunctionLocation::NamedFunction { index } => {
+                self.named.get(index).map(|function| &function.inner)
+            }
+            FunctionLocation::AnonymousFunction { location } => {
+                self.anonymous.get(location)
+            }
+        }
+    }
+
     /// # Find the branch at the given location
     pub fn find_branch_by_location(
         &self,
@@ -88,23 +105,6 @@ impl Functions {
     ) -> Option<&Expression> {
         let branch = self.find_branch_by_location(&location.parent)?;
         branch.body.get(&location.index)
-    }
-
-    /// # Find the function at the given location
-    ///
-    /// This includes both named and anonymous functions.
-    pub fn find_function_by_location(
-        &self,
-        location: &FunctionLocation,
-    ) -> Option<&Function> {
-        match location {
-            FunctionLocation::NamedFunction { index } => {
-                self.named.get(index).map(|function| &function.inner)
-            }
-            FunctionLocation::AnonymousFunction { location } => {
-                self.anonymous.get(location)
-            }
-        }
     }
 
     /// # Iterate over the named functions
