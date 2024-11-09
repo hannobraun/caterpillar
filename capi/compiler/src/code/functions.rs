@@ -22,14 +22,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Access the named function at the given index mutably
-    pub fn get_named_mut(
-        &mut self,
-        index: &Index<NamedFunction>,
-    ) -> Option<&mut NamedFunction> {
-        self.named.get_mut(index)
-    }
-
     /// # Find the named function with the provided hash
     pub fn find_named_by_hash(
         &self,

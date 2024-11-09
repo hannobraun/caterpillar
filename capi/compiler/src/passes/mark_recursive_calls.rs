@@ -26,7 +26,8 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
 
         for named_function_index in cluster.functions.values() {
             let function = functions
-                .get_named_mut(named_function_index)
+                .named
+                .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
             mark_recursive_calls_in_function(
