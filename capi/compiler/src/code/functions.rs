@@ -9,7 +9,7 @@ use super::{
     Hash, IndexMap, Located,
 };
 
-/// # All functions in a program
+/// # All functions in the program
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
     /// # The named functions
