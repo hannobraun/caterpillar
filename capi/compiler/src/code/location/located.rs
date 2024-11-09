@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 use crate::code::{Branch, Expression, Index, NamedFunction};
 
@@ -19,6 +19,12 @@ impl<T: HasLocation> Deref for Located<T> {
 
     fn deref(&self) -> &Self::Target {
         &self.fragment
+    }
+}
+
+impl<T: HasLocation> DerefMut for Located<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.fragment
     }
 }
 
