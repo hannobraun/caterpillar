@@ -22,15 +22,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Insert the provided named function
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if the added function does not have a name.
-    pub fn insert_named(&mut self, function: NamedFunction) {
-        self.named.push(function);
-    }
-
     /// # Access the named function at the given index
     pub fn get_named(
         &self,

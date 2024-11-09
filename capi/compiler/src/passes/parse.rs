@@ -47,7 +47,7 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
             break;
         };
 
-        functions.insert_named(function);
+        functions.named.push(function);
     }
 
     functions
