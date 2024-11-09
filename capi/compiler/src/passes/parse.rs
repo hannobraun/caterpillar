@@ -80,7 +80,11 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    while let Some(branch) = parse_branch(tokens) {
+    loop {
+        let Some(branch) = parse_branch(tokens) else {
+            break;
+        };
+
         function.branches.push(branch);
     }
 
