@@ -193,7 +193,7 @@ impl DebugExpressionKind {
                     calling function's cluster.",
                 );
                 let called_function =
-                    functions.get_named(called_function_index).expect(
+                    functions.named.get(called_function_index).expect(
                         "Expecting to find expression referred to from a \
                         cluster.",
                     );

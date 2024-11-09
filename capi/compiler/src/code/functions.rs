@@ -22,14 +22,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Access the named function at the given index
-    pub fn get_named(
-        &self,
-        index: &Index<NamedFunction>,
-    ) -> Option<&NamedFunction> {
-        self.named.get(index)
-    }
-
     /// # Access the named function at the given index mutably
     pub fn get_named_mut(
         &mut self,

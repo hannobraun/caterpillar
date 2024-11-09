@@ -261,7 +261,8 @@ fn instruction_to_named_function(
             FunctionLocation::NamedFunction { index } => {
                 let function = code
                     .functions
-                    .get_named(&index)
+                    .named
+                    .get(&index)
                     .expect(
                         "Function location in source map should refer to \
                         function.",
