@@ -1,7 +1,8 @@
 use std::collections::VecDeque;
 
 use crate::code::{
-    Branch, Expression, Function, Functions, NamedFunction, Pattern,
+    Branch, BranchLocation, Expression, ExpressionLocation, Function,
+    FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
 
 use super::tokenize::Token;
@@ -38,7 +39,9 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut functions = Functions::default();
 
     loop {
-        let Some(function) = parse_named_function(&mut tokens) else {
+        let index = functions.next_named_index();
+
+        let Some(function) = parse_named_function(&mut tokens, index) else {
             break;
         };
 
@@ -48,7 +51,10 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     functions
 }
 
-fn parse_named_function(tokens: &mut Tokens) -> Option<NamedFunction> {
+fn parse_named_function(
+    tokens: &mut Tokens,
+    index: Index<NamedFunction>,
+) -> Option<NamedFunction> {
     let name = loop {
         if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
@@ -66,7 +72,8 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<NamedFunction> {
         }
     };
 
-    let function = parse_function(tokens)?;
+    let location = FunctionLocation::NamedFunction { index };
+    let function = parse_function(tokens, location)?;
 
     Some(NamedFunction {
         name,
@@ -74,7 +81,10 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<NamedFunction> {
     })
 }
 
-fn parse_function(tokens: &mut Tokens) -> Option<Function> {
+fn parse_function(
+    tokens: &mut Tokens,
+    location: FunctionLocation,
+) -> Option<Function> {
     let mut function = Function::default();
 
     match tokens.take()? {
@@ -85,7 +95,12 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     }
 
     loop {
-        let Some(branch) = parse_branch(tokens) else {
+        let location = BranchLocation {
+            parent: Box::new(location.clone()),
+            index: function.branches.next_index(),
+        };
+
+        let Some(branch) = parse_branch(tokens, location) else {
             break;
         };
 
@@ -102,7 +117,10 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
     Some(function)
 }
 
-fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
+fn parse_branch(
+    tokens: &mut Tokens,
+    location: BranchLocation,
+) -> Option<Branch> {
     match tokens.peek()? {
         Token::BranchStart => {
             tokens.take();
@@ -118,7 +136,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     let mut branch = Branch::default();
 
     parse_branch_parameters(tokens, &mut branch);
-    parse_branch_body(tokens, &mut branch)?;
+    parse_branch_body(tokens, &mut branch, location)?;
 
     Some(branch)
 }
@@ -174,11 +192,22 @@ fn parse_branch_parameter(token: Token) -> Option<Pattern> {
     }
 }
 
-fn parse_branch_body(tokens: &mut Tokens, branch: &mut Branch) -> Option<()> {
+fn parse_branch_body(
+    tokens: &mut Tokens,
+    branch: &mut Branch,
+    location: BranchLocation,
+) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::KeywordFn => {
-                if let Some(function) = parse_function(tokens) {
+                let location = FunctionLocation::AnonymousFunction {
+                    location: ExpressionLocation {
+                        parent: Box::new(location.clone()),
+                        index: branch.body.next_index(),
+                    },
+                };
+
+                if let Some(function) = parse_function(tokens, location) {
                     branch.body.push(Expression::LiteralFunction { function });
                 }
             }

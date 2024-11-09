@@ -25,6 +25,11 @@ pub struct Functions {
 }
 
 impl Functions {
+    /// # Compute the index of the next named function to be inserted
+    pub fn next_named_index(&self) -> Index<NamedFunction> {
+        self.inner.next_index()
+    }
+
     /// # Insert the provided named function
     ///
     /// ## Panics
