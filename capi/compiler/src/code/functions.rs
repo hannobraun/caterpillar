@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use capi_runtime::Value;
 
@@ -19,6 +19,13 @@ pub struct Functions {
     /// expected to grow a module system in the future, and then this will
     /// change.
     pub named: IndexMap<NamedFunction>,
+
+    /// # The anonymous functions
+    ///
+    /// Anonymous functions are defined within named functions (or recursively,
+    /// within other anonymous functions). They are identified by their address
+    /// in the code.
+    pub anonymous: BTreeMap<ExpressionLocation, Function>,
 }
 
 impl Functions {
