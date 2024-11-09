@@ -200,14 +200,15 @@ fn parse_branch_body(
     while let Some(token) = tokens.peek() {
         match token {
             Token::KeywordFn => {
-                let location = FunctionLocation::AnonymousFunction {
-                    location: ExpressionLocation {
-                        parent: Box::new(location.clone()),
-                        index: branch.body.next_index(),
-                    },
+                let location = ExpressionLocation {
+                    parent: Box::new(location.clone()),
+                    index: branch.body.next_index(),
                 };
 
-                if let Some(function) = parse_function(tokens, location) {
+                if let Some(function) = parse_function(
+                    tokens,
+                    FunctionLocation::AnonymousFunction { location },
+                ) {
                     branch.body.push(Expression::LiteralFunction { function });
                 }
             }
