@@ -224,6 +224,7 @@ fn parse_branch_body(
                 ) {
                     branch.body.push(Expression::LiteralFunction {
                         function: function.clone(),
+                        hash: None,
                     });
                     functions.anonymous.insert(location, function);
                 }
