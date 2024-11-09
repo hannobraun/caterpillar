@@ -143,7 +143,7 @@ impl Cluster {
         &'r self,
         index: &Index<Index<NamedFunction>>,
         functions: &'r Functions,
-    ) -> Located<'r, NamedFunction> {
+    ) -> Located<&'r NamedFunction> {
         let index = self
             .functions
             .get(index)
@@ -165,7 +165,7 @@ impl Cluster {
     pub fn functions<'r>(
         &'r self,
         functions: &'r Functions,
-    ) -> impl Iterator<Item = Located<'r, NamedFunction>> + 'r {
+    ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
         self.functions.values().copied().map(|index| {
             functions
                 .find_named_by_index(&index)
