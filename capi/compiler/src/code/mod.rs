@@ -11,7 +11,9 @@ pub use self::{
     call_graph::{CallGraph, Cluster},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::{Expression, UnresolvedCallToUserDefinedFunction},
-    functions::{Branch, Function, Functions, NamedFunction, Pattern},
+    functions::{
+        Branch, Function, Functions, NamedFunction, Pattern, StableFunctions,
+    },
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},

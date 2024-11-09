@@ -1,4 +1,7 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    ops::Deref,
+};
 
 use capi_runtime::Value;
 
@@ -122,6 +125,34 @@ impl Functions {
         &mut self,
     ) -> impl Iterator<Item = &mut NamedFunction> {
         self.named.values_mut()
+    }
+}
+
+/// # All functions in a program, stable and content-addressable
+///
+/// Functions can be addressed via a hash, and this is done in function calls,
+/// for example. This must be done with care though, as any change to a function
+/// will also change its hash, invalidating any pre-existing hashes.
+///
+/// This is a wrapper around [`Functions`] (it [`Deref`]s to [`Functions`]),
+/// which only allows immutable access, making sure that functions (and
+/// therefore their hashes) remain stable.
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+pub struct StableFunctions {
+    inner: Functions,
+}
+
+impl Deref for StableFunctions {
+    type Target = Functions;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl From<Functions> for StableFunctions {
+    fn from(functions: Functions) -> Self {
+        Self { inner: functions }
     }
 }
 
