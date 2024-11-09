@@ -39,7 +39,7 @@ impl Located<'_, NamedFunction> {
 
     /// # Iterate over the function's branches
     pub fn branches(&self) -> impl Iterator<Item = Located<Branch>> {
-        let function = &self.fragment;
+        let function = self.fragment;
 
         function
             .inner
