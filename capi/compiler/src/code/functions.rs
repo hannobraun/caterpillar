@@ -102,8 +102,7 @@ impl Functions {
                 self.named.get(index).map(|function| &function.inner)
             }
             FunctionLocation::AnonymousFunction { location } => {
-                let expression = self.find_expression_by_location(location)?;
-                expression.as_function()
+                self.anonymous.get(location)
             }
         }
     }
