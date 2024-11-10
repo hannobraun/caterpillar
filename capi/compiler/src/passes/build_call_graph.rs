@@ -7,8 +7,8 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
-    NamedFunction,
+    CallGraph, Cluster, Expression, Function, FunctionLocation, Functions,
+    Index, IndexMap, Located, NamedFunction,
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
@@ -25,17 +25,16 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         let name = function.name.clone();
         let index = function.index();
 
-        let graph_index =
-            call_graph.add_node((&function.fragment.inner, index));
+        let graph_index = call_graph.add_node((function, index));
         graph_index_by_function_name.insert(name, graph_index);
     }
 
     for caller_index in call_graph.node_indices() {
-        let (function, _) = call_graph[caller_index];
+        let (function, _) = &call_graph[caller_index];
 
         include_calls_from_function_in_call_graph(
             caller_index,
-            function,
+            function.clone().as_located_function(),
             &graph_index_by_function_name,
             &mut call_graph,
         );
@@ -46,17 +45,22 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
 fn include_calls_from_function_in_call_graph(
     caller_index: NodeIndex,
-    function: &Function,
+    function: Located<&Function>,
     graph_index_by_function_name: &BTreeMap<String, NodeIndex>,
     call_graph: &mut PetCallGraph,
 ) {
-    for branch in function.branches.values() {
-        for expression in branch.body.values() {
-            match expression {
+    for branch in function.branches() {
+        for expression in branch.body() {
+            match expression.fragment {
                 Expression::LiteralFunction { function, .. } => {
                     include_calls_from_function_in_call_graph(
                         caller_index,
-                        function,
+                        Located {
+                            fragment: function,
+                            location: FunctionLocation::AnonymousFunction {
+                                location: expression.location,
+                            },
+                        },
                         graph_index_by_function_name,
                         call_graph,
                     );
@@ -112,7 +116,8 @@ fn collect_functions_into_clusters(
         })
 }
 
-type PetCallGraph<'r> = Graph<(&'r Function, Index<NamedFunction>), ()>;
+type PetCallGraph<'r> =
+    Graph<(Located<&'r NamedFunction>, Index<NamedFunction>), ()>;
 
 #[cfg(test)]
 mod tests {
