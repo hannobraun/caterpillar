@@ -288,6 +288,7 @@ fn step_into_function() {
         let a = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .branches()
             .next()
             .unwrap()

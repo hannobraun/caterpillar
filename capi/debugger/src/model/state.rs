@@ -99,6 +99,7 @@ impl PersistentState {
                         );
 
                     function
+                        .as_located_function()
                         .branches()
                         .filter_map(|branch| {
                             let expression = branch.body().next()?;

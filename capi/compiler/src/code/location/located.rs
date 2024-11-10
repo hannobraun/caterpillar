@@ -43,24 +43,6 @@ impl Located<&NamedFunction> {
         index.into()
     }
 
-    /// # Iterate over the function's branches
-    pub fn branches(&self) -> impl Iterator<Item = Located<&Branch>> {
-        let function = self.fragment;
-        let location = self.location;
-
-        function
-            .inner
-            .branches
-            .iter()
-            .map(move |(&index, branch)| Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(location.into()),
-                    index,
-                },
-            })
-    }
-
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.
@@ -93,6 +75,25 @@ impl Located<&NamedFunction> {
                 index: self.location,
             },
         }
+    }
+}
+
+impl Located<&Function> {
+    /// # Iterate over the function's branches
+    pub fn branches(&self) -> impl Iterator<Item = Located<&Branch>> {
+        let function = self.fragment;
+        let location = self.location.clone();
+
+        function
+            .branches
+            .iter()
+            .map(move |(&index, branch)| Located {
+                fragment: branch,
+                location: BranchLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            })
     }
 }
 
