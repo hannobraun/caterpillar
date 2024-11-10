@@ -5,7 +5,7 @@ use crate::code::{Branch, Expression, Index, NamedFunction};
 use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 
 /// # A fragment of code, with its location attached
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Located<T: HasLocation> {
     /// # The code fragment
     pub fragment: T,
