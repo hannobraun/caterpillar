@@ -29,6 +29,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     let nop = functions
         .find_by_name("main")
         .unwrap()
+        .as_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -64,6 +65,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     let nop = functions
         .find_by_name("main")
         .unwrap()
+        .as_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -112,6 +114,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         .expect_code()
         .find_by_name("main")
         .unwrap()
+        .as_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -169,6 +172,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         .expect_code()
         .find_by_name("main")
         .unwrap()
+        .as_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -279,6 +283,7 @@ fn step_into_function() {
         let f = functions
             .find_by_name("main")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -348,6 +353,7 @@ fn step_out_of_function_if_at_last_expression() {
         let nop_in_main = functions
             .find_by_name("main")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -357,6 +363,7 @@ fn step_out_of_function_if_at_last_expression() {
         let nop_in_f = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -410,6 +417,7 @@ fn step_out_of_main_function() {
         functions
             .find_by_name("main")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -456,6 +464,7 @@ fn step_over_function_call() {
         .expect_code()
         .find_by_name("main")
         .unwrap()
+        .as_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -514,6 +523,7 @@ fn step_out_of_function() {
         let a = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -523,6 +533,7 @@ fn step_out_of_function() {
         let b = functions
             .find_by_name("main")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()

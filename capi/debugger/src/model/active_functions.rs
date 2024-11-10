@@ -289,7 +289,9 @@ fn reconstruct_function(
         panic!("Expecting function `{name}` to exist.");
     };
 
-    let tail_call = if let Some(branch) = function.find_single_branch() {
+    let tail_call = if let Some(branch) =
+        function.as_located_function().find_single_branch()
+    {
         let mut tail_call = None;
 
         for expression in branch.body() {

@@ -43,30 +43,6 @@ impl Located<&NamedFunction> {
         index.into()
     }
 
-    /// # Access the function's single branch
-    ///
-    /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(&self) -> Option<Located<&Branch>> {
-        let function = &self.fragment;
-        let location = self.location.into();
-
-        if function.inner.branches.len() > 1 {
-            return None;
-        }
-
-        function
-            .inner
-            .branches
-            .first_key_value()
-            .map(|(&index, branch)| Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(location),
-                    index,
-                },
-            })
-    }
-
     /// # Convert this located named function to a located function
     pub fn as_located_function(&self) -> Located<&Function> {
         Located {
@@ -91,6 +67,29 @@ impl Located<&Function> {
                 fragment: branch,
                 location: BranchLocation {
                     parent: Box::new(location.clone()),
+                    index,
+                },
+            })
+    }
+
+    /// # Access the function's single branch
+    ///
+    /// Returns `None`, if the function does not have exactly one branch.
+    pub fn find_single_branch(&self) -> Option<Located<&Branch>> {
+        let function = &self.fragment;
+        let location = self.location.clone();
+
+        if function.branches.len() > 1 {
+            return None;
+        }
+
+        function
+            .branches
+            .first_key_value()
+            .map(|(&index, branch)| Located {
+                fragment: branch,
+                location: BranchLocation {
+                    parent: Box::new(location),
                     index,
                 },
             })

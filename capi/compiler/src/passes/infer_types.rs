@@ -513,6 +513,7 @@ mod tests {
         let (n, host_fn) = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -550,6 +551,7 @@ mod tests {
         let function = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -638,6 +640,7 @@ mod tests {
         let branch = functions
             .find_by_name("f")
             .unwrap()
+            .as_located_function()
             .find_single_branch()
             .map(|branch| {
                 types
