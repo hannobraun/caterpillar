@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-use crate::code::{Branch, Expression, Index, NamedFunction};
+use crate::code::{Branch, Expression, Function, Index, NamedFunction};
 
 use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 
@@ -83,6 +83,16 @@ impl Located<&NamedFunction> {
                     index,
                 },
             })
+    }
+
+    /// # Convert this located named function to a located function
+    pub fn as_located_function(&self) -> Located<&Function> {
+        Located {
+            fragment: &self.fragment.inner,
+            location: FunctionLocation::NamedFunction {
+                index: self.location,
+            },
+        }
     }
 }
 
