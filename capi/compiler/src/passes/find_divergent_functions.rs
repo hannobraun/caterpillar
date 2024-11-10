@@ -56,7 +56,7 @@ pub fn find_divergent_functions(
         let make_acyclic = false;
         let branch_clusters = condensation(branch_call_graph, make_acyclic);
 
-        let mut diverging_branches = BTreeSet::new();
+        let mut divergent_branches = BTreeSet::new();
 
         for index in branch_clusters.node_indices() {
             let branch_cluster = branch_clusters.node_weight(index).expect(
@@ -73,7 +73,7 @@ pub fn find_divergent_functions(
                 .all(|edge| edge.target() == index);
 
             if has_outgoing_edges && only_contains_calls_to_itself {
-                diverging_branches.extend(branch_cluster.iter().cloned());
+                divergent_branches.extend(branch_cluster.iter().cloned());
             }
         }
 
@@ -82,7 +82,7 @@ pub fn find_divergent_functions(
             .filter_map(|function| {
                 let all_branches_are_diverging =
                     function.branches().all(|branch| {
-                        diverging_branches.contains(&branch.location)
+                        divergent_branches.contains(&branch.location)
                     });
 
                 if all_branches_are_diverging {
