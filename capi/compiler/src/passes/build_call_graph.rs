@@ -111,8 +111,7 @@ fn collect_functions_into_clusters(
         })
 }
 
-type PetCallGraph<'r> = Graph<FunctionWithIndex<'r>, ()>;
-type FunctionWithIndex<'r> = (&'r Function, Index<NamedFunction>);
+type PetCallGraph<'r> = Graph<(&'r Function, Index<NamedFunction>), ()>;
 
 #[cfg(test)]
 mod tests {
