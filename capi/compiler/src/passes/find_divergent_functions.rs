@@ -77,7 +77,7 @@ pub fn find_divergent_functions(
             }
         }
 
-        let diverging_functions = cluster
+        let divergent_functions = cluster
             .functions(functions)
             .filter_map(|function| {
                 let all_branches_are_diverging =
@@ -93,6 +93,6 @@ pub fn find_divergent_functions(
             })
             .collect();
 
-        cluster.divergent_functions = Some(diverging_functions);
+        cluster.divergent_functions = Some(divergent_functions);
     }
 }
