@@ -21,19 +21,9 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for function in functions.named_functions_mut() {
-        if !function.inner.environment.is_empty() {
-            panic!(
-                "Named functions do not have an environment that they could \
-                access.\n\
-                \n\
-                Environment: {:#?}",
-                function.inner.environment,
-            );
-        }
-
+    for mut function in functions.all_functions_mut() {
         resolve_in_function(
-            &mut function.inner,
+            &mut function,
             &mut scopes,
             &known_named_functions,
             host,
