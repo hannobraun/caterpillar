@@ -25,8 +25,9 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         let name = named_function.name.clone();
         let index = named_function.index();
 
-        let graph_index = call_graph.add_node((named_function, index));
-        graph_index_by_function_name.insert(name, graph_index);
+        graph_index_by_function_name
+            .entry(name)
+            .or_insert_with(|| call_graph.add_node((named_function, index)));
     }
 
     for caller_index in call_graph.node_indices() {
