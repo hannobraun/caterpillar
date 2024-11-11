@@ -2,13 +2,12 @@ use std::collections::BTreeMap;
 
 use petgraph::{
     algo::{condensation, toposort},
-    graph::NodeIndex,
     Graph,
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
-    Located, NamedFunction,
+    CallGraph, Cluster, Expression, Functions, Index, IndexMap, Located,
+    NamedFunction,
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
@@ -42,36 +41,22 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
             graph_index_by_function_name[&named_function.name]
         };
 
-        include_calls_from_function_in_call_graph(
-            caller_index,
-            function,
-            &graph_index_by_function_name,
-            &mut call_graph,
-        );
-    }
-
-    call_graph
-}
-
-fn include_calls_from_function_in_call_graph(
-    caller_index: NodeIndex,
-    function: Located<&Function>,
-    graph_index_by_function_name: &BTreeMap<String, NodeIndex>,
-    call_graph: &mut PetCallGraph,
-) {
-    for branch in function.branches() {
-        for expression in branch.body() {
-            if let Expression::UnresolvedIdentifier {
-                name,
-                is_known_to_be_call_to_user_defined_function: Some(_),
-                ..
-            } = expression.fragment
-            {
-                let callee_index = graph_index_by_function_name[name];
-                call_graph.add_edge(caller_index, callee_index, ());
+        for branch in function.branches() {
+            for expression in branch.body() {
+                if let Expression::UnresolvedIdentifier {
+                    name,
+                    is_known_to_be_call_to_user_defined_function: Some(_),
+                    ..
+                } = expression.fragment
+                {
+                    let callee_index = graph_index_by_function_name[name];
+                    call_graph.add_edge(caller_index, callee_index, ());
+                }
             }
         }
     }
+
+    call_graph
 }
 
 fn collect_functions_into_clusters(
