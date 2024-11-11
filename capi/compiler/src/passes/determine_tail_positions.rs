@@ -1,8 +1,8 @@
 use crate::code::{Branch, Expression, Function, Functions};
 
 pub fn determine_tail_positions(functions: &mut Functions) {
-    for function in functions.named_functions_mut() {
-        analyze_function(&mut function.inner);
+    for mut function in functions.all_functions_mut() {
+        analyze_function(&mut function);
     }
 }
 
