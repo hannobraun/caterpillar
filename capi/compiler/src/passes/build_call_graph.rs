@@ -309,8 +309,8 @@ mod tests {
                     \ ->
                         fn
                             \ ->
-                                # Call a function that comes is placed after
-                                # this one in the source code.
+                                # Call a function that is placed after this one
+                                # in the source code.
                                 c
                         end
                 end
