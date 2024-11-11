@@ -110,6 +110,22 @@ impl Functions {
         branch.body.get(&location.index)
     }
 
+    /// # Iterate over all functions, both named and anonymous
+    pub fn all_functions(&self) -> impl Iterator<Item = Located<&Function>> {
+        self.named
+            .iter()
+            .map(|(&index, named_function)| Located {
+                fragment: &named_function.inner,
+                location: FunctionLocation::NamedFunction { index },
+            })
+            .chain(self.anonymous.iter().map(|(location, function)| Located {
+                fragment: function,
+                location: FunctionLocation::AnonymousFunction {
+                    location: location.clone(),
+                },
+            }))
+    }
+
     /// # Iterate over the named functions
     pub fn named_functions(
         &self,
