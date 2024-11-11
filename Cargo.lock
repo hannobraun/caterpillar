@@ -350,7 +350,7 @@ dependencies = [
  "capi-protocol",
  "capi-watch",
  "ron",
- "thiserror 2.0.2",
+ "thiserror 2.0.3",
  "tokio",
  "tracing",
 ]
@@ -441,7 +441,7 @@ name = "capi-runtime"
 version = "0.1.0"
 dependencies = [
  "serde",
- "thiserror 2.0.2",
+ "thiserror 2.0.3",
  "udigest",
 ]
 
@@ -2193,9 +2193,9 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustix"
-version = "0.38.39"
+version = "0.38.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "375116bee2be9ed569afe2154ea6a99dfdffd257f533f187498c2a8f5feaf4ee"
+checksum = "99e4ea3e1cdc4b559b8e5650f9c8e5998e3e5c1343b4eaf034565f32318d63c0"
 dependencies = [
  "bitflags 2.6.0",
  "errno",
@@ -2560,11 +2560,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.2"
+version = "2.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "037e29b009aa709f293b974da5cd33b15783c049e07f8435778ce8c4871525d8"
+checksum = "c006c85c7651b3cf2ada4584faa36773bd07bac24acfb39f3c431b36d7e667aa"
 dependencies = [
- "thiserror-impl 2.0.2",
+ "thiserror-impl 2.0.3",
 ]
 
 [[package]]
@@ -2580,9 +2580,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.2"
+version = "2.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea4778c7e8ff768bdb32a58a2349903859fe719a320300d7d4ce8636f19a1e69"
+checksum = "f077553d607adc1caf65430528a576c757a71ed73944b66ebb58ef2bbd243568"
 dependencies = [
  "proc-macro2",
  "quote",
