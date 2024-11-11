@@ -118,20 +118,20 @@ impl Functions {
     /// Returns `None`, if no parent named function can be found.
     pub fn find_named_parent(
         &self,
-        location: FunctionLocation,
+        location: &FunctionLocation,
     ) -> Option<Located<&NamedFunction>> {
         let index = match location {
             FunctionLocation::NamedFunction { index } => index,
             FunctionLocation::AnonymousFunction { location } => {
-                return self.find_named_parent(*location.parent.parent);
+                return self.find_named_parent(&location.parent.parent);
             }
         };
 
-        let named_function = self.named.get(&index)?;
+        let named_function = self.named.get(index)?;
 
         Some(Located {
             fragment: named_function,
-            location: index,
+            location: *index,
         })
     }
 
