@@ -7,8 +7,8 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, Function, FunctionLocation, Functions,
-    Index, IndexMap, Located, NamedFunction,
+    CallGraph, Cluster, Expression, Function, Functions, Index, IndexMap,
+    Located, NamedFunction,
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
@@ -30,12 +30,21 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
             .or_insert_with(|| call_graph.add_node((named_function, index)));
     }
 
-    for caller_index in call_graph.node_indices() {
-        let (function, _) = &call_graph[caller_index];
+    for function in functions.all_functions() {
+        let caller_index = {
+            let named_function =
+                functions.find_named_parent(&function.location).expect(
+                    "All functions are either named, or defined in a named \
+                    function. Just got `function` from `functions`. If it \
+                    isn't a named function already, then the named function \
+                    it's defined in must be in there.",
+                );
+            graph_index_by_function_name[&named_function.name]
+        };
 
         include_calls_from_function_in_call_graph(
             caller_index,
-            function.clone().as_located_function(),
+            function,
             &graph_index_by_function_name,
             &mut call_graph,
         );
@@ -52,29 +61,14 @@ fn include_calls_from_function_in_call_graph(
 ) {
     for branch in function.branches() {
         for expression in branch.body() {
-            match expression.fragment {
-                Expression::LiteralFunction { function, .. } => {
-                    include_calls_from_function_in_call_graph(
-                        caller_index,
-                        Located {
-                            fragment: function,
-                            location: FunctionLocation::AnonymousFunction {
-                                location: expression.location,
-                            },
-                        },
-                        graph_index_by_function_name,
-                        call_graph,
-                    );
-                }
-                Expression::UnresolvedIdentifier {
-                    name,
-                    is_known_to_be_call_to_user_defined_function: Some(_),
-                    ..
-                } => {
-                    let callee_index = graph_index_by_function_name[name];
-                    call_graph.add_edge(caller_index, callee_index, ());
-                }
-                _ => {}
+            if let Expression::UnresolvedIdentifier {
+                name,
+                is_known_to_be_call_to_user_defined_function: Some(_),
+                ..
+            } = expression.fragment
+            {
+                let callee_index = graph_index_by_function_name[name];
+                call_graph.add_edge(caller_index, callee_index, ());
             }
         }
     }
