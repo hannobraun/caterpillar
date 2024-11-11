@@ -21,11 +21,11 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for function in functions.named_functions() {
-        let name = function.name.clone();
-        let index = function.index();
+    for named_function in functions.named_functions() {
+        let name = named_function.name.clone();
+        let index = named_function.index();
 
-        let graph_index = call_graph.add_node((function, index));
+        let graph_index = call_graph.add_node((named_function, index));
         graph_index_by_function_name.insert(name, graph_index);
     }
 
