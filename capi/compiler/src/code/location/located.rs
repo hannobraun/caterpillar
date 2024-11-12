@@ -131,6 +131,7 @@ impl Located<&Branch> {
     /// # Iterate over the expressions in the branch's body
     pub fn body(&self) -> impl Iterator<Item = Located<&Expression>> {
         let location = self.location.clone();
+
         self.body.iter().map(move |(&index, expression)| Located {
             fragment: expression,
             location: ExpressionLocation {
