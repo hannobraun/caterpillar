@@ -59,6 +59,18 @@ impl Located<&NamedFunction> {
     }
 }
 
+impl Located<&mut NamedFunction> {
+    /// # Convert this located named function to a located function
+    pub fn as_located_function_mut(&mut self) -> Located<&mut Function> {
+        Located {
+            fragment: &mut self.fragment.inner,
+            location: FunctionLocation::NamedFunction {
+                index: self.location,
+            },
+        }
+    }
+}
+
 impl Located<&Function> {
     /// # Iterate over the function's branches
     pub fn branches(&self) -> impl Iterator<Item = Located<&Branch>> {
