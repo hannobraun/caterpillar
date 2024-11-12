@@ -8,8 +8,8 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    BranchLocation, Cluster, Expression, ExpressionLocation, FunctionLocation,
-    Hash, IndexMap, Located,
+    BranchLocation, Expression, ExpressionLocation, FunctionLocation, Hash,
+    IndexMap, Located,
 };
 
 /// # All functions in the program
@@ -275,12 +275,6 @@ pub struct Function {
     /// All functions in Caterpillar are closures that can use values from
     /// parent scopes. The names of those values are stored here.
     pub environment: BTreeSet<String>,
-
-    /// # The index of this function within its cluster
-    ///
-    /// This is defined for named functions only. The value is `None` for
-    /// anonymous functions.
-    pub index_in_cluster: Option<Index<(Function, Cluster)>>,
 }
 
 #[derive(
