@@ -3,7 +3,9 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use crate::code::{Branch, Expression, Function, Index, NamedFunction};
+use crate::code::{
+    Branch, Expression, Function, Index, NamedFunction, Pattern,
+};
 
 use super::{BranchLocation, ExpressionLocation, FunctionLocation};
 
@@ -136,6 +138,32 @@ impl Located<&Branch> {
                 index,
             },
         })
+    }
+}
+
+impl<'r> Located<&'r mut Branch> {
+    /// # Destructure the located function into its component parts
+    ///
+    /// Unfortunately, following the pattern set by the `Located<&Branch>` API
+    /// doesn't work here, due to lifetime issues.
+    pub fn destructure(
+        self,
+    ) -> (Vec<Located<&'r mut Expression>>, &'r mut Vec<Pattern>) {
+        let expressions = self
+            .fragment
+            .body
+            .iter_mut()
+            .map(|(&index, branch)| Located {
+                fragment: branch,
+                location: ExpressionLocation {
+                    parent: Box::new(self.location.clone()),
+                    index,
+                },
+            })
+            .collect();
+        let parameters = &mut self.fragment.parameters;
+
+        (expressions, parameters)
     }
 }
 
