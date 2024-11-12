@@ -21,9 +21,9 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for function in functions.all_functions_mut() {
+    for mut function in functions.named_functions_mut() {
         resolve_in_function(
-            function,
+            function.as_located_function_mut(),
             &mut scopes,
             &known_named_functions,
             host,
