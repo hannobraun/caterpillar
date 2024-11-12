@@ -203,8 +203,11 @@ impl Functions {
     /// # Iterate over the named functions mutably
     pub fn named_functions_mut(
         &mut self,
-    ) -> impl Iterator<Item = &mut NamedFunction> {
-        self.named.values_mut()
+    ) -> impl Iterator<Item = Located<&mut NamedFunction>> {
+        self.named.iter_mut().map(|(index, function)| Located {
+            fragment: function,
+            location: *index,
+        })
     }
 }
 
