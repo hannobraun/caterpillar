@@ -75,6 +75,25 @@ impl Functions {
         })
     }
 
+    /// # Find the anonymous function at the provided location
+    pub fn find_anonymous_by_location(
+        &self,
+        location: &ExpressionLocation,
+    ) -> Option<Located<&Function>> {
+        self.anonymous.iter().find_map(|(loc, function)| {
+            if loc == location {
+                Some(Located {
+                    fragment: function,
+                    location: FunctionLocation::AnonymousFunction {
+                        location: location.clone(),
+                    },
+                })
+            } else {
+                None
+            }
+        })
+    }
+
     /// # Find the function at the given location
     ///
     /// This includes both named and anonymous functions.
