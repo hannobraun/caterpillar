@@ -91,6 +91,26 @@ mod tests {
             ",
         );
 
+        assert_eq!(
+            functions
+                .find_by_name("f")
+                .unwrap()
+                .as_located_function()
+                .find_single_branch()
+                .unwrap()
+                .body()
+                .nth(1)
+                .and_then(|expression| {
+                    functions.find_anonymous_by_location(&expression.location)
+                })
+                .unwrap()
+                .find_single_branch()
+                .unwrap()
+                .body
+                .to_identifiers(),
+            vec![("not_tail", false), ("tail", true)],
+        );
+
         let mut function = functions.named.into_values().next().unwrap();
         let (_, branch) = function.inner.branches.pop_first().unwrap();
         let Expression::LiteralFunction { function, .. } =
