@@ -2,8 +2,8 @@ use std::collections::BTreeSet;
 
 use crate::{
     code::{
-        Branch, Expression, Function, Functions, Pattern,
-        UnresolvedCallToUserDefinedFunction,
+        Branch, Expression, Function, FunctionLocation, Functions, Located,
+        Pattern, UnresolvedCallToUserDefinedFunction,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -21,9 +21,9 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for mut function in functions.all_functions_mut() {
+    for function in functions.all_functions_mut() {
         resolve_in_function(
-            &mut function,
+            function,
             &mut scopes,
             &known_named_functions,
             host,
@@ -32,12 +32,14 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
 }
 
 fn resolve_in_function(
-    function: &mut Function,
+    function: Located<&mut Function>,
     scopes: &mut Scopes,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
-    for branch in function.branches.values_mut() {
+    let (branches, environment) = function.destructure();
+
+    for branch in branches {
         scopes.push(
             branch
                 .parameters
@@ -59,7 +61,7 @@ fn resolve_in_function(
         resolve_in_branch(
             branch,
             scopes,
-            &mut function.environment,
+            environment,
             known_named_functions,
             host,
         );
@@ -67,17 +69,24 @@ fn resolve_in_function(
 }
 
 fn resolve_in_branch(
-    branch: &mut Branch,
+    branch: Located<&mut Branch>,
     scopes: &mut Scopes,
     environment: &mut Environment,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
-    for expression in branch.body.values_mut() {
-        match expression {
+    let (body, parameters) = branch.destructure();
+
+    for expression in body {
+        match expression.fragment {
             Expression::LiteralFunction { function, .. } => {
                 resolve_in_function(
-                    function,
+                    Located {
+                        fragment: function,
+                        location: FunctionLocation::AnonymousFunction {
+                            location: expression.location,
+                        },
+                    },
                     scopes,
                     known_named_functions,
                     host,
@@ -114,7 +123,7 @@ fn resolve_in_branch(
                     }
 
                     let mut index = 0;
-                    for parameter in &branch.parameters {
+                    for parameter in &*parameters {
                         match parameter {
                             Pattern::Identifier { name: n } => {
                                 if n == name {
@@ -129,19 +138,20 @@ fn resolve_in_branch(
                         index += 1;
                     }
 
-                    *expression = Expression::Binding {
+                    *expression.fragment = Expression::Binding {
                         name: name.clone(),
                         index,
                     }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    *expression = Expression::CallToIntrinsicFunction {
-                        intrinsic,
-                        is_tail_call: *is_known_to_be_in_tail_position,
-                    };
+                    *expression.fragment =
+                        Expression::CallToIntrinsicFunction {
+                            intrinsic,
+                            is_tail_call: *is_known_to_be_in_tail_position,
+                        };
                 } else if let Some(function) = host.function_by_name(name) {
-                    *expression = Expression::CallToHostFunction {
+                    *expression.fragment = Expression::CallToHostFunction {
                         number: function.number(),
                     }
                 } else if known_named_functions.contains(name) {
