@@ -21,7 +21,7 @@ pub struct Functions {
     /// are addressed by an index into that root context. The language is
     /// expected to grow a module system in the future, and then this will
     /// change.
-    pub named: IndexMap<NamedFunction>,
+    pub named: NamedFunctions,
 
     /// # The anonymous functions
     ///
@@ -37,7 +37,7 @@ impl Functions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Located<&NamedFunction>> {
-        self.named.iter().find_map(|(&index, function)| {
+        self.named.inner.iter().find_map(|(&index, function)| {
             if &Hash::new(&function.inner) == hash {
                 Some(Located {
                     fragment: function,
@@ -54,7 +54,7 @@ impl Functions {
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<Located<&NamedFunction>> {
-        let function = self.named.get(index)?;
+        let function = self.named.inner.get(index)?;
         Some(Located {
             fragment: function,
             location: *index,
@@ -63,7 +63,7 @@ impl Functions {
 
     /// # Find the function with the provided name
     pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
-        self.named.iter().find_map(|(&index, function)| {
+        self.named.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
                 Some(Located {
                     fragment: function,
@@ -103,7 +103,7 @@ impl Functions {
     ) -> Option<&Function> {
         match location {
             FunctionLocation::NamedFunction { index } => {
-                self.named.get(index).map(|function| &function.inner)
+                self.named.inner.get(index).map(|function| &function.inner)
             }
             FunctionLocation::AnonymousFunction { location } => {
                 self.anonymous.get(location)
@@ -146,7 +146,7 @@ impl Functions {
             }
         };
 
-        let named_function = self.named.get(index)?;
+        let named_function = self.named.inner.get(index)?;
 
         Some(Located {
             fragment: named_function,
@@ -157,6 +157,7 @@ impl Functions {
     /// # Iterate over all functions, both named and anonymous
     pub fn all_functions(&self) -> impl Iterator<Item = Located<&Function>> {
         self.named
+            .inner
             .iter()
             .map(|(&index, named_function)| Located {
                 fragment: &named_function.inner,
@@ -175,6 +176,7 @@ impl Functions {
         &mut self,
     ) -> impl Iterator<Item = Located<&mut Function>> {
         self.named
+            .inner
             .iter_mut()
             .map(|(&index, named_function)| Located {
                 fragment: &mut named_function.inner,
@@ -194,7 +196,7 @@ impl Functions {
     pub fn named_functions(
         &self,
     ) -> impl Iterator<Item = Located<&NamedFunction>> {
-        self.named.iter().map(|(index, function)| Located {
+        self.named.inner.iter().map(|(index, function)| Located {
             fragment: function,
             location: *index,
         })
@@ -204,11 +206,24 @@ impl Functions {
     pub fn named_functions_mut(
         &mut self,
     ) -> impl Iterator<Item = Located<&mut NamedFunction>> {
-        self.named.iter_mut().map(|(index, function)| Located {
-            fragment: function,
-            location: *index,
-        })
+        self.named
+            .inner
+            .iter_mut()
+            .map(|(index, function)| Located {
+                fragment: function,
+                location: *index,
+            })
     }
+}
+
+/// # The named functions in the program
+///
+/// At this point, all named functions live in a single root context, and are
+/// addressed by an index into that root context. The language is expected to
+/// grow a module system in the future, and then this will change.
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+pub struct NamedFunctions {
+    pub inner: IndexMap<NamedFunction>,
 }
 
 /// # All functions in a program, stable and content-addressable

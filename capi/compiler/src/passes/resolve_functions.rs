@@ -13,6 +13,7 @@ pub fn resolve_calls_to_user_defined_functions(
     for (index, _) in call_graph.functions_from_leaves() {
         let function = functions
             .named
+            .inner
             .get_mut(index)
             .expect("Function referred to from call graph must exist.");
 

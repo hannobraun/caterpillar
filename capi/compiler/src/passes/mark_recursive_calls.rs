@@ -13,6 +13,7 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
             .map(|(&function_index_in_cluster, named_function_index)| {
                 let name = functions
                     .named
+                    .inner
                     .get(named_function_index)
                     .expect(
                         "Expecting function referenced from call graph to \
@@ -27,6 +28,7 @@ pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
         for named_function_index in cluster.functions.values() {
             let function = functions
                 .named
+                .inner
                 .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
@@ -108,7 +110,7 @@ mod tests {
             ",
         );
 
-        for mut function in functions.named.into_values() {
+        for mut function in functions.named.inner.into_values() {
             let Expression::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
@@ -159,7 +161,7 @@ mod tests {
             ",
         );
 
-        let mut functions = functions.named.into_values();
+        let mut functions = functions.named.inner.into_values();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
