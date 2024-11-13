@@ -187,14 +187,14 @@ impl NamedFunctions {
     /// itself is returned.
     ///
     /// Returns `None`, if no parent named function can be found.
-    pub fn find_named_parent(
+    pub fn by_child_function(
         &self,
         location: &FunctionLocation,
     ) -> Option<Located<&NamedFunction>> {
         let index = match location {
             FunctionLocation::NamedFunction { index } => index,
             FunctionLocation::AnonymousFunction { location } => {
-                return self.find_named_parent(&location.parent.parent);
+                return self.by_child_function(&location.parent.parent);
             }
         };
 

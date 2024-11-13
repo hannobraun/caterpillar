@@ -33,7 +33,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         let caller_index =
             {
                 let named_function =
-                functions.named.find_named_parent(&function.location).expect(
+                functions.named.by_child_function(&function.location).expect(
                     "All functions are either named, or defined in a named \
                     function. Just got `function` from `functions`. If it \
                     isn't a named function already, then the named function \
