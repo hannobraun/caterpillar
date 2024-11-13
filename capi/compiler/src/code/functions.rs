@@ -27,7 +27,10 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Find the anonymous function at the provided location
+    /// # Access the anonymous function defined at the provided location
+    ///
+    /// Returns `None`, if no anonymous function is defined at the given
+    /// location.
     pub fn find_anonymous_by_location(
         &self,
         location: &ExpressionLocation,
@@ -46,9 +49,11 @@ impl Functions {
         })
     }
 
-    /// # Find the function at the given location
+    /// # Access the function at the given location
     ///
     /// This includes both named and anonymous functions.
+    ///
+    /// Returns `None`, if the given location does not identify a function.
     pub fn by_location(
         &self,
         location: &FunctionLocation,
@@ -63,7 +68,9 @@ impl Functions {
         }
     }
 
-    /// # Find the branch at the given location
+    /// # Access the branch at the given location
+    ///
+    /// Returns `None`, if the given location does not identify a branch.
     pub fn branch_by_location(
         &self,
         location: &BranchLocation,
@@ -72,7 +79,9 @@ impl Functions {
         function.branches.get(&location.index)
     }
 
-    /// # Find the expression at the given location
+    /// # Access the expression at the given location
+    ///
+    /// Returns `None`, if the given location does not identify an expression.
     pub fn expression_by_location(
         &self,
         location: &ExpressionLocation,
