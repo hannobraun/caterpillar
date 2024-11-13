@@ -73,7 +73,7 @@ impl Functions {
     }
 
     /// # Find the expression at the given location
-    pub fn find_expression_by_location(
+    pub fn expression_by_location(
         &self,
         location: &ExpressionLocation,
     ) -> Option<&Expression> {

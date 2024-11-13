@@ -335,7 +335,7 @@ fn function_call_to_function_name(
 ) -> Option<String> {
     let expression = code
         .functions
-        .find_expression_by_location(function_call)
+        .expression_by_location(function_call)
         .expect("Expression referenced by active function must exist.");
     let hash = expression.as_call_to_function()?;
     let function = code.functions.find_named_by_hash(hash)?;
