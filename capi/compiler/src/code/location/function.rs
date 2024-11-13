@@ -62,7 +62,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 let name = &self
                     .functions
                     .named
-                    .find_named_by_index(index)
+                    .by_index(index)
                     .expect("Named function referred to be index must exist")
                     .name;
 

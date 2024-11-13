@@ -194,7 +194,7 @@ pub struct NamedFunctions {
 
 impl NamedFunctions {
     /// # Find the named function with the provided index
-    pub fn find_named_by_index(
+    pub fn by_index(
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<Located<&NamedFunction>> {

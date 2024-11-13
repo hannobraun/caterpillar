@@ -36,7 +36,7 @@ pub fn find_divergent_functions(
                             );
                         let called_function = functions
                             .named
-                            .find_named_by_index(called_function_index)
+                            .by_index(called_function_index)
                             .expect(
                                 "Function referred to from cluster must exist.",
                             );
