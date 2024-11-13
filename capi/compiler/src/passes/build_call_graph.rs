@@ -30,16 +30,17 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     }
 
     for function in functions.all_functions() {
-        let caller_index = {
-            let named_function =
-                functions.find_named_parent(&function.location).expect(
+        let caller_index =
+            {
+                let named_function =
+                functions.named.find_named_parent(&function.location).expect(
                     "All functions are either named, or defined in a named \
                     function. Just got `function` from `functions`. If it \
                     isn't a named function already, then the named function \
                     it's defined in must be in there.",
                 );
-            graph_index_by_function_name[&named_function.name]
-        };
+                graph_index_by_function_name[&named_function.name]
+            };
 
         for branch in function.branches() {
             for expression in branch.body() {

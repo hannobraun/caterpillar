@@ -81,31 +81,6 @@ impl Functions {
         branch.body.get(&location.index)
     }
 
-    /// # Find the named parent function for the given function, if anonymous
-    ///
-    /// If the location of a named function is provided, that named function
-    /// itself is returned.
-    ///
-    /// Returns `None`, if no parent named function can be found.
-    pub fn find_named_parent(
-        &self,
-        location: &FunctionLocation,
-    ) -> Option<Located<&NamedFunction>> {
-        let index = match location {
-            FunctionLocation::NamedFunction { index } => index,
-            FunctionLocation::AnonymousFunction { location } => {
-                return self.find_named_parent(&location.parent.parent);
-            }
-        };
-
-        let named_function = self.named.inner.get(index)?;
-
-        Some(Located {
-            fragment: named_function,
-            location: *index,
-        })
-    }
-
     /// # Iterate over all functions, both named and anonymous
     pub fn all_functions(&self) -> impl Iterator<Item = Located<&Function>> {
         self.named
@@ -203,6 +178,31 @@ impl NamedFunctions {
             } else {
                 None
             }
+        })
+    }
+
+    /// # Find the named parent function for the given function, if anonymous
+    ///
+    /// If the location of a named function is provided, that named function
+    /// itself is returned.
+    ///
+    /// Returns `None`, if no parent named function can be found.
+    pub fn find_named_parent(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<Located<&NamedFunction>> {
+        let index = match location {
+            FunctionLocation::NamedFunction { index } => index,
+            FunctionLocation::AnonymousFunction { location } => {
+                return self.find_named_parent(&location.parent.parent);
+            }
+        };
+
+        let named_function = self.inner.get(index)?;
+
+        Some(Located {
+            fragment: named_function,
+            location: *index,
         })
     }
 }
