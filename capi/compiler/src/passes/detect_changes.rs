@@ -15,7 +15,7 @@ pub fn detect_changes(
 
     for new_function in new_functions.named_functions() {
         if old_functions
-            .find_named_by_hash(&Hash::new(&new_function.fragment.inner))
+            .named_by_hash(&Hash::new(&new_function.fragment.inner))
             .is_some()
         {
             // Function has not changed. We can forget about it.

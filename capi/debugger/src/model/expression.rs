@@ -176,7 +176,7 @@ impl DebugExpressionKind {
             Expression::Binding { name, .. } => Self::Binding { name },
             Expression::CallToUserDefinedFunction { hash, .. } => {
                 let function = functions
-                    .find_named_by_hash(&hash)
+                    .named_by_hash(&hash)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone();
 

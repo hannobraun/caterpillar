@@ -228,7 +228,7 @@ impl StableFunctions {
     /// from erroneously relying on the hash of a function that might still
     /// change. Which would be possible, if an equivalent method was available
     /// on [`Functions`] or [`NamedFunctions`].
-    pub fn find_named_by_hash(
+    pub fn named_by_hash(
         &self,
         hash: &Hash<Function>,
     ) -> Option<Located<&NamedFunction>> {

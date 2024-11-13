@@ -282,7 +282,7 @@ fn infer_type_of_expression(
         }
         Expression::CallToUserDefinedFunction { hash, .. } => {
             let function = functions
-                .find_named_by_hash(hash)
+                .named_by_hash(hash)
                 .expect("Function referred to by resolved call must exist.");
 
             types
