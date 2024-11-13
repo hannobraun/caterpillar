@@ -8,15 +8,15 @@ use std::{
 use crate::{
     code::{
         Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Expression, ExpressionLocation, FunctionLocation, Functions, Index,
-        Pattern, Signature, Type, Types,
+        Expression, ExpressionLocation, FunctionLocation, Index, Pattern,
+        Signature, StableFunctions, Type, Types,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
 };
 
 pub fn infer_types(
-    functions: &Functions,
+    functions: &StableFunctions,
     call_graph: &CallGraph,
     host: &impl Host,
 ) -> Types {
@@ -86,7 +86,7 @@ pub fn infer_types(
 fn infer_types_in_branch(
     mut queue_item: QueueItem,
     cluster: &Cluster,
-    functions: &Functions,
+    functions: &StableFunctions,
     host: &impl Host,
     queue: &mut BranchQueue,
     types: &mut Types,
@@ -199,7 +199,7 @@ fn infer_type_of_expression(
     expression: &Expression,
     location: &ExpressionLocation,
     cluster: &Cluster,
-    functions: &Functions,
+    functions: &StableFunctions,
     bindings: &BTreeMap<String, Index<Type>>,
     host: &impl Host,
     stack: &mut Vec<Index<Type>>,
