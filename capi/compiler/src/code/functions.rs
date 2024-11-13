@@ -193,7 +193,7 @@ impl NamedFunctions {
     }
 
     /// # Find the function with the provided name
-    pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
+    pub fn by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
                 Some(Located {

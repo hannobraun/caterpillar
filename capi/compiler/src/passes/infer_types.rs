@@ -513,7 +513,7 @@ mod tests {
 
         let (n, host_fn) = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -552,7 +552,7 @@ mod tests {
 
         let function = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -613,7 +613,7 @@ mod tests {
         fn check(functions: &Functions, types: &Types) {
             let f = functions
                 .named
-                .find_by_name("f")
+                .by_name("f")
                 .map(|function| {
                     types
                         .of_functions
@@ -643,7 +643,7 @@ mod tests {
 
         let branch = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -658,7 +658,7 @@ mod tests {
             .unwrap();
         let function = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .map(|function| {
                 types
                     .of_functions
@@ -691,7 +691,7 @@ mod tests {
 
         let f = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .map(|function| {
                 types
                     .of_functions
@@ -742,7 +742,7 @@ mod tests {
         fn check(functions: &Functions, types: &Types) {
             let f = functions
                 .named
-                .find_by_name("f")
+                .by_name("f")
                 .map(|function| {
                     types
                         .of_functions
@@ -786,7 +786,7 @@ mod tests {
 
             let f = functions
                 .named
-                .find_by_name("f")
+                .by_name("f")
                 .map(|function| {
                     types
                         .of_functions
@@ -798,7 +798,7 @@ mod tests {
                 .unwrap();
             let g = functions
                 .named
-                .find_by_name("f")
+                .by_name("f")
                 .map(|function| {
                     types
                         .of_functions

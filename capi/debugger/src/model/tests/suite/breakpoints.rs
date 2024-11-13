@@ -28,7 +28,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     let functions = debugger.expect_code();
     let nop = functions
         .named
-        .find_by_name("main")
+        .by_name("main")
         .unwrap()
         .as_located_function()
         .find_single_branch()
@@ -65,7 +65,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     let functions = debugger.expect_code();
     let nop = functions
         .named
-        .find_by_name("main")
+        .by_name("main")
         .unwrap()
         .as_located_function()
         .find_single_branch()
@@ -115,7 +115,7 @@ fn step_over_brk() -> anyhow::Result<()> {
     let (brk, nop) = debugger
         .expect_code()
         .named
-        .find_by_name("main")
+        .by_name("main")
         .unwrap()
         .as_located_function()
         .find_single_branch()
@@ -174,7 +174,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     let (a, b, c) = debugger
         .expect_code()
         .named
-        .find_by_name("main")
+        .by_name("main")
         .unwrap()
         .as_located_function()
         .find_single_branch()
@@ -286,7 +286,7 @@ fn step_into_function() {
 
         let f = functions
             .named
-            .find_by_name("main")
+            .by_name("main")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -297,7 +297,7 @@ fn step_into_function() {
             .location;
         let a = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .branches()
@@ -358,7 +358,7 @@ fn step_out_of_function_if_at_last_expression() {
 
         let nop_in_main = functions
             .named
-            .find_by_name("main")
+            .by_name("main")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -369,7 +369,7 @@ fn step_out_of_function_if_at_last_expression() {
             .location;
         let nop_in_f = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -424,7 +424,7 @@ fn step_out_of_main_function() {
 
         functions
             .named
-            .find_by_name("main")
+            .by_name("main")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -472,7 +472,7 @@ fn step_over_function_call() {
     let (f, nop) = debugger
         .expect_code()
         .named
-        .find_by_name("main")
+        .by_name("main")
         .unwrap()
         .as_located_function()
         .find_single_branch()
@@ -532,7 +532,7 @@ fn step_out_of_function() {
 
         let a = functions
             .named
-            .find_by_name("f")
+            .by_name("f")
             .unwrap()
             .as_located_function()
             .find_single_branch()
@@ -543,7 +543,7 @@ fn step_out_of_function() {
             .location;
         let b = functions
             .named
-            .find_by_name("main")
+            .by_name("main")
             .unwrap()
             .as_located_function()
             .find_single_branch()
