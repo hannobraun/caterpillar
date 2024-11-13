@@ -49,7 +49,7 @@ impl Functions {
     /// # Find the function at the given location
     ///
     /// This includes both named and anonymous functions.
-    pub fn find_function_by_location(
+    pub fn by_location(
         &self,
         location: &FunctionLocation,
     ) -> Option<&Function> {
@@ -68,7 +68,7 @@ impl Functions {
         &self,
         location: &BranchLocation,
     ) -> Option<&Branch> {
-        let function = self.find_function_by_location(&location.parent)?;
+        let function = self.by_location(&location.parent)?;
         function.branches.get(&location.index)
     }
 
