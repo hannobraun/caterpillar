@@ -199,6 +199,7 @@ impl NamedFunctions {
         index: &Index<NamedFunction>,
     ) -> Option<Located<&NamedFunction>> {
         let function = self.inner.get(index)?;
+
         Some(Located {
             fragment: function,
             location: *index,
