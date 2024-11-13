@@ -16,11 +16,6 @@ use super::{
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
     /// # The named functions
-    ///
-    /// At this point, all named functions live in a single root context, and
-    /// are addressed by an index into that root context. The language is
-    /// expected to grow a module system in the future, and then this will
-    /// change.
     pub named: NamedFunctions,
 
     /// # The anonymous functions
