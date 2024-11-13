@@ -235,12 +235,15 @@ pub struct StableFunctions {
 }
 
 impl StableFunctions {
-    /// # Find the named function with the provided hash
+    /// # Access the named function with the provided hash
     ///
     /// This method is only available on [`StableFunctions`], to prevent callers
     /// from erroneously relying on the hash of a function that might still
     /// change. Which would be possible, if an equivalent method was available
     /// on [`Functions`] or [`NamedFunctions`].
+    ///
+    /// Returns `None`, if a named function with the provided hash does not
+    /// exist.
     pub fn named_by_hash(
         &self,
         hash: &Hash<Function>,
