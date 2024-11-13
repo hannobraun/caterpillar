@@ -64,7 +64,7 @@ impl Functions {
     }
 
     /// # Find the branch at the given location
-    pub fn find_branch_by_location(
+    pub fn branch_by_location(
         &self,
         location: &BranchLocation,
     ) -> Option<&Branch> {
@@ -77,7 +77,7 @@ impl Functions {
         &self,
         location: &ExpressionLocation,
     ) -> Option<&Expression> {
-        let branch = self.find_branch_by_location(&location.parent)?;
+        let branch = self.branch_by_location(&location.parent)?;
         branch.body.get(&location.index)
     }
 
