@@ -163,7 +163,9 @@ pub struct NamedFunctions {
 }
 
 impl NamedFunctions {
-    /// # Find the named function with the provided index
+    /// # Access the named function with the provided index
+    ///
+    /// Returns `None`, if the there is no named function at the provided index.
     pub fn by_index(
         &self,
         index: &Index<NamedFunction>,
@@ -176,7 +178,9 @@ impl NamedFunctions {
         })
     }
 
-    /// # Find the function with the provided name
+    /// # Access the function with the provided name
+    ///
+    /// Returns `None`, if no function has the provided name.
     pub fn by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
         self.inner.iter().find_map(|(&index, function)| {
             if function.name == name {
@@ -190,7 +194,7 @@ impl NamedFunctions {
         })
     }
 
-    /// # Find the named parent function for the given function, if anonymous
+    /// # Access the named parent function for the given function, if anonymous
     ///
     /// If the location of a named function is provided, that named function
     /// itself is returned.
