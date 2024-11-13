@@ -77,7 +77,7 @@ fn compile_call_to_main(
         capi_runtime::Function,
     >,
 ) {
-    let Some(main) = functions.find_by_name("main") else {
+    let Some(main) = functions.named.find_by_name("main") else {
         // If we can't find the call to `main`, that is a result of invalid
         // code. Leaving the placeholder instruction is appropriate in that
         // case.

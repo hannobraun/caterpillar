@@ -27,20 +27,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Find the function with the provided name
-    pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
-        self.named.inner.iter().find_map(|(&index, function)| {
-            if function.name == name {
-                Some(Located {
-                    fragment: function,
-                    location: index,
-                })
-            } else {
-                None
-            }
-        })
-    }
-
     /// # Find the anonymous function at the provided location
     pub fn find_anonymous_by_location(
         &self,
@@ -203,6 +189,20 @@ impl NamedFunctions {
         Some(Located {
             fragment: function,
             location: *index,
+        })
+    }
+
+    /// # Find the function with the provided name
+    pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
+        self.inner.iter().find_map(|(&index, function)| {
+            if function.name == name {
+                Some(Located {
+                    fragment: function,
+                    location: index,
+                })
+            } else {
+                None
+            }
         })
     }
 }

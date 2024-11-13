@@ -512,6 +512,7 @@ mod tests {
         );
 
         let (n, host_fn) = functions
+            .named
             .find_by_name("f")
             .unwrap()
             .as_located_function()
@@ -550,6 +551,7 @@ mod tests {
         );
 
         let function = functions
+            .named
             .find_by_name("f")
             .unwrap()
             .as_located_function()
@@ -610,6 +612,7 @@ mod tests {
 
         fn check(functions: &Functions, types: &Types) {
             let f = functions
+                .named
                 .find_by_name("f")
                 .map(|function| {
                     types
@@ -639,6 +642,7 @@ mod tests {
         );
 
         let branch = functions
+            .named
             .find_by_name("f")
             .unwrap()
             .as_located_function()
@@ -653,6 +657,7 @@ mod tests {
             })
             .unwrap();
         let function = functions
+            .named
             .find_by_name("f")
             .map(|function| {
                 types
@@ -685,6 +690,7 @@ mod tests {
         );
 
         let f = functions
+            .named
             .find_by_name("f")
             .map(|function| {
                 types
@@ -735,6 +741,7 @@ mod tests {
 
         fn check(functions: &Functions, types: &Types) {
             let f = functions
+                .named
                 .find_by_name("f")
                 .map(|function| {
                     types
@@ -778,6 +785,7 @@ mod tests {
             let (functions, types) = infer_types(code);
 
             let f = functions
+                .named
                 .find_by_name("f")
                 .map(|function| {
                     types
@@ -789,6 +797,7 @@ mod tests {
                 })
                 .unwrap();
             let g = functions
+                .named
                 .find_by_name("f")
                 .map(|function| {
                     types

@@ -94,6 +94,7 @@ mod tests {
 
         assert_eq!(
             functions
+                .named
                 .find_by_name("f")
                 .unwrap()
                 .as_located_function()
