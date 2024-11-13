@@ -27,23 +27,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Find the named function with the provided hash
-    pub fn find_named_by_hash(
-        &self,
-        hash: &Hash<Function>,
-    ) -> Option<Located<&NamedFunction>> {
-        self.named.inner.iter().find_map(|(&index, function)| {
-            if &Hash::new(&function.inner) == hash {
-                Some(Located {
-                    fragment: function,
-                    location: index,
-                })
-            } else {
-                None
-            }
-        })
-    }
-
     /// # Find the named function with the provided index
     pub fn find_named_by_index(
         &self,
@@ -233,6 +216,25 @@ pub struct NamedFunctions {
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct StableFunctions {
     inner: Functions,
+}
+
+impl StableFunctions {
+    /// # Find the named function with the provided hash
+    pub fn find_named_by_hash(
+        &self,
+        hash: &Hash<Function>,
+    ) -> Option<Located<&NamedFunction>> {
+        self.named.inner.iter().find_map(|(&index, function)| {
+            if &Hash::new(&function.inner) == hash {
+                Some(Located {
+                    fragment: function,
+                    location: index,
+                })
+            } else {
+                None
+            }
+        })
+    }
 }
 
 impl Deref for StableFunctions {
