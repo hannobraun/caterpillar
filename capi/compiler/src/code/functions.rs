@@ -27,18 +27,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    /// # Find the named function with the provided index
-    pub fn find_named_by_index(
-        &self,
-        index: &Index<NamedFunction>,
-    ) -> Option<Located<&NamedFunction>> {
-        let function = self.named.inner.get(index)?;
-        Some(Located {
-            fragment: function,
-            location: *index,
-        })
-    }
-
     /// # Find the function with the provided name
     pub fn find_by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
         self.named.inner.iter().find_map(|(&index, function)| {
@@ -202,6 +190,20 @@ impl Functions {
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
     pub inner: IndexMap<NamedFunction>,
+}
+
+impl NamedFunctions {
+    /// # Find the named function with the provided index
+    pub fn find_named_by_index(
+        &self,
+        index: &Index<NamedFunction>,
+    ) -> Option<Located<&NamedFunction>> {
+        let function = self.inner.get(index)?;
+        Some(Located {
+            fragment: function,
+            location: *index,
+        })
+    }
 }
 
 /// # All functions in a program, stable and content-addressable

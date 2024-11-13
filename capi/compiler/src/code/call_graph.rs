@@ -150,6 +150,7 @@ impl Cluster {
             .expect("Expecting index that refers to function in cluster.");
 
         functions
+            .named
             .find_named_by_index(index)
             .expect("Expecting index in cluster to refer to existing function")
     }
@@ -168,6 +169,7 @@ impl Cluster {
     ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
         self.functions.values().copied().map(|index| {
             functions
+                .named
                 .find_named_by_index(&index)
                 .expect("Function referred to from cluster must exist.")
         })
