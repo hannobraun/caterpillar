@@ -1,11 +1,8 @@
-use std::{
-    collections::BTreeSet,
-    ops::{Deref, DerefMut},
-};
+use std::ops::{Deref, DerefMut};
 
-use crate::code::{Branch, Function, Index, NamedFunction};
+use crate::code::{Function, Index, NamedFunction};
 
-use super::{BranchLocation, FunctionLocation};
+use super::FunctionLocation;
 
 /// # A fragment of code, with its location attached
 #[derive(Clone, Debug)]
@@ -66,74 +63,6 @@ impl Located<&mut NamedFunction> {
                 index: self.location,
             },
         }
-    }
-}
-
-impl Located<&Function> {
-    /// # Iterate over the function's branches
-    pub fn branches(&self) -> impl Iterator<Item = Located<&Branch>> {
-        let function = self.fragment;
-        let location = self.location.clone();
-
-        function
-            .branches
-            .iter()
-            .map(move |(&index, branch)| Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(location.clone()),
-                    index,
-                },
-            })
-    }
-
-    /// # Access the function's single branch
-    ///
-    /// Returns `None`, if the function does not have exactly one branch.
-    pub fn find_single_branch(&self) -> Option<Located<&Branch>> {
-        let function = &self.fragment;
-        let location = self.location.clone();
-
-        if function.branches.len() > 1 {
-            return None;
-        }
-
-        function
-            .branches
-            .first_key_value()
-            .map(|(&index, branch)| Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(location),
-                    index,
-                },
-            })
-    }
-}
-
-impl<'r> Located<&'r mut Function> {
-    /// # Destructure the located function into its component parts
-    ///
-    /// Unfortunately, following the pattern set by the `Located<&Function>` API
-    /// doesn't work here, due to lifetime issues.
-    pub fn destructure(
-        self,
-    ) -> (Vec<Located<&'r mut Branch>>, &'r mut BTreeSet<String>) {
-        let branches = self
-            .fragment
-            .branches
-            .iter_mut()
-            .map(|(&index, branch)| Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(self.location.clone()),
-                    index,
-                },
-            })
-            .collect();
-        let environment = &mut self.fragment.environment;
-
-        (branches, environment)
     }
 }
 
