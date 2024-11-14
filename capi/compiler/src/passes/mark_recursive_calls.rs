@@ -2,7 +2,6 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     CallGraph, Expression, Function, Functions, Index, NamedFunction,
-    UnresolvedCallToUserDefinedFunction,
 };
 
 pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
@@ -56,16 +55,23 @@ fn mark_recursive_calls_in_function(
                 }
                 Expression::UnresolvedIdentifier {
                     name,
-                    is_known_to_be_call_to_user_defined_function:
-                        Some(UnresolvedCallToUserDefinedFunction {
-                            is_known_to_be_recursive_call,
-                        }),
+                    is_known_to_be_in_tail_position,
+                    is_known_to_be_call_to_user_defined_function: Some(_),
                     ..
                 } => {
+                    // By the time we make it to this compiler pass, all
+                    // expressions that are in tail position should be known to
+                    // be so.
+                    let is_in_tail_position = is_known_to_be_in_tail_position;
+
                     if let Some(&index) =
                         indices_in_cluster_by_function_name.get(name)
                     {
-                        *is_known_to_be_recursive_call = Some(index);
+                        *expression =
+                            Expression::CallToUserDefinedFunctionRecursive {
+                                index,
+                                is_tail_call: *is_in_tail_position,
+                            };
                     }
                 }
                 _ => {}
@@ -78,9 +84,7 @@ fn mark_recursive_calls_in_function(
 mod tests {
 
     use crate::{
-        code::{
-            Expression, Functions, Index, UnresolvedCallToUserDefinedFunction,
-        },
+        code::{Expression, Functions, Index},
         host::NoHost,
         passes::{build_call_graph, parse, resolve_most_identifiers, tokenize},
     };
@@ -109,9 +113,8 @@ mod tests {
         );
 
         for mut function in functions.named.into_iter() {
-            let Expression::UnresolvedIdentifier {
-                is_known_to_be_call_to_user_defined_function,
-                ..
+            let Expression::CallToUserDefinedFunctionRecursive {
+                index, ..
             } = function
                 .inner
                 .branches
@@ -124,15 +127,6 @@ mod tests {
                 .unwrap()
             else {
                 panic!("Expected expression to be an identifier.");
-            };
-            let Some(UnresolvedCallToUserDefinedFunction {
-                is_known_to_be_recursive_call,
-            }) = is_known_to_be_call_to_user_defined_function
-            else {
-                panic!("Expected expression to be a function call");
-            };
-            let Some(index) = is_known_to_be_recursive_call else {
-                panic!("Expected function call to be recursive.");
             };
 
             assert_eq!(
@@ -183,13 +177,7 @@ mod tests {
         let expression = body.next().unwrap();
         assert!(body.next().is_none());
 
-        let Expression::UnresolvedIdentifier {
-            is_known_to_be_call_to_user_defined_function:
-                Some(UnresolvedCallToUserDefinedFunction {
-                    is_known_to_be_recursive_call: Some(_),
-                }),
-            ..
-        } = expression
+        let Expression::CallToUserDefinedFunctionRecursive { .. } = expression
         else {
             panic!("Expected identifier to be a recursive function call.");
         };
