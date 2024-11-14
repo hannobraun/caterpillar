@@ -3,11 +3,9 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use crate::code::{
-    Branch, Expression, Function, Index, NamedFunction, Pattern,
-};
+use crate::code::{Branch, Function, Index, NamedFunction};
 
-use super::{BranchLocation, ExpressionLocation, FunctionLocation};
+use super::{BranchLocation, FunctionLocation};
 
 /// # A fragment of code, with its location attached
 #[derive(Clone, Debug)]
@@ -136,47 +134,6 @@ impl<'r> Located<&'r mut Function> {
         let environment = &mut self.fragment.environment;
 
         (branches, environment)
-    }
-}
-
-impl Located<&Branch> {
-    /// # Iterate over the expressions in the branch's body
-    pub fn body(&self) -> impl Iterator<Item = Located<&Expression>> {
-        let location = self.location.clone();
-
-        self.body.iter().map(move |(&index, expression)| Located {
-            fragment: expression,
-            location: ExpressionLocation {
-                parent: Box::new(location.clone()),
-                index,
-            },
-        })
-    }
-}
-
-impl<'r> Located<&'r mut Branch> {
-    /// # Destructure the located function into its component parts
-    ///
-    /// Unfortunately, following the pattern set by the `Located<&Branch>` API
-    /// doesn't work here, due to lifetime issues.
-    pub fn destructure(
-        self,
-    ) -> (Vec<Located<&'r mut Expression>>, &'r mut Vec<Pattern>) {
-        let expressions = self
-            .fragment
-            .body
-            .iter_mut()
-            .map(|(&index, branch)| Located {
-                fragment: branch,
-                location: ExpressionLocation {
-                    parent: Box::new(self.location.clone()),
-                    index,
-                },
-            })
-            .collect();
-        let parameters = &mut self.fragment.parameters;
-
-        (expressions, parameters)
     }
 }
 

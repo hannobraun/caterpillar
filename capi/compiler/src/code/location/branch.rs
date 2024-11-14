@@ -1,11 +1,54 @@
 use std::fmt;
 
-use crate::code::{Branch, Functions, Index};
+use crate::code::{Branch, Expression, Functions, Index, Pattern};
 
-use super::{located::HasLocation, FunctionLocation};
+use super::{
+    located::HasLocation, ExpressionLocation, FunctionLocation, Located,
+};
 
 impl HasLocation for Branch {
     type Location = BranchLocation;
+}
+
+impl Located<&Branch> {
+    /// # Iterate over the expressions in the branch's body
+    pub fn body(&self) -> impl Iterator<Item = Located<&Expression>> {
+        let location = self.location.clone();
+
+        self.body.iter().map(move |(&index, expression)| Located {
+            fragment: expression,
+            location: ExpressionLocation {
+                parent: Box::new(location.clone()),
+                index,
+            },
+        })
+    }
+}
+
+impl<'r> Located<&'r mut Branch> {
+    /// # Destructure the located function into its component parts
+    ///
+    /// Unfortunately, following the pattern set by the `Located<&Branch>` API
+    /// doesn't work here, due to lifetime issues.
+    pub fn destructure(
+        self,
+    ) -> (Vec<Located<&'r mut Expression>>, &'r mut Vec<Pattern>) {
+        let expressions = self
+            .fragment
+            .body
+            .iter_mut()
+            .map(|(&index, branch)| Located {
+                fragment: branch,
+                location: ExpressionLocation {
+                    parent: Box::new(self.location.clone()),
+                    index,
+                },
+            })
+            .collect();
+        let parameters = &mut self.fragment.parameters;
+
+        (expressions, parameters)
+    }
 }
 
 /// # The location of a branch in the source code
