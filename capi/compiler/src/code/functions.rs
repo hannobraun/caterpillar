@@ -191,6 +191,7 @@ impl NamedFunctions {
     }
 
     /// # Convert this instance into an iterator over the named functions
+    #[allow(clippy::should_implement_trait)] // would require naming return type
     pub fn into_iter(self) -> impl Iterator<Item = Located<NamedFunction>> {
         self.inner
             .into_iter()
