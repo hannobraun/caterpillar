@@ -291,12 +291,9 @@ impl StableFunctions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Located<&NamedFunction>> {
-        self.named.inner.iter().find_map(|(&index, function)| {
+        self.named.iter().find_map(|function| {
             if &Hash::new(&function.inner) == hash {
-                Some(Located {
-                    fragment: function,
-                    location: index,
-                })
+                Some(function)
             } else {
                 None
             }
