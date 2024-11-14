@@ -255,7 +255,6 @@ fn compile_expression(
                 let called_function = functions_context
                     .functions
                     .named
-                    .inner
                     .get(&function_index_in_root_context)
                     .expect("Function referred to from cluster must exist.");
 

@@ -39,7 +39,7 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
     let mut functions = Functions::default();
 
     loop {
-        let index = functions.named.inner.next_index();
+        let index = functions.named.next_index();
 
         let Some(function) =
             parse_named_function(&mut tokens, index, &mut functions)

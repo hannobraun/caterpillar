@@ -227,6 +227,14 @@ impl NamedFunctions {
     }
 }
 
+impl Deref for NamedFunctions {
+    type Target = IndexMap<NamedFunction>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
 /// # All functions in a program, stable and content-addressable
 ///
 /// Functions can be addressed via a hash, and this is done in function calls,
