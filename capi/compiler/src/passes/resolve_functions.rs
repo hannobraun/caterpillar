@@ -63,9 +63,15 @@ fn resolve_calls_in_expression(
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
                     panic!(
-                        "Resolving call to function `{name}`. Expecting called \
-                        function to already be resolved when its caller is \
-                        being resolved."
+                        "Resolving call to function `{name}`, but can't find \
+                        the hash of that function. This should not happen, \
+                        because this compiler pass processes functions by \
+                        their order in the call graph.\n\
+                        \n\
+                        Theoretically, this could also happen if this is a \
+                        recursive call. But those have been resolved in an \
+                        earlier compiler pass already, and that shouldn't be a \
+                        factor here."
                     );
                 };
 
