@@ -110,7 +110,7 @@ mod tests {
             ",
         );
 
-        for mut function in functions.named.inner.into_values() {
+        for mut function in functions.named.into_iter() {
             let Expression::UnresolvedIdentifier {
                 is_known_to_be_call_to_user_defined_function,
                 ..
@@ -161,11 +161,11 @@ mod tests {
             ",
         );
 
-        let mut functions = functions.named.inner.into_values();
+        let mut functions = functions.named.into_iter();
         let f = functions.next().unwrap();
         assert!(functions.next().is_none());
 
-        let mut branches = f.inner.branches.into_values();
+        let mut branches = f.fragment.inner.branches.into_values();
         let branch = branches.next().unwrap();
         assert!(branches.next().is_none());
 

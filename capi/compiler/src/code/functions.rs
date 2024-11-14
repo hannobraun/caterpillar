@@ -217,6 +217,16 @@ impl NamedFunctions {
                 location: *index,
             })
     }
+
+    /// # Convert this instance into an iterator over the named functions
+    pub fn into_iter(self) -> impl Iterator<Item = Located<NamedFunction>> {
+        self.inner
+            .into_iter()
+            .map(|(index, named_function)| Located {
+                fragment: named_function,
+                location: index,
+            })
+    }
 }
 
 /// # All functions in a program, stable and content-addressable

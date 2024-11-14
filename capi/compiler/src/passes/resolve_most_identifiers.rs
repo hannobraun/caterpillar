@@ -313,9 +313,8 @@ mod tests {
 
         functions
             .named
-            .inner
-            .into_values()
-            .flat_map(|function| function.inner.branches.into_values())
+            .into_iter()
+            .flat_map(|function| function.fragment.inner.branches.into_values())
             .collect()
     }
 
