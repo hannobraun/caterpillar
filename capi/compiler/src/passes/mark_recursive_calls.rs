@@ -4,7 +4,10 @@ use crate::code::{
     CallGraph, Expression, Function, Functions, Index, NamedFunction,
 };
 
-pub fn mark_recursive_calls(functions: &mut Functions, call_graph: &CallGraph) {
+pub fn resolve_recursive_calls(
+    functions: &mut Functions,
+    call_graph: &CallGraph,
+) {
     for cluster in call_graph.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
             .functions
@@ -188,7 +191,7 @@ mod tests {
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
         let call_graph = build_call_graph(&functions);
-        super::mark_recursive_calls(&mut functions, &call_graph);
+        super::resolve_recursive_calls(&mut functions, &call_graph);
 
         functions
     }

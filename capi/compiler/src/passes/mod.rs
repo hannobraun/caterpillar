@@ -15,7 +15,7 @@ pub use {
     determine_tail_positions::determine_tail_positions,
     find_divergent_functions::find_divergent_functions,
     generate_instructions::generate_instructions, infer_types::infer_types,
-    mark_recursive_calls::mark_recursive_calls, parse::parse,
+    mark_recursive_calls::resolve_recursive_calls, parse::parse,
     resolve_functions::resolve_calls_to_user_defined_functions,
     resolve_most_identifiers::resolve_most_identifiers, tokenize::tokenize,
 };
