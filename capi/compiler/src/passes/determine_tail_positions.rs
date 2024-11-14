@@ -102,7 +102,9 @@ mod tests {
                 .body()
                 .nth(1)
                 .and_then(|expression| {
-                    functions.find_anonymous_by_location(&expression.location)
+                    functions
+                        .anonymous
+                        .find_anonymous_by_location(&expression.location)
                 })
                 .unwrap()
                 .find_single_branch()
