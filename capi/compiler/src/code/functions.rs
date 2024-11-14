@@ -200,8 +200,8 @@ impl NamedFunctions {
 
     /// # Iterate over the named functions
     pub fn iter(&self) -> impl Iterator<Item = Located<&NamedFunction>> {
-        self.inner.iter().map(|(index, function)| Located {
-            fragment: function,
+        self.inner.iter().map(|(index, named_function)| Located {
+            fragment: named_function,
             location: *index,
         })
     }
