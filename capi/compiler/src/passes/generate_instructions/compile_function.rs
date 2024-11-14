@@ -206,9 +206,9 @@ fn compile_expression(
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {
                 let function =
-                    functions_context.functions.named.iter().find(
-                        |function| Hash::new(&function.fragment.inner) == hash,
-                    );
+                    functions_context.functions.named.iter().find(|function| {
+                        Hash::new(&function.fragment.inner) == hash
+                    });
 
                 panic!(
                     "Compiling call to user-defined function `{hash}`. \
