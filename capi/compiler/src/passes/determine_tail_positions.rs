@@ -1,6 +1,6 @@
 use crate::code::{Branch, Expression, Function, Functions};
 
-pub fn determine_tail_positions(functions: &mut Functions) {
+pub fn mark_tail_positions(functions: &mut Functions) {
     for mut function in functions.all_functions_mut() {
         analyze_function(&mut function);
     }
@@ -154,7 +154,7 @@ mod tests {
     pub fn determine_tail_positions(source: &str) -> Functions {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
-        super::determine_tail_positions(&mut functions);
+        super::mark_tail_positions(&mut functions);
 
         functions
     }

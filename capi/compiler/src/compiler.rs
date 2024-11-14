@@ -6,8 +6,8 @@ use crate::{
     code::{CallGraph, Function, Hash, StableFunctions, Types},
     host::Host,
     passes::{
-        build_call_graph, detect_changes, determine_tail_positions,
-        find_divergent_functions, generate_instructions, infer_types, parse,
+        build_call_graph, detect_changes, find_divergent_functions,
+        generate_instructions, infer_types, mark_tail_positions, parse,
         resolve_calls_to_user_defined_functions, resolve_most_identifiers,
         resolve_recursive_calls, tokenize,
     },
@@ -35,7 +35,7 @@ impl Compiler {
     ) -> CompilerOutput {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
-        determine_tail_positions(&mut functions);
+        mark_tail_positions(&mut functions);
         resolve_most_identifiers(&mut functions, host);
         let mut call_graph = build_call_graph(&functions);
         resolve_recursive_calls(&mut functions, &call_graph);
