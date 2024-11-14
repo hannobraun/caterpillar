@@ -32,7 +32,7 @@ pub fn resolve_recursive_calls(
                 .get_mut(named_function_index)
                 .expect("Functions referred to from clusters must exist.");
 
-            mark_recursive_calls_in_function(
+            resolve_recursive_calls_in_function(
                 &mut function.inner,
                 &indices_in_cluster_by_function_name,
             );
@@ -40,7 +40,7 @@ pub fn resolve_recursive_calls(
     }
 }
 
-fn mark_recursive_calls_in_function(
+fn resolve_recursive_calls_in_function(
     function: &mut Function,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
@@ -51,7 +51,7 @@ fn mark_recursive_calls_in_function(
         for expression in branch.body.values_mut() {
             match expression {
                 Expression::LiteralFunction { function, .. } => {
-                    mark_recursive_calls_in_function(
+                    resolve_recursive_calls_in_function(
                         function,
                         indices_in_cluster_by_function_name,
                     );
