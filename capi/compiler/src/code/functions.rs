@@ -19,10 +19,6 @@ pub struct Functions {
     pub named: NamedFunctions,
 
     /// # The anonymous functions
-    ///
-    /// Anonymous functions are defined within named functions (or recursively,
-    /// within other anonymous functions). They are identified by their address
-    /// in the code.
     pub anonymous: AnonymousFunctions,
 }
 
