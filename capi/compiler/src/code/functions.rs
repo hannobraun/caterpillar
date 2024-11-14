@@ -23,7 +23,7 @@ pub struct Functions {
     /// Anonymous functions are defined within named functions (or recursively,
     /// within other anonymous functions). They are identified by their address
     /// in the code.
-    pub anonymous: BTreeMap<ExpressionLocation, Function>,
+    pub anonymous: AnonymousFunctions,
 }
 
 impl Functions {
@@ -236,6 +236,30 @@ impl Deref for NamedFunctions {
 }
 
 impl DerefMut for NamedFunctions {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+/// # The anonymous functions in the program
+///
+/// Anonymous functions are defined within named functions (or recursively,
+/// within other anonymous functions). They are identified by their address
+/// in the code.
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+pub struct AnonymousFunctions {
+    inner: BTreeMap<ExpressionLocation, Function>,
+}
+
+impl Deref for AnonymousFunctions {
+    type Target = BTreeMap<ExpressionLocation, Function>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl DerefMut for AnonymousFunctions {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
