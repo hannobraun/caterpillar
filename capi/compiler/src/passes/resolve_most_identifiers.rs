@@ -2,8 +2,8 @@ use std::collections::BTreeSet;
 
 use crate::{
     code::{
-        Branch, Expression, Function, FunctionLocation, Functions, Located,
-        Pattern, UnresolvedCallToUserDefinedFunction,
+        AnonymousFunctions, Branch, Expression, Function, FunctionLocation,
+        Functions, Located, Pattern, UnresolvedCallToUserDefinedFunction,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -22,10 +22,11 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for function in functions.all_functions_mut() {
+    for mut function in functions.named.iter_mut() {
         resolve_in_function(
-            function,
+            function.as_located_function_mut(),
             &mut scopes,
+            &mut functions.anonymous,
             &known_named_functions,
             host,
         );
@@ -35,6 +36,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
 fn resolve_in_function(
     function: Located<&mut Function>,
     scopes: &mut Scopes,
+    anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
@@ -63,6 +65,7 @@ fn resolve_in_function(
             branch,
             scopes,
             environment,
+            anonymous_functions,
             known_named_functions,
             host,
         );
@@ -73,6 +76,7 @@ fn resolve_in_branch(
     branch: Located<&mut Branch>,
     scopes: &mut Scopes,
     environment: &mut Environment,
+    anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
@@ -85,10 +89,11 @@ fn resolve_in_branch(
                     Located {
                         fragment: function,
                         location: FunctionLocation::AnonymousFunction {
-                            location: expression.location,
+                            location: expression.location.clone(),
                         },
                     },
                     scopes,
+                    anonymous_functions,
                     known_named_functions,
                     host,
                 );
@@ -104,6 +109,48 @@ fn resolve_in_branch(
                         }
                     }
                 }
+
+                // Need to remove this and put it back below, since we need to
+                // mutably borrow in between.
+                let mut function =
+                    anonymous_functions.remove(&expression.location).expect(
+                        "The current expression is an anonymous function, or \
+                        we wouldn't be in this `match` arm. It must be tracked \
+                        in `anonymous_functions` under this location.\n\
+                        \n\
+                        Since this compiler pass is going through the code \
+                        lexically, and locations are unique, we should not \
+                        encounter this location again. Hence, that we remove \
+                        an anonymous function from `anonymous_functions` here \
+                        should have no bearing.",
+                    );
+
+                resolve_in_function(
+                    Located {
+                        fragment: &mut function,
+                        location: FunctionLocation::AnonymousFunction {
+                            location: expression.location.clone(),
+                        },
+                    },
+                    scopes,
+                    anonymous_functions,
+                    known_named_functions,
+                    host,
+                );
+
+                for name in &function.environment {
+                    // If the child function we just resolved identifiers for
+                    // captures something from its environment, and the current
+                    // scope doesn't already have that, then it needs to capture
+                    // it from its environment likewise.
+                    if let Some(bindings) = scopes.last() {
+                        if !bindings.contains(name) {
+                            environment.insert(name.clone());
+                        }
+                    }
+                }
+
+                anonymous_functions.insert(expression.location, function);
             }
             Expression::UnresolvedIdentifier {
                 name,
