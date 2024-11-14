@@ -230,7 +230,7 @@ impl AnonymousFunctions {
     ///
     /// Returns `None`, if no anonymous function is defined at the given
     /// location.
-    pub fn find_anonymous_by_location(
+    pub fn by_location(
         &self,
         location: &ExpressionLocation,
     ) -> Option<Located<&Function>> {
