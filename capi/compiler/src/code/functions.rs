@@ -207,7 +207,7 @@ impl NamedFunctions {
     }
 
     /// # Iterate over the named functions mutably
-    pub fn named_functions_mut(
+    pub fn iter_mut(
         &mut self,
     ) -> impl Iterator<Item = Located<&mut NamedFunction>> {
         self.inner.iter_mut().map(|(index, function)| Located {
