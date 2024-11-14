@@ -20,7 +20,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_name = BTreeMap::new();
 
-    for named_function in functions.named_functions() {
+    for named_function in functions.named.named_functions() {
         let name = named_function.name.clone();
         let index = named_function.index();
 

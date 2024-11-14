@@ -128,16 +128,6 @@ impl Functions {
             }))
     }
 
-    /// # Iterate over the named functions
-    pub fn named_functions(
-        &self,
-    ) -> impl Iterator<Item = Located<&NamedFunction>> {
-        self.named.inner.iter().map(|(index, function)| Located {
-            fragment: function,
-            location: *index,
-        })
-    }
-
     /// # Iterate over the named functions mutably
     pub fn named_functions_mut(
         &mut self,
@@ -217,6 +207,16 @@ impl NamedFunctions {
 
         Some(Located {
             fragment: named_function,
+            location: *index,
+        })
+    }
+
+    /// # Iterate over the named functions
+    pub fn named_functions(
+        &self,
+    ) -> impl Iterator<Item = Located<&NamedFunction>> {
+        self.inner.iter().map(|(index, function)| Located {
+            fragment: function,
             location: *index,
         })
     }

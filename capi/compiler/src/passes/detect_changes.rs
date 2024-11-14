@@ -13,7 +13,7 @@ pub fn detect_changes(
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for new_function in new_functions.named_functions() {
+    for new_function in new_functions.named.named_functions() {
         if old_functions
             .named_by_hash(&Hash::new(&new_function.fragment.inner))
             .is_some()

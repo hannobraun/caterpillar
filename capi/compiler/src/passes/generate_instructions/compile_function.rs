@@ -206,7 +206,7 @@ fn compile_expression(
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {
                 let function =
-                    functions_context.functions.named_functions().find(
+                    functions_context.functions.named.named_functions().find(
                         |function| Hash::new(&function.fragment.inner) == hash,
                     );
 
