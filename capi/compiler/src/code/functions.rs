@@ -1,6 +1,6 @@
 use std::{
     collections::{BTreeMap, BTreeSet},
-    ops::Deref,
+    ops::{Deref, DerefMut},
 };
 
 use capi_runtime::Value;
@@ -232,6 +232,12 @@ impl Deref for NamedFunctions {
 
     fn deref(&self) -> &Self::Target {
         &self.inner
+    }
+}
+
+impl DerefMut for NamedFunctions {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 

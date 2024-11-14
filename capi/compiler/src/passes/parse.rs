@@ -47,7 +47,7 @@ pub fn parse(tokens: Vec<Token>) -> Functions {
             break;
         };
 
-        let actual_index = functions.named.inner.push(function);
+        let actual_index = functions.named.push(function);
         assert_eq!(
             index, actual_index,
             "Function has a different index than was initially assumed.",
