@@ -59,33 +59,20 @@ fn resolve_calls_in_expression(
             // that are in tail position should be known to be so.
             let is_in_tail_position = is_known_to_be_in_tail_position;
 
-            if let Some(call) = is_known_to_be_call_to_user_defined_function {
-                // By the time we make it to this compiler pass, all calls that
-                // are recursive should be known to be so.
-                let is_recursive_call_to_index =
-                    call.is_known_to_be_recursive_call;
-
-                if let Some(index) = is_recursive_call_to_index {
-                    *expression =
-                        Expression::CallToUserDefinedFunctionRecursive {
-                            index,
-                            is_tail_call: *is_in_tail_position,
-                        }
-                } else {
-                    let Some(hash) = resolved_hashes_by_name.get(name).copied()
-                    else {
-                        panic!(
-                            "Resolving call to function `{name}`. Expecting \
+            if is_known_to_be_call_to_user_defined_function.is_some() {
+                let Some(hash) = resolved_hashes_by_name.get(name).copied()
+                else {
+                    panic!(
+                        "Resolving call to function `{name}`. Expecting \
                             called function to already be resolved when its \
                             caller is being resolved."
-                        );
-                    };
+                    );
+                };
 
-                    *expression = Expression::CallToUserDefinedFunction {
-                        hash,
-                        is_tail_call: *is_in_tail_position,
-                    };
-                }
+                *expression = Expression::CallToUserDefinedFunction {
+                    hash,
+                    is_tail_call: *is_in_tail_position,
+                };
             }
         }
         _ => {}
