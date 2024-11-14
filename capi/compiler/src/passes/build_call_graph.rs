@@ -46,7 +46,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
             for expression in branch.body() {
                 if let Expression::UnresolvedIdentifier {
                     name,
-                    is_known_to_be_call_to_user_defined_function: Some(_),
+                    is_known_to_be_call_to_user_defined_function: true,
                     ..
                 } = expression.fragment
                 {

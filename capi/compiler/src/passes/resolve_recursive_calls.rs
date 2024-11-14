@@ -59,7 +59,7 @@ fn resolve_recursive_calls_in_function(
                 Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_in_tail_position,
-                    is_known_to_be_call_to_user_defined_function: Some(_),
+                    is_known_to_be_call_to_user_defined_function: true,
                     ..
                 } => {
                     // By the time we make it to this compiler pass, all

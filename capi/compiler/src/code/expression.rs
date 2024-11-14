@@ -191,8 +191,7 @@ pub enum Expression {
         ///
         /// This starts out as `false` and might later get updated by the
         /// respective compiler pass.
-        is_known_to_be_call_to_user_defined_function:
-            Option<UnresolvedCallToUserDefinedFunction>,
+        is_known_to_be_call_to_user_defined_function: bool,
     },
 }
 
@@ -212,25 +211,4 @@ impl Expression {
 
         Some(text)
     }
-}
-
-/// # The information that is currently known about an unresolved function call
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct UnresolvedCallToUserDefinedFunction {
-    /// # Indicate whether the call is known to be recursive
-    ///
-    /// Starts out as `None`, until it might get filled in by the respective
-    /// compiler pass. In that case, the index of the function within the
-    /// cluster is provided, which is later needed to resolve the call.
-    pub is_known_to_be_recursive_call: Option<Index<Index<NamedFunction>>>,
 }

@@ -10,7 +10,7 @@ mod types;
 pub use self::{
     call_graph::{CallGraph, Cluster},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
-    expression::{Expression, UnresolvedCallToUserDefinedFunction},
+    expression::Expression,
     functions::{
         AnonymousFunctions, Branch, Function, Functions, NamedFunction,
         NamedFunctions, Pattern, StableFunctions,

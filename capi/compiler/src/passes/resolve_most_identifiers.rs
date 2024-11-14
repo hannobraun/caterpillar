@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use crate::{
     code::{
         AnonymousFunctions, Branch, Expression, Function, FunctionLocation,
-        Functions, Located, Pattern, UnresolvedCallToUserDefinedFunction,
+        Functions, Located, Pattern,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -203,10 +203,7 @@ fn resolve_in_branch(
                         number: function.number(),
                     }
                 } else if known_named_functions.contains(name) {
-                    *is_known_to_be_call_to_user_defined_function =
-                        Some(UnresolvedCallToUserDefinedFunction {
-                            is_known_to_be_recursive_call: None,
-                        });
+                    *is_known_to_be_call_to_user_defined_function = true;
                 }
             }
             _ => {}
@@ -223,10 +220,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{
-            Branch, ConcreteSignature, Expression,
-            UnresolvedCallToUserDefinedFunction,
-        },
+        code::{Branch, ConcreteSignature, Expression},
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
         passes::{parse, tokenize},
@@ -259,7 +253,7 @@ mod tests {
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
                 is_known_to_be_in_tail_position: false,
-                is_known_to_be_call_to_user_defined_function: None,
+                is_known_to_be_call_to_user_defined_function: false,
             })
         );
     }
@@ -344,11 +338,7 @@ mod tests {
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
                 is_known_to_be_in_tail_position: false,
-                is_known_to_be_call_to_user_defined_function: Some(
-                    UnresolvedCallToUserDefinedFunction {
-                        is_known_to_be_recursive_call: None
-                    }
-                ),
+                is_known_to_be_call_to_user_defined_function: true,
             })
         );
     }

@@ -59,7 +59,7 @@ fn resolve_calls_in_expression(
             // that are in tail position should be known to be so.
             let is_in_tail_position = is_known_to_be_in_tail_position;
 
-            if is_known_to_be_call_to_user_defined_function.is_some() {
+            if *is_known_to_be_call_to_user_defined_function {
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
                     unreachable!(
