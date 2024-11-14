@@ -94,7 +94,7 @@ mod tests {
 
     #[test]
     fn self_recursive_functions() {
-        let functions = mark_recursive_calls(
+        let functions = resolve_recursive_calls(
             r"
                 f: fn
                     \ ->
@@ -144,7 +144,7 @@ mod tests {
 
     #[test]
     fn mark_recursive_calls_from_anonymous_functions() {
-        let functions = mark_recursive_calls(
+        let functions = resolve_recursive_calls(
             r"
                 f: fn
                     \ ->
@@ -186,7 +186,7 @@ mod tests {
         };
     }
 
-    fn mark_recursive_calls(source: &str) -> Functions {
+    fn resolve_recursive_calls(source: &str) -> Functions {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
