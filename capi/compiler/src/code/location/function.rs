@@ -4,10 +4,6 @@ use crate::code::{Function, Functions, Index, NamedFunction};
 
 use super::{located::HasLocation, ExpressionLocation};
 
-impl HasLocation for NamedFunction {
-    type Location = Index<NamedFunction>;
-}
-
 impl HasLocation for Function {
     type Location = FunctionLocation;
 }
