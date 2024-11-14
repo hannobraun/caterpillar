@@ -63,9 +63,9 @@ fn resolve_calls_in_expression(
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
                     panic!(
-                        "Resolving call to function `{name}`. Expecting \
-                            called function to already be resolved when its \
-                            caller is being resolved."
+                        "Resolving call to function `{name}`. Expecting called \
+                        function to already be resolved when its caller is \
+                        being resolved."
                     );
                 };
 
