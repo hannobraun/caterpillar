@@ -136,10 +136,8 @@ impl Functions {
 /// grow a module system in the future, and then this will change.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunctions {
-    pub inner: NamedFunctionsInner,
+    pub inner: IndexMap<NamedFunction>,
 }
-
-type NamedFunctionsInner = IndexMap<NamedFunction>;
 
 impl NamedFunctions {
     /// # Access the named function with the provided index
