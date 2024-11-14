@@ -62,7 +62,7 @@ fn resolve_calls_in_expression(
             if is_known_to_be_call_to_user_defined_function.is_some() {
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
-                    panic!(
+                    unreachable!(
                         "Resolving call to function `{name}`, but can't find \
                         the hash of that function. This should not happen, \
                         because this compiler pass processes functions by \
