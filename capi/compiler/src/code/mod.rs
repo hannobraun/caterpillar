@@ -12,7 +12,8 @@ pub use self::{
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::{Expression, UnresolvedCallToUserDefinedFunction},
     functions::{
-        Branch, Function, Functions, NamedFunction, Pattern, StableFunctions,
+        AnonymousFunctions, Branch, Function, Functions, NamedFunction,
+        NamedFunctions, Pattern, StableFunctions,
     },
     hash::Hash,
     index::{Index, IndexMap},
