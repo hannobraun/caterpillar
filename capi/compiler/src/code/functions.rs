@@ -210,10 +210,12 @@ impl NamedFunctions {
     pub fn iter_mut(
         &mut self,
     ) -> impl Iterator<Item = Located<&mut NamedFunction>> {
-        self.inner.iter_mut().map(|(index, function)| Located {
-            fragment: function,
-            location: *index,
-        })
+        self.inner
+            .iter_mut()
+            .map(|(index, named_function)| Located {
+                fragment: named_function,
+                location: *index,
+            })
     }
 }
 
