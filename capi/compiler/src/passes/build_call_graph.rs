@@ -15,7 +15,7 @@ pub fn build_call_graph(functions: &Functions) -> CallGraph {
     CallGraph::from_clusters(clusters)
 }
 
-fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
+fn build_pet_call_graph(functions: &Functions) -> DependencyGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
@@ -59,7 +59,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 }
 
 fn collect_functions_into_clusters(
-    call_graph: PetCallGraph,
+    call_graph: DependencyGraph,
     _: &Functions,
 ) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
@@ -103,7 +103,7 @@ fn collect_functions_into_clusters(
         })
 }
 
-type PetCallGraph = Graph<FunctionLocation, ()>;
+type DependencyGraph = Graph<FunctionLocation, ()>;
 
 #[cfg(test)]
 mod tests {
