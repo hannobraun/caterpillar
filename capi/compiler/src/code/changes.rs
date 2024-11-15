@@ -19,15 +19,15 @@ impl Changes {
     /// nor updated.
     pub fn new_or_updated_function(
         &self,
-        index: &FunctionLocation,
+        location: &FunctionLocation,
     ) -> Option<&Function> {
-        if let Some(function) = self.added.get(index) {
+        if let Some(function) = self.added.get(location) {
             return Some(function);
         }
 
         self.updated.iter().find_map(|update| {
             let new = &update.new;
-            (new.index == *index).then_some(&new.function)
+            (new.index == *location).then_some(&new.function)
         })
     }
 }
