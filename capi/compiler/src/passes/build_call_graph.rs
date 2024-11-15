@@ -105,7 +105,7 @@ fn collect_functions_into_clusters(
         })
 }
 
-type PetCallGraph<'r> = Graph<FunctionLocation, ()>;
+type PetCallGraph = Graph<FunctionLocation, ()>;
 
 #[cfg(test)]
 mod tests {
