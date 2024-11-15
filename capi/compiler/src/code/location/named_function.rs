@@ -6,7 +6,7 @@ impl HasLocation for NamedFunction {
     type Location = Index<NamedFunction>;
 }
 
-impl Located<&NamedFunction> {
+impl<'r> Located<&'r NamedFunction> {
     /// # Access the index of the found function
     ///
     /// This is a convenience accessor, to make code that would otherwise access
@@ -22,7 +22,7 @@ impl Located<&NamedFunction> {
     }
 
     /// # Convert this located named function to a located function
-    pub fn as_located_function(&self) -> Located<&Function> {
+    pub fn as_located_function(self) -> Located<&'r Function> {
         Located {
             fragment: &self.fragment.inner,
             location: FunctionLocation::NamedFunction {
