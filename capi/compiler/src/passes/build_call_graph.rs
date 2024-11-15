@@ -23,7 +23,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         let location = FunctionLocation::from(named_function.index());
 
         graph_index_by_function_name
-            .entry(named_function.name.clone())
+            .entry(location.clone())
             .or_insert_with(|| call_graph.add_node(location));
     }
 
@@ -37,7 +37,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                     isn't a named function already, then the named function \
                     it's defined in must be in there.",
                 );
-                graph_index_by_function_name[&named_function.name]
+                graph_index_by_function_name[&named_function.location()]
             };
 
         for branch in function.branches() {
@@ -48,7 +48,13 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                     ..
                 } = expression.fragment
                 {
-                    let callee_index = graph_index_by_function_name[name];
+                    let named_function = functions.named.by_name(name).expect(
+                        "Just got `name` from an identifier that is known to \
+                        be a call to a user-defined function. A function of \
+                        that name must be available.",
+                    );
+                    let callee_index = graph_index_by_function_name
+                        [&named_function.location()];
                     call_graph.add_edge(self_index, callee_index, ());
                 }
             }
