@@ -79,7 +79,7 @@ fn collect_functions_into_clusters(
 
     clustered_and_sorted_call_graph
         .into_iter()
-        .map(move |graph_index| {
+        .filter_map(move |graph_index| {
             let function_group =
                 clustered_call_graph.remove_node(graph_index).expect(
                     "Each entry in the sorted version of the call graph must \
@@ -97,10 +97,14 @@ fn collect_functions_into_clusters(
                 named_functions.push(index);
             }
 
-            Cluster {
-                functions: named_functions,
-                divergent_functions: None,
-                non_divergent_branches: None,
+            if named_functions.is_empty() {
+                None
+            } else {
+                Some(Cluster {
+                    functions: named_functions,
+                    divergent_functions: None,
+                    non_divergent_branches: None,
+                })
             }
         })
 }
