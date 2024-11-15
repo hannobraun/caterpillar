@@ -10,12 +10,12 @@ use crate::code::{
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
-    let pet_call_graph = build_pet_call_graph(functions);
+    let pet_call_graph = build_dependency_graph(functions);
     let clusters = collect_functions_into_clusters(pet_call_graph, functions);
     CallGraph::from_clusters(clusters)
 }
 
-fn build_pet_call_graph(functions: &Functions) -> DependencyGraph {
+fn build_dependency_graph(functions: &Functions) -> DependencyGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
