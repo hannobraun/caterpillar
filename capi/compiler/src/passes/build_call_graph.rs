@@ -115,12 +115,12 @@ mod tests {
     fn no_recursion() {
         let (_, call_graph) = create_call_graph(
             r"
-                main: fn
+                f: fn
                     \ ->
-                        f
+                        g
                 end
 
-                f: fn
+                g: fn
                     \ ->
                         nop
                 end
@@ -150,14 +150,14 @@ mod tests {
     fn self_recursion() {
         let (_, call_graph) = create_call_graph(
             r"
-                main: fn
-                    \ ->
-                        f
-                end
-
                 f: fn
                     \ ->
-                        f
+                        g
+                end
+
+                g: fn
+                    \ ->
+                        g
                 end
             ",
         );
@@ -185,11 +185,6 @@ mod tests {
     fn mutual_recursion() {
         let (_, call_graph) = create_call_graph(
             r"
-                main: fn
-                    \ ->
-                        f
-                end
-
                 f: fn
                     \ ->
                         g
@@ -197,7 +192,12 @@ mod tests {
 
                 g: fn
                     \ ->
-                        f
+                        h
+                end
+
+                h: fn
+                    \ ->
+                        g
                 end
             ",
         );
@@ -229,23 +229,23 @@ mod tests {
     fn sort_clusters_by_call_graph() {
         let (_, call_graph) = create_call_graph(
             r"
-                a: fn
+                f: fn
                     \ ->
                         # Call a function that comes is placed after this one in
                         # the source code.
-                        c
+                        h
                 end
 
-                b: fn
+                g: fn
                     \ ->
                         nop
                 end
 
-                c: fn
+                h: fn
                     \ ->
                         # And for some variety, call a function that is placed
                         # before.
-                        b
+                        g
                 end
             ",
         );
@@ -274,28 +274,28 @@ mod tests {
     fn consider_anonymous_functions_in_call_graph() {
         let (_, call_graph) = create_call_graph(
             r"
-                a: fn
+                f: fn
                     \ ->
                         fn
                             \ ->
                                 # Call a function that is placed after this one
                                 # in the source code.
-                                c
+                                h
                         end
                 end
 
-                b: fn
+                g: fn
                     \ ->
                         nop
                 end
 
-                c: fn
+                h: fn
                     \ ->
                         fn
                             \ ->
                                 # And for some variety, call a function that is
                                 # placed before.
-                                b
+                                g
                         end
                 end
             ",
