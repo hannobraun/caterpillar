@@ -250,11 +250,11 @@ fn compile_expression(
             is_tail_call,
         } => {
             let hash = {
-                let function_index_in_root_context = &cluster.functions[&index];
+                let function_location = &cluster.functions[&index];
 
                 let called_function = functions_context
                     .functions
-                    .by_location(function_index_in_root_context)
+                    .by_location(function_location)
                     .expect("Function referred to from cluster must exist.");
 
                 Hash::new(called_function.fragment)
