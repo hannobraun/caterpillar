@@ -51,9 +51,9 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                         be a call to a user-defined function. A function of \
                         that name must be available.",
                     );
-                    let callee_index = graph_index_by_function_location
+                    let dependee_index = graph_index_by_function_location
                         [&named_function.location()];
-                    call_graph.add_edge(depender_index, callee_index, ());
+                    call_graph.add_edge(depender_index, dependee_index, ());
                 }
             }
         }
