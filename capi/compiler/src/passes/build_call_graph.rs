@@ -66,7 +66,7 @@ fn collect_functions_into_clusters(
 
     let clustered_and_sorted_graph = toposort(&clustered_graph, None).expect(
         "The previous operation should have made the call graph acyclic. \
-            Hence, topologically sorting the graph should not fail.",
+        Hence, topologically sorting the graph should not fail.",
     );
 
     clustered_and_sorted_graph
