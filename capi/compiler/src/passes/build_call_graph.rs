@@ -11,7 +11,7 @@ use crate::code::{
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
     let dependency_graph = build_dependency_graph(functions);
-    let clusters = collect_functions_into_clusters(dependency_graph, functions);
+    let clusters = collect_functions_into_clusters(dependency_graph);
     CallGraph::from_clusters(clusters)
 }
 
@@ -60,7 +60,6 @@ fn build_dependency_graph(functions: &Functions) -> DependencyGraph {
 
 fn collect_functions_into_clusters(
     dependency_graph: DependencyGraph,
-    _: &Functions,
 ) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
