@@ -40,6 +40,15 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
         for branch in function.branches() {
             for expression in branch.body() {
+                if let Expression::LiteralFunction { .. } = expression.fragment
+                {
+                    let location = FunctionLocation::AnonymousFunction {
+                        location: expression.location,
+                    };
+
+                    let dependee = graph_index_by_function_location[&location];
+                    call_graph.add_edge(depender_index, dependee, ());
+                }
                 if let Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_call_to_user_defined_function: true,
