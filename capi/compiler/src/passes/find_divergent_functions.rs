@@ -29,13 +29,13 @@ pub fn find_divergent_functions(
                         ..
                     } = expression.fragment
                     {
-                        let called_function_index =
+                        let called_function_location =
                             cluster.functions.get(index).expect(
                                 "Function referred to from recursive call must \
                                 exist in same cluster.",
                             );
                         let called_function = functions
-                            .by_location(called_function_index)
+                            .by_location(called_function_location)
                             .expect(
                                 "Function referred to from cluster must exist.",
                             );
