@@ -137,8 +137,8 @@ mod tests {
                 .collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
-                .map(|indices| Cluster {
-                    functions: [indices].into_iter().collect(),
+                .map(|locations_by_index| Cluster {
+                    functions: [locations_by_index].into_iter().collect(),
                     divergent_functions: None,
                     non_divergent_branches: None,
                 })
@@ -172,8 +172,8 @@ mod tests {
                 .collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
-                .map(|indices| Cluster {
-                    functions: [indices].into_iter().collect(),
+                .map(|locations_by_index| Cluster {
+                    functions: [locations_by_index].into_iter().collect(),
                     divergent_functions: None,
                     non_divergent_branches: None,
                 })
@@ -216,8 +216,8 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
-                functions: indices.iter().cloned().collect(),
+            .map(|locations_by_index| Cluster {
+                functions: locations_by_index.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })
@@ -265,8 +265,8 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
-                functions: indices.iter().cloned().collect(),
+            .map(|locations_by_index| Cluster {
+                functions: locations_by_index.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })
@@ -320,8 +320,8 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|indices| Cluster {
-                functions: indices.iter().cloned().collect(),
+            .map(|locations_by_index| Cluster {
+                functions: locations_by_index.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })
