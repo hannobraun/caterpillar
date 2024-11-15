@@ -40,29 +40,32 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
         for branch in function.branches() {
             for expression in branch.body() {
-                if let Expression::LiteralFunction { .. } = expression.fragment
-                {
-                    let location = FunctionLocation::AnonymousFunction {
-                        location: expression.location,
-                    };
+                match expression.fragment {
+                    Expression::LiteralFunction { .. } => {
+                        let location = FunctionLocation::AnonymousFunction {
+                            location: expression.location,
+                        };
 
-                    let dependee = graph_index_by_function_location[&location];
-                    call_graph.add_edge(depender, dependee, ());
-                }
-                if let Expression::UnresolvedIdentifier {
-                    name,
-                    is_known_to_be_call_to_user_defined_function: true,
-                    ..
-                } = expression.fragment
-                {
-                    let named_function = functions.named.by_name(name).expect(
-                        "Just got `name` from an identifier that is known to \
-                        be a call to a user-defined function. A function of \
-                        that name must be available.",
-                    );
-                    let dependee = graph_index_by_function_location
-                        [&named_function.location()];
-                    call_graph.add_edge(depender, dependee, ());
+                        let dependee =
+                            graph_index_by_function_location[&location];
+                        call_graph.add_edge(depender, dependee, ());
+                    }
+                    Expression::UnresolvedIdentifier {
+                        name,
+                        is_known_to_be_call_to_user_defined_function: true,
+                        ..
+                    } => {
+                        let named_function =
+                            functions.named.by_name(name).expect(
+                                "Just got `name` from an identifier that is \
+                                known to be a call to a user-defined function. \
+                                A function of that name must be available.",
+                            );
+                        let dependee = graph_index_by_function_location
+                            [&named_function.location()];
+                        call_graph.add_edge(depender, dependee, ());
+                    }
+                    _ => {}
                 }
             }
         }
