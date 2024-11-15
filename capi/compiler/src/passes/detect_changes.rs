@@ -30,11 +30,11 @@ pub fn detect_changes(
             // is an updated version of the old.
             updated.push(FunctionUpdate {
                 old: FunctionInUpdate {
-                    index: old_function.location(),
+                    location: old_function.location(),
                     function: old_function.inner.clone(),
                 },
                 new: FunctionInUpdate {
-                    index: new_function.location(),
+                    location: new_function.location(),
                     function: new_function.inner.clone(),
                 },
             });

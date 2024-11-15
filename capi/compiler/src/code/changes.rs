@@ -27,7 +27,7 @@ impl Changes {
 
         self.updated.iter().find_map(|update| {
             let new = &update.new;
-            (new.index == *location).then_some(&new.function)
+            (new.location == *location).then_some(&new.function)
         })
     }
 }
@@ -45,6 +45,6 @@ pub struct FunctionUpdate {
 /// # An function that is part of an update; either an old or a new version
 #[derive(Debug)]
 pub struct FunctionInUpdate {
-    pub index: FunctionLocation,
+    pub location: FunctionLocation,
     pub function: Function,
 }
