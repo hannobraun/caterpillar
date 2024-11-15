@@ -6,7 +6,7 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, Functions, Index, IndexMap, NamedFunction,
+    CallGraph, Cluster, Expression, FunctionLocation, Functions, IndexMap,
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
@@ -22,7 +22,10 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     for named_function in functions.named.iter() {
         graph_index_by_function_name
             .entry(named_function.name.clone())
-            .or_insert_with(|| call_graph.add_node(named_function.index()));
+            .or_insert_with(|| {
+                call_graph
+                    .add_node(FunctionLocation::from(named_function.index()))
+            });
     }
 
     for function in functions.all_functions() {
@@ -81,7 +84,10 @@ fn collect_functions_into_clusters(
                 );
 
             let mut functions = IndexMap::default();
-            for index in function_group {
+            for location in function_group {
+                let FunctionLocation::NamedFunction { index } = location else {
+                    continue;
+                };
                 functions.push(index);
             }
 
@@ -93,7 +99,7 @@ fn collect_functions_into_clusters(
         })
 }
 
-type PetCallGraph<'r> = Graph<Index<NamedFunction>, ()>;
+type PetCallGraph<'r> = Graph<FunctionLocation, ()>;
 
 #[cfg(test)]
 mod tests {
