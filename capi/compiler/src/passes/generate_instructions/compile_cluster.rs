@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use crate::code::{Changes, Cluster, Function, FunctionLocation, Hash};
+use crate::code::{Changes, Cluster, Function, Hash};
 
 use super::{
     compile_function::{
@@ -86,12 +86,11 @@ fn seed_queue_of_functions_to_compile(
     changes: &Changes,
 ) {
     let functions_in_cluster_to_compile =
-        cluster.functions.values().filter_map(|&index| {
-            let location = FunctionLocation::NamedFunction { index };
-            let function = changes.new_or_updated_function(&location)?;
+        cluster.functions.values().filter_map(|location| {
+            let function = changes.new_or_updated_function(location)?;
             Some(FunctionToCompile {
                 function: function.clone(),
-                location: FunctionLocation::NamedFunction { index },
+                location: location.clone(),
                 address_of_instruction_to_make_anon_function: None,
             })
         });

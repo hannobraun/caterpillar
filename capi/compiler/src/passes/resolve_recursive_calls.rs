@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Expression, Function, Functions, Index, NamedFunction,
+    CallGraph, Expression, Function, FunctionLocation, Functions, Index,
 };
 
 pub fn resolve_recursive_calls(
@@ -13,6 +13,15 @@ pub fn resolve_recursive_calls(
             .functions
             .iter()
             .map(|(&function_index_in_cluster, named_function_index)| {
+                let FunctionLocation::NamedFunction {
+                    index: named_function_index,
+                } = named_function_index
+                else {
+                    unreachable!(
+                        "Only named functions are being tracked in `Cluster`."
+                    );
+                };
+
                 let name = functions
                     .named
                     .get(named_function_index)
@@ -27,6 +36,15 @@ pub fn resolve_recursive_calls(
             .collect::<BTreeMap<_, _>>();
 
         for named_function_index in cluster.functions.values() {
+            let FunctionLocation::NamedFunction {
+                index: named_function_index,
+            } = named_function_index
+            else {
+                unreachable!(
+                    "Only named functions are being tracked in `Cluster`."
+                );
+            };
+
             let function = functions
                 .named
                 .get_mut(named_function_index)
@@ -44,7 +62,7 @@ fn resolve_recursive_calls_in_function(
     function: &mut Function,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
-        Index<Index<NamedFunction>>,
+        Index<FunctionLocation>,
     >,
 ) {
     for branch in function.branches.values_mut() {

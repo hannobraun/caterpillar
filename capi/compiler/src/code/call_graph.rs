@@ -1,7 +1,8 @@
 use std::{collections::BTreeSet, iter};
 
 use super::{
-    BranchLocation, Functions, Index, IndexMap, Located, NamedFunction,
+    BranchLocation, FunctionLocation, Functions, Index, IndexMap, Located,
+    NamedFunction,
 };
 
 /// # The program's named functions, organized as a call graph
@@ -48,7 +49,7 @@ impl CallGraph {
     /// non-recursive calls to functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
-    ) -> impl Iterator<Item = (&Index<NamedFunction>, &Cluster)> {
+    ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
         self.clusters_from_leaves().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
@@ -63,9 +64,11 @@ impl CallGraph {
         &self,
         index: &Index<NamedFunction>,
     ) -> Option<&Cluster> {
-        self.clusters
-            .iter()
-            .find(|cluster| cluster.functions.values().any(|i| i == index))
+        self.clusters.iter().find(|cluster| {
+            cluster.functions.values().any(|location| {
+                *location == FunctionLocation::NamedFunction { index: *index }
+            })
+        })
     }
 }
 
@@ -89,7 +92,7 @@ impl CallGraph {
 )]
 pub struct Cluster {
     /// # The functions in this cluster
-    pub functions: IndexMap<Index<NamedFunction>>,
+    pub functions: IndexMap<FunctionLocation>,
 
     /// # The functions in this cluster that never terminate (diverge)
     ///
@@ -141,13 +144,19 @@ impl Cluster {
     /// bug.
     pub fn find_function_by_index<'r>(
         &'r self,
-        index: &Index<Index<NamedFunction>>,
+        index: &Index<FunctionLocation>,
         functions: &'r Functions,
     ) -> Located<&'r NamedFunction> {
         let index = self
             .functions
             .get(index)
             .expect("Expecting index that refers to function in cluster.");
+
+        let FunctionLocation::NamedFunction { index } = index else {
+            unreachable!(
+                "Only named functions are being tracked in `Cluster`."
+            );
+        };
 
         functions
             .named
@@ -168,6 +177,12 @@ impl Cluster {
         functions: &'r Functions,
     ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
         self.functions.values().map(|index| {
+            let FunctionLocation::NamedFunction { index } = index else {
+                unreachable!(
+                    "Only named functions are being tracked in `Cluster`."
+                );
+            };
+
             functions
                 .named
                 .by_index(index)

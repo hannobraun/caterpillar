@@ -35,15 +35,12 @@ pub fn find_divergent_functions(
                                 exist in same cluster.",
                             );
                         let called_function = functions
-                            .named
-                            .by_index(called_function_index)
+                            .by_location(called_function_index)
                             .expect(
                                 "Function referred to from cluster must exist.",
                             );
 
-                        for called_branch in
-                            called_function.into_located_function().branches()
-                        {
+                        for called_branch in called_function.branches() {
                             let from =
                                 node_index_by_branch_location[&branch.location];
                             let to = node_index_by_branch_location

@@ -83,10 +83,10 @@ fn collect_functions_into_clusters(
 
             let mut named_functions = IndexMap::default();
             for location in function_group {
-                let FunctionLocation::NamedFunction { index } = location else {
+                let FunctionLocation::NamedFunction { .. } = location else {
                     continue;
                 };
-                named_functions.push(index);
+                named_functions.push(location);
             }
 
             if named_functions.is_empty() {
@@ -127,8 +127,8 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().index();
-        let g = functions.named.by_name("g").unwrap().index();
+        let f = functions.named.by_name("f").unwrap().location();
+        let g = functions.named.by_name("g").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -162,8 +162,8 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().index();
-        let g = functions.named.by_name("g").unwrap().index();
+        let f = functions.named.by_name("f").unwrap().location();
+        let g = functions.named.by_name("g").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -202,9 +202,9 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().index();
-        let g = functions.named.by_name("g").unwrap().index();
-        let h = functions.named.by_name("h").unwrap().index();
+        let f = functions.named.by_name("f").unwrap().location();
+        let g = functions.named.by_name("g").unwrap().location();
+        let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -217,7 +217,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: indices.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })
@@ -250,9 +250,9 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().index();
-        let g = functions.named.by_name("g").unwrap().index();
-        let h = functions.named.by_name("h").unwrap().index();
+        let f = functions.named.by_name("f").unwrap().location();
+        let g = functions.named.by_name("g").unwrap().location();
+        let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -266,7 +266,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: indices.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })
@@ -305,9 +305,9 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().index();
-        let g = functions.named.by_name("g").unwrap().index();
-        let h = functions.named.by_name("h").unwrap().index();
+        let f = functions.named.by_name("f").unwrap().location();
+        let g = functions.named.by_name("g").unwrap().location();
+        let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -321,7 +321,7 @@ mod tests {
             ]
             .into_iter()
             .map(|indices| Cluster {
-                functions: indices.iter().copied().collect(),
+                functions: indices.iter().cloned().collect(),
                 divergent_functions: None,
                 non_divergent_branches: None,
             })

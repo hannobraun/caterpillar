@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::intrinsics::IntrinsicFunction;
 
-use super::{Function, Hash, Index, NamedFunction};
+use super::{Function, FunctionLocation, Hash, Index};
 
 /// # An expression within a function
 ///
@@ -112,7 +112,7 @@ pub enum Expression {
         /// the calling function is part of a cluster of mutually recursive
         /// functions, the index identifies the called function within the
         /// cluster.
-        index: Index<Index<NamedFunction>>,
+        index: Index<FunctionLocation>,
 
         /// # Indicate whether the call is in tail position
         ///

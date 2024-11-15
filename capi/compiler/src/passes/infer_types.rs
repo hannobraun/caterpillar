@@ -53,16 +53,15 @@ pub fn infer_types(
 
         for index in cluster.functions.values() {
             let function = functions
-                .named
-                .by_index(index)
+                .by_location(index)
                 .expect("Function referred to from call graph must exist.");
 
-            for branch in function.into_located_function().branches() {
+            for branch in function.branches() {
                 let environment = BTreeMap::new();
                 queue.push_back(QueueItem::new(
                     branch.fragment,
                     branch.location,
-                    function.location(),
+                    function.location.clone(),
                     &environment,
                     &mut types,
                 ));
@@ -308,13 +307,16 @@ fn infer_type_of_expression(
                 "Function referred to by recursive call must exist in cluster.",
             );
 
-            if current_function != *index {
+            if (FunctionLocation::NamedFunction {
+                index: current_function,
+            }) != *index
+            {
                 // Inference of mutually recursive functions is not supported
                 // yet.
                 return None;
             }
 
-            let location = FunctionLocation::from(*index);
+            let location = index.clone();
 
             let Some(signature) = types.of_functions.get(&location).cloned()
             else {

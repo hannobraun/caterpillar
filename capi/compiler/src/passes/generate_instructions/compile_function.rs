@@ -254,11 +254,10 @@ fn compile_expression(
 
                 let called_function = functions_context
                     .functions
-                    .named
-                    .get(function_index_in_root_context)
+                    .by_location(function_index_in_root_context)
                     .expect("Function referred to from cluster must exist.");
 
-                Hash::new(&called_function.inner)
+                Hash::new(called_function.fragment)
             };
 
             // For recursive calls, we can't generally assume that the called

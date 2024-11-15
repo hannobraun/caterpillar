@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Expression, Function, Functions, Hash, StableFunctions,
+    CallGraph, Expression, Function, FunctionLocation, Functions, Hash,
+    StableFunctions,
 };
 
 pub fn resolve_calls_to_user_defined_functions(
@@ -11,6 +12,10 @@ pub fn resolve_calls_to_user_defined_functions(
     let mut resolved_hashes_by_name = BTreeMap::new();
 
     for (index, _) in call_graph.functions_from_leaves() {
+        let FunctionLocation::NamedFunction { index } = index else {
+            unreachable!("Only named functions are tracked in `CallGraph`");
+        };
+
         let function = functions
             .named
             .get_mut(index)
