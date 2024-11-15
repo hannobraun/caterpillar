@@ -303,20 +303,20 @@ fn infer_type_of_expression(
                 }
             };
 
-            let index = cluster.functions.get(index).expect(
+            let location = cluster.functions.get(index).expect(
                 "Function referred to by recursive call must exist in cluster.",
             );
 
             if (FunctionLocation::NamedFunction {
                 index: current_function,
-            }) != *index
+            }) != *location
             {
                 // Inference of mutually recursive functions is not supported
                 // yet.
                 return None;
             }
 
-            let location = index.clone();
+            let location = location.clone();
 
             let Some(signature) = types.of_functions.get(&location).cloned()
             else {
