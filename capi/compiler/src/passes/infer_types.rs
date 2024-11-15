@@ -494,9 +494,8 @@ mod tests {
         code::{ConcreteSignature, Functions, StableFunctions, Type, Types},
         host::{Host, HostFunction},
         passes::{
-            build_call_graph, resolve_recursive_calls, parse,
-            resolve_calls_to_user_defined_functions, resolve_most_identifiers,
-            tokenize,
+            build_call_graph, parse, resolve_calls_to_user_defined_functions,
+            resolve_most_identifiers, resolve_recursive_calls, tokenize,
         },
     };
 
