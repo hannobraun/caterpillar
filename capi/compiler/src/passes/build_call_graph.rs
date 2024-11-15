@@ -64,13 +64,12 @@ fn collect_functions_into_clusters(
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
-    let clustered_and_sorted_call_graph = toposort(&clustered_graph, None)
-        .expect(
-            "The previous operation should have made the call graph acyclic. \
+    let clustered_and_sorted_graph = toposort(&clustered_graph, None).expect(
+        "The previous operation should have made the call graph acyclic. \
             Hence, topologically sorting the graph should not fail.",
-        );
+    );
 
-    clustered_and_sorted_call_graph
+    clustered_and_sorted_graph
         .into_iter()
         .filter_map(move |graph_index| {
             let function_group =
