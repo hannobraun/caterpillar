@@ -229,11 +229,6 @@ mod tests {
     fn sort_clusters_by_call_graph() {
         let (_, call_graph) = create_call_graph(
             r"
-                main: fn
-                    \ ->
-                        a
-                end
-
                 a: fn
                     \ ->
                         # Call a function that comes is placed after this one in
@@ -261,9 +256,8 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(Index::from(0), Index::from(2))].as_slice(),
-                [(Index::from(0), Index::from(3))].as_slice(),
                 [(Index::from(0), Index::from(1))].as_slice(),
+                [(Index::from(0), Index::from(2))].as_slice(),
                 [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
