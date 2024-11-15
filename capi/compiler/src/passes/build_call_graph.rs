@@ -17,12 +17,12 @@ pub fn build_call_graph(functions: &Functions) -> CallGraph {
 
 fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
-    let mut graph_index_by_function_name = BTreeMap::new();
+    let mut graph_index_by_function_location = BTreeMap::new();
 
     for named_function in functions.named.iter() {
         let location = FunctionLocation::from(named_function.index());
 
-        graph_index_by_function_name
+        graph_index_by_function_location
             .entry(location.clone())
             .or_insert_with(|| call_graph.add_node(location));
     }
@@ -37,7 +37,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                     isn't a named function already, then the named function \
                     it's defined in must be in there.",
                 );
-                graph_index_by_function_name[&named_function.location()]
+                graph_index_by_function_location[&named_function.location()]
             };
 
         for branch in function.branches() {
@@ -53,7 +53,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                         be a call to a user-defined function. A function of \
                         that name must be available.",
                     );
-                    let callee_index = graph_index_by_function_name
+                    let callee_index = graph_index_by_function_location
                         [&named_function.location()];
                     call_graph.add_edge(self_index, callee_index, ());
                 }
