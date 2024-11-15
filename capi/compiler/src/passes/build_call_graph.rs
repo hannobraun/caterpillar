@@ -20,11 +20,9 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut graph_index_by_function_location = BTreeMap::new();
 
     for function in functions.all_functions() {
-        let location = function.location;
-
         graph_index_by_function_location
-            .entry(location.clone())
-            .or_insert_with(|| call_graph.add_node(location));
+            .entry(function.location.clone())
+            .or_insert_with(|| call_graph.add_node(function.location));
     }
 
     for function in functions.all_functions() {
