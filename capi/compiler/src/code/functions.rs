@@ -33,9 +33,10 @@ impl Functions {
         location: &FunctionLocation,
     ) -> Option<&Function> {
         match location {
-            FunctionLocation::NamedFunction { index } => {
-                self.named.get(index).map(|function| &function.inner)
-            }
+            FunctionLocation::NamedFunction { index } => self
+                .named
+                .get(index)
+                .map(|named_function| &named_function.inner),
             FunctionLocation::AnonymousFunction { location } => {
                 self.anonymous.get(location)
             }
