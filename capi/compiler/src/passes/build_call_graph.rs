@@ -19,8 +19,8 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
-    for named_function in functions.named.iter() {
-        let location = FunctionLocation::from(named_function.index());
+    for named_function in functions.all_functions() {
+        let location = named_function.location;
 
         graph_index_by_function_location
             .entry(location.clone())
