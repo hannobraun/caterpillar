@@ -42,10 +42,9 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
             for expression in branch.body() {
                 let dependee = match expression.fragment {
                     Expression::LiteralFunction { .. } => {
-                        let location = FunctionLocation::AnonymousFunction {
+                        Some(FunctionLocation::AnonymousFunction {
                             location: expression.location,
-                        };
-                        Some(location)
+                        })
                     }
                     Expression::UnresolvedIdentifier {
                         name,
