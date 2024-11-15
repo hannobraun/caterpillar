@@ -2,10 +2,25 @@ use std::fmt;
 
 use crate::code::{Expression, Functions, Index};
 
-use super::{located::HasLocation, BranchLocation};
+use super::{located::HasLocation, BranchLocation, FunctionLocation, Located};
 
 impl HasLocation for Expression {
     type Location = ExpressionLocation;
+}
+
+impl Located<&Expression> {
+    /// # Convert the located expression to a function location, if possible
+    ///
+    /// Returns `None`, if the expression is not a function literal.
+    pub fn to_function_location(&self) -> Option<FunctionLocation> {
+        if let Expression::LiteralFunction { .. } = self.fragment {
+            Some(FunctionLocation::AnonymousFunction {
+                location: self.location.clone(),
+            })
+        } else {
+            None
+        }
+    }
 }
 
 /// # The location of an expression in the source code
