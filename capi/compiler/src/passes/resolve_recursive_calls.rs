@@ -12,10 +12,10 @@ pub fn resolve_recursive_calls(
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
-            .map(|(&function_index_in_cluster, named_function_index)| {
+            .map(|(&function_index_in_cluster, function_location)| {
                 let FunctionLocation::NamedFunction {
                     index: named_function_index,
-                } = named_function_index
+                } = function_location
                 else {
                     unreachable!(
                         "Only named functions are being tracked in `Cluster`."
