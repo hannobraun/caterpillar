@@ -87,7 +87,8 @@ fn seed_queue_of_functions_to_compile(
 ) {
     let functions_in_cluster_to_compile =
         cluster.functions.values().filter_map(|&index| {
-            let function = changes.new_or_updated_function(&index)?;
+            let location = FunctionLocation::NamedFunction { index };
+            let function = changes.new_or_updated_function(&location)?;
             Some(FunctionToCompile {
                 function: function.clone(),
                 location: FunctionLocation::NamedFunction { index },

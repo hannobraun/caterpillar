@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
-use super::{Function, Index, NamedFunction};
+use super::{Function, FunctionLocation};
 
 /// # The changes between two versions of code
 #[derive(Debug)]
 pub struct Changes {
     /// # The functions that were added in the new version
-    pub added: BTreeMap<Index<NamedFunction>, Function>,
+    pub added: BTreeMap<FunctionLocation, Function>,
 
     /// # The functions that were updated in the new version
     pub updated: Vec<FunctionUpdate>,
@@ -19,7 +19,7 @@ impl Changes {
     /// nor updated.
     pub fn new_or_updated_function(
         &self,
-        index: &Index<NamedFunction>,
+        index: &FunctionLocation,
     ) -> Option<&Function> {
         if let Some(function) = self.added.get(index) {
             return Some(function);
@@ -45,6 +45,6 @@ pub struct FunctionUpdate {
 /// # An function that is part of an update; either an old or a new version
 #[derive(Debug)]
 pub struct FunctionInUpdate {
-    pub index: Index<NamedFunction>,
+    pub index: FunctionLocation,
     pub function: Function,
 }

@@ -30,11 +30,11 @@ pub fn detect_changes(
             // is an updated version of the old.
             updated.push(FunctionUpdate {
                 old: FunctionInUpdate {
-                    index: old_function.index(),
+                    index: old_function.location(),
                     function: old_function.inner.clone(),
                 },
                 new: FunctionInUpdate {
-                    index: new_function.index(),
+                    index: new_function.location(),
                     function: new_function.inner.clone(),
                 },
             });
@@ -44,7 +44,7 @@ pub fn detect_changes(
 
         // If we make it here, there was neither an identical function before,
         // nor one with the same name. This must mean this function is new.
-        added.insert(new_function.index(), new_function.inner.clone());
+        added.insert(new_function.location(), new_function.inner.clone());
     }
 
     Changes { added, updated }
