@@ -167,10 +167,10 @@ impl Cluster {
         &'r self,
         functions: &'r Functions,
     ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
-        self.functions.values().copied().map(|index| {
+        self.functions.values().map(|index| {
             functions
                 .named
-                .by_index(&index)
+                .by_index(index)
                 .expect("Function referred to from cluster must exist.")
         })
     }
