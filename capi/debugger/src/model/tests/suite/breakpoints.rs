@@ -30,7 +30,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .named
         .by_name("main")
         .unwrap()
-        .as_located_function()
+        .into_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -67,7 +67,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .named
         .by_name("main")
         .unwrap()
-        .as_located_function()
+        .into_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -117,7 +117,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         .named
         .by_name("main")
         .unwrap()
-        .as_located_function()
+        .into_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -176,7 +176,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         .named
         .by_name("main")
         .unwrap()
-        .as_located_function()
+        .into_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -288,7 +288,7 @@ fn step_into_function() {
             .named
             .by_name("main")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -299,7 +299,7 @@ fn step_into_function() {
             .named
             .by_name("f")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .branches()
             .next()
             .unwrap()
@@ -360,7 +360,7 @@ fn step_out_of_function_if_at_last_expression() {
             .named
             .by_name("main")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -371,7 +371,7 @@ fn step_out_of_function_if_at_last_expression() {
             .named
             .by_name("f")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -426,7 +426,7 @@ fn step_out_of_main_function() {
             .named
             .by_name("main")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -474,7 +474,7 @@ fn step_over_function_call() {
         .named
         .by_name("main")
         .unwrap()
-        .as_located_function()
+        .into_located_function()
         .find_single_branch()
         .unwrap()
         .body()
@@ -534,7 +534,7 @@ fn step_out_of_function() {
             .named
             .by_name("f")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()
@@ -545,7 +545,7 @@ fn step_out_of_function() {
             .named
             .by_name("main")
             .unwrap()
-            .as_located_function()
+            .into_located_function()
             .find_single_branch()
             .unwrap()
             .body()

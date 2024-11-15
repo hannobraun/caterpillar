@@ -96,7 +96,7 @@ mod tests {
                 .named
                 .by_name("f")
                 .unwrap()
-                .as_located_function()
+                .into_located_function()
                 .find_single_branch()
                 .unwrap()
                 .body()

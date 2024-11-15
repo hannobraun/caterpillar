@@ -22,7 +22,7 @@ impl<'r> Located<&'r NamedFunction> {
     }
 
     /// # Convert this located named function to a located function
-    pub fn as_located_function(self) -> Located<&'r Function> {
+    pub fn into_located_function(self) -> Located<&'r Function> {
         Located {
             fragment: &self.fragment.inner,
             location: FunctionLocation::NamedFunction {

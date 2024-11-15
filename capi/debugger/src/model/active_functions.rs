@@ -290,7 +290,7 @@ fn reconstruct_function(
     };
 
     let tail_call = if let Some(branch) =
-        function.as_located_function().find_single_branch()
+        function.into_located_function().find_single_branch()
     {
         let mut tail_call = None;
 
