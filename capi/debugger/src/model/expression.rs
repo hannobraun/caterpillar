@@ -185,14 +185,14 @@ impl DebugExpressionKind {
             Expression::CallToUserDefinedFunctionRecursive {
                 index, ..
             } => {
-                let called_function_index =
+                let called_function_location =
                     cluster.functions.get(&index).expect(
                         "The index of a recursive call must be valid within \
                         the calling function's cluster.",
                     );
                 let FunctionLocation::NamedFunction {
                     index: called_function_index,
-                } = called_function_index
+                } = called_function_location
                 else {
                     unreachable!(
                         "Only named functions are tracked in `CallGraph`"
