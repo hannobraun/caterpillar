@@ -41,11 +41,6 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
         for branch in function.branches() {
             for expression in branch.body() {
                 let dependee = match expression.fragment {
-                    Expression::LiteralFunction { .. } => {
-                        Some(FunctionLocation::AnonymousFunction {
-                            location: expression.location,
-                        })
-                    }
                     Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_call_to_user_defined_function: true,
@@ -59,7 +54,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                             );
                         Some(named_function.location())
                     }
-                    _ => None,
+                    _ => expression.to_function_location(),
                 };
 
                 if let Some(dependee) = dependee {
