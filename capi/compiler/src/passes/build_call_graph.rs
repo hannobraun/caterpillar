@@ -66,7 +66,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
 fn collect_functions_into_clusters(
     call_graph: PetCallGraph,
-) -> impl Iterator<Item = Cluster> + '_ {
+) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
     let mut clustered_call_graph = condensation(call_graph, make_acyclic);
 
