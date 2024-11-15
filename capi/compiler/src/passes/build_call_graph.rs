@@ -113,7 +113,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (_, call_graph) = create_call_graph(
+        let (functions, call_graph) = create_call_graph(
             r"
                 f: fn
                     \ ->
@@ -127,28 +127,28 @@ mod tests {
             ",
         );
 
+        let f = functions.named.by_name("f").unwrap().index();
+        let g = functions.named.by_name("g").unwrap().index();
+
         assert_eq!(
             call_graph
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
-            [
-                (Index::from(0), Index::from(1)),
-                (Index::from(0), Index::from(0)),
-            ]
-            .into_iter()
-            .map(|indices| Cluster {
-                functions: [indices].into_iter().collect(),
-                divergent_functions: None,
-                non_divergent_branches: None,
-            })
-            .collect::<Vec<_>>(),
+            [(Index::from(0), g), (Index::from(0), f),]
+                .into_iter()
+                .map(|indices| Cluster {
+                    functions: [indices].into_iter().collect(),
+                    divergent_functions: None,
+                    non_divergent_branches: None,
+                })
+                .collect::<Vec<_>>(),
         );
     }
 
     #[test]
     fn self_recursion() {
-        let (_, call_graph) = create_call_graph(
+        let (functions, call_graph) = create_call_graph(
             r"
                 f: fn
                     \ ->
@@ -162,28 +162,28 @@ mod tests {
             ",
         );
 
+        let f = functions.named.by_name("f").unwrap().index();
+        let g = functions.named.by_name("g").unwrap().index();
+
         assert_eq!(
             call_graph
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
-            [
-                (Index::from(0), Index::from(1)),
-                (Index::from(0), Index::from(0)),
-            ]
-            .into_iter()
-            .map(|indices| Cluster {
-                functions: [indices].into_iter().collect(),
-                divergent_functions: None,
-                non_divergent_branches: None,
-            })
-            .collect::<Vec<_>>(),
+            [(Index::from(0), g), (Index::from(0), f),]
+                .into_iter()
+                .map(|indices| Cluster {
+                    functions: [indices].into_iter().collect(),
+                    divergent_functions: None,
+                    non_divergent_branches: None,
+                })
+                .collect::<Vec<_>>(),
         );
     }
 
     #[test]
     fn mutual_recursion() {
-        let (_, call_graph) = create_call_graph(
+        let (functions, call_graph) = create_call_graph(
             r"
                 f: fn
                     \ ->
@@ -202,18 +202,18 @@ mod tests {
             ",
         );
 
+        let f = functions.named.by_name("f").unwrap().index();
+        let g = functions.named.by_name("g").unwrap().index();
+        let h = functions.named.by_name("h").unwrap().index();
+
         assert_eq!(
             call_graph
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [
-                    (Index::from(0), Index::from(1)),
-                    (Index::from(1), Index::from(2))
-                ]
-                .as_slice(),
-                [(Index::from(0), Index::from(0))].as_slice(),
+                [(Index::from(0), g), (Index::from(1), h)].as_slice(),
+                [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (_, call_graph) = create_call_graph(
+        let (functions, call_graph) = create_call_graph(
             r"
                 f: fn
                     \ ->
@@ -250,15 +250,19 @@ mod tests {
             ",
         );
 
+        let f = functions.named.by_name("f").unwrap().index();
+        let g = functions.named.by_name("g").unwrap().index();
+        let h = functions.named.by_name("h").unwrap().index();
+
         assert_eq!(
             call_graph
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(Index::from(0), Index::from(1))].as_slice(),
-                [(Index::from(0), Index::from(2))].as_slice(),
-                [(Index::from(0), Index::from(0))].as_slice(),
+                [(Index::from(0), g)].as_slice(),
+                [(Index::from(0), h)].as_slice(),
+                [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
@@ -272,7 +276,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (_, call_graph) = create_call_graph(
+        let (functions, call_graph) = create_call_graph(
             r"
                 f: fn
                     \ ->
@@ -301,15 +305,19 @@ mod tests {
             ",
         );
 
+        let f = functions.named.by_name("f").unwrap().index();
+        let g = functions.named.by_name("g").unwrap().index();
+        let h = functions.named.by_name("h").unwrap().index();
+
         assert_eq!(
             call_graph
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(Index::from(0), Index::from(1))].as_slice(),
-                [(Index::from(0), Index::from(2))].as_slice(),
-                [(Index::from(0), Index::from(0))].as_slice(),
+                [(Index::from(0), g)].as_slice(),
+                [(Index::from(0), h)].as_slice(),
+                [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
             .map(|indices| Cluster {
