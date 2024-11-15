@@ -35,10 +35,10 @@ pub fn resolve_recursive_calls(
             })
             .collect::<BTreeMap<_, _>>();
 
-        for named_function_index in cluster.functions.values() {
+        for function_location in cluster.functions.values() {
             let FunctionLocation::NamedFunction {
                 index: named_function_index,
-            } = named_function_index
+            } = function_location
             else {
                 unreachable!(
                     "Only named functions are being tracked in `Cluster`."
