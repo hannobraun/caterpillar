@@ -26,7 +26,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
     }
 
     for function in functions.all_functions() {
-        let self_index =
+        let depender_index =
             {
                 let named_function =
                 functions.named.by_child_function(&function.location).expect(
@@ -53,7 +53,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                     );
                     let callee_index = graph_index_by_function_location
                         [&named_function.location()];
-                    call_graph.add_edge(self_index, callee_index, ());
+                    call_graph.add_edge(depender_index, callee_index, ());
                 }
             }
         }
