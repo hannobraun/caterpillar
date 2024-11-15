@@ -58,12 +58,10 @@ pub fn infer_types(
                 .expect("Function referred to from call graph must exist.");
 
             for branch in function.into_located_function().branches() {
-                let location = branch.location;
-
                 let environment = BTreeMap::new();
                 queue.push_back(QueueItem::new(
                     branch.fragment,
-                    location,
+                    branch.location,
                     function.location(),
                     &environment,
                     &mut types,
