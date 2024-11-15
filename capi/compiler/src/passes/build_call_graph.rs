@@ -89,16 +89,16 @@ fn collect_functions_into_clusters(
                     work.",
                 );
 
-            let mut functions = IndexMap::default();
+            let mut named_functions = IndexMap::default();
             for location in function_group {
                 let FunctionLocation::NamedFunction { index } = location else {
                     continue;
                 };
-                functions.push(index);
+                named_functions.push(index);
             }
 
             Cluster {
-                functions,
+                functions: named_functions,
                 divergent_functions: None,
                 non_divergent_branches: None,
             }
