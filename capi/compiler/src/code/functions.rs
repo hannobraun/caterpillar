@@ -31,14 +31,14 @@ impl Functions {
     pub fn by_location(
         &self,
         location: &FunctionLocation,
-    ) -> Option<&Function> {
+    ) -> Option<Located<&Function>> {
         match location {
             FunctionLocation::NamedFunction { index } => self
                 .named
-                .get(index)
-                .map(|named_function| &named_function.inner),
+                .by_index(index)
+                .map(|named_function| named_function.into_located_function()),
             FunctionLocation::AnonymousFunction { location } => {
-                self.anonymous.get(location)
+                self.anonymous.by_location(location)
             }
         }
     }
