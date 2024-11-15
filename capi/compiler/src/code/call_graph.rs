@@ -147,12 +147,12 @@ impl Cluster {
         index: &Index<FunctionLocation>,
         functions: &'r Functions,
     ) -> Located<&'r NamedFunction> {
-        let index = self
+        let location = self
             .functions
             .get(index)
             .expect("Expecting index that refers to function in cluster.");
 
-        let FunctionLocation::NamedFunction { index } = index else {
+        let FunctionLocation::NamedFunction { index } = location else {
             unreachable!(
                 "Only named functions are being tracked in `Cluster`."
             );
