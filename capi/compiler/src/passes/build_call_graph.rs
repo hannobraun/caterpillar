@@ -40,7 +40,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
         for branch in function.branches() {
             for expression in branch.body() {
-                match expression.fragment {
+                let dependee = match expression.fragment {
                     Expression::LiteralFunction { .. } => {
                         let location = FunctionLocation::AnonymousFunction {
                             location: expression.location,
@@ -48,7 +48,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
                         let dependee =
                             graph_index_by_function_location[&location];
-                        call_graph.add_edge(depender, dependee, ());
+                        Some(dependee)
                     }
                     Expression::UnresolvedIdentifier {
                         name,
@@ -63,9 +63,13 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                             );
                         let dependee = graph_index_by_function_location
                             [&named_function.location()];
-                        call_graph.add_edge(depender, dependee, ());
+                        Some(dependee)
                     }
-                    _ => {}
+                    _ => None,
+                };
+
+                if let Some(dependee) = dependee {
+                    call_graph.add_edge(depender, dependee, ());
                 }
             }
         }
