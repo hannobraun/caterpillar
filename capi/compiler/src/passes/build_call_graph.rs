@@ -10,8 +10,8 @@ use crate::code::{
 };
 
 pub fn build_call_graph(functions: &Functions) -> CallGraph {
-    let pet_call_graph = build_dependency_graph(functions);
-    let clusters = collect_functions_into_clusters(pet_call_graph, functions);
+    let dependency_graph = build_dependency_graph(functions);
+    let clusters = collect_functions_into_clusters(dependency_graph, functions);
     CallGraph::from_clusters(clusters)
 }
 
