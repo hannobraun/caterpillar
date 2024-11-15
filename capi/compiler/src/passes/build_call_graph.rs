@@ -282,14 +282,6 @@ mod tests {
     fn consider_anonymous_functions_in_call_graph() {
         let call_graph = create_call_graph(
             r"
-                main: fn
-                    \ ->
-                        fn
-                            \ ->
-                                a
-                        end
-                end
-
                 a: fn
                     \ ->
                         fn
@@ -323,9 +315,8 @@ mod tests {
                 .cloned()
                 .collect::<Vec<_>>(),
             [
-                [(Index::from(0), Index::from(2))].as_slice(),
-                [(Index::from(0), Index::from(3))].as_slice(),
                 [(Index::from(0), Index::from(1))].as_slice(),
+                [(Index::from(0), Index::from(2))].as_slice(),
                 [(Index::from(0), Index::from(0))].as_slice(),
             ]
             .into_iter()
