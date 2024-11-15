@@ -63,9 +63,9 @@ fn collect_functions_into_clusters(
     _: &Functions,
 ) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
-    let mut clustered_call_graph = condensation(dependency_graph, make_acyclic);
+    let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
-    let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
+    let clustered_and_sorted_call_graph = toposort(&clustered_graph, None)
         .expect(
             "The previous operation should have made the call graph acyclic. \
             Hence, topologically sorting the graph should not fail.",
@@ -75,7 +75,7 @@ fn collect_functions_into_clusters(
         .into_iter()
         .filter_map(move |graph_index| {
             let function_group =
-                clustered_call_graph.remove_node(graph_index).expect(
+                clustered_graph.remove_node(graph_index).expect(
                     "Each entry in the sorted version of the call graph must \
                     correspond to exactly one node in the unsorted version. So \
                     using every node from the sorted version once, to remove
