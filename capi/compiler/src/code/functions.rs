@@ -293,13 +293,9 @@ impl StableFunctions {
         &self,
         hash: &Hash<Function>,
     ) -> Option<Located<&NamedFunction>> {
-        self.named.iter().find_map(|function| {
-            if &Hash::new(&function.inner) == hash {
-                Some(function)
-            } else {
-                None
-            }
-        })
+        self.named
+            .iter()
+            .find(|function| &Hash::new(&function.inner) == hash)
     }
 }
 
