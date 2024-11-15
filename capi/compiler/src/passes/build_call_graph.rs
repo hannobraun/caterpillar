@@ -59,11 +59,11 @@ fn build_dependency_graph(functions: &Functions) -> DependencyGraph {
 }
 
 fn collect_functions_into_clusters(
-    call_graph: DependencyGraph,
+    dependency_graph: DependencyGraph,
     _: &Functions,
 ) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
-    let mut clustered_call_graph = condensation(call_graph, make_acyclic);
+    let mut clustered_call_graph = condensation(dependency_graph, make_acyclic);
 
     let clustered_and_sorted_call_graph = toposort(&clustered_call_graph, None)
         .expect(
