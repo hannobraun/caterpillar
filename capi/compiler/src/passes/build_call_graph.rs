@@ -106,14 +106,14 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{CallGraph, Cluster, Index},
+        code::{CallGraph, Cluster, Functions, Index},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
 
     #[test]
     fn no_recursion() {
-        let call_graph = create_call_graph(
+        let (_, call_graph) = create_call_graph(
             r"
                 main: fn
                     \ ->
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let call_graph = create_call_graph(
+        let (_, call_graph) = create_call_graph(
             r"
                 main: fn
                     \ ->
@@ -183,7 +183,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let call_graph = create_call_graph(
+        let (_, call_graph) = create_call_graph(
             r"
                 main: fn
                     \ ->
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let call_graph = create_call_graph(
+        let (_, call_graph) = create_call_graph(
             r"
                 main: fn
                     \ ->
@@ -278,7 +278,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let call_graph = create_call_graph(
+        let (_, call_graph) = create_call_graph(
             r"
                 a: fn
                     \ ->
@@ -327,10 +327,11 @@ mod tests {
         );
     }
 
-    fn create_call_graph(source: &str) -> CallGraph {
+    fn create_call_graph(source: &str) -> (Functions, CallGraph) {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
-        super::build_call_graph(&functions)
+        let call_graph = super::build_call_graph(&functions);
+        (functions, call_graph)
     }
 }
