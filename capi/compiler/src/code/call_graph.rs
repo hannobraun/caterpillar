@@ -176,8 +176,8 @@ impl Cluster {
         &'r self,
         functions: &'r Functions,
     ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
-        self.functions.values().map(|index| {
-            let FunctionLocation::NamedFunction { index } = index else {
+        self.functions.values().map(|location| {
+            let FunctionLocation::NamedFunction { index } = location else {
                 unreachable!(
                     "Only named functions are being tracked in `Cluster`."
                 );
