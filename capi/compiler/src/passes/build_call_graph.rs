@@ -45,10 +45,7 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                         let location = FunctionLocation::AnonymousFunction {
                             location: expression.location,
                         };
-
-                        let dependee =
-                            graph_index_by_function_location[&location];
-                        Some(dependee)
+                        Some(location)
                     }
                     Expression::UnresolvedIdentifier {
                         name,
@@ -61,14 +58,13 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
                                 known to be a call to a user-defined function. \
                                 A function of that name must be available.",
                             );
-                        let dependee = graph_index_by_function_location
-                            [&named_function.location()];
-                        Some(dependee)
+                        Some(named_function.location())
                     }
                     _ => None,
                 };
 
                 if let Some(dependee) = dependee {
+                    let dependee = graph_index_by_function_location[&dependee];
                     call_graph.add_edge(depender, dependee, ());
                 }
             }
