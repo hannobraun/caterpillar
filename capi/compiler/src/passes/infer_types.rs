@@ -316,9 +316,7 @@ fn infer_type_of_expression(
                 return None;
             }
 
-            let location = location.clone();
-
-            let Some(signature) = types.of_functions.get(&location).cloned()
+            let Some(signature) = types.of_functions.get(location).cloned()
             else {
                 return Some(ExpressionInference::Defer);
             };
