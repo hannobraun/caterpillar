@@ -21,11 +21,10 @@ fn build_pet_call_graph(functions: &Functions) -> PetCallGraph {
 
     for named_function in functions.named.iter() {
         let name = named_function.name.clone();
-        let index = named_function.index();
 
         graph_index_by_function_name
             .entry(name)
-            .or_insert_with(|| call_graph.add_node(index));
+            .or_insert_with(|| call_graph.add_node(named_function.index()));
     }
 
     for function in functions.all_functions() {
