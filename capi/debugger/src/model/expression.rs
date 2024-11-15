@@ -185,13 +185,11 @@ impl DebugExpressionKind {
             Expression::CallToUserDefinedFunctionRecursive {
                 index, ..
             } => {
-                let called_function_index = cluster
-                    .functions
-                    .get(&index)
-                    .expect(
-                    "The index of a recursive call must be valid within the \
-                    calling function's cluster.",
-                );
+                let called_function_index =
+                    cluster.functions.get(&index).expect(
+                        "The index of a recursive call must be valid within \
+                        the calling function's cluster.",
+                    );
                 let called_function =
                     functions.named.get(called_function_index).expect(
                         "Expecting to find expression referred to from a \
