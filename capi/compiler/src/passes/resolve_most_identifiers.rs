@@ -24,7 +24,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
 
     for function in functions.named.iter_mut() {
         resolve_in_function(
-            function.as_located_function_mut(),
+            function.into_located_function_mut(),
             &mut scopes,
             &mut functions.anonymous,
             &known_named_functions,
