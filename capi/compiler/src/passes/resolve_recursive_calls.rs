@@ -36,22 +36,12 @@ pub fn resolve_recursive_calls(
             .collect::<BTreeMap<_, _>>();
 
         for function_location in cluster.functions.values() {
-            let FunctionLocation::NamedFunction {
-                index: named_function_index,
-            } = function_location
-            else {
-                unreachable!(
-                    "Only named functions are being tracked in `Cluster`."
-                );
-            };
-
-            let function = functions
-                .named
-                .get_mut(named_function_index)
+            let mut function = functions
+                .by_location_mut(function_location)
                 .expect("Functions referred to from clusters must exist.");
 
             resolve_recursive_calls_in_function(
-                &mut function.inner,
+                &mut function,
                 &indices_in_cluster_by_function_name,
             );
         }
