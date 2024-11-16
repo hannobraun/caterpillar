@@ -12,14 +12,12 @@ pub fn resolve_recursive_calls(
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
-            .map(|(&function_index_in_cluster, function_location)| {
+            .filter_map(|(&function_index_in_cluster, function_location)| {
                 let FunctionLocation::NamedFunction {
                     index: named_function_index,
                 } = function_location
                 else {
-                    unreachable!(
-                        "Only named functions are being tracked in `Cluster`."
-                    );
+                    return None;
                 };
 
                 let name = functions
@@ -31,7 +29,7 @@ pub fn resolve_recursive_calls(
                     )
                     .name
                     .clone();
-                (name, function_index_in_cluster)
+                Some((name, function_index_in_cluster))
             })
             .collect::<BTreeMap<_, _>>();
 
