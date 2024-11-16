@@ -43,6 +43,27 @@ impl Functions {
         }
     }
 
+    /// # Access the function at the given location, mutably
+    ///
+    /// This includes both named and anonymous functions.
+    ///
+    /// Returns `None`, if the given location does not identify a function.
+    pub fn by_location_mut(
+        &mut self,
+        location: &FunctionLocation,
+    ) -> Option<Located<&mut Function>> {
+        match location {
+            FunctionLocation::NamedFunction { index } => {
+                self.named.by_index_mut(index).map(|named_function| {
+                    named_function.into_located_function_mut()
+                })
+            }
+            FunctionLocation::AnonymousFunction { location } => {
+                self.anonymous.by_location_mut(location)
+            }
+        }
+    }
+
     /// # Access the branch at the given location
     ///
     /// Returns `None`, if the given location does not identify a branch.
