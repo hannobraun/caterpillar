@@ -228,7 +228,7 @@ pub struct AnonymousFunctions {
 }
 
 impl AnonymousFunctions {
-    /// # Access the anonymous function defined at the provided location
+    /// # Access the anonymous function at the provided location
     ///
     /// Returns `None`, if no anonymous function is defined at the given
     /// location.
