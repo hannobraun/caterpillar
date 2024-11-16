@@ -12,22 +12,20 @@ pub fn resolve_calls_to_user_defined_functions(
     let mut resolved_hashes_by_name = BTreeMap::new();
 
     for (location, _) in call_graph.functions_from_leaves() {
-        let FunctionLocation::NamedFunction { index } = location else {
-            unreachable!("Only named functions are tracked in `CallGraph`");
-        };
-
-        let function = functions
-            .named
-            .get_mut(index)
+        let mut function = functions
+            .by_location_mut(location)
             .expect("Function referred to from call graph must exist.");
 
-        resolve_calls_in_function(
-            &mut function.inner,
-            &mut resolved_hashes_by_name,
-        );
+        resolve_calls_in_function(&mut function, &mut resolved_hashes_by_name);
 
-        resolved_hashes_by_name
-            .insert(function.name.clone(), Hash::new(&function.inner));
+        if let FunctionLocation::NamedFunction { index } = location {
+            let function = functions.named.by_index(index).expect(
+                "Got function index by iterating over call graph. Function \
+                referred to there must exist.",
+            );
+            resolved_hashes_by_name
+                .insert(function.name.clone(), Hash::new(&function.inner));
+        }
     }
 
     // We have resolved the function calls, creating hashes to refer to the
