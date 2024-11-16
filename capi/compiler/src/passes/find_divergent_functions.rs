@@ -86,7 +86,7 @@ pub fn find_divergent_functions(
                     });
 
                 if all_branches_are_diverging {
-                    Some(function.index())
+                    Some(function.location())
                 } else {
                     None
                 }
