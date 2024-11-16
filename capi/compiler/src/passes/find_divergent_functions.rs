@@ -13,7 +13,7 @@ pub fn find_divergent_functions(
         let mut node_index_by_branch_location = BTreeMap::new();
 
         for function in cluster.functions(functions) {
-            for branch in function.into_located_function().branches() {
+            for branch in function.branches() {
                 let location = branch.location.clone();
 
                 let index = branch_call_graph.add_node(location.clone());
@@ -22,7 +22,7 @@ pub fn find_divergent_functions(
         }
 
         for function in cluster.functions(functions) {
-            for branch in function.into_located_function().branches() {
+            for branch in function.branches() {
                 for expression in branch.body() {
                     if let Expression::CallToUserDefinedFunctionRecursive {
                         index,
@@ -81,12 +81,12 @@ pub fn find_divergent_functions(
             .functions(functions)
             .filter_map(|function| {
                 let all_branches_are_diverging =
-                    function.into_located_function().branches().all(|branch| {
+                    function.branches().all(|branch| {
                         divergent_branches.contains(&branch.location)
                     });
 
                 if all_branches_are_diverging {
-                    Some(function.location())
+                    Some(function.location)
                 } else {
                     None
                 }

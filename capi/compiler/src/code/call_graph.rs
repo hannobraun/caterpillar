@@ -1,8 +1,8 @@
 use std::{collections::BTreeSet, iter};
 
 use super::{
-    BranchLocation, FunctionLocation, Functions, Index, IndexMap, Located,
-    NamedFunction,
+    BranchLocation, Function, FunctionLocation, Functions, Index, IndexMap,
+    Located, NamedFunction,
 };
 
 /// # The program's named functions, organized as a call graph
@@ -140,17 +140,10 @@ impl Cluster {
     pub fn functions<'r>(
         &'r self,
         functions: &'r Functions,
-    ) -> impl Iterator<Item = Located<&'r NamedFunction>> + 'r {
+    ) -> impl Iterator<Item = Located<&'r Function>> + 'r {
         self.functions.values().map(|location| {
-            let FunctionLocation::NamedFunction { index } = location else {
-                unreachable!(
-                    "Only named functions are being tracked in `Cluster`."
-                );
-            };
-
             functions
-                .named
-                .by_index(index)
+                .by_location(location)
                 .expect("Function referred to from cluster must exist.")
         })
     }
