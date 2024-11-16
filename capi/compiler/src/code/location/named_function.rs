@@ -32,9 +32,9 @@ impl<'r> Located<&'r NamedFunction> {
     }
 }
 
-impl Located<&mut NamedFunction> {
+impl<'r> Located<&'r mut NamedFunction> {
     /// # Convert this located named function to a located function
-    pub fn as_located_function_mut(&mut self) -> Located<&mut Function> {
+    pub fn as_located_function_mut(self) -> Located<&'r mut Function> {
         Located {
             fragment: &mut self.fragment.inner,
             location: FunctionLocation::NamedFunction {

@@ -22,7 +22,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for mut function in functions.named.iter_mut() {
+    for function in functions.named.iter_mut() {
         resolve_in_function(
             function.as_located_function_mut(),
             &mut scopes,
