@@ -130,6 +130,21 @@ impl NamedFunctions {
         })
     }
 
+    /// # Access the named function with the provided index, mutably
+    ///
+    /// Returns `None`, if the there is no named function at the provided index.
+    pub fn by_index_mut(
+        &mut self,
+        index: &Index<NamedFunction>,
+    ) -> Option<Located<&mut NamedFunction>> {
+        let function = self.inner.get_mut(index)?;
+
+        Some(Located {
+            fragment: function,
+            location: *index,
+        })
+    }
+
     /// # Access the function with the provided name
     ///
     /// Returns `None`, if no function has the provided name.
