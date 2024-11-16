@@ -195,7 +195,7 @@ impl DebugExpressionKind {
                 } = called_function_location
                 else {
                     unreachable!(
-                        "Only named functions are tracked in `CallGraph`"
+                        "Only named functions can be called recursively."
                     );
                 };
                 let called_function =
