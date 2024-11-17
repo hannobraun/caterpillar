@@ -22,8 +22,8 @@ pub fn resolve_calls_to_user_defined_functions(
         match location {
             FunctionLocation::NamedFunction { index } => {
                 let function = functions.named.by_index(index).expect(
-                    "Got function index by iterating over call graph. Function \
-                    referred to there must exist.",
+                    "Got function index by iterating over ordered functions. \
+                    Function referred to from there must exist.",
                 );
                 resolved_hashes_by_name
                     .insert(function.name.clone(), Hash::new(&function.inner));
