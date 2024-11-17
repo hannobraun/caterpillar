@@ -52,22 +52,23 @@ pub fn infer_types(
         let mut queue = VecDeque::new();
 
         for location in cluster.functions.values() {
-            let FunctionLocation::NamedFunction { .. } = location else {
+            let FunctionLocation::NamedFunction { index } = location else {
                 // We need to infer functions in lexical order, since a
                 // function's environment must be known for type inference.
                 continue;
             };
 
             let function = functions
-                .by_location(location)
+                .named
+                .by_index(index)
                 .expect("Function referred to from call graph must exist.");
 
-            for branch in function.branches() {
+            for branch in function.into_located_function().branches() {
                 let environment = BTreeMap::new();
                 queue.push_back(QueueItem::new(
                     branch.fragment,
                     branch.location,
-                    function.location.clone(),
+                    function.location(),
                     &environment,
                     &mut types,
                 ));
