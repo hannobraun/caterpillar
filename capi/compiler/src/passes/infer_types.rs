@@ -52,6 +52,12 @@ pub fn infer_types(
         let mut queue = VecDeque::new();
 
         for location in cluster.functions.values() {
+            let FunctionLocation::NamedFunction { .. } = location else {
+                // We need to infer functions in lexical order, since a
+                // function's environment must be known for type inference.
+                continue;
+            };
+
             let function = functions
                 .by_location(location)
                 .expect("Function referred to from call graph must exist.");
