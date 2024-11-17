@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    Expression, Function, FunctionLocation, Functions, Hash, OrderedFunctions,
-    StableFunctions,
+    Expression, ExpressionLocation, Function, FunctionLocation, Functions,
+    Hash, OrderedFunctions, StableFunctions,
 };
 
 pub fn resolve_calls_to_user_defined_functions(
@@ -17,7 +17,11 @@ pub fn resolve_calls_to_user_defined_functions(
             .by_location_mut(location)
             .expect("Function referred to from call graph must exist.");
 
-        resolve_calls_in_function(&mut function, &mut resolved_hashes_by_name);
+        resolve_calls_in_function(
+            &mut function,
+            &mut resolved_hashes_by_name,
+            &mut resolved_hashes_by_location,
+        );
 
         match location {
             FunctionLocation::NamedFunction { index } => {
@@ -49,10 +53,18 @@ pub fn resolve_calls_to_user_defined_functions(
 fn resolve_calls_in_function(
     function: &mut Function,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
+    resolved_hashes_by_location: &mut BTreeMap<
+        ExpressionLocation,
+        Hash<Function>,
+    >,
 ) {
     for branch in function.branches.values_mut() {
         for expression in branch.body.values_mut() {
-            resolve_calls_in_expression(expression, resolved_hashes_by_name);
+            resolve_calls_in_expression(
+                expression,
+                resolved_hashes_by_name,
+                resolved_hashes_by_location,
+            );
         }
     }
 }
@@ -60,10 +72,18 @@ fn resolve_calls_in_function(
 fn resolve_calls_in_expression(
     expression: &mut Expression,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
+    resolved_hashes_by_location: &mut BTreeMap<
+        ExpressionLocation,
+        Hash<Function>,
+    >,
 ) {
     match expression {
         Expression::LiteralFunction { function, hash } => {
-            resolve_calls_in_function(function, resolved_hashes_by_name);
+            resolve_calls_in_function(
+                function,
+                resolved_hashes_by_name,
+                resolved_hashes_by_location,
+            );
             *hash = Some(Hash::new(function));
         }
         Expression::UnresolvedIdentifier {
