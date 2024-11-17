@@ -79,11 +79,13 @@ fn resolve_calls_in_expression(
 ) {
     match expression {
         Expression::LiteralFunction { function, hash } => {
-            resolve_calls_in_function(
-                function,
-                resolved_hashes_by_name,
-                resolved_hashes_by_location,
-            );
+            {
+                resolve_calls_in_function(
+                    function,
+                    resolved_hashes_by_name,
+                    resolved_hashes_by_location,
+                );
+            }
             *hash = Some(Hash::new(function));
         }
         Expression::UnresolvedIdentifier {
