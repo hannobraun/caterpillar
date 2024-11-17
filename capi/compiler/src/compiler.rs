@@ -61,7 +61,7 @@ impl Compiler {
 
         CompilerOutput {
             functions,
-            call_graph: ordered_functions,
+            ordered_functions,
             types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
@@ -77,7 +77,7 @@ pub struct CallInstructionsByCallee {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
     pub functions: StableFunctions,
-    pub call_graph: OrderedFunctions,
+    pub ordered_functions: OrderedFunctions,
     pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,
