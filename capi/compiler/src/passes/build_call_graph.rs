@@ -113,7 +113,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (functions, call_graph) = order_functions_by_dependencies(
+        let (functions, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -131,7 +131,7 @@ mod tests {
         let g = functions.named.by_name("g").unwrap().location();
 
         assert_eq!(
-            call_graph
+            ordered_functions
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let (functions, call_graph) = order_functions_by_dependencies(
+        let (functions, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -166,7 +166,7 @@ mod tests {
         let g = functions.named.by_name("g").unwrap().location();
 
         assert_eq!(
-            call_graph
+            ordered_functions
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -183,7 +183,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let (functions, call_graph) = order_functions_by_dependencies(
+        let (functions, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -207,7 +207,7 @@ mod tests {
         let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
-            call_graph
+            ordered_functions
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (functions, call_graph) = order_functions_by_dependencies(
+        let (functions, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -255,7 +255,7 @@ mod tests {
         let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
-            call_graph
+            ordered_functions
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -276,7 +276,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (functions, call_graph) = order_functions_by_dependencies(
+        let (functions, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -322,7 +322,7 @@ mod tests {
         let g = functions.named.by_name("g").unwrap().location();
 
         assert_eq!(
-            call_graph
+            ordered_functions
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
