@@ -10,6 +10,7 @@ pub fn resolve_calls_to_user_defined_functions(
     call_graph: &OrderedFunctions,
 ) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
+    let mut resolved_hashes_by_location = BTreeMap::new();
 
     for (location, _) in call_graph.functions_from_leaves() {
         let mut function = functions
@@ -18,13 +19,19 @@ pub fn resolve_calls_to_user_defined_functions(
 
         resolve_calls_in_function(&mut function, &mut resolved_hashes_by_name);
 
-        if let FunctionLocation::NamedFunction { index } = location {
-            let function = functions.named.by_index(index).expect(
-                "Got function index by iterating over call graph. Function \
-                referred to there must exist.",
-            );
-            resolved_hashes_by_name
-                .insert(function.name.clone(), Hash::new(&function.inner));
+        match location {
+            FunctionLocation::NamedFunction { index } => {
+                let function = functions.named.by_index(index).expect(
+                    "Got function index by iterating over call graph. Function \
+                    referred to there must exist.",
+                );
+                resolved_hashes_by_name
+                    .insert(function.name.clone(), Hash::new(&function.inner));
+            }
+            FunctionLocation::AnonymousFunction { location } => {
+                resolved_hashes_by_location
+                    .insert(location, Hash::new(function.fragment));
+            }
         }
     }
 
