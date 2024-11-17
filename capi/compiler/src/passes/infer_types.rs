@@ -51,9 +51,9 @@ pub fn infer_types(
         // now.
         let mut queue = VecDeque::new();
 
-        for index in cluster.functions.values() {
+        for location in cluster.functions.values() {
             let function = functions
-                .by_location(index)
+                .by_location(location)
                 .expect("Function referred to from call graph must exist.");
 
             for branch in function.branches() {
