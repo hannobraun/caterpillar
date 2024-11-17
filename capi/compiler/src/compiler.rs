@@ -37,19 +37,21 @@ impl Compiler {
         let mut functions = parse(tokens);
         mark_tail_positions(&mut functions);
         resolve_most_identifiers(&mut functions, host);
-        let mut call_graph = order_functions_by_dependencies(&functions);
-        resolve_recursive_calls(&mut functions, &call_graph);
-        let functions =
-            resolve_calls_to_user_defined_functions(functions, &call_graph);
-        find_divergent_functions(&functions, &mut call_graph);
-        let types = infer_types(&functions, &call_graph, host);
+        let mut ordered_functions = order_functions_by_dependencies(&functions);
+        resolve_recursive_calls(&mut functions, &ordered_functions);
+        let functions = resolve_calls_to_user_defined_functions(
+            functions,
+            &ordered_functions,
+        );
+        find_divergent_functions(&functions, &mut ordered_functions);
+        let types = infer_types(&functions, &ordered_functions, host);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());
 
         generate_instructions(
             &functions,
-            &call_graph,
+            &ordered_functions,
             &changes,
             &mut self.instructions,
             &mut self.call_instructions_by_callee,
@@ -59,7 +61,7 @@ impl Compiler {
 
         CompilerOutput {
             functions,
-            call_graph,
+            call_graph: ordered_functions,
             types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
