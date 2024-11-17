@@ -381,7 +381,7 @@ impl StableFunctions {
     ) -> Option<Located<&NamedFunction>> {
         self.named
             .iter()
-            .find(|function| &Hash::new(&function.inner) == hash)
+            .find(|function| Hash::new(&function.inner) == *hash)
     }
 }
 
