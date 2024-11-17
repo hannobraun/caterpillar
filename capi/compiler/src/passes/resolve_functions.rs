@@ -35,7 +35,7 @@ pub fn resolve_calls_to_user_defined_functions(
                         functions. Function referred to from there must exist.",
                     );
                 resolved_hashes_by_location
-                    .insert(location, Hash::new(function.fragment));
+                    .insert(location.clone(), Hash::new(function.fragment));
             }
         }
     }
