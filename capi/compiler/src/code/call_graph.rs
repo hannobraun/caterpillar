@@ -12,11 +12,6 @@ pub struct OrderedFunctions {
 }
 
 impl OrderedFunctions {
-    /// # Construct an instance of `CallGraph`
-    ///
-    /// Expects the provided clusters to be sorted topologically: The iterator
-    /// must yield any cluster that contains calls to another cluster before it
-    /// yields that other cluster.
     pub(crate) fn from_clusters(
         clusters: impl IntoIterator<Item = Cluster>,
     ) -> Self {
