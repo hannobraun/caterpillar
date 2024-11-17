@@ -3,7 +3,9 @@ use std::collections::BTreeMap;
 use capi_runtime::Instruction;
 
 use crate::{
-    code::{Changes, Function, Functions, Hash, OrderedFunctions},
+    code::{
+        Changes, Function, Functions, Hash, OrderedFunctions, StableFunctions,
+    },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
     Instructions,
@@ -21,7 +23,7 @@ pub struct FunctionsContext<'r> {
 }
 
 pub fn compile_functions(
-    functions: &Functions,
+    functions: &StableFunctions,
     changes: &Changes,
     call_graph: &OrderedFunctions,
     instructions: &mut Instructions,
