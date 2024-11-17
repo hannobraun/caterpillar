@@ -327,7 +327,16 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
-        Expression::LiteralFunction { function, .. } => {
+        Expression::LiteralFunction { function: _, hash } => {
+            let hash = hash.expect(
+                "The compiler pass that resolves anonymous functions must have \
+                already run."
+            );
+            let function = functions_context.functions.by_hash(&hash).expect(
+                "Anonymous function that has been previously resolved must be \
+                available.",
+            );
+
             // We have encountered an anonymous function. We need to emit an
             // instruction that allocates it, and takes care of its environment.
             //
@@ -359,7 +368,7 @@ fn compile_expression(
             // replaced, at a later time.
             cluster_context.queue_of_functions_to_compile.push_front(
                 FunctionToCompile {
-                    function: function.clone(),
+                    function: function.fragment.clone(),
                     location: FunctionLocation::AnonymousFunction { location },
                     address_of_instruction_to_make_anon_function: Some(address),
                 },
