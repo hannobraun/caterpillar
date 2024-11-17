@@ -338,6 +338,34 @@ pub struct StableFunctions {
 }
 
 impl StableFunctions {
+    /// # Access the function (named or anonymous) with the provided hash
+    ///
+    /// This method is only available on [`StableFunctions`], to prevent callers
+    /// from erroneously relying on the hash of a function that might still
+    /// change. Which would be possible, if an equivalent method was available
+    /// on [`Functions`] or [`NamedFunctions`].
+    ///
+    /// Returns `None`, if a named function with the provided hash does not
+    /// exist.
+    pub fn by_hash(&self, hash: &Hash<Function>) -> Option<Located<&Function>> {
+        self.named_by_hash(hash)
+            .map(|named_function| named_function.into_located_function())
+            .or_else(|| {
+                self.anonymous.iter().find_map(|(location, function)| {
+                    if Hash::new(function) == *hash {
+                        Some(Located {
+                            fragment: function,
+                            location: FunctionLocation::AnonymousFunction {
+                                location: location.clone(),
+                            },
+                        })
+                    } else {
+                        None
+                    }
+                })
+            })
+    }
+
     /// # Access the named function with the provided hash
     ///
     /// This method is only available on [`StableFunctions`], to prevent callers
