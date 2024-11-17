@@ -86,7 +86,9 @@ fn resolve_calls_in_expression(
                     resolved_hashes_by_location,
                 );
             }
-            *hash = Some(Hash::new(function));
+            {
+                *hash = Some(Hash::new(function));
+            }
         }
         Expression::UnresolvedIdentifier {
             name,
