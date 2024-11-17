@@ -347,7 +347,8 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
-        let call_graph = super::order_functions_by_dependencies(&functions);
-        (functions, call_graph)
+        let ordered_functions =
+            super::order_functions_by_dependencies(&functions);
+        (functions, ordered_functions)
     }
 }
