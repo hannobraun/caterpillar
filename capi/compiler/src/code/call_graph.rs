@@ -5,7 +5,27 @@ use super::{
     Located, NamedFunction,
 };
 
-/// # The program's named functions, organized as a call graph
+/// # All functions, ordered by their dependencies
+///
+/// A dependency can take two forms:
+///
+/// - If a named function `f` calls a named function `g`, then `f` depends on
+///   `g`.
+/// - If an anonymous function `g` is defined within any function (named or
+///   anonymous) `f`, then `f` depends on `g`.
+///
+/// Calls between named functions can be recursive, which means dependencies can
+/// be recursive too. To reflect this, all functions are grouped into
+/// [`Cluster`]s, in the following way:
+///
+/// - Any group of functions in the dependency graph, that mutually depend on
+///   each other (a "strongly connected component" in graph theory jargon) are
+///   grouped into the same cluster, without any other functions.
+/// - Any functions that are not part of a mutually dependent group, are grouped
+///   into a dedicated cluster by themselves.
+///
+/// Or using graph theory jargon, the clusters are a "condensation" of the
+/// original dependency graph.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct OrderedFunctions {
     clusters: Vec<Cluster>,
@@ -23,27 +43,26 @@ impl OrderedFunctions {
     /// # Iterate over the function clusters, from the leaves up
     ///
     /// Guarantees that any cluster that is yielded by the iterator only has
-    /// non-recursive calls to functions in clusters that have already been
-    /// yielded before.
+    /// dependencies on functions in clusters that have already been yielded
+    /// before.
     pub fn clusters_from_leaves(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
 
     /// # Iterate over the function clusters, from the leaves up, mutably
     ///
-    /// Guarantees that any cluster that is yielded by the iterator only has
-    /// non-recursive calls to functions in clusters that have already been
-    /// yielded before.
+    /// The documented behavior of [`Self::clusters_from_leaves`] applies to
+    /// this method too.
     pub fn clusters_from_leaves_mut(
         &mut self,
     ) -> impl Iterator<Item = &mut Cluster> {
         self.clusters.iter_mut().rev()
     }
 
-    /// # Iterate over all named functions, from the leaves up
+    /// # Iterate over all functions, from the leaves up
     ///
     /// Guarantees that any function that is yielded by the iterator only has
-    /// non-recursive calls to functions that have already been yielded before.
+    /// dependencies on functions that have already been yielded before.
     pub fn functions_from_leaves(
         &self,
     ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
@@ -52,11 +71,7 @@ impl OrderedFunctions {
         })
     }
 
-    /// # Find the cluster containing a given function
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if the provided location does not refer to a named function.
+    /// # Find the cluster containing a given named function
     pub fn find_cluster_by_named_function(
         &self,
         index: &Index<NamedFunction>,
