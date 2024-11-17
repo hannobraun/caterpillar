@@ -1,14 +1,13 @@
-mod call_graph;
 mod changes;
 mod expression;
 mod functions;
 mod hash;
 mod index;
 mod location;
+mod ordered_functions;
 mod types;
 
 pub use self::{
-    call_graph::{Cluster, OrderedFunctions},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::Expression,
     functions::{
@@ -18,5 +17,6 @@ pub use self::{
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
+    ordered_functions::{Cluster, OrderedFunctions},
     types::{ConcreteSignature, Signature, Type, Types},
 };
