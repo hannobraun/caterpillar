@@ -11,7 +11,8 @@ mod resolve_recursive_calls;
 mod tokenize;
 
 pub use {
-    build_call_graph::build_call_graph, detect_changes::detect_changes,
+    build_call_graph::order_functions_by_dependencies,
+    detect_changes::detect_changes,
     find_divergent_functions::find_divergent_functions,
     generate_instructions::generate_instructions, infer_types::infer_types,
     mark_tail_positions::mark_tail_positions, parse::parse,

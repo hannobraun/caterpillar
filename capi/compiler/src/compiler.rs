@@ -6,10 +6,10 @@ use crate::{
     code::{Function, Hash, OrderedFunctions, StableFunctions, Types},
     host::Host,
     passes::{
-        build_call_graph, detect_changes, find_divergent_functions,
-        generate_instructions, infer_types, mark_tail_positions, parse,
-        resolve_calls_to_user_defined_functions, resolve_most_identifiers,
-        resolve_recursive_calls, tokenize,
+        detect_changes, find_divergent_functions, generate_instructions,
+        infer_types, mark_tail_positions, order_functions_by_dependencies,
+        parse, resolve_calls_to_user_defined_functions,
+        resolve_most_identifiers, resolve_recursive_calls, tokenize,
     },
     source_map::SourceMap,
     Instructions,
@@ -37,7 +37,7 @@ impl Compiler {
         let mut functions = parse(tokens);
         mark_tail_positions(&mut functions);
         resolve_most_identifiers(&mut functions, host);
-        let mut call_graph = build_call_graph(&functions);
+        let mut call_graph = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &call_graph);
         let functions =
             resolve_calls_to_user_defined_functions(functions, &call_graph);

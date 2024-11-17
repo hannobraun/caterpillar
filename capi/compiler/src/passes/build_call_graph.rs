@@ -10,7 +10,9 @@ use crate::code::{
     OrderedFunctions,
 };
 
-pub fn build_call_graph(functions: &Functions) -> OrderedFunctions {
+pub fn order_functions_by_dependencies(
+    functions: &Functions,
+) -> OrderedFunctions {
     let dependency_graph = build_dependency_graph(functions);
     let clusters = collect_functions_into_clusters(dependency_graph);
     OrderedFunctions::from_clusters(clusters)
@@ -345,7 +347,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
-        let call_graph = super::build_call_graph(&functions);
+        let call_graph = super::order_functions_by_dependencies(&functions);
         (functions, call_graph)
     }
 }

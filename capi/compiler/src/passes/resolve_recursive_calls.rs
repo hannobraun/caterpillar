@@ -95,7 +95,10 @@ mod tests {
     use crate::{
         code::{Expression, Functions, Index},
         host::NoHost,
-        passes::{build_call_graph, parse, resolve_most_identifiers, tokenize},
+        passes::{
+            order_functions_by_dependencies, parse, resolve_most_identifiers,
+            tokenize,
+        },
     };
 
     #[test]
@@ -196,7 +199,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
-        let call_graph = build_call_graph(&functions);
+        let call_graph = order_functions_by_dependencies(&functions);
         super::resolve_recursive_calls(&mut functions, &call_graph);
 
         functions

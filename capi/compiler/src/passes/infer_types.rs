@@ -496,8 +496,9 @@ mod tests {
         code::{ConcreteSignature, Functions, StableFunctions, Type, Types},
         host::{Host, HostFunction},
         passes::{
-            build_call_graph, parse, resolve_calls_to_user_defined_functions,
-            resolve_most_identifiers, resolve_recursive_calls, tokenize,
+            order_functions_by_dependencies, parse,
+            resolve_calls_to_user_defined_functions, resolve_most_identifiers,
+            resolve_recursive_calls, tokenize,
         },
     };
 
@@ -823,7 +824,7 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &TestHost);
-        let call_graph = build_call_graph(&functions);
+        let call_graph = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &call_graph);
         let functions =
             resolve_calls_to_user_defined_functions(functions, &call_graph);
