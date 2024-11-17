@@ -17,7 +17,9 @@ impl OrderedFunctions {
     /// Expects the provided clusters to be sorted topologically: The iterator
     /// must yield any cluster that contains calls to another cluster before it
     /// yields that other cluster.
-    pub fn from_clusters(clusters: impl IntoIterator<Item = Cluster>) -> Self {
+    pub(crate) fn from_clusters(
+        clusters: impl IntoIterator<Item = Cluster>,
+    ) -> Self {
         Self {
             clusters: clusters.into_iter().collect(),
         }
