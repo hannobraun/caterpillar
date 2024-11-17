@@ -83,9 +83,6 @@ fn collect_functions_into_clusters(
 
             let mut named_functions = IndexMap::default();
             for location in function_group {
-                let FunctionLocation::NamedFunction { .. } = location else {
-                    continue;
-                };
                 named_functions.push(location);
             }
 
@@ -305,9 +302,21 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().location();
+        let [(f, f_a), (h, h_a)] = ["f", "h"].map(|name| {
+            let named = functions.named.by_name(name).unwrap();
+            let anonymous = named
+                .into_located_function()
+                .find_single_branch()
+                .unwrap()
+                .body()
+                .next()
+                .unwrap()
+                .to_function_location()
+                .unwrap();
+
+            (named.location(), anonymous)
+        });
         let g = functions.named.by_name("g").unwrap().location();
-        let h = functions.named.by_name("h").unwrap().location();
 
         assert_eq!(
             call_graph
@@ -316,7 +325,9 @@ mod tests {
                 .collect::<Vec<_>>(),
             [
                 [(Index::from(0), g)].as_slice(),
+                [(Index::from(0), h_a)].as_slice(),
                 [(Index::from(0), h)].as_slice(),
+                [(Index::from(0), f_a)].as_slice(),
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
