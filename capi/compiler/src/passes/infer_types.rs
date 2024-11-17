@@ -334,7 +334,16 @@ fn infer_type_of_expression(
             // Comments have no bearing on type inference.
             return None;
         }
-        Expression::LiteralFunction { function, .. } => {
+        Expression::LiteralFunction { function: _, hash } => {
+            let hash = hash.expect(
+                "The compiler pass that resolves anonymous functions must have \
+                already run."
+            );
+            let function = functions.by_hash(&hash).expect(
+                "Anonymous function that has been previously resolved must be \
+                available.",
+            );
+
             let function_location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };
