@@ -113,7 +113,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (functions, call_graph) = create_call_graph(
+        let (functions, call_graph) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -148,7 +148,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let (functions, call_graph) = create_call_graph(
+        let (functions, call_graph) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -183,7 +183,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let (functions, call_graph) = create_call_graph(
+        let (functions, call_graph) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (functions, call_graph) = create_call_graph(
+        let (functions, call_graph) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -276,7 +276,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (functions, call_graph) = create_call_graph(
+        let (functions, call_graph) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -343,7 +343,9 @@ mod tests {
         );
     }
 
-    fn create_call_graph(source: &str) -> (Functions, OrderedFunctions) {
+    fn order_functions_by_dependencies(
+        source: &str,
+    ) -> (Functions, OrderedFunctions) {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
