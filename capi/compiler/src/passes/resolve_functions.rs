@@ -29,6 +29,11 @@ pub fn resolve_calls_to_user_defined_functions(
                     .insert(function.name.clone(), Hash::new(&function.inner));
             }
             FunctionLocation::AnonymousFunction { location } => {
+                let function =
+                    functions.anonymous.by_location(location).expect(
+                        "Got function location by iterating over ordered \
+                        functions. Function referred to from there must exist.",
+                    );
                 resolved_hashes_by_location
                     .insert(location, Hash::new(function.fragment));
             }
