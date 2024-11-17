@@ -824,11 +824,14 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &TestHost);
-        let call_graph = order_functions_by_dependencies(&functions);
-        resolve_recursive_calls(&mut functions, &call_graph);
-        let functions =
-            resolve_calls_to_user_defined_functions(functions, &call_graph);
-        let types = super::infer_types(&functions, &call_graph, &TestHost);
+        let ordered_functions = order_functions_by_dependencies(&functions);
+        resolve_recursive_calls(&mut functions, &ordered_functions);
+        let functions = resolve_calls_to_user_defined_functions(
+            functions,
+            &ordered_functions,
+        );
+        let types =
+            super::infer_types(&functions, &ordered_functions, &TestHost);
 
         (functions, types)
     }
