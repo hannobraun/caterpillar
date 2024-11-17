@@ -199,8 +199,8 @@ mod tests {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
-        let call_graph = order_functions_by_dependencies(&functions);
-        super::resolve_recursive_calls(&mut functions, &call_graph);
+        let ordered_functions = order_functions_by_dependencies(&functions);
+        super::resolve_recursive_calls(&mut functions, &ordered_functions);
 
         functions
     }
