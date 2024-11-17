@@ -86,12 +86,7 @@ impl OrderedFunctions {
 
 /// # A cluster of functions
 ///
-/// A cluster either contains a single function that might or might not be
-/// recursive, or multiple mutually recursive functions. During compilation, all
-/// functions are grouped into clusters.
-///
-/// A group of mutually recursive functions is guaranteed to be part of a single
-/// cluster, without any other functions.
+/// See [`OrderedFunctions`] for more information.
 #[derive(
     Clone,
     Debug,
@@ -145,7 +140,7 @@ impl Cluster {
     ///
     /// ## Panics
     ///
-    /// Panics, if the provided [`NamedFunctions`] instance does not contain a
+    /// Panics, if the provided [`Functions`] instance does not contain a
     /// function referenced in this cluster. Unless you're mixing data
     /// structures from different compiler passes, this should never happen. If
     /// it still does, that's a bug.
