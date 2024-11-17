@@ -1,13 +1,13 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Expression, Function, FunctionLocation, Functions, Hash,
+    Expression, Function, FunctionLocation, Functions, Hash, OrderedFunctions,
     StableFunctions,
 };
 
 pub fn resolve_calls_to_user_defined_functions(
     mut functions: Functions,
-    call_graph: &CallGraph,
+    call_graph: &OrderedFunctions,
 ) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
 

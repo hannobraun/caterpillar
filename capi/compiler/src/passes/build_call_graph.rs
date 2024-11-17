@@ -6,13 +6,14 @@ use petgraph::{
 };
 
 use crate::code::{
-    CallGraph, Cluster, Expression, FunctionLocation, Functions, IndexMap,
+    Cluster, Expression, FunctionLocation, Functions, IndexMap,
+    OrderedFunctions,
 };
 
-pub fn build_call_graph(functions: &Functions) -> CallGraph {
+pub fn build_call_graph(functions: &Functions) -> OrderedFunctions {
     let dependency_graph = build_dependency_graph(functions);
     let clusters = collect_functions_into_clusters(dependency_graph);
-    CallGraph::from_clusters(clusters)
+    OrderedFunctions::from_clusters(clusters)
 }
 
 fn build_dependency_graph(functions: &Functions) -> DependencyGraph {
@@ -103,7 +104,7 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{CallGraph, Cluster, Functions, Index},
+        code::{Cluster, Functions, Index, OrderedFunctions},
         host::NoHost,
         passes::{parse, resolve_most_identifiers, tokenize},
     };
@@ -340,7 +341,7 @@ mod tests {
         );
     }
 
-    fn create_call_graph(source: &str) -> (Functions, CallGraph) {
+    fn create_call_graph(source: &str) -> (Functions, OrderedFunctions) {
         let tokens = tokenize(source);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);

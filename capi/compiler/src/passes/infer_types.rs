@@ -7,8 +7,8 @@ use std::{
 
 use crate::{
     code::{
-        Branch, BranchLocation, CallGraph, Cluster, ConcreteSignature,
-        Expression, ExpressionLocation, FunctionLocation, Index, Pattern,
+        Branch, BranchLocation, Cluster, ConcreteSignature, Expression,
+        ExpressionLocation, FunctionLocation, Index, OrderedFunctions, Pattern,
         Signature, StableFunctions, Type, Types,
     },
     host::Host,
@@ -17,7 +17,7 @@ use crate::{
 
 pub fn infer_types(
     functions: &StableFunctions,
-    call_graph: &CallGraph,
+    call_graph: &OrderedFunctions,
     host: &impl Host,
 ) -> Types {
     let mut types = Types::default();

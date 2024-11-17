@@ -7,11 +7,11 @@ use super::{
 
 /// # The program's named functions, organized as a call graph
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct CallGraph {
+pub struct OrderedFunctions {
     clusters: Vec<Cluster>,
 }
 
-impl CallGraph {
+impl OrderedFunctions {
     /// # Construct an instance of `CallGraph`
     ///
     /// Expects the provided clusters to be sorted topologically: The iterator

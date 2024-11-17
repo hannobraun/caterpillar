@@ -8,7 +8,7 @@ mod location;
 mod types;
 
 pub use self::{
-    call_graph::{CallGraph, Cluster},
+    call_graph::{Cluster, OrderedFunctions},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::Expression,
     functions::{

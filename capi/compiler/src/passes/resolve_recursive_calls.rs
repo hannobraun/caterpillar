@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    CallGraph, Expression, Function, FunctionLocation, Functions, Index,
+    Expression, Function, FunctionLocation, Functions, Index, OrderedFunctions,
 };
 
 pub fn resolve_recursive_calls(
     functions: &mut Functions,
-    call_graph: &CallGraph,
+    call_graph: &OrderedFunctions,
 ) {
     for cluster in call_graph.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster

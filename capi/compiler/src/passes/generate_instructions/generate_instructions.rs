@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
-    code::{CallGraph, Changes, Function, Functions, Hash},
+    code::{Changes, Function, Functions, Hash, OrderedFunctions},
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
     Instructions,
@@ -16,7 +16,7 @@ use super::{
 
 pub fn generate_instructions(
     functions: &Functions,
-    call_graph: &CallGraph,
+    call_graph: &OrderedFunctions,
     changes: &Changes,
     instructions: &mut Instructions,
     call_instructions_by_callee: &mut CallInstructionsByCallee,

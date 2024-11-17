@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{CallGraph, Function, Hash, StableFunctions, Types},
+    code::{Function, Hash, OrderedFunctions, StableFunctions, Types},
     host::Host,
     passes::{
         build_call_graph, detect_changes, find_divergent_functions,
@@ -75,7 +75,7 @@ pub struct CallInstructionsByCallee {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
     pub functions: StableFunctions,
-    pub call_graph: CallGraph,
+    pub call_graph: OrderedFunctions,
     pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,
