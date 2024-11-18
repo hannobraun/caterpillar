@@ -244,7 +244,17 @@ pub enum Expression {
         is_known_to_be_call_to_user_defined_function: bool,
     },
 
-    /// # A function literal
+    /// # An unresolved local function
+    ///
+    /// This variant is created by the parser when it encounters a function
+    /// literal. During compilation, it is replaced by either
+    /// [`Expression::LocalFunction`] or [`Expression::LocalFunctionRecursive`],
+    /// as appropriate.
+    ///
+    /// ## Implementation Note
+    ///
+    /// The replacement described above does not happen yet, as of this writing.
+    /// There is an ongoing cleanup effort with the goal of changing that.
     UnresolvedLocalFunction {
         /// # The function defined by this literal
         ///
