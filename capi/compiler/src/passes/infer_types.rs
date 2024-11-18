@@ -334,7 +334,7 @@ fn infer_type_of_expression(
             // Comments have no bearing on type inference.
             return None;
         }
-        Expression::LiteralFunction { function: _, hash } => {
+        Expression::UnresolvedLocalFunction { function: _, hash } => {
             let hash = hash.expect(
                 "The compiler pass that resolves anonymous functions must have \
                 already run."

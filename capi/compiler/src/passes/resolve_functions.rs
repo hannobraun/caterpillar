@@ -82,7 +82,7 @@ fn resolve_calls_in_expression(
     >,
 ) -> Result<(), ExpressionLocation> {
     match expression {
-        Expression::LiteralFunction { function, hash } => {
+        Expression::UnresolvedLocalFunction { function, hash } => {
             {
                 resolve_calls_in_function(
                     function,

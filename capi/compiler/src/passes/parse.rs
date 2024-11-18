@@ -222,7 +222,7 @@ fn parse_branch_body(
                     },
                     functions,
                 ) {
-                    branch.body.push(Expression::LiteralFunction {
+                    branch.body.push(Expression::UnresolvedLocalFunction {
                         function: function.clone(),
                         hash: None,
                     });

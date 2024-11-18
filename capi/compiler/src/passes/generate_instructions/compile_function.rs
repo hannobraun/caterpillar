@@ -327,7 +327,7 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
-        Expression::LiteralFunction { function: _, hash } => {
+        Expression::UnresolvedLocalFunction { function: _, hash } => {
             let hash = hash.expect(
                 "The compiler pass that resolves anonymous functions must have \
                 already run."

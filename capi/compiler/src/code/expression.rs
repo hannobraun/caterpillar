@@ -145,7 +145,7 @@ pub enum Expression {
     },
 
     /// # A function literal
-    LiteralFunction {
+    UnresolvedLocalFunction {
         /// # The function defined by this literal
         ///
         /// ## Implementation Note

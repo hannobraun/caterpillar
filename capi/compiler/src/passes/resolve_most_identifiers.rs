@@ -84,7 +84,7 @@ fn resolve_in_branch(
 
     for expression in body {
         match expression.fragment {
-            Expression::LiteralFunction { function, .. } => {
+            Expression::UnresolvedLocalFunction { function, .. } => {
                 resolve_in_function(
                     Located {
                         fragment: function,
