@@ -357,8 +357,20 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::LocalFunction { hash: _ } => {
-            unreachable!("This enum variant is not generated yet.");
+        Expression::LocalFunction { hash } => {
+            let function = functions_context.functions.by_hash(&hash).expect(
+                "Anonymous function that has been previously resolved must be \
+                available.",
+            );
+
+            let address = compile_local_function(
+                &function,
+                location,
+                cluster_context,
+                functions_context.instructions,
+                &mut mapping,
+            );
+            Some(address)
         }
         Expression::LocalFunctionRecursive { index } => {
             let function = {
