@@ -8,6 +8,7 @@ mod parse;
 mod resolve_functions;
 mod resolve_most_identifiers;
 mod resolve_recursive_calls;
+mod resolve_recursive_local_functions;
 mod tokenize;
 
 pub use {
@@ -18,5 +19,7 @@ pub use {
     mark_tail_positions::mark_tail_positions, parse::parse,
     resolve_functions::resolve_calls_to_user_defined_functions,
     resolve_most_identifiers::resolve_most_identifiers,
-    resolve_recursive_calls::resolve_recursive_calls, tokenize::tokenize,
+    resolve_recursive_calls::resolve_recursive_calls,
+    resolve_recursive_local_functions::resolve_recursive_local_functions,
+    tokenize::tokenize,
 };
