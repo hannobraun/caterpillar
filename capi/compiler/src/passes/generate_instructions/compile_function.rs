@@ -402,22 +402,16 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedLocalFunction { function: _, hash } => {
-            let hash = hash.expect(
-                "The compiler pass that resolves anonymous functions must have \
-                already run."
-            );
-            let function = functions_context.functions.by_hash(&hash).expect(
-                "Anonymous function that has been previously resolved must be \
-                available.",
-            );
-
-            let address = compile_local_function(
-                &function,
-                location,
-                cluster_context,
+        Expression::UnresolvedLocalFunction {
+            function: _,
+            hash: _,
+        } => {
+            let address = generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::BuildError,
+                },
                 functions_context.instructions,
-                &mut mapping,
+                Some(&mut mapping),
             );
             Some(address)
         }
