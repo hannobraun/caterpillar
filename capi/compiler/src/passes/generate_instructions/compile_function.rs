@@ -402,10 +402,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedLocalFunction {
-            function: _,
-            hash: _,
-        } => {
+        Expression::UnresolvedLocalFunction { function: _ } => {
             let address = generate_instruction(
                 Instruction::TriggerEffect {
                     effect: Effect::BuildError,

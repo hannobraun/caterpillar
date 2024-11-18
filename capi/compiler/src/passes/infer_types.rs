@@ -350,10 +350,7 @@ fn infer_type_of_expression(
             // identified as a problem.
             return None;
         }
-        Expression::UnresolvedLocalFunction {
-            function: _,
-            hash: _,
-        } => {
+        Expression::UnresolvedLocalFunction { function: _ } => {
             match handle_local_function(location, functions, bindings, types) {
                 Ok(signature) => signature,
                 Err(function_inference) => return Some(function_inference),
