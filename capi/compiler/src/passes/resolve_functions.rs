@@ -113,14 +113,16 @@ fn resolve_calls_in_expression(
                 };
             }
         }
-        Expression::UnresolvedLocalFunction { function, hash } => {
+        Expression::UnresolvedLocalFunction { function, .. } => {
             resolve_calls_in_function(
                 function,
                 resolved_hashes_by_name,
                 resolved_hashes_by_location,
             )?;
 
-            *hash = Some(Hash::new(function));
+            *expression = Expression::LocalFunction {
+                hash: Hash::new(function),
+            };
         }
         _ => {}
     }
