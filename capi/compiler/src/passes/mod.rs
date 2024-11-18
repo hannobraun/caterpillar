@@ -5,8 +5,8 @@ mod generate_instructions;
 mod infer_types;
 mod mark_tail_positions;
 mod parse;
-mod resolve_functions;
 mod resolve_most_identifiers;
+mod resolve_non_recursive_functions;
 mod resolve_recursive_calls;
 mod resolve_recursive_local_functions;
 mod tokenize;
@@ -17,8 +17,8 @@ pub use {
     find_divergent_functions::find_divergent_functions,
     generate_instructions::generate_instructions, infer_types::infer_types,
     mark_tail_positions::mark_tail_positions, parse::parse,
-    resolve_functions::resolve_non_recursive_functions,
     resolve_most_identifiers::resolve_most_identifiers,
+    resolve_non_recursive_functions::resolve_non_recursive_functions,
     resolve_recursive_calls::resolve_recursive_calls,
     resolve_recursive_local_functions::resolve_recursive_local_functions,
     tokenize::tokenize,
