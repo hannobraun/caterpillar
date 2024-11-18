@@ -335,6 +335,12 @@ fn compile_expression(
             );
             Some(address)
         }
+        Expression::LocalFunction { hash: _ } => {
+            unreachable!("This enum variant is not generated yet.");
+        }
+        Expression::LocalFunctionRecursive { index: _ } => {
+            unreachable!("This enum variant is not generated yet.");
+        }
         Expression::UnresolvedIdentifier { .. } => {
             let address = generate_instruction(
                 Instruction::TriggerEffect {

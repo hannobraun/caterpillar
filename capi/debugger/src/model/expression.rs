@@ -227,6 +227,12 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
+            Expression::LocalFunction { hash: _ } => {
+                unreachable!("This enum variant is not generated yet.");
+            }
+            Expression::LocalFunctionRecursive { index: _ } => {
+                unreachable!("This enum variant is not generated yet.");
+            }
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }

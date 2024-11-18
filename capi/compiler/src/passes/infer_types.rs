@@ -338,6 +338,12 @@ fn infer_type_of_expression(
             inputs: vec![],
             outputs: vec![types.inner.push(Type::Number)],
         },
+        Expression::LocalFunction { hash: _ } => {
+            unreachable!("This enum variant is not generated yet.");
+        }
+        Expression::LocalFunctionRecursive { index: _ } => {
+            unreachable!("This enum variant is not generated yet.");
+        }
         Expression::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.

@@ -150,6 +150,74 @@ pub enum Expression {
         value: Value,
     },
 
+    /// # A resolved local function
+    ///
+    /// Function literals start out as [`Expression::UnresolvedLocalFunction`].
+    /// During compilation, they are replaced by this variant or
+    /// [`Expression::LocalFunctionRecursive`] accordingly.
+    ///
+    /// ## Implementation Note
+    ///
+    /// As of this writing, this variant is not created yet.
+    LocalFunction {
+        /// # The hash of the local function
+        ///
+        /// ## Necessity
+        ///
+        /// Local functions can be accessed via their location in the code. So
+        /// this hash is not needed for accessing this function.
+        ///
+        /// In fact, it _can't_ be needed for that purpose, as multiple compiler
+        /// passes must run and have the need to access local functions, before
+        /// functions are resolved and this hash exists.
+        ///
+        /// Despite this, this field is still required! Without it, there is
+        /// nothing to distinguish expressions of this type, which means that
+        /// distinct functions could end up with the same hash, despite being
+        /// very different due to the local functions they define.
+        hash: Hash<Function>,
+    },
+
+    /// # A resolved local function that calls a parent function recursively
+    ///
+    /// Function literals start out as [`Expression::UnresolvedLocalFunction`].
+    /// During compilation, they are replaced by this variant or
+    /// [`Expression::LocalFunction`] accordingly.
+    ///
+    /// The parent called might be the direct parent, or the parent of any
+    /// parent, recursively.
+    ///
+    /// The call to the parent itself might be direct, or it might be indirect,
+    /// occurring in a local function defined in this function, or any of their
+    /// local functions, recursively.
+    ///
+    /// This variant is distinct from [`Expression::LocalFunction`], as local
+    /// functions that call their parent can't be hashed. The hash of the local
+    /// function and the parent it calls would depend on each other, which can't
+    /// work.
+    ///
+    /// ## Implementation Note
+    ///
+    /// As of this writing, this variant is not created yet.
+    LocalFunctionRecursive {
+        /// # The index of the local function within its cluster
+        ///
+        /// ## Necessity
+        ///
+        /// Local functions can be accessed via their location in the code. So
+        /// this index is not needed for accessing this function.
+        ///
+        /// In fact, it _can't_ be needed for that purpose, as multiple compiler
+        /// passes must run and have the need to access local functions, before
+        /// functions are resolved and this index exists.
+        ///
+        /// Despite this, this field is still required! Without it, there is
+        /// nothing to distinguish expressions of this type, which means that
+        /// distinct functions could end up with the same hash, despite being
+        /// very different due to the local functions they define.
+        index: Index<FunctionLocation>,
+    },
+
     /// # An unresolved identifier
     ///
     /// This is the result of a compiler error.
