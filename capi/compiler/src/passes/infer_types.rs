@@ -349,16 +349,15 @@ fn infer_type_of_expression(
             // identified as a problem.
             return None;
         }
-        Expression::UnresolvedLocalFunction { function: _, hash } => {
+        Expression::UnresolvedLocalFunction {
+            function: _,
+            hash: _,
+        } => {
             let function_location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };
 
-            let hash = hash.expect(
-                "The compiler pass that resolves anonymous functions must have \
-                already run."
-            );
-            let function = functions.by_hash(&hash).expect(
+            let function = functions.by_location(&function_location).expect(
                 "Anonymous function that has been previously resolved must be \
                 available.",
             );
