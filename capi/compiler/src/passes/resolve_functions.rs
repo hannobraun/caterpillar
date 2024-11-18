@@ -17,11 +17,13 @@ pub fn resolve_calls_to_user_defined_functions(
             .by_location_mut(location)
             .expect("Function referred to from call graph must exist.");
 
-        resolve_calls_in_function(
+        if let Err(err) = resolve_calls_in_function(
             &mut function,
             &mut resolved_hashes_by_name,
             &mut resolved_hashes_by_location,
-        );
+        ) {
+            unreachable!("Unexpected error: {err:?}");
+        }
 
         match location {
             FunctionLocation::NamedFunction { index } => {
@@ -57,16 +59,18 @@ fn resolve_calls_in_function(
         ExpressionLocation,
         Hash<Function>,
     >,
-) {
+) -> Result<(), ExpressionLocation> {
     for branch in function.branches.values_mut() {
         for expression in branch.body.values_mut() {
             resolve_calls_in_expression(
                 expression,
                 resolved_hashes_by_name,
                 resolved_hashes_by_location,
-            );
+            )?;
         }
     }
+
+    Ok(())
 }
 
 fn resolve_calls_in_expression(
@@ -76,7 +80,7 @@ fn resolve_calls_in_expression(
         ExpressionLocation,
         Hash<Function>,
     >,
-) {
+) -> Result<(), ExpressionLocation> {
     match expression {
         Expression::LiteralFunction { function, hash } => {
             {
@@ -84,7 +88,7 @@ fn resolve_calls_in_expression(
                     function,
                     resolved_hashes_by_name,
                     resolved_hashes_by_location,
-                );
+                )?;
             }
             {
                 *hash = Some(Hash::new(function));
@@ -123,4 +127,6 @@ fn resolve_calls_in_expression(
         }
         _ => {}
     }
+
+    Ok(())
 }
