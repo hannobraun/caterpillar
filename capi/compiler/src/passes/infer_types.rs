@@ -339,10 +339,16 @@ fn infer_type_of_expression(
             outputs: vec![types.inner.push(Type::Number)],
         },
         Expression::LocalFunction { hash: _ } => {
-            unreachable!("This enum variant is not generated yet.");
+            match handle_local_function(location, functions, bindings, types) {
+                Ok(signature) => signature,
+                Err(function_inference) => return Some(function_inference),
+            }
         }
         Expression::LocalFunctionRecursive { index: _ } => {
-            unreachable!("This enum variant is not generated yet.");
+            match handle_local_function(location, functions, bindings, types) {
+                Ok(signature) => signature,
+                Err(function_inference) => return Some(function_inference),
+            }
         }
         Expression::UnresolvedIdentifier { .. } => {
             // There nothing we can do here, really. This has already been
