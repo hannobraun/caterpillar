@@ -327,6 +327,24 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
+        Expression::LiteralNumber { value } => {
+            let address = generate_instruction(
+                Instruction::Push { value },
+                functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
+        Expression::UnresolvedIdentifier { .. } => {
+            let address = generate_instruction(
+                Instruction::TriggerEffect {
+                    effect: Effect::BuildError,
+                },
+                functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
         Expression::UnresolvedLocalFunction { function: _, hash } => {
             let hash = hash.expect(
                 "The compiler pass that resolves anonymous functions must have \
@@ -374,24 +392,6 @@ fn compile_expression(
                 },
             );
 
-            Some(address)
-        }
-        Expression::LiteralNumber { value } => {
-            let address = generate_instruction(
-                Instruction::Push { value },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
-        }
-        Expression::UnresolvedIdentifier { .. } => {
-            let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::BuildError,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
             Some(address)
         }
     }

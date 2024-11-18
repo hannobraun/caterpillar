@@ -56,12 +56,6 @@ fn resolve_recursive_calls_in_function(
     for branch in function.branches.values_mut() {
         for expression in branch.body.values_mut() {
             match expression {
-                Expression::UnresolvedLocalFunction { function, .. } => {
-                    resolve_recursive_calls_in_function(
-                        function,
-                        indices_in_cluster_by_function_name,
-                    );
-                }
                 Expression::UnresolvedIdentifier {
                     name,
                     is_known_to_be_in_tail_position,
@@ -82,6 +76,12 @@ fn resolve_recursive_calls_in_function(
                                 is_tail_call: *is_in_tail_position,
                             };
                     }
+                }
+                Expression::UnresolvedLocalFunction { function, .. } => {
+                    resolve_recursive_calls_in_function(
+                        function,
+                        indices_in_cluster_by_function_name,
+                    );
                 }
                 _ => {}
             }

@@ -224,6 +224,12 @@ impl DebugExpressionKind {
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
+            Expression::LiteralNumber { value } => Self::Value {
+                as_string: value.to_string(),
+            },
+            Expression::UnresolvedIdentifier { name, .. } => {
+                Self::UnresolvedIdentifier { name }
+            }
             Expression::UnresolvedLocalFunction { function, .. } => {
                 let function = DebugFunction::new(
                     function,
@@ -240,12 +246,6 @@ impl DebugExpressionKind {
                 );
 
                 Self::Function { function }
-            }
-            Expression::LiteralNumber { value } => Self::Value {
-                as_string: value.to_string(),
-            },
-            Expression::UnresolvedIdentifier { name, .. } => {
-                Self::UnresolvedIdentifier { name }
             }
         }
     }

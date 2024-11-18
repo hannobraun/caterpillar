@@ -84,6 +84,60 @@ fn resolve_in_branch(
 
     for expression in body {
         match expression.fragment {
+            Expression::UnresolvedIdentifier {
+                name,
+                is_known_to_be_in_tail_position,
+                is_known_to_be_call_to_user_defined_function,
+                ..
+            } => {
+                // The way this is written, definitions can silently shadow each
+                // other in a defined order. This is undesirable.
+                //
+                // There should at least be a warning, if such shadowing
+                // shouldn't be forbidden outright.
+                if scopes.iter().any(|bindings| bindings.contains(name)) {
+                    if let Some(bindings) = scopes.last() {
+                        if !bindings.contains(name) {
+                            environment.insert(name.clone());
+                        }
+                    }
+
+                    let mut index = 0;
+                    for parameter in &*parameters {
+                        match parameter {
+                            Pattern::Identifier { name: n } => {
+                                if n == name {
+                                    break;
+                                }
+                            }
+                            Pattern::Literal { .. } => {
+                                continue;
+                            }
+                        }
+
+                        index += 1;
+                    }
+
+                    *expression.fragment = Expression::Binding {
+                        name: name.clone(),
+                        index,
+                    }
+                } else if let Some(intrinsic) =
+                    IntrinsicFunction::from_name(name)
+                {
+                    *expression.fragment =
+                        Expression::CallToIntrinsicFunction {
+                            intrinsic,
+                            is_tail_call: *is_known_to_be_in_tail_position,
+                        };
+                } else if let Some(function) = host.function_by_name(name) {
+                    *expression.fragment = Expression::CallToHostFunction {
+                        number: function.number(),
+                    }
+                } else if known_named_functions.contains(name) {
+                    *is_known_to_be_call_to_user_defined_function = true;
+                }
+            }
             Expression::UnresolvedLocalFunction { function, .. } => {
                 resolve_in_function(
                     Located {
@@ -151,60 +205,6 @@ fn resolve_in_branch(
                 }
 
                 anonymous_functions.insert(expression.location, function);
-            }
-            Expression::UnresolvedIdentifier {
-                name,
-                is_known_to_be_in_tail_position,
-                is_known_to_be_call_to_user_defined_function,
-                ..
-            } => {
-                // The way this is written, definitions can silently shadow each
-                // other in a defined order. This is undesirable.
-                //
-                // There should at least be a warning, if such shadowing
-                // shouldn't be forbidden outright.
-                if scopes.iter().any(|bindings| bindings.contains(name)) {
-                    if let Some(bindings) = scopes.last() {
-                        if !bindings.contains(name) {
-                            environment.insert(name.clone());
-                        }
-                    }
-
-                    let mut index = 0;
-                    for parameter in &*parameters {
-                        match parameter {
-                            Pattern::Identifier { name: n } => {
-                                if n == name {
-                                    break;
-                                }
-                            }
-                            Pattern::Literal { .. } => {
-                                continue;
-                            }
-                        }
-
-                        index += 1;
-                    }
-
-                    *expression.fragment = Expression::Binding {
-                        name: name.clone(),
-                        index,
-                    }
-                } else if let Some(intrinsic) =
-                    IntrinsicFunction::from_name(name)
-                {
-                    *expression.fragment =
-                        Expression::CallToIntrinsicFunction {
-                            intrinsic,
-                            is_tail_call: *is_known_to_be_in_tail_position,
-                        };
-                } else if let Some(function) = host.function_by_name(name) {
-                    *expression.fragment = Expression::CallToHostFunction {
-                        number: function.number(),
-                    }
-                } else if known_named_functions.contains(name) {
-                    *is_known_to_be_call_to_user_defined_function = true;
-                }
             }
             _ => {}
         }

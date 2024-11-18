@@ -144,36 +144,6 @@ pub enum Expression {
         text: String,
     },
 
-    /// # A function literal
-    UnresolvedLocalFunction {
-        /// # The function defined by this literal
-        ///
-        /// ## Implementation Note
-        ///
-        /// This field is on its way out, as part of an ongoing cleanup to
-        /// simplify the handling of functions in the compiler pipeline. The
-        /// `hash` field is the new way of accessing anonymous functions.
-        function: Function,
-
-        /// # The hash of the literal function that is defined here
-        ///
-        /// Starts out as `None`, until functions are stable, and a hash can be
-        /// computed.
-        ///
-        /// ## Necessity
-        ///
-        /// Anonymous functions can be accessed by their location in the code,
-        /// so this hash is not needed for accessing the function. In fact, it
-        /// _can't_ be needed for that purpose, because multiple compiler
-        /// passes must run, before functions are resolved and this hash exists.
-        ///
-        /// Despite this, this field is still required! Without it, there is
-        /// nothing to distinguish expressions of this type, which means that
-        /// distinct functions could end up with the same hash, despite being
-        /// very different due to the anonymous functions they define.
-        hash: Option<Hash<Function>>,
-    },
-
     /// # A number literal
     LiteralNumber {
         /// The number defined by this literal
@@ -204,6 +174,36 @@ pub enum Expression {
         /// This starts out as `false` and might later get updated by the
         /// respective compiler pass.
         is_known_to_be_call_to_user_defined_function: bool,
+    },
+
+    /// # A function literal
+    UnresolvedLocalFunction {
+        /// # The function defined by this literal
+        ///
+        /// ## Implementation Note
+        ///
+        /// This field is on its way out, as part of an ongoing cleanup to
+        /// simplify the handling of functions in the compiler pipeline. The
+        /// `hash` field is the new way of accessing anonymous functions.
+        function: Function,
+
+        /// # The hash of the literal function that is defined here
+        ///
+        /// Starts out as `None`, until functions are stable, and a hash can be
+        /// computed.
+        ///
+        /// ## Necessity
+        ///
+        /// Anonymous functions can be accessed by their location in the code,
+        /// so this hash is not needed for accessing the function. In fact, it
+        /// _can't_ be needed for that purpose, because multiple compiler
+        /// passes must run, before functions are resolved and this hash exists.
+        ///
+        /// Despite this, this field is still required! Without it, there is
+        /// nothing to distinguish expressions of this type, which means that
+        /// distinct functions could end up with the same hash, despite being
+        /// very different due to the anonymous functions they define.
+        hash: Option<Hash<Function>>,
     },
 }
 

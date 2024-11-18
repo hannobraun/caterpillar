@@ -334,6 +334,15 @@ fn infer_type_of_expression(
             // Comments have no bearing on type inference.
             return None;
         }
+        Expression::LiteralNumber { .. } => Signature {
+            inputs: vec![],
+            outputs: vec![types.inner.push(Type::Number)],
+        },
+        Expression::UnresolvedIdentifier { .. } => {
+            // There nothing we can do here, really. This has already been
+            // identified as a problem.
+            return None;
+        }
         Expression::UnresolvedLocalFunction { function: _, hash } => {
             let hash = hash.expect(
                 "The compiler pass that resolves anonymous functions must have \
@@ -381,15 +390,6 @@ fn infer_type_of_expression(
                 inputs: vec![],
                 outputs: vec![type_],
             }
-        }
-        Expression::LiteralNumber { .. } => Signature {
-            inputs: vec![],
-            outputs: vec![types.inner.push(Type::Number)],
-        },
-        Expression::UnresolvedIdentifier { .. } => {
-            // There nothing we can do here, really. This has already been
-            // identified as a problem.
-            return None;
         }
     };
 

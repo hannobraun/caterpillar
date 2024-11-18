@@ -82,18 +82,6 @@ fn resolve_calls_in_expression(
     >,
 ) -> Result<(), ExpressionLocation> {
     match expression {
-        Expression::UnresolvedLocalFunction { function, hash } => {
-            {
-                resolve_calls_in_function(
-                    function,
-                    resolved_hashes_by_name,
-                    resolved_hashes_by_location,
-                )?;
-            }
-            {
-                *hash = Some(Hash::new(function));
-            }
-        }
         Expression::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
@@ -123,6 +111,18 @@ fn resolve_calls_in_expression(
                     hash,
                     is_tail_call: *is_in_tail_position,
                 };
+            }
+        }
+        Expression::UnresolvedLocalFunction { function, hash } => {
+            {
+                resolve_calls_in_function(
+                    function,
+                    resolved_hashes_by_name,
+                    resolved_hashes_by_location,
+                )?;
+            }
+            {
+                *hash = Some(Hash::new(function));
             }
         }
         _ => {}
