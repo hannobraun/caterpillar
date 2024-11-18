@@ -351,10 +351,9 @@ fn infer_type_of_expression(
             return None;
         }
         Expression::UnresolvedLocalFunction { function: _ } => {
-            match handle_local_function(location, functions, bindings, types) {
-                Ok(signature) => signature,
-                Err(function_inference) => return Some(function_inference),
-            }
+            // There nothing we can do here, really. This has already been
+            // identified as a problem.
+            return None;
         }
     };
 
