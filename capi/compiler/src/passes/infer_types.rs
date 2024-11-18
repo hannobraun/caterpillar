@@ -353,46 +353,9 @@ fn infer_type_of_expression(
             function: _,
             hash: _,
         } => {
-            let location = FunctionLocation::AnonymousFunction {
-                location: location.clone(),
-            };
-
-            let function = functions.by_location(&location).expect(
-                "Anonymous function that has been previously resolved must be \
-                available.",
-            );
-
-            let Some(signature) = types.of_functions.get(&location).cloned()
-            else {
-                let mut queue_items = Vec::new();
-
-                for (&index, branch) in function.branches.iter() {
-                    let branch_location = BranchLocation {
-                        parent: Box::new(location.clone()),
-                        index,
-                    };
-
-                    queue_items.push(QueueItem::new(
-                        branch,
-                        branch_location.clone(),
-                        location.clone(),
-                        bindings,
-                        types,
-                    ));
-                }
-
-                return Some(
-                    ExpressionInference::NeedToInferMoreBranchesFirst {
-                        queue_items,
-                    },
-                );
-            };
-
-            let type_ = types.inner.push(Type::Function { signature });
-
-            Signature {
-                inputs: vec![],
-                outputs: vec![type_],
+            match handle_local_function(location, functions, bindings, types) {
+                Ok(signature) => signature,
+                Err(function_inference) => return Some(function_inference),
             }
         }
     };
@@ -439,6 +402,52 @@ fn handle_concrete_signature(
     }
 
     signature
+}
+
+fn handle_local_function(
+    location: &ExpressionLocation,
+    functions: &StableFunctions,
+    bindings: &BTreeMap<String, Index<Type>>,
+    types: &mut Types,
+) -> Result<Signature, ExpressionInference> {
+    let location = FunctionLocation::AnonymousFunction {
+        location: location.clone(),
+    };
+
+    let function = functions.by_location(&location).expect(
+        "Anonymous function that has been previously resolved must be \
+                available.",
+    );
+
+    let Some(signature) = types.of_functions.get(&location).cloned() else {
+        let mut queue_items = Vec::new();
+
+        for (&index, branch) in function.branches.iter() {
+            let branch_location = BranchLocation {
+                parent: Box::new(location.clone()),
+                index,
+            };
+
+            queue_items.push(QueueItem::new(
+                branch,
+                branch_location.clone(),
+                location.clone(),
+                bindings,
+                types,
+            ));
+        }
+
+        return Err(ExpressionInference::NeedToInferMoreBranchesFirst {
+            queue_items,
+        });
+    };
+
+    let type_ = types.inner.push(Type::Function { signature });
+
+    Ok(Signature {
+        inputs: vec![],
+        outputs: vec![type_],
+    })
 }
 
 type BranchQueue = VecDeque<QueueItem>;
