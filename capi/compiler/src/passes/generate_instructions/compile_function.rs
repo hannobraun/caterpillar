@@ -360,8 +360,25 @@ fn compile_expression(
         Expression::LocalFunction { hash: _ } => {
             unreachable!("This enum variant is not generated yet.");
         }
-        Expression::LocalFunctionRecursive { index: _ } => {
-            unreachable!("This enum variant is not generated yet.");
+        Expression::LocalFunctionRecursive { index } => {
+            let function = {
+                let location = cluster.functions.get(&index).expect(
+                    "Resolved local recursive function must exist in cluster.",
+                );
+                functions_context
+                    .functions
+                    .by_location(location)
+                    .expect("Function referenced from cluster must exist.")
+            };
+
+            let address = compile_local_function(
+                &function,
+                location,
+                cluster_context,
+                functions_context.instructions,
+                &mut mapping,
+            );
+            Some(address)
         }
         Expression::UnresolvedIdentifier { .. } => {
             let address = generate_instruction(
