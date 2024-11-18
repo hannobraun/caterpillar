@@ -5,7 +5,7 @@ use crate::code::{
     Hash, OrderedFunctions, StableFunctions,
 };
 
-pub fn resolve_calls_to_user_defined_functions(
+pub fn resolve_non_recursive_functions(
     mut functions: Functions,
     call_graph: &OrderedFunctions,
 ) -> StableFunctions {

@@ -8,9 +8,8 @@ use crate::{
     passes::{
         detect_changes, find_divergent_functions, generate_instructions,
         infer_types, mark_tail_positions, order_functions_by_dependencies,
-        parse, resolve_calls_to_user_defined_functions,
-        resolve_most_identifiers, resolve_recursive_calls,
-        resolve_recursive_local_functions, tokenize,
+        parse, resolve_most_identifiers, resolve_non_recursive_functions,
+        resolve_recursive_calls, resolve_recursive_local_functions, tokenize,
     },
     source_map::SourceMap,
     Instructions,
@@ -41,10 +40,8 @@ impl Compiler {
         let mut ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);
         resolve_recursive_local_functions(&mut functions, &ordered_functions);
-        let functions = resolve_calls_to_user_defined_functions(
-            functions,
-            &ordered_functions,
-        );
+        let functions =
+            resolve_non_recursive_functions(functions, &ordered_functions);
         find_divergent_functions(&functions, &mut ordered_functions);
         let types = infer_types(&functions, &ordered_functions, host);
         let changes = detect_changes(self.old_functions.take(), &functions);
