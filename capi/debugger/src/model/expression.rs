@@ -227,8 +227,26 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
-            Expression::LocalFunction { hash: _ } => {
-                unreachable!("This enum variant is not generated yet.");
+            Expression::LocalFunction { hash } => {
+                let function = functions
+                    .by_hash(&hash)
+                    .expect("Resolved local function must exist.");
+
+                let function = DebugFunction::new(
+                    function.fragment.clone(),
+                    None,
+                    FunctionLocation::AnonymousFunction { location },
+                    active_expression,
+                    is_in_innermost_active_function,
+                    cluster,
+                    functions,
+                    types,
+                    source_map,
+                    breakpoints,
+                    effect,
+                );
+
+                Self::Function { function }
             }
             Expression::LocalFunctionRecursive { index } => {
                 let function = {
