@@ -338,13 +338,13 @@ fn infer_type_of_expression(
             inputs: vec![],
             outputs: vec![types.inner.push(Type::Number)],
         },
-        Expression::LocalFunction { hash: _ } => {
+        Expression::LocalFunction { .. } => {
             match handle_local_function(location, functions, bindings, types) {
                 Ok(signature) => signature,
                 Err(function_inference) => return Some(function_inference),
             }
         }
-        Expression::LocalFunctionRecursive { index: _ } => {
+        Expression::LocalFunctionRecursive { .. } => {
             match handle_local_function(location, functions, bindings, types) {
                 Ok(signature) => signature,
                 Err(function_inference) => return Some(function_inference),
