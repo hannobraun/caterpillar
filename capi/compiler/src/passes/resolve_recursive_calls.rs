@@ -6,9 +6,9 @@ use crate::code::{
 
 pub fn resolve_recursive_calls(
     functions: &mut Functions,
-    call_graph: &OrderedFunctions,
+    ordered_functions: &OrderedFunctions,
 ) {
-    for cluster in call_graph.clusters_from_leaves() {
+    for cluster in ordered_functions.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
             .functions
             .iter()
