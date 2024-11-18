@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     Expression, ExpressionLocation, Function, FunctionLocation, Functions,
-    Hash, OrderedFunctions, StableFunctions,
+    Hash, Located, OrderedFunctions, StableFunctions,
 };
 
 pub fn resolve_non_recursive_functions(
@@ -13,12 +13,12 @@ pub fn resolve_non_recursive_functions(
     let mut resolved_hashes_by_location = BTreeMap::new();
 
     for (location, _) in call_graph.functions_from_leaves() {
-        let mut function = functions
+        let function = functions
             .by_location_mut(location)
             .expect("Function referred to from call graph must exist.");
 
         if let Err(err) = resolve_calls_in_function(
-            &mut function,
+            function,
             &mut resolved_hashes_by_name,
             &mut resolved_hashes_by_location,
         ) {
@@ -53,15 +53,19 @@ pub fn resolve_non_recursive_functions(
 }
 
 fn resolve_calls_in_function(
-    function: &mut Function,
+    function: Located<&mut Function>,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &mut BTreeMap<
         ExpressionLocation,
         Hash<Function>,
     >,
 ) -> Result<(), ExpressionLocation> {
-    for branch in function.branches.values_mut() {
-        for expression in branch.body.values_mut() {
+    let (branches, _) = function.destructure();
+
+    for branch in branches {
+        let (body, _) = branch.destructure();
+
+        for expression in body {
             resolve_calls_in_expression(
                 expression,
                 resolved_hashes_by_name,
@@ -74,14 +78,14 @@ fn resolve_calls_in_function(
 }
 
 fn resolve_calls_in_expression(
-    expression: &mut Expression,
+    expression: Located<&mut Expression>,
     resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &mut BTreeMap<
         ExpressionLocation,
         Hash<Function>,
     >,
 ) -> Result<(), ExpressionLocation> {
-    match expression {
+    match expression.fragment {
         Expression::UnresolvedIdentifier {
             name,
             is_known_to_be_in_tail_position,
@@ -107,7 +111,7 @@ fn resolve_calls_in_expression(
                     );
                 };
 
-                *expression = Expression::CallToUserDefinedFunction {
+                *expression.fragment = Expression::CallToUserDefinedFunction {
                     hash,
                     is_tail_call: *is_in_tail_position,
                 };
@@ -115,6 +119,12 @@ fn resolve_calls_in_expression(
         }
         Expression::UnresolvedLocalFunction { function, .. } => {
             {
+                let function = Located {
+                    fragment: function,
+                    location: FunctionLocation::AnonymousFunction {
+                        location: expression.location.clone(),
+                    },
+                };
                 resolve_calls_in_function(
                     function,
                     resolved_hashes_by_name,
@@ -122,9 +132,14 @@ fn resolve_calls_in_expression(
                 )?;
             }
 
-            *expression = Expression::LocalFunction {
-                hash: Hash::new(function),
-            };
+            let hash = *resolved_hashes_by_location
+                .get(&expression.location)
+                .expect(
+                    "This compiler pass iterates over functions by \
+                    dependency. Any local function that is encountered should \
+                    have already been processed. We should have a hash for it.",
+                );
+            *expression.fragment = Expression::LocalFunction { hash };
         }
         _ => {}
     }
