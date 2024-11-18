@@ -157,8 +157,8 @@ pub enum Expression {
 
         /// # The hash of the literal function that is defined here
         ///
-        /// Starts out as `None`, until functions are finalized, and a hash can
-        /// be computed.
+        /// Starts out as `None`, until functions are stable, and a hash can be
+        /// computed.
         hash: Option<Hash<Function>>,
     },
 
