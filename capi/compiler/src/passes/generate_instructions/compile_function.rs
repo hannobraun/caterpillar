@@ -127,6 +127,28 @@ fn compile_branch(
     (branch, [first_address, last_address])
 }
 
+fn compile_binding<'r, N>(
+    names: N,
+    instructions: &mut Instructions,
+) -> Option<InstructionAddress>
+where
+    N: IntoIterator<Item = &'r String>,
+    N::IntoIter: DoubleEndedIterator,
+{
+    let mut first_address = None;
+
+    for name in names.into_iter().rev() {
+        let address = generate_instruction(
+            Instruction::Bind { name: name.clone() },
+            instructions,
+            None,
+        );
+        first_address = first_address.or(Some(address));
+    }
+
+    first_address
+}
+
 fn compile_branch_body(
     body: IndexMap<Expression>,
     location: BranchLocation,
@@ -460,28 +482,6 @@ fn compile_intrinsic(
     };
 
     generate_instruction(instruction, instructions, Some(mapping))
-}
-
-fn compile_binding<'r, N>(
-    names: N,
-    instructions: &mut Instructions,
-) -> Option<InstructionAddress>
-where
-    N: IntoIterator<Item = &'r String>,
-    N::IntoIter: DoubleEndedIterator,
-{
-    let mut first_address = None;
-
-    for name in names.into_iter().rev() {
-        let address = generate_instruction(
-            Instruction::Bind { name: name.clone() },
-            instructions,
-            None,
-        );
-        first_address = first_address.or(Some(address));
-    }
-
-    first_address
 }
 
 fn generate_instruction(
