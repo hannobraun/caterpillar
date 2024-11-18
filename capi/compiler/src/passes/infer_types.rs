@@ -353,30 +353,29 @@ fn infer_type_of_expression(
             function: _,
             hash: _,
         } => {
-            let function_location = FunctionLocation::AnonymousFunction {
+            let location = FunctionLocation::AnonymousFunction {
                 location: location.clone(),
             };
 
-            let function = functions.by_location(&function_location).expect(
+            let function = functions.by_location(&location).expect(
                 "Anonymous function that has been previously resolved must be \
                 available.",
             );
 
-            let Some(signature) =
-                types.of_functions.get(&function_location).cloned()
+            let Some(signature) = types.of_functions.get(&location).cloned()
             else {
                 let mut queue_items = Vec::new();
 
                 for (&index, branch) in function.branches.iter() {
                     let branch_location = BranchLocation {
-                        parent: Box::new(function_location.clone()),
+                        parent: Box::new(location.clone()),
                         index,
                     };
 
                     queue_items.push(QueueItem::new(
                         branch,
                         branch_location.clone(),
-                        function_location.clone(),
+                        location.clone(),
                         bindings,
                         types,
                     ));
