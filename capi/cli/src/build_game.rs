@@ -6,13 +6,11 @@ use std::{
 };
 
 use anyhow::anyhow;
-use capi_compiler::Compiler;
+use capi_compiler::{Compiler, CompilerOutput};
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
 use tokio::{fs, sync::mpsc, task};
-
-pub use capi_compiler::CompilerOutput;
 
 pub async fn build_game_once(
     games_path: impl AsRef<Path>,
