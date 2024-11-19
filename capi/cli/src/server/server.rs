@@ -7,7 +7,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_build_game::CompilerOutput;
+use capi_compiler::CompilerOutput;
 use capi_protocol::{ron_options, Versioned};
 use tokio::{
     fs::File,

@@ -341,27 +341,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b96ec4966b5813e2c0507c1f86115c8c5abaadc3980879c3424042a02fd1ad3"
 
 [[package]]
-name = "capi-build-game"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "capi-compiler",
- "capi-game-engine",
- "capi-protocol",
- "capi-watch",
- "ron",
- "thiserror 2.0.3",
- "tokio",
- "tracing",
-]
-
-[[package]]
 name = "capi-cli"
 version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
- "capi-build-game",
+ "capi-compiler",
  "capi-game-engine",
  "capi-protocol",
  "capi-watch",
@@ -369,6 +354,7 @@ dependencies = [
  "rand",
  "reqwest",
  "tempfile",
+ "thiserror 1.0.69",
  "tokio",
  "tracing",
  "tracing-subscriber",

@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 rand = "*"
+thiserror = "*"
 tracing = "*"
 tracing-subscriber = "*"
 
@@ -13,11 +14,11 @@ tracing-subscriber = "*"
 version = "*"
 features = ["ws"]
 
+[dependencies.capi-compiler]
+path = "../compiler"
+
 [dependencies.capi-game-engine]
 path = "../game-engine"
-
-[dependencies.capi-build-game]
-path = "../build-game"
 
 [dependencies.capi-protocol]
 path = "../protocol"

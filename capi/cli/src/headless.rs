@@ -1,10 +1,11 @@
 use std::time::Instant;
 
-use capi_build_game::build_game_once;
 use capi_game_engine::{
     command::Command, display::NUM_PIXEL_BYTES, game_engine::GameEngine,
 };
 use rand::random;
+
+use crate::build_game::build_game_once;
 
 pub async fn run() -> anyhow::Result<()> {
     let code = build_game_once("games", "snake").await?;

@@ -1,4 +1,5 @@
 mod args;
+mod build_game;
 mod headless;
 mod server;
 

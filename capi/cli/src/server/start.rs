@@ -1,10 +1,11 @@
 use std::{net::SocketAddr, path::PathBuf};
 
 use anyhow::Context;
-use capi_build_game::build_and_watch_game;
 use capi_watch::Watcher;
 use tokio::{sync::mpsc, task};
 use tracing::error;
+
+use crate::build_game::{self, build_and_watch_game};
 
 use super::server::{self, CodeTx};
 
@@ -53,10 +54,10 @@ async fn start_inner(
 
     while let Some(event) = build_events.recv().await {
         match event {
-            capi_build_game::Event::ChangeDetected => {
+            build_game::Event::ChangeDetected => {
                 events.send(Event::ChangeDetected).await?;
             }
-            capi_build_game::Event::BuildFinished(code) => {
+            build_game::Event::BuildFinished(code) => {
                 events.send(Event::BuildFinished).await?;
 
                 match server_task {
