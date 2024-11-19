@@ -12,9 +12,12 @@ async fn basic_build() -> anyhow::Result<()> {
     let address = "[::1]:34481".parse()?;
     let serve_dir = tempdir()?;
 
-    let mut events =
-        crate::start(games_dir, address, serve_dir.path().to_path_buf())
-            .await?;
+    let mut events = crate::server::start(
+        games_dir,
+        address,
+        serve_dir.path().to_path_buf(),
+    )
+    .await?;
 
     // Wait for server to be ready.
     while let Some(event) = events.recv().await {

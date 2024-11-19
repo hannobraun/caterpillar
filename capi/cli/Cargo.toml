@@ -2,17 +2,28 @@
 name = "capi-cli"
 edition = "2021"
 
+
 [dependencies]
 anyhow = "*"
 rand = "*"
 tracing = "*"
 tracing-subscriber = "*"
 
+[dependencies.axum]
+version = "*"
+features = ["ws"]
+
 [dependencies.capi-game-engine]
 path = "../game-engine"
 
 [dependencies.capi-build-game]
 path = "../build-game"
+
+[dependencies.capi-protocol]
+path = "../protocol"
+
+[dependencies.capi-watch]
+path = "../watch"
 
 [dependencies.clap]
 version = "*"
@@ -21,3 +32,11 @@ features = ["derive"]
 [dependencies.tokio]
 version = "*"
 features = ["full"]
+
+
+[dev-dependencies]
+tempfile = "*"
+
+[dev-dependencies.reqwest]
+version = "*"
+default-features = false

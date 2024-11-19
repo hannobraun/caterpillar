@@ -360,10 +360,15 @@ name = "capi-cli"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "axum",
  "capi-build-game",
  "capi-game-engine",
+ "capi-protocol",
+ "capi-watch",
  "clap",
  "rand",
+ "reqwest",
+ "tempfile",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -446,24 +451,6 @@ dependencies = [
  "serde",
  "thiserror 2.0.3",
  "udigest",
-]
-
-[[package]]
-name = "capi-server"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "axum",
- "capi-build-game",
- "capi-protocol",
- "capi-watch",
- "clap",
- "reqwest",
- "ron",
- "tempfile",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

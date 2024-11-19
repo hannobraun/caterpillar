@@ -10,7 +10,6 @@ members = [
     "capi/host",
     "capi/protocol",
     "capi/runtime",
-    "capi/server",
     "capi/watch",
 
     "tools/builder",

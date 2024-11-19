@@ -35,8 +35,9 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
         let mut new_server = Command::new("cargo")
             .arg("run")
-            .args(["--package", "capi-server"])
+            .args(["--package", "capi-cli"])
             .arg("--")
+            .arg("serve")
             .args(["--address", address])
             .args(["--serve-dir", &serve_dir.display().to_string()])
             .kill_on_drop(true)
