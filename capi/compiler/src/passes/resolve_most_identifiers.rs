@@ -138,32 +138,7 @@ fn resolve_in_branch(
                     *is_known_to_be_call_to_user_defined_function = true;
                 }
             }
-            Expression::UnresolvedLocalFunction { function } => {
-                resolve_in_function(
-                    Located {
-                        fragment: function,
-                        location: FunctionLocation::AnonymousFunction {
-                            location: expression.location.clone(),
-                        },
-                    },
-                    scopes,
-                    anonymous_functions,
-                    known_named_functions,
-                    host,
-                );
-
-                for name in &function.environment {
-                    // If the child function we just resolved identifiers for
-                    // captures something from its environment, and the current
-                    // scope doesn't already have that, then it needs to capture
-                    // it from its environment likewise.
-                    if let Some(bindings) = scopes.last() {
-                        if !bindings.contains(name) {
-                            environment.insert(name.clone());
-                        }
-                    }
-                }
-
+            Expression::UnresolvedLocalFunction { function: _ } => {
                 // Need to remove this and put it back below, since we need to
                 // mutably borrow in between.
                 let mut function =
