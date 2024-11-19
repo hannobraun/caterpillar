@@ -138,7 +138,7 @@ fn resolve_in_branch(
                     *is_known_to_be_call_to_user_defined_function = true;
                 }
             }
-            Expression::UnresolvedLocalFunction { function, .. } => {
+            Expression::UnresolvedLocalFunction { function } => {
                 resolve_in_function(
                     Located {
                         fragment: function,
