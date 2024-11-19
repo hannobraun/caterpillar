@@ -255,16 +255,7 @@ pub enum Expression {
     ///
     /// The replacement described above does not happen yet, as of this writing.
     /// There is an ongoing cleanup effort with the goal of changing that.
-    UnresolvedLocalFunction {
-        /// # The function defined by this literal
-        ///
-        /// ## Implementation Note
-        ///
-        /// This field is on its way out, as part of an ongoing cleanup to
-        /// simplify the handling of functions in the compiler pipeline. The
-        /// `hash` field is the new way of accessing anonymous functions.
-        function: Function,
-    },
+    UnresolvedLocalFunction,
 }
 
 impl Expression {

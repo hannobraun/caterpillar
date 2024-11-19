@@ -117,7 +117,7 @@ fn resolve_calls_in_expression(
                 };
             }
         }
-        Expression::UnresolvedLocalFunction { function: _ } => {
+        Expression::UnresolvedLocalFunction => {
             let hash = *resolved_hashes_by_location
                 .get(&expression.location)
                 .expect(

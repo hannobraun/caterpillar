@@ -350,7 +350,7 @@ fn infer_type_of_expression(
             // identified as a problem.
             return None;
         }
-        Expression::UnresolvedLocalFunction { function: _ } => {
+        Expression::UnresolvedLocalFunction => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.
             return None;

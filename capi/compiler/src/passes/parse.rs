@@ -222,9 +222,7 @@ fn parse_branch_body(
                     },
                     functions,
                 ) {
-                    branch.body.push(Expression::UnresolvedLocalFunction {
-                        function: function.clone(),
-                    });
+                    branch.body.push(Expression::UnresolvedLocalFunction);
                     functions.anonymous.insert(location, function);
                 }
             }

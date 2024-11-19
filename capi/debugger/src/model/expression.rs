@@ -279,7 +279,7 @@ impl DebugExpressionKind {
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Expression::UnresolvedLocalFunction { function: _ } => {
+            Expression::UnresolvedLocalFunction => {
                 Self::UnresolvedLocalFunction
             }
         }

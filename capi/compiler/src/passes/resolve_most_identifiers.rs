@@ -138,7 +138,7 @@ fn resolve_in_branch(
                     *is_known_to_be_call_to_user_defined_function = true;
                 }
             }
-            Expression::UnresolvedLocalFunction { function: _ } => {
+            Expression::UnresolvedLocalFunction => {
                 // Need to remove this and put it back below, since we need to
                 // mutably borrow in between.
                 let mut function =
