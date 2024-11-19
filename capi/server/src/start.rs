@@ -6,7 +6,7 @@ use capi_watch::Watcher;
 use tokio::{sync::mpsc, task};
 use tracing::error;
 
-use crate::server::{self, CodeTx};
+use super::server::{self, CodeTx};
 
 pub enum Event {
     ChangeDetected,
