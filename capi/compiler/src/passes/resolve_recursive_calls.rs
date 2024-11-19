@@ -93,7 +93,7 @@ fn resolve_recursive_calls_in_function(
 mod tests {
 
     use crate::{
-        code::{Expression, Functions, Index},
+        code::{Expression, FunctionLocation, Functions, Index},
         host::NoHost,
         passes::{
             order_functions_by_dependencies, parse, resolve_most_identifiers,
@@ -164,6 +164,32 @@ mod tests {
                 end
             ",
         );
+
+        let f_a = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .next()
+            .map(|expression| {
+                let location =
+                    FunctionLocation::from(expression.location.clone());
+                functions.by_location(&location).unwrap()
+            })
+            .unwrap();
+        let Expression::CallToUserDefinedFunctionRecursive { .. } = f_a
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .next()
+            .unwrap()
+            .fragment
+        else {
+            panic!("Expected identifier to be a recursive function call.");
+        };
 
         let mut functions = functions.named.into_iter();
         let f = functions.next().unwrap();
