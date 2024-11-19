@@ -117,7 +117,7 @@ fn resolve_calls_in_expression(
                 };
             }
         }
-        Expression::UnresolvedLocalFunction { function, .. } => {
+        Expression::UnresolvedLocalFunction { function } => {
             {
                 let function = Located {
                     fragment: function,
