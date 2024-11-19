@@ -1,14 +1,10 @@
-use crate::code::{Branch, Expression, Function, Functions};
+use crate::code::{Branch, Expression, Functions};
 
 pub fn mark_tail_positions(functions: &mut Functions) {
     for mut function in functions.all_functions_mut() {
-        analyze_function(&mut function);
-    }
-}
-
-fn analyze_function(function: &mut Function) {
-    for branch in function.branches.values_mut() {
-        analyze_branch(branch);
+        for branch in function.branches.values_mut() {
+            analyze_branch(branch);
+        }
     }
 }
 
