@@ -113,6 +113,12 @@ impl From<Index<NamedFunction>> for FunctionLocation {
     }
 }
 
+impl From<ExpressionLocation> for FunctionLocation {
+    fn from(location: ExpressionLocation) -> Self {
+        Self::AnonymousFunction { location }
+    }
+}
+
 /// # Helper struct to display [`FunctionLocation`]
 ///
 /// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
