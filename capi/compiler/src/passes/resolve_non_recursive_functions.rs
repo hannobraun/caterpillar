@@ -117,21 +117,7 @@ fn resolve_calls_in_expression(
                 };
             }
         }
-        Expression::UnresolvedLocalFunction { function } => {
-            {
-                let function = Located {
-                    fragment: function,
-                    location: FunctionLocation::AnonymousFunction {
-                        location: expression.location.clone(),
-                    },
-                };
-                resolve_calls_in_function(
-                    function,
-                    resolved_hashes_by_name,
-                    resolved_hashes_by_location,
-                )?;
-            }
-
+        Expression::UnresolvedLocalFunction { function: _ } => {
             let hash = *resolved_hashes_by_location
                 .get(&expression.location)
                 .expect(
