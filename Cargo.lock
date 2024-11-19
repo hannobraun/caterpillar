@@ -365,6 +365,8 @@ dependencies = [
  "clap",
  "rand",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
