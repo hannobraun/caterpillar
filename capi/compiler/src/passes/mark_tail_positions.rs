@@ -1,28 +1,24 @@
-use crate::code::{Branch, Expression, Functions};
+use crate::code::{Expression, Functions};
 
 pub fn mark_tail_positions(functions: &mut Functions) {
     for mut function in functions.all_functions_mut() {
         for branch in function.branches.values_mut() {
-            analyze_branch(branch);
-        }
-    }
-}
+            for expression in branch.body.values_mut().rev() {
+                if let Expression::Comment { .. } = expression {
+                    continue;
+                }
 
-fn analyze_branch(branch: &mut Branch) {
-    for expression in branch.body.values_mut().rev() {
-        if let Expression::Comment { .. } = expression {
-            continue;
-        }
+                if let Expression::UnresolvedIdentifier {
+                    is_known_to_be_in_tail_position,
+                    ..
+                } = expression
+                {
+                    *is_known_to_be_in_tail_position = true;
+                }
 
-        if let Expression::UnresolvedIdentifier {
-            is_known_to_be_in_tail_position,
-            ..
-        } = expression
-        {
-            *is_known_to_be_in_tail_position = true;
+                break;
+            }
         }
-
-        break;
     }
 }
 
