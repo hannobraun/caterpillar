@@ -28,13 +28,6 @@ fn analyze_branch(branch: &mut Branch) {
 
         break;
     }
-
-    for expression in branch.body.values_mut() {
-        if let Expression::UnresolvedLocalFunction { function, .. } = expression
-        {
-            analyze_function(function);
-        }
-    }
 }
 
 #[cfg(test)]
@@ -112,22 +105,6 @@ mod tests {
                 .to_identifiers(),
             vec![("not_tail", false), ("tail", true)],
         );
-
-        let mut function = functions.named.into_iter().next().unwrap();
-        let (_, branch) = function.inner.branches.pop_first().unwrap();
-        let Expression::UnresolvedLocalFunction { function, .. } =
-            &branch.body.values().nth(1).unwrap()
-        else {
-            panic!("Expected block.");
-        };
-        let identifiers = function
-            .branches
-            .first_key_value()
-            .map(|(_, branch)| branch)
-            .unwrap()
-            .body
-            .to_identifiers();
-        assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
     #[test]
