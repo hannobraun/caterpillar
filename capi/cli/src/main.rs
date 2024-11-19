@@ -5,6 +5,8 @@ mod headless;
 async fn main() -> anyhow::Result<()> {
     use self::args::Args;
 
+    tracing_subscriber::fmt().init();
+
     let args = Args::parse();
 
     match args {
