@@ -12,6 +12,10 @@ path = "../game-engine"
 [dependencies.capi-build-game]
 path = "../build-game"
 
+[dependencies.clap]
+version = "*"
+features = ["derive"]
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
