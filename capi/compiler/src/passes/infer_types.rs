@@ -17,12 +17,12 @@ use crate::{
 
 pub fn infer_types(
     functions: &StableFunctions,
-    call_graph: &OrderedFunctions,
+    ordered_functions: &OrderedFunctions,
     host: &impl Host,
 ) -> Types {
     let mut types = Types::default();
 
-    for cluster in call_graph.clusters_from_leaves() {
+    for cluster in ordered_functions.clusters_from_leaves() {
         // For every cluster, we create a queue of the branches within that
         // cluster. This queue is not processed in its initial order. Processing
         // of a branch can be paused, and other branches can be processed first.
