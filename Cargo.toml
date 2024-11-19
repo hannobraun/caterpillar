@@ -7,7 +7,7 @@ members = [
     "capi/ffi",
     "capi/game-engine",
     "capi/host",
-    "capi/launcher",
+    "capi/cli",
     "capi/protocol",
     "capi/runtime",
     "capi/server",
