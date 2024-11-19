@@ -81,7 +81,7 @@ pub fn find_divergent_functions(
             .functions(functions)
             .filter_map(|function| {
                 let all_branches_are_diverging =
-                    function.branches().all(|branch| {
+                    function.clone().branches().all(|branch| {
                         divergent_branches.contains(&branch.location)
                     });
 
