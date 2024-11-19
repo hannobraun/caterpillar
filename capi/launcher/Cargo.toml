@@ -1,5 +1,5 @@
 [package]
-name = "capi-launcher"
+name = "capi-cli"
 edition = "2021"
 
 [dependencies]

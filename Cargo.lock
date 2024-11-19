@@ -356,6 +356,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-cli"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "capi-build-game",
+ "capi-game-engine",
+ "rand",
+ "tokio",
+]
+
+[[package]]
 name = "capi-compiler"
 version = "0.0.0"
 dependencies = [
@@ -412,17 +423,6 @@ dependencies = [
  "capi-protocol",
  "capi-runtime",
  "ron",
-]
-
-[[package]]
-name = "capi-launcher"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "capi-build-game",
- "capi-game-engine",
- "rand",
- "tokio",
 ]
 
 [[package]]
