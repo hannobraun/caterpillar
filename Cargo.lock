@@ -342,7 +342,7 @@ checksum = "8b96ec4966b5813e2c0507c1f86115c8c5abaadc3980879c3424042a02fd1ad3"
 
 [[package]]
 name = "capi-build-game"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-compiler",
@@ -357,7 +357,7 @@ dependencies = [
 
 [[package]]
 name = "capi-compiler"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "blake3",
  "capi-runtime",
@@ -369,7 +369,7 @@ dependencies = [
 
 [[package]]
 name = "capi-debugger"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-compiler",
@@ -389,11 +389,11 @@ dependencies = [
 
 [[package]]
 name = "capi-ffi"
-version = "0.1.0"
+version = "0.0.0"
 
 [[package]]
 name = "capi-game-engine"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "capi-compiler",
  "capi-runtime",
@@ -404,7 +404,7 @@ dependencies = [
 
 [[package]]
 name = "capi-host"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
@@ -416,7 +416,7 @@ dependencies = [
 
 [[package]]
 name = "capi-launcher"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-build-game",
@@ -427,7 +427,7 @@ dependencies = [
 
 [[package]]
 name = "capi-protocol"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "capi-compiler",
  "capi-game-engine",
@@ -438,7 +438,7 @@ dependencies = [
 
 [[package]]
 name = "capi-runtime"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "serde",
  "thiserror 2.0.3",
@@ -447,7 +447,7 @@ dependencies = [
 
 [[package]]
 name = "capi-server"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -465,7 +465,7 @@ dependencies = [
 
 [[package]]
 name = "capi-watch"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "notify",
