@@ -9,6 +9,7 @@ mod resolve_most_identifiers;
 mod resolve_non_recursive_functions;
 mod resolve_recursive_calls;
 mod resolve_recursive_local_functions;
+mod sort_non_divergent_branches;
 mod tokenize;
 
 pub use {
@@ -21,5 +22,6 @@ pub use {
     resolve_non_recursive_functions::resolve_non_recursive_functions,
     resolve_recursive_calls::resolve_recursive_calls,
     resolve_recursive_local_functions::resolve_recursive_local_functions,
+    sort_non_divergent_branches::sort_non_divergent_branches,
     tokenize::tokenize,
 };
