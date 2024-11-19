@@ -2,12 +2,12 @@
 resolver = "2"
 members = [
     "capi/build-game",
+    "capi/cli",
     "capi/compiler",
     "capi/debugger",
     "capi/ffi",
     "capi/game-engine",
     "capi/host",
-    "capi/cli",
     "capi/protocol",
     "capi/runtime",
     "capi/server",
