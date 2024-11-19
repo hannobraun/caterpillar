@@ -155,6 +155,7 @@ pub enum DebugExpressionKind {
     Comment { text: String },
     Function { function: DebugFunction },
     UnresolvedIdentifier { name: String },
+    UnresolvedLocalFunction,
     Value { as_string: String },
 }
 
@@ -278,22 +279,8 @@ impl DebugExpressionKind {
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Expression::UnresolvedLocalFunction { function } => {
-                let function = DebugFunction::new(
-                    function,
-                    None,
-                    FunctionLocation::AnonymousFunction { location },
-                    active_expression,
-                    is_in_innermost_active_function,
-                    cluster,
-                    functions,
-                    types,
-                    source_map,
-                    breakpoints,
-                    effect,
-                );
-
-                Self::Function { function }
+            Expression::UnresolvedLocalFunction { function: _ } => {
+                Self::UnresolvedLocalFunction
             }
         }
     }
