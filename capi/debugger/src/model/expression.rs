@@ -278,7 +278,7 @@ impl DebugExpressionKind {
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
-            Expression::UnresolvedLocalFunction { function, .. } => {
+            Expression::UnresolvedLocalFunction { function } => {
                 let function = DebugFunction::new(
                     function,
                     None,
