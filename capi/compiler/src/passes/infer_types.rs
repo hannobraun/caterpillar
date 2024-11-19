@@ -345,12 +345,8 @@ fn infer_type_of_expression(
                 Err(function_inference) => return Some(function_inference),
             }
         }
-        Expression::UnresolvedIdentifier { .. } => {
-            // There nothing we can do here, really. This has already been
-            // identified as a problem.
-            return None;
-        }
-        Expression::UnresolvedLocalFunction => {
+        Expression::UnresolvedIdentifier { .. }
+        | Expression::UnresolvedLocalFunction => {
             // There nothing we can do here, really. This has already been
             // identified as a problem.
             return None;
