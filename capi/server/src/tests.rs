@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use tempfile::tempdir;
 
-use crate::Event;
+use super::Event;
 
 #[tokio::test]
 async fn basic_build() -> anyhow::Result<()> {
