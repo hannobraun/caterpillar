@@ -6,15 +6,18 @@
 
 use std::collections::VecDeque;
 
+/// # The tokens in a script
 pub struct Tokens {
     pub inner: VecDeque<Token>,
 }
 
 impl Tokens {
+    /// # Peek at the next token without taking it
     pub fn peek(&self) -> Option<&Token> {
         self.inner.front()
     }
 
+    /// # Take the next token
     pub fn take(&mut self) -> Option<Token> {
         self.inner.pop_front()
     }
