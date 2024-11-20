@@ -58,8 +58,7 @@ impl<'r> Located<&'r mut Function> {
     /// Unfortunately, following the pattern set by the `Located<&Function>` API
     /// doesn't work here, due to lifetime issues.
     pub fn destructure(self) -> Vec<Located<&'r mut Branch>> {
-        let branches = self
-            .fragment
+        self.fragment
             .branches
             .iter_mut()
             .map(|(&index, branch)| Located {
@@ -69,9 +68,7 @@ impl<'r> Located<&'r mut Function> {
                     index,
                 },
             })
-            .collect();
-
-        branches
+            .collect()
     }
 }
 
