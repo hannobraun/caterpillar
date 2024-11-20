@@ -32,7 +32,7 @@ impl Tokens {
 
 /// # A token
 ///
-/// See [parent module][self].
+/// See [parent module](super).
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Token {
     /// # A comment
