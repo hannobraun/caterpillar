@@ -2,13 +2,12 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     Expression, Function, FunctionLocation, Functions, Index, Located,
-    OrderedFunctions, TailExpressions,
+    OrderedFunctions,
 };
 
 pub fn resolve_recursive_calls(
     functions: &mut Functions,
     ordered_functions: &OrderedFunctions,
-    tail_expressions: &TailExpressions,
 ) {
     for cluster in ordered_functions.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
@@ -42,7 +41,6 @@ pub fn resolve_recursive_calls(
 
             resolve_recursive_calls_in_function(
                 function,
-                tail_expressions,
                 &indices_in_cluster_by_function_name,
             );
         }
@@ -51,7 +49,6 @@ pub fn resolve_recursive_calls(
 
 fn resolve_recursive_calls_in_function(
     function: Located<&mut Function>,
-    _: &TailExpressions,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
         Index<FunctionLocation>,
@@ -88,7 +85,7 @@ mod tests {
     use crate::{
         code::{
             syntax::parse, tokens::Tokens, Expression, FunctionLocation,
-            Functions, Index, TailExpressions,
+            Functions, Index,
         },
         host::NoHost,
         passes::{order_functions_by_dependencies, resolve_most_identifiers},
@@ -188,14 +185,9 @@ mod tests {
     fn resolve_recursive_calls(input: &str) -> Functions {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        let tail_expressions = TailExpressions::from_functions(&functions);
         resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
-        super::resolve_recursive_calls(
-            &mut functions,
-            &ordered_functions,
-            &tail_expressions,
-        );
+        super::resolve_recursive_calls(&mut functions, &ordered_functions);
 
         functions
     }
