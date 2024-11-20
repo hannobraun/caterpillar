@@ -4,6 +4,22 @@
 //! ignoring whitespace. They are the first semi-structured code representation
 //! that the compiler produces, laying the groundwork for parsing.
 
+use std::collections::VecDeque;
+
+pub struct Tokens {
+    pub inner: VecDeque<Token>,
+}
+
+impl Tokens {
+    pub fn peek(&self) -> Option<&Token> {
+        self.inner.front()
+    }
+
+    pub fn take(&mut self) -> Option<Token> {
+        self.inner.pop_front()
+    }
+}
+
 /// # A token
 ///
 /// See [parent module][self].

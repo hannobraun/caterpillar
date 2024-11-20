@@ -1,8 +1,7 @@
-use std::collections::VecDeque;
-
 use crate::code::{
-    tokens::Token, Branch, BranchLocation, Expression, ExpressionLocation,
-    Function, FunctionLocation, Functions, Index, NamedFunction, Pattern,
+    tokens::{Token, Tokens},
+    Branch, BranchLocation, Expression, ExpressionLocation, Function,
+    FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
 
 /// # Parse the provided tokens
@@ -251,18 +250,4 @@ fn parse_branch_body(
     }
 
     Some(())
-}
-
-struct Tokens {
-    inner: VecDeque<Token>,
-}
-
-impl Tokens {
-    pub fn peek(&self) -> Option<&Token> {
-        self.inner.front()
-    }
-
-    pub fn take(&mut self) -> Option<Token> {
-        self.inner.pop_front()
-    }
 }
