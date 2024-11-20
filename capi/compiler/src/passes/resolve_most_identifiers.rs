@@ -88,7 +88,6 @@ fn resolve_in_branch(
                 name,
                 is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function,
-                ..
             } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
