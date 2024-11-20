@@ -1,5 +1,6 @@
 pub mod syntax;
 
+mod bindings;
 mod tail_expressions;
 mod tokens;
 
@@ -13,6 +14,7 @@ mod ordered_functions;
 mod types;
 
 pub use self::{
+    bindings::Bindings,
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::Expression,
     functions::{
