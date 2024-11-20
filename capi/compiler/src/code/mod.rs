@@ -1,7 +1,7 @@
 pub mod syntax;
-pub mod tokens;
 
 mod tail_expressions;
+mod tokens;
 
 mod changes;
 mod expression;
