@@ -34,7 +34,7 @@ impl Compiler {
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        let bindings = Bindings::resolve_bindings(&functions);
+        let bindings = Bindings::resolve(&functions);
         let tail_expressions =
             TailExpressions::find_tail_expressions(&functions);
         resolve_most_identifiers(&mut functions, host);

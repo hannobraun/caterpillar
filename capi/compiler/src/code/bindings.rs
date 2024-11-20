@@ -17,7 +17,7 @@ pub struct Bindings {
 
 impl Bindings {
     /// # Resolve all bindings
-    pub fn resolve_bindings(functions: &Functions) -> Self {
+    pub fn resolve(functions: &Functions) -> Self {
         let mut bindings = BTreeSet::new();
         let mut environments = BTreeMap::new();
 
@@ -359,7 +359,7 @@ mod tests {
     fn resolve_bindings(input: &str) -> (Functions, Bindings) {
         let tokens = Tokens::from_input(input);
         let functions = parse(tokens);
-        let bindings = Bindings::resolve_bindings(&functions);
+        let bindings = Bindings::resolve(&functions);
 
         (functions, bindings)
     }
