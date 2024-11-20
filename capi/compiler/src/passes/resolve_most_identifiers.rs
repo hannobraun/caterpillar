@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    code::{Branch, Expression, Function, Functions, Located},
+    code::{Branch, Expression, Functions, Located},
     host::Host,
     intrinsics::IntrinsicFunction,
 };
@@ -19,19 +19,11 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .collect();
 
     for function in functions.all_functions_mut() {
-        resolve_in_function(function, &known_named_functions, host);
-    }
-}
+        let (branches, _) = function.destructure();
 
-fn resolve_in_function(
-    function: Located<&mut Function>,
-    known_named_functions: &BTreeSet<String>,
-    host: &impl Host,
-) {
-    let (branches, _) = function.destructure();
-
-    for branch in branches {
-        resolve_in_branch(branch, known_named_functions, host);
+        for branch in branches {
+            resolve_in_branch(branch, &known_named_functions, host);
+        }
     }
 }
 
