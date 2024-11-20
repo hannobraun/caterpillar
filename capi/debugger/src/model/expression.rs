@@ -31,8 +31,6 @@ impl DebugExpression {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        let signature = DebugExpressionSignature::new(&location, types);
-
         let state = if Some(&location) == active_expression {
             if is_in_innermost_active_function {
                 DebugExpressionState::InnermostActiveExpression
@@ -59,7 +57,6 @@ impl DebugExpression {
         let data = DebugExpressionData {
             expression: expression.clone(),
             location: location.clone(),
-            signature,
             state,
             has_durable_breakpoint,
             effect: active_effect,
@@ -85,37 +82,9 @@ impl DebugExpression {
 pub struct DebugExpressionData {
     pub expression: Expression,
     pub location: ExpressionLocation,
-    pub signature: DebugExpressionSignature,
     pub state: DebugExpressionState,
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugExpressionSignature {
-    pub inputs: Vec<String>,
-    pub outputs: Vec<String>,
-}
-
-impl DebugExpressionSignature {
-    pub fn new(location: &ExpressionLocation, types: &Types) -> Self {
-        let mut inputs = Vec::new();
-        let mut outputs = Vec::new();
-
-        if let Some(signature) = types.of_expressions.get(location) {
-            let convert = |index| {
-                let type_ = types.inner.get(index).expect(
-                    "Got type index from signature; must exist in `types`.",
-                );
-                format!("{type_:?}")
-            };
-
-            inputs.extend(signature.inputs.iter().map(convert));
-            outputs.extend(signature.outputs.iter().map(convert));
-        }
-
-        Self { inputs, outputs }
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
