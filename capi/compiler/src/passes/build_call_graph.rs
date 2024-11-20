@@ -347,9 +347,9 @@ mod tests {
     }
 
     fn order_functions_by_dependencies(
-        source: &str,
+        input: &str,
     ) -> (Functions, OrderedFunctions) {
-        let tokens = tokenize(source);
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
