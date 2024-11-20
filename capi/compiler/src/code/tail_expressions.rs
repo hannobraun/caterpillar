@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use super::{Expression, ExpressionLocation, Functions};
 
-/// # Tracks the tail expressions in the code
+/// # Tracks tail expressions
 ///
 /// A tail expression is the last expression in a function. Any function that
 /// has at least one expression, has a tail expression.
