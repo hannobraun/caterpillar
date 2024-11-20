@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use capi_compiler::{
     code::{
         Branch, BranchLocation, Cluster, ExpressionLocation, Pattern,
-        StableFunctions, Types,
+        StableFunctions,
     },
     source_map::SourceMap,
 };
@@ -26,7 +26,6 @@ impl DebugBranch {
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         functions: &StableFunctions,
-        types: &Types,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
@@ -46,7 +45,6 @@ impl DebugBranch {
                     is_in_innermost_active_function,
                     cluster,
                     functions,
-                    types,
                     source_map,
                     breakpoints,
                     effect,
