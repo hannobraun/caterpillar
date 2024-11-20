@@ -3,14 +3,17 @@ use std::collections::BTreeMap;
 use capi_runtime::InstructionAddress;
 
 use crate::{
-    code::{Function, Hash, OrderedFunctions, StableFunctions, Types},
+    code::{
+        tokens::tokenize, Function, Hash, OrderedFunctions, StableFunctions,
+        Types,
+    },
     host::Host,
     passes::{
         detect_changes, find_divergent_functions, generate_instructions,
         infer_types, mark_tail_positions, order_functions_by_dependencies,
         parse, resolve_most_identifiers, resolve_non_recursive_functions,
         resolve_recursive_calls, resolve_recursive_local_functions,
-        sort_non_divergent_branches, tokenize,
+        sort_non_divergent_branches,
     },
     source_map::SourceMap,
     Instructions,

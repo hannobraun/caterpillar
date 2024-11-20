@@ -25,8 +25,8 @@ pub fn mark_tail_positions(functions: &mut Functions) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Expression, Functions, IndexMap},
-        passes::{parse, tokenize},
+        code::{tokens::tokenize, Expression, Functions, IndexMap},
+        passes::parse,
     };
 
     #[test]

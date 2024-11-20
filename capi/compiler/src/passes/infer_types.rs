@@ -508,11 +508,14 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{ConcreteSignature, Functions, StableFunctions, Type, Types},
+        code::{
+            tokens::tokenize, ConcreteSignature, Functions, StableFunctions,
+            Type, Types,
+        },
         host::{Host, HostFunction},
         passes::{
             order_functions_by_dependencies, parse, resolve_most_identifiers,
-            resolve_non_recursive_functions, resolve_recursive_calls, tokenize,
+            resolve_non_recursive_functions, resolve_recursive_calls,
         },
     };
 

@@ -84,11 +84,12 @@ fn resolve_recursive_calls_in_function(
 mod tests {
 
     use crate::{
-        code::{Expression, FunctionLocation, Functions, Index},
+        code::{
+            tokens::tokenize, Expression, FunctionLocation, Functions, Index,
+        },
         host::NoHost,
         passes::{
             order_functions_by_dependencies, parse, resolve_most_identifiers,
-            tokenize,
         },
     };
 

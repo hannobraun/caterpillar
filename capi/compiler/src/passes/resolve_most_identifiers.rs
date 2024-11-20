@@ -195,10 +195,10 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{Branch, ConcreteSignature, Expression},
+        code::{tokens::tokenize, Branch, ConcreteSignature, Expression},
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
-        passes::{parse, tokenize},
+        passes::parse,
     };
 
     #[test]
