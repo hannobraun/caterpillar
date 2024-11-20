@@ -145,13 +145,28 @@ fn resolve_bindings_in_branch(
                     .by_location(&location)
                     .expect("Function referred to from branch must exist.");
 
-                resolve_bindings_in_function(
+                let child_environment = resolve_bindings_in_function(
                     function,
                     functions,
                     scopes,
                     bindings,
                     environments,
                 );
+
+                for name in child_environment {
+                    if let Some(bindings) = scopes.last() {
+                        if !bindings.contains(&name) {
+                            // The child function that we just resolved bindings
+                            // in has a function in its environment that is not
+                            // known in the current scope.
+                            //
+                            // This means it must come from this function's
+                            // parent scopes, and must be added to this
+                            // environment too.
+                            environment.insert(name.clone());
+                        }
+                    }
+                }
             }
             _ => {}
         }
@@ -290,6 +305,55 @@ mod tests {
             .unwrap();
 
         assert!(!bindings.is_binding(&child_parameter));
+    }
+
+    #[test]
+    fn track_indirect_bindings_in_environment() {
+        // If a function doesn't access a binding from a parent scope itself,
+        // but one of its child functions does, the binding still needs to be
+        // part of the function's environment.
+
+        let (functions, bindings) = resolve_bindings(
+            r"
+                f: fn
+                    \ binding ->
+                        fn
+                            \ ->
+                                fn
+                                    \ ->
+                                        binding
+                                end
+                        end
+                        
+                end
+            ",
+        );
+
+        let function = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .filter_map(|expression| {
+                if let Expression::UnresolvedLocalFunction = expression.fragment
+                {
+                    let location = FunctionLocation::from(expression.location);
+                    let function = functions.by_location(&location);
+                    Some(function)
+                } else {
+                    None
+                }
+            })
+            .flatten()
+            .next()
+            .unwrap();
+
+        assert!(bindings
+            .environment_of(&function.location)
+            .contains("binding"));
     }
 
     fn resolve_bindings(input: &str) -> (Functions, Bindings) {
