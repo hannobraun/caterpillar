@@ -210,6 +210,10 @@ fn compile_expression(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> Option<InstructionAddress> {
+    let is_tail_expression = functions_context
+        .tail_expressions
+        .is_tail_expression(&location);
+
     let mut mapping = functions_context
         .source_map
         .map_expression_to_instructions(location.clone());
@@ -337,10 +341,6 @@ fn compile_expression(
             Some(address)
         }
         Expression::CallToIntrinsicFunction { intrinsic } => {
-            let is_tail_expression = functions_context
-                .tail_expressions
-                .is_tail_expression(&location);
-
             let address = compile_intrinsic(
                 intrinsic,
                 is_tail_expression,
