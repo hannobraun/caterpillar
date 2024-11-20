@@ -56,14 +56,16 @@ fn resolve_recursive_calls_in_function(
 ) {
     let (branches, _) = function.destructure();
 
-    for mut branch in branches {
-        for expression in branch.body.values_mut() {
+    for branch in branches {
+        let (body, _) = branch.destructure();
+
+        for expression in body {
             if let Expression::UnresolvedIdentifier {
                 name,
                 is_known_to_be_in_tail_position,
                 is_known_to_be_call_to_user_defined_function: true,
                 ..
-            } = expression
+            } = expression.fragment
             {
                 if let Some(&index) =
                     indices_in_cluster_by_function_name.get(name)
@@ -73,7 +75,7 @@ fn resolve_recursive_calls_in_function(
                     // be so.
                     let is_tail_call = *is_known_to_be_in_tail_position;
 
-                    *expression =
+                    *expression.fragment =
                         Expression::CallToUserDefinedFunctionRecursive {
                             index,
                             is_tail_call,
