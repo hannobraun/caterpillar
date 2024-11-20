@@ -843,7 +843,11 @@ mod tests {
         let tail_expressions = TailExpressions::from_functions(&functions);
         resolve_most_identifiers(&mut functions, &tail_expressions, &TestHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
-        resolve_recursive_calls(&mut functions, &ordered_functions);
+        resolve_recursive_calls(
+            &mut functions,
+            &ordered_functions,
+            &tail_expressions,
+        );
         let functions = resolve_non_recursive_functions(
             functions,
             &ordered_functions,

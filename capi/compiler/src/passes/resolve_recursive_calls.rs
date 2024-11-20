@@ -2,12 +2,13 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     Expression, Function, FunctionLocation, Functions, Index, Located,
-    OrderedFunctions,
+    OrderedFunctions, TailExpressions,
 };
 
 pub fn resolve_recursive_calls(
     functions: &mut Functions,
     ordered_functions: &OrderedFunctions,
+    tail_expressions: &TailExpressions,
 ) {
     for cluster in ordered_functions.clusters_from_leaves() {
         let indices_in_cluster_by_function_name = cluster
@@ -41,6 +42,7 @@ pub fn resolve_recursive_calls(
 
             resolve_recursive_calls_in_function(
                 function,
+                tail_expressions,
                 &indices_in_cluster_by_function_name,
             );
         }
@@ -49,6 +51,7 @@ pub fn resolve_recursive_calls(
 
 fn resolve_recursive_calls_in_function(
     function: Located<&mut Function>,
+    tail_expressions: &TailExpressions,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
         Index<FunctionLocation>,
@@ -62,7 +65,7 @@ fn resolve_recursive_calls_in_function(
         for expression in body {
             if let Expression::UnresolvedIdentifier {
                 name,
-                is_known_to_be_in_tail_position,
+                is_known_to_be_in_tail_position: _,
                 is_known_to_be_call_to_user_defined_function: true,
                 ..
             } = expression.fragment
@@ -70,10 +73,8 @@ fn resolve_recursive_calls_in_function(
                 if let Some(&index) =
                     indices_in_cluster_by_function_name.get(name)
                 {
-                    // By the time we make it to this compiler pass, all
-                    // expressions that are in tail position should be known to
-                    // be so.
-                    let is_tail_call = *is_known_to_be_in_tail_position;
+                    let is_tail_call = tail_expressions
+                        .is_tail_expression(&expression.location);
 
                     *expression.fragment =
                         Expression::CallToUserDefinedFunctionRecursive {
@@ -195,7 +196,11 @@ mod tests {
         let tail_expressions = TailExpressions::from_functions(&functions);
         resolve_most_identifiers(&mut functions, &tail_expressions, &NoHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
-        super::resolve_recursive_calls(&mut functions, &ordered_functions);
+        super::resolve_recursive_calls(
+            &mut functions,
+            &ordered_functions,
+            &tail_expressions,
+        );
 
         functions
     }
