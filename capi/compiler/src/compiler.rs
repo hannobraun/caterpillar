@@ -4,8 +4,8 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, Function, Hash, OrderedFunctions, StableFunctions,
-        TailExpressions, Tokens,
+        bindings::resolve_bindings, syntax::parse, Function, Hash,
+        OrderedFunctions, StableFunctions, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -35,6 +35,7 @@ impl Compiler {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let tail_expressions = TailExpressions::from_functions(&functions);
+        resolve_bindings(&mut functions);
         resolve_most_identifiers(&mut functions, host);
         let mut ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);

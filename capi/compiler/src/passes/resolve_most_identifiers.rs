@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use crate::{
     code::{
         AnonymousFunctions, Branch, Expression, Function, FunctionLocation,
-        Functions, Located, Pattern,
+        Functions, Located,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -15,7 +15,6 @@ use crate::{
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
 pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
-    let mut scopes = Scopes::new();
     let known_named_functions = functions
         .named
         .iter()
@@ -25,7 +24,6 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
     for function in functions.named.iter_mut() {
         resolve_in_function(
             function.into_located_function_mut(),
-            &mut scopes,
             &mut functions.anonymous,
             &known_named_functions,
             host,
@@ -35,36 +33,15 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
 
 fn resolve_in_function(
     function: Located<&mut Function>,
-    scopes: &mut Scopes,
     anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
-    let (branches, environment) = function.destructure();
+    let (branches, _) = function.destructure();
 
     for branch in branches {
-        scopes.push(
-            branch
-                .parameters
-                .clone()
-                .into_iter()
-                .filter_map(|pattern| match pattern {
-                    Pattern::Identifier { name } => Some(name),
-                    Pattern::Literal { .. } => {
-                        // The scope is used to resolve identifiers against
-                        // known bindings. Literal patterns don't create
-                        // bindings, as their value is only used to select
-                        // the function to be called.
-                        None
-                    }
-                })
-                .collect(),
-        );
-
         resolve_in_branch(
             branch,
-            scopes,
-            environment,
             anonymous_functions,
             known_named_functions,
             host,
@@ -74,8 +51,6 @@ fn resolve_in_function(
 
 fn resolve_in_branch(
     branch: Located<&mut Branch>,
-    scopes: &mut Scopes,
-    environment: &mut Environment,
     anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
@@ -93,18 +68,7 @@ fn resolve_in_branch(
                 //
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
-                if scopes.iter().any(|bindings| bindings.contains(name)) {
-                    if let Some(bindings) = scopes.last() {
-                        if !bindings.contains(name) {
-                            environment.insert(name.clone());
-                        }
-                    }
-
-                    *expression.fragment =
-                        Expression::Binding { name: name.clone() }
-                } else if let Some(intrinsic) =
-                    IntrinsicFunction::from_name(name)
-                {
+                if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
                     *expression.fragment =
                         Expression::CallToIntrinsicFunction { intrinsic };
                 } else if let Some(function) = host.function_by_name(name) {
@@ -138,36 +102,17 @@ fn resolve_in_branch(
                             location: expression.location.clone(),
                         },
                     },
-                    scopes,
                     anonymous_functions,
                     known_named_functions,
                     host,
                 );
-
-                for name in &function.environment {
-                    // If the child function we just resolved identifiers for
-                    // captures something from its environment, and the current
-                    // scope doesn't already have that, then it needs to capture
-                    // it from its environment likewise.
-                    if let Some(bindings) = scopes.last() {
-                        if !bindings.contains(name) {
-                            environment.insert(name.clone());
-                        }
-                    }
-                }
 
                 anonymous_functions.insert(expression.location, function);
             }
             _ => {}
         }
     }
-
-    scopes.pop();
 }
-
-type Scopes = Vec<Bindings>;
-type Bindings = BTreeSet<String>;
-type Environment = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
@@ -176,37 +121,6 @@ mod tests {
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
     };
-
-    #[test]
-    fn do_not_resolve_binding_from_child_scope() {
-        // Bindings that are defined in a scope that is a lexical child of the
-        // current scope, should not be resolved.
-
-        let mut functions = resolve_identifiers(
-            r"
-                f: fn
-                    \ ->
-                        0
-                        fn
-                            \ value ->
-                        end
-                        value
-                end
-            ",
-        );
-
-        assert_eq!(
-            functions
-                .remove(0)
-                .body
-                .last_key_value()
-                .map(|(_, expression)| expression),
-            Some(&Expression::UnresolvedIdentifier {
-                name: String::from("value"),
-                is_known_to_be_call_to_user_defined_function: false,
-            })
-        );
-    }
 
     #[test]
     fn resolve_host_function() {
