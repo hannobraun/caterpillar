@@ -85,8 +85,7 @@ mod tests {
 
     use crate::{
         code::{
-            tokens::{tokenize, Tokens},
-            Expression, FunctionLocation, Functions, Index,
+            tokens::Tokens, Expression, FunctionLocation, Functions, Index,
         },
         host::NoHost,
         passes::{
@@ -186,10 +185,7 @@ mod tests {
     }
 
     fn resolve_recursive_calls(input: &str) -> Functions {
-        let tokens = tokenize(input);
-        let tokens = Tokens {
-            inner: tokens.into(),
-        };
+        let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions = order_functions_by_dependencies(&functions);

@@ -1,11 +1,24 @@
 use std::collections::VecDeque;
 
+use super::tokenize::tokenize;
+
 /// # The tokens in a script
 pub struct Tokens {
     pub inner: VecDeque<Token>,
 }
 
 impl Tokens {
+    /// # Tokenize the provided input
+    ///
+    /// Takes raw text, as input by the developer, and creates its tokenized
+    /// form.
+    pub fn from_input(input: &str) -> Self {
+        let tokens = tokenize(input);
+        Self {
+            inner: tokens.into(),
+        }
+    }
+
     /// # Peek at the next token without taking it
     pub fn peek(&self) -> Option<&Token> {
         self.inner.front()

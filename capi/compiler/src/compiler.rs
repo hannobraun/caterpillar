@@ -4,8 +4,8 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        tokens::{tokenize, Tokens},
-        Function, Hash, OrderedFunctions, StableFunctions, Types,
+        tokens::Tokens, Function, Hash, OrderedFunctions, StableFunctions,
+        Types,
     },
     host::Host,
     passes::{
@@ -33,10 +33,7 @@ pub struct Compiler {
 impl Compiler {
     /// # Compile the provided source code
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
-        let tokens = tokenize(input);
-        let tokens = Tokens {
-            inner: tokens.into(),
-        };
+        let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         mark_tail_positions(&mut functions);
         resolve_most_identifiers(&mut functions, host);

@@ -195,10 +195,7 @@ type Environment = BTreeSet<String>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{
-            tokens::{tokenize, Tokens},
-            Branch, ConcreteSignature, Expression,
-        },
+        code::{tokens::Tokens, Branch, ConcreteSignature, Expression},
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
         passes::parse,
@@ -322,10 +319,7 @@ mod tests {
     }
 
     fn resolve_identifiers(input: &str) -> Vec<Branch> {
-        let tokens = tokenize(input);
-        let tokens = Tokens {
-            inner: tokens.into(),
-        };
+        let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         super::resolve_most_identifiers(&mut functions, &TestHost {});
 
