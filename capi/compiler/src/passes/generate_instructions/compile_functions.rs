@@ -23,7 +23,7 @@ pub struct FunctionsContext<'r> {
 pub fn compile_functions(
     functions: &StableFunctions,
     changes: &Changes,
-    call_graph: &OrderedFunctions,
+    ordered_functions: &OrderedFunctions,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
@@ -40,7 +40,7 @@ pub fn compile_functions(
         compiled_functions_by_hash,
     };
 
-    for cluster in call_graph.clusters_from_leaves() {
+    for cluster in ordered_functions.clusters_from_leaves() {
         compile_cluster(cluster, changes, &mut context);
     }
 
