@@ -106,9 +106,12 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{tokens::Tokens, Cluster, Functions, Index, OrderedFunctions},
+        code::{
+            syntax::parse, tokens::Tokens, Cluster, Functions, Index,
+            OrderedFunctions,
+        },
         host::NoHost,
-        passes::{parse, resolve_most_identifiers},
+        passes::resolve_most_identifiers,
     };
 
     #[test]

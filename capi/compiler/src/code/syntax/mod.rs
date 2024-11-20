@@ -15,3 +15,7 @@
 //! As of this writing, there is an ongoing cleanup of the code representations
 //! in the compiler. What the above documentation says might not be fully true
 //! yet.
+
+mod parse;
+
+pub use self::parse::parse;

@@ -85,12 +85,11 @@ mod tests {
 
     use crate::{
         code::{
-            tokens::Tokens, Expression, FunctionLocation, Functions, Index,
+            syntax::parse, tokens::Tokens, Expression, FunctionLocation,
+            Functions, Index,
         },
         host::NoHost,
-        passes::{
-            order_functions_by_dependencies, parse, resolve_most_identifiers,
-        },
+        passes::{order_functions_by_dependencies, resolve_most_identifiers},
     };
 
     #[test]

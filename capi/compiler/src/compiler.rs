@@ -4,14 +4,14 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        tokens::Tokens, Function, Hash, OrderedFunctions, StableFunctions,
-        Types,
+        syntax::parse, tokens::Tokens, Function, Hash, OrderedFunctions,
+        StableFunctions, Types,
     },
     host::Host,
     passes::{
         detect_changes, find_divergent_functions, generate_instructions,
         infer_types, mark_tail_positions, order_functions_by_dependencies,
-        parse, resolve_most_identifiers, resolve_non_recursive_functions,
+        resolve_most_identifiers, resolve_non_recursive_functions,
         resolve_recursive_calls, resolve_recursive_local_functions,
         sort_non_divergent_branches,
     },

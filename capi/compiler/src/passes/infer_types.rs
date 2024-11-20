@@ -509,12 +509,12 @@ mod tests {
 
     use crate::{
         code::{
-            tokens::Tokens, ConcreteSignature, Functions, StableFunctions,
-            Type, Types,
+            syntax::parse, tokens::Tokens, ConcreteSignature, Functions,
+            StableFunctions, Type, Types,
         },
         host::{Host, HostFunction},
         passes::{
-            order_functions_by_dependencies, parse, resolve_most_identifiers,
+            order_functions_by_dependencies, resolve_most_identifiers,
             resolve_non_recursive_functions, resolve_recursive_calls,
         },
     };
