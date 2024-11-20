@@ -49,6 +49,9 @@ pub fn compile_function(
         };
     }
 
+    let environment =
+        functions_context.bindings.environment_of(&location).clone();
+
     if let Some(instruction_range) = instruction_range {
         functions_context
             .source_map
@@ -60,12 +63,12 @@ pub fn compile_function(
             &address,
             Instruction::MakeAnonymousFunction {
                 branches: runtime_function.branches.clone(),
-                environment: function.environment,
+                environment,
             },
         );
     } else {
         assert!(
-            function.environment.is_empty(),
+            environment.is_empty(),
             "We were not provided an address where to put a \"make anonymous \
             function\" instruction, and yet the function has an environment. \
             This is a bug.",
