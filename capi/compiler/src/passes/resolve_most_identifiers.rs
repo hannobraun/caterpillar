@@ -94,7 +94,7 @@ fn resolve_in_branch(
         match expression.fragment {
             Expression::UnresolvedIdentifier {
                 name,
-                is_known_to_be_in_tail_position,
+                is_known_to_be_in_tail_position: _,
                 is_known_to_be_call_to_user_defined_function,
             } => {
                 // The way this is written, definitions can silently shadow each
@@ -132,10 +132,13 @@ fn resolve_in_branch(
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
+                    let is_tail_call = tail_expressions
+                        .is_tail_expression(&expression.location);
+
                     *expression.fragment =
                         Expression::CallToIntrinsicFunction {
                             intrinsic,
-                            is_tail_call: *is_known_to_be_in_tail_position,
+                            is_tail_call,
                         };
                 } else if let Some(function) = host.function_by_name(name) {
                     *expression.fragment = Expression::CallToHostFunction {
@@ -291,7 +294,7 @@ mod tests {
                 .map(|(_, expression)| expression),
             Some(&Expression::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
-                is_tail_call: false
+                is_tail_call: true
             })
         );
     }
