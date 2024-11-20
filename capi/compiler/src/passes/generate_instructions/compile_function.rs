@@ -227,7 +227,10 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::CallToUserDefinedFunction { hash, is_tail_call } => {
+        Expression::CallToUserDefinedFunction {
+            hash,
+            is_tail_call: _,
+        } => {
             let Some(function) =
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {
@@ -250,7 +253,7 @@ fn compile_expression(
             let address = generate_instruction(
                 Instruction::CallFunction {
                     function: function.clone(),
-                    is_tail_call,
+                    is_tail_call: is_tail_expression,
                 },
                 functions_context.instructions,
                 Some(&mut mapping),
