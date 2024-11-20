@@ -168,7 +168,7 @@ mod tests {
             ",
         );
 
-        let (parameter, no_parameter) = functions
+        let function = functions
             .named
             .by_name("f")
             .unwrap()
@@ -188,7 +188,8 @@ mod tests {
             })
             .flatten()
             .next()
-            .unwrap()
+            .unwrap();
+        let (parameter, no_parameter) = function
             .find_single_branch()
             .unwrap()
             .body()
