@@ -106,7 +106,10 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{tokens::tokenize, Cluster, Functions, Index, OrderedFunctions},
+        code::{
+            tokens::{tokenize, Tokens},
+            Cluster, Functions, Index, OrderedFunctions,
+        },
         host::NoHost,
         passes::{parse, resolve_most_identifiers},
     };
@@ -347,6 +350,9 @@ mod tests {
         source: &str,
     ) -> (Functions, OrderedFunctions) {
         let tokens = tokenize(source);
+        let tokens = Tokens {
+            inner: tokens.into(),
+        };
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions =

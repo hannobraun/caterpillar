@@ -509,8 +509,8 @@ mod tests {
 
     use crate::{
         code::{
-            tokens::tokenize, ConcreteSignature, Functions, StableFunctions,
-            Type, Types,
+            tokens::{tokenize, Tokens},
+            ConcreteSignature, Functions, StableFunctions, Type, Types,
         },
         host::{Host, HostFunction},
         passes::{
@@ -839,6 +839,9 @@ mod tests {
 
     fn infer_types(source: &str) -> (StableFunctions, Types) {
         let tokens = tokenize(source);
+        let tokens = Tokens {
+            inner: tokens.into(),
+        };
         let mut functions = parse(tokens);
         resolve_most_identifiers(&mut functions, &TestHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
