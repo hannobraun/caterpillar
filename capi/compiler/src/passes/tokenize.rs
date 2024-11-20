@@ -1,5 +1,7 @@
 use std::mem;
 
+use crate::code::tokens::Token;
+
 pub fn tokenize(source: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r",", Token::Delimiter),
@@ -56,23 +58,6 @@ pub fn tokenize(source: &str) -> Vec<Token> {
     }
 
     tokens
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Token {
-    Comment { text: String },
-    Delimiter,
-
-    KeywordEnd,
-    KeywordFn,
-
-    FunctionName { name: String },
-
-    BranchStart,
-    BranchBodyStart,
-
-    Identifier { name: String },
-    IntegerLiteral { value: i32 },
 }
 
 enum State {

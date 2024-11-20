@@ -1,11 +1,9 @@
 use std::collections::VecDeque;
 
 use crate::code::{
-    Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Functions, Index, NamedFunction, Pattern,
+    tokens::Token, Branch, BranchLocation, Expression, ExpressionLocation,
+    Function, FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
-
-use super::tokenize::Token;
 
 /// # Parse the provided tokens
 ///
