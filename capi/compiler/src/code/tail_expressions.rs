@@ -12,6 +12,7 @@ use super::{Expression, ExpressionLocation, Functions};
 /// called "tail call elimination", or "tail call optimization"), to reduce
 /// stack usage and prevent unlimited stack growth in the presence of recursive
 /// tail calls.
+#[derive(Debug)]
 pub struct TailExpressions {
     inner: BTreeSet<ExpressionLocation>,
 }
