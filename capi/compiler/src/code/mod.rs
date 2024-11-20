@@ -1,4 +1,3 @@
-pub mod bindings;
 pub mod syntax;
 
 mod tail_expressions;

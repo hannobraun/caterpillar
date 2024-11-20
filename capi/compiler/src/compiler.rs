@@ -4,15 +4,16 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        bindings::resolve_bindings, syntax::parse, Function, Hash,
-        OrderedFunctions, StableFunctions, TailExpressions, Tokens,
+        syntax::parse, Function, Hash, OrderedFunctions, StableFunctions,
+        TailExpressions, Tokens,
     },
     host::Host,
     passes::{
         detect_changes, find_divergent_functions, generate_instructions,
-        order_functions_by_dependencies, resolve_most_identifiers,
-        resolve_non_recursive_functions, resolve_recursive_calls,
-        resolve_recursive_local_functions, sort_non_divergent_branches,
+        order_functions_by_dependencies, resolve_bindings,
+        resolve_most_identifiers, resolve_non_recursive_functions,
+        resolve_recursive_calls, resolve_recursive_local_functions,
+        sort_non_divergent_branches,
     },
     source_map::SourceMap,
     Instructions,
