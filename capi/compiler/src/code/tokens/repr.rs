@@ -4,7 +4,7 @@ use super::tokenize::tokenize;
 
 /// # The tokens in a script
 pub struct Tokens {
-    pub inner: VecDeque<Token>,
+    inner: VecDeque<Token>,
 }
 
 impl Tokens {
