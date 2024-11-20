@@ -41,8 +41,11 @@ impl Compiler {
         let mut ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);
         resolve_recursive_local_functions(&mut functions, &ordered_functions);
-        let functions =
-            resolve_non_recursive_functions(functions, &ordered_functions);
+        let functions = resolve_non_recursive_functions(
+            functions,
+            &ordered_functions,
+            &tail_expressions,
+        );
         find_divergent_functions(&functions, &mut ordered_functions);
         sort_non_divergent_branches(&functions, &mut ordered_functions);
         let types = infer_types(&functions, &ordered_functions, host);

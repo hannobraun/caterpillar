@@ -2,12 +2,13 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     Expression, ExpressionLocation, Function, FunctionLocation, Functions,
-    Hash, Located, OrderedFunctions, StableFunctions,
+    Hash, Located, OrderedFunctions, StableFunctions, TailExpressions,
 };
 
 pub fn resolve_non_recursive_functions(
     mut functions: Functions,
     call_graph: &OrderedFunctions,
+    tail_expressions: &TailExpressions,
 ) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
     let mut resolved_hashes_by_location = BTreeMap::new();
@@ -19,6 +20,7 @@ pub fn resolve_non_recursive_functions(
 
         if let Err(err) = resolve_calls_in_function(
             function,
+            tail_expressions,
             &resolved_hashes_by_name,
             &resolved_hashes_by_location,
         ) {
@@ -54,6 +56,7 @@ pub fn resolve_non_recursive_functions(
 
 fn resolve_calls_in_function(
     function: Located<&mut Function>,
+    tail_expressions: &TailExpressions,
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
@@ -65,6 +68,7 @@ fn resolve_calls_in_function(
         for expression in body {
             resolve_calls_in_expression(
                 expression,
+                tail_expressions,
                 resolved_hashes_by_name,
                 resolved_hashes_by_location,
             )?;
@@ -76,19 +80,19 @@ fn resolve_calls_in_function(
 
 fn resolve_calls_in_expression(
     expression: Located<&mut Expression>,
+    tail_expressions: &TailExpressions,
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
     match expression.fragment {
         Expression::UnresolvedIdentifier {
             name,
-            is_known_to_be_in_tail_position,
+            is_known_to_be_in_tail_position: _,
             is_known_to_be_call_to_user_defined_function,
         } => {
             if *is_known_to_be_call_to_user_defined_function {
-                // By the time we make it to this compiler pass, all expressions
-                // that are in tail position should be known to be so.
-                let is_tail_call = *is_known_to_be_in_tail_position;
+                let is_tail_call =
+                    tail_expressions.is_tail_expression(&expression.location);
 
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
