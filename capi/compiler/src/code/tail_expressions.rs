@@ -64,7 +64,7 @@ mod tests {
         // The last expression in a function should be marked as being a tail.
         // Others should not be.
 
-        let (functions, tail_expressions) = tail_expressions(
+        let (functions, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
                     \ ->
@@ -95,7 +95,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let (functions, tail_expressions) = tail_expressions(
+        let (functions, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
                     \ ->
@@ -121,7 +121,7 @@ mod tests {
         assert!(tail_expressions.is_tail_expression(&tail));
     }
 
-    pub fn tail_expressions(input: &str) -> (Functions, TailExpressions) {
+    pub fn find_tail_expressions(input: &str) -> (Functions, TailExpressions) {
         let tokens = Tokens::from_input(input);
         let functions = parse(tokens);
         let tail_expressions =
