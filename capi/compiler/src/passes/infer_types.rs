@@ -848,11 +848,8 @@ mod tests {
             &ordered_functions,
             &tail_expressions,
         );
-        let functions = resolve_non_recursive_functions(
-            functions,
-            &ordered_functions,
-            &tail_expressions,
-        );
+        let functions =
+            resolve_non_recursive_functions(functions, &ordered_functions);
         let types =
             super::infer_types(&functions, &ordered_functions, &TestHost);
 
