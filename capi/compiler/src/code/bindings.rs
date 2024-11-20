@@ -54,9 +54,9 @@ fn resolve_bindings(
 ) {
     let mut scopes = Scopes::new();
 
-    for function in functions.all_functions() {
+    for function in functions.named.iter() {
         resolve_bindings_in_function(
-            function,
+            function.into_located_function(),
             functions,
             &mut scopes,
             bindings,
