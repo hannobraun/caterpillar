@@ -80,7 +80,7 @@ fn resolve_calls_in_function(
 
 fn resolve_calls_in_expression(
     expression: Located<&mut Expression>,
-    tail_expressions: &TailExpressions,
+    _: &TailExpressions,
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
@@ -90,9 +90,6 @@ fn resolve_calls_in_expression(
             is_known_to_be_call_to_user_defined_function,
         } => {
             if *is_known_to_be_call_to_user_defined_function {
-                let is_tail_call =
-                    tail_expressions.is_tail_expression(&expression.location);
-
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
                     unreachable!(
@@ -108,10 +105,8 @@ fn resolve_calls_in_expression(
                     );
                 };
 
-                *expression.fragment = Expression::CallToUserDefinedFunction {
-                    hash,
-                    is_tail_call,
-                };
+                *expression.fragment =
+                    Expression::CallToUserDefinedFunction { hash };
             }
         }
         Expression::UnresolvedLocalFunction => {

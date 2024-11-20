@@ -227,10 +227,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::CallToUserDefinedFunction {
-            hash,
-            is_tail_call: _,
-        } => {
+        Expression::CallToUserDefinedFunction { hash } => {
             let Some(function) =
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {

@@ -75,12 +75,6 @@ pub enum Expression {
     CallToUserDefinedFunction {
         /// # The hash of the function being called
         hash: Hash<Function>,
-
-        /// # Indicate whether the call is in tail position
-        ///
-        /// This is relevant as function calls might necessitate tail call
-        /// elimination.
-        is_tail_call: bool,
     },
 
     /// # A recursive call to a user-defined function
