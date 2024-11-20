@@ -321,8 +321,8 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(source: &str) -> Vec<Branch> {
-        let tokens = tokenize(source);
+    fn resolve_identifiers(input: &str) -> Vec<Branch> {
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
