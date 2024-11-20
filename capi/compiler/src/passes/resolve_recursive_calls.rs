@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    Expression, Function, FunctionLocation, Functions, Index, OrderedFunctions,
+    Expression, Function, FunctionLocation, Functions, Index, Located,
+    OrderedFunctions,
 };
 
 pub fn resolve_recursive_calls(
@@ -34,12 +35,12 @@ pub fn resolve_recursive_calls(
             .collect::<BTreeMap<_, _>>();
 
         for function_location in cluster.functions.values() {
-            let mut function = functions
+            let function = functions
                 .by_location_mut(function_location)
                 .expect("Functions referred to from clusters must exist.");
 
             resolve_recursive_calls_in_function(
-                &mut function,
+                function,
                 &indices_in_cluster_by_function_name,
             );
         }
@@ -47,7 +48,7 @@ pub fn resolve_recursive_calls(
 }
 
 fn resolve_recursive_calls_in_function(
-    function: &mut Function,
+    mut function: Located<&mut Function>,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
         Index<FunctionLocation>,
