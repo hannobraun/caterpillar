@@ -276,7 +276,7 @@ fn compile_expression(
         }
         Expression::CallToUserDefinedFunctionRecursive {
             index,
-            is_tail_call,
+            is_tail_call: _,
         } => {
             let hash = {
                 let function_location = &cluster.functions[&index];
@@ -308,7 +308,7 @@ fn compile_expression(
                 .or_default()
                 .push(CallToFunction {
                     address,
-                    is_tail_call,
+                    is_tail_call: is_tail_expression,
                 });
 
             // For now, we're done with this call. But the function we're
