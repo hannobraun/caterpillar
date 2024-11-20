@@ -185,8 +185,8 @@ mod tests {
         };
     }
 
-    fn resolve_recursive_calls(source: &str) -> Functions {
-        let tokens = tokenize(source);
+    fn resolve_recursive_calls(input: &str) -> Functions {
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
