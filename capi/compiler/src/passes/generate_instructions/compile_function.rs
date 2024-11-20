@@ -337,13 +337,13 @@ fn compile_expression(
             Some(address)
         }
         Expression::CallToIntrinsicFunction { intrinsic } => {
-            let is_tail_call = functions_context
+            let is_tail_expression = functions_context
                 .tail_expressions
                 .is_tail_expression(&location);
 
             let address = compile_intrinsic(
                 intrinsic,
-                is_tail_call,
+                is_tail_expression,
                 functions_context.instructions,
                 &mut mapping,
             );
