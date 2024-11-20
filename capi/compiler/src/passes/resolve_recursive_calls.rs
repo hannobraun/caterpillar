@@ -51,7 +51,7 @@ pub fn resolve_recursive_calls(
 
 fn resolve_recursive_calls_in_function(
     function: Located<&mut Function>,
-    tail_expressions: &TailExpressions,
+    _: &TailExpressions,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
         Index<FunctionLocation>,
@@ -72,13 +72,9 @@ fn resolve_recursive_calls_in_function(
                 if let Some(&index) =
                     indices_in_cluster_by_function_name.get(name)
                 {
-                    let is_tail_call = tail_expressions
-                        .is_tail_expression(&expression.location);
-
                     *expression.fragment =
                         Expression::CallToUserDefinedFunctionRecursive {
                             index,
-                            is_tail_call,
                         };
                 }
             }

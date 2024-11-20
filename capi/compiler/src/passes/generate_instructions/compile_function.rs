@@ -271,10 +271,7 @@ fn compile_expression(
 
             Some(address)
         }
-        Expression::CallToUserDefinedFunctionRecursive {
-            index,
-            is_tail_call: _,
-        } => {
+        Expression::CallToUserDefinedFunctionRecursive { index } => {
             let hash = {
                 let function_location = &cluster.functions[&index];
 

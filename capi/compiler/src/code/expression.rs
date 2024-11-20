@@ -101,12 +101,6 @@ pub enum Expression {
         /// functions, the index identifies the called function within the
         /// cluster.
         index: Index<FunctionLocation>,
-
-        /// # Indicate whether the call is in tail position
-        ///
-        /// This is relevant as function calls might necessitate tail call
-        /// elimination.
-        is_tail_call: bool,
     },
 
     /// # A comment, which does not influence the execution of the code
