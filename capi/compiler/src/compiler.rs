@@ -32,12 +32,8 @@ pub struct Compiler {
 
 impl Compiler {
     /// # Compile the provided source code
-    pub fn compile(
-        &mut self,
-        source: &str,
-        host: &impl Host,
-    ) -> CompilerOutput {
-        let tokens = tokenize(source);
+    pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
