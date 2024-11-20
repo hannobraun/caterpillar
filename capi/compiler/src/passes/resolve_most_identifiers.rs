@@ -1,10 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    code::{
-        AnonymousFunctions, Branch, Expression, Function, FunctionLocation,
-        Functions, Located,
-    },
+    code::{Branch, Expression, Function, Functions, Located},
     host::Host,
     intrinsics::IntrinsicFunction,
 };
@@ -21,95 +18,51 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .map(|function| function.name.clone())
         .collect();
 
-    for function in functions.named.iter_mut() {
-        resolve_in_function(
-            function.into_located_function_mut(),
-            &mut functions.anonymous,
-            &known_named_functions,
-            host,
-        );
+    for function in functions.all_functions_mut() {
+        resolve_in_function(function, &known_named_functions, host);
     }
 }
 
 fn resolve_in_function(
     function: Located<&mut Function>,
-    anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
     let (branches, _) = function.destructure();
 
     for branch in branches {
-        resolve_in_branch(
-            branch,
-            anonymous_functions,
-            known_named_functions,
-            host,
-        );
+        resolve_in_branch(branch, known_named_functions, host);
     }
 }
 
 fn resolve_in_branch(
     branch: Located<&mut Branch>,
-    anonymous_functions: &mut AnonymousFunctions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
     let (body, _) = branch.destructure();
 
     for expression in body {
-        match expression.fragment {
-            Expression::UnresolvedIdentifier {
-                name,
-                is_known_to_be_call_to_user_defined_function,
-            } => {
-                // The way this is written, definitions can silently shadow each
-                // other in a defined order. This is undesirable.
-                //
-                // There should at least be a warning, if such shadowing
-                // shouldn't be forbidden outright.
-                if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
-                    *expression.fragment =
-                        Expression::CallToIntrinsicFunction { intrinsic };
-                } else if let Some(function) = host.function_by_name(name) {
-                    *expression.fragment = Expression::CallToHostFunction {
-                        number: function.number(),
-                    }
-                } else if known_named_functions.contains(name) {
-                    *is_known_to_be_call_to_user_defined_function = true;
+        if let Expression::UnresolvedIdentifier {
+            name,
+            is_known_to_be_call_to_user_defined_function,
+        } = expression.fragment
+        {
+            // The way this is written, definitions can silently shadow each
+            // other in a defined order. This is undesirable.
+            //
+            // There should at least be a warning, if such shadowing
+            // shouldn't be forbidden outright.
+            if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
+                *expression.fragment =
+                    Expression::CallToIntrinsicFunction { intrinsic };
+            } else if let Some(function) = host.function_by_name(name) {
+                *expression.fragment = Expression::CallToHostFunction {
+                    number: function.number(),
                 }
+            } else if known_named_functions.contains(name) {
+                *is_known_to_be_call_to_user_defined_function = true;
             }
-            Expression::UnresolvedLocalFunction => {
-                // Need to remove this and put it back below, since we need to
-                // mutably borrow in between.
-                let mut function =
-                    anonymous_functions.remove(&expression.location).expect(
-                        "The current expression is an anonymous function, or \
-                        we wouldn't be in this `match` arm. It must be tracked \
-                        in `anonymous_functions` under this location.\n\
-                        \n\
-                        Since this compiler pass is going through the code \
-                        lexically, and locations are unique, we should not \
-                        encounter this location again. Hence, that we remove \
-                        an anonymous function from `anonymous_functions` here \
-                        should have no bearing.",
-                    );
-
-                resolve_in_function(
-                    Located {
-                        fragment: &mut function,
-                        location: FunctionLocation::AnonymousFunction {
-                            location: expression.location.clone(),
-                        },
-                    },
-                    anonymous_functions,
-                    known_named_functions,
-                    host,
-                );
-
-                anonymous_functions.insert(expression.location, function);
-            }
-            _ => {}
         }
     }
 }
