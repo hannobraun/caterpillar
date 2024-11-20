@@ -65,7 +65,6 @@ fn resolve_recursive_calls_in_function(
         for expression in body {
             if let Expression::UnresolvedIdentifier {
                 name,
-                is_known_to_be_in_tail_position: _,
                 is_known_to_be_call_to_user_defined_function: true,
                 ..
             } = expression.fragment

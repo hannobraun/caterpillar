@@ -230,7 +230,6 @@ fn parse_branch_body(
                 Token::Identifier { name } => {
                     branch.body.push(Expression::UnresolvedIdentifier {
                         name,
-                        is_known_to_be_in_tail_position: false,
                         is_known_to_be_call_to_user_defined_function: false,
                     });
                 }

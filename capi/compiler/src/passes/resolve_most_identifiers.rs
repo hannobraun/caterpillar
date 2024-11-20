@@ -94,7 +94,6 @@ fn resolve_in_branch(
         match expression.fragment {
             Expression::UnresolvedIdentifier {
                 name,
-                is_known_to_be_in_tail_position: _,
                 is_known_to_be_call_to_user_defined_function,
             } => {
                 // The way this is written, definitions can silently shadow each
@@ -240,7 +239,6 @@ mod tests {
                 .map(|(_, expression)| expression),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("value"),
-                is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: false,
             })
         );
@@ -325,7 +323,6 @@ mod tests {
                 .map(|(_, expression)| expression),
             Some(&Expression::UnresolvedIdentifier {
                 name: String::from("user_fn"),
-                is_known_to_be_in_tail_position: false,
                 is_known_to_be_call_to_user_defined_function: true,
             })
         );

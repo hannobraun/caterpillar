@@ -87,7 +87,6 @@ fn resolve_calls_in_expression(
     match expression.fragment {
         Expression::UnresolvedIdentifier {
             name,
-            is_known_to_be_in_tail_position: _,
             is_known_to_be_call_to_user_defined_function,
         } => {
             if *is_known_to_be_call_to_user_defined_function {
