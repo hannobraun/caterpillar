@@ -1,5 +1,5 @@
 use std::{
-    collections::{BTreeMap, BTreeSet},
+    collections::BTreeMap,
     ops::{Deref, DerefMut},
 };
 
@@ -432,12 +432,6 @@ pub struct Function {
     /// called, its arguments are matched against the parameters of each branch,
     /// until one branch matches. This branch is then evaluated.
     pub branches: IndexMap<Branch>,
-
-    /// # Values captured by the function from a parent scope
-    ///
-    /// All functions in Caterpillar are closures that can use values from
-    /// parent scopes. The names of those values are stored here.
-    pub environment: BTreeSet<String>,
 }
 
 #[derive(
