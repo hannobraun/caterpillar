@@ -12,7 +12,7 @@ use crate::{
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
 pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
-    let known_named_functions = functions
+    let known_named_functions: BTreeSet<_> = functions
         .named
         .iter()
         .map(|function| function.name.clone())
