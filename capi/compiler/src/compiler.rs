@@ -5,7 +5,7 @@ use capi_runtime::InstructionAddress;
 use crate::{
     code::{
         syntax::parse, tokens::Tokens, Function, Hash, OrderedFunctions,
-        StableFunctions, TailExpressions, Types,
+        StableFunctions, TailExpressions,
     },
     host::Host,
     passes::{
@@ -43,7 +43,7 @@ impl Compiler {
             resolve_non_recursive_functions(functions, &ordered_functions);
         find_divergent_functions(&functions, &mut ordered_functions);
         sort_non_divergent_branches(&functions, &mut ordered_functions);
-        let types = infer_types(&functions, &ordered_functions, host);
+        let _ = infer_types(&functions, &ordered_functions, host);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());
@@ -62,7 +62,6 @@ impl Compiler {
         CompilerOutput {
             functions,
             ordered_functions,
-            types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
         }
@@ -78,7 +77,6 @@ pub struct CallInstructionsByCallee {
 pub struct CompilerOutput {
     pub functions: StableFunctions,
     pub ordered_functions: OrderedFunctions,
-    pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,
 }
