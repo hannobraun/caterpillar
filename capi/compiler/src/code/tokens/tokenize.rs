@@ -2,7 +2,7 @@ use std::mem;
 
 use crate::code::tokens::Token;
 
-pub fn tokenize(source: &str) -> Vec<Token> {
+pub fn tokenize(input: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r",", Token::Delimiter),
         (r"\", Token::BranchStart),
@@ -14,7 +14,7 @@ pub fn tokenize(source: &str) -> Vec<Token> {
 
     let mut tokens = Vec::new();
 
-    for ch in source.chars() {
+    for ch in input.chars() {
         match state {
             State::Initial => match ch {
                 '#' => {
