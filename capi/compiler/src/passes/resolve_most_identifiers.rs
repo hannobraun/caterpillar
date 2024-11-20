@@ -322,7 +322,7 @@ mod tests {
     fn resolve_identifiers(input: &str) -> Vec<Branch> {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        super::resolve_most_identifiers(&mut functions, &TestHost {});
+        super::resolve_most_identifiers(&mut functions, &TestHost);
 
         functions
             .named
@@ -331,7 +331,7 @@ mod tests {
             .collect()
     }
 
-    struct TestHost {}
+    struct TestHost;
 
     impl Host for TestHost {
         fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
