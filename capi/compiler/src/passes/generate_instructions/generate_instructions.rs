@@ -18,7 +18,7 @@ use super::{
 
 pub fn generate_instructions(
     functions: &StableFunctions,
-    call_graph: &OrderedFunctions,
+    ordered_functions: &OrderedFunctions,
     changes: &Changes,
     instructions: &mut Instructions,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
@@ -44,7 +44,7 @@ pub fn generate_instructions(
     compile_functions(
         functions,
         changes,
-        call_graph,
+        ordered_functions,
         instructions,
         source_map,
         call_instructions_by_callee,
