@@ -124,8 +124,8 @@ mod tests {
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
-    pub fn determine_tail_positions(source: &str) -> Functions {
-        let tokens = tokenize(source);
+    pub fn determine_tail_positions(input: &str) -> Functions {
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
