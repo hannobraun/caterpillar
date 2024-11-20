@@ -71,7 +71,7 @@ fn resolve_bindings_in_function(
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
-) {
+) -> Environment {
     let location = function.location.clone();
     let mut environment = Environment::new();
 
@@ -86,11 +86,13 @@ fn resolve_bindings_in_function(
         );
     }
 
-    let overwritten_value = environments.insert(location, environment);
+    let overwritten_value = environments.insert(location, environment.clone());
     assert!(
         overwritten_value.is_none(),
         "Every function should be processed only once."
     );
+
+    environment
 }
 
 fn resolve_bindings_in_branch(
