@@ -4,8 +4,8 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, tokens::Tokens, Function, Hash, OrderedFunctions,
-        StableFunctions, TailExpressions,
+        syntax::parse, Function, Hash, OrderedFunctions, StableFunctions,
+        TailExpressions, Tokens,
     },
     host::Host,
     passes::{

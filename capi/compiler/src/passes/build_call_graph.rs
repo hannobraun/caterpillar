@@ -107,8 +107,7 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::parse, tokens::Tokens, Cluster, Functions, Index,
-            OrderedFunctions,
+            syntax::parse, Cluster, Functions, Index, OrderedFunctions, Tokens,
         },
         host::NoHost,
         passes::resolve_most_identifiers,

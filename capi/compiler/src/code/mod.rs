@@ -24,5 +24,6 @@ pub use self::{
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
     ordered_functions::{Cluster, OrderedFunctions},
     tail_expressions::TailExpressions,
+    tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type, Types},
 };
