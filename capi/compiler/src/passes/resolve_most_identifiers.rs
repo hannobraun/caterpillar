@@ -131,14 +131,8 @@ fn resolve_in_branch(
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {
-                    let is_tail_call = tail_expressions
-                        .is_tail_expression(&expression.location);
-
                     *expression.fragment =
-                        Expression::CallToIntrinsicFunction {
-                            intrinsic,
-                            is_tail_call,
-                        };
+                        Expression::CallToIntrinsicFunction { intrinsic };
                 } else if let Some(function) = host.function_by_name(name) {
                     *expression.fragment = Expression::CallToHostFunction {
                         number: function.number(),
@@ -292,7 +286,6 @@ mod tests {
                 .map(|(_, expression)| expression),
             Some(&Expression::CallToIntrinsicFunction {
                 intrinsic: IntrinsicFunction::Eval,
-                is_tail_call: true
             })
         );
     }

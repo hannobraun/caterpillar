@@ -69,12 +69,6 @@ pub enum Expression {
     CallToIntrinsicFunction {
         /// # The intrinsic function being called
         intrinsic: IntrinsicFunction,
-
-        /// # Indicate whether the call is in tail position
-        ///
-        /// This is relevant, as intrinsics can trigger calls to user-defined
-        /// functions, which might necessitate tail call elimination.
-        is_tail_call: bool,
     },
 
     /// # A call to a user-defined function

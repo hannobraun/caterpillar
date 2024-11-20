@@ -336,10 +336,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::CallToIntrinsicFunction {
-            intrinsic,
-            is_tail_call: _,
-        } => {
+        Expression::CallToIntrinsicFunction { intrinsic } => {
             let is_tail_call = functions_context
                 .tail_expressions
                 .is_tail_expression(&location);
