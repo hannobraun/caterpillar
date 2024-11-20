@@ -80,7 +80,7 @@ fn resolve_in_branch(
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
-    let (body, parameters) = branch.destructure();
+    let (body, _) = branch.destructure();
 
     for expression in body {
         match expression.fragment {
@@ -100,26 +100,8 @@ fn resolve_in_branch(
                         }
                     }
 
-                    let mut index = 0;
-                    for parameter in &*parameters {
-                        match parameter {
-                            Pattern::Identifier { name: n } => {
-                                if n == name {
-                                    break;
-                                }
-                            }
-                            Pattern::Literal { .. } => {
-                                continue;
-                            }
-                        }
-
-                        index += 1;
-                    }
-
-                    *expression.fragment = Expression::Binding {
-                        name: name.clone(),
-                        index,
-                    }
+                    *expression.fragment =
+                        Expression::Binding { name: name.clone() }
                 } else if let Some(intrinsic) =
                     IntrinsicFunction::from_name(name)
                 {

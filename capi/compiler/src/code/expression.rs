@@ -32,20 +32,6 @@ pub enum Expression {
     Binding {
         /// # The name of the binding
         name: String,
-
-        /// # The index of the binding
-        ///
-        /// The index is derived from the index of the binding in the parameter
-        /// list of its branch. Only identifiers are counted.
-        ///
-        /// The index determines the position within the local stack frame,
-        /// where the binding is stored.
-        ///
-        /// ## Implementation Note
-        ///
-        /// As of this writing, bindings are not actually stored like described
-        /// here. This is a work in progress.
-        index: u32,
     },
 
     /// # A call to a function defined by the host
