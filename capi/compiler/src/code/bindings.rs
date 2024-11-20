@@ -72,15 +72,25 @@ fn resolve_bindings_in_function(
     bindings: &mut BTreeSet<ExpressionLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
+    let location = function.location.clone();
+    let mut environment = Environment::new();
+
     for branch in function.branches() {
         resolve_bindings_in_branch(
             branch,
             functions,
             scopes,
             bindings,
+            &mut environment,
             environments,
         );
     }
+
+    let overwritten_value = environments.insert(location, environment);
+    assert!(
+        overwritten_value.is_none(),
+        "Every function should be processed only once."
+    );
 }
 
 fn resolve_bindings_in_branch(
@@ -88,6 +98,7 @@ fn resolve_bindings_in_branch(
     functions: &Functions,
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
+    environment: &mut Environment,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     scopes.push(
@@ -121,12 +132,7 @@ fn resolve_bindings_in_branch(
                         if !scope.contains(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-
-                            let function = *branch.location.parent.clone();
-                            environments
-                                .entry(function)
-                                .or_default()
-                                .insert(name.clone());
+                            environment.insert(name.clone());
                         }
                     }
                 }
