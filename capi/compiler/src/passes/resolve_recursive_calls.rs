@@ -54,7 +54,7 @@ fn resolve_recursive_calls_in_function(
         Index<FunctionLocation>,
     >,
 ) {
-    let (branches, _) = function.destructure();
+    let branches = function.destructure();
 
     for branch in branches {
         let (body, _) = branch.destructure();

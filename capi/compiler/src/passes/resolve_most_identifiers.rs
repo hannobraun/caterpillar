@@ -19,7 +19,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         .collect();
 
     for function in functions.all_functions_mut() {
-        let (branches, _) = function.destructure();
+        let branches = function.destructure();
 
         for branch in branches {
             let (body, _) = branch.destructure();

@@ -57,7 +57,7 @@ fn resolve_calls_in_function(
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
-    let (branches, _) = function.destructure();
+    let branches = function.destructure();
 
     for branch in branches {
         let (body, _) = branch.destructure();

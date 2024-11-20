@@ -10,7 +10,7 @@ pub fn resolve_recursive_local_functions(
                 .by_location_mut(location)
                 .expect("Function referred to from cluster must exist.");
 
-            let (branches, _) = function.destructure();
+            let branches = function.destructure();
 
             for branch in branches {
                 let (body, _) = branch.destructure();

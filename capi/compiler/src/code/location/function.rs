@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, fmt};
+use std::fmt;
 
 use crate::code::{Branch, Function, Functions, Index, NamedFunction};
 
@@ -57,9 +57,7 @@ impl<'r> Located<&'r mut Function> {
     ///
     /// Unfortunately, following the pattern set by the `Located<&Function>` API
     /// doesn't work here, due to lifetime issues.
-    pub fn destructure(
-        self,
-    ) -> (Vec<Located<&'r mut Branch>>, &'r mut BTreeSet<String>) {
+    pub fn destructure(self) -> Vec<Located<&'r mut Branch>> {
         let branches = self
             .fragment
             .branches
@@ -72,9 +70,8 @@ impl<'r> Located<&'r mut Function> {
                 },
             })
             .collect();
-        let environment = &mut self.fragment.environment;
 
-        (branches, environment)
+        branches
     }
 }
 
