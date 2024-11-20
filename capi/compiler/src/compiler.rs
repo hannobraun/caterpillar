@@ -10,10 +10,9 @@ use crate::{
     host::Host,
     passes::{
         detect_changes, find_divergent_functions, generate_instructions,
-        infer_types, mark_tail_positions, order_functions_by_dependencies,
-        resolve_most_identifiers, resolve_non_recursive_functions,
-        resolve_recursive_calls, resolve_recursive_local_functions,
-        sort_non_divergent_branches,
+        infer_types, order_functions_by_dependencies, resolve_most_identifiers,
+        resolve_non_recursive_functions, resolve_recursive_calls,
+        resolve_recursive_local_functions, sort_non_divergent_branches,
     },
     source_map::SourceMap,
     Instructions,
@@ -36,7 +35,6 @@ impl Compiler {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let tail_expressions = TailExpressions::from_functions(&functions);
-        mark_tail_positions(&mut functions);
         resolve_most_identifiers(&mut functions, &tail_expressions, host);
         let mut ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);
