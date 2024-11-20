@@ -841,7 +841,7 @@ mod tests {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let tail_expressions = TailExpressions::from_functions(&functions);
-        resolve_most_identifiers(&mut functions, &tail_expressions, &TestHost);
+        resolve_most_identifiers(&mut functions, &TestHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(
             &mut functions,
