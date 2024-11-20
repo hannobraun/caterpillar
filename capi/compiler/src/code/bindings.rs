@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
     Branch, Expression, ExpressionLocation, Function, FunctionLocation,
@@ -12,25 +12,45 @@ use super::{
 #[derive(Debug)]
 pub struct Bindings {
     bindings: BTreeSet<ExpressionLocation>,
+    environments: BTreeMap<FunctionLocation, Environment>,
 }
 
 impl Bindings {
     /// # Resolve all bindings
     pub fn resolve_bindings(functions: &Functions) -> Self {
         let mut bindings = BTreeSet::new();
-        resolve_bindings(functions, &mut bindings);
-        Self { bindings }
+        let mut environments = BTreeMap::new();
+
+        resolve_bindings(functions, &mut bindings, &mut environments);
+
+        Self {
+            bindings,
+            environments,
+        }
     }
 
     /// # Determine, if the expression at the given location is a binding
     pub fn is_binding(&self, location: &ExpressionLocation) -> bool {
         self.bindings.contains(location)
     }
+
+    /// # Access the environment of the function at the provided location
+    pub fn environment_of(&self, location: &FunctionLocation) -> &Environment {
+        static EMPTY: Environment = Environment::new();
+        self.environments.get(location).unwrap_or(&EMPTY)
+    }
 }
+
+/// # The environment of a function
+///
+/// The environment of a function is the set of bindings it accesses, that are
+/// not its own parameters.
+pub type Environment = BTreeSet<String>;
 
 fn resolve_bindings(
     functions: &Functions,
     bindings: &mut BTreeSet<ExpressionLocation>,
+    environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     let mut scopes = Scopes::new();
 
@@ -40,6 +60,7 @@ fn resolve_bindings(
             functions,
             &mut scopes,
             bindings,
+            environments,
         );
     }
 }
@@ -49,9 +70,16 @@ fn resolve_bindings_in_function(
     functions: &Functions,
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
+    environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     for branch in function.branches() {
-        resolve_bindings_in_branch(branch, functions, scopes, bindings);
+        resolve_bindings_in_branch(
+            branch,
+            functions,
+            scopes,
+            bindings,
+            environments,
+        );
     }
 }
 
@@ -60,6 +88,7 @@ fn resolve_bindings_in_branch(
     functions: &Functions,
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
+    environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     scopes.push(
         branch
@@ -87,6 +116,19 @@ fn resolve_bindings_in_branch(
 
                 if is_known_binding {
                     bindings.insert(expression.location);
+
+                    if let Some(scope) = scopes.last() {
+                        if !scope.contains(name) {
+                            // The binding is not known in the current scope,
+                            // which means it comes from a parent scope.
+
+                            let function = *branch.location.parent.clone();
+                            environments
+                                .entry(function)
+                                .or_default()
+                                .insert(name.clone());
+                        }
+                    }
                 }
             }
             Expression::UnresolvedLocalFunction => {
@@ -96,7 +138,11 @@ fn resolve_bindings_in_branch(
                     .expect("Function referred to from branch must exist.");
 
                 resolve_bindings_in_function(
-                    function, functions, scopes, bindings,
+                    function,
+                    functions,
+                    scopes,
+                    bindings,
+                    environments,
                 );
             }
             _ => {}
@@ -199,6 +245,10 @@ mod tests {
 
         assert!(bindings.is_binding(&parameter));
         assert!(!bindings.is_binding(&no_parameter));
+
+        assert!(bindings
+            .environment_of(&function.location)
+            .contains("parameter"));
     }
 
     #[test]
