@@ -12,7 +12,9 @@ impl HasLocation for Branch {
 
 impl Located<&Branch> {
     /// # Iterate over the expressions in the branch's body
-    pub fn body(&self) -> impl Iterator<Item = Located<&Expression>> {
+    pub fn body(
+        &self,
+    ) -> impl DoubleEndedIterator<Item = Located<&Expression>> {
         let location = self.location.clone();
 
         self.body.iter().map(move |(&index, expression)| Located {
