@@ -62,13 +62,14 @@ fn resolve_recursive_calls_in_function(
                 ..
             } = expression
             {
-                // By the time we make it to this compiler pass, all expressions
-                // that are in tail position should be known to be so.
-                let is_in_tail_position = *is_known_to_be_in_tail_position;
-
                 if let Some(&index) =
                     indices_in_cluster_by_function_name.get(name)
                 {
+                    // By the time we make it to this compiler pass, all
+                    // expressions that are in tail position should be known to
+                    // be so.
+                    let is_in_tail_position = *is_known_to_be_in_tail_position;
+
                     *expression =
                         Expression::CallToUserDefinedFunctionRecursive {
                             index,
