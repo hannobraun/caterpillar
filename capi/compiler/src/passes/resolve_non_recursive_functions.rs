@@ -19,8 +19,8 @@ pub fn resolve_non_recursive_functions(
 
         if let Err(err) = resolve_calls_in_function(
             function,
-            &mut resolved_hashes_by_name,
-            &mut resolved_hashes_by_location,
+            &resolved_hashes_by_name,
+            &resolved_hashes_by_location,
         ) {
             unreachable!("Unexpected error: {err:?}");
         }
@@ -54,11 +54,8 @@ pub fn resolve_non_recursive_functions(
 
 fn resolve_calls_in_function(
     function: Located<&mut Function>,
-    resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
-    resolved_hashes_by_location: &mut BTreeMap<
-        ExpressionLocation,
-        Hash<Function>,
-    >,
+    resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
+    resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
     let (branches, _) = function.destructure();
 
@@ -79,11 +76,8 @@ fn resolve_calls_in_function(
 
 fn resolve_calls_in_expression(
     expression: Located<&mut Expression>,
-    resolved_hashes_by_name: &mut BTreeMap<String, Hash<Function>>,
-    resolved_hashes_by_location: &mut BTreeMap<
-        ExpressionLocation,
-        Hash<Function>,
-    >,
+    resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
+    resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
     match expression.fragment {
         Expression::UnresolvedIdentifier {
