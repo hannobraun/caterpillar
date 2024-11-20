@@ -35,8 +35,7 @@ impl Compiler {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let bindings = Bindings::resolve(&functions);
-        let tail_expressions =
-            TailExpressions::find_tail_expressions(&functions);
+        let tail_expressions = TailExpressions::find(&functions);
         resolve_most_identifiers(&mut functions, host);
         let mut ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);
