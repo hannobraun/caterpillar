@@ -22,6 +22,7 @@ impl Bindings {
         Self { bindings }
     }
 
+    /// # Determine, if the expression at the given location is a binding
     pub fn is_binding(&self, location: &ExpressionLocation) -> bool {
         self.bindings.contains(location)
     }
