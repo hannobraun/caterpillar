@@ -18,6 +18,7 @@ pub struct TailExpressions {
 }
 
 impl TailExpressions {
+    /// # Find all tail expressions
     pub fn from_functions(functions: &Functions) -> Self {
         let mut tail_expressions = BTreeSet::new();
 
@@ -44,6 +45,7 @@ impl TailExpressions {
         }
     }
 
+    /// # Determine if the expression at the provided location is a tail
     pub fn is_tail_expression(&self, location: &ExpressionLocation) -> bool {
         self.inner.contains(location)
     }
