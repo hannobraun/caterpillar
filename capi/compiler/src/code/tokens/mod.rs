@@ -1,4 +1,4 @@
-//! # A basic code representation, mirroring the raw input text
+//! # A basic code representation, mirroring the raw input
 //!
 //! Tokens almost fully mirror the raw text that the developer inputs, only
 //! ignoring whitespace. They are the first semi-structured code representation
