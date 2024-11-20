@@ -219,14 +219,6 @@ fn compile_expression(
         .map_expression_to_instructions(location.clone());
 
     match expression {
-        Expression::Binding { name, .. } => {
-            let address = generate_instruction(
-                Instruction::BindingEvaluate { name: name.clone() },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
-        }
         Expression::CallToUserDefinedFunction { hash } => {
             let Some(function) =
                 functions_context.compiled_functions_by_hash.get(&hash)

@@ -114,7 +114,6 @@ impl DebugExpressionState {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugExpressionKind {
-    Binding { name: String },
     CallToFunction { name: String },
     CallToFunctionRecursive { name: String },
     CallToHostFunction { name: String },
@@ -140,7 +139,6 @@ impl DebugExpressionKind {
         effect: Option<&Effect>,
     ) -> Self {
         match expression {
-            Expression::Binding { name, .. } => Self::Binding { name },
             Expression::CallToUserDefinedFunction { hash, .. } => {
                 let function = functions
                     .named_by_hash(&hash)

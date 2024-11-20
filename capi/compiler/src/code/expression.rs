@@ -28,12 +28,6 @@ use super::{Function, FunctionLocation, Hash, Index};
     udigest::Digestable,
 )]
 pub enum Expression {
-    /// # A reference to a local binding
-    Binding {
-        /// # The name of the binding
-        name: String,
-    },
-
     /// # A call to a function defined by the host
     ///
     /// Host functions present as functions to the user. But contrary to regular
