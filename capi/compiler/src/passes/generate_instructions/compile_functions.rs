@@ -4,7 +4,7 @@ use capi_runtime::Instruction;
 
 use crate::{
     code::{
-        Changes, Function, Hash, OrderedFunctions, StableFunctions,
+        Bindings, Changes, Function, Hash, OrderedFunctions, StableFunctions,
         TailExpressions,
     },
     compiler::CallInstructionsByCallee,
@@ -16,6 +16,7 @@ use super::compile_cluster::compile_cluster;
 
 pub struct FunctionsContext<'r> {
     pub functions: &'r StableFunctions,
+    pub bindings: &'r Bindings,
     pub tail_expressions: &'r TailExpressions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
@@ -29,6 +30,7 @@ pub fn compile_functions(
     functions: &StableFunctions,
     changes: &Changes,
     ordered_functions: &OrderedFunctions,
+    bindings: &Bindings,
     tail_expressions: &TailExpressions,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
@@ -40,6 +42,7 @@ pub fn compile_functions(
 ) {
     let mut context = FunctionsContext {
         functions,
+        bindings,
         tail_expressions,
         instructions,
         source_map,

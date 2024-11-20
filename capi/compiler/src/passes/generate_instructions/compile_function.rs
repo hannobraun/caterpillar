@@ -390,15 +390,24 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedIdentifier { .. } => {
-            let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::BuildError,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
+        Expression::UnresolvedIdentifier { name, .. } => {
+            if functions_context.bindings.is_binding(&location) {
+                let address = generate_instruction(
+                    Instruction::BindingEvaluate { name: name.clone() },
+                    functions_context.instructions,
+                    Some(&mut mapping),
+                );
+                Some(address)
+            } else {
+                let address = generate_instruction(
+                    Instruction::TriggerEffect {
+                        effect: Effect::BuildError,
+                    },
+                    functions_context.instructions,
+                    Some(&mut mapping),
+                );
+                Some(address)
+            }
         }
         Expression::UnresolvedLocalFunction => {
             let address = generate_instruction(

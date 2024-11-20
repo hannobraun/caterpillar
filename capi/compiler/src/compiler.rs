@@ -36,7 +36,6 @@ impl Compiler {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let bindings = Bindings::resolve_bindings(&functions);
-        dbg!(bindings);
         let tail_expressions =
             TailExpressions::find_tail_expressions(&functions);
         resolve_bindings(&mut functions);
@@ -55,6 +54,7 @@ impl Compiler {
         generate_instructions(
             &functions,
             &ordered_functions,
+            &bindings,
             &tail_expressions,
             &changes,
             &mut self.instructions,
