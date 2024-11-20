@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    code::{Branch, Expression, Functions, Located},
+    code::{Expression, Functions},
     host::Host,
     intrinsics::IntrinsicFunction,
 };
@@ -22,38 +22,31 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
         let (branches, _) = function.destructure();
 
         for branch in branches {
-            resolve_in_branch(branch, &known_named_functions, host);
-        }
-    }
-}
+            let (body, _) = branch.destructure();
 
-fn resolve_in_branch(
-    branch: Located<&mut Branch>,
-    known_named_functions: &BTreeSet<String>,
-    host: &impl Host,
-) {
-    let (body, _) = branch.destructure();
-
-    for expression in body {
-        if let Expression::UnresolvedIdentifier {
-            name,
-            is_known_to_be_call_to_user_defined_function,
-        } = expression.fragment
-        {
-            // The way this is written, definitions can silently shadow each
-            // other in a defined order. This is undesirable.
-            //
-            // There should at least be a warning, if such shadowing
-            // shouldn't be forbidden outright.
-            if let Some(intrinsic) = IntrinsicFunction::from_name(name) {
-                *expression.fragment =
-                    Expression::CallToIntrinsicFunction { intrinsic };
-            } else if let Some(function) = host.function_by_name(name) {
-                *expression.fragment = Expression::CallToHostFunction {
-                    number: function.number(),
+            for expression in body {
+                if let Expression::UnresolvedIdentifier {
+                    name,
+                    is_known_to_be_call_to_user_defined_function,
+                } = expression.fragment
+                {
+                    // The way this is written, definitions can silently shadow
+                    // each other in a defined order. This is undesirable.
+                    //
+                    // There should at least be a warning, if such shadowing
+                    // shouldn't be forbidden outright.
+                    if let Some(intrinsic) = IntrinsicFunction::from_name(name)
+                    {
+                        *expression.fragment =
+                            Expression::CallToIntrinsicFunction { intrinsic };
+                    } else if let Some(function) = host.function_by_name(name) {
+                        *expression.fragment = Expression::CallToHostFunction {
+                            number: function.number(),
+                        }
+                    } else if known_named_functions.contains(name) {
+                        *is_known_to_be_call_to_user_defined_function = true;
+                    }
                 }
-            } else if known_named_functions.contains(name) {
-                *is_known_to_be_call_to_user_defined_function = true;
             }
         }
     }
