@@ -3,7 +3,10 @@ use std::collections::BTreeMap;
 use capi_runtime::Instruction;
 
 use crate::{
-    code::{Changes, Function, Hash, OrderedFunctions, StableFunctions},
+    code::{
+        Changes, Function, Hash, OrderedFunctions, StableFunctions,
+        TailExpressions,
+    },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
     Instructions,
@@ -13,6 +16,7 @@ use super::compile_cluster::compile_cluster;
 
 pub struct FunctionsContext<'r> {
     pub functions: &'r StableFunctions,
+    pub tail_expressions: &'r TailExpressions,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
@@ -20,10 +24,12 @@ pub struct FunctionsContext<'r> {
         &'r mut BTreeMap<Hash<Function>, capi_runtime::Function>,
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn compile_functions(
     functions: &StableFunctions,
     changes: &Changes,
     ordered_functions: &OrderedFunctions,
+    tail_expressions: &TailExpressions,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
@@ -34,6 +40,7 @@ pub fn compile_functions(
 ) {
     let mut context = FunctionsContext {
         functions,
+        tail_expressions,
         instructions,
         source_map,
         call_instructions_by_callee,

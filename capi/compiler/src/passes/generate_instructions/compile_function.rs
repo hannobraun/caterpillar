@@ -338,8 +338,12 @@ fn compile_expression(
         }
         Expression::CallToIntrinsicFunction {
             intrinsic,
-            is_tail_call,
+            is_tail_call: _,
         } => {
+            let is_tail_call = functions_context
+                .tail_expressions
+                .is_tail_expression(&location);
+
             let address = compile_intrinsic(
                 intrinsic,
                 is_tail_call,

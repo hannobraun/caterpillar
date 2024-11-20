@@ -58,6 +58,7 @@ impl Compiler {
         generate_instructions(
             &functions,
             &ordered_functions,
+            &tail_expressions,
             &changes,
             &mut self.instructions,
             &mut self.call_instructions_by_callee,
