@@ -55,7 +55,7 @@ fn resolve_bindings_in_function(
 fn resolve_bindings_in_branch(
     branch: Located<&mut Branch>,
     scopes: &mut Scopes,
-    environment: &mut Environment,
+    environment: &mut BTreeSet<String>,
     anonymous_functions: &mut AnonymousFunctions,
 ) {
     let (body, _) = branch.destructure();
@@ -132,7 +132,6 @@ fn resolve_bindings_in_branch(
 
 type Scopes = Vec<Bindings>;
 type Bindings = BTreeSet<String>;
-type Environment = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
