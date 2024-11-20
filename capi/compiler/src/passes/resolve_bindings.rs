@@ -72,9 +72,6 @@ fn resolve_bindings_in_branch(
                             environment.insert(name.clone());
                         }
                     }
-
-                    *expression.fragment =
-                        Expression::Binding { name: name.clone() }
                 }
             }
             Expression::UnresolvedLocalFunction => {
