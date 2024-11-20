@@ -48,13 +48,15 @@ pub fn resolve_recursive_calls(
 }
 
 fn resolve_recursive_calls_in_function(
-    mut function: Located<&mut Function>,
+    function: Located<&mut Function>,
     indices_in_cluster_by_function_name: &BTreeMap<
         String,
         Index<FunctionLocation>,
     >,
 ) {
-    for branch in function.branches.values_mut() {
+    let (branches, _) = function.destructure();
+
+    for mut branch in branches {
         for expression in branch.body.values_mut() {
             if let Expression::UnresolvedIdentifier {
                 name,
