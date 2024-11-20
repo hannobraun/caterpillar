@@ -837,8 +837,8 @@ mod tests {
         }
     }
 
-    fn infer_types(source: &str) -> (StableFunctions, Types) {
-        let tokens = tokenize(source);
+    fn infer_types(input: &str) -> (StableFunctions, Types) {
+        let tokens = tokenize(input);
         let tokens = Tokens {
             inner: tokens.into(),
         };
