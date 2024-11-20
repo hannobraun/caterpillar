@@ -3,6 +3,8 @@ use std::collections::VecDeque;
 use super::tokenize::tokenize;
 
 /// # The tokens in a script
+///
+/// See [parent module](super).
 pub struct Tokens {
     inner: VecDeque<Token>,
 }
