@@ -66,11 +66,6 @@ fn resolve_bindings_in_branch(
                 name,
                 is_known_to_be_call_to_user_defined_function: _,
             } => {
-                // The way this is written, definitions can silently shadow each
-                // other in a defined order. This is undesirable.
-                //
-                // There should at least be a warning, if such shadowing
-                // shouldn't be forbidden outright.
                 if scopes.iter().any(|bindings| bindings.contains(name)) {
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains(name) {
