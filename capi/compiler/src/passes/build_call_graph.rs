@@ -108,7 +108,7 @@ mod tests {
     use crate::{
         code::{
             syntax::parse, tokens::Tokens, Cluster, Functions, Index,
-            OrderedFunctions,
+            OrderedFunctions, TailExpressions,
         },
         host::NoHost,
         passes::resolve_most_identifiers,
@@ -351,7 +351,8 @@ mod tests {
     ) -> (Functions, OrderedFunctions) {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        resolve_most_identifiers(&mut functions, &NoHost);
+        let tail_expressions = TailExpressions::from_functions(&functions);
+        resolve_most_identifiers(&mut functions, &tail_expressions, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions);
         (functions, ordered_functions)

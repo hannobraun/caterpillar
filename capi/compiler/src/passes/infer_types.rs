@@ -510,7 +510,7 @@ mod tests {
     use crate::{
         code::{
             syntax::parse, tokens::Tokens, ConcreteSignature, Functions,
-            StableFunctions, Type, Types,
+            StableFunctions, TailExpressions, Type, Types,
         },
         host::{Host, HostFunction},
         passes::{
@@ -840,7 +840,8 @@ mod tests {
     fn infer_types(input: &str) -> (StableFunctions, Types) {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        resolve_most_identifiers(&mut functions, &TestHost);
+        let tail_expressions = TailExpressions::from_functions(&functions);
+        resolve_most_identifiers(&mut functions, &tail_expressions, &TestHost);
         let ordered_functions = order_functions_by_dependencies(&functions);
         resolve_recursive_calls(&mut functions, &ordered_functions);
         let functions =

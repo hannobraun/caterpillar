@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use crate::{
     code::{
         AnonymousFunctions, Branch, Expression, Function, FunctionLocation,
-        Functions, Located, Pattern,
+        Functions, Located, Pattern, TailExpressions,
     },
     host::Host,
     intrinsics::IntrinsicFunction,
@@ -14,7 +14,11 @@ use crate::{
 /// Identifiers referring to user-defined functions are identified as such, but
 /// can not be resolved without a call graph. But by identifying them as such,
 /// this compiler pass creates the prerequisite for creating a call graph.
-pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
+pub fn resolve_most_identifiers(
+    functions: &mut Functions,
+    tail_expressions: &TailExpressions,
+    host: &impl Host,
+) {
     let mut scopes = Scopes::new();
     let known_named_functions = functions
         .named
@@ -27,6 +31,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
             function.into_located_function_mut(),
             &mut scopes,
             &mut functions.anonymous,
+            tail_expressions,
             &known_named_functions,
             host,
         );
@@ -37,6 +42,7 @@ fn resolve_in_function(
     function: Located<&mut Function>,
     scopes: &mut Scopes,
     anonymous_functions: &mut AnonymousFunctions,
+    tail_expressions: &TailExpressions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
@@ -66,6 +72,7 @@ fn resolve_in_function(
             scopes,
             environment,
             anonymous_functions,
+            tail_expressions,
             known_named_functions,
             host,
         );
@@ -77,6 +84,7 @@ fn resolve_in_branch(
     scopes: &mut Scopes,
     environment: &mut Environment,
     anonymous_functions: &mut AnonymousFunctions,
+    tail_expressions: &TailExpressions,
     known_named_functions: &BTreeSet<String>,
     host: &impl Host,
 ) {
@@ -162,6 +170,7 @@ fn resolve_in_branch(
                     },
                     scopes,
                     anonymous_functions,
+                    tail_expressions,
                     known_named_functions,
                     host,
                 );
@@ -196,7 +205,7 @@ mod tests {
     use crate::{
         code::{
             syntax::parse, tokens::Tokens, Branch, ConcreteSignature,
-            Expression,
+            Expression, TailExpressions,
         },
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
@@ -322,7 +331,12 @@ mod tests {
     fn resolve_identifiers(input: &str) -> Vec<Branch> {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        super::resolve_most_identifiers(&mut functions, &TestHost);
+        let tail_expressions = TailExpressions::from_functions(&functions);
+        super::resolve_most_identifiers(
+            &mut functions,
+            &tail_expressions,
+            &TestHost,
+        );
 
         functions
             .named
