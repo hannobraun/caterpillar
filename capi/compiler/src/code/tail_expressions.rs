@@ -19,7 +19,7 @@ pub struct TailExpressions {
 
 impl TailExpressions {
     /// # Find all tail expressions
-    pub fn from_functions(functions: &Functions) -> Self {
+    pub fn find_tail_expressions(functions: &Functions) -> Self {
         let mut tail_expressions = BTreeSet::new();
 
         for function in functions.all_functions() {
@@ -124,7 +124,8 @@ mod tests {
     pub fn tail_expressions(input: &str) -> (Functions, TailExpressions) {
         let tokens = Tokens::from_input(input);
         let functions = parse(tokens);
-        let tail_expressions = TailExpressions::from_functions(&functions);
+        let tail_expressions =
+            TailExpressions::find_tail_expressions(&functions);
 
         (functions, tail_expressions)
     }

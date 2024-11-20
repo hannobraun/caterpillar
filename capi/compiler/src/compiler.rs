@@ -35,7 +35,8 @@ impl Compiler {
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
-        let tail_expressions = TailExpressions::from_functions(&functions);
+        let tail_expressions =
+            TailExpressions::find_tail_expressions(&functions);
         resolve_bindings(&mut functions);
         resolve_most_identifiers(&mut functions, host);
         let mut ordered_functions = order_functions_by_dependencies(&functions);
