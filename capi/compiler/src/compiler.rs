@@ -49,6 +49,7 @@ impl Compiler {
             functions,
             &function_calls,
             &ordered_functions,
+            &recursion,
         );
         let changes = detect_changes(self.old_functions.take(), &functions);
 
