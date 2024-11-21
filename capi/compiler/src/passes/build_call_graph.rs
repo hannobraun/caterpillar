@@ -330,7 +330,7 @@ mod tests {
     fn order_functions_by_dependencies(
         input: &str,
     ) -> (Functions, OrderedFunctions) {
-        let tokens = Tokens::from_input(input);
+        let tokens = Tokens::tokenize(input);
         let functions = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =

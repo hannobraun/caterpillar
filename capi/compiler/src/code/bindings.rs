@@ -352,7 +352,7 @@ mod tests {
     }
 
     fn resolve_bindings(input: &str) -> (Functions, Bindings) {
-        let tokens = Tokens::from_input(input);
+        let tokens = Tokens::tokenize(input);
         let functions = parse(tokens);
         let bindings = Bindings::resolve(&functions);
 

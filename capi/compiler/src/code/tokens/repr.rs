@@ -14,7 +14,7 @@ impl Tokens {
     ///
     /// Takes raw text, as input by the developer, and creates its tokenized
     /// form.
-    pub fn from_input(input: &str) -> Self {
+    pub fn tokenize(input: &str) -> Self {
         let tokens = tokenize(input);
         Self {
             inner: tokens.into(),

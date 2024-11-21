@@ -404,7 +404,7 @@ mod tests {
     }
 
     fn find_recursion(input: &str) -> (Functions, Recursion) {
-        let tokens = Tokens::from_input(input);
+        let tokens = Tokens::tokenize(input);
         let functions = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
