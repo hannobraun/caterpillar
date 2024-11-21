@@ -8,8 +8,8 @@ use capi_runtime::Value;
 use crate::code::Index;
 
 use super::{
-    BranchLocation, Expression, ExpressionLocation, FunctionLocation, Hash,
-    IndexMap, Located,
+    BranchLocation, Expression, ExpressionLocation, FunctionLocation, IndexMap,
+    Located,
 };
 
 /// # All functions in the program
@@ -320,82 +320,6 @@ impl Deref for AnonymousFunctions {
 impl DerefMut for AnonymousFunctions {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
-    }
-}
-
-/// # All functions in a program, stable and content-addressable
-///
-/// Functions can be addressed via a hash, and this is done in function calls,
-/// for example. This must be done with care though, as any change to a function
-/// will also change its hash, invalidating any pre-existing hashes.
-///
-/// This is a wrapper around [`Functions`] (it [`Deref`]s to [`Functions`]),
-/// which only allows immutable access, making sure that functions (and
-/// therefore their hashes) remain stable.
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct StableFunctions {
-    inner: Functions,
-}
-
-impl StableFunctions {
-    /// # Access the function (named or anonymous) with the provided hash
-    ///
-    /// This method is only available on [`StableFunctions`], to prevent callers
-    /// from erroneously relying on the hash of a function that might still
-    /// change. Which would be possible, if an equivalent method was available
-    /// on [`Functions`] or [`NamedFunctions`].
-    ///
-    /// Returns `None`, if a named function with the provided hash does not
-    /// exist.
-    pub fn by_hash(&self, hash: &Hash<Function>) -> Option<Located<&Function>> {
-        self.named_by_hash(hash)
-            .map(|named_function| named_function.into_located_function())
-            .or_else(|| {
-                self.anonymous.iter().find_map(|(location, function)| {
-                    if Hash::new(function) == *hash {
-                        Some(Located {
-                            fragment: function,
-                            location: FunctionLocation::AnonymousFunction {
-                                location: location.clone(),
-                            },
-                        })
-                    } else {
-                        None
-                    }
-                })
-            })
-    }
-
-    /// # Access the named function with the provided hash
-    ///
-    /// This method is only available on [`StableFunctions`], to prevent callers
-    /// from erroneously relying on the hash of a function that might still
-    /// change. Which would be possible, if an equivalent method was available
-    /// on [`Functions`] or [`NamedFunctions`].
-    ///
-    /// Returns `None`, if a named function with the provided hash does not
-    /// exist.
-    pub fn named_by_hash(
-        &self,
-        hash: &Hash<Function>,
-    ) -> Option<Located<&NamedFunction>> {
-        self.named
-            .iter()
-            .find(|function| Hash::new(&function.inner) == *hash)
-    }
-}
-
-impl Deref for StableFunctions {
-    type Target = Functions;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-
-impl From<Functions> for StableFunctions {
-    fn from(functions: Functions) -> Self {
-        Self { inner: functions }
     }
 }
 

@@ -22,7 +22,7 @@ pub use self::{
     function_calls::FunctionCalls,
     functions::{
         AnonymousFunctions, Branch, Function, Functions, NamedFunction,
-        NamedFunctions, Pattern, StableFunctions,
+        NamedFunctions, Pattern,
     },
     hash::Hash,
     index::{Index, IndexMap},
