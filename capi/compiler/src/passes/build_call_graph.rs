@@ -41,7 +41,6 @@ fn build_dependency_graph(
                     Expression::UnresolvedIdentifier {
                         name,
                         is_known_to_be_call_to_user_defined_function: _,
-                        ..
                     } => {
                         if function_calls.is_call_to_user_defined_function(
                             &expression.location,
