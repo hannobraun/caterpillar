@@ -5,14 +5,14 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::{Expression, ExpressionLocation, Functions};
+use super::{Expression, ExpressionLocation, FunctionLocation, Functions};
 
 /// # Tracks function calls
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCalls {
     to_host_functions: BTreeMap<ExpressionLocation, HostFunction>,
     to_intrinsic_functions: BTreeMap<ExpressionLocation, IntrinsicFunction>,
-    to_user_defined_functions: BTreeMap<ExpressionLocation, ()>,
+    to_user_defined_functions: BTreeMap<ExpressionLocation, FunctionLocation>,
 }
 
 impl FunctionCalls {
@@ -46,9 +46,11 @@ impl FunctionCalls {
                                 .insert(expression.location.clone(), function);
                         }
 
-                        if functions.named.by_name(name).is_some() {
-                            to_user_defined_functions
-                                .insert(expression.location, ());
+                        if let Some(function) = functions.named.by_name(name) {
+                            to_user_defined_functions.insert(
+                                expression.location,
+                                function.location(),
+                            );
                         }
                     }
                 }
