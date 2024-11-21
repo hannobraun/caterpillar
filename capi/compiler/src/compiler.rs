@@ -9,9 +9,9 @@ use crate::{
     },
     host::Host,
     passes::{
-        detect_changes, find_divergent_functions, generate_instructions,
-        order_functions_by_dependencies, resolve_non_recursive_functions,
-        resolve_recursive_calls, resolve_recursive_local_functions,
+        detect_changes, generate_instructions, order_functions_by_dependencies,
+        resolve_non_recursive_functions, resolve_recursive_calls,
+        resolve_recursive_local_functions,
     },
     source_map::SourceMap,
     Instructions,
@@ -36,7 +36,7 @@ impl Compiler {
         let bindings = Bindings::resolve(&functions);
         let function_calls = FunctionCalls::resolve(&functions, host);
         let tail_expressions = TailExpressions::find(&functions);
-        let mut ordered_functions =
+        let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         resolve_recursive_calls(
             &mut functions,
@@ -49,7 +49,6 @@ impl Compiler {
             &function_calls,
             &ordered_functions,
         );
-        find_divergent_functions(&functions, &mut ordered_functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());
