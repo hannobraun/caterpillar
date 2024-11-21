@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
         Cluster, Expression, ExpressionLocation, FunctionCalls,
-        FunctionLocation, StableFunctions,
+        FunctionLocation, Functions,
     },
     source_map::SourceMap,
 };
@@ -23,7 +23,7 @@ impl DebugExpression {
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        functions: &StableFunctions,
+        functions: &Functions,
         function_calls: &FunctionCalls,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
@@ -129,7 +129,7 @@ impl DebugExpressionKind {
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
-        functions: &StableFunctions,
+        functions: &Functions,
         function_calls: &FunctionCalls,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
