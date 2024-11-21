@@ -13,7 +13,7 @@ impl Located<&Expression> {
     ///
     /// Returns `None`, if the expression is not a function literal.
     pub fn to_function_location(&self) -> Option<FunctionLocation> {
-        if let Expression::UnresolvedLocalFunction { .. } = self.fragment {
+        if let Expression::LocalFunction { .. } = self.fragment {
             Some(FunctionLocation::AnonymousFunction {
                 location: self.location.clone(),
             })

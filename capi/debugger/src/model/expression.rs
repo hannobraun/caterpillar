@@ -144,7 +144,7 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
-            Expression::UnresolvedLocalFunction => {
+            Expression::LocalFunction => {
                 let function = {
                     let location = FunctionLocation::from(location.clone());
                     functions

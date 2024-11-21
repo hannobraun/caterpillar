@@ -67,7 +67,7 @@ pub enum Expression {
     /// literal. During compilation, it is replaced by either
     /// [`Expression::LocalFunction`] or [`Expression::LocalFunctionRecursive`],
     /// as appropriate.
-    UnresolvedLocalFunction,
+    LocalFunction,
 }
 
 impl Expression {

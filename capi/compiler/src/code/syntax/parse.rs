@@ -216,7 +216,7 @@ fn parse_branch_body(
                     },
                     functions,
                 ) {
-                    branch.body.push(Expression::UnresolvedLocalFunction);
+                    branch.body.push(Expression::LocalFunction);
                     functions.anonymous.insert(location, function);
                 }
             }

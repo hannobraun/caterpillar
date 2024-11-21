@@ -136,7 +136,7 @@ fn resolve_bindings_in_branch(
                     }
                 }
             }
-            Expression::UnresolvedLocalFunction => {
+            Expression::LocalFunction => {
                 let location = FunctionLocation::from(expression.location);
                 let function = functions
                     .by_location(&location)
@@ -243,8 +243,7 @@ mod tests {
             .unwrap()
             .body()
             .filter_map(|expression| {
-                if let Expression::UnresolvedLocalFunction = expression.fragment
-                {
+                if let Expression::LocalFunction = expression.fragment {
                     let location = FunctionLocation::from(expression.location);
                     let function = functions.by_location(&location);
                     Some(function)
@@ -335,8 +334,7 @@ mod tests {
             .unwrap()
             .body()
             .filter_map(|expression| {
-                if let Expression::UnresolvedLocalFunction = expression.fragment
-                {
+                if let Expression::LocalFunction = expression.fragment {
                     let location = FunctionLocation::from(expression.location);
                     let function = functions.by_location(&location);
                     Some(function)

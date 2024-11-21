@@ -385,7 +385,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedLocalFunction => {
+        Expression::LocalFunction => {
             if let Some(index) = functions_context
                 .recursion
                 .is_recursive_expression(&location)
