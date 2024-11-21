@@ -124,7 +124,8 @@ fn call_stack_reconstruction_missing_main() {
     // Tail call elimination can leave gaps in the call stack. If the `main`
     // function is missing due to that, it should be reconstructed.
 
-    let transient = debugger()
+    let mut debugger = debugger();
+    debugger
         .provide_source_code(
             r"
                 main: fn \ size_x, size_y ->
@@ -136,8 +137,9 @@ fn call_stack_reconstruction_missing_main() {
                 end
             ",
         )
-        .run_program()
-        .transient_state();
+        .run_program();
+
+    let transient = debugger.transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["f", "main"]);
