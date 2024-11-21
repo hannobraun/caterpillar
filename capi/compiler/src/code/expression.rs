@@ -1,7 +1,5 @@
 use capi_runtime::Value;
 
-use super::{Function, Hash};
-
 /// # An expression within a function
 ///
 /// ## Error Handling
@@ -61,34 +59,6 @@ pub enum Expression {
     LiteralNumber {
         /// The number defined by this literal
         value: Value,
-    },
-
-    /// # A resolved local function
-    ///
-    /// Function literals start out as [`Expression::UnresolvedLocalFunction`].
-    /// During compilation, they are replaced by this variant or
-    /// [`Expression::LocalFunctionRecursive`] accordingly.
-    ///
-    /// ## Implementation Note
-    ///
-    /// As of this writing, this variant is not created yet.
-    LocalFunction {
-        /// # The hash of the local function
-        ///
-        /// ## Necessity
-        ///
-        /// Local functions can be accessed via their location in the code. So
-        /// this hash is not needed for accessing this function.
-        ///
-        /// In fact, it _can't_ be needed for that purpose, as multiple compiler
-        /// passes must run and have the need to access local functions, before
-        /// functions are resolved and this hash exists.
-        ///
-        /// Despite this, this field is still required! Without it, there is
-        /// nothing to distinguish expressions of this type, which means that
-        /// distinct functions could end up with the same hash, despite being
-        /// very different due to the local functions they define.
-        hash: Hash<Function>,
     },
 
     /// # An unresolved local function

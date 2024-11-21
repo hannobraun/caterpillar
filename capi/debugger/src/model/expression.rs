@@ -144,29 +144,6 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
-            Expression::LocalFunction { .. } => {
-                let location = FunctionLocation::from(location);
-
-                let function = functions
-                    .by_location(&location)
-                    .expect("Resolved local function must exist.");
-
-                let function = DebugFunction::new(
-                    function.fragment.clone(),
-                    None,
-                    location,
-                    active_expression,
-                    is_in_innermost_active_function,
-                    cluster,
-                    functions,
-                    function_calls,
-                    source_map,
-                    breakpoints,
-                    effect,
-                );
-
-                Self::Function { function }
-            }
             Expression::UnresolvedLocalFunction => {
                 let function = {
                     let location = FunctionLocation::from(location.clone());

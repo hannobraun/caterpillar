@@ -385,26 +385,6 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::LocalFunction { .. } => {
-            let function_location = FunctionLocation::from(location.clone());
-
-            let function = functions_context
-                .functions
-                .by_location(&function_location)
-                .expect(
-                "Anonymous function that has been previously resolved must be \
-                available.",
-            );
-
-            let address = compile_local_function(
-                &function,
-                location,
-                cluster_context,
-                functions_context.instructions,
-                &mut mapping,
-            );
-            Some(address)
-        }
         Expression::UnresolvedLocalFunction => {
             if let Some(index) = functions_context
                 .recursion
