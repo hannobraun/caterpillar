@@ -257,11 +257,11 @@ pub trait DebugExpressionExt {
 }
 
 impl DebugExpressionExt for DebugExpression {
-    fn expect_call_to_function(self, called_fn: &str) -> Self {
+    fn expect_call_to_function(self, called_name: &str) -> Self {
         let DebugExpressionKind::CallToFunction { name } = &self.kind else {
             panic!("Expected call to function.");
         };
-        assert_eq!(called_fn, name);
+        assert_eq!(called_name, name);
 
         self
     }
