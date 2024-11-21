@@ -21,7 +21,7 @@ pub fn order_functions_by_dependencies(
 
 fn build_dependency_graph(
     functions: &Functions,
-    _: &FunctionCalls,
+    function_calls: &FunctionCalls,
 ) -> DependencyGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
@@ -43,13 +43,20 @@ fn build_dependency_graph(
                         is_known_to_be_call_to_user_defined_function: true,
                         ..
                     } => {
-                        let named_function =
-                            functions.named.by_name(name).expect(
-                                "Just got `name` from an identifier that is \
-                                known to be a call to a user-defined function. \
-                                A function of that name must be available.",
-                            );
-                        Some(named_function.location())
+                        if function_calls.is_call_to_user_defined_function(
+                            &expression.location,
+                        ) {
+                            let named_function =
+                                functions.named.by_name(name).expect(
+                                    "Just got `name` from an identifier that \
+                                    is known to be a call to a user-defined \
+                                    function. A function of that name must be \
+                                    available.",
+                                );
+                            Some(named_function.location())
+                        } else {
+                            None
+                        }
                     }
                     _ => expression.to_function_location(),
                 };
