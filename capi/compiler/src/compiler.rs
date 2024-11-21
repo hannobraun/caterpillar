@@ -4,8 +4,8 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, Bindings, FunctionCalls, FunctionLocation,
-        OrderedFunctions, Recursion, StableFunctions, TailExpressions, Tokens,
+        syntax::parse, Bindings, FunctionCalls, FunctionLocation, Functions,
+        OrderedFunctions, Recursion, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -18,7 +18,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    old_functions: Option<StableFunctions>,
+    old_functions: Option<Functions>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_location:
@@ -37,7 +37,6 @@ impl Compiler {
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion = Recursion::find(&functions, &ordered_functions);
-        let functions = StableFunctions::from(functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());
@@ -73,7 +72,7 @@ pub struct CallInstructionsByCallee {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
-    pub functions: StableFunctions,
+    pub functions: Functions,
     pub function_calls: FunctionCalls,
     pub ordered_functions: OrderedFunctions,
     pub instructions: Instructions,
