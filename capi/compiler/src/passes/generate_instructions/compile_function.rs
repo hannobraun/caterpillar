@@ -223,6 +223,11 @@ fn compile_expression(
 
     match expression {
         Expression::CallToUserDefinedFunction { hash } => {
+            let callee_location = functions_context
+                .function_calls
+                .is_call_to_user_defined_function(&location)
+                .unwrap();
+
             let Some(function) =
                 functions_context.compiled_functions_by_hash.get(&hash)
             else {
@@ -232,13 +237,14 @@ fn compile_expression(
                     });
 
                 panic!(
-                    "Compiling call to user-defined function `{hash}`. \
+                    "Compiling call to this user-defined function: `{}` \
                     Expecting functions to be compiled before any \
                     non-recursive calls to them, but can't find the compiled \
                     version of this one.\n\
                     \n\
                     Function:\n\
                     {function:#?}",
+                    callee_location.display(functions_context.functions),
                 )
             };
 
