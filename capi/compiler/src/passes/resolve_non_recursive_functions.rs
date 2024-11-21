@@ -7,12 +7,12 @@ use crate::code::{
 
 pub fn resolve_non_recursive_functions(
     mut functions: Functions,
-    call_graph: &OrderedFunctions,
+    ordered_functions: &OrderedFunctions,
 ) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
     let mut resolved_hashes_by_location = BTreeMap::new();
 
-    for (location, _) in call_graph.functions_from_leaves() {
+    for (location, _) in ordered_functions.functions_from_leaves() {
         let function = functions
             .by_location_mut(location)
             .expect("Function referred to from call graph must exist.");
