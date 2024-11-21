@@ -1,6 +1,7 @@
 pub mod syntax;
 
 mod bindings;
+mod function_calls;
 mod tail_expressions;
 mod tokens;
 
@@ -17,6 +18,7 @@ pub use self::{
     bindings::Bindings,
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::Expression,
+    function_calls::FunctionCalls,
     functions::{
         AnonymousFunctions, Branch, Function, Functions, NamedFunction,
         NamedFunctions, Pattern, StableFunctions,
