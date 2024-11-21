@@ -159,6 +159,8 @@ impl DebugExpressionKind {
                 as_string: value.to_string(),
             },
             Expression::LocalFunction { hash } => {
+                let location = FunctionLocation::from(location);
+
                 let function = functions
                     .by_hash(&hash)
                     .expect("Resolved local function must exist.");
@@ -166,7 +168,7 @@ impl DebugExpressionKind {
                 let function = DebugFunction::new(
                     function.fragment.clone(),
                     None,
-                    FunctionLocation::AnonymousFunction { location },
+                    location,
                     active_expression,
                     is_in_innermost_active_function,
                     cluster,
