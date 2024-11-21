@@ -55,11 +55,11 @@ pub enum Expression {
         text: String,
     },
 
-    /// # An unresolved identifier
+    /// # An identifier
     ///
-    /// This is the result of a compiler error.
+    /// Can refer to a binding or function.
     Identifier {
-        /// # The name of the unresolved identifier
+        /// # The name of the identifier
         name: String,
     },
 
