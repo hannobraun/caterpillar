@@ -393,12 +393,12 @@ fn compile_expression(
                     Some(&mut mapping),
                 );
                 Some(address)
-            } else if let Some(intrinsic) = functions_context
+            } else if let Some(function) = functions_context
                 .function_calls
                 .is_call_to_intrinsic_function(&location)
             {
                 let address = compile_intrinsic(
-                    intrinsic,
+                    function,
                     is_tail_expression,
                     functions_context.instructions,
                     &mut mapping,
