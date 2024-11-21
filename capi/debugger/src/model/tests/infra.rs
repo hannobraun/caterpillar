@@ -279,7 +279,7 @@ impl DebugExpressionExt for DebugExpression {
 
     fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self {
         let DebugExpressionKind::CallToIntrinsic { name } = &self.kind else {
-            panic!("Expected call to function.");
+            panic!("Expected call to intrinsic function.");
         };
         assert_eq!(called_intrinsic, name);
 
