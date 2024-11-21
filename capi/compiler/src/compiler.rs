@@ -4,9 +4,8 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, Bindings, Function, FunctionCalls, FunctionLocation,
-        Hash, OrderedFunctions, Recursion, StableFunctions, TailExpressions,
-        Tokens,
+        syntax::parse, Bindings, FunctionCalls, FunctionLocation,
+        OrderedFunctions, Recursion, StableFunctions, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -75,7 +74,7 @@ impl Compiler {
 
 #[derive(Default)]
 pub struct CallInstructionsByCallee {
-    pub inner: BTreeMap<Hash<Function>, Vec<InstructionAddress>>,
+    pub inner: BTreeMap<FunctionLocation, Vec<InstructionAddress>>,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]

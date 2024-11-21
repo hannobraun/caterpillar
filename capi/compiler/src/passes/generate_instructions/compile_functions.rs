@@ -4,8 +4,8 @@ use capi_runtime::Instruction;
 
 use crate::{
     code::{
-        Bindings, Changes, FunctionCalls, FunctionLocation, Hash,
-        OrderedFunctions, Recursion, StableFunctions, TailExpressions,
+        Bindings, Changes, FunctionCalls, FunctionLocation, OrderedFunctions,
+        Recursion, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -61,12 +61,10 @@ pub fn compile_functions(
     }
 
     for update in &changes.updated {
-        let old_hash = Hash::new(&update.old.function);
-
         for calling_address in context
             .call_instructions_by_callee
             .inner
-            .remove(&old_hash)
+            .remove(&update.old.location)
             .unwrap_or_default()
         {
             let calling_instruction = context

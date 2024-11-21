@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Branch, BranchLocation, Cluster, Expression, ExpressionLocation,
-        Function, FunctionLocation, Hash, IndexMap, Pattern,
+        Function, FunctionLocation, IndexMap, Pattern,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -222,7 +222,7 @@ fn compile_expression(
         .map_expression_to_instructions(location.clone());
 
     match expression {
-        Expression::CallToUserDefinedFunction { hash } => {
+        Expression::CallToUserDefinedFunction { .. } => {
             let callee_location = functions_context
                 .function_calls
                 .is_call_to_user_defined_function(&location)
@@ -267,7 +267,7 @@ fn compile_expression(
             functions_context
                 .call_instructions_by_callee
                 .inner
-                .entry(hash)
+                .entry(callee_location.clone())
                 .or_default()
                 .push(address);
 
@@ -328,7 +328,6 @@ fn compile_expression(
                             "Function referred to from cluster must \
                             exist.",
                         );
-                    let hash = Hash::new(called_function.fragment);
 
                     // For recursive calls, we can't generally assume that the
                     // called function has been compiled yet. It's a recursive
@@ -363,7 +362,7 @@ fn compile_expression(
                     functions_context
                         .call_instructions_by_callee
                         .inner
-                        .entry(hash)
+                        .entry(callee_location.clone())
                         .or_default()
                         .push(address);
 
