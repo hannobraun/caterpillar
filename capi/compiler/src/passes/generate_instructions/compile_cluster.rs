@@ -62,7 +62,7 @@ pub fn compile_cluster(
         );
 
         functions_context
-            .compiled_functions_by_hash
+            .compiled_functions_by_location
             .insert(function_to_compile.location, runtime_function);
     }
 
@@ -71,7 +71,7 @@ pub fn compile_cluster(
             compile_call_to_function(
                 &hash,
                 call,
-                functions_context.compiled_functions_by_hash,
+                functions_context.compiled_functions_by_location,
                 functions_context.instructions,
             );
         }

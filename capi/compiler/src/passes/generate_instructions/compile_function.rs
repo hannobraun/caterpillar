@@ -229,7 +229,7 @@ fn compile_expression(
                 .unwrap();
 
             let Some(function) = functions_context
-                .compiled_functions_by_hash
+                .compiled_functions_by_location
                 .get(callee_location)
             else {
                 let function =

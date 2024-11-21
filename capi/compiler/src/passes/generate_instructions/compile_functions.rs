@@ -23,7 +23,7 @@ pub struct FunctionsContext<'r> {
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
-    pub compiled_functions_by_hash:
+    pub compiled_functions_by_location:
         &'r mut BTreeMap<FunctionLocation, capi_runtime::Function>,
 }
 
@@ -53,7 +53,7 @@ pub fn compile_functions(
         instructions,
         source_map,
         call_instructions_by_callee,
-        compiled_functions_by_hash,
+        compiled_functions_by_location: compiled_functions_by_hash,
     };
 
     for cluster in ordered_functions.clusters_from_leaves() {
@@ -83,7 +83,7 @@ pub fn compile_functions(
             };
 
             let function = context
-                .compiled_functions_by_hash
+                .compiled_functions_by_location
                 .get(&update.new.location)
                 .expect(
                     "New function referenced in update should have been \
