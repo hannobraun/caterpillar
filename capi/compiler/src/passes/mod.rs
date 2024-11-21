@@ -5,7 +5,6 @@ mod generate_instructions;
 mod resolve_non_recursive_functions;
 mod resolve_recursive_calls;
 mod resolve_recursive_local_functions;
-mod sort_non_divergent_branches;
 
 pub use {
     build_call_graph::order_functions_by_dependencies,
@@ -15,5 +14,4 @@ pub use {
     resolve_non_recursive_functions::resolve_non_recursive_functions,
     resolve_recursive_calls::resolve_recursive_calls,
     resolve_recursive_local_functions::resolve_recursive_local_functions,
-    sort_non_divergent_branches::sort_non_divergent_branches,
 };
