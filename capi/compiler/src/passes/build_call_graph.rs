@@ -38,25 +38,9 @@ fn build_dependency_graph(
         for branch in function.branches() {
             for expression in branch.body() {
                 let dependee = match expression.fragment {
-                    Expression::Identifier { name } => {
-                        if function_calls
-                            .is_call_to_user_defined_function(
-                                &expression.location,
-                            )
-                            .is_some()
-                        {
-                            let named_function =
-                                functions.named.by_name(name).expect(
-                                    "Just got `name` from an identifier that \
-                                    is known to be a call to a user-defined \
-                                    function. A function of that name must be \
-                                    available.",
-                                );
-                            Some(named_function.location())
-                        } else {
-                            None
-                        }
-                    }
+                    Expression::Identifier { .. } => function_calls
+                        .is_call_to_user_defined_function(&expression.location)
+                        .cloned(),
                     _ => expression.to_function_location(),
                 };
 
