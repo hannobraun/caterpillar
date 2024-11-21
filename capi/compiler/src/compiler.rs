@@ -23,7 +23,7 @@ pub struct Compiler {
     old_functions: Option<StableFunctions>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
-    compiled_functions_by_hash:
+    compiled_functions_by_location:
         BTreeMap<FunctionLocation, capi_runtime::Function>,
     source_map: SourceMap,
 }
@@ -59,7 +59,7 @@ impl Compiler {
             &changes,
             &mut self.instructions,
             &mut self.call_instructions_by_callee,
-            &mut self.compiled_functions_by_hash,
+            &mut self.compiled_functions_by_location,
             &mut self.source_map,
         );
 
