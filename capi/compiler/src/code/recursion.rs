@@ -50,15 +50,28 @@ impl Recursion {
             for function in cluster.functions(functions) {
                 for branch in function.branches() {
                     for expression in branch.body() {
-                        if let Expression::UnresolvedIdentifier { name } =
-                            expression.fragment
-                        {
-                            if let Some(index) =
-                                cluster.find_function_by_name(name, functions)
-                            {
-                                recursive_expressions
-                                    .insert(expression.location, index);
+                        match expression.fragment {
+                            Expression::UnresolvedIdentifier { name } => {
+                                if let Some(index) = cluster
+                                    .find_function_by_name(name, functions)
+                                {
+                                    recursive_expressions
+                                        .insert(expression.location, index);
+                                }
                             }
+                            Expression::UnresolvedLocalFunction => {
+                                let location = FunctionLocation::from(
+                                    expression.location.clone(),
+                                );
+
+                                if let Some(index) =
+                                    cluster.find_function_by_location(&location)
+                                {
+                                    recursive_expressions
+                                        .insert(expression.location, index);
+                                }
+                            }
+                            _ => {}
                         }
                     }
                 }
@@ -248,6 +261,146 @@ mod tests {
 
         assert!(recursion.is_recursive_expression(&nop).is_none());
         assert!(recursion.is_recursive_expression(&g).is_some());
+    }
+
+    #[test]
+    fn self_recursive_direct_local_function() {
+        let (functions, recursion) = find_recursion(
+            r"
+                f: fn
+                    \ ->
+                        nop
+                        fn
+                            \ ->
+                                f
+                        end
+                end
+            ",
+        );
+
+        let (nop, function) = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|expression| expression.location)
+            .collect_tuple()
+            .unwrap();
+
+        assert!(recursion.is_recursive_expression(&nop).is_none());
+        assert!(recursion.is_recursive_expression(&function).is_some());
+    }
+
+    #[test]
+    fn self_recursive_indirect_local_function() {
+        let (functions, recursion) = find_recursion(
+            r"
+                f: fn
+                    \ ->
+                        nop
+                        fn
+                            \ ->
+                                fn
+                                    \ ->
+                                        f
+                                end
+                        end
+                end
+            ",
+        );
+
+        let (nop, function) = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|expression| expression.location)
+            .collect_tuple()
+            .unwrap();
+
+        assert!(recursion.is_recursive_expression(&nop).is_none());
+        assert!(recursion.is_recursive_expression(&function).is_some());
+    }
+
+    #[test]
+    fn mutually_recursive_direct_local_function() {
+        let (functions, recursion) = find_recursion(
+            r"
+                f: fn
+                    \ ->
+                        nop
+                        fn
+                            \ ->
+                                g
+                        end
+                end
+
+                g: fn
+                    \ ->
+                        f
+                end
+            ",
+        );
+
+        let (nop, function) = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|expression| expression.location)
+            .collect_tuple()
+            .unwrap();
+
+        assert!(recursion.is_recursive_expression(&nop).is_none());
+        assert!(recursion.is_recursive_expression(&function).is_some());
+    }
+
+    #[test]
+    fn mutually_recursive_indirect_local_function() {
+        let (functions, recursion) = find_recursion(
+            r"
+                f: fn
+                    \ ->
+                        nop
+                        fn
+                            \ ->
+                                fn
+                                    \ ->
+                                        g
+                                end
+                        end
+                end
+
+                g: fn
+                    \ ->
+                        f
+                end
+            ",
+        );
+
+        let (nop, function) = functions
+            .named
+            .by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .body()
+            .map(|expression| expression.location)
+            .collect_tuple()
+            .unwrap();
+
+        assert!(recursion.is_recursive_expression(&nop).is_none());
+        assert!(recursion.is_recursive_expression(&function).is_some());
     }
 
     fn find_recursion(input: &str) -> (Functions, Recursion) {
