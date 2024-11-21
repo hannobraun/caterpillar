@@ -136,9 +136,14 @@ impl DebugExpressionKind {
         effect: Option<&Effect>,
     ) -> Self {
         match expression {
-            Expression::CallToUserDefinedFunction { hash, .. } => {
+            Expression::CallToUserDefinedFunction { .. } => {
+                let location = function_calls
+                    .is_call_to_user_defined_function(&location)
+                    .unwrap();
+
                 let function = functions
-                    .named_by_hash(&hash)
+                    .named
+                    .by_child_function(location)
                     .expect("Expecting function referenced by call to exist.");
                 let name = function.name.clone();
 
