@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Bindings, Changes, FunctionCalls, FunctionLocation, Functions,
-        OrderedFunctions, Recursion, StableFunctions, TailExpressions,
+        OrderedFunctions, Recursion, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -19,7 +19,7 @@ use super::{
 
 #[allow(clippy::too_many_arguments)]
 pub fn generate_instructions(
-    functions: &StableFunctions,
+    functions: &Functions,
     ordered_functions: &OrderedFunctions,
     bindings: &Bindings,
     function_calls: &FunctionCalls,
