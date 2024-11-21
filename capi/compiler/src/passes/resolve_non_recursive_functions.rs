@@ -100,6 +100,7 @@ fn resolve_calls_in_expression(
         Expression::Identifier { name } => {
             if function_calls
                 .is_call_to_user_defined_function(&expression.location)
+                .is_some()
             {
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {

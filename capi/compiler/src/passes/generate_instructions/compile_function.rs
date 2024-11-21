@@ -308,6 +308,7 @@ fn compile_expression(
             } else if functions_context
                 .function_calls
                 .is_call_to_user_defined_function(&location)
+                .is_some()
             {
                 if let Some(index) = functions_context
                     .recursion

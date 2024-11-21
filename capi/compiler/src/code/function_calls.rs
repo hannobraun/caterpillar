@@ -84,8 +84,8 @@ impl FunctionCalls {
     pub fn is_call_to_user_defined_function(
         &self,
         location: &ExpressionLocation,
-    ) -> bool {
-        self.to_user_defined_functions.contains_key(location)
+    ) -> Option<&FunctionLocation> {
+        self.to_user_defined_functions.get(location)
     }
 }
 
@@ -128,7 +128,9 @@ mod tests {
         assert!(function_calls
             .is_call_to_intrinsic_function(&host_fn)
             .is_none());
-        assert!(!function_calls.is_call_to_user_defined_function(&host_fn));
+        assert!(function_calls
+            .is_call_to_user_defined_function(&host_fn)
+            .is_none());
     }
 
     #[test]
@@ -159,7 +161,9 @@ mod tests {
 
         assert!(function_calls.is_call_to_host_function(&nop).is_none());
         assert!(function_calls.is_call_to_intrinsic_function(&nop).is_some());
-        assert!(!function_calls.is_call_to_user_defined_function(&nop));
+        assert!(function_calls
+            .is_call_to_user_defined_function(&nop)
+            .is_none());
     }
 
     #[test]
@@ -193,7 +197,9 @@ mod tests {
 
         assert!(function_calls.is_call_to_host_function(&nop).is_none());
         assert!(function_calls.is_call_to_intrinsic_function(&nop).is_none());
-        assert!(function_calls.is_call_to_user_defined_function(&nop));
+        assert!(function_calls
+            .is_call_to_user_defined_function(&nop)
+            .is_some());
     }
 
     fn resolve_function_calls(input: &str) -> (Functions, FunctionCalls) {
