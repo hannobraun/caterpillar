@@ -314,17 +314,19 @@ fn compile_expression(
                     .recursion
                     .is_recursive_expression(&location)
                 {
-                    let hash =
-                        {
-                            let function_location = &cluster.functions[&index];
+                    let hash = {
+                        let function_location = &cluster.functions[&index];
 
-                            let called_function = functions_context
-                    .functions
-                    .by_location(function_location)
-                    .expect("Function referred to from cluster must exist.");
+                        let called_function = functions_context
+                            .functions
+                            .by_location(function_location)
+                            .expect(
+                                "Function referred to from cluster must \
+                                exist.",
+                            );
 
-                            Hash::new(called_function.fragment)
-                        };
+                        Hash::new(called_function.fragment)
+                    };
 
                     // For recursive calls, we can't generally assume that the
                     // called function has been compiled yet. It's a recursive
