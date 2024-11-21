@@ -39,7 +39,7 @@ pub fn compile_functions(
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
-    compiled_functions_by_hash: &mut BTreeMap<
+    compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
         capi_runtime::Function,
     >,
@@ -53,7 +53,7 @@ pub fn compile_functions(
         instructions,
         source_map,
         call_instructions_by_callee,
-        compiled_functions_by_location: compiled_functions_by_hash,
+        compiled_functions_by_location,
     };
 
     for cluster in ordered_functions.clusters_from_leaves() {
