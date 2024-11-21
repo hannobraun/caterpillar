@@ -33,6 +33,7 @@ use super::{
 ///
 /// As of this writing, recursive local functions are not tracked yet. This is
 /// subject to an ongoing transition.
+#[derive(Debug)]
 pub struct Recursion {
     inner: BTreeMap<ExpressionLocation, Index<FunctionLocation>>,
 }
