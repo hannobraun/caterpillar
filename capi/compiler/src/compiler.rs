@@ -5,7 +5,7 @@ use capi_runtime::InstructionAddress;
 use crate::{
     code::{
         syntax::parse, Bindings, Function, FunctionCalls, Hash,
-        OrderedFunctions, StableFunctions, TailExpressions, Tokens,
+        OrderedFunctions, Recursion, StableFunctions, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -38,6 +38,8 @@ impl Compiler {
         let tail_expressions = TailExpressions::find(&functions);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
+        let recursion = Recursion::find(&functions, &ordered_functions);
+        dbg!(recursion);
         resolve_recursive_calls(
             &mut functions,
             &function_calls,
