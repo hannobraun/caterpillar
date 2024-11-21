@@ -159,7 +159,8 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     // functions have only a single branch each, it is possible to add them back
     // without any additional hints being required.
 
-    let transient = debugger()
+    let mut debugger = debugger();
+    debugger
         .provide_source_code(
             r"
                 main: fn \ size_x, size_y ->
@@ -176,8 +177,9 @@ fn call_stack_reconstruction_missing_single_branch_function() {
                 end
             ",
         )
-        .run_program()
-        .transient_state();
+        .run_program();
+
+    let transient = debugger.transient_state();
 
     let names = transient.active_functions.names();
     assert_eq!(names, vec!["g", "f", "main"]);
