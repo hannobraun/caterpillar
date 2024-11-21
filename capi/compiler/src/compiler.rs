@@ -39,7 +39,6 @@ impl Compiler {
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion = Recursion::find(&functions, &ordered_functions);
-        dbg!(recursion);
         resolve_recursive_calls(
             &mut functions,
             &function_calls,
@@ -61,6 +60,7 @@ impl Compiler {
             &bindings,
             &function_calls,
             &tail_expressions,
+            &recursion,
             &changes,
             &mut self.instructions,
             &mut self.call_instructions_by_callee,

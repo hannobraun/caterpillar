@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Bindings, Changes, Function, FunctionCalls, Functions, Hash,
-        OrderedFunctions, StableFunctions, TailExpressions,
+        OrderedFunctions, Recursion, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -24,6 +24,7 @@ pub fn generate_instructions(
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
+    recursion: &Recursion,
     changes: &Changes,
     instructions: &mut Instructions,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
@@ -53,6 +54,7 @@ pub fn generate_instructions(
         bindings,
         function_calls,
         tail_expressions,
+        recursion,
         instructions,
         source_map,
         call_instructions_by_callee,

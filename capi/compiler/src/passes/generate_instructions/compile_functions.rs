@@ -5,7 +5,7 @@ use capi_runtime::Instruction;
 use crate::{
     code::{
         Bindings, Changes, Function, FunctionCalls, Hash, OrderedFunctions,
-        StableFunctions, TailExpressions,
+        Recursion, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -19,6 +19,7 @@ pub struct FunctionsContext<'r> {
     pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
     pub tail_expressions: &'r TailExpressions,
+    pub recursion: &'r Recursion,
     pub instructions: &'r mut Instructions,
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
@@ -34,6 +35,7 @@ pub fn compile_functions(
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
+    recursion: &Recursion,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
@@ -47,6 +49,7 @@ pub fn compile_functions(
         bindings,
         function_calls,
         tail_expressions,
+        recursion,
         instructions,
         source_map,
         call_instructions_by_callee,
