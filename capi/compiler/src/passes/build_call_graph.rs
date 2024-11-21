@@ -6,19 +6,23 @@ use petgraph::{
 };
 
 use crate::code::{
-    Cluster, Expression, FunctionLocation, Functions, IndexMap,
+    Cluster, Expression, FunctionCalls, FunctionLocation, Functions, IndexMap,
     OrderedFunctions,
 };
 
 pub fn order_functions_by_dependencies(
     functions: &Functions,
+    function_calls: &FunctionCalls,
 ) -> OrderedFunctions {
-    let dependency_graph = build_dependency_graph(functions);
+    let dependency_graph = build_dependency_graph(functions, function_calls);
     let clusters = collect_functions_into_clusters(dependency_graph);
     OrderedFunctions::from_clusters(clusters)
 }
 
-fn build_dependency_graph(functions: &Functions) -> DependencyGraph {
+fn build_dependency_graph(
+    functions: &Functions,
+    _: &FunctionCalls,
+) -> DependencyGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
@@ -107,7 +111,8 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::parse, Cluster, Functions, Index, OrderedFunctions, Tokens,
+            syntax::parse, Cluster, FunctionCalls, Functions, Index,
+            OrderedFunctions, Tokens,
         },
         host::NoHost,
         passes::resolve_most_identifiers,
@@ -350,9 +355,10 @@ mod tests {
     ) -> (Functions, OrderedFunctions) {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
+        let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions =
-            super::order_functions_by_dependencies(&functions);
+            super::order_functions_by_dependencies(&functions, &function_calls);
         (functions, ordered_functions)
     }
 }

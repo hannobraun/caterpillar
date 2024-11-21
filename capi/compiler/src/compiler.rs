@@ -38,7 +38,8 @@ impl Compiler {
         let function_calls = FunctionCalls::resolve(&functions, host);
         let tail_expressions = TailExpressions::find(&functions);
         resolve_most_identifiers(&mut functions, host);
-        let mut ordered_functions = order_functions_by_dependencies(&functions);
+        let mut ordered_functions =
+            order_functions_by_dependencies(&functions, &function_calls);
         resolve_recursive_calls(&mut functions, &ordered_functions);
         resolve_recursive_local_functions(&mut functions, &ordered_functions);
         let functions =
