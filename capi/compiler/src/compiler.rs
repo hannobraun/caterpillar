@@ -10,7 +10,6 @@ use crate::{
     host::Host,
     passes::{
         detect_changes, generate_instructions, order_functions_by_dependencies,
-        resolve_non_recursive_functions,
     },
     source_map::SourceMap,
     Instructions,
@@ -38,12 +37,7 @@ impl Compiler {
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion = Recursion::find(&functions, &ordered_functions);
-        let functions = resolve_non_recursive_functions(
-            functions,
-            &function_calls,
-            &ordered_functions,
-            &recursion,
-        );
+        let functions = StableFunctions::from(functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());
