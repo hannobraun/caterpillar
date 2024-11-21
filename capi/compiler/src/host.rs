@@ -29,7 +29,7 @@ pub trait Host {
 }
 
 /// # A function that is provided by the host
-#[derive(Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct HostFunction {
     /// # The name that identifies the function in input code
     pub name: String,
