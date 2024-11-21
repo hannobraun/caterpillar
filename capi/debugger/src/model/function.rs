@@ -1,8 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        self, BranchLocation, Cluster, ExpressionLocation, FunctionLocation,
-        StableFunctions,
+        self, BranchLocation, Cluster, ExpressionLocation, FunctionCalls,
+        FunctionLocation, StableFunctions,
     },
     source_map::SourceMap,
 };
@@ -26,6 +26,7 @@ impl DebugFunction {
         is_innermost_active_function: bool,
         cluster: &Cluster,
         functions: &StableFunctions,
+        function_calls: &FunctionCalls,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
@@ -44,6 +45,7 @@ impl DebugFunction {
                     is_innermost_active_function,
                     cluster,
                     functions,
+                    function_calls,
                     source_map,
                     breakpoints,
                     effect,
