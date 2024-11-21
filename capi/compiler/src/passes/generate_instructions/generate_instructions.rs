@@ -28,7 +28,7 @@ pub fn generate_instructions(
     changes: &Changes,
     instructions: &mut Instructions,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
-    compiled_functions_by_hash: &mut BTreeMap<
+    compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
         capi_runtime::Function,
     >,
@@ -58,13 +58,13 @@ pub fn generate_instructions(
         instructions,
         source_map,
         call_instructions_by_callee,
-        compiled_functions_by_hash,
+        compiled_functions_by_location,
     );
     compile_call_to_main(
         call_to_main,
         functions,
         instructions,
-        compiled_functions_by_hash,
+        compiled_functions_by_location,
     );
 }
 
