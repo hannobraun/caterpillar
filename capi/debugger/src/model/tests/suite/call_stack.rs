@@ -65,7 +65,16 @@ fn stopped_at_host_function() {
         .expect_functions()
         .with_name("main")
         .active_expression()
-        .expect_call_to_host_function("halt");
+        .expect_call_to_host_function(
+            "halt",
+            &debugger
+                .persistent_state()
+                .code
+                .inner
+                .as_ref()
+                .unwrap()
+                .function_calls,
+        );
 }
 
 #[test]

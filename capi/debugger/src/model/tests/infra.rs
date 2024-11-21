@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::{ExpressionLocation, Functions},
+    code::{ExpressionLocation, FunctionCalls, Functions},
     Compiler,
 };
 use capi_game_engine::{
@@ -128,6 +128,10 @@ impl TestDebugger {
         expression
     }
 
+    pub fn persistent_state(&self) -> &PersistentState {
+        &self.persistent
+    }
+
     pub fn transient_state(&mut self) -> TransientState {
         self.transient
             .get_or_insert_with(|| self.persistent.generate_transient_state())
@@ -239,7 +243,11 @@ impl DebugBranchExt for DebugBranch {
 
 pub trait DebugExpressionExt {
     fn expect_call_to_function(self, called_fn: &str) -> Self;
-    fn expect_call_to_host_function(self, called_host_fn: &str) -> Self;
+    fn expect_call_to_host_function(
+        self,
+        called_host_fn: &str,
+        function_calls: &FunctionCalls,
+    ) -> Self;
     fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self;
     fn expect_function(self) -> DebugFunction;
 }
@@ -254,12 +262,17 @@ impl DebugExpressionExt for DebugExpression {
         self
     }
 
-    fn expect_call_to_host_function(self, called_host_fn: &str) -> Self {
-        let DebugExpressionKind::CallToHostFunction { name } = &self.kind
+    fn expect_call_to_host_function(
+        self,
+        called_host_fn: &str,
+        function_calls: &FunctionCalls,
+    ) -> Self {
+        let Some(host_fn) =
+            function_calls.is_call_to_host_function(&self.data.location)
         else {
-            panic!("Expected call to function.");
+            panic!("Expected call to host function.");
         };
-        assert_eq!(called_host_fn, name);
+        assert_eq!(called_host_fn, host_fn.name);
 
         self
     }
