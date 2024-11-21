@@ -330,12 +330,10 @@ fn function_call_to_function_name(
     function_call: &ExpressionLocation,
     code: &CompilerOutput,
 ) -> Option<String> {
-    let expression = code
-        .functions
-        .expression_by_location(function_call)
-        .expect("Expression referenced by active function must exist.");
-    let hash = expression.as_call_to_function()?;
-    let function = code.functions.named_by_hash(hash)?;
+    let function_location = code
+        .function_calls
+        .is_call_to_user_defined_function(function_call)?;
+    let function = code.functions.named.by_child_function(function_location)?;
 
     Some(function.name.clone())
 }
