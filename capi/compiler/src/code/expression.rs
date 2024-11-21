@@ -26,12 +26,6 @@ use super::{Function, Hash};
     udigest::Digestable,
 )]
 pub enum Expression {
-    /// # A call to a user-defined function
-    CallToUserDefinedFunction {
-        /// # The hash of the function being called
-        hash: Hash<Function>,
-    },
-
     /// # A comment, which does not influence the execution of the code
     ///
     /// ## Implementation Note

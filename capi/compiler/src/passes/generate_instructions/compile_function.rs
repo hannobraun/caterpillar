@@ -222,57 +222,6 @@ fn compile_expression(
         .map_expression_to_instructions(location.clone());
 
     match expression {
-        Expression::CallToUserDefinedFunction { .. } => {
-            let callee_location = functions_context
-                .function_calls
-                .is_call_to_user_defined_function(&location)
-                .unwrap();
-
-            let Some(function) = functions_context
-                .compiled_functions_by_location
-                .get(callee_location)
-            else {
-                let function =
-                    functions_context.functions.named.iter().find(|function| {
-                        function.location() == *callee_location
-                    });
-
-                panic!(
-                    "Compiling call to this user-defined function: `{}` \
-                    Expecting functions to be compiled before any \
-                    non-recursive calls to them, but can't find the compiled \
-                    version of this one.\n\
-                    \n\
-                    Function:\n\
-                    {function:#?}",
-                    callee_location.display(functions_context.functions),
-                )
-            };
-
-            let address = generate_instruction(
-                Instruction::CallFunction {
-                    function: function.clone(),
-                    is_tail_call: is_tail_expression,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-
-            // For now, we're done with this call. But the function we're
-            // calling might get updated in the future. When that happens, the
-            // compiler wants to know about all calls to the function, to update
-            // them.
-            //
-            // Let's make sure that information is going to be available.
-            functions_context
-                .call_instructions_by_callee
-                .inner
-                .entry(callee_location.clone())
-                .or_default()
-                .push(address);
-
-            Some(address)
-        }
         Expression::Comment { .. } => None,
         Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location) {

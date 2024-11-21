@@ -114,7 +114,6 @@ impl DebugExpressionState {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugExpressionKind {
-    CallToFunction { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
     UnresolvedIdentifier { name: String },
@@ -136,19 +135,6 @@ impl DebugExpressionKind {
         effect: Option<&Effect>,
     ) -> Self {
         match expression {
-            Expression::CallToUserDefinedFunction { .. } => {
-                let location = function_calls
-                    .is_call_to_user_defined_function(&location)
-                    .unwrap();
-
-                let function = functions
-                    .named
-                    .by_child_function(location)
-                    .expect("Expecting function referenced by call to exist.");
-                let name = function.name.clone();
-
-                Self::CallToFunction { name }
-            }
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },

@@ -95,12 +95,6 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
 
     let (expression, actions, error) = match expression.kind {
-        DebugExpressionKind::CallToFunction { name } => make_single_expression(
-            name,
-            expression.data,
-            &mut class_outer,
-            actions,
-        ),
         DebugExpressionKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
             (
