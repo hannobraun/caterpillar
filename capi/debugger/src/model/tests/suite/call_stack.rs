@@ -47,7 +47,8 @@ fn stopped_at_host_function() {
     // If execution is stopped at a host function, it should be displayed as
     // such.
 
-    let transient = debugger()
+    let mut debugger = debugger();
+    debugger
         .provide_source_code(
             r"
                 main: fn \ size_x, size_y ->
@@ -55,10 +56,10 @@ fn stopped_at_host_function() {
                 end
             ",
         )
-        .run_program()
-        .transient_state();
+        .run_program();
 
-    transient
+    debugger
+        .transient_state()
         .active_functions
         .expect_entries()
         .expect_functions()
