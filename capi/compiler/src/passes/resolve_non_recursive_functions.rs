@@ -110,9 +110,8 @@ fn resolve_calls_in_expression(
                         their order in the call graph.\n\
                         \n\
                         Theoretically, this could also happen if this is a \
-                        recursive call. But those have been resolved in an \
-                        earlier compiler pass already, and that shouldn't be a \
-                        factor here."
+                        recursive call, but this has been explicitly ruled out \
+                        above."
                     );
                 };
 
