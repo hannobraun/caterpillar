@@ -147,19 +147,7 @@ pub enum GameEngineFunction {
 
 impl GameEngineFunction {
     fn function(&self) -> HostFunction {
-        let name = self.name();
-        let number = (*self).into();
-        let signature = self.signature();
-
-        HostFunction {
-            name,
-            number,
-            signature,
-        }
-    }
-
-    fn name(&self) -> &'static str {
-        match self {
+        let name = match self {
             Self::Halt => "halt",
             Self::Load => "load",
             Self::Store => "store",
@@ -167,6 +155,14 @@ impl GameEngineFunction {
             Self::ReadRandom => "read_random",
             Self::SetPixel => "set_pixel",
             Self::SubmitFrame => "submit_frame",
+        };
+        let number = (*self).into();
+        let signature = self.signature();
+
+        HostFunction {
+            name,
+            number,
+            signature,
         }
     }
 
