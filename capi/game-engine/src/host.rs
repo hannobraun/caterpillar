@@ -1,7 +1,4 @@
-use capi_compiler::{
-    code::ConcreteSignature,
-    host::{Host, HostFunction},
-};
+use capi_compiler::host::{Host, HostFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
@@ -147,6 +144,8 @@ pub enum GameEngineFunction {
 
 impl GameEngineFunction {
     fn function(&self) -> HostFunction {
+        use capi_compiler::code::Type::*;
+
         let name = match self {
             Self::Halt => "halt",
             Self::Load => "load",
@@ -157,19 +156,7 @@ impl GameEngineFunction {
             Self::SubmitFrame => "submit_frame",
         };
         let number = (*self).into();
-        let signature = self.signature();
-
-        HostFunction {
-            name,
-            number,
-            signature,
-        }
-    }
-
-    fn signature(&self) -> ConcreteSignature {
-        use capi_compiler::code::Type::*;
-
-        match self {
+        let signature = match self {
             Self::Halt => ([], []).into(),
             Self::Load => ([Number], [Number]).into(),
             Self::Store => ([Number, Number], []).into(),
@@ -179,6 +166,12 @@ impl GameEngineFunction {
                 ([Number, Number, Number, Number, Number, Number], []).into()
             }
             Self::SubmitFrame => ([], []).into(),
+        };
+
+        HostFunction {
+            name,
+            number,
+            signature,
         }
     }
 }
