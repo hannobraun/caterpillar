@@ -305,18 +305,16 @@ fn compile_expression(
                     Some(&mut mapping),
                 );
                 Some(address)
-            } else if functions_context
+            } else if let Some(function_location) = functions_context
                 .function_calls
                 .is_call_to_user_defined_function(&location)
-                .is_some()
             {
-                if let Some(index) = functions_context
+                if functions_context
                     .recursion
                     .is_recursive_expression(&location)
+                    .is_some()
                 {
                     let hash = {
-                        let function_location = &cluster.functions[&index];
-
                         let called_function = functions_context
                             .functions
                             .by_location(function_location)
