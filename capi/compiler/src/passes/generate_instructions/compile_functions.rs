@@ -83,13 +83,11 @@ pub fn compile_functions(
                 );
             };
 
-            let function = context
-                .compiled_functions_by_hash
-                .get(&new_hash)
-                .expect(
-                "New function referenced in update should have been compiled; \
-                is expected to exist.",
-            );
+            let function =
+                context.compiled_functions_by_hash.get(&new_hash).expect(
+                    "New function referenced in update should have been \
+                    compiled; is expected to exist.",
+                );
 
             context.instructions.replace(
                 &calling_address,
