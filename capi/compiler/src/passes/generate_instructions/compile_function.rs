@@ -480,12 +480,23 @@ fn compile_expression(
                 );
                 Some(address)
             } else {
-                let address = generate_instruction(
-                    Instruction::TriggerEffect {
-                        effect: Effect::BuildError,
-                    },
+                let function_location =
+                    FunctionLocation::from(location.clone());
+
+                let function = functions_context
+                    .functions
+                    .by_location(&function_location)
+                    .expect(
+                        "Anonymous function that has been previously resolved \
+                        must be available.",
+                    );
+
+                let address = compile_local_function(
+                    &function,
+                    location,
+                    cluster_context,
                     functions_context.instructions,
-                    Some(&mut mapping),
+                    &mut mapping,
                 );
                 Some(address)
             }
