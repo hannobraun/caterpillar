@@ -290,26 +290,6 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::LocalFunctionRecursive { index } => {
-            let function = {
-                let location = cluster.functions.get(&index).expect(
-                    "Resolved local recursive function must exist in cluster.",
-                );
-                functions_context
-                    .functions
-                    .by_location(location)
-                    .expect("Function referenced from cluster must exist.")
-            };
-
-            let address = compile_local_function(
-                &function,
-                location,
-                cluster_context,
-                functions_context.instructions,
-                &mut mapping,
-            );
-            Some(address)
-        }
         Expression::UnresolvedIdentifier { name } => {
             if functions_context.bindings.is_binding(&location) {
                 let address = generate_instruction(

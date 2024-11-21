@@ -167,29 +167,6 @@ impl DebugExpressionKind {
 
                 Self::Function { function }
             }
-            Expression::LocalFunctionRecursive { .. } => {
-                let function = {
-                    let location = FunctionLocation::from(location.clone());
-                    functions
-                        .by_location(&location)
-                        .expect("Function referred to from cluster must exist.")
-                };
-
-                let function = DebugFunction::new(
-                    function.fragment.clone(),
-                    None,
-                    FunctionLocation::AnonymousFunction { location },
-                    active_expression,
-                    is_in_innermost_active_function,
-                    cluster,
-                    functions,
-                    source_map,
-                    breakpoints,
-                    effect,
-                );
-
-                Self::Function { function }
-            }
             Expression::UnresolvedIdentifier { name, .. } => {
                 Self::UnresolvedIdentifier { name }
             }
