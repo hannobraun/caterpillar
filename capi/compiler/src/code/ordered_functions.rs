@@ -1,8 +1,8 @@
-use std::{collections::BTreeSet, iter};
+use std::iter;
 
 use super::{
-    BranchLocation, Function, FunctionLocation, Functions, Index, IndexMap,
-    Located, NamedFunction,
+    Function, FunctionLocation, Functions, Index, IndexMap, Located,
+    NamedFunction,
 };
 
 /// # All functions, ordered by their dependencies
@@ -100,39 +100,6 @@ impl OrderedFunctions {
 pub struct Cluster {
     /// # The functions in this cluster
     pub functions: IndexMap<FunctionLocation>,
-
-    /// # The functions in this cluster that never terminate (diverge)
-    ///
-    /// Any functions that are _not_ in this set might still never terminate at
-    /// runtime. We can't know, that's called the halting problem.
-    ///
-    /// But what we do know, is that any function in this set is _guaranteed_ to
-    /// never terminate.
-    ///
-    /// Starts out as `None`, as the compiler pass that creates the call graph
-    /// (and those all [`Cluster`]s does not have the information required to do
-    /// this analysis. It is later filled in by another compiler pass.
-    pub divergent_functions: Option<BTreeSet<FunctionLocation>>,
-
-    /// # The branches in this cluster that are _not_ divergent
-    ///
-    /// Contains any branches in this cluster from functions that are _not_
-    /// known to diverge. Those are the branches from all the functions that are
-    /// not tracked in `divergent_functions`.
-    ///
-    /// The branches are arrange such, that they can be processed by the type
-    /// inference algorithm in order. The first branch will have no recursive
-    /// function calls. If no such branch exists, this list is empty, and all
-    /// functions in the cluster are divergent.
-    ///
-    /// Every following branch in the list will only have recursive calls to
-    /// functions with at least one branch that came before in the list. This
-    /// makes it possible to infer the types for all functions in order.
-    ///
-    /// Starts out as `None`, as the compiler pass that creates the call graph
-    /// (and those all [`Cluster`]s does not have the information required to do
-    /// this analysis. It is later filled in by another compiler pass.
-    pub non_divergent_branches: Option<Vec<BranchLocation>>,
 }
 
 impl Cluster {

@@ -101,8 +101,6 @@ fn collect_functions_into_clusters(
             } else {
                 Some(Cluster {
                     functions: named_functions,
-                    divergent_functions: None,
-                    non_divergent_branches: None,
                 })
             }
         })
@@ -148,8 +146,6 @@ mod tests {
                 .into_iter()
                 .map(|locations_by_index| Cluster {
                     functions: [locations_by_index].into_iter().collect(),
-                    divergent_functions: None,
-                    non_divergent_branches: None,
                 })
                 .collect::<Vec<_>>(),
         );
@@ -183,8 +179,6 @@ mod tests {
                 .into_iter()
                 .map(|locations_by_index| Cluster {
                     functions: [locations_by_index].into_iter().collect(),
-                    divergent_functions: None,
-                    non_divergent_branches: None,
                 })
                 .collect::<Vec<_>>(),
         );
@@ -227,8 +221,6 @@ mod tests {
             .into_iter()
             .map(|locations_by_index| Cluster {
                 functions: locations_by_index.iter().cloned().collect(),
-                divergent_functions: None,
-                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -276,8 +268,6 @@ mod tests {
             .into_iter()
             .map(|locations_by_index| Cluster {
                 functions: locations_by_index.iter().cloned().collect(),
-                divergent_functions: None,
-                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
@@ -345,8 +335,6 @@ mod tests {
             .into_iter()
             .map(|locations_by_index| Cluster {
                 functions: locations_by_index.iter().cloned().collect(),
-                divergent_functions: None,
-                non_divergent_branches: None,
             })
             .collect::<Vec<_>>(),
         );
