@@ -38,10 +38,7 @@ fn build_dependency_graph(
         for branch in function.branches() {
             for expression in branch.body() {
                 let dependee = match expression.fragment {
-                    Expression::UnresolvedIdentifier {
-                        name,
-                        is_known_to_be_call_to_user_defined_function: _,
-                    } => {
+                    Expression::UnresolvedIdentifier { name } => {
                         if function_calls.is_call_to_user_defined_function(
                             &expression.location,
                         ) {

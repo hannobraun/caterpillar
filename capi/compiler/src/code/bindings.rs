@@ -120,10 +120,7 @@ fn resolve_bindings_in_branch(
 
     for expression in branch.body() {
         match expression.fragment {
-            Expression::UnresolvedIdentifier {
-                name,
-                is_known_to_be_call_to_user_defined_function: _,
-            } => {
+            Expression::UnresolvedIdentifier { name } => {
                 let is_known_binding =
                     scopes.iter().any(|scope| scope.contains(name));
 

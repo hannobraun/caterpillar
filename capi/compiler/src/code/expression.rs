@@ -186,12 +186,6 @@ pub enum Expression {
     UnresolvedIdentifier {
         /// # The name of the unresolved identifier
         name: String,
-
-        /// # Indicate whether the identifier is known to be a function call
-        ///
-        /// This starts out as `false` and might later get updated by the
-        /// respective compiler pass.
-        is_known_to_be_call_to_user_defined_function: bool,
     },
 
     /// # An unresolved local function

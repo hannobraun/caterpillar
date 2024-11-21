@@ -25,10 +25,8 @@ impl FunctionCalls {
         for function in functions.all_functions() {
             for branch in function.branches() {
                 for expression in branch.body() {
-                    if let Expression::UnresolvedIdentifier {
-                        name,
-                        is_known_to_be_call_to_user_defined_function: _,
-                    } = expression.fragment
+                    if let Expression::UnresolvedIdentifier { name } =
+                        expression.fragment
                     {
                         // If multiple functions of different types have the
                         // same name, the following code will resolve a single

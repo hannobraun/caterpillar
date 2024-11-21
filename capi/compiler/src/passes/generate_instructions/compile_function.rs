@@ -385,10 +385,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedIdentifier {
-            name,
-            is_known_to_be_call_to_user_defined_function: _,
-        } => {
+        Expression::UnresolvedIdentifier { name } => {
             if functions_context.bindings.is_binding(&location) {
                 let address = generate_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },

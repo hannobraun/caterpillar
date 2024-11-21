@@ -63,10 +63,8 @@ fn resolve_recursive_calls_in_function(
         let (body, _) = branch.destructure();
 
         for expression in body {
-            if let Expression::UnresolvedIdentifier {
-                name,
-                is_known_to_be_call_to_user_defined_function: _,
-            } = expression.fragment
+            if let Expression::UnresolvedIdentifier { name } =
+                expression.fragment
             {
                 if function_calls
                     .is_call_to_user_defined_function(&expression.location)
