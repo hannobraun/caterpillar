@@ -89,18 +89,18 @@ fn resolve_calls_in_expression(
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
+    if recursion
+        .is_recursive_expression(&expression.location)
+        .is_some()
+    {
+        return Ok(());
+    }
+
     match expression.fragment {
         Expression::UnresolvedIdentifier { name } => {
             if function_calls
                 .is_call_to_user_defined_function(&expression.location)
             {
-                if recursion
-                    .is_recursive_expression(&expression.location)
-                    .is_some()
-                {
-                    return Ok(());
-                }
-
                 let Some(hash) = resolved_hashes_by_name.get(name).copied()
                 else {
                     unreachable!(
