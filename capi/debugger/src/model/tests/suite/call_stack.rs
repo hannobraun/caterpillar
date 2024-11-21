@@ -83,7 +83,8 @@ fn stopped_in_anonymous_function() {
     // contains that block should appear as an active function, and the current
     // instruction should be visible.
 
-    let transient = debugger()
+    let mut debugger = debugger();
+    debugger
         .provide_source_code(
             r"
                 main: fn \ size_x, size_y ->
@@ -91,10 +92,10 @@ fn stopped_in_anonymous_function() {
                 end
             ",
         )
-        .run_program()
-        .transient_state();
+        .run_program();
 
-    let expression = transient
+    let expression = debugger
+        .transient_state()
         .active_functions
         .expect_entries()
         .expect_functions()
