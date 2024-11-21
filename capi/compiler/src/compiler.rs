@@ -10,7 +10,7 @@ use crate::{
     host::Host,
     passes::{
         detect_changes, generate_instructions, order_functions_by_dependencies,
-        resolve_non_recursive_functions, resolve_recursive_local_functions,
+        resolve_non_recursive_functions,
     },
     source_map::SourceMap,
     Instructions,
@@ -31,14 +31,13 @@ impl Compiler {
     /// # Compile the provided source code
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::from_input(input);
-        let mut functions = parse(tokens);
+        let functions = parse(tokens);
         let bindings = Bindings::resolve(&functions);
         let function_calls = FunctionCalls::resolve(&functions, host);
         let tail_expressions = TailExpressions::find(&functions);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion = Recursion::find(&functions, &ordered_functions);
-        resolve_recursive_local_functions(&mut functions, &ordered_functions);
         let functions = resolve_non_recursive_functions(
             functions,
             &function_calls,
