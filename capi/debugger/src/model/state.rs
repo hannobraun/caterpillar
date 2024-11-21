@@ -90,54 +90,59 @@ impl PersistentState {
                 let branch = entries.leaf().function()?.active_branch()?;
 
                 let origin = branch.active_expression()?;
-                let targets = if let Some(hash) =
-                    origin.data.expression.as_call_to_function()
-                {
-                    let function = code.functions.named_by_hash(hash).expect(
-                        "Expecting function referenced from call to exist.",
-                    );
 
-                    function
-                        .into_located_function()
-                        .branches()
-                        .filter_map(|branch| {
-                            let expression = branch.body().next()?;
-                            Some(expression.location)
-                        })
-                        .collect()
-                } else {
-                    let mut expression = origin.clone();
+                let targets =
+                    if let Some(location) = code
+                        .function_calls
+                        .is_call_to_user_defined_function(&origin.data.location)
+                    {
+                        let function =
+                        code.functions.named.by_child_function(location).expect(
+                            "Expecting function referenced from call to exist.",
+                        );
 
-                    loop {
-                        let Some(after) = entries
-                            .find_next_expression_or_next_after_caller(
-                                branch,
-                                &expression.data.location,
-                            )?
-                        else {
-                            // Can't find a next expression _or_ a caller, which
-                            // means we must be at the top-level function.
-                            //
-                            // Let's just tell the runtime to continue, so the
-                            // process finishes.
-                            self.step_or_continue(
-                                &origin.data.location,
-                                vec![],
-                                &mut commands,
-                            )?;
-                            return Ok(commands);
-                        };
+                        function
+                            .into_located_function()
+                            .branches()
+                            .filter_map(|branch| {
+                                let expression = branch.body().next()?;
+                                Some(expression.location)
+                            })
+                            .collect()
+                    } else {
+                        let mut expression = origin.clone();
 
-                        if let DebugExpressionKind::Comment { .. } = after.kind
-                        {
-                            // Can't step to comments! Need to ignore them.
-                            expression = after.clone();
-                            continue;
+                        loop {
+                            let Some(after) = entries
+                                .find_next_expression_or_next_after_caller(
+                                    branch,
+                                    &expression.data.location,
+                                )?
+                            else {
+                                // Can't find a next expression _or_ a caller, which
+                                // means we must be at the top-level function.
+                                //
+                                // Let's just tell the runtime to continue, so the
+                                // process finishes.
+                                self.step_or_continue(
+                                    &origin.data.location,
+                                    vec![],
+                                    &mut commands,
+                                )?;
+                                return Ok(commands);
+                            };
+
+                            if let DebugExpressionKind::Comment { .. } =
+                                after.kind
+                            {
+                                // Can't step to comments! Need to ignore them.
+                                expression = after.clone();
+                                continue;
+                            }
+
+                            break vec![(after.data.location)];
                         }
-
-                        break vec![(after.data.location)];
-                    }
-                };
+                    };
 
                 self.step_or_continue(
                     &origin.data.location,
