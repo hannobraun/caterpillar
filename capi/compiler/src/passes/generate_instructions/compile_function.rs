@@ -368,10 +368,54 @@ fn compile_expression(
 
                     Some(address)
                 } else {
-                    unreachable!(
-                        "Non-recursive calls to user-defined functions should \
-                        still get resolved."
+                    let Some(function) = functions_context
+                        .compiled_functions_by_location
+                        .get(callee_location)
+                    else {
+                        let function =
+                            functions_context.functions.named.iter().find(
+                                |function| {
+                                    function.location() == *callee_location
+                                },
+                            );
+
+                        panic!(
+                            "Compiling call to this user-defined function: \
+                            `{}` \
+                            Expecting functions to be compiled before any \
+                            non-recursive calls to them, but can't find the compiled \
+                            version of this one.\n\
+                            \n\
+                            Function:\n\
+                            {function:#?}",
+                            callee_location.display(functions_context.functions),
+                        )
+                    };
+
+                    let address = generate_instruction(
+                        Instruction::CallFunction {
+                            function: function.clone(),
+                            is_tail_call: is_tail_expression,
+                        },
+                        functions_context.instructions,
+                        Some(&mut mapping),
                     );
+
+                    // For now, we're done with this call. But the function
+                    // we're calling might get updated in the future. When that
+                    // happens, the compiler wants to know about all calls to
+                    // the function, to update them.
+                    //
+                    // Let's make sure that information is going to be
+                    // available.
+                    functions_context
+                        .call_instructions_by_callee
+                        .inner
+                        .entry(callee_location.clone())
+                        .or_default()
+                        .push(address);
+
+                    Some(address)
                 }
             } else {
                 let address = generate_instruction(
