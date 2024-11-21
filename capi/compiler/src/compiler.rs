@@ -40,7 +40,11 @@ impl Compiler {
         resolve_most_identifiers(&mut functions, host);
         let mut ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
-        resolve_recursive_calls(&mut functions, &ordered_functions);
+        resolve_recursive_calls(
+            &mut functions,
+            &function_calls,
+            &ordered_functions,
+        );
         resolve_recursive_local_functions(&mut functions, &ordered_functions);
         let functions = resolve_non_recursive_functions(
             functions,
