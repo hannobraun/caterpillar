@@ -267,29 +267,6 @@ fn compile_expression(
             Some(address)
         }
         Expression::Comment { .. } => None,
-        Expression::LiteralNumber { value } => {
-            let address = generate_instruction(
-                Instruction::Push { value },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
-        }
-        Expression::LocalFunction { hash } => {
-            let function = functions_context.functions.by_hash(&hash).expect(
-                "Anonymous function that has been previously resolved must be \
-                available.",
-            );
-
-            let address = compile_local_function(
-                &function,
-                location,
-                cluster_context,
-                functions_context.instructions,
-                &mut mapping,
-            );
-            Some(address)
-        }
         Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location) {
                 let address = generate_instruction(
@@ -402,6 +379,29 @@ fn compile_expression(
                 );
                 Some(address)
             }
+        }
+        Expression::LiteralNumber { value } => {
+            let address = generate_instruction(
+                Instruction::Push { value },
+                functions_context.instructions,
+                Some(&mut mapping),
+            );
+            Some(address)
+        }
+        Expression::LocalFunction { hash } => {
+            let function = functions_context.functions.by_hash(&hash).expect(
+                "Anonymous function that has been previously resolved must be \
+                available.",
+            );
+
+            let address = compile_local_function(
+                &function,
+                location,
+                cluster_context,
+                functions_context.instructions,
+                &mut mapping,
+            );
+            Some(address)
         }
         Expression::UnresolvedLocalFunction => {
             if let Some(index) = functions_context

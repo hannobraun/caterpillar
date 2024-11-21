@@ -55,6 +55,14 @@ pub enum Expression {
         text: String,
     },
 
+    /// # An unresolved identifier
+    ///
+    /// This is the result of a compiler error.
+    Identifier {
+        /// # The name of the unresolved identifier
+        name: String,
+    },
+
     /// # A number literal
     LiteralNumber {
         /// The number defined by this literal
@@ -87,14 +95,6 @@ pub enum Expression {
         /// distinct functions could end up with the same hash, despite being
         /// very different due to the local functions they define.
         hash: Hash<Function>,
-    },
-
-    /// # An unresolved identifier
-    ///
-    /// This is the result of a compiler error.
-    Identifier {
-        /// # The name of the unresolved identifier
-        name: String,
     },
 
     /// # An unresolved local function

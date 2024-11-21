@@ -144,6 +144,9 @@ impl DebugExpressionKind {
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
+            Expression::Identifier { name } => {
+                Self::UnresolvedIdentifier { name }
+            }
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
@@ -166,9 +169,6 @@ impl DebugExpressionKind {
                 );
 
                 Self::Function { function }
-            }
-            Expression::Identifier { name } => {
-                Self::UnresolvedIdentifier { name }
             }
             Expression::UnresolvedLocalFunction => {
                 let function = {
