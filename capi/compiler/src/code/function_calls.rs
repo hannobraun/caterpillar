@@ -8,6 +8,7 @@ use crate::{
 use super::{Expression, ExpressionLocation, Functions};
 
 /// # Tracks function calls
+#[derive(Debug)]
 pub struct FunctionCalls {
     to_host_functions: BTreeMap<ExpressionLocation, HostFunction>,
     to_intrinsic_functions: BTreeMap<ExpressionLocation, IntrinsicFunction>,
