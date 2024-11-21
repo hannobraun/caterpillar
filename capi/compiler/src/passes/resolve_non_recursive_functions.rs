@@ -1,12 +1,13 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    Expression, ExpressionLocation, Function, FunctionLocation, Functions,
-    Hash, Located, OrderedFunctions, StableFunctions,
+    Expression, ExpressionLocation, Function, FunctionCalls, FunctionLocation,
+    Functions, Hash, Located, OrderedFunctions, StableFunctions,
 };
 
 pub fn resolve_non_recursive_functions(
     mut functions: Functions,
+    function_calls: &FunctionCalls,
     ordered_functions: &OrderedFunctions,
 ) -> StableFunctions {
     let mut resolved_hashes_by_name = BTreeMap::new();
@@ -19,6 +20,7 @@ pub fn resolve_non_recursive_functions(
 
         if let Err(err) = resolve_calls_in_function(
             function,
+            function_calls,
             &resolved_hashes_by_name,
             &resolved_hashes_by_location,
         ) {
@@ -54,6 +56,7 @@ pub fn resolve_non_recursive_functions(
 
 fn resolve_calls_in_function(
     function: Located<&mut Function>,
+    function_calls: &FunctionCalls,
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {
@@ -65,6 +68,7 @@ fn resolve_calls_in_function(
         for expression in body {
             resolve_calls_in_expression(
                 expression,
+                function_calls,
                 resolved_hashes_by_name,
                 resolved_hashes_by_location,
             )?;
@@ -76,6 +80,7 @@ fn resolve_calls_in_function(
 
 fn resolve_calls_in_expression(
     expression: Located<&mut Expression>,
+    _: &FunctionCalls,
     resolved_hashes_by_name: &BTreeMap<String, Hash<Function>>,
     resolved_hashes_by_location: &BTreeMap<ExpressionLocation, Hash<Function>>,
 ) -> Result<(), ExpressionLocation> {

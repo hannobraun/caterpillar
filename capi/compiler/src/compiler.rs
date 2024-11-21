@@ -42,8 +42,11 @@ impl Compiler {
             order_functions_by_dependencies(&functions, &function_calls);
         resolve_recursive_calls(&mut functions, &ordered_functions);
         resolve_recursive_local_functions(&mut functions, &ordered_functions);
-        let functions =
-            resolve_non_recursive_functions(functions, &ordered_functions);
+        let functions = resolve_non_recursive_functions(
+            functions,
+            &function_calls,
+            &ordered_functions,
+        );
         find_divergent_functions(&functions, &mut ordered_functions);
         sort_non_divergent_branches(&functions, &mut ordered_functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
