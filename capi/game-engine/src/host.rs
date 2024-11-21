@@ -170,15 +170,15 @@ impl GameEngineFunction {
         use capi_compiler::code::Type::*;
 
         match self {
-            GameEngineFunction::Halt => ([], []).into(),
-            GameEngineFunction::Load => ([Number], [Number]).into(),
-            GameEngineFunction::Store => ([Number, Number], []).into(),
-            GameEngineFunction::ReadInput => ([], [Number]).into(),
-            GameEngineFunction::ReadRandom => ([], [Number]).into(),
-            GameEngineFunction::SetPixel => {
+            Self::Halt => ([], []).into(),
+            Self::Load => ([Number], [Number]).into(),
+            Self::Store => ([Number, Number], []).into(),
+            Self::ReadInput => ([], [Number]).into(),
+            Self::ReadRandom => ([], [Number]).into(),
+            Self::SetPixel => {
                 ([Number, Number, Number, Number, Number, Number], []).into()
             }
-            GameEngineFunction::SubmitFrame => ([], []).into(),
+            Self::SubmitFrame => ([], []).into(),
         }
     }
 }
