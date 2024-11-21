@@ -3,10 +3,8 @@ use capi_compiler::{
         Cluster, Expression, ExpressionLocation, FunctionLocation,
         StableFunctions,
     },
-    host::Host,
     source_map::SourceMap,
 };
-use capi_game_engine::host::GameEngineHost;
 use capi_runtime::Effect;
 
 use super::{Breakpoints, DebugFunction};
@@ -116,7 +114,6 @@ impl DebugExpressionState {
 pub enum DebugExpressionKind {
     CallToFunction { name: String },
     CallToFunctionRecursive { name: String },
-    CallToHostFunction { name: String },
     CallToIntrinsic { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
@@ -171,15 +168,6 @@ impl DebugExpressionKind {
                 let name = called_function.name.clone();
 
                 Self::CallToFunctionRecursive { name }
-            }
-            Expression::CallToHostFunction { number } => {
-                let name = GameEngineHost
-                    .function_by_number(number)
-                    .expect("Expected effect number in code to be valid.")
-                    .name
-                    .to_string();
-
-                Self::CallToHostFunction { name }
             }
             Expression::CallToIntrinsicFunction { intrinsic, .. } => {
                 Self::CallToIntrinsic {

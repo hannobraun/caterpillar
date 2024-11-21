@@ -28,19 +28,6 @@ use super::{Function, FunctionLocation, Hash, Index};
     udigest::Digestable,
 )]
 pub enum Expression {
-    /// # A call to a function defined by the host
-    ///
-    /// Host functions present as functions to the user. But contrary to regular
-    /// functions, they have no representation in the form of Caterpillar code.
-    ///
-    /// The compiler translates calls to host functions into instructions that
-    /// trigger a specific effect. This effect is then handled by the host in
-    /// whatever way it deems appropriate.
-    CallToHostFunction {
-        /// # The number that identifies the host function
-        number: u8,
-    },
-
     /// # A call to a compiler-intrinsic function
     ///
     /// Intrinsic functions are implemented in the compiler. Calls to them are

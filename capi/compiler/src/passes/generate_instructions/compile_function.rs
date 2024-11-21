@@ -315,23 +315,6 @@ fn compile_expression(
 
             Some(address)
         }
-        Expression::CallToHostFunction { number } => {
-            let address = generate_instruction(
-                Instruction::Push {
-                    value: number.into(),
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::Host,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
-        }
         Expression::CallToIntrinsicFunction { intrinsic } => {
             let address = compile_intrinsic(
                 &intrinsic,

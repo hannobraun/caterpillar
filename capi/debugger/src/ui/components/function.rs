@@ -109,14 +109,6 @@ pub fn Expression(
                 actions,
             )
         }
-        DebugExpressionKind::CallToHostFunction { name } => {
-            make_single_expression(
-                name,
-                expression.data,
-                &mut class_outer,
-                actions,
-            )
-        }
         DebugExpressionKind::CallToIntrinsic { name } => {
             make_single_expression(
                 name,
