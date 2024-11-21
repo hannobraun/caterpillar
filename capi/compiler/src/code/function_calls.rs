@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use crate::{
     host::{Host, HostFunction},
@@ -12,7 +12,7 @@ use super::{Expression, ExpressionLocation, Functions};
 pub struct FunctionCalls {
     to_host_functions: BTreeMap<ExpressionLocation, HostFunction>,
     to_intrinsic_functions: BTreeMap<ExpressionLocation, IntrinsicFunction>,
-    to_user_defined_functions: BTreeSet<ExpressionLocation>,
+    to_user_defined_functions: BTreeMap<ExpressionLocation, ()>,
 }
 
 impl FunctionCalls {
@@ -20,7 +20,7 @@ impl FunctionCalls {
     pub fn resolve(functions: &Functions, host: &impl Host) -> Self {
         let mut to_host_functions = BTreeMap::new();
         let mut to_intrinsic_functions = BTreeMap::new();
-        let mut to_user_defined_functions = BTreeSet::new();
+        let mut to_user_defined_functions = BTreeMap::new();
 
         for function in functions.all_functions() {
             for branch in function.branches() {
@@ -48,7 +48,7 @@ impl FunctionCalls {
 
                         if functions.named.by_name(name).is_some() {
                             to_user_defined_functions
-                                .insert(expression.location);
+                                .insert(expression.location, ());
                         }
                     }
                 }
@@ -83,7 +83,7 @@ impl FunctionCalls {
         &self,
         location: &ExpressionLocation,
     ) -> bool {
-        self.to_user_defined_functions.contains(location)
+        self.to_user_defined_functions.contains_key(location)
     }
 }
 
