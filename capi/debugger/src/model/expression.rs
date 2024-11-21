@@ -168,14 +168,11 @@ impl DebugExpressionKind {
 
                 Self::Function { function }
             }
-            Expression::LocalFunctionRecursive { index } => {
+            Expression::LocalFunctionRecursive { .. } => {
                 let function = {
-                    let location = cluster.functions.get(&index).expect(
-                        "Resolved recursive local function must exist in \
-                        cluster.",
-                    );
+                    let location = FunctionLocation::from(location.clone());
                     functions
-                        .by_location(location)
+                        .by_location(&location)
                         .expect("Function referred to from cluster must exist.")
                 };
 
