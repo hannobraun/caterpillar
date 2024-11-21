@@ -148,7 +148,7 @@ pub enum GameEngineFunction {
 impl GameEngineFunction {
     fn function(&self) -> HostFunction {
         let name = self.name();
-        let number = self.number();
+        let number = (*self).into();
         let signature = self.signature();
 
         HostFunction {
@@ -156,10 +156,6 @@ impl GameEngineFunction {
             number,
             signature,
         }
-    }
-
-    fn number(&self) -> u8 {
-        (*self).into()
     }
 
     fn name(&self) -> &'static str {
