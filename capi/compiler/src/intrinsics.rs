@@ -44,6 +44,17 @@ macro_rules! intrinsics {
                 Some(intrinsic)
             }
 
+            /// # Access the name of this intrinsic function
+            pub fn name(&self) -> &'static str {
+                match self {
+                    $(
+                        Self::$variant => {
+                            $name
+                        }
+                    )*
+                }
+            }
+
             /// # Access the type signature of this intrinsic function
             ///
             /// Not all intrinsic functions can provide a type signature, as the
