@@ -424,14 +424,38 @@ fn compile_expression(
             }
         }
         Expression::UnresolvedLocalFunction => {
-            let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::BuildError,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
+            if let Some(index) = functions_context
+                .recursion
+                .is_recursive_expression(&location)
+            {
+                let function = {
+                    let location = cluster.functions.get(&index).expect(
+                    "Resolved local recursive function must exist in cluster.",
+                );
+                    functions_context
+                        .functions
+                        .by_location(location)
+                        .expect("Function referenced from cluster must exist.")
+                };
+
+                let address = compile_local_function(
+                    &function,
+                    location,
+                    cluster_context,
+                    functions_context.instructions,
+                    &mut mapping,
+                );
+                Some(address)
+            } else {
+                let address = generate_instruction(
+                    Instruction::TriggerEffect {
+                        effect: Effect::BuildError,
+                    },
+                    functions_context.instructions,
+                    Some(&mut mapping),
+                );
+                Some(address)
+            }
         }
     }
 }
