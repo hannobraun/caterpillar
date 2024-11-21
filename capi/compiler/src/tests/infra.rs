@@ -93,7 +93,7 @@ struct TestHost {}
 impl Host for TestHost {
     fn functions(&self) -> impl IntoIterator<Item = HostFunction> {
         [HostFunction {
-            name: "send",
+            name: "send".into(),
             number: 0,
             signature: ([Type::Number], []).into(),
         }]

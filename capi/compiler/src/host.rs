@@ -32,7 +32,7 @@ pub trait Host {
 #[derive(Debug)]
 pub struct HostFunction {
     /// # The name that identifies the function in input code
-    pub name: &'static str,
+    pub name: String,
 
     /// # The number that identifies the function in the host effect
     pub number: u8,

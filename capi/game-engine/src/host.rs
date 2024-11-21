@@ -169,7 +169,7 @@ impl GameEngineFunction {
         };
 
         HostFunction {
-            name,
+            name: name.into(),
             number,
             signature,
         }

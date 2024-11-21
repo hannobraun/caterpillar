@@ -210,7 +210,7 @@ mod tests {
     impl Host for TestHost {
         fn functions(&self) -> impl IntoIterator<Item = HostFunction> {
             [HostFunction {
-                name: "host_fn",
+                name: "host_fn".into(),
                 number: 0,
                 signature: ([], []).into(),
             }]
