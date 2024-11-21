@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use crate::code::{Changes, Cluster, Function, Hash};
+use crate::code::{Changes, Cluster, FunctionLocation};
 
 use super::{
     compile_function::{
@@ -30,7 +30,7 @@ pub struct ClusterContext {
     /// placeholder instruction can be replaced with the real call, once all
     /// functions have been compiled.
     pub recursive_calls_by_callee:
-        BTreeMap<Hash<Function>, Vec<CallToFunction>>,
+        BTreeMap<FunctionLocation, Vec<CallToFunction>>,
 }
 
 pub fn compile_cluster(
@@ -52,11 +52,9 @@ pub fn compile_cluster(
     while let Some(function_to_compile) =
         context.queue_of_functions_to_compile.pop_front()
     {
-        let hash = Hash::new(&function_to_compile.function);
-
         let runtime_function = compile_function(
             function_to_compile.function,
-            function_to_compile.location,
+            function_to_compile.location.clone(),
             function_to_compile.address_of_instruction_to_make_anon_function,
             cluster,
             &mut context,
@@ -65,7 +63,7 @@ pub fn compile_cluster(
 
         functions_context
             .compiled_functions_by_hash
-            .insert(hash, runtime_function);
+            .insert(function_to_compile.location, runtime_function);
     }
 
     for (hash, calls) in context.recursive_calls_by_callee {

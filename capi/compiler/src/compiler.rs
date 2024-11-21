@@ -4,8 +4,9 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, Bindings, Function, FunctionCalls, Hash,
-        OrderedFunctions, Recursion, StableFunctions, TailExpressions, Tokens,
+        syntax::parse, Bindings, Function, FunctionCalls, FunctionLocation,
+        Hash, OrderedFunctions, Recursion, StableFunctions, TailExpressions,
+        Tokens,
     },
     host::Host,
     passes::{
@@ -23,7 +24,7 @@ pub struct Compiler {
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_hash:
-        BTreeMap<Hash<Function>, capi_runtime::Function>,
+        BTreeMap<FunctionLocation, capi_runtime::Function>,
     source_map: SourceMap,
 }
 

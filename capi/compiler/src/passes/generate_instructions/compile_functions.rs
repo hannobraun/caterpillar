@@ -4,8 +4,8 @@ use capi_runtime::Instruction;
 
 use crate::{
     code::{
-        Bindings, Changes, Function, FunctionCalls, Hash, OrderedFunctions,
-        Recursion, StableFunctions, TailExpressions,
+        Bindings, Changes, FunctionCalls, FunctionLocation, Hash,
+        OrderedFunctions, Recursion, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -24,7 +24,7 @@ pub struct FunctionsContext<'r> {
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
     pub compiled_functions_by_hash:
-        &'r mut BTreeMap<Hash<Function>, capi_runtime::Function>,
+        &'r mut BTreeMap<FunctionLocation, capi_runtime::Function>,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -40,7 +40,7 @@ pub fn compile_functions(
     source_map: &mut SourceMap,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
     compiled_functions_by_hash: &mut BTreeMap<
-        Hash<Function>,
+        FunctionLocation,
         capi_runtime::Function,
     >,
 ) {
@@ -62,7 +62,6 @@ pub fn compile_functions(
 
     for update in &changes.updated {
         let old_hash = Hash::new(&update.old.function);
-        let new_hash = Hash::new(&update.new.function);
 
         for calling_address in context
             .call_instructions_by_callee
@@ -83,8 +82,10 @@ pub fn compile_functions(
                 );
             };
 
-            let function =
-                context.compiled_functions_by_hash.get(&new_hash).expect(
+            let function = context
+                .compiled_functions_by_hash
+                .get(&update.new.location)
+                .expect(
                     "New function referenced in update should have been \
                     compiled; is expected to exist.",
                 );

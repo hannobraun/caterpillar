@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Bindings, Changes, Function, FunctionCalls, Functions, Hash,
+        Bindings, Changes, FunctionCalls, FunctionLocation, Functions,
         OrderedFunctions, Recursion, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
@@ -29,7 +29,7 @@ pub fn generate_instructions(
     instructions: &mut Instructions,
     call_instructions_by_callee: &mut CallInstructionsByCallee,
     compiled_functions_by_hash: &mut BTreeMap<
-        Hash<Function>,
+        FunctionLocation,
         capi_runtime::Function,
     >,
     source_map: &mut SourceMap,
@@ -85,7 +85,7 @@ fn compile_call_to_main(
     functions: &Functions,
     instructions: &mut Instructions,
     compiled_functions_by_hash: &mut BTreeMap<
-        Hash<Function>,
+        FunctionLocation,
         capi_runtime::Function,
     >,
 ) {
@@ -97,7 +97,7 @@ fn compile_call_to_main(
     };
 
     compile_call_to_function(
-        &Hash::new(&main.inner),
+        &main.location(),
         CallToFunction {
             address: call_to_main,
             is_tail_call: true,

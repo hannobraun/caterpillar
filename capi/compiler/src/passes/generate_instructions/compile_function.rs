@@ -228,12 +228,13 @@ fn compile_expression(
                 .is_call_to_user_defined_function(&location)
                 .unwrap();
 
-            let Some(function) =
-                functions_context.compiled_functions_by_hash.get(&hash)
+            let Some(function) = functions_context
+                .compiled_functions_by_hash
+                .get(callee_location)
             else {
                 let function =
                     functions_context.functions.named.iter().find(|function| {
-                        Hash::new(&function.fragment.inner) == hash
+                        function.location() == *callee_location
                     });
 
                 panic!(
@@ -345,7 +346,7 @@ fn compile_expression(
                     );
                     cluster_context
                         .recursive_calls_by_callee
-                        .entry(hash)
+                        .entry(called_function.location)
                         .or_default()
                         .push(CallToFunction {
                             address,
@@ -445,12 +446,12 @@ fn compile_expression(
 }
 
 pub fn compile_call_to_function(
-    hash: &Hash<Function>,
+    location: &FunctionLocation,
     call: CallToFunction,
-    functions: &mut BTreeMap<Hash<Function>, capi_runtime::Function>,
+    functions: &mut BTreeMap<FunctionLocation, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
-    let function = functions.get(hash).expect(
+    let function = functions.get(location).expect(
         "Attempting to compile call to function. Expecting that function to \
         have been compiled already.",
     );
