@@ -36,7 +36,6 @@ impl Compiler {
         let mut functions = parse(tokens);
         let bindings = Bindings::resolve(&functions);
         let function_calls = FunctionCalls::resolve(&functions, host);
-        dbg!(function_calls);
         let tail_expressions = TailExpressions::find(&functions);
         resolve_most_identifiers(&mut functions, host);
         let mut ordered_functions = order_functions_by_dependencies(&functions);
@@ -54,6 +53,7 @@ impl Compiler {
             &functions,
             &ordered_functions,
             &bindings,
+            &function_calls,
             &tail_expressions,
             &changes,
             &mut self.instructions,

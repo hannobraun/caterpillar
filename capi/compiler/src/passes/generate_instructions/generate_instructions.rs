@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Bindings, Changes, Function, Functions, Hash, OrderedFunctions,
-        StableFunctions, TailExpressions,
+        Bindings, Changes, Function, FunctionCalls, Functions, Hash,
+        OrderedFunctions, StableFunctions, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -22,6 +22,7 @@ pub fn generate_instructions(
     functions: &StableFunctions,
     ordered_functions: &OrderedFunctions,
     bindings: &Bindings,
+    function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
     changes: &Changes,
     instructions: &mut Instructions,
@@ -50,6 +51,7 @@ pub fn generate_instructions(
         changes,
         ordered_functions,
         bindings,
+        function_calls,
         tail_expressions,
         instructions,
         source_map,

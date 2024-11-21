@@ -393,6 +393,25 @@ fn compile_expression(
                     Some(&mut mapping),
                 );
                 Some(address)
+            } else if let Some(function) = functions_context
+                .function_calls
+                .is_call_to_host_function(&location)
+            {
+                let address = generate_instruction(
+                    Instruction::Push {
+                        value: function.number.into(),
+                    },
+                    functions_context.instructions,
+                    Some(&mut mapping),
+                );
+                generate_instruction(
+                    Instruction::TriggerEffect {
+                        effect: Effect::Host,
+                    },
+                    functions_context.instructions,
+                    Some(&mut mapping),
+                );
+                Some(address)
             } else {
                 let address = generate_instruction(
                     Instruction::TriggerEffect {
