@@ -29,9 +29,7 @@ impl TailExpressions {
                         continue;
                     }
 
-                    if let Expression::UnresolvedIdentifier { .. } =
-                        expression.fragment
-                    {
+                    if let Expression::Identifier { .. } = expression.fragment {
                         tail_expressions.insert(expression.location);
                     }
 

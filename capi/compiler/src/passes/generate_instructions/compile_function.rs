@@ -290,7 +290,7 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::UnresolvedIdentifier { name } => {
+        Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location) {
                 let address = generate_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },

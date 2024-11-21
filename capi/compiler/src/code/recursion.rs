@@ -51,7 +51,7 @@ impl Recursion {
                 for branch in function.branches() {
                     for expression in branch.body() {
                         match expression.fragment {
-                            Expression::UnresolvedIdentifier { name } => {
+                            Expression::Identifier { name } => {
                                 if let Some(index) = cluster
                                     .find_function_by_name(name, functions)
                                 {

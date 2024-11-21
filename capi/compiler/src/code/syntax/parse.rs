@@ -228,7 +228,7 @@ fn parse_branch_body(
                     branch.body.push(Expression::Comment { text });
                 }
                 Token::Identifier { name } => {
-                    branch.body.push(Expression::UnresolvedIdentifier { name });
+                    branch.body.push(Expression::Identifier { name });
                 }
                 Token::IntegerLiteral { value } => {
                     branch.body.push(Expression::LiteralNumber {

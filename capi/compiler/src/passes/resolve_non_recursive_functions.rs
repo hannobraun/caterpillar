@@ -97,7 +97,7 @@ fn resolve_calls_in_expression(
     }
 
     match expression.fragment {
-        Expression::UnresolvedIdentifier { name } => {
+        Expression::Identifier { name } => {
             if function_calls
                 .is_call_to_user_defined_function(&expression.location)
             {

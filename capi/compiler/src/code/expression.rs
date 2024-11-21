@@ -92,7 +92,7 @@ pub enum Expression {
     /// # An unresolved identifier
     ///
     /// This is the result of a compiler error.
-    UnresolvedIdentifier {
+    Identifier {
         /// # The name of the unresolved identifier
         name: String,
     },
