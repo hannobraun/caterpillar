@@ -113,7 +113,6 @@ impl DebugExpressionState {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugExpressionKind {
     CallToFunction { name: String },
-    CallToFunctionRecursive { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
     UnresolvedIdentifier { name: String },
@@ -142,31 +141,6 @@ impl DebugExpressionKind {
                 let name = function.name.clone();
 
                 Self::CallToFunction { name }
-            }
-            Expression::CallToUserDefinedFunctionRecursive {
-                index, ..
-            } => {
-                let called_function_location =
-                    cluster.functions.get(&index).expect(
-                        "The index of a recursive call must be valid within \
-                        the calling function's cluster.",
-                    );
-                let FunctionLocation::NamedFunction {
-                    index: called_function_index,
-                } = called_function_location
-                else {
-                    unreachable!(
-                        "Only named functions can be called recursively."
-                    );
-                };
-                let called_function =
-                    functions.named.get(called_function_index).expect(
-                        "Expecting to find expression referred to from a \
-                        cluster.",
-                    );
-                let name = called_function.name.clone();
-
-                Self::CallToFunctionRecursive { name }
             }
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),

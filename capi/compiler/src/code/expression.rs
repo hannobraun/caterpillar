@@ -32,32 +32,6 @@ pub enum Expression {
         hash: Hash<Function>,
     },
 
-    /// # A recursive call to a user-defined function
-    ///
-    /// This call can either be directly recursive (a function is calling
-    /// itself), or mutually recursive (the function is calling another function
-    /// that directly or indirectly calls the original function).
-    ///
-    /// This needs to be handled separately from non-recursive calls, as those
-    /// non-recursive calls reference the callee by hash. In a recursive call,
-    /// this is not possible. It would result in a circular dependency when
-    /// creating the hash of the callee, since that would depend on the hash of
-    /// caller, which would depend on the hash of the callee again.
-    CallToUserDefinedFunctionRecursive {
-        /// # The index of the called function within its cluster
-        ///
-        /// During compilation, functions are grouped into clusters. A cluster
-        /// either contains a single functions, or a group of mutually recursive
-        /// function. All mutually recursive functions are part of a single
-        /// cluster.
-        ///
-        /// If this is a function calling itself, the index is always `0`. If
-        /// the calling function is part of a cluster of mutually recursive
-        /// functions, the index identifies the called function within the
-        /// cluster.
-        index: Index<FunctionLocation>,
-    },
-
     /// # A comment, which does not influence the execution of the code
     ///
     /// ## Implementation Note

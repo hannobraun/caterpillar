@@ -266,55 +266,6 @@ fn compile_expression(
 
             Some(address)
         }
-        Expression::CallToUserDefinedFunctionRecursive { index } => {
-            let hash = {
-                let function_location = &cluster.functions[&index];
-
-                let called_function = functions_context
-                    .functions
-                    .by_location(function_location)
-                    .expect("Function referred to from cluster must exist.");
-
-                Hash::new(called_function.fragment)
-            };
-
-            // For recursive calls, we can't generally assume that the called
-            // function has been compiled yet. It's a recursive call, after all!
-            //
-            // Let's emit a placeholder instruction and arrange for that to be
-            // replaced later, once all of the functions in the cluster have
-            // been compiled.
-            let address = generate_instruction(
-                Instruction::TriggerEffect {
-                    effect: Effect::CompilerBug,
-                },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            cluster_context
-                .recursive_calls_by_callee
-                .entry(hash)
-                .or_default()
-                .push(CallToFunction {
-                    address,
-                    is_tail_call: is_tail_expression,
-                });
-
-            // For now, we're done with this call. But the function we're
-            // calling might get updated in the future. When that happens, the
-            // compiler wants to know about all calls to the function, to update
-            // them.
-            //
-            // Let's make sure that information is going to be available.
-            functions_context
-                .call_instructions_by_callee
-                .inner
-                .entry(hash)
-                .or_default()
-                .push(address);
-
-            Some(address)
-        }
         Expression::Comment { .. } => None,
         Expression::LiteralNumber { value } => {
             let address = generate_instruction(
