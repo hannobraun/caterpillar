@@ -150,7 +150,23 @@ fn call_stack_reconstruction_missing_main() {
         .expect_functions()
         .with_name("main")
         .active_expression()
-        .expect_call_to_function("f");
+        .expect_call_to_function(
+            "f",
+            &debugger
+                .persistent_state()
+                .code
+                .inner
+                .as_ref()
+                .unwrap()
+                .functions,
+            &debugger
+                .persistent_state()
+                .code
+                .inner
+                .as_ref()
+                .unwrap()
+                .function_calls,
+        );
 }
 
 #[test]
@@ -190,7 +206,23 @@ fn call_stack_reconstruction_missing_single_branch_function() {
         .expect_functions()
         .with_name("f")
         .active_expression()
-        .expect_call_to_function("g");
+        .expect_call_to_function(
+            "g",
+            &debugger
+                .persistent_state()
+                .code
+                .inner
+                .as_ref()
+                .unwrap()
+                .functions,
+            &debugger
+                .persistent_state()
+                .code
+                .inner
+                .as_ref()
+                .unwrap()
+                .function_calls,
+        );
 }
 
 #[test]

@@ -242,7 +242,12 @@ impl DebugBranchExt for DebugBranch {
 }
 
 pub trait DebugExpressionExt {
-    fn expect_call_to_function(self, called_fn: &str) -> Self;
+    fn expect_call_to_function(
+        self,
+        called_fn: &str,
+        functions: &Functions,
+        function_calls: &FunctionCalls,
+    ) -> Self;
     fn expect_call_to_host_function(
         self,
         called_host_fn: &str,
@@ -257,11 +262,21 @@ pub trait DebugExpressionExt {
 }
 
 impl DebugExpressionExt for DebugExpression {
-    fn expect_call_to_function(self, called_name: &str) -> Self {
-        let DebugExpressionKind::CallToFunction { name } = &self.kind else {
+    fn expect_call_to_function(
+        self,
+        called_name: &str,
+        functions: &Functions,
+        function_calls: &FunctionCalls,
+    ) -> Self {
+        let Some(called_fn) = function_calls
+            .is_call_to_user_defined_function(&self.data.location.clone())
+        else {
             panic!("Expected call to function.");
         };
-        assert_eq!(called_name, name);
+        let Some(user_fn) = functions.named.by_name(called_name) else {
+            panic!("Function `{called_name}` does not exist.");
+        };
+        assert_eq!(*called_fn, user_fn.location());
 
         self
     }
