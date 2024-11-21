@@ -155,6 +155,20 @@ impl Cluster {
         })
     }
 
+    /// # Find the function with the given location in the cluster
+    pub fn find_function_by_location(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<Index<FunctionLocation>> {
+        self.functions.iter().find_map(|(&index, l)| {
+            if location == l {
+                Some(index)
+            } else {
+                None
+            }
+        })
+    }
+
     /// # Find the function with the given name in the cluster
     ///
     /// ## Panics
