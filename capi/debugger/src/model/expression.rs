@@ -158,11 +158,11 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
-            Expression::LocalFunction { hash } => {
+            Expression::LocalFunction { .. } => {
                 let location = FunctionLocation::from(location);
 
                 let function = functions
-                    .by_hash(&hash)
+                    .by_location(&location)
                     .expect("Resolved local function must exist.");
 
                 let function = DebugFunction::new(
