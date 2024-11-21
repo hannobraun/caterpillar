@@ -7,7 +7,7 @@ use capi_compiler::{
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
-    fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
+    fn functions(&self) -> impl IntoIterator<Item = HostFunction> {
         use GameEngineFunction::*;
 
         [
@@ -19,7 +19,7 @@ impl Host for GameEngineHost {
             &SetPixel,
             &SubmitFrame,
         ]
-        .map(|function| function as &_)
+        .map(|function| function.function())
     }
 }
 
@@ -145,7 +145,19 @@ pub enum GameEngineFunction {
     SubmitFrame,
 }
 
-impl HostFunction for GameEngineFunction {
+impl GameEngineFunction {
+    fn function(&self) -> HostFunction {
+        let name = self.name();
+        let number = self.number();
+        let signature = self.signature();
+
+        HostFunction {
+            name,
+            number,
+            signature,
+        }
+    }
+
     fn number(&self) -> u8 {
         (*self).into()
     }

@@ -41,7 +41,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
                             Expression::CallToIntrinsicFunction { intrinsic };
                     } else if let Some(function) = host.function_by_name(name) {
                         *expression.fragment = Expression::CallToHostFunction {
-                            number: function.number(),
+                            number: function.number,
                         }
                     } else if known_named_functions.contains(name) {
                         *is_known_to_be_call_to_user_defined_function = true;
@@ -55,7 +55,7 @@ pub fn resolve_most_identifiers(functions: &mut Functions, host: &impl Host) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{syntax::parse, Branch, ConcreteSignature, Expression, Tokens},
+        code::{syntax::parse, Branch, Expression, Tokens},
         host::{Host, HostFunction},
         intrinsics::IntrinsicFunction,
     };
@@ -158,24 +158,12 @@ mod tests {
     struct TestHost;
 
     impl Host for TestHost {
-        fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
-            [&TestFunction as &_]
-        }
-    }
-
-    struct TestFunction;
-
-    impl HostFunction for TestFunction {
-        fn number(&self) -> u8 {
-            0
-        }
-
-        fn name(&self) -> &'static str {
-            "host_fn"
-        }
-
-        fn signature(&self) -> ConcreteSignature {
-            ([], []).into()
+        fn functions(&self) -> impl IntoIterator<Item = HostFunction> {
+            [HostFunction {
+                name: "host_fn",
+                number: 0,
+                signature: ([], []).into(),
+            }]
         }
     }
 }

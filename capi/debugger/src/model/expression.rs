@@ -176,7 +176,7 @@ impl DebugExpressionKind {
                 let name = GameEngineHost
                     .function_by_number(number)
                     .expect("Expected effect number in code to be valid.")
-                    .name()
+                    .name
                     .to_string();
 
                 Self::CallToHostFunction { name }

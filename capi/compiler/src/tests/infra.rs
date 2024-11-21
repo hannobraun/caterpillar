@@ -1,7 +1,7 @@
 use capi_runtime::{Effect, Heap, Runtime};
 
 use crate::{
-    code::{ConcreteSignature, Type},
+    code::Type,
     host::{Host, HostFunction},
     Compiler, Instructions,
 };
@@ -91,23 +91,11 @@ impl TestRuntime {
 struct TestHost {}
 
 impl Host for TestHost {
-    fn functions(&self) -> impl IntoIterator<Item = &dyn HostFunction> {
-        [&TestFunction as &_]
-    }
-}
-
-struct TestFunction;
-
-impl HostFunction for TestFunction {
-    fn number(&self) -> u8 {
-        0
-    }
-
-    fn name(&self) -> &'static str {
-        "send"
-    }
-
-    fn signature(&self) -> ConcreteSignature {
-        ([Type::Number], []).into()
+    fn functions(&self) -> impl IntoIterator<Item = HostFunction> {
+        [HostFunction {
+            name: "send",
+            number: 0,
+            signature: ([Type::Number], []).into(),
+        }]
     }
 }
