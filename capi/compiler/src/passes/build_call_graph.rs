@@ -121,7 +121,6 @@ mod tests {
             OrderedFunctions, Tokens,
         },
         host::NoHost,
-        passes::resolve_most_identifiers,
     };
 
     #[test]
@@ -360,9 +359,8 @@ mod tests {
         input: &str,
     ) -> (Functions, OrderedFunctions) {
         let tokens = Tokens::from_input(input);
-        let mut functions = parse(tokens);
+        let functions = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
-        resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);
         (functions, ordered_functions)

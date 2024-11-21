@@ -94,7 +94,7 @@ mod tests {
             Functions, Index, Tokens,
         },
         host::NoHost,
-        passes::{order_functions_by_dependencies, resolve_most_identifiers},
+        passes::order_functions_by_dependencies,
     };
 
     #[test]
@@ -192,7 +192,6 @@ mod tests {
         let tokens = Tokens::from_input(input);
         let mut functions = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
-        resolve_most_identifiers(&mut functions, &NoHost);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         super::resolve_recursive_calls(
