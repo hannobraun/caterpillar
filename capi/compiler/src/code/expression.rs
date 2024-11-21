@@ -107,14 +107,6 @@ pub enum Expression {
 }
 
 impl Expression {
-    pub fn as_call_to_function(&self) -> Option<&Hash<Function>> {
-        let Expression::CallToUserDefinedFunction { hash, .. } = self else {
-            return None;
-        };
-
-        Some(hash)
-    }
-
     pub fn as_comment(&self) -> Option<&String> {
         let Expression::Comment { text } = self else {
             return None;
