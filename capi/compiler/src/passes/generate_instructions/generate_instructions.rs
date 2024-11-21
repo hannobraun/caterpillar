@@ -84,7 +84,7 @@ fn compile_call_to_main(
     call_to_main: InstructionAddress,
     functions: &Functions,
     instructions: &mut Instructions,
-    compiled_functions_by_hash: &mut BTreeMap<
+    compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
         capi_runtime::Function,
     >,
@@ -102,7 +102,7 @@ fn compile_call_to_main(
             address: call_to_main,
             is_tail_call: true,
         },
-        compiled_functions_by_hash,
+        compiled_functions_by_location,
         instructions,
     );
 }
