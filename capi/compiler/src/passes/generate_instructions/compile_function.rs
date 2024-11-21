@@ -334,7 +334,7 @@ fn compile_expression(
         }
         Expression::CallToIntrinsicFunction { intrinsic } => {
             let address = compile_intrinsic(
-                intrinsic,
+                &intrinsic,
                 is_tail_expression,
                 functions_context.instructions,
                 &mut mapping,
@@ -457,7 +457,7 @@ pub fn compile_call_to_function(
 }
 
 fn compile_intrinsic(
-    intrinsic: IntrinsicFunction,
+    intrinsic: &IntrinsicFunction,
     is_tail_call: bool,
     instructions: &mut Instructions,
     mapping: &mut Mapping,
