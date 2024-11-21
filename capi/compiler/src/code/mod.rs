@@ -2,6 +2,7 @@ pub mod syntax;
 
 mod bindings;
 mod function_calls;
+mod recursion;
 mod tail_expressions;
 mod tokens;
 
@@ -27,6 +28,7 @@ pub use self::{
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
     ordered_functions::{Cluster, OrderedFunctions},
+    recursion::Recursion,
     tail_expressions::TailExpressions,
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type, Types},
