@@ -132,12 +132,6 @@ pub fn Expression(
                 actions,
             )
         }
-        DebugExpressionKind::UnresolvedLocalFunction => make_single_expression(
-            "unresolved local function".into(),
-            expression.data,
-            &mut class_outer,
-            actions,
-        ),
         DebugExpressionKind::Value { as_string } => make_single_expression(
             as_string,
             expression.data,

@@ -116,7 +116,6 @@ pub enum DebugExpressionKind {
     Comment { text: String },
     Function { function: DebugFunction },
     UnresolvedIdentifier { name: String },
-    UnresolvedLocalFunction,
     Value { as_string: String },
 }
 
@@ -195,7 +194,27 @@ impl DebugExpressionKind {
                 Self::UnresolvedIdentifier { name }
             }
             Expression::UnresolvedLocalFunction => {
-                Self::UnresolvedLocalFunction
+                let function = {
+                    let location = FunctionLocation::from(location.clone());
+                    functions
+                        .by_location(&location)
+                        .expect("Function referred to from cluster must exist.")
+                };
+
+                let function = DebugFunction::new(
+                    function.fragment.clone(),
+                    None,
+                    FunctionLocation::AnonymousFunction { location },
+                    active_expression,
+                    is_in_innermost_active_function,
+                    cluster,
+                    functions,
+                    source_map,
+                    breakpoints,
+                    effect,
+                );
+
+                Self::Function { function }
             }
         }
     }
