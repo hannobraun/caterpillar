@@ -114,7 +114,6 @@ impl DebugExpressionState {
 pub enum DebugExpressionKind {
     CallToFunction { name: String },
     CallToFunctionRecursive { name: String },
-    CallToIntrinsic { name: String },
     Comment { text: String },
     Function { function: DebugFunction },
     UnresolvedIdentifier { name: String },
@@ -168,11 +167,6 @@ impl DebugExpressionKind {
                 let name = called_function.name.clone();
 
                 Self::CallToFunctionRecursive { name }
-            }
-            Expression::CallToIntrinsicFunction { intrinsic, .. } => {
-                Self::CallToIntrinsic {
-                    name: intrinsic.to_string(),
-                }
             }
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),

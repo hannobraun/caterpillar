@@ -109,14 +109,6 @@ pub fn Expression(
                 actions,
             )
         }
-        DebugExpressionKind::CallToIntrinsic { name } => {
-            make_single_expression(
-                name,
-                expression.data,
-                &mut class_outer,
-                actions,
-            )
-        }
         DebugExpressionKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
             (

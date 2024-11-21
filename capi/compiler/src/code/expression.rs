@@ -1,7 +1,5 @@
 use capi_runtime::Value;
 
-use crate::intrinsics::IntrinsicFunction;
-
 use super::{Function, FunctionLocation, Hash, Index};
 
 /// # An expression within a function
@@ -28,16 +26,6 @@ use super::{Function, FunctionLocation, Hash, Index};
     udigest::Digestable,
 )]
 pub enum Expression {
-    /// # A call to a compiler-intrinsic function
-    ///
-    /// Intrinsic functions are implemented in the compiler. Calls to them are
-    /// directly translated into a series of instructions, which provide the
-    /// desired behavior.
-    CallToIntrinsicFunction {
-        /// # The intrinsic function being called
-        intrinsic: IntrinsicFunction,
-    },
-
     /// # A call to a user-defined function
     CallToUserDefinedFunction {
         /// # The hash of the function being called

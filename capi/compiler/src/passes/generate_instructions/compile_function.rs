@@ -315,15 +315,6 @@ fn compile_expression(
 
             Some(address)
         }
-        Expression::CallToIntrinsicFunction { intrinsic } => {
-            let address = compile_intrinsic(
-                &intrinsic,
-                is_tail_expression,
-                functions_context.instructions,
-                &mut mapping,
-            );
-            Some(address)
-        }
         Expression::Comment { .. } => None,
         Expression::LiteralNumber { value } => {
             let address = generate_instruction(
