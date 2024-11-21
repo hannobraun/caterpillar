@@ -30,11 +30,11 @@ pub trait Host {
 
 /// # A function that is provided by the host
 pub trait HostFunction {
-    /// # The number that identifies the function in the host effect
-    fn number(&self) -> u8;
-
     /// # The name that identifies the function in input code
     fn name(&self) -> &'static str;
+
+    /// # The number that identifies the function in the host effect
+    fn number(&self) -> u8;
 
     /// # The type signature of the function
     fn signature(&self) -> ConcreteSignature;
