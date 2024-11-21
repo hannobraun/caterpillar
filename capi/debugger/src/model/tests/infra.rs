@@ -248,7 +248,11 @@ pub trait DebugExpressionExt {
         called_host_fn: &str,
         function_calls: &FunctionCalls,
     ) -> Self;
-    fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self;
+    fn expect_call_to_intrinsic(
+        self,
+        called_intrinsic: &str,
+        function_calls: &FunctionCalls,
+    ) -> Self;
     fn expect_function(self) -> DebugFunction;
 }
 
@@ -277,11 +281,17 @@ impl DebugExpressionExt for DebugExpression {
         self
     }
 
-    fn expect_call_to_intrinsic(self, called_intrinsic: &str) -> Self {
-        let DebugExpressionKind::CallToIntrinsic { name } = &self.kind else {
+    fn expect_call_to_intrinsic(
+        self,
+        called_intrinsic: &str,
+        function_calls: &FunctionCalls,
+    ) -> Self {
+        let Some(intrinsic_fn) =
+            function_calls.is_call_to_intrinsic_function(&self.data.location)
+        else {
             panic!("Expected call to intrinsic function.");
         };
-        assert_eq!(called_intrinsic, name);
+        assert_eq!(called_intrinsic, intrinsic_fn.name());
 
         self
     }

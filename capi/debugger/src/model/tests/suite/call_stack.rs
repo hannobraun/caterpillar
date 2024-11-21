@@ -107,7 +107,16 @@ fn stopped_in_anonymous_function() {
         .expression(0);
     assert_eq!(expression.data.effect, Some(Effect::Breakpoint));
 
-    expression.expect_call_to_intrinsic("brk");
+    expression.expect_call_to_intrinsic(
+        "brk",
+        &debugger
+            .persistent_state()
+            .code
+            .inner
+            .as_ref()
+            .unwrap()
+            .function_calls,
+    );
 }
 
 #[test]
