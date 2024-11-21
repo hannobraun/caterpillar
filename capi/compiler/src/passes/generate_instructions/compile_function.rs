@@ -436,8 +436,13 @@ fn compile_expression(
             );
             Some(address)
         }
-        Expression::LocalFunction { hash } => {
-            let function = functions_context.functions.by_hash(&hash).expect(
+        Expression::LocalFunction { .. } => {
+            let function_location = FunctionLocation::from(location.clone());
+
+            let function = functions_context
+                .functions
+                .by_location(&function_location)
+                .expect(
                 "Anonymous function that has been previously resolved must be \
                 available.",
             );
