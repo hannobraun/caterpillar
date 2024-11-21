@@ -312,7 +312,7 @@ fn compile_expression(
                     Some(&mut mapping),
                 );
                 Some(address)
-            } else if let Some(function_location) = functions_context
+            } else if let Some(callee_location) = functions_context
                 .function_calls
                 .is_call_to_user_defined_function(&location)
             {
@@ -323,7 +323,7 @@ fn compile_expression(
                 {
                     let called_function = functions_context
                         .functions
-                        .by_location(function_location)
+                        .by_location(callee_location)
                         .expect(
                             "Function referred to from cluster must \
                             exist.",
