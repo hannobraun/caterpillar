@@ -163,7 +163,7 @@ impl Cluster {
     /// function referenced in this cluster. Unless you're mixing data
     /// structures from different compiler passes, this should never happen. If
     /// it still does, that's a bug.
-    pub fn find_named_function(
+    pub fn find_function_by_name(
         &self,
         name: &str,
         functions: &Functions,

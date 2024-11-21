@@ -54,7 +54,7 @@ impl Recursion {
                             expression.fragment
                         {
                             if let Some(index) =
-                                cluster.find_named_function(name, functions)
+                                cluster.find_function_by_name(name, functions)
                             {
                                 recursive_expressions
                                     .insert(expression.location, index);
