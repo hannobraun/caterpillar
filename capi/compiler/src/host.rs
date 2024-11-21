@@ -29,6 +29,7 @@ pub trait Host {
 }
 
 /// # A function that is provided by the host
+#[derive(Debug)]
 pub struct HostFunction {
     /// # The name that identifies the function in input code
     pub name: &'static str,
