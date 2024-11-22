@@ -9,11 +9,6 @@ use tokio::{
 use crate::build::UpdatesRx;
 
 pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
-    // Yes, I too think it seems wrong to not use IPv6 here. But if I do, my
-    // terminal does no longer recognize it as a URL, so I can no longer just
-    // CTRL-click to open it.
-    let address = "127.0.0.1:34480";
-
     let mut current_server: Option<Child> = None;
 
     let Some(mut serve_dir) = updates.recv().await else {
@@ -38,7 +33,6 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             .args(["--package", "capi-cli"])
             .arg("--")
             .arg("serve")
-            .args(["--address", address])
             .args(["--serve-dir", &serve_dir.display().to_string()])
             .kill_on_drop(true)
             .stdout(Stdio::piped())

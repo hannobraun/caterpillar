@@ -5,7 +5,7 @@ pub enum Args {
     Headless,
     Serve {
         /// Address to serve at
-        #[arg(short, long)]
+        #[arg(short, long, default_value = "127.0.0.1:34480")]
         address: SocketAddr,
 
         /// Directory to serve from
