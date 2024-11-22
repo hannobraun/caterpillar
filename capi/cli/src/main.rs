@@ -39,8 +39,6 @@ async fn main() -> anyhow::Result<()> {
                             ✅ Build is ready:\n\
                             \n\
                             \t🚀 http://{address}/\n\
-                            \n\
-                            ================================================\n\
                             \n"
                         );
                     }
