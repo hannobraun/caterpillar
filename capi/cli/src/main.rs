@@ -27,16 +27,16 @@ async fn main() -> anyhow::Result<()> {
                     server::Event::ChangeDetected => {
                         print!(
                             "\n\
-                            \t⏳ Change detected. Building game...\n"
+                            ⏳ Change detected. Building game...\n"
                         );
                     }
                     server::Event::BuildFinished => {
-                        println!("\t✅ Finished building game.");
+                        println!("✅ Finished building game.");
                     }
                     server::Event::ServerReady => {
                         print!(
                             "\n\
-                            \t🚀 Build is ready: http://{address}/ 🚀\n\
+                            🚀 Build is ready: http://{address}/ 🚀\n\
                             \n"
                         );
                     }

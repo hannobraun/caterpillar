@@ -70,7 +70,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                 }
             }
 
-            print!("{line}");
+            print!("\t{line}");
         }
     }
 }
