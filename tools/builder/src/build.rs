@@ -151,5 +151,4 @@ enum ShouldContinue {
 pub type UpdatesRx = mpsc::Receiver<Update>;
 pub type UpdatesTx = mpsc::Sender<Update>;
 
-// TASK: Inline?
 pub type Update = PathBuf;
