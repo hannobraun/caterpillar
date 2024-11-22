@@ -25,13 +25,24 @@ async fn main() -> anyhow::Result<()> {
             while let Some(event) = events.recv().await {
                 match event {
                     server::Event::ChangeDetected => {
-                        println!("build:change");
+                        print!(
+                            "\n\
+                            \t⏳ Change detected. Building game...\n"
+                        );
                     }
                     server::Event::BuildFinished => {
-                        println!("build:finish");
+                        println!("\t✅ Finished building game.");
                     }
                     server::Event::ServerReady => {
-                        println!("ready");
+                        print!(
+                            "\n\
+                            ✅ Build is ready:\n\
+                            \n\
+                            \t🚀 http://{address}/\n\
+                            \n\
+                            ================================================\n\
+                            \n"
+                        );
                     }
                 }
             }

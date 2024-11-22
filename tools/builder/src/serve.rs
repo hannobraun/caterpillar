@@ -70,31 +70,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
                 }
             }
 
-            match line.trim() {
-                "ready" => {
-                    print!(
-                        "\n\
-                        ✅ Build is ready:\n\
-                        \n\
-                        \t🚀 http://{address}/\n\
-                        \n\
-                        ================================================\n\
-                        \n"
-                    );
-                }
-                "build:change" => {
-                    print!(
-                        "\n\
-                        \t⏳ Change detected. Building game...\n"
-                    );
-                }
-                "build:finish" => {
-                    println!("\t✅ Finished building game.");
-                }
-                _ => {
-                    continue;
-                }
-            }
+            print!("{line}");
         }
     }
 }
