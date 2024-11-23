@@ -19,7 +19,8 @@ async fn main() -> anyhow::Result<()> {
             headless::run().await?;
         }
         Args::Serve { address, serve_dir } => {
-            dbg!(files::FILES.list_invalid());
+            let files = files::FILES;
+            dbg!(files.list_invalid());
 
             let mut events =
                 server::start(PathBuf::from("games"), address, serve_dir)
