@@ -41,3 +41,7 @@ tempfile = "*"
 [dev-dependencies.reqwest]
 version = "*"
 default-features = false
+
+
+[build-dependencies]
+anyhow = "*"
