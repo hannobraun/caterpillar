@@ -18,10 +18,7 @@ async fn main() -> anyhow::Result<()> {
         Args::Headless => {
             headless::run().await?;
         }
-        Args::Serve {
-            address,
-            serve_dir: _,
-        } => {
+        Args::Serve { address } => {
             let files = files::FILES;
 
             if !files.list_invalid().is_empty() {

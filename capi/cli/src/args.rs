@@ -1,4 +1,4 @@
-use std::{net::SocketAddr, path::PathBuf};
+use std::net::SocketAddr;
 
 #[derive(clap::Parser)]
 pub enum Args {
@@ -7,10 +7,6 @@ pub enum Args {
         /// Address to serve at
         #[arg(short, long, default_value = "127.0.0.1:34480")]
         address: SocketAddr,
-
-        /// Directory to serve from
-        #[arg(short, long)]
-        serve_dir: PathBuf,
     },
 }
 
