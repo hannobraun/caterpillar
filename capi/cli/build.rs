@@ -1,4 +1,8 @@
-use std::{env, fs::File, path::Path};
+use std::{
+    env,
+    fs::{self, File},
+    path::Path,
+};
 
 fn main() -> anyhow::Result<()> {
     if let Err(err) = env::var("FILES") {
@@ -19,7 +23,11 @@ fn main() -> anyhow::Result<()> {
 
 fn create_dummy_files() -> anyhow::Result<()> {
     let out_dir_var = env::var("OUT_DIR")?;
+
     let out_dir_path = Path::new(&out_dir_var);
+    let files_path = out_dir_path.join("files");
+
+    fs::create_dir_all(&files_path)?;
 
     let files = [
         "capi-debugger_bg.wasm",
@@ -30,10 +38,10 @@ fn create_dummy_files() -> anyhow::Result<()> {
     ];
 
     for file in files {
-        File::create(out_dir_path.join(file))?;
+        File::create(files_path.join(file))?;
     }
 
-    println!("cargo:rustc-env=FILES={}", out_dir_var);
+    println!("cargo:rustc-env=FILES={}", files_path.display());
 
     Ok(())
 }
