@@ -21,7 +21,11 @@ fn create_dummy_files() -> anyhow::Result<()> {
     let out_dir_var = env::var("OUT_DIR")?;
     let out_dir_path = Path::new(&out_dir_var);
 
-    File::create(out_dir_path.join("index.html"))?;
+    let files = ["index.html"];
+
+    for file in files {
+        File::create(out_dir_path.join(file))?;
+    }
 
     println!("cargo:rustc-env=FILES={}", out_dir_var);
 
