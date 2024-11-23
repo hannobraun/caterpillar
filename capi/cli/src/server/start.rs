@@ -21,7 +21,6 @@ pub type EventsRx = mpsc::Receiver<Event>;
 pub async fn start(
     games_path: PathBuf,
     address: SocketAddr,
-    _: PathBuf,
 ) -> anyhow::Result<EventsRx> {
     let (events_tx, events_rx) = mpsc::channel(1);
 

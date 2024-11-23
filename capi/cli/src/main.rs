@@ -18,7 +18,10 @@ async fn main() -> anyhow::Result<()> {
         Args::Headless => {
             headless::run().await?;
         }
-        Args::Serve { address, serve_dir } => {
+        Args::Serve {
+            address,
+            serve_dir: _,
+        } => {
             let files = files::FILES;
 
             if !files.list_invalid().is_empty() {
@@ -63,8 +66,7 @@ async fn main() -> anyhow::Result<()> {
             }
 
             let mut events =
-                server::start(PathBuf::from("games"), address, serve_dir)
-                    .await?;
+                server::start(PathBuf::from("games"), address).await?;
 
             while let Some(event) = events.recv().await {
                 match event {
