@@ -1,7 +1,17 @@
 use std::{env, fs::File, path::Path};
 
 fn main() -> anyhow::Result<()> {
-    create_dummy_files()?;
+    if let Err(err) = env::var("FILES") {
+        match err {
+            env::VarError::NotPresent => {
+                create_dummy_files()?;
+            }
+            env::VarError::NotUnicode(_) => {
+                return Err(err.into());
+            }
+        }
+    }
+
     Ok(())
 }
 
