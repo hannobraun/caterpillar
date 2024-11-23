@@ -1,5 +1,6 @@
 mod args;
 mod build_game;
+mod files;
 mod headless;
 mod server;
 
@@ -18,6 +19,8 @@ async fn main() -> anyhow::Result<()> {
             headless::run().await?;
         }
         Args::Serve { address, serve_dir } => {
+            dbg!(files::INDEX_HTML);
+
             let mut events =
                 server::start(PathBuf::from("games"), address, serve_dir)
                     .await?;
