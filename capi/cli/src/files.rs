@@ -15,8 +15,12 @@ impl Files {
     pub fn list_invalid(&self) -> Vec<&'static str> {
         let mut invalid_files = Vec::new();
 
-        if self.index_html.is_empty() {
-            invalid_files.push("index.html");
+        let files = [(self.index_html, "index.html")];
+
+        for (file, name) in files {
+            if file.is_empty() {
+                invalid_files.push(name);
+            }
         }
 
         invalid_files
