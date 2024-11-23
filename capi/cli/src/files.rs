@@ -11,4 +11,14 @@ impl Files {
             index_html: include_bytes!(concat!(env!("FILES"), "/index.html")),
         }
     }
+
+    pub fn list_invalid(&self) -> Vec<&'static str> {
+        let mut invalid_files = Vec::new();
+
+        if self.index_html.is_empty() {
+            invalid_files.push("index.html");
+        }
+
+        invalid_files
+    }
 }
