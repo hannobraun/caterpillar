@@ -21,7 +21,13 @@ fn create_dummy_files() -> anyhow::Result<()> {
     let out_dir_var = env::var("OUT_DIR")?;
     let out_dir_path = Path::new(&out_dir_var);
 
-    let files = ["index.html"];
+    let files = [
+        "capi-debugger_bg.wasm",
+        "capi-debugger.js",
+        "capi_host.wasm",
+        "index.html",
+        "tailwind.js",
+    ];
 
     for file in files {
         File::create(out_dir_path.join(file))?;
