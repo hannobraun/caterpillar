@@ -22,7 +22,44 @@ async fn main() -> anyhow::Result<()> {
             let files = files::FILES;
 
             if !files.list_invalid().is_empty() {
-                dbg!(files.list_invalid());
+                eprint!(
+                    "\n\
+                    Can't start the server because the\n\
+                    following files are not available:\n\
+                    \n",
+                );
+
+                for file in files.list_invalid() {
+                    eprintln!("- {file}");
+                }
+
+                eprint!(
+                    "\n\
+                    All of those files should be included\n\
+                    with this tool! That they aren't, means\n\
+                    that the tool has not been built\n\
+                    correctly.\n\
+                    \n\
+                    Are you trying to run the server from\n\
+                    within the Caterpillar repository?\n\
+                    \n\
+                    \tThen do so through the build tool!\n\
+                    \tJust execute `cargo run` from the\n\
+                    \trepository root.\n\
+                    \n\
+                    Are you trying to build a version of\n\
+                    this tool for use outside of the\n\
+                    repository?\n\
+                    \n\
+                    \tSorry, but as of 2024-11-23, this is\n\
+                    \tnot supported yet! If you're reading\n\
+                    \tthis some time after that date, then\n\
+                    \tmaybe it has become possible in the\n\
+                    \tmeantime, and this error message has not\n\
+                    \tbeen updated.\n",
+                );
+
+                return Ok(());
             }
 
             let mut events =
