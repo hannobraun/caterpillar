@@ -21,14 +21,12 @@ pub type EventsRx = mpsc::Receiver<Event>;
 pub async fn start(
     games_path: PathBuf,
     address: SocketAddr,
-    serve_dir: PathBuf,
+    _: PathBuf,
 ) -> anyhow::Result<EventsRx> {
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
-        if let Err(err) =
-            start_inner(games_path, address, serve_dir, events_tx).await
-        {
+        if let Err(err) = start_inner(games_path, address, events_tx).await {
             error!("Error while running server: {err:?}");
 
             // This tasks sender has already been dropped, which will cause the
@@ -42,7 +40,6 @@ pub async fn start(
 async fn start_inner(
     games_path: PathBuf,
     address: SocketAddr,
-    _: PathBuf,
     events: EventsTx,
 ) -> anyhow::Result<()> {
     let watcher =
