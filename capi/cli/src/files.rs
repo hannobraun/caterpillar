@@ -5,7 +5,7 @@ macro_rules! files {
         #[derive(Debug)]
         pub struct Files {
             $(
-                pub $field: &'static [u8],
+                $field: &'static [u8],
             )*
         }
 
