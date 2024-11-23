@@ -30,7 +30,7 @@ async fn main() -> anyhow::Result<()> {
                 );
 
                 for file in files.list_invalid() {
-                    eprintln!("- {file}");
+                    eprintln!("- `{file}`");
                 }
 
                 eprint!(
