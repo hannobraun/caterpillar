@@ -42,7 +42,7 @@ pub async fn start(
 async fn start_inner(
     games_path: PathBuf,
     address: SocketAddr,
-    serve_dir: PathBuf,
+    _: PathBuf,
     events: EventsTx,
 ) -> anyhow::Result<()> {
     let watcher =
@@ -50,7 +50,7 @@ async fn start_inner(
     let mut build_events =
         build_and_watch_game(games_path, "snake", watcher.changes);
 
-    let mut server_task = ServerTask::Uninitialized { address, serve_dir };
+    let mut server_task = ServerTask::Uninitialized { address };
 
     while let Some(event) = build_events.recv().await {
         match event {
@@ -61,9 +61,8 @@ async fn start_inner(
                 events.send(Event::BuildFinished).await?;
 
                 match server_task {
-                    ServerTask::Uninitialized { address, serve_dir } => {
-                        let (ready_rx, code_tx) =
-                            server::start(address, serve_dir, code);
+                    ServerTask::Uninitialized { address } => {
+                        let (ready_rx, code_tx) = server::start(address, code);
 
                         ready_rx.await?;
                         events.send(Event::ServerReady).await?;
@@ -85,11 +84,6 @@ async fn start_inner(
 }
 
 enum ServerTask {
-    Uninitialized {
-        address: SocketAddr,
-        serve_dir: PathBuf,
-    },
-    Initialized {
-        code_tx: CodeTx,
-    },
+    Uninitialized { address: SocketAddr },
+    Initialized { code_tx: CodeTx },
 }

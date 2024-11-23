@@ -26,7 +26,7 @@ type CodeRx = watch::Receiver<Code>;
 type ReadyTx = oneshot::Sender<()>;
 pub type ReadyRx = oneshot::Receiver<()>;
 
-pub fn start(address: SocketAddr, _: PathBuf, code: Code) -> (ReadyRx, CodeTx) {
+pub fn start(address: SocketAddr, code: Code) -> (ReadyRx, CodeTx) {
     let (code_tx, code_rx) = watch::channel(code);
     let (ready_tx, ready_rx) = oneshot::channel();
 
