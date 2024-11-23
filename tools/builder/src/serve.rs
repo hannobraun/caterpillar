@@ -33,6 +33,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             .args(["--package", "capi-cli"])
             .arg("--")
             .arg("serve")
+            .env("FILES", serve_dir.display().to_string())
             .args(["--serve-dir", &serve_dir.display().to_string()])
             .kill_on_drop(true)
             .stdout(Stdio::piped())
