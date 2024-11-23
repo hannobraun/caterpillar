@@ -12,6 +12,8 @@ fn main() -> anyhow::Result<()> {
         }
     }
 
+    println!("cargo::rerun-if-env-changed=FILES");
+
     Ok(())
 }
 
