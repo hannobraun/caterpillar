@@ -26,18 +26,12 @@ type CodeRx = watch::Receiver<Code>;
 type ReadyTx = oneshot::Sender<()>;
 pub type ReadyRx = oneshot::Receiver<()>;
 
-pub fn start(
-    address: SocketAddr,
-    serve_dir: PathBuf,
-    code: Code,
-) -> (ReadyRx, CodeTx) {
+pub fn start(address: SocketAddr, _: PathBuf, code: Code) -> (ReadyRx, CodeTx) {
     let (code_tx, code_rx) = watch::channel(code);
     let (ready_tx, ready_rx) = oneshot::channel();
 
     task::spawn(async move {
-        if let Err(err) =
-            start_inner(address, serve_dir, ready_tx, code_rx).await
-        {
+        if let Err(err) = start_inner(address, ready_tx, code_rx).await {
             error!("Error serving game code: {err:?}");
 
             // The rest of the system will start shutting down, as messages to
@@ -50,7 +44,6 @@ pub fn start(
 
 async fn start_inner(
     address: SocketAddr,
-    _: PathBuf,
     ready: ReadyTx,
     code: CodeRx,
 ) -> anyhow::Result<()> {
