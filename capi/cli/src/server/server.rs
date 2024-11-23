@@ -119,10 +119,7 @@ async fn serve_index() -> impl IntoResponse {
     make_file_response(PathBuf::from("index.html")).await
 }
 
-async fn serve_static(
-    Path(path): Path<PathBuf>,
-    _: State<ServerState>,
-) -> impl IntoResponse {
+async fn serve_static(Path(path): Path<PathBuf>) -> impl IntoResponse {
     make_file_response(path).await
 }
 
