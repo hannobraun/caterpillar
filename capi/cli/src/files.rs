@@ -44,9 +44,9 @@ macro_rules! files {
 }
 
 files!(
-    capi_debugger_bg_wasm, "capi-debugger_bg.wasm";
-    capi_debugger_js, "capi-debugger.js";
-    capi_host_wasm, "capi_host.wasm";
-    index_html, "index.html";
-    tailwind_js, "tailwind.js";
+    a, "capi-debugger_bg.wasm";
+    b, "capi-debugger.js";
+    c, "capi_host.wasm";
+    d, "index.html";
+    e, "tailwind.js";
 );
