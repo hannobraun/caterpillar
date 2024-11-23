@@ -35,9 +35,6 @@ version = "*"
 features = ["full"]
 
 
-[dev-dependencies]
-tempfile = "*"
-
 [dev-dependencies.reqwest]
 version = "*"
 default-features = false

@@ -353,7 +353,6 @@ dependencies = [
  "clap",
  "rand",
  "reqwest",
- "tempfile",
  "thiserror 2.0.3",
  "tokio",
  "tracing",
