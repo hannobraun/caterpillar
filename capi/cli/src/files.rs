@@ -1,3 +1,5 @@
+use std::path::Path;
+
 pub const FILES: Files = Files::new();
 
 macro_rules! files {
@@ -38,6 +40,15 @@ macro_rules! files {
                 }
 
                 invalid_files
+            }
+
+            pub fn get(&self, path: impl AsRef<Path>) -> Option<&[u8]> {
+                match path.as_ref().to_str() {
+                    $(
+                        Some($name) => Some(self.$field),
+                    )*
+                    _ => None,
+                }
             }
         }
     };

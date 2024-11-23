@@ -1,4 +1,4 @@
-use std::{future, io, net::SocketAddr, path::PathBuf};
+use std::{future, net::SocketAddr, path::PathBuf};
 
 use axum::{
     extract::{ws::WebSocket, Path, State, WebSocketUpgrade},
@@ -10,13 +10,13 @@ use axum::{
 use capi_compiler::CompilerOutput;
 use capi_protocol::{ron_options, Versioned};
 use tokio::{
-    fs::File,
-    io::AsyncReadExt,
     net::TcpListener,
     sync::{oneshot, watch},
     task,
 };
 use tracing::error;
+
+use crate::files::FILES;
 
 pub type Code = Versioned<CompilerOutput>;
 
@@ -50,7 +50,7 @@ pub fn start(
 
 async fn start_inner(
     address: SocketAddr,
-    serve_dir: PathBuf,
+    _: PathBuf,
     ready: ReadyTx,
     code: CodeRx,
 ) -> anyhow::Result<()> {
@@ -61,7 +61,7 @@ async fn start_inner(
         .route("/code/:timestamp", get(serve_code))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(ServerState { serve_dir, code });
+        .with_state(ServerState { code });
 
     let listener = TcpListener::bind(address).await?;
 
@@ -77,7 +77,6 @@ async fn start_inner(
 
 #[derive(Clone, Debug)]
 pub struct ServerState {
-    serve_dir: PathBuf,
     code: CodeRx,
 }
 
@@ -123,15 +122,15 @@ async fn serve_code(
     }
 }
 
-async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
-    make_file_response(state.serve_dir.join("index.html")).await
+async fn serve_index(_: State<ServerState>) -> impl IntoResponse {
+    make_file_response(PathBuf::from("index.html")).await
 }
 
 async fn serve_static(
     Path(path): Path<PathBuf>,
-    State(state): State<ServerState>,
+    _: State<ServerState>,
 ) -> impl IntoResponse {
-    make_file_response(state.serve_dir.join(path)).await
+    make_file_response(path).await
 }
 
 async fn make_file_response(path: PathBuf) -> Response {
@@ -145,25 +144,14 @@ async fn make_file_response(path: PathBuf) -> Response {
         _ => "application/octet-stream",
     };
 
-    let mut file = match File::open(path).await {
-        Ok(file) => file,
-        Err(err) => return error_to_response(err),
+    let Some(file) = FILES.get(path) else {
+        return StatusCode::NOT_FOUND.into_response();
     };
 
-    let mut data = Vec::new();
-    if let Err(err) = file.read_to_end(&mut data).await {
-        return error_to_response(err);
-    }
-
-    (StatusCode::OK, [(header::CONTENT_TYPE, content_type)], data)
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, content_type)],
+        file.to_vec(),
+    )
         .into_response()
-}
-
-fn error_to_response(err: io::Error) -> Response {
-    let status = match err.kind() {
-        io::ErrorKind::NotFound => StatusCode::NOT_FOUND,
-        _ => StatusCode::INTERNAL_SERVER_ERROR,
-    };
-
-    status.into_response()
 }
