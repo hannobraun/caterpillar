@@ -1,6 +1,11 @@
 use std::{env, fs::File, path::Path};
 
 fn main() -> anyhow::Result<()> {
+    create_dummy_files()?;
+    Ok(())
+}
+
+fn create_dummy_files() -> anyhow::Result<()> {
     let out_dir_var = env::var("OUT_DIR")?;
     let out_dir_path = Path::new(&out_dir_var);
 
