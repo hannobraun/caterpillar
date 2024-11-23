@@ -20,7 +20,10 @@ async fn main() -> anyhow::Result<()> {
         }
         Args::Serve { address, serve_dir } => {
             let files = files::FILES;
-            dbg!(files.list_invalid());
+
+            if !files.list_invalid().is_empty() {
+                dbg!(files.list_invalid());
+            }
 
             let mut events =
                 server::start(PathBuf::from("games"), address, serve_dir)
