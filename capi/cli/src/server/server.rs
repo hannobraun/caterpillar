@@ -115,7 +115,7 @@ async fn serve_code(
     }
 }
 
-async fn serve_index(_: State<ServerState>) -> impl IntoResponse {
+async fn serve_index() -> impl IntoResponse {
     make_file_response(PathBuf::from("index.html")).await
 }
 
