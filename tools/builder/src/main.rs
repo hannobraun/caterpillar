@@ -10,6 +10,9 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
     match args.command {
+        Some(Command::Deploy) => {
+            dbg!();
+        }
         None | Some(Command::Serve) => {
             pipeline::pipeline().await?;
         }
@@ -26,5 +29,6 @@ struct Args {
 
 #[derive(clap::Subcommand)]
 enum Command {
+    Deploy,
     Serve,
 }
