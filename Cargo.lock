@@ -304,7 +304,7 @@ dependencies = [
 
 [[package]]
 name = "builder"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-watch",
@@ -657,7 +657,7 @@ dependencies = [
 
 [[package]]
 name = "daily"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -3149,7 +3149,7 @@ dependencies = [
 
 [[package]]
 name = "website"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "clap",
