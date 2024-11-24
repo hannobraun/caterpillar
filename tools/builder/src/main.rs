@@ -1,5 +1,4 @@
 mod build;
-mod pipeline;
 mod serve;
 
 #[tokio::main]
@@ -14,7 +13,7 @@ async fn main() -> anyhow::Result<()> {
             dbg!();
         }
         None | Some(Command::Serve) => {
-            pipeline::pipeline().await?;
+            serve::start().await?;
         }
     }
 

@@ -1,14 +1,20 @@
-use std::process::Stdio;
+use std::{path::PathBuf, process::Stdio};
 
+use capi_watch::Watcher;
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
     process::{Child, Command},
     select,
 };
 
-use crate::build::UpdatesRx;
+use crate::build;
 
-pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
+pub async fn start() -> anyhow::Result<()> {
+    let crates_dir = PathBuf::from("capi").canonicalize()?;
+
+    let watcher = Watcher::new(&crates_dir)?;
+    let mut updates = build::start(watcher.changes);
+
     let mut current_server: Option<Child> = None;
 
     let Some(mut serve_dir) = updates.recv().await else {
