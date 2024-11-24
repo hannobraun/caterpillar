@@ -308,6 +308,7 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-watch",
+ "clap",
  "tempfile",
  "tokio",
  "tracing",

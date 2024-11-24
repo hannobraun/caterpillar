@@ -13,6 +13,10 @@ wasm-bindgen-cli-support = "*"
 [dependencies.capi-watch]
 path = "../../capi/watch"
 
+[dependencies.clap]
+version = "*"
+features = ["derive"]
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
