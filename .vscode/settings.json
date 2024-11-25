@@ -12,6 +12,9 @@
     ],
     "deno.config": "./website/deno.json",
     "typescript.format.enable": true,
+    "[html]": {
+        "editor.defaultFormatter": "denoland.vscode-deno"
+    },
     "[typescript]": {
         "editor.defaultFormatter": "denoland.vscode-deno"
     }
