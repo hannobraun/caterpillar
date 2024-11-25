@@ -28,8 +28,8 @@ async fn main() -> anyhow::Result<()> {
 
                 write!(
                     err,
-                    "Can't start the server because the \
-                    following files are not available:\n\
+                    "Can't start the server because the following files are \
+                    not available:\n\
                     \n",
                 )?;
 
