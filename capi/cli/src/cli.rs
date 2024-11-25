@@ -75,7 +75,7 @@ fn check_files() -> anyhow::Result<()> {
 
     write!(
         err,
-        "Can't start the server because the following files are not \
+        "Can't start the Caterpillar tool because the following files are not \
         available:\n\
         \n",
     )?;
