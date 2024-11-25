@@ -8,6 +8,7 @@ use tokio::{
 use crate::files::FILES;
 
 pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
+    fs::remove_dir_all(&path).await?;
     fs::create_dir_all(&path).await?;
 
     let deployment = ["index.html", "capi_host.wasm"];
