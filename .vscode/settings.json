@@ -6,7 +6,6 @@
     "search.exclude": {
         "archive/**": true
     },
-    "nixEnvSelector.nixFile": "${workspaceRoot}/capi/shell.nix",
     "deno.enablePaths": [
         "./website"
     ],
