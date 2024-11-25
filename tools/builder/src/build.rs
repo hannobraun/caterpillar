@@ -57,9 +57,9 @@ async fn watch_and_build(
         if let Some(output_dir) = &_output_dir {
             let output_path = output_dir.path().to_path_buf();
             if updates.send(output_path).await.is_err() {
-                // If the send failed, the other end has hung up. That means
-                // either we're currently shutting down, or something went wrong
-                // over there and we _should_ be shutting down.
+                // If other end hung up, that means either we're currently
+                // shutting down, or something went wrong over there and we
+                // _should_ be shutting down.
                 return Err(anyhow!(
                     "Could not send update, because the other end hung up."
                 ));
