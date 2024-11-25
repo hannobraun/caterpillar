@@ -15,6 +15,11 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     match args {
+        Args::Deploy => {
+            check_files()?;
+
+            dbg!();
+        }
         Args::Headless => {
             headless::run().await?;
         }

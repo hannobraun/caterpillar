@@ -2,6 +2,7 @@ use std::net::SocketAddr;
 
 #[derive(clap::Parser)]
 pub enum Args {
+    Deploy,
     Headless,
     Serve {
         /// Address to serve at
