@@ -57,8 +57,7 @@ fn check_files() -> anyhow::Result<()> {
 
     use anyhow::anyhow;
 
-    let files = files::FILES;
-    let invalid_files = files.list_invalid();
+    let invalid_files = files::FILES.list_invalid();
 
     if !invalid_files.is_empty() {
         let mut err = String::new();
