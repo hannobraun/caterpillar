@@ -1,6 +1,7 @@
 use std::{fmt::Write, net::SocketAddr, path::PathBuf};
 
 use anyhow::anyhow;
+use clap::Parser;
 
 use crate::{files, headless, server};
 
@@ -61,12 +62,6 @@ enum Args {
         #[arg(short, long, default_value = "127.0.0.1:34480")]
         address: SocketAddr,
     },
-}
-
-impl Args {
-    pub fn parse() -> Self {
-        <Self as clap::Parser>::parse()
-    }
 }
 
 fn check_files() -> anyhow::Result<()> {
