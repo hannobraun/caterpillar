@@ -34,17 +34,9 @@ async fn watch_and_build(
     // exist. It keeps the `TempDir` instances from being dropped before we're
     // done with it. Dropping it prematurely would delete the temporary
     // directory we serve files out of.
-    let mut _output_dir = build_once().await?;
+    let mut _output_dir = None;
 
-    if let Some(output_dir) = &_output_dir {
-        let output_path = output_dir.path().to_path_buf();
-        if updates.send(output_path).await.is_err() {
-            // If the send failed, the other end has hung up. That means either
-            // we're currently shutting down, or something went wrong over there
-            // and we _should_ be shutting down.
-            return Ok(());
-        }
-    }
+    build_once_and_send_update(&updates, &mut _output_dir).await?;
 
     while changes.wait_for_change().await {
         println!();
