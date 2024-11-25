@@ -11,10 +11,10 @@ pub async fn run() -> anyhow::Result<()> {
     let args = Args::parse();
 
     match args {
-        Args::Deploy => {
+        Args::Deploy { path } => {
             check_files()?;
 
-            dbg!();
+            dbg!(path);
         }
         Args::Headless => {
             headless::run().await?;
@@ -55,7 +55,10 @@ pub async fn run() -> anyhow::Result<()> {
 
 #[derive(clap::Parser)]
 enum Args {
-    Deploy,
+    Deploy {
+        #[arg(short, long)]
+        path: PathBuf,
+    },
     Headless,
     Serve {
         /// Address to serve at

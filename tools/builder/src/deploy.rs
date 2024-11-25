@@ -11,6 +11,7 @@ pub async fn run() -> anyhow::Result<()> {
             .args(["--package", "capi-cli"])
             .arg("--")
             .arg("deploy")
+            .args(["--path", "caterpillar-deployment"])
             .env("FILES", files.path().display().to_string())
             .kill_on_drop(true)
             .status()
