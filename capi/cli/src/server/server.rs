@@ -116,7 +116,7 @@ async fn serve_code(
 }
 
 async fn serve_index() -> impl IntoResponse {
-    make_file_response(PathBuf::from("index.html")).await
+    make_file_response(PathBuf::from("index-debugger.html")).await
 }
 
 async fn serve_static(Path(path): Path<PathBuf>) -> impl IntoResponse {

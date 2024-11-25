@@ -33,7 +33,7 @@ fn create_dummy_files() -> anyhow::Result<()> {
         "capi-debugger_bg.wasm",
         "capi-debugger.js",
         "capi_host.wasm",
-        "index.html",
+        "index-debugger.html",
         "tailwind.js",
     ];
 

@@ -58,6 +58,6 @@ files!(
     a, "capi-debugger_bg.wasm";
     b, "capi-debugger.js";
     c, "capi_host.wasm";
-    d, "index.html";
+    d, "index-debugger.html";
     e, "tailwind.js";
 );
