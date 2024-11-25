@@ -1,4 +1,5 @@
 mod build;
+mod deploy;
 mod serve;
 
 #[tokio::main]
@@ -10,7 +11,7 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     match args.command {
         Some(Command::Deploy) => {
-            dbg!();
+            deploy::run().await?;
         }
         None | Some(Command::Serve) => {
             serve::start().await?;
