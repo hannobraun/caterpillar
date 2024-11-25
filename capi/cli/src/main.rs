@@ -1,5 +1,5 @@
-mod args;
 mod build_game;
+mod cli;
 mod files;
 mod headless;
 mod server;
@@ -8,7 +8,7 @@ mod server;
 async fn main() -> anyhow::Result<()> {
     use std::path::PathBuf;
 
-    use self::args::Args;
+    use self::cli::Args;
 
     tracing_subscriber::fmt().init();
 
