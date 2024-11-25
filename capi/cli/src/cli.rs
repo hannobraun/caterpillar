@@ -53,7 +53,7 @@ pub async fn run() -> anyhow::Result<()> {
 }
 
 #[derive(clap::Parser)]
-pub enum Args {
+enum Args {
     Deploy,
     Headless,
     Serve {
