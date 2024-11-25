@@ -6,7 +6,7 @@ mod server;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use std::path::PathBuf;
+    use std::{fmt::Write, path::PathBuf};
 
     use self::args::Args;
 
@@ -22,18 +22,22 @@ async fn main() -> anyhow::Result<()> {
             let files = files::FILES;
 
             if !files.list_invalid().is_empty() {
-                eprint!(
+                let mut err = String::new();
+
+                write!(
+                    err,
                     "\n\
                     Can't start the server because the\n\
                     following files are not available:\n\
                     \n",
-                );
+                )?;
 
                 for file in files.list_invalid() {
-                    eprintln!("- `{file}`");
+                    writeln!(err, "- `{file}`")?;
                 }
 
-                eprint!(
+                write!(
+                    err,
                     "\n\
                     All of those files should be included\n\
                     with this tool! That they aren't, means\n\
@@ -57,7 +61,9 @@ async fn main() -> anyhow::Result<()> {
                     \tmaybe it has become possible in the\n\
                     \tmeantime, and this error message has not\n\
                     \tbeen updated.\n",
-                );
+                )?;
+
+                eprint!("{}", err);
 
                 return Ok(());
             }
