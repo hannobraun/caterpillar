@@ -17,7 +17,7 @@ pub async fn start() -> anyhow::Result<()> {
 
     let mut current_server: Option<Child> = None;
 
-    let Some(mut serve_dir) = updates.recv().await else {
+    let Some(mut files) = updates.recv().await else {
         // The sender has been dropped, which means the process is shutting
         // down.
         return Ok(());
@@ -39,7 +39,7 @@ pub async fn start() -> anyhow::Result<()> {
             .args(["--package", "capi-cli"])
             .arg("--")
             .arg("serve")
-            .env("FILES", serve_dir.display().to_string())
+            .env("FILES", files.display().to_string())
             .kill_on_drop(true)
             .stdout(Stdio::piped())
             .spawn()?;
@@ -65,7 +65,7 @@ pub async fn start() -> anyhow::Result<()> {
                         // is shutting down.
                         return Ok(());
                     };
-                    serve_dir = update;
+                    files = update;
                     continue 'updates;
                 }
             }
