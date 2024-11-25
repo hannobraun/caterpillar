@@ -15,7 +15,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(crates_dir: &Path) -> anyhow::Result<Self> {
+    pub fn new(path: &Path) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {
@@ -42,8 +42,8 @@ impl Watcher {
             }
         })?;
         watcher
-            .watch(crates_dir, RecursiveMode::Recursive)
-            .with_context(|| match crates_dir.canonicalize() {
+            .watch(path, RecursiveMode::Recursive)
+            .with_context(|| match path.canonicalize() {
                 Ok(path) => {
                     format!("Watching `{}`", path.display())
                 }
@@ -58,7 +58,7 @@ impl Watcher {
                     format!(
                         "Watching `{}` in `{current_dir}` (failed to \
                         canonicalize path: {err})",
-                        crates_dir.display()
+                        path.display()
                     )
                 }
             })?;
