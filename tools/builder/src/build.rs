@@ -34,9 +34,17 @@ async fn watch_and_build(
     // exist. It keeps the `TempDir` instances from being dropped before we're
     // done with it. Dropping it prematurely would delete the temporary
     // directory we serve files out of.
-    let mut _output_dir = None;
+    let mut _output_dir = build_once().await?;
 
-    build_once(&updates, &mut _output_dir).await?;
+    if let Some(output_dir) = &_output_dir {
+        let output_path = output_dir.path().to_path_buf();
+        if updates.send(output_path).await.is_err() {
+            // If the send failed, the other end has hung up. That means either
+            // we're currently shutting down, or something went wrong over there
+            // and we _should_ be shutting down.
+            return Ok(());
+        }
+    }
 
     while changes.wait_for_change().await {
         println!();
@@ -44,19 +52,23 @@ async fn watch_and_build(
         println!("⏳ Rebuilding Caterpillar...");
         println!();
 
-        let should_continue = build_once(&updates, &mut _output_dir).await?;
-        if let ShouldContinue::NoBecauseShutdown = should_continue {
-            break;
+        _output_dir = build_once().await?;
+
+        if let Some(output_dir) = &_output_dir {
+            let output_path = output_dir.path().to_path_buf();
+            if updates.send(output_path).await.is_err() {
+                // If the send failed, the other end has hung up. That means
+                // either we're currently shutting down, or something went wrong
+                // over there and we _should_ be shutting down.
+                break;
+            }
         }
     }
 
     Ok(())
 }
 
-async fn build_once(
-    updates: &UpdatesTx,
-    output_dir: &mut Option<TempDir>,
-) -> anyhow::Result<ShouldContinue> {
+async fn build_once() -> anyhow::Result<Option<TempDir>> {
     let packages = [("capi-host", Some("cdylib")), ("capi-debugger", None)];
 
     for (package, crate_type) in packages {
@@ -78,7 +90,7 @@ async fn build_once(
             //
             // But that doesn't mean that the builder overall should be done.
             // Next time we detect a change, we should try again.
-            return Ok(ShouldContinue::YesWhyNot);
+            return Ok(None);
         }
     }
 
@@ -106,18 +118,7 @@ async fn build_once(
         copy(www_dir, new_output_dir.path(), relative_path).await?;
     }
 
-    let output_path = new_output_dir.path().to_path_buf();
-
-    if updates.send(output_path).await.is_err() {
-        // If the send failed, the other end has hung up. That means either
-        // we're currently shutting down, or something went wrong over there and
-        // we _should_ be shutting down.
-        return Ok(ShouldContinue::NoBecauseShutdown);
-    }
-
-    *output_dir = Some(new_output_dir);
-
-    Ok(ShouldContinue::YesWhyNot)
+    Ok(Some(new_output_dir))
 }
 
 async fn copy(
@@ -141,11 +142,6 @@ async fn copy(
         })?;
 
     Ok(())
-}
-
-enum ShouldContinue {
-    YesWhyNot,
-    NoBecauseShutdown,
 }
 
 pub type UpdatesRx = mpsc::Receiver<Update>;
