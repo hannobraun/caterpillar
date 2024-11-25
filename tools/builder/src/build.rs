@@ -68,7 +68,7 @@ async fn watch_and_build(
     Ok(())
 }
 
-async fn build_once() -> anyhow::Result<Option<TempDir>> {
+pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
     let packages = [("capi-host", Some("cdylib")), ("capi-debugger", None)];
 
     for (package, crate_type) in packages {
