@@ -52,19 +52,33 @@ async fn watch_and_build(
         println!("⏳ Rebuilding Caterpillar...");
         println!();
 
-        _output_dir = build_once().await?;
+        build_once_and_send_update(&updates, &mut _output_dir).await?;
+    }
 
-        if let Some(output_dir) = &_output_dir {
-            let output_path = output_dir.path().to_path_buf();
-            if updates.send(output_path).await.is_err() {
-                // If other end hung up, that means either we're currently
-                // shutting down, or something went wrong over there and we
-                // _should_ be shutting down.
-                return Err(anyhow!(
-                    "Could not send update, because the other end hung up."
-                ));
-            }
+    Ok(())
+}
+
+async fn build_once_and_send_update(
+    updates: &UpdatesTx,
+    output_dir: &mut Option<TempDir>,
+) -> anyhow::Result<()> {
+    let new_output_dir = build_once().await?;
+
+    if let Some(new_output_dir) = new_output_dir {
+        let output_path = new_output_dir.path().to_path_buf();
+        if updates.send(output_path).await.is_err() {
+            // If other end hung up, that means either we're currently shutting
+            // down, or something went wrong over there and we _should_ be
+            // shutting down.
+            return Err(anyhow!(
+                "Could not send update, because the other end hung up."
+            ));
         }
+
+        // Let's now overwrite `output_dir`, unless we have a new one.
+        // Otherwise, if we have a server serving the last successful build,
+        // that will no longer work after an unsuccessful one.
+        *output_dir = Some(new_output_dir);
     }
 
     Ok(())
