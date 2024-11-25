@@ -88,8 +88,9 @@ async fn build_once() -> anyhow::Result<Option<TempDir>> {
             // The build failed, and since the rest of this function is
             // dependent on its success, we're done here.
             //
-            // But that doesn't mean that the builder overall should be done.
-            // Next time we detect a change, we should try again.
+            // But this isn't an error condition for this function, just a
+            // normal part of operations. We just need to signal to the caller,
+            // that no build was produced.
             return Ok(None);
         }
     }
