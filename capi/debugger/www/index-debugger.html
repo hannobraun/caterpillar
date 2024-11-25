@@ -1,195 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Caterpillar</title>
 
-    <title>Caterpillar</title>
+        <script src="/tailwind.js"></script>
+    </head>
 
-    <script src="/tailwind.js"></script>
-</head>
+    <body>
+        <canvas
+            width="256"
+            height="256"
+            id="capi"
+            class="mx-auto m-16"
+            data-raw-handle="1"
+        >
+            Display for a game written in Caterpillar.
+        </canvas>
+        <script type="module">
+            let panicHappened = false;
 
-<body>
-    <canvas width="256" height="256" id="capi" class="mx-auto m-16" data-raw-handle="1">
-        Display for a game written in Caterpillar.
-    </canvas>
-    <script type="module">
-        let panicHappened = false;
+            const module = fetch("/capi_host.wasm");
+            const { instance } = await WebAssembly.instantiateStreaming(module, {
+                env: {
+                    on_panic: (ptr, len) => {
+                        panicHappened = true;
 
-        const module = fetch("/capi_host.wasm");
-        const { instance } = await WebAssembly.instantiateStreaming(module, {
-            env: {
-                on_panic: (ptr, len) => {
-                    panicHappened = true;
+                        const array = new Uint8Array(
+                            instance.exports.memory.buffer,
+                            ptr,
+                            len,
+                        );
+                        const message = new TextDecoder().decode(array);
 
-                    const array = new Uint8Array(
-                        instance.exports.memory.buffer,
-                        ptr,
-                        len
-                    );
-                    const message = new TextDecoder().decode(array);
+                        const error = new Error();
 
-                    const error = new Error();
+                        console.error(`${message}\n\n${error.stack}`);
+                    },
 
-                    console.error(`${message}\n\n${error.stack}`);
+                    print: (ptr, len) => {
+                        const array = new Uint8Array(
+                            instance.exports.memory.buffer,
+                            ptr,
+                            len,
+                        );
+                        const message = new TextDecoder().decode(array);
+
+                        console.log(message);
+                    },
                 },
+            });
+            const runtime = instance.exports;
 
-                print: (ptr, len) => {
-                    const array = new Uint8Array(
-                        instance.exports.memory.buffer,
-                        ptr,
-                        len
-                    );
-                    const message = new TextDecoder().decode(array);
-
-                    console.log(message);
-                },
-            }
-        });
-        const runtime = instance.exports;
-
-        import initDebugger from "/capi-debugger.js";
-        const debugger_ = await initDebugger(
-            { module_or_path: "capi-debugger_bg.wasm" }
-        );
-
-        window.addEventListener("keydown", (event) => {
-            let keyCode = null;
-
-            if (event.key == "ArrowUp" || event.key == "w") {
-                keyCode = 1;
-            }
-            if (event.key == "ArrowLeft" || event.key == "a") {
-                keyCode = 2;
-            }
-            if (event.key == "ArrowDown" || event.key == "s") {
-                keyCode = 3;
-            }
-            if (event.key == "ArrowRight" || event.key == "d") {
-                keyCode = 4;
-            }
-
-            if (keyCode != null) {
-                runtime.on_key(keyCode);
-                event.preventDefault();
-            }
-        });
-
-        const canvas = document.querySelector("canvas");
-        const context = canvas.getContext("2d");
-
-        window.requestAnimationFrame(mainLoop);
-
-        function mainLoop(currentTimeMs) {
-            while (runtime.push_random(Math.random())) { }
-
-            while (true) {
-                debugger_.commands_read();
-                const command_rx = new Uint8Array(
-                    debugger_.memory.buffer,
-                    debugger_.commands_read_ptr(),
-                    debugger_.commands_read_len(),
-                );
-
-                if (command_rx.byteLength > 0) {
-                    runtime.commands_write(command_rx.byteLength);
-                    const command_tx = new Uint8Array(
-                        runtime.memory.buffer,
-                        runtime.commands_write_ptr(),
-                        runtime.commands_write_len(),
-                    );
-                    command_tx.set(command_rx);
-
-                    runtime.on_command();
-                }
-                else {
-                    break;
-                }
-            }
-
-            runtime.on_frame(currentTimeMs);
-
-            const pixels = new Uint8ClampedArray(
-                runtime.memory.buffer,
-                runtime.pixels_ptr(),
-                runtime.pixels_len(),
+            import initDebugger from "/capi-debugger.js";
+            const debugger_ = await initDebugger(
+                { module_or_path: "capi-debugger_bg.wasm" },
             );
 
-            const imageData = new ImageData(
-                pixels,
-                canvas.width,
-                canvas.height
-            );
+            window.addEventListener("keydown", (event) => {
+                let keyCode = null;
 
-            context.putImageData(imageData, 0, 0);
+                if (event.key == "ArrowUp" || event.key == "w") {
+                    keyCode = 1;
+                }
+                if (event.key == "ArrowLeft" || event.key == "a") {
+                    keyCode = 2;
+                }
+                if (event.key == "ArrowDown" || event.key == "s") {
+                    keyCode = 3;
+                }
+                if (event.key == "ArrowRight" || event.key == "d") {
+                    keyCode = 4;
+                }
 
-            while (true) {
-                runtime.updates_read();
-                const update_rx = new Uint8Array(
-                    runtime.memory.buffer,
-                    runtime.updates_read_ptr(),
-                    runtime.updates_read_len(),
-                );
+                if (keyCode != null) {
+                    runtime.on_key(keyCode);
+                    event.preventDefault();
+                }
+            });
 
-                if (update_rx.byteLength > 0) {
-                    debugger_.updates_write(update_rx.byteLength);
-                    const update_tx = new Uint8Array(
+            const canvas = document.querySelector("canvas");
+            const context = canvas.getContext("2d");
+
+            window.requestAnimationFrame(mainLoop);
+
+            function mainLoop(currentTimeMs) {
+                while (runtime.push_random(Math.random())) {}
+
+                while (true) {
+                    debugger_.commands_read();
+                    const command_rx = new Uint8Array(
                         debugger_.memory.buffer,
-                        debugger_.updates_write_ptr(),
-                        debugger_.updates_write_len(),
+                        debugger_.commands_read_ptr(),
+                        debugger_.commands_read_len(),
                     );
-                    update_tx.set(update_rx);
 
-                    debugger_.on_update();
-                } else {
-                    break;
+                    if (command_rx.byteLength > 0) {
+                        runtime.commands_write(command_rx.byteLength);
+                        const command_tx = new Uint8Array(
+                            runtime.memory.buffer,
+                            runtime.commands_write_ptr(),
+                            runtime.commands_write_len(),
+                        );
+                        command_tx.set(command_rx);
+
+                        runtime.on_command();
+                    } else {
+                        break;
+                    }
+                }
+
+                runtime.on_frame(currentTimeMs);
+
+                const pixels = new Uint8ClampedArray(
+                    runtime.memory.buffer,
+                    runtime.pixels_ptr(),
+                    runtime.pixels_len(),
+                );
+
+                const imageData = new ImageData(
+                    pixels,
+                    canvas.width,
+                    canvas.height,
+                );
+
+                context.putImageData(imageData, 0, 0);
+
+                while (true) {
+                    runtime.updates_read();
+                    const update_rx = new Uint8Array(
+                        runtime.memory.buffer,
+                        runtime.updates_read_ptr(),
+                        runtime.updates_read_len(),
+                    );
+
+                    if (update_rx.byteLength > 0) {
+                        debugger_.updates_write(update_rx.byteLength);
+                        const update_tx = new Uint8Array(
+                            debugger_.memory.buffer,
+                            debugger_.updates_write_ptr(),
+                            debugger_.updates_write_len(),
+                        );
+                        update_tx.set(update_rx);
+
+                        debugger_.on_update();
+                    } else {
+                        break;
+                    }
+                }
+
+                if (!panicHappened) {
+                    requestAnimationFrame(mainLoop);
                 }
             }
+        </script>
+        <script type="module">
+            // Let's choose a nice and short delay, to make sure we never have to
+            // wait long for any updates. As of this writing, this code is only used
+            // for local development, where the resulting traffic doesn't matter.
+            const delayMs = 50;
 
+            const socket = new WebSocket("/wait-while-alive");
 
-            if (!panicHappened) {
-                requestAnimationFrame(mainLoop);
+            socket.onopen = () => {
+                // We need to send something to the server. Otherwise, we'll not get
+                // an error if it disconnects.
+                sendHeartbeat();
+            };
+            socket.onmessage = () => {
+                reloadOnceServerIsReady();
+            };
+            socket.onerror = () => {
+                // Disconnected from server, which could mean it has been restarted
+                // and we have new code to run.
+                reloadOnceServerIsReady();
+            };
+
+            function sendHeartbeat() {
+                socket.send("");
+                setTimeout(sendHeartbeat, delayMs);
             }
-        }
-    </script>
-    <script type="module">
-        // Let's choose a nice and short delay, to make sure we never have to
-        // wait long for any updates. As of this writing, this code is only used
-        // for local development, where the resulting traffic doesn't matter.
-        const delayMs = 50;
 
-        const socket = new WebSocket("/wait-while-alive");
-
-        socket.onopen = () => {
-            // We need to send something to the server. Otherwise, we'll not get
-            // an error if it disconnects.
-            sendHeartbeat();
-        };
-        socket.onmessage = () => {
-            reloadOnceServerIsReady();
-        };
-        socket.onerror = () => {
-            // Disconnected from server, which could mean it has been restarted
-            // and we have new code to run.
-            reloadOnceServerIsReady();
-        };
-
-        function sendHeartbeat() {
-            socket.send("");
-            setTimeout(sendHeartbeat, delayMs);
-        }
-
-        function reloadOnceServerIsReady() {
-            fetch("/is-alive")
-                .then((response) => {
-                    window.location.reload();
-                })
-                .catch(() => {
-                    setTimeout(reloadOnceServerIsReady, delayMs);
-                });
-        }
-    </script>
-</body>
-
+            function reloadOnceServerIsReady() {
+                fetch("/is-alive")
+                    .then((response) => {
+                        window.location.reload();
+                    })
+                    .catch(() => {
+                        setTimeout(reloadOnceServerIsReady, delayMs);
+                    });
+            }
+        </script>
+    </body>
 </html>
