@@ -8,6 +8,8 @@ mod server;
 async fn main() -> anyhow::Result<()> {
     use std::{fmt::Write, path::PathBuf};
 
+    use anyhow::anyhow;
+
     use self::args::Args;
 
     tracing_subscriber::fmt().init();
@@ -63,9 +65,7 @@ async fn main() -> anyhow::Result<()> {
                     \tbeen updated.\n",
                 )?;
 
-                eprint!("{}", err);
-
-                return Ok(());
+                return Err(anyhow!("{}", err));
             }
 
             let mut events =
