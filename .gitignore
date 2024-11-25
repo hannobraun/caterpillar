@@ -1,5 +1,8 @@
 # Cargo
 /target
 
+# Caterpillar
+/deployment
+
 # Vim
 .*.swp
