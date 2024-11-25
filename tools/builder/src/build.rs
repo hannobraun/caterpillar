@@ -115,16 +115,18 @@ pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
         .web(true)?
         .generate(&new_output_dir)?;
 
-    let www_dir = "capi/debugger/www";
-    for entry in WalkDir::new(www_dir) {
-        let entry = entry?;
+    let www_directories = ["capi/debugger/www"];
+    for www_dir in www_directories {
+        for entry in WalkDir::new(www_dir) {
+            let entry = entry?;
 
-        if entry.file_type().is_dir() {
-            continue;
+            if entry.file_type().is_dir() {
+                continue;
+            }
+
+            let relative_path = entry.path().strip_prefix(www_dir)?;
+            copy(www_dir, new_output_dir.path(), relative_path).await?;
         }
-
-        let relative_path = entry.path().strip_prefix(www_dir)?;
-        copy(www_dir, new_output_dir.path(), relative_path).await?;
     }
 
     Ok(Some(new_output_dir))
