@@ -3,7 +3,7 @@ use std::{
     process,
 };
 
-use anyhow::Context;
+use anyhow::{anyhow, Context};
 use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::mpsc, task};
@@ -60,7 +60,9 @@ async fn watch_and_build(
                 // If the send failed, the other end has hung up. That means
                 // either we're currently shutting down, or something went wrong
                 // over there and we _should_ be shutting down.
-                break;
+                return Err(anyhow!(
+                    "Could not send update, because the other end hung up."
+                ));
             }
         }
     }
