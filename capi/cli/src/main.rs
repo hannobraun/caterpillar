@@ -58,8 +58,9 @@ fn check_files() -> anyhow::Result<()> {
     use anyhow::anyhow;
 
     let files = files::FILES;
+    let invalid_files = files.list_invalid();
 
-    if !files.list_invalid().is_empty() {
+    if !invalid_files.is_empty() {
         let mut err = String::new();
 
         write!(
@@ -69,7 +70,7 @@ fn check_files() -> anyhow::Result<()> {
             \n",
         )?;
 
-        for file in files.list_invalid() {
+        for file in invalid_files {
             writeln!(err, "- `{file}`")?;
         }
 
