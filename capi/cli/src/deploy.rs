@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use tokio::{
     fs::{self, File},
@@ -8,8 +8,7 @@ use tokio::{
 use crate::files::FILES;
 
 pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
-    fs::remove_dir_all(&path).await?;
-    fs::create_dir_all(&path).await?;
+    prepare_directory(&path).await?;
 
     let static_files = ["index.html", "capi_host.wasm"];
 
@@ -27,6 +26,13 @@ pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
             .write_all(file)
             .await?;
     }
+
+    Ok(())
+}
+
+async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
+    fs::remove_dir_all(&path).await?;
+    fs::create_dir_all(&path).await?;
 
     Ok(())
 }
