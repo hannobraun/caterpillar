@@ -60,7 +60,7 @@ pub enum Event {
 }
 
 async fn build_and_watch_game_inner(
-    game: &Path,
+    game_dir: &Path,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
 ) -> anyhow::Result<()> {
@@ -75,30 +75,31 @@ async fn build_and_watch_game_inner(
             return Ok(());
         }
 
-        let code =
-            match build_game_once_with_compiler(game, &mut compiler).await {
-                Ok(code) => code,
-                Err(err) => match err.source.kind() {
-                    io::ErrorKind::NotFound => {
-                        // Depending on the editor, this can happen while the file
-                        // is being saved.
-                        if let Some(old_err) = ignored_error {
-                            return Err(anyhow!(
-                                "{err}\n\
+        let code = match build_game_once_with_compiler(game_dir, &mut compiler)
+            .await
+        {
+            Ok(code) => code,
+            Err(err) => match err.source.kind() {
+                io::ErrorKind::NotFound => {
+                    // Depending on the editor, this can happen while the file
+                    // is being saved.
+                    if let Some(old_err) = ignored_error {
+                        return Err(anyhow!(
+                            "{err}\n\
                             \n\
                             Previously ignored an error, because a false \
                             positive was suspected: {old_err}"
-                            ));
-                        } else {
-                            ignored_error = Some(err);
-                            continue;
-                        }
+                        ));
+                    } else {
+                        ignored_error = Some(err);
+                        continue;
                     }
-                    _ => {
-                        return Err(err.into());
-                    }
-                },
-            };
+                }
+                _ => {
+                    return Err(err.into());
+                }
+            },
+        };
 
         ignored_error = None;
 
