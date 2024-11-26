@@ -19,8 +19,8 @@ pub async fn deploy(
         }
 
         let game_dir = game.path();
-        let path_within_games = game_dir.strip_prefix(&games_path)?;
-        let target_path = target_path.join(path_within_games);
+        let dir_within_games = game_dir.strip_prefix(&games_path)?;
+        let target_path = target_path.join(dir_within_games);
 
         prepare_directory(&target_path).await?;
         deploy_static_files(&target_path).await?;
