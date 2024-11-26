@@ -37,7 +37,7 @@ pub async fn run() -> anyhow::Result<()> {
                     server::Event::ServerReady => {
                         print!(
                             "\n\
-                            🚀 Build is ready: http://{address}/ 🚀\n\
+                            🚀 Build is ready: http://{address}/\n\
                             \n"
                         );
                     }
