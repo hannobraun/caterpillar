@@ -1,7 +1,6 @@
 use std::{
     io,
     path::{Path, PathBuf},
-    str,
     time::SystemTime,
 };
 
