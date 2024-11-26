@@ -21,8 +21,7 @@ pub async fn run() -> anyhow::Result<()> {
         Command::Serve { address } => {
             check_files()?;
 
-            let mut events =
-                server::start(PathBuf::from("games"), address).await?;
+            let mut events = server::start(args.games, address).await?;
 
             while let Some(event) = events.recv().await {
                 match event {
@@ -54,6 +53,9 @@ pub async fn run() -> anyhow::Result<()> {
 
 #[derive(clap::Parser)]
 struct Args {
+    #[arg(short, long, default_value = "games")]
+    games: PathBuf,
+
     #[command(subcommand)]
     command: Command,
 }
