@@ -26,14 +26,14 @@ pub async fn build_game_once(
 }
 
 pub fn build_and_watch_game(
-    game: PathBuf,
+    game_dir: PathBuf,
     changes: DebouncedChanges,
 ) -> EventsRx {
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
         if let Err(err) =
-            build_and_watch_game_inner(&game, changes, events_tx).await
+            build_and_watch_game_inner(&game_dir, changes, events_tx).await
         {
             tracing::error!("Error building and watching game: {err}");
 
