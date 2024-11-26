@@ -8,7 +8,7 @@ use rand::random;
 use crate::build_game::build_game_once;
 
 pub async fn run(games_path: PathBuf) -> anyhow::Result<()> {
-    let code = build_game_once(games_path, "snake").await?;
+    let code = build_game_once(&games_path.join("snake")).await?;
 
     let mut pixels = [0; NUM_PIXEL_BYTES];
     let mut game_engine = GameEngine::new();
