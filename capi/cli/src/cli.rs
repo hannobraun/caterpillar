@@ -10,15 +10,15 @@ pub async fn run() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    match args {
-        Args::Deploy { path } => {
+    match args.command {
+        Command::Deploy { path } => {
             check_files()?;
             deploy(path).await?;
         }
-        Args::Headless => {
+        Command::Headless => {
             headless::run().await?;
         }
-        Args::Serve { address } => {
+        Command::Serve { address } => {
             check_files()?;
 
             let mut events =
@@ -53,7 +53,13 @@ pub async fn run() -> anyhow::Result<()> {
 }
 
 #[derive(clap::Parser)]
-enum Args {
+struct Args {
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(clap::Subcommand)]
+enum Command {
     Deploy {
         #[arg(short, long)]
         path: PathBuf,
