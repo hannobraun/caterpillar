@@ -7,9 +7,9 @@ use tokio::{
 
 use crate::files::FILES;
 
-pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
-    prepare_directory(&path).await?;
-    deploy_static_files(&path).await?;
+pub async fn deploy(target_path: PathBuf) -> anyhow::Result<()> {
+    prepare_directory(&target_path).await?;
+    deploy_static_files(&target_path).await?;
 
     Ok(())
 }
