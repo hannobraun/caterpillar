@@ -1,11 +1,13 @@
 use std::path::{Path, PathBuf};
 
+use capi_game_engine::command::Command;
+use capi_protocol::command::CommandExt;
 use tokio::{
     fs::{self, File},
     io::AsyncWriteExt,
 };
 
-use crate::files::FILES;
+use crate::{build_game::build_game_once, files::FILES};
 
 pub async fn deploy(
     games_path: PathBuf,
@@ -24,6 +26,7 @@ pub async fn deploy(
 
         prepare_directory(&target_path).await?;
         deploy_static_files(&target_path).await?;
+        deploy_game_code(&game_dir, &target_path).await?;
     }
 
     Ok(())
@@ -55,6 +58,22 @@ async fn deploy_static_files(path: &Path) -> anyhow::Result<()> {
             .write_all(file)
             .await?;
     }
+
+    Ok(())
+}
+
+async fn deploy_game_code(
+    game_dir: &Path,
+    target_path: &Path,
+) -> anyhow::Result<()> {
+    let compiler_output = build_game_once(game_dir).await?;
+    let command = Command::UpdateCode {
+        instructions: compiler_output.instructions,
+    }
+    .serialize();
+
+    let target_path = target_path.join("command-with-instructions");
+    File::create(target_path).await?.write_all(&command).await?;
 
     Ok(())
 }
