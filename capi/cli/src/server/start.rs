@@ -44,7 +44,7 @@ async fn start_inner(
     let watcher =
         Watcher::new(&games_path).context("Creating watcher for game")?;
     let mut build_events =
-        build_and_watch_game(games_path, "snake", watcher.changes);
+        build_and_watch_game(games_path.join("snake"), watcher.changes);
 
     let mut server_task = ServerTask::Uninitialized { address };
 
