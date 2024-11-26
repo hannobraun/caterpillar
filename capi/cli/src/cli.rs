@@ -16,7 +16,7 @@ pub async fn run() -> anyhow::Result<()> {
             deploy(path).await?;
         }
         Command::Headless => {
-            headless::run().await?;
+            headless::run(args.games).await?;
         }
         Command::Serve { address } => {
             check_files()?;
