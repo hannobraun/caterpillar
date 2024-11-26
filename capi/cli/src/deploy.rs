@@ -11,9 +11,9 @@ pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
     fs::remove_dir_all(&path).await?;
     fs::create_dir_all(&path).await?;
 
-    let deployment = ["index.html", "capi_host.wasm"];
+    let static_files = ["index.html", "capi_host.wasm"];
 
-    for name in deployment {
+    for name in static_files {
         let file_path = PathBuf::from(name);
         let Some(file) = FILES.get(&file_path) else {
             unreachable!(
