@@ -35,9 +35,12 @@ pub fn build_and_watch_game(
     let (events_tx, events_rx) = mpsc::channel(1);
 
     task::spawn(async move {
-        if let Err(err) =
-            build_and_watch_game_inner(&games_path, game, changes, events_tx)
-                .await
+        if let Err(err) = build_and_watch_game_inner(
+            &games_path.join(game),
+            changes,
+            events_tx,
+        )
+        .await
         {
             tracing::error!("Error building and watching game: {err}");
 
@@ -57,13 +60,10 @@ pub enum Event {
 }
 
 async fn build_and_watch_game_inner(
-    games_path: impl AsRef<Path>,
-    game: String,
+    game: &Path,
     mut changes: DebouncedChanges,
     events: mpsc::Sender<Event>,
 ) -> anyhow::Result<()> {
-    let games_path = games_path.as_ref();
-
     let mut compiler = Compiler::default();
     let mut timestamp = Timestamp(0);
 
@@ -75,34 +75,30 @@ async fn build_and_watch_game_inner(
             return Ok(());
         }
 
-        let code = match build_game_once_with_compiler(
-            &games_path.join(&game),
-            &mut compiler,
-        )
-        .await
-        {
-            Ok(code) => code,
-            Err(err) => match err.source.kind() {
-                io::ErrorKind::NotFound => {
-                    // Depending on the editor, this can happen while the file
-                    // is being saved.
-                    if let Some(old_err) = ignored_error {
-                        return Err(anyhow!(
-                            "{err}\n\
+        let code =
+            match build_game_once_with_compiler(game, &mut compiler).await {
+                Ok(code) => code,
+                Err(err) => match err.source.kind() {
+                    io::ErrorKind::NotFound => {
+                        // Depending on the editor, this can happen while the file
+                        // is being saved.
+                        if let Some(old_err) = ignored_error {
+                            return Err(anyhow!(
+                                "{err}\n\
                             \n\
                             Previously ignored an error, because a false \
                             positive was suspected: {old_err}"
-                        ));
-                    } else {
-                        ignored_error = Some(err);
-                        continue;
+                            ));
+                        } else {
+                            ignored_error = Some(err);
+                            continue;
+                        }
                     }
-                }
-                _ => {
-                    return Err(err.into());
-                }
-            },
-        };
+                    _ => {
+                        return Err(err.into());
+                    }
+                },
+            };
 
         ignored_error = None;
 
