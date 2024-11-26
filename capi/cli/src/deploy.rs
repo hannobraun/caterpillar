@@ -9,7 +9,19 @@ use crate::files::FILES;
 
 pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
     prepare_directory(&path).await?;
+    deploy_static_files(&path).await?;
 
+    Ok(())
+}
+
+async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
+    fs::remove_dir_all(path).await?;
+    fs::create_dir_all(path).await?;
+
+    Ok(())
+}
+
+async fn deploy_static_files(path: &Path) -> anyhow::Result<()> {
     let static_files = ["index.html", "capi_host.wasm"];
 
     for name in static_files {
@@ -26,13 +38,6 @@ pub async fn deploy(path: PathBuf) -> anyhow::Result<()> {
             .write_all(file)
             .await?;
     }
-
-    Ok(())
-}
-
-async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
-    fs::remove_dir_all(path).await?;
-    fs::create_dir_all(path).await?;
 
     Ok(())
 }
