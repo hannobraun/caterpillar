@@ -18,8 +18,8 @@ pub async fn deploy(
             continue;
         }
 
-        let path = game.path();
-        let path_within_games = path.strip_prefix(&games_path)?;
+        let game_dir = game.path();
+        let path_within_games = game_dir.strip_prefix(&games_path)?;
         let target_path = target_path.join(path_within_games);
 
         prepare_directory(&target_path).await?;
