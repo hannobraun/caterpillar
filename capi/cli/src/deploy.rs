@@ -15,7 +15,9 @@ pub async fn deploy(target_path: PathBuf) -> anyhow::Result<()> {
 }
 
 async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
-    fs::remove_dir_all(path).await?;
+    if path.exists() {
+        fs::remove_dir_all(path).await?;
+    }
     fs::create_dir_all(path).await?;
 
     Ok(())
