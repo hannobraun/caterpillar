@@ -18,7 +18,7 @@ pub async fn build_game_once(
 ) -> Result<CompilerOutput, BuildGameOnceError> {
     let mut compiler = Compiler::default();
     let output = build_game_once_with_compiler(
-        games_path.as_ref().join(game),
+        &games_path.as_ref().join(game),
         &mut compiler,
     )
     .await?;
@@ -76,7 +76,7 @@ async fn build_and_watch_game_inner(
         }
 
         let code = match build_game_once_with_compiler(
-            games_path.join(&game),
+            &games_path.join(&game),
             &mut compiler,
         )
         .await
