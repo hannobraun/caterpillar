@@ -12,10 +12,10 @@ use capi_watch::DebouncedChanges;
 use tokio::{fs, sync::mpsc, task};
 
 pub async fn build_game_once(
-    game: &Path,
+    game_dir: &Path,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
     let mut compiler = Compiler::default();
-    let output = build_game_once_with_compiler(game, &mut compiler).await?;
+    let output = build_game_once_with_compiler(game_dir, &mut compiler).await?;
     Ok(output)
 }
 
