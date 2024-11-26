@@ -130,7 +130,7 @@ async fn build_game_once_with_compiler(
     game: &str,
     compiler: &mut Compiler,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
-    let path = games_path.as_ref().join(format!("{game}/{game}.capi"));
+    let path = games_path.as_ref().join(format!("{game}/main.capi"));
     let source = fs::read_to_string(&path)
         .await
         .map_err(|source| BuildGameOnceError { source, path })?;
