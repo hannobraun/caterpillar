@@ -128,10 +128,10 @@ async fn build_and_watch_game_inner(
 }
 
 async fn build_game_once_with_compiler(
-    game_dir: impl AsRef<Path>,
+    game_dir: &Path,
     compiler: &mut Compiler,
 ) -> Result<CompilerOutput, BuildGameOnceError> {
-    let path = game_dir.as_ref().join("main.capi");
+    let path = game_dir.join("main.capi");
     let source = fs::read_to_string(&path)
         .await
         .map_err(|source| BuildGameOnceError { source, path })?;
