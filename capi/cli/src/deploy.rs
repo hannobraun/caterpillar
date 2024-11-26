@@ -7,9 +7,24 @@ use tokio::{
 
 use crate::files::FILES;
 
-pub async fn deploy(target_path: PathBuf) -> anyhow::Result<()> {
-    prepare_directory(&target_path).await?;
-    deploy_static_files(&target_path).await?;
+pub async fn deploy(
+    games_path: PathBuf,
+    target_path: PathBuf,
+) -> anyhow::Result<()> {
+    let mut games = fs::read_dir(&games_path).await?;
+
+    while let Some(game) = games.next_entry().await? {
+        if !game.file_type().await?.is_dir() {
+            continue;
+        }
+
+        let path = game.path();
+        let path_within_games = path.strip_prefix(&games_path)?;
+        let target_path = target_path.join(path_within_games);
+
+        prepare_directory(&target_path).await?;
+        deploy_static_files(&target_path).await?;
+    }
 
     Ok(())
 }

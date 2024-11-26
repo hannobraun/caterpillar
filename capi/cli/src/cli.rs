@@ -13,7 +13,7 @@ pub async fn run() -> anyhow::Result<()> {
     match args.command {
         Command::Deploy { path } => {
             check_files()?;
-            deploy(path).await?;
+            deploy(args.games, path).await?;
         }
         Command::Headless => {
             headless::run(args.games).await?;
