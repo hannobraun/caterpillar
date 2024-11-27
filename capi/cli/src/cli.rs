@@ -3,7 +3,7 @@ use std::{fmt::Write, net::SocketAddr, path::PathBuf};
 use anyhow::anyhow;
 use clap::Parser;
 
-use crate::{deploy::deploy, files, headless, server};
+use crate::{deploy::export, files, headless, server};
 
 pub async fn run() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
@@ -13,7 +13,7 @@ pub async fn run() -> anyhow::Result<()> {
     match args.command {
         Command::Export { path } => {
             check_files()?;
-            deploy(args.games, path).await?;
+            export(args.games, path).await?;
         }
         Command::Headless => {
             headless::run(args.games).await?;

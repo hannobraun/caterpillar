@@ -9,7 +9,7 @@ use tokio::{
 
 use crate::{build_game::build_game_once, files::FILES};
 
-pub async fn deploy(
+pub async fn export(
     games_path: PathBuf,
     target_path: PathBuf,
 ) -> anyhow::Result<()> {
