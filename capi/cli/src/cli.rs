@@ -3,7 +3,7 @@ use std::{fmt::Write, net::SocketAddr, path::PathBuf};
 use anyhow::anyhow;
 use clap::Parser;
 
-use crate::{deploy::export, files, headless, server};
+use crate::{export::export, files, headless, server};
 
 pub async fn run() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
