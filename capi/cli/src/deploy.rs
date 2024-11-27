@@ -25,7 +25,7 @@ pub async fn export(
         let target_path = target_path.join(dir_within_games);
 
         prepare_directory(&target_path).await?;
-        deploy_static_files(&target_path).await?;
+        export_static_files(&target_path).await?;
         deploy_game_code(&game_dir, &target_path).await?;
     }
 
@@ -41,7 +41,7 @@ async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn deploy_static_files(path: &Path) -> anyhow::Result<()> {
+async fn export_static_files(path: &Path) -> anyhow::Result<()> {
     let static_files = ["index.html", "capi_host.wasm"];
 
     for name in static_files {
