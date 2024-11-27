@@ -10,7 +10,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
     match args.command {
-        Some(Command::Deploy) => {
+        Some(Command::Export) => {
             export::run().await?;
         }
         None | Some(Command::Serve) => {
@@ -29,6 +29,6 @@ struct Args {
 
 #[derive(clap::Subcommand)]
 enum Command {
-    Deploy,
+    Export,
     Serve,
 }
