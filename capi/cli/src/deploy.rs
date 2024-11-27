@@ -26,7 +26,7 @@ pub async fn export(
 
         prepare_directory(&target_path).await?;
         export_static_files(&target_path).await?;
-        deploy_game_code(&game_dir, &target_path).await?;
+        export_game_code(&game_dir, &target_path).await?;
     }
 
     Ok(())
@@ -62,7 +62,7 @@ async fn export_static_files(path: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn deploy_game_code(
+async fn export_game_code(
     game_dir: &Path,
     target_path: &Path,
 ) -> anyhow::Result<()> {
