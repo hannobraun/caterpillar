@@ -10,7 +10,7 @@ pub async fn run() -> anyhow::Result<()> {
             .arg("run")
             .args(["--package", "capi-cli"])
             .arg("--")
-            .arg("deploy")
+            .arg("export")
             .args(["--path", "deployment"])
             .env("FILES", files.path().display().to_string())
             .kill_on_drop(true)

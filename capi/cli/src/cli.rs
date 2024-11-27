@@ -11,7 +11,7 @@ pub async fn run() -> anyhow::Result<()> {
     let args = Args::parse();
 
     match args.command {
-        Command::Deploy { path } => {
+        Command::Export { path } => {
             check_files()?;
             deploy(args.games, path).await?;
         }
@@ -62,7 +62,7 @@ struct Args {
 
 #[derive(clap::Subcommand)]
 enum Command {
-    Deploy {
+    Export {
         #[arg(short, long)]
         path: PathBuf,
     },
