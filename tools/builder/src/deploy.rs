@@ -11,7 +11,7 @@ pub async fn run() -> anyhow::Result<()> {
             .args(["--package", "capi-cli"])
             .arg("--")
             .arg("export")
-            .args(["--path", "deployment"])
+            .args(["--path", "export"])
             .env("FILES", files.path().display().to_string())
             .kill_on_drop(true)
             .status()

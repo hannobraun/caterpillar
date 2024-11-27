@@ -2,7 +2,7 @@
 /target
 
 # Caterpillar
-/deployment
+/export
 
 # Vim
 .*.swp
