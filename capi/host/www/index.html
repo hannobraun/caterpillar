@@ -19,7 +19,7 @@
         <script type="module">
             let panicHappened = false;
 
-            const module = fetch("/capi_host.wasm");
+            const module = fetch("capi_host.wasm");
             const { instance } = await WebAssembly.instantiateStreaming(module, {
                 env: {
                     on_panic: (ptr, len) => {
@@ -83,7 +83,7 @@
 
             async function loadCode() {
                 const commandWithInstructions =
-                    await (await fetch("/command-with-instructions")).bytes();
+                    await (await fetch("command-with-instructions")).bytes();
 
                 runtime.commands_write(commandWithInstructions.byteLength);
                 const command_tx = new Uint8Array(
