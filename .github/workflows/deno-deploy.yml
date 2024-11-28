@@ -18,7 +18,7 @@ jobs:
         run: cargo run --package builder -- export
       
       - name: Run website builder
-        run: cargo run --package website -- --build
+        run: cargo run --package website
 
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
