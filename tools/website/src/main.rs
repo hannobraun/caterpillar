@@ -13,7 +13,8 @@ fn main() -> anyhow::Result<()> {
 }
 
 fn copy_exported_games_to_target_dir(target_dir: &Path) -> anyhow::Result<()> {
-    fs::rename("export", target_dir.join("games"))?;
+    let target = target_dir.join("games");
+    fs::rename("export", target)?;
     Ok(())
 }
 
