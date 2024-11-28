@@ -6,12 +6,15 @@ fn main() -> anyhow::Result<()> {
     let source_dir = Path::new("website");
     let target_dir = Path::new("website-output");
 
-    build(source_dir, target_dir)?;
+    copy_website_source_to_target_dir(source_dir, target_dir)?;
 
     Ok(())
 }
 
-fn build(source_dir: &Path, target_dir: &Path) -> anyhow::Result<()> {
+fn copy_website_source_to_target_dir(
+    source_dir: &Path,
+    target_dir: &Path,
+) -> anyhow::Result<()> {
     for entry in WalkDir::new(source_dir) {
         let entry = entry?;
         if entry.file_type().is_dir() {
