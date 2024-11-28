@@ -4,7 +4,6 @@ use walkdir::WalkDir;
 
 fn main() -> anyhow::Result<()> {
     let source_dir = Path::new("website");
-
     let target_dir = Path::new("website-output");
 
     build(source_dir, target_dir)?;
