@@ -3153,8 +3153,6 @@ name = "website"
 version = "0.0.0"
 dependencies = [
  "anyhow",
- "clap",
- "tempfile",
  "walkdir",
 ]
 
