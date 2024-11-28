@@ -6,8 +6,14 @@ fn main() -> anyhow::Result<()> {
     let source_dir = Path::new("website");
     let target_dir = Path::new("website-output");
 
+    copy_exported_games_to_target_dir(target_dir)?;
     copy_website_source_to_target_dir(source_dir, target_dir)?;
 
+    Ok(())
+}
+
+fn copy_exported_games_to_target_dir(target_dir: &Path) -> anyhow::Result<()> {
+    fs::rename("export", target_dir.join("games"))?;
     Ok(())
 }
 
