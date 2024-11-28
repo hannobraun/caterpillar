@@ -3,7 +3,8 @@ use tokio::process::Command;
 use crate::build::build_once;
 
 pub async fn run() -> anyhow::Result<()> {
-    let files = build_once().await?;
+    let optimize = true;
+    let files = build_once(optimize).await?;
 
     if let Some(files) = files {
         Command::new("cargo")

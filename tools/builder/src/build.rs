@@ -54,7 +54,8 @@ async fn build_once_and_send_update(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<()> {
-    let new_output_dir = build_once().await?;
+    let optimize = false;
+    let new_output_dir = build_once(optimize).await?;
 
     if let Some(new_output_dir) = new_output_dir {
         let output_path = new_output_dir.path().to_path_buf();
@@ -76,7 +77,7 @@ async fn build_once_and_send_update(
     Ok(())
 }
 
-pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
+pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
     let packages = [("capi-host", Some("cdylib")), ("capi-debugger", None)];
 
     for (package, crate_type) in packages {
@@ -89,6 +90,10 @@ pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
 
         if let Some(crate_type) = crate_type {
             command.args(["--crate-type", crate_type]);
+        }
+
+        if optimize {
+            command.arg("--release");
         }
 
         let exit_status = command.status().await?;
@@ -104,7 +109,11 @@ pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
     }
 
     let mut target = String::from("target/wasm32-unknown-unknown/");
-    target.push_str("debug");
+    if optimize {
+        target.push_str("release");
+    } else {
+        target.push_str("debug");
+    }
 
     let new_output_dir = tempdir()?;
 
