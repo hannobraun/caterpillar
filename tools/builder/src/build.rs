@@ -127,6 +127,17 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
             .arg(input)
             .args(["--output", &output.display().to_string()])
             .arg("-Oz")
+            // I've been seeing errors containing this in the CI/CD build:
+            // "unexpected false: all used features should be allowed"
+            //
+            // The CI/CI build runs on GitHub Actions using the `ubuntu-latest`
+            // image. At the time of writing this resolves to Ubuntu 22.04,
+            // which packages an older version ob Binaryen.
+            //
+            // I don't understand what's happening, but this issue indicates
+            // that the following argument might help:
+            // https://github.com/WebAssembly/binaryen/issues/5833
+            .arg("--all-features")
             .status()
             .await;
 
