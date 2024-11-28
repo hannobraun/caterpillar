@@ -105,6 +105,7 @@ pub async fn build_once() -> anyhow::Result<Option<TempDir>> {
 
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
+
     copy(target, new_output_dir.path(), "capi_host.wasm").await?;
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
