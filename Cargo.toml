@@ -18,4 +18,4 @@ members = [
 default-members = ["tools/builder"]
 
 [profile.dev]
-opt-level = 3
+opt-level = 3 # otherwise interpreted code becomes unbearably slow
