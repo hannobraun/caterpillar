@@ -14,7 +14,10 @@ fn main() -> anyhow::Result<()> {
 
 fn copy_exported_games_to_target_dir(target_dir: &Path) -> anyhow::Result<()> {
     let target = target_dir.join("static/games");
+    fs::create_dir_all(&target)?;
+
     fs::rename("export", target)?;
+
     Ok(())
 }
 
