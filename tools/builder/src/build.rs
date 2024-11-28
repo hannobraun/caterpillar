@@ -1,4 +1,5 @@
 use std::{
+    io,
     path::{Path, PathBuf},
     process,
 };
@@ -118,7 +119,56 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
     let new_output_dir = tempdir()?;
 
     let capi_host = "capi_host.wasm";
-    copy(&target, new_output_dir.path(), capi_host).await?;
+    if optimize {
+        let input = Path::new(&target).join(capi_host);
+        let output = new_output_dir.path().join(capi_host);
+
+        let result = Command::new("wasm-opt")
+            .arg(input)
+            .args(["--output", &output.display().to_string()])
+            .arg("-Oz")
+            .status()
+            .await;
+
+        match result {
+            Ok(exit_status) => {
+                if !exit_status.success() {
+                    return Err(anyhow!(
+                        "`wasm-opt` failed with exit status `{:?}`",
+                        exit_status.code()
+                    ));
+                }
+            }
+            Err(err) if err.kind() == io::ErrorKind::NotFound => {
+                eprint!(
+                    "\n\
+                    WARNING `wasm-opt` (part of Binaryen, available at\n\
+                    WARNING https://github.com/WebAssembly/binaryen) is not\n\
+                    WARNING installed. I would have used that to optimize\n\
+                    WARNING Caterpillar. The export is still going to work,\n\
+                    WARNING probably. I'm just not doing the optimization.\n\
+                    WARNING\n\
+                    WARNING If you intend to upload your game to the\n\
+                    WARNING internet, I STRONGLY recommend that you install\n\
+                    WARNING Binaryen, so I can do the optimization.\n\
+                    WARNING\n\
+                    WARNING The optimization is going to make a big\n\
+                    WARNING difference, making the resulting web page MUCH\n\
+                    WARNING smaller. It's probably going to reduce the size\n\
+                    WARNING of Caterpillar's WebAssembly module by an order\n\
+                    WARNING of magnitude, saving megabytes of data.\n\
+                    \n"
+                );
+
+                copy(&target, new_output_dir.path(), capi_host).await?;
+            }
+            Err(err) => {
+                return Err(err.into());
+            }
+        }
+    } else {
+        copy(&target, new_output_dir.path(), capi_host).await?;
+    }
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
 
