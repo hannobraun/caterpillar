@@ -28,6 +28,16 @@ impl<'r> Located<&'r Function> {
             })
     }
 
+    /// # Iterate over all local functions in this function, recursively
+    pub fn all_local_functions(
+        self,
+    ) -> impl Iterator<Item = Located<&'r Function>> {
+        self.branches().flat_map(|branch| {
+            Box::new(branch.all_local_functions())
+                as Box<dyn Iterator<Item = Located<&Function>>>
+        })
+    }
+
     /// # Access the function's single branch
     ///
     /// Returns `None`, if the function does not have exactly one branch.

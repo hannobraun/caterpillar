@@ -1,6 +1,6 @@
-use std::fmt;
+use std::{fmt, iter};
 
-use crate::code::{syntax::SyntaxTree, Branch, Expression, Index};
+use crate::code::{syntax::SyntaxTree, Branch, Expression, Function, Index};
 
 use super::{
     located::HasLocation, ExpressionLocation, FunctionLocation, Located,
@@ -24,6 +24,18 @@ impl<'r> Located<&'r Branch> {
                 index,
             },
         })
+    }
+
+    /// # Iterate over all local functions in this branch, recursively
+    pub fn all_local_functions(
+        self,
+    ) -> impl Iterator<Item = Located<&'r Function>> {
+        self.body()
+            .filter_map(|expression| expression.into_local_function())
+            .flat_map(|function| {
+                iter::once(function.clone())
+                    .chain(function.all_local_functions())
+            })
     }
 }
 
