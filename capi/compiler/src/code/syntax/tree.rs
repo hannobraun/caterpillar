@@ -3,7 +3,7 @@ use crate::code::{IndexMap, Located, NamedFunction};
 /// # The syntax tree
 ///
 /// See [parent module](super).
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct SyntaxTree {
     pub named_functions: IndexMap<NamedFunction>,
 }
