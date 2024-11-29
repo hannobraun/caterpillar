@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::{syntax::SyntaxTree, ExpressionLocation, FunctionCalls, Functions},
+    code::{syntax::SyntaxTree, ExpressionLocation, FunctionCalls},
     Compiler,
 };
 use capi_game_engine::{
@@ -96,8 +96,8 @@ impl TestDebugger {
         self.transient = Some(self.persistent.generate_transient_state());
     }
 
-    pub fn expect_code(&self) -> &Functions {
-        &self.persistent.code.inner.as_ref().unwrap().functions
+    pub fn expect_code(&self) -> &SyntaxTree {
+        &self.persistent.code.inner.as_ref().unwrap().syntax_tree
     }
 
     pub fn expect_expression(
