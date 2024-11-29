@@ -27,4 +27,16 @@ impl SyntaxTree {
             }
         })
     }
+
+    /// # Iterate over the named functions
+    pub fn named_functions(
+        &self,
+    ) -> impl Iterator<Item = Located<&NamedFunction>> {
+        self.named_functions
+            .iter()
+            .map(|(&index, function)| Located {
+                fragment: function,
+                location: index,
+            })
+    }
 }
