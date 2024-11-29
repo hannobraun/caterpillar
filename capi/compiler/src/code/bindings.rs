@@ -186,7 +186,7 @@ mod tests {
         // An identifier with the same name as a function's parameter should be
         // resolved as a binding.
 
-        let (functions, bindings) = resolve_bindings(
+        let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
                     \ parameter ->
@@ -196,7 +196,7 @@ mod tests {
             ",
         );
 
-        let (parameter, no_parameter) = functions
+        let (parameter, no_parameter) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -216,7 +216,7 @@ mod tests {
         // An identifier with the same name as the parameter of a parent
         // function should be resolved as a binding.
 
-        let (functions, bindings) = resolve_bindings(
+        let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
                     \ parameter ->
@@ -229,7 +229,7 @@ mod tests {
             ",
         );
 
-        let function = functions
+        let function = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -262,7 +262,7 @@ mod tests {
         // Identifiers that share a name with a parameter of a child function
         // should not be resolved as bindings.
 
-        let (functions, bindings) = resolve_bindings(
+        let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
                     \ ->
@@ -275,7 +275,7 @@ mod tests {
             ",
         );
 
-        let child_parameter = functions
+        let child_parameter = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -295,7 +295,7 @@ mod tests {
         // but one of its child functions does, the binding still needs to be
         // part of the function's environment.
 
-        let (functions, bindings) = resolve_bindings(
+        let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
                     \ binding ->
@@ -311,7 +311,7 @@ mod tests {
             ",
         );
 
-        let function = functions
+        let function = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
