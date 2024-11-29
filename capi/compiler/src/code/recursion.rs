@@ -401,13 +401,13 @@ mod tests {
 
     fn find_recursion(input: &str) -> (SyntaxTree, Recursion) {
         let tokens = Tokens::tokenize(input);
-        let (_syntax_tree, functions) = parse(tokens);
+        let (syntax_tree, functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
 
-        (_syntax_tree, recursion)
+        (syntax_tree, recursion)
     }
 }
