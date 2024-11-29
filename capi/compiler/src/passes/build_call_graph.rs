@@ -109,7 +109,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (functions, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -123,8 +123,8 @@ mod tests {
             ",
         );
 
-        let f = functions.function_by_name("f").unwrap().location();
-        let g = functions.function_by_name("g").unwrap().location();
+        let f = syntax_tree.function_by_name("f").unwrap().location();
+        let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -142,7 +142,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let (functions, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -156,8 +156,8 @@ mod tests {
             ",
         );
 
-        let f = functions.function_by_name("f").unwrap().location();
-        let g = functions.function_by_name("g").unwrap().location();
+        let f = syntax_tree.function_by_name("f").unwrap().location();
+        let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -175,7 +175,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let (functions, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -194,9 +194,9 @@ mod tests {
             ",
         );
 
-        let f = functions.function_by_name("f").unwrap().location();
-        let g = functions.function_by_name("g").unwrap().location();
-        let h = functions.function_by_name("h").unwrap().location();
+        let f = syntax_tree.function_by_name("f").unwrap().location();
+        let g = syntax_tree.function_by_name("g").unwrap().location();
+        let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -217,7 +217,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (functions, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -240,9 +240,9 @@ mod tests {
             ",
         );
 
-        let f = functions.function_by_name("f").unwrap().location();
-        let g = functions.function_by_name("g").unwrap().location();
-        let h = functions.function_by_name("h").unwrap().location();
+        let f = syntax_tree.function_by_name("f").unwrap().location();
+        let g = syntax_tree.function_by_name("g").unwrap().location();
+        let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -264,7 +264,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (functions, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
             r"
                 f: fn
                     \ ->
@@ -294,7 +294,7 @@ mod tests {
         );
 
         let [(f, f_a), (h, h_a)] = ["f", "h"].map(|name| {
-            let named = functions.function_by_name(name).unwrap();
+            let named = syntax_tree.function_by_name(name).unwrap();
             let anonymous = named
                 .into_located_function()
                 .find_single_branch()
@@ -308,7 +308,7 @@ mod tests {
 
             (named.location(), anonymous)
         });
-        let g = functions.function_by_name("g").unwrap().location();
+        let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
