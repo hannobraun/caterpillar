@@ -23,6 +23,19 @@ impl<T: HasLocation> Located<T> {
     }
 }
 
+impl<T: HasLocation> Located<&T> {
+    /// # Maps a `Located<&T>` to a `Located<T>` by cloning the fragment
+    pub fn cloned(self) -> Located<T>
+    where
+        T: Clone,
+    {
+        Located {
+            fragment: self.fragment.clone(),
+            location: self.location,
+        }
+    }
+}
+
 impl<T: HasLocation> Deref for Located<T> {
     type Target = T;
 
