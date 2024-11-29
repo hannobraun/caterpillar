@@ -328,7 +328,7 @@ fn compile_expression(
                                 },
                             );
 
-                        panic!(
+                        unreachable!(
                             "Compiling call to this user-defined function: \
                             `{}` \
                             Expecting functions to be compiled before any \
