@@ -337,7 +337,9 @@ fn compile_expression(
                             \n\
                             Function:\n\
                             {function:#?}",
-                            callee_location.display(functions_context.functions),
+                            callee_location.display(
+                                functions_context.functions
+                            ),
                         )
                     };
 
