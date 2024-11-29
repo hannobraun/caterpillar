@@ -19,7 +19,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    old_functions: Option<SyntaxTree>,
+    old_code: Option<SyntaxTree>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_location:
@@ -39,9 +39,9 @@ impl Compiler {
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
-        let changes = detect_changes(self.old_functions.take(), &functions);
+        let changes = detect_changes(self.old_code.take(), &functions);
 
-        self.old_functions = Some(syntax_tree.clone());
+        self.old_code = Some(syntax_tree.clone());
 
         generate_instructions(
             &syntax_tree,
