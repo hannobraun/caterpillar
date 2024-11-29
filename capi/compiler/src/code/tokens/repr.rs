@@ -56,12 +56,6 @@ pub enum Token {
     /// # A keyword
     Keyword(Keyword),
 
-    /// # A function name
-    FunctionName {
-        /// # The name of the function
-        name: String,
-    },
-
     /// # An identifier
     Identifier {
         /// # The name of the identifier
