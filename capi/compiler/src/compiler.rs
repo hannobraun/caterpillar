@@ -42,6 +42,7 @@ impl Compiler {
         self.old_functions = Some(functions.clone());
 
         generate_instructions(
+            &_syntax_tree,
             &functions,
             &ordered_functions,
             &bindings,

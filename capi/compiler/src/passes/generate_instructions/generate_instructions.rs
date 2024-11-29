@@ -4,8 +4,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        Bindings, Changes, FunctionCalls, FunctionLocation, Functions,
-        OrderedFunctions, Recursion, TailExpressions,
+        syntax::SyntaxTree, Bindings, Changes, FunctionCalls, FunctionLocation,
+        Functions, OrderedFunctions, Recursion, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -19,6 +19,7 @@ use super::{
 
 #[allow(clippy::too_many_arguments)]
 pub fn generate_instructions(
+    _: &SyntaxTree,
     functions: &Functions,
     ordered_functions: &OrderedFunctions,
     bindings: &Bindings,
