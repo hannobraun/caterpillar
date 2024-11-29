@@ -338,6 +338,7 @@ mod tests {
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);
+
         (functions, ordered_functions)
     }
 }
