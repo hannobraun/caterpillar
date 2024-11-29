@@ -59,7 +59,7 @@ impl Recursion {
                                         .insert(expression.location, index);
                                 }
                             }
-                            Expression::LocalFunction => {
+                            Expression::LocalFunction { function: _ } => {
                                 let location = FunctionLocation::from(
                                     expression.location.clone(),
                                 );

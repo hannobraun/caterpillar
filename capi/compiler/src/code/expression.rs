@@ -1,5 +1,7 @@
 use capi_runtime::Value;
 
+use super::Function;
+
 /// # An expression within a function
 ///
 /// ## Error Handling
@@ -62,7 +64,10 @@ pub enum Expression {
     },
 
     /// # A local function
-    LocalFunction,
+    LocalFunction {
+        /// # The local function
+        function: Function,
+    },
 }
 
 impl Expression {
