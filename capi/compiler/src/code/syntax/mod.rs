@@ -5,10 +5,10 @@
 //! and the last one that still mirrors the input.
 //!
 //! The syntax representation is the last code representation in the compiler
-//! that is intended to be displayed to the developer. And follow-up
-//! representations are geared towards simplicity and ease of processing by
-//! compiler code. They no longer contain any syntax sugar, that is still
-//! present in the syntax representation
+//! that is intended to be displayed to the developer. Follow-up representations
+//! are geared towards simplicity and ease of processing by compiler code. They
+//! no longer contain any syntax sugar, which is still present in the syntax
+//! representation
 //!
 //! ## Implementation Note
 //!
