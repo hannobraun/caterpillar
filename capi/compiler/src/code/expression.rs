@@ -61,12 +61,7 @@ pub enum Expression {
         value: Value,
     },
 
-    /// # An unresolved local function
-    ///
-    /// This variant is created by the parser when it encounters a function
-    /// literal. During compilation, it is replaced by either
-    /// [`Expression::LocalFunction`] or [`Expression::LocalFunctionRecursive`],
-    /// as appropriate.
+    /// # A local function
     LocalFunction,
 }
 
