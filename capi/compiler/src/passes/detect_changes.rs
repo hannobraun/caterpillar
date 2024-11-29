@@ -6,10 +6,10 @@ use crate::code::{
 };
 
 pub fn detect_changes(
-    old_functions: Option<SyntaxTree>,
+    old_code: Option<SyntaxTree>,
     new_functions: &Functions,
 ) -> Changes {
-    let old_functions = old_functions.unwrap_or_default();
+    let old_functions = old_code.unwrap_or_default();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
