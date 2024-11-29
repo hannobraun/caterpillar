@@ -100,6 +100,12 @@ pub enum Punctuator {
     /// # A delimiter in a list, rendered as `,`
     Delimiter,
 
+    /// # A token that introduces a new syntactic element, rendered as `:`
+    ///
+    /// This token is used to separate the new syntactic element from the
+    /// previous one, that it relates to.
+    Introducer,
+
     /// # The start of a branch, rendered as `\`
     BranchStart,
 
