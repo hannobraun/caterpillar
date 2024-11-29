@@ -144,16 +144,9 @@ impl DebugExpressionKind {
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },
-            Expression::LocalFunction { function: _ } => {
-                let function = {
-                    let location = FunctionLocation::from(location.clone());
-                    functions
-                        .by_location(&location)
-                        .expect("Function referred to from cluster must exist.")
-                };
-
+            Expression::LocalFunction { function } => {
                 let function = DebugFunction::new(
-                    function.fragment.clone(),
+                    function,
                     None,
                     FunctionLocation::AnonymousFunction { location },
                     active_expression,
