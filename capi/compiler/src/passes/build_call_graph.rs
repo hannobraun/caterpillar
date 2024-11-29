@@ -41,7 +41,9 @@ fn build_dependency_graph(
                     Expression::Identifier { .. } => function_calls
                         .is_call_to_user_defined_function(&expression.location)
                         .cloned(),
-                    _ => expression.to_function_location(),
+                    _ => expression
+                        .into_local_function()
+                        .map(|function| function.location),
                 };
 
                 if let Some(dependee) = dependee {
