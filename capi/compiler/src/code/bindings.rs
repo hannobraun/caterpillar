@@ -137,10 +137,9 @@ fn resolve_bindings_in_branch(
                 }
             }
             Expression::LocalFunction { function } => {
-                let location = FunctionLocation::from(expression.location);
                 let function = Located {
                     fragment: function,
-                    location,
+                    location: FunctionLocation::from(expression.location),
                 };
 
                 let child_environment = resolve_bindings_in_function(
