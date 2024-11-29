@@ -8,7 +8,7 @@ impl HasLocation for Expression {
     type Location = ExpressionLocation;
 }
 
-impl Located<&Expression> {
+impl<'r> Located<&'r Expression> {
     /// # Convert the located expression to a function location, if possible
     ///
     /// Returns `None`, if the expression is not a function literal.
