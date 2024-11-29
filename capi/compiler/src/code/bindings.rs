@@ -237,21 +237,12 @@ mod tests {
             .find_single_branch()
             .unwrap()
             .body()
-            .filter_map(|expression| {
-                if let Expression::LocalFunction { function: _ } =
-                    expression.fragment
-                {
-                    let location = FunctionLocation::from(expression.location);
-                    let function = functions.by_location(&location);
-                    Some(function)
-                } else {
-                    None
-                }
-            })
-            .flatten()
+            .filter_map(|expression| expression.into_local_function())
             .next()
-            .unwrap();
+            .unwrap()
+            .cloned();
         let (parameter, no_parameter) = function
+            .as_ref()
             .find_single_branch()
             .unwrap()
             .body()
