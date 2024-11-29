@@ -53,7 +53,10 @@ impl TailExpressions {
 mod tests {
     use itertools::Itertools;
 
-    use crate::code::{syntax::parse, tokens::Tokens, Functions};
+    use crate::code::{
+        syntax::{parse, SyntaxTree},
+        tokens::Tokens,
+    };
 
     use super::TailExpressions;
 
@@ -73,8 +76,7 @@ mod tests {
         );
 
         let (not_tail, tail) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -105,8 +107,7 @@ mod tests {
         );
 
         let tail = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -119,11 +120,11 @@ mod tests {
         assert!(tail_expressions.is_tail_expression(&tail));
     }
 
-    pub fn find_tail_expressions(input: &str) -> (Functions, TailExpressions) {
+    pub fn find_tail_expressions(input: &str) -> (SyntaxTree, TailExpressions) {
         let tokens = Tokens::tokenize(input);
         let (_syntax_tree, functions) = parse(tokens);
         let tail_expressions = TailExpressions::find(&functions);
 
-        (functions, tail_expressions)
+        (_syntax_tree, tail_expressions)
     }
 }
