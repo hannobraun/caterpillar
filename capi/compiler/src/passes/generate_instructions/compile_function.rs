@@ -339,7 +339,7 @@ fn compile_expression(
                             Function:\n\
                             {function:#?}",
                             callee_location.display(
-                                functions_context.functions
+                                functions_context.functions,
                             ),
                         )
                     };
