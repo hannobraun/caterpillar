@@ -41,7 +41,7 @@ pub struct Recursion {
 impl Recursion {
     /// # Find all recursive expressions
     pub fn find(
-        _: &FunctionCalls,
+        function_calls: &FunctionCalls,
         functions: &Functions,
         ordered_functions: &OrderedFunctions,
     ) -> Self {
@@ -52,9 +52,17 @@ impl Recursion {
                 for branch in function.branches() {
                     for expression in branch.body() {
                         match expression.fragment {
-                            Expression::Identifier { name } => {
-                                if let Some(index) = cluster
-                                    .find_function_by_name(name, functions)
+                            Expression::Identifier { name: _ } => {
+                                let Some(location) = function_calls
+                                    .is_call_to_user_defined_function(
+                                        &expression.location,
+                                    )
+                                else {
+                                    continue;
+                                };
+
+                                if let Some(index) =
+                                    cluster.find_function_by_location(location)
                                 {
                                     recursive_expressions
                                         .insert(expression.location, index);
