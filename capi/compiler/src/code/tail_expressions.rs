@@ -65,7 +65,7 @@ mod tests {
         // The last expression in a function should be marked as being a tail.
         // Others should not be.
 
-        let (functions, tail_expressions) = find_tail_expressions(
+        let (syntax_tree, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
                     \ ->
@@ -75,7 +75,7 @@ mod tests {
             ",
         );
 
-        let (not_tail, tail) = functions
+        let (not_tail, tail) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -95,7 +95,7 @@ mod tests {
         // A comment being located after a tail call should not confuse the
         // analysis.
 
-        let (functions, tail_expressions) = find_tail_expressions(
+        let (syntax_tree, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
                     \ ->
@@ -106,7 +106,7 @@ mod tests {
             ",
         );
 
-        let tail = functions
+        let tail = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
