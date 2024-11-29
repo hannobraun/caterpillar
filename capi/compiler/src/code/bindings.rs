@@ -136,11 +136,12 @@ fn resolve_bindings_in_branch(
                     }
                 }
             }
-            Expression::LocalFunction { function: _ } => {
+            Expression::LocalFunction { function } => {
                 let location = FunctionLocation::from(expression.location);
-                let function = functions
-                    .by_location(&location)
-                    .expect("Function referred to from branch must exist.");
+                let function = Located {
+                    fragment: function,
+                    location,
+                };
 
                 let child_environment = resolve_bindings_in_function(
                     function,
