@@ -21,7 +21,7 @@ pub struct FunctionCalls {
 impl FunctionCalls {
     /// # Resolve all function calls
     pub fn resolve(
-        _: &SyntaxTree,
+        syntax_tree: &SyntaxTree,
         functions: &Functions,
         host: &impl Host,
     ) -> Self {
@@ -53,7 +53,9 @@ impl FunctionCalls {
                                 .insert(expression.location.clone(), function);
                         }
 
-                        if let Some(function) = functions.named.by_name(name) {
+                        if let Some(function) =
+                            syntax_tree.function_by_name(name)
+                        {
                             to_user_defined_functions.insert(
                                 expression.location,
                                 function.location(),
