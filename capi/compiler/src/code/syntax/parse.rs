@@ -236,22 +236,24 @@ fn parse_branch_body(
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
             }
-            _ => match tokens.take()? {
-                Token::Comment { text } => {
-                    branch.body.push(Expression::Comment { text });
-                }
-                Token::Identifier { name } => {
-                    branch.body.push(Expression::Identifier { name });
-                }
-                Token::IntegerLiteral { value } => {
-                    branch.body.push(Expression::LiteralNumber {
-                        value: value.into(),
-                    });
-                }
-                token => {
-                    panic!("Unexpected token: {token:?}");
-                }
-            },
+            _ => {
+                let expression = match tokens.take()? {
+                    Token::Comment { text } => Expression::Comment { text },
+                    Token::Identifier { name } => {
+                        Expression::Identifier { name }
+                    }
+                    Token::IntegerLiteral { value } => {
+                        Expression::LiteralNumber {
+                            value: value.into(),
+                        }
+                    }
+                    token => {
+                        panic!("Unexpected token: {token:?}");
+                    }
+                };
+
+                branch.body.push(expression);
+            }
         }
     }
 
