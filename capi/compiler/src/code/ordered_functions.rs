@@ -135,36 +135,4 @@ impl Cluster {
             }
         })
     }
-
-    /// # Find the function with the given name in the cluster
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if the provided [`Functions`] instance does not contain a
-    /// function referenced in this cluster. Unless you're mixing data
-    /// structures from different compiler passes, this should never happen. If
-    /// it still does, that's a bug.
-    pub fn find_function_by_name(
-        &self,
-        name: &str,
-        functions: &Functions,
-    ) -> Option<Index<FunctionLocation>> {
-        self.functions
-            .iter()
-            .filter_map(|(&index_in_cluster, location)| {
-                if let FunctionLocation::NamedFunction { index } = location {
-                    let function = functions.named.by_index(index)?;
-                    Some((index_in_cluster, function))
-                } else {
-                    None
-                }
-            })
-            .find_map(|(index, function)| {
-                if function.name == name {
-                    Some(index)
-                } else {
-                    None
-                }
-            })
-    }
 }
