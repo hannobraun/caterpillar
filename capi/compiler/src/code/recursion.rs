@@ -251,8 +251,7 @@ mod tests {
             .unwrap()
             .body()
             .filter_map(|expression| {
-                let location = expression.to_function_location()?;
-                let function = functions.by_location(&location)?;
+                let function = expression.into_local_function()?;
                 Some(function)
             })
             .next()
