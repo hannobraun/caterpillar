@@ -175,7 +175,8 @@ mod tests {
     use itertools::Itertools;
 
     use crate::code::{
-        syntax::parse, Expression, FunctionLocation, Functions, Tokens,
+        syntax::{parse, SyntaxTree},
+        Expression, FunctionLocation, Tokens,
     };
 
     use super::Bindings;
@@ -196,8 +197,7 @@ mod tests {
         );
 
         let (parameter, no_parameter) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -230,8 +230,7 @@ mod tests {
         );
 
         let function = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -277,8 +276,7 @@ mod tests {
         );
 
         let child_parameter = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -314,8 +312,7 @@ mod tests {
         );
 
         let function = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -337,11 +334,11 @@ mod tests {
         assert!(bindings.environment_of(&function).contains("binding"));
     }
 
-    fn resolve_bindings(input: &str) -> (Functions, Bindings) {
+    fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
         let tokens = Tokens::tokenize(input);
         let (_syntax_tree, functions) = parse(tokens);
         let bindings = Bindings::resolve(&functions);
 
-        (functions, bindings)
+        (_syntax_tree, bindings)
     }
 }
