@@ -229,8 +229,8 @@ fn parse_branch_body(
                     },
                     functions,
                 ) {
-                    branch.body.push(Expression::LocalFunction);
                     functions.anonymous.insert(location, function);
+                    branch.body.push(Expression::LocalFunction);
                 }
             }
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
