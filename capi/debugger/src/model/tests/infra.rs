@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::{ExpressionLocation, FunctionCalls, Functions},
+    code::{syntax::SyntaxTree, ExpressionLocation, FunctionCalls, Functions},
     Compiler,
 };
 use capi_game_engine::{
@@ -245,7 +245,7 @@ pub trait DebugExpressionExt {
     fn expect_call_to_function(
         self,
         called_fn: &str,
-        functions: &Functions,
+        syntax_tree: &SyntaxTree,
         function_calls: &FunctionCalls,
     ) -> Self;
     fn expect_call_to_host_function(
@@ -265,7 +265,7 @@ impl DebugExpressionExt for DebugExpression {
     fn expect_call_to_function(
         self,
         called_name: &str,
-        functions: &Functions,
+        syntax_tree: &SyntaxTree,
         function_calls: &FunctionCalls,
     ) -> Self {
         let Some(called_fn) = function_calls
@@ -273,7 +273,7 @@ impl DebugExpressionExt for DebugExpression {
         else {
             panic!("Expected call to function.");
         };
-        let Some(user_fn) = functions.named.by_name(called_name) else {
+        let Some(user_fn) = syntax_tree.function_by_name(called_name) else {
             panic!("Function `{called_name}` does not exist.");
         };
         assert_eq!(*called_fn, user_fn.location());

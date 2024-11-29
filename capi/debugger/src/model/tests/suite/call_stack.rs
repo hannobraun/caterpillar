@@ -158,7 +158,7 @@ fn call_stack_reconstruction_missing_main() {
                 .inner
                 .as_ref()
                 .unwrap()
-                .functions,
+                .syntax_tree,
             &debugger
                 .persistent_state()
                 .code
@@ -214,7 +214,7 @@ fn call_stack_reconstruction_missing_single_branch_function() {
                 .inner
                 .as_ref()
                 .unwrap()
-                .functions,
+                .syntax_tree,
             &debugger
                 .persistent_state()
                 .code
