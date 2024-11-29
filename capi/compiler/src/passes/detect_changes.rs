@@ -1,9 +1,12 @@
 use std::collections::BTreeMap;
 
-use crate::code::{Changes, FunctionInUpdate, FunctionUpdate, Functions, Hash};
+use crate::code::{
+    syntax::SyntaxTree, Changes, FunctionInUpdate, FunctionUpdate, Functions,
+    Hash,
+};
 
 pub fn detect_changes(
-    old_functions: Option<Functions>,
+    old_functions: Option<SyntaxTree>,
     new_functions: &Functions,
 ) -> Changes {
     let old_functions = old_functions.unwrap_or_default();
@@ -12,8 +15,8 @@ pub fn detect_changes(
     let mut updated = Vec::new();
 
     for new_function in new_functions.named.iter() {
-        if old_functions.named.iter().any(|old_function| {
-            Hash::new(&old_function.fragment.inner)
+        if old_functions.named_functions.values().any(|old_function| {
+            Hash::new(&old_function.inner)
                 == Hash::new(&new_function.fragment.inner)
         }) {
             // Function has not changed. We can forget about it.
@@ -21,7 +24,7 @@ pub fn detect_changes(
         }
 
         if let Some(old_function) =
-            old_functions.named.by_name(&new_function.name)
+            old_functions.function_by_name(&new_function.name)
         {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function

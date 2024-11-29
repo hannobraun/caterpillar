@@ -4,8 +4,9 @@ use capi_runtime::InstructionAddress;
 
 use crate::{
     code::{
-        syntax::parse, Bindings, FunctionCalls, FunctionLocation, Functions,
-        OrderedFunctions, Recursion, TailExpressions, Tokens,
+        syntax::{parse, SyntaxTree},
+        Bindings, FunctionCalls, FunctionLocation, Functions, OrderedFunctions,
+        Recursion, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -18,7 +19,7 @@ use crate::{
 /// # Entry point to the compiler API
 #[derive(Default)]
 pub struct Compiler {
-    old_functions: Option<Functions>,
+    old_functions: Option<SyntaxTree>,
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_location:
@@ -40,7 +41,7 @@ impl Compiler {
             Recursion::find(&function_calls, &functions, &ordered_functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
-        self.old_functions = Some(functions.clone());
+        self.old_functions = Some(syntax_tree.clone());
 
         generate_instructions(
             &syntax_tree,
