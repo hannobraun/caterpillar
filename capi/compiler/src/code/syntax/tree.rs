@@ -16,16 +16,8 @@ impl SyntaxTree {
         &self,
         name: &str,
     ) -> Option<Located<&NamedFunction>> {
-        self.named_functions.iter().find_map(|(&index, function)| {
-            if function.name == name {
-                Some(Located {
-                    fragment: function,
-                    location: index,
-                })
-            } else {
-                None
-            }
-        })
+        self.named_functions()
+            .find(|function| function.name == name)
     }
 
     /// # Iterate over the named functions
