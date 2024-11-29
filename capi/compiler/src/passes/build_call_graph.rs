@@ -101,8 +101,8 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::parse, Cluster, FunctionCalls, Functions, Index,
-            OrderedFunctions, Tokens,
+            syntax::{parse, SyntaxTree},
+            Cluster, FunctionCalls, Index, OrderedFunctions, Tokens,
         },
         host::NoHost,
     };
@@ -123,8 +123,8 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().location();
-        let g = functions.named.by_name("g").unwrap().location();
+        let f = functions.function_by_name("f").unwrap().location();
+        let g = functions.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -156,8 +156,8 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().location();
-        let g = functions.named.by_name("g").unwrap().location();
+        let f = functions.function_by_name("f").unwrap().location();
+        let g = functions.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -194,9 +194,9 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().location();
-        let g = functions.named.by_name("g").unwrap().location();
-        let h = functions.named.by_name("h").unwrap().location();
+        let f = functions.function_by_name("f").unwrap().location();
+        let g = functions.function_by_name("g").unwrap().location();
+        let h = functions.function_by_name("h").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -240,9 +240,9 @@ mod tests {
             ",
         );
 
-        let f = functions.named.by_name("f").unwrap().location();
-        let g = functions.named.by_name("g").unwrap().location();
-        let h = functions.named.by_name("h").unwrap().location();
+        let f = functions.function_by_name("f").unwrap().location();
+        let g = functions.function_by_name("g").unwrap().location();
+        let h = functions.function_by_name("h").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -294,7 +294,7 @@ mod tests {
         );
 
         let [(f, f_a), (h, h_a)] = ["f", "h"].map(|name| {
-            let named = functions.named.by_name(name).unwrap();
+            let named = functions.function_by_name(name).unwrap();
             let anonymous = named
                 .into_located_function()
                 .find_single_branch()
@@ -308,7 +308,7 @@ mod tests {
 
             (named.location(), anonymous)
         });
-        let g = functions.named.by_name("g").unwrap().location();
+        let g = functions.function_by_name("g").unwrap().location();
 
         assert_eq!(
             ordered_functions
@@ -332,13 +332,13 @@ mod tests {
 
     fn order_functions_by_dependencies(
         input: &str,
-    ) -> (Functions, OrderedFunctions) {
+    ) -> (SyntaxTree, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
         let (_syntax_tree, functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);
 
-        (functions, ordered_functions)
+        (_syntax_tree, ordered_functions)
     }
 }
