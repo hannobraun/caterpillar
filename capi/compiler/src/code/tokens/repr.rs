@@ -100,7 +100,7 @@ pub enum Punctuator {
     /// # A delimiter in a list, rendered as `,`
     Delimiter,
 
-    /// # The start of a branch, rendered as `\``
+    /// # The start of a branch, rendered as `\`
     BranchStart,
 
     /// # The start of the body of a branch, rendered as `->`
