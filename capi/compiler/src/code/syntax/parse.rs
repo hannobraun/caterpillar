@@ -4,6 +4,8 @@ use crate::code::{
     FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
 
+use super::SyntaxTree;
+
 /// # Parse the provided tokens
 ///
 /// ## Implementation Note
@@ -29,7 +31,8 @@ use crate::code::{
 /// It's probably not worth solving this non-trivial problem for the current
 /// architecture, for little gain, only to re-solve it again for the new
 /// architecture, once that is necessary.
-pub fn parse(mut tokens: Tokens) -> Functions {
+pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
+    let syntax_tree = SyntaxTree {};
     let mut functions = Functions::default();
 
     loop {
@@ -48,7 +51,7 @@ pub fn parse(mut tokens: Tokens) -> Functions {
         );
     }
 
-    functions
+    (syntax_tree, functions)
 }
 
 fn parse_named_function(

@@ -204,7 +204,7 @@ mod tests {
 
     fn resolve_function_calls(input: &str) -> (Functions, FunctionCalls) {
         let tokens = Tokens::tokenize(input);
-        let functions = parse(tokens);
+        let (_syntax_tree, functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &TestHost);
 
         (functions, function_calls)

@@ -17,5 +17,6 @@
 //! yet.
 
 mod parse;
+mod tree;
 
-pub use self::parse::parse;
+pub use self::{parse::parse, tree::SyntaxTree};

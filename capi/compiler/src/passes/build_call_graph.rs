@@ -331,7 +331,7 @@ mod tests {
         input: &str,
     ) -> (Functions, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
-        let functions = parse(tokens);
+        let (_syntax_tree, functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);
