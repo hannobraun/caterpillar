@@ -62,7 +62,7 @@ pub enum Token {
     /// # The `fn` keyword
     KeywordFn,
 
-    /// # A function name, represented
+    /// # A function name
     FunctionName {
         /// # The name of the function
         name: String,
