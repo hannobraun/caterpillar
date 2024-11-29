@@ -122,9 +122,9 @@ mod tests {
 
     pub fn find_tail_expressions(input: &str) -> (SyntaxTree, TailExpressions) {
         let tokens = Tokens::tokenize(input);
-        let (_syntax_tree, functions) = parse(tokens);
+        let (syntax_tree, functions) = parse(tokens);
         let tail_expressions = TailExpressions::find(&functions);
 
-        (_syntax_tree, tail_expressions)
+        (syntax_tree, tail_expressions)
     }
 }
