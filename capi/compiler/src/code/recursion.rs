@@ -129,7 +129,7 @@ mod tests {
 
     #[test]
     fn self_recursive_direct_call() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -139,7 +139,7 @@ mod tests {
             ",
         );
 
-        let (nop, f) = functions
+        let (nop, f) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -156,7 +156,7 @@ mod tests {
 
     #[test]
     fn self_recursive_indirect_call() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -169,7 +169,7 @@ mod tests {
             ",
         );
 
-        let (nop, f) = functions
+        let (nop, f) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -192,7 +192,7 @@ mod tests {
 
     #[test]
     fn mutually_recursive_direct_call() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -207,7 +207,7 @@ mod tests {
             ",
         );
 
-        let (nop, g) = functions
+        let (nop, g) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -224,7 +224,7 @@ mod tests {
 
     #[test]
     fn mutually_recursive_indirect_call() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -242,7 +242,7 @@ mod tests {
             ",
         );
 
-        let (nop, g) = functions
+        let (nop, g) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn self_recursive_direct_local_function() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -278,7 +278,7 @@ mod tests {
             ",
         );
 
-        let (nop, function) = functions
+        let (nop, function) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -295,7 +295,7 @@ mod tests {
 
     #[test]
     fn self_recursive_indirect_local_function() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -311,7 +311,7 @@ mod tests {
             ",
         );
 
-        let (nop, function) = functions
+        let (nop, function) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -328,7 +328,7 @@ mod tests {
 
     #[test]
     fn mutually_recursive_direct_local_function() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -346,7 +346,7 @@ mod tests {
             ",
         );
 
-        let (nop, function) = functions
+        let (nop, function) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -363,7 +363,7 @@ mod tests {
 
     #[test]
     fn mutually_recursive_indirect_local_function() {
-        let (functions, recursion) = find_recursion(
+        let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
                     \ ->
@@ -384,7 +384,7 @@ mod tests {
             ",
         );
 
-        let (nop, function) = functions
+        let (nop, function) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
