@@ -117,7 +117,10 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{syntax::parse, FunctionCalls, Functions, Tokens},
+        code::{
+            syntax::parse, FunctionCalls, FunctionLocation, Functions, Located,
+            Tokens,
+        },
         host::NoHost,
         passes::order_functions_by_dependencies,
     };
@@ -176,9 +179,12 @@ mod tests {
             .unwrap()
             .body()
             .filter_map(|expression| {
-                let location = expression.to_function_location()?;
-                let function = functions.by_location(&location)?;
-                Some(function)
+                expression.as_local_function().map(|function| Located {
+                    fragment: function,
+                    location: FunctionLocation::AnonymousFunction {
+                        location: expression.location,
+                    },
+                })
             })
             .next()
             .unwrap()
