@@ -302,7 +302,8 @@ mod tests {
                 .body()
                 .next()
                 .unwrap()
-                .to_function_location()
+                .into_local_function()
+                .map(|function| function.location)
                 .unwrap();
 
             (named.location(), anonymous)
