@@ -285,7 +285,7 @@ fn reconstruct_function(
     breakpoints: &Breakpoints,
     effect: Option<&Effect>,
 ) -> Option<String> {
-    let Some(function) = code.functions.named.by_name(name) else {
+    let Some(function) = code.syntax_tree.function_by_name(name) else {
         panic!("Expecting function `{name}` to exist.");
     };
 
