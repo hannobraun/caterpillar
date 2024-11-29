@@ -335,19 +335,15 @@ mod tests {
                     expression.fragment
                 {
                     let location = FunctionLocation::from(expression.location);
-                    let function = functions.by_location(&location);
-                    Some(function)
+                    Some(location)
                 } else {
                     None
                 }
             })
-            .flatten()
             .next()
             .unwrap();
 
-        assert!(bindings
-            .environment_of(&function.location)
-            .contains("binding"));
+        assert!(bindings.environment_of(&function).contains("binding"));
     }
 
     fn resolve_bindings(input: &str) -> (Functions, Bindings) {
