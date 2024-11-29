@@ -117,10 +117,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{
-            syntax::parse, FunctionCalls, FunctionLocation, Functions, Located,
-            Tokens,
-        },
+        code::{syntax::parse, FunctionCalls, Functions, Tokens},
         host::NoHost,
         passes::order_functions_by_dependencies,
     };
@@ -178,14 +175,7 @@ mod tests {
             .find_single_branch()
             .unwrap()
             .body()
-            .filter_map(|expression| {
-                expression.as_local_function().map(|function| Located {
-                    fragment: function,
-                    location: FunctionLocation::AnonymousFunction {
-                        location: expression.location,
-                    },
-                })
-            })
+            .filter_map(|expression| expression.into_local_function())
             .next()
             .unwrap()
             .find_single_branch()

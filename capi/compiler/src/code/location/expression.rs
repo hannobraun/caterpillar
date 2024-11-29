@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::code::{syntax::SyntaxTree, Expression, Index};
+use crate::code::{syntax::SyntaxTree, Expression, Function, Index};
 
 use super::{located::HasLocation, BranchLocation, FunctionLocation, Located};
 
@@ -9,6 +9,16 @@ impl HasLocation for Expression {
 }
 
 impl<'r> Located<&'r Expression> {
+    /// # Convert the located expression into a located local function
+    pub fn into_local_function(self) -> Option<Located<&'r Function>> {
+        self.fragment.as_local_function().map(|function| Located {
+            fragment: function,
+            location: FunctionLocation::AnonymousFunction {
+                location: self.location.clone(),
+            },
+        })
+    }
+
     /// # Convert the located expression to a function location, if possible
     ///
     /// Returns `None`, if the expression is not a function literal.
