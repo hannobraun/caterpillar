@@ -1,5 +1,5 @@
 use crate::code::{
-    tokens::{Token, Tokens},
+    tokens::{Keyword, Token, Tokens},
     Branch, BranchLocation, Expression, ExpressionLocation, Function,
     FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
@@ -90,7 +90,7 @@ fn parse_function(
     let mut function = Function::default();
 
     match tokens.take()? {
-        Token::KeywordFn => {}
+        Token::Keyword(Keyword::Fn) => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -110,7 +110,7 @@ fn parse_function(
     }
 
     match tokens.take()? {
-        Token::KeywordEnd => {}
+        Token::Keyword(Keyword::End) => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -128,7 +128,7 @@ fn parse_branch(
         Token::BranchStart => {
             tokens.take();
         }
-        Token::KeywordEnd => {
+        Token::Keyword(Keyword::End) => {
             return None;
         }
         token => {
@@ -203,7 +203,7 @@ fn parse_branch_body(
 ) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
-            Token::KeywordFn => {
+            Token::Keyword(Keyword::Fn) => {
                 let location = ExpressionLocation {
                     parent: Box::new(location.clone()),
                     index: branch.body.next_index(),
@@ -220,7 +220,7 @@ fn parse_branch_body(
                     functions.anonymous.insert(location, function);
                 }
             }
-            Token::BranchStart | Token::KeywordEnd => {
+            Token::BranchStart | Token::Keyword(Keyword::End) => {
                 break;
             }
             _ => match tokens.take()? {

@@ -7,4 +7,4 @@
 mod repr;
 mod tokenize;
 
-pub use self::repr::{Token, Tokens};
+pub use self::repr::{Keyword, Token, Tokens};

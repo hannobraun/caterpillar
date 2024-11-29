@@ -56,11 +56,8 @@ pub enum Token {
     /// # A delimiter in a list, rendered as `,`
     Delimiter,
 
-    /// # The `end` keyword
-    KeywordEnd,
-
-    /// # The `fn` keyword
-    KeywordFn,
+    /// # A keyword
+    Keyword(Keyword),
 
     /// # A function name
     FunctionName {
@@ -85,4 +82,17 @@ pub enum Token {
         /// # The value of the integer literal
         value: i32,
     },
+}
+
+/// # Keywords
+///
+/// A keyword is a specific word with special meaning in the language, that is
+/// delimited by whitespace.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum Keyword {
+    /// # The `end` keyword
+    End,
+
+    /// # The `fn` keyword
+    Fn,
 }

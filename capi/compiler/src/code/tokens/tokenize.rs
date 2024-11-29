@@ -2,6 +2,8 @@ use std::mem;
 
 use crate::code::tokens::Token;
 
+use super::Keyword;
+
 pub fn tokenize(input: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r",", Token::Delimiter),
@@ -95,9 +97,9 @@ impl Buffer {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
             } else if token == "end" {
-                Token::KeywordEnd
+                Token::Keyword(Keyword::End)
             } else if token == "fn" {
-                Token::KeywordFn
+                Token::Keyword(Keyword::Fn)
             } else {
                 Token::Identifier { name: token }
             }
