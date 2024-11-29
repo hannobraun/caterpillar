@@ -2,7 +2,7 @@ use std::mem;
 
 use crate::code::tokens::Token;
 
-use super::Keyword;
+use super::Keyword::*;
 
 pub fn tokenize(input: &str) -> Vec<Token> {
     let eager_tokens = vec![
@@ -97,9 +97,9 @@ impl Buffer {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
             } else if token == "end" {
-                Token::Keyword(Keyword::End)
+                Token::Keyword(End)
             } else if token == "fn" {
-                Token::Keyword(Keyword::Fn)
+                Token::Keyword(Fn)
             } else {
                 Token::Identifier { name: token }
             }
