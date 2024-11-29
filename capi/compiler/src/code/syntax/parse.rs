@@ -32,7 +32,7 @@ use super::SyntaxTree;
 /// architecture, for little gain, only to re-solve it again for the new
 /// architecture, once that is necessary.
 pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
-    let syntax_tree = SyntaxTree::default();
+    let mut syntax_tree = SyntaxTree::default();
     let mut functions = Functions::default();
 
     loop {
@@ -44,7 +44,13 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
             break;
         };
 
-        let actual_index = functions.named.push(function);
+        let actual_index = functions.named.push(function.clone());
+        assert_eq!(
+            index, actual_index,
+            "Function has a different index than was initially assumed.",
+        );
+
+        let actual_index = syntax_tree.named_functions.push(function);
         assert_eq!(
             index, actual_index,
             "Function has a different index than was initially assumed.",
