@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::code::{Expression, Functions, Index};
+use crate::code::{syntax::SyntaxTree, Expression, Index};
 
 use super::{located::HasLocation, BranchLocation, FunctionLocation, Located};
 
@@ -43,11 +43,11 @@ impl ExpressionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        functions: &'r Functions,
+        syntax_tree: &'r SyntaxTree,
     ) -> ExpressionLocationDisplay<'r> {
         ExpressionLocationDisplay {
             location: self,
-            functions,
+            syntax_tree,
         }
     }
 }
@@ -57,7 +57,7 @@ impl ExpressionLocation {
 /// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
 pub struct ExpressionLocationDisplay<'r> {
     location: &'r ExpressionLocation,
-    functions: &'r Functions,
+    syntax_tree: &'r SyntaxTree,
 }
 
 impl fmt::Display for ExpressionLocationDisplay<'_> {
@@ -66,7 +66,7 @@ impl fmt::Display for ExpressionLocationDisplay<'_> {
             f,
             "expression {}\n    in {}",
             self.location.index,
-            self.location.parent.display(self.functions)
+            self.location.parent.display(self.syntax_tree)
         )
     }
 }

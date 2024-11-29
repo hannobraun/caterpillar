@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::code::{Branch, Function, Functions, Index, NamedFunction};
+use crate::code::{syntax::SyntaxTree, Branch, Function, Index, NamedFunction};
 
 use super::{
     located::HasLocation, BranchLocation, ExpressionLocation, Located,
@@ -92,11 +92,11 @@ impl FunctionLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
-        functions: &'r Functions,
+        syntax_tree: &'r SyntaxTree,
     ) -> FunctionLocationDisplay<'r> {
         FunctionLocationDisplay {
             location: self,
-            functions,
+            syntax_tree,
         }
     }
 }
@@ -118,7 +118,7 @@ impl From<ExpressionLocation> for FunctionLocation {
 /// Implements [`fmt::Display`], which [`FunctionLocation`] itself doesn't.
 pub struct FunctionLocationDisplay<'r> {
     location: &'r FunctionLocation,
-    functions: &'r Functions,
+    syntax_tree: &'r SyntaxTree,
 }
 
 impl fmt::Display for FunctionLocationDisplay<'_> {
@@ -126,9 +126,9 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
         match self.location {
             FunctionLocation::NamedFunction { index } => {
                 let name = &self
-                    .functions
-                    .named
-                    .by_index(index)
+                    .syntax_tree
+                    .named_functions
+                    .get(index)
                     .expect("Named function referred to be index must exist")
                     .name;
 
@@ -138,7 +138,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
                 write!(
                     f,
                     "anonymous function at {}",
-                    location.display(self.functions),
+                    location.display(self.syntax_tree),
                 )?;
             }
         }

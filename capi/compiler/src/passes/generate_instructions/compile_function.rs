@@ -328,7 +328,6 @@ fn compile_expression(
                                 },
                             );
 
-                        let _ = functions_context.syntax_tree;
                         unreachable!(
                             "Compiling call to this user-defined function: \
                             `{}` \
@@ -339,7 +338,7 @@ fn compile_expression(
                             Function:\n\
                             {function:#?}",
                             callee_location.display(
-                                functions_context.functions,
+                                functions_context.syntax_tree,
                             ),
                         )
                     };
