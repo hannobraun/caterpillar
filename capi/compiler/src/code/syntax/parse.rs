@@ -56,22 +56,7 @@ fn parse_named_function(
     index: Index<NamedFunction>,
     functions: &mut Functions,
 ) -> Option<NamedFunction> {
-    let name = loop {
-        if let Some(Token::Comment { .. }) = tokens.peek() {
-            // Comments in the top-level context are currently ignored.
-            tokens.take();
-            continue;
-        }
-
-        match tokens.take()? {
-            Token::FunctionName { name } => {
-                break name;
-            }
-            token => {
-                panic!("Unexpected token: {token:?}");
-            }
-        }
-    };
+    let name = parse_function_name(tokens)?;
 
     let location = FunctionLocation::NamedFunction { index };
     let function = parse_function(tokens, location, functions)?;
@@ -80,6 +65,25 @@ fn parse_named_function(
         name,
         inner: function,
     })
+}
+
+fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
+    loop {
+        if let Some(Token::Comment { .. }) = tokens.peek() {
+            // Comments in the top-level context are currently ignored.
+            tokens.take();
+            continue;
+        }
+
+        match tokens.take()? {
+            Token::FunctionName { name } => {
+                break Some(name);
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
+    }
 }
 
 fn parse_function(
