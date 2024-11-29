@@ -36,7 +36,8 @@ impl Compiler {
         let tail_expressions = TailExpressions::find(&functions);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
-        let recursion = Recursion::find(&functions, &ordered_functions);
+        let recursion =
+            Recursion::find(&function_calls, &functions, &ordered_functions);
         let changes = detect_changes(self.old_functions.take(), &functions);
 
         self.old_functions = Some(functions.clone());

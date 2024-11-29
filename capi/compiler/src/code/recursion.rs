@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Expression, ExpressionLocation, FunctionLocation, Functions, Index,
-    OrderedFunctions,
+    Expression, ExpressionLocation, FunctionCalls, FunctionLocation, Functions,
+    Index, OrderedFunctions,
 };
 
 /// # Tracks recursive expressions
@@ -41,6 +41,7 @@ pub struct Recursion {
 impl Recursion {
     /// # Find all recursive expressions
     pub fn find(
+        _: &FunctionCalls,
         functions: &Functions,
         ordered_functions: &OrderedFunctions,
     ) -> Self {
@@ -409,7 +410,8 @@ mod tests {
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
-        let recursion = Recursion::find(&functions, &ordered_functions);
+        let recursion =
+            Recursion::find(&function_calls, &functions, &ordered_functions);
 
         (functions, recursion)
     }
