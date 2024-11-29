@@ -4,8 +4,8 @@ use capi_runtime::Instruction;
 
 use crate::{
     code::{
-        Bindings, Changes, FunctionCalls, FunctionLocation, Functions,
-        OrderedFunctions, Recursion, TailExpressions,
+        syntax::SyntaxTree, Bindings, Changes, FunctionCalls, FunctionLocation,
+        Functions, OrderedFunctions, Recursion, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -29,6 +29,7 @@ pub struct FunctionsContext<'r> {
 
 #[allow(clippy::too_many_arguments)]
 pub fn compile_functions(
+    _: &SyntaxTree,
     functions: &Functions,
     changes: &Changes,
     ordered_functions: &OrderedFunctions,

@@ -19,7 +19,7 @@ use super::{
 
 #[allow(clippy::too_many_arguments)]
 pub fn generate_instructions(
-    _: &SyntaxTree,
+    syntax_tree: &SyntaxTree,
     functions: &Functions,
     ordered_functions: &OrderedFunctions,
     bindings: &Bindings,
@@ -49,6 +49,7 @@ pub fn generate_instructions(
     let call_to_main = create_placeholder_for_call_to_main(instructions);
 
     compile_functions(
+        syntax_tree,
         functions,
         changes,
         ordered_functions,
