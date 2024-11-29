@@ -250,10 +250,7 @@ mod tests {
             .find_single_branch()
             .unwrap()
             .body()
-            .filter_map(|expression| {
-                let function = expression.into_local_function()?;
-                Some(function)
-            })
+            .filter_map(|expression| expression.into_local_function())
             .next()
             .unwrap()
             .find_single_branch()
