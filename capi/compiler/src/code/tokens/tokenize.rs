@@ -2,13 +2,13 @@ use std::mem;
 
 use crate::code::tokens::Token;
 
-use super::Keyword::*;
+use super::{Keyword::*, Punctuator::*};
 
 pub fn tokenize(input: &str) -> Vec<Token> {
     let eager_tokens = vec![
-        (r",", Token::Delimiter),
-        (r"\", Token::BranchStart),
-        (r"->", Token::BranchBodyStart),
+        (r",", Token::Punctuator(Delimiter)),
+        (r"\", Token::Punctuator(BranchStart)),
+        (r"->", Token::Punctuator(BranchBodyStart)),
     ];
 
     let mut state = State::Initial;

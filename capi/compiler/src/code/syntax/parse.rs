@@ -1,5 +1,5 @@
 use crate::code::{
-    tokens::{Keyword::*, Token, Tokens},
+    tokens::{Keyword::*, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, Expression, ExpressionLocation, Function,
     FunctionLocation, Functions, Index, NamedFunction, Pattern,
 };
@@ -125,7 +125,7 @@ fn parse_branch(
     functions: &mut Functions,
 ) -> Option<Branch> {
     match tokens.peek()? {
-        Token::BranchStart => {
+        Token::Punctuator(BranchStart) => {
             tokens.take();
         }
         Token::Keyword(End) => {
@@ -164,13 +164,13 @@ fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
         };
 
         match token {
-            Token::Delimiter => {
+            Token::Punctuator(Delimiter) => {
                 // If we have a delimiter, then we're good here. Next loop
                 // iteration, we'll either parse the next parameter, or if it
                 // was the last one, find the start of the branch body.
                 continue;
             }
-            Token::BranchBodyStart => {
+            Token::Punctuator(BranchBodyStart) => {
                 // The last parameter doesn't need a delimiter, so this is fine
                 // too.
                 break;
@@ -188,7 +188,7 @@ fn parse_branch_parameter(token: Token) -> Option<Pattern> {
         Token::IntegerLiteral { value } => Some(Pattern::Literal {
             value: value.into(),
         }),
-        Token::BranchBodyStart => None,
+        Token::Punctuator(BranchBodyStart) => None,
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -220,7 +220,7 @@ fn parse_branch_body(
                     functions.anonymous.insert(location, function);
                 }
             }
-            Token::BranchStart | Token::Keyword(End) => {
+            Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
             }
             _ => match tokens.take()? {

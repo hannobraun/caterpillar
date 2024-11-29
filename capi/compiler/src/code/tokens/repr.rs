@@ -53,9 +53,6 @@ pub enum Token {
         text: String,
     },
 
-    /// # A delimiter in a list, rendered as `,`
-    Delimiter,
-
     /// # A keyword
     Keyword(Keyword),
 
@@ -64,12 +61,6 @@ pub enum Token {
         /// # The name of the function
         name: String,
     },
-
-    /// # The start of a branch, rendered as `\``
-    BranchStart,
-
-    /// # The start of the body of a branch, rendered as `->`
-    BranchBodyStart,
 
     /// # An identifier
     Identifier {
@@ -82,6 +73,9 @@ pub enum Token {
         /// # The value of the integer literal
         value: i32,
     },
+
+    /// # A punctuator
+    Punctuator(Punctuator),
 }
 
 /// # Keywords
@@ -95,4 +89,20 @@ pub enum Keyword {
 
     /// # The `fn` keyword
     Fn,
+}
+
+/// # Punctuators
+///
+/// A punctuator is a token with syntactic and semantic meaning to the compiler,
+/// that in itself is never an expression.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum Punctuator {
+    /// # A delimiter in a list, rendered as `,`
+    Delimiter,
+
+    /// # The start of a branch, rendered as `\``
+    BranchStart,
+
+    /// # The start of the body of a branch, rendered as `->`
+    BranchBodyStart,
 }
