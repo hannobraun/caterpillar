@@ -81,4 +81,15 @@ impl Expression {
 
         Some(text)
     }
+
+    /// # Convert the expression into a local function
+    ///
+    /// Returns `None`, if this expression is not a local function.
+    pub fn as_local_function(&self) -> Option<&Function> {
+        let Expression::LocalFunction { function } = self else {
+            return None;
+        };
+
+        Some(function)
+    }
 }
