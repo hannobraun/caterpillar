@@ -24,11 +24,6 @@ pub fn tokenize(input: &str) -> Vec<Token> {
                     buffer.take_literal_or_keyword_or_identifier(&mut tokens);
                     state = State::Comment;
                 }
-                ':' => {
-                    tokens.push(Token::FunctionName {
-                        name: buffer.take(),
-                    });
-                }
                 ch if ch.is_whitespace() => {
                     buffer.take_literal_or_keyword_or_identifier(&mut tokens);
                 }

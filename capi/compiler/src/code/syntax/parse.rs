@@ -68,7 +68,7 @@ fn parse_named_function(
 }
 
 fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
-    loop {
+    let name = loop {
         if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
             tokens.take();
@@ -76,14 +76,23 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
         }
 
         match tokens.take()? {
-            Token::FunctionName { name } => {
+            Token::Identifier { name } => {
                 break Some(name);
             }
             token => {
                 panic!("Unexpected token: {token:?}");
             }
         }
+    };
+
+    match tokens.take()? {
+        Token::Punctuator(Introducer) => {}
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
     }
+
+    name
 }
 
 fn parse_function(
