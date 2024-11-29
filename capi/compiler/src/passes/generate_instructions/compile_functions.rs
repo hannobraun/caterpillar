@@ -15,6 +15,7 @@ use crate::{
 use super::compile_cluster::compile_cluster;
 
 pub struct FunctionsContext<'r> {
+    pub syntax_tree: &'r SyntaxTree,
     pub functions: &'r Functions,
     pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
@@ -29,7 +30,7 @@ pub struct FunctionsContext<'r> {
 
 #[allow(clippy::too_many_arguments)]
 pub fn compile_functions(
-    _: &SyntaxTree,
+    syntax_tree: &SyntaxTree,
     functions: &Functions,
     changes: &Changes,
     ordered_functions: &OrderedFunctions,
@@ -46,6 +47,7 @@ pub fn compile_functions(
     >,
 ) {
     let mut context = FunctionsContext {
+        syntax_tree,
         functions,
         bindings,
         function_calls,
