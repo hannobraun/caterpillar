@@ -59,6 +59,7 @@ impl Compiler {
         );
 
         CompilerOutput {
+            syntax_tree,
             functions,
             function_calls,
             ordered_functions,
@@ -75,6 +76,7 @@ pub struct CallInstructionsByCallee {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct CompilerOutput {
+    pub syntax_tree: SyntaxTree,
     pub functions: Functions,
     pub function_calls: FunctionCalls,
     pub ordered_functions: OrderedFunctions,
