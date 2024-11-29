@@ -77,7 +77,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
 
         match tokens.take()? {
             Token::Identifier { name } => {
-                break Some(name);
+                break name;
             }
             token => {
                 panic!("Unexpected token: {token:?}");
@@ -92,7 +92,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
         }
     }
 
-    name
+    Some(name)
 }
 
 fn parse_function(
