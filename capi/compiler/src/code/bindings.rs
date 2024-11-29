@@ -57,7 +57,6 @@ fn resolve_bindings(
     for function in functions.named.iter() {
         resolve_bindings_in_function(
             function.into_located_function(),
-            functions,
             &mut scopes,
             bindings,
             environments,
@@ -67,7 +66,6 @@ fn resolve_bindings(
 
 fn resolve_bindings_in_function(
     function: Located<&Function>,
-    functions: &Functions,
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
@@ -78,7 +76,6 @@ fn resolve_bindings_in_function(
     for branch in function.branches() {
         resolve_bindings_in_branch(
             branch,
-            functions,
             scopes,
             bindings,
             &mut environment,
@@ -97,7 +94,6 @@ fn resolve_bindings_in_function(
 
 fn resolve_bindings_in_branch(
     branch: Located<&Branch>,
-    functions: &Functions,
     scopes: &mut Scopes,
     bindings: &mut BTreeSet<ExpressionLocation>,
     environment: &mut Environment,
@@ -144,7 +140,6 @@ fn resolve_bindings_in_branch(
 
                 let child_environment = resolve_bindings_in_function(
                     function,
-                    functions,
                     scopes,
                     bindings,
                     environments,
