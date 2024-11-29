@@ -64,7 +64,7 @@ pub fn generate_instructions(
     );
     compile_call_to_main(
         call_to_main,
-        functions,
+        syntax_tree,
         instructions,
         compiled_functions_by_location,
     );
@@ -84,14 +84,14 @@ fn create_placeholder_for_call_to_main(
 
 fn compile_call_to_main(
     call_to_main: InstructionAddress,
-    functions: &Functions,
+    syntax_tree: &SyntaxTree,
     instructions: &mut Instructions,
     compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
         capi_runtime::Function,
     >,
 ) {
-    let Some(main) = functions.named.by_name("main") else {
+    let Some(main) = syntax_tree.function_by_name("main") else {
         // If we can't find the call to `main`, that is a result of invalid
         // code. Leaving the placeholder instruction is appropriate in that
         // case.
