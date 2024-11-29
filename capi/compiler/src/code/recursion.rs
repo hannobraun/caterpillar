@@ -117,7 +117,10 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{syntax::parse, FunctionCalls, Functions, Tokens},
+        code::{
+            syntax::{parse, SyntaxTree},
+            FunctionCalls, Tokens,
+        },
         host::NoHost,
         passes::order_functions_by_dependencies,
     };
@@ -137,8 +140,7 @@ mod tests {
         );
 
         let (nop, f) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -168,8 +170,7 @@ mod tests {
         );
 
         let (nop, f) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -207,8 +208,7 @@ mod tests {
         );
 
         let (nop, g) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -243,8 +243,7 @@ mod tests {
         );
 
         let (nop, g) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -280,8 +279,7 @@ mod tests {
         );
 
         let (nop, function) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -314,8 +312,7 @@ mod tests {
         );
 
         let (nop, function) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -350,8 +347,7 @@ mod tests {
         );
 
         let (nop, function) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -389,8 +385,7 @@ mod tests {
         );
 
         let (nop, function) = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -404,7 +399,7 @@ mod tests {
         assert!(recursion.is_recursive_expression(&function).is_some());
     }
 
-    fn find_recursion(input: &str) -> (Functions, Recursion) {
+    fn find_recursion(input: &str) -> (SyntaxTree, Recursion) {
         let tokens = Tokens::tokenize(input);
         let (_syntax_tree, functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&functions, &NoHost);
@@ -413,6 +408,6 @@ mod tests {
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
 
-        (functions, recursion)
+        (_syntax_tree, recursion)
     }
 }
