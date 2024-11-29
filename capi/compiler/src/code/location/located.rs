@@ -10,6 +10,19 @@ pub struct Located<T: HasLocation> {
     pub location: T::Location,
 }
 
+impl<T: HasLocation> Located<T> {
+    /// # Maps a `&Located<T>` to a `Located<&T>`
+    pub fn as_ref(&self) -> Located<&T>
+    where
+        T::Location: Clone,
+    {
+        Located {
+            fragment: &self.fragment,
+            location: self.location.clone(),
+        }
+    }
+}
+
 impl<T: HasLocation> Deref for Located<T> {
     type Target = T;
 
