@@ -237,25 +237,26 @@ fn parse_branch_body(
                 break;
             }
             _ => {
-                let expression = match tokens.take()? {
-                    Token::Comment { text } => Expression::Comment { text },
-                    Token::Identifier { name } => {
-                        Expression::Identifier { name }
-                    }
-                    Token::IntegerLiteral { value } => {
-                        Expression::LiteralNumber {
-                            value: value.into(),
-                        }
-                    }
-                    token => {
-                        panic!("Unexpected token: {token:?}");
-                    }
-                };
-
+                let expression = parse_expression(tokens)?;
                 branch.body.push(expression);
             }
         }
     }
 
     Some(())
+}
+
+fn parse_expression(tokens: &mut Tokens) -> Option<Expression> {
+    let expression = match tokens.take()? {
+        Token::Comment { text } => Expression::Comment { text },
+        Token::Identifier { name } => Expression::Identifier { name },
+        Token::IntegerLiteral { value } => Expression::LiteralNumber {
+            value: value.into(),
+        },
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    };
+
+    Some(expression)
 }
