@@ -36,7 +36,7 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
     let mut functions = Functions::default();
 
     loop {
-        let index = functions.named.next_index();
+        let index = syntax_tree.named_functions.next_index();
 
         let Some(function) =
             parse_named_function(&mut tokens, index, &mut functions)
