@@ -19,4 +19,4 @@
 mod parse;
 mod tree;
 
-pub use self::{parse::parse, tree::SyntaxTree};
+pub use self::tree::SyntaxTree;
