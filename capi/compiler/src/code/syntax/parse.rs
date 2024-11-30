@@ -48,12 +48,12 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
         );
     }
 
-    let mut functions = Functions::default();
-    for function in syntax_tree.all_functions() {
-        functions
-            .inner
-            .insert(function.location, function.fragment.clone());
-    }
+    let functions = Functions {
+        inner: syntax_tree
+            .all_functions()
+            .map(|function| (function.location, function.fragment.clone()))
+            .collect(),
+    };
 
     (syntax_tree, functions)
 }
