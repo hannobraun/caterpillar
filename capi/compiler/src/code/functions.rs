@@ -5,8 +5,6 @@ use std::{
 
 use capi_runtime::Value;
 
-use crate::code::Index;
-
 use super::{
     BranchLocation, Expression, ExpressionLocation, FunctionLocation, IndexMap,
     Located,
@@ -80,21 +78,6 @@ pub struct NamedFunctions {
 }
 
 impl NamedFunctions {
-    /// # Access the named function with the provided index
-    ///
-    /// Returns `None`, if the there is no named function at the provided index.
-    pub fn by_index(
-        &self,
-        index: &Index<NamedFunction>,
-    ) -> Option<Located<&NamedFunction>> {
-        let function = self.inner.get(index)?;
-
-        Some(Located {
-            fragment: function,
-            location: *index,
-        })
-    }
-
     /// # Access the named parent function for the given function, if anonymous
     ///
     /// If the location of a named function is provided, that named function
@@ -115,14 +98,6 @@ impl NamedFunctions {
         let named_function = self.inner.get(index)?;
 
         Some(Located {
-            fragment: named_function,
-            location: *index,
-        })
-    }
-
-    /// # Iterate over the named functions
-    pub fn iter(&self) -> impl Iterator<Item = Located<&NamedFunction>> {
-        self.inner.iter().map(|(index, named_function)| Located {
             fragment: named_function,
             location: *index,
         })
