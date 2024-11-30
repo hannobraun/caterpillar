@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
-    Branch, Expression, ExpressionLocation, Function, FunctionLocation,
-    Functions, Located, Pattern,
+    syntax::SyntaxTree, Branch, Expression, ExpressionLocation, Function,
+    FunctionLocation, Located, Pattern,
 };
 
 /// # Tracks bindings
@@ -17,11 +17,11 @@ pub struct Bindings {
 
 impl Bindings {
     /// # Resolve all bindings
-    pub fn resolve(functions: &Functions) -> Self {
+    pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
         let mut bindings = BTreeSet::new();
         let mut environments = BTreeMap::new();
 
-        resolve_bindings(functions, &mut bindings, &mut environments);
+        resolve_bindings(syntax_tree, &mut bindings, &mut environments);
 
         Self {
             bindings,
@@ -48,13 +48,13 @@ impl Bindings {
 pub type Environment = BTreeSet<String>;
 
 fn resolve_bindings(
-    functions: &Functions,
+    syntax_tree: &SyntaxTree,
     bindings: &mut BTreeSet<ExpressionLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     let mut scopes = Scopes::new();
 
-    for function in functions.named.iter() {
+    for function in syntax_tree.named_functions() {
         resolve_bindings_in_function(
             function.into_located_function(),
             &mut scopes,
@@ -336,8 +336,8 @@ mod tests {
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
-        let bindings = Bindings::resolve(&functions);
+        let (syntax_tree, _functions) = parse(tokens);
+        let bindings = Bindings::resolve(&syntax_tree);
 
         (syntax_tree, bindings)
     }
