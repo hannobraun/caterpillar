@@ -104,7 +104,7 @@ intrinsics! {
     "brk", Brk, Some(([], []));
 
     /// # Copy a value
-    "copy", Copy, Some(([Unknown], [Unknown, Unknown]));
+    "copy", Copy, Option::<([Type; 0], [Type; 0])>::None;
 
     /// # Divide two signed 32-bit integers
     "div_s32", DivS32, Some(([Number, Number], [Number]));
@@ -113,7 +113,7 @@ intrinsics! {
     "div_u8", DivU8, Some(([Number, Number], [Number]));
 
     /// # Drop a value
-    "drop", Drop, Some(([Unknown], []));
+    "drop", Drop, Option::<([Type; 0], [Type; 0])>::None;
 
     /// # Compare two values for equality
     "eq", Eq, Some(([Number, Number], [Number]));
