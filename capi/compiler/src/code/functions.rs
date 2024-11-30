@@ -210,28 +210,6 @@ impl AnonymousFunctions {
             }
         })
     }
-
-    /// # Access the anonymous function at the provided location, mutably
-    ///
-    /// Returns `None`, if no anonymous function is defined at the given
-    /// location.
-    pub fn by_location_mut(
-        &mut self,
-        location: &ExpressionLocation,
-    ) -> Option<Located<&mut Function>> {
-        self.inner.iter_mut().find_map(|(loc, function)| {
-            if loc == location {
-                Some(Located {
-                    fragment: function,
-                    location: FunctionLocation::AnonymousFunction {
-                        location: location.clone(),
-                    },
-                })
-            } else {
-                None
-            }
-        })
-    }
 }
 
 impl Deref for AnonymousFunctions {
