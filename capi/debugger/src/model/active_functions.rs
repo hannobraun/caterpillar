@@ -335,7 +335,9 @@ fn function_call_to_function_name(
     let function_location = code
         .function_calls
         .is_call_to_user_defined_function(function_call)?;
-    let function = code.functions.named.by_child_function(function_location)?;
+    let function = code
+        .syntax_tree
+        .find_top_level_parent_function(function_location)?;
 
     Some(function.name.clone())
 }
