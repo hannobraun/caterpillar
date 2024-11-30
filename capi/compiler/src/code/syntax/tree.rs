@@ -16,7 +16,8 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(tokens: Tokens) -> Self {
-        parse(tokens)
+        let named_functions = parse(tokens);
+        Self { named_functions }
     }
 
     /// # Find the function with the provided name

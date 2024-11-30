@@ -1,7 +1,7 @@
 use crate::code::{
     tokens::{Keyword::*, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Index, NamedFunction, Pattern,
+    FunctionLocation, Index, IndexMap, NamedFunction, Pattern,
 };
 
 use super::SyntaxTree;
@@ -31,7 +31,7 @@ use super::SyntaxTree;
 /// It's probably not worth solving this non-trivial problem for the current
 /// architecture, for little gain, only to re-solve it again for the new
 /// architecture, once that is necessary.
-pub fn parse(mut tokens: Tokens) -> SyntaxTree {
+pub fn parse(mut tokens: Tokens) -> IndexMap<NamedFunction> {
     let mut syntax_tree = SyntaxTree::default();
 
     loop {
@@ -48,7 +48,7 @@ pub fn parse(mut tokens: Tokens) -> SyntaxTree {
         );
     }
 
-    syntax_tree
+    syntax_tree.named_functions
 }
 
 fn parse_named_function(
