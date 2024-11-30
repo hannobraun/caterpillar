@@ -38,9 +38,7 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
     loop {
         let index = syntax_tree.named_functions.next_index();
 
-        let Some(function) =
-            parse_named_function(&mut tokens, index, &mut functions)
-        else {
+        let Some(function) = parse_named_function(&mut tokens, index) else {
             break;
         };
 
@@ -63,12 +61,11 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
 fn parse_named_function(
     tokens: &mut Tokens,
     index: Index<NamedFunction>,
-    functions: &mut Functions,
 ) -> Option<NamedFunction> {
     let name = parse_function_name(tokens)?;
 
     let location = FunctionLocation::NamedFunction { index };
-    let function = parse_function(tokens, location, functions)?;
+    let function = parse_function(tokens, location)?;
 
     Some(NamedFunction {
         name,
@@ -107,7 +104,6 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
 fn parse_function(
     tokens: &mut Tokens,
     location: FunctionLocation,
-    functions: &mut Functions,
 ) -> Option<Function> {
     let mut function = Function::default();
 
@@ -124,7 +120,7 @@ fn parse_function(
             index: function.branches.next_index(),
         };
 
-        let Some(branch) = parse_branch(tokens, location, functions) else {
+        let Some(branch) = parse_branch(tokens, location) else {
             break;
         };
 
@@ -144,7 +140,6 @@ fn parse_function(
 fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
-    functions: &mut Functions,
 ) -> Option<Branch> {
     match tokens.peek()? {
         Token::Punctuator(BranchStart) => {
@@ -161,7 +156,7 @@ fn parse_branch(
     let mut branch = Branch::default();
 
     parse_branch_parameters(tokens, &mut branch);
-    parse_branch_body(tokens, &mut branch, location, functions)?;
+    parse_branch_body(tokens, &mut branch, location)?;
 
     Some(branch)
 }
@@ -221,7 +216,6 @@ fn parse_branch_body(
     tokens: &mut Tokens,
     branch: &mut Branch,
     location: BranchLocation,
-    functions: &mut Functions,
 ) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
@@ -233,8 +227,7 @@ fn parse_branch_body(
                     },
                 };
 
-                if let Some(function) =
-                    parse_function(tokens, location.clone(), functions)
+                if let Some(function) = parse_function(tokens, location.clone())
                 {
                     branch.body.push(Expression::LocalFunction { function });
                 }
