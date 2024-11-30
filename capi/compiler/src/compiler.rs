@@ -39,7 +39,7 @@ impl Compiler {
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
-        let changes = detect_changes(self.old_code.take(), &functions);
+        let changes = detect_changes(self.old_code.take(), &syntax_tree);
 
         self.old_code = Some(syntax_tree.clone());
 

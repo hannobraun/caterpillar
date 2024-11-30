@@ -1,20 +1,19 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    syntax::SyntaxTree, Changes, FunctionInUpdate, FunctionUpdate, Functions,
-    Hash,
+    syntax::SyntaxTree, Changes, FunctionInUpdate, FunctionUpdate, Hash,
 };
 
 pub fn detect_changes(
     old_code: Option<SyntaxTree>,
-    new_functions: &Functions,
+    new_functions: &SyntaxTree,
 ) -> Changes {
     let old_functions = old_code.unwrap_or_default();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for new_function in new_functions.named.iter() {
+    for new_function in new_functions.named_functions() {
         if old_functions.named_functions.values().any(|old_function| {
             Hash::new(&old_function.inner)
                 == Hash::new(&new_function.fragment.inner)
