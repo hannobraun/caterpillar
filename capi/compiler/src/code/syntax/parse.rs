@@ -44,11 +44,6 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
             break;
         };
 
-        let actual_index = functions.named.push(function.clone());
-        assert_eq!(
-            index, actual_index,
-            "Function has a different index than was initially assumed.",
-        );
         functions.inner.insert(
             FunctionLocation::NamedFunction { index },
             function.inner.clone(),
