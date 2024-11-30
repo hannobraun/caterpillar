@@ -31,7 +31,13 @@ impl Compiler {
     /// # Compile the provided source code
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
+        let syntax_tree = parse(tokens);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&functions);

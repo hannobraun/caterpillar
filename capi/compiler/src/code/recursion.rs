@@ -119,7 +119,7 @@ mod tests {
     use crate::{
         code::{
             syntax::{parse, SyntaxTree},
-            FunctionCalls, Tokens,
+            FunctionCalls, Functions, Tokens,
         },
         host::NoHost,
         passes::order_functions_by_dependencies,
@@ -401,7 +401,13 @@ mod tests {
 
     fn find_recursion(input: &str) -> (SyntaxTree, Recursion) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
+        let syntax_tree = parse(tokens);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);

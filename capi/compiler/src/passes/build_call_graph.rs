@@ -102,7 +102,7 @@ mod tests {
     use crate::{
         code::{
             syntax::{parse, SyntaxTree},
-            Cluster, FunctionCalls, Index, OrderedFunctions, Tokens,
+            Cluster, FunctionCalls, Functions, Index, OrderedFunctions, Tokens,
         },
         host::NoHost,
     };
@@ -334,7 +334,13 @@ mod tests {
         input: &str,
     ) -> (SyntaxTree, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
+        let syntax_tree = parse(tokens);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);

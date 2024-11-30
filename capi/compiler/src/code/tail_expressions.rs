@@ -56,6 +56,7 @@ mod tests {
     use crate::code::{
         syntax::{parse, SyntaxTree},
         tokens::Tokens,
+        Functions,
     };
 
     use super::TailExpressions;
@@ -122,7 +123,13 @@ mod tests {
 
     pub fn find_tail_expressions(input: &str) -> (SyntaxTree, TailExpressions) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
+        let syntax_tree = parse(tokens);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let tail_expressions = TailExpressions::find(&functions);
 
         (syntax_tree, tail_expressions)

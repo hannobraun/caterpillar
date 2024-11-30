@@ -336,7 +336,7 @@ mod tests {
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, _functions) = parse(tokens);
+        let syntax_tree = parse(tokens);
         let bindings = Bindings::resolve(&syntax_tree);
 
         (syntax_tree, bindings)
