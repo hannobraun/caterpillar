@@ -259,6 +259,21 @@ fn parse_expression(
     Some(expression)
 }
 
-fn parse_type_annotation(_: &mut Tokens) -> Option<Type> {
-    None
+fn parse_type_annotation(tokens: &mut Tokens) -> Option<Type> {
+    let Token::Punctuator(Introducer) = tokens.peek()? else {
+        return None;
+    };
+    tokens.take()?;
+
+    let type_ = match tokens.take()? {
+        Token::Identifier { name } => match name.as_str() {
+            "Number" => Type::Number,
+            type_ => panic!("Unknown type: `{type_}`"),
+        },
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    };
+
+    Some(type_)
 }
