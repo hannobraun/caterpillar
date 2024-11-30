@@ -96,7 +96,10 @@ impl FunctionCalls {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{syntax::parse, Functions, Tokens},
+        code::{
+            syntax::{parse, SyntaxTree},
+            Tokens,
+        },
         host::{Host, HostFunction},
     };
 
@@ -117,8 +120,7 @@ mod tests {
         );
 
         let host_fn = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -152,8 +154,7 @@ mod tests {
         );
 
         let nop = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -188,8 +189,7 @@ mod tests {
         );
 
         let nop = functions
-            .named
-            .by_name("f")
+            .function_by_name("f")
             .unwrap()
             .into_located_function()
             .find_single_branch()
@@ -206,12 +206,12 @@ mod tests {
             .is_some());
     }
 
-    fn resolve_function_calls(input: &str) -> (Functions, FunctionCalls) {
+    fn resolve_function_calls(input: &str) -> (SyntaxTree, FunctionCalls) {
         let tokens = Tokens::tokenize(input);
-        let (syntax_tree, functions) = parse(tokens);
+        let (syntax_tree, _functions) = parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &TestHost);
 
-        (functions, function_calls)
+        (syntax_tree, function_calls)
     }
 
     struct TestHost;
