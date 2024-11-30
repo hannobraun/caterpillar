@@ -6,14 +6,14 @@ use crate::code::{
 
 pub fn detect_changes(
     old_code: Option<SyntaxTree>,
-    new_functions: &SyntaxTree,
+    new_code: &SyntaxTree,
 ) -> Changes {
     let old_functions = old_code.unwrap_or_default();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
-    for new_function in new_functions.named_functions() {
+    for new_function in new_code.named_functions() {
         if old_functions.named_functions.values().any(|old_function| {
             Hash::new(&old_function.inner)
                 == Hash::new(&new_function.fragment.inner)
