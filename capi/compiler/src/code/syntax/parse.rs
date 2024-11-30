@@ -226,11 +226,12 @@ fn parse_branch_body(
     while let Some(token) = tokens.peek() {
         match token {
             Token::Keyword(Fn) => {
-                let location = ExpressionLocation {
-                    parent: Box::new(location.clone()),
-                    index: branch.body.next_index(),
+                let location = FunctionLocation::AnonymousFunction {
+                    location: ExpressionLocation {
+                        parent: Box::new(location.clone()),
+                        index: branch.body.next_index(),
+                    },
                 };
-                let location = FunctionLocation::AnonymousFunction { location };
 
                 if let Some(function) =
                     parse_function(tokens, location.clone(), functions)
