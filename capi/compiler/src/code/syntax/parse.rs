@@ -219,10 +219,7 @@ fn parse_branch_body(
                     index: branch.body.next_index(),
                 };
                 let expression = parse_expression(tokens, location)?;
-                branch.body.push(TypedExpression {
-                    inner: expression,
-                    type_: None,
-                });
+                branch.body.push(expression);
             }
         }
     }
@@ -233,7 +230,7 @@ fn parse_branch_body(
 fn parse_expression(
     tokens: &mut Tokens,
     location: ExpressionLocation,
-) -> Option<Expression> {
+) -> Option<TypedExpression> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
@@ -249,6 +246,11 @@ fn parse_expression(
                 panic!("Unexpected token: {token:?}");
             }
         }
+    };
+
+    let expression = TypedExpression {
+        inner: expression,
+        type_: None,
     };
 
     Some(expression)
