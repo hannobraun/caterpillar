@@ -18,7 +18,7 @@ mod types;
 pub use self::{
     bindings::Bindings,
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
-    expression::Expression,
+    expression::{Expression, TypedExpression},
     function_calls::FunctionCalls,
     functions::{Branch, Function, Functions, NamedFunction, Pattern},
     hash::Hash,

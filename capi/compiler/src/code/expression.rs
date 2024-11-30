@@ -1,6 +1,26 @@
 use capi_runtime::Value;
 
-use super::Function;
+use super::{Function, Type};
+
+/// # An expression, optionally annotated with a type
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct TypedExpression {
+    /// # The expression
+    pub inner: Expression,
+
+    /// # The optional type annotation that applies to the expression
+    pub type_: Option<Type>,
+}
 
 /// # An expression within a function
 ///
