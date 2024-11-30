@@ -218,10 +218,9 @@ fn parse_branch_body(
                     },
                 };
 
-                if let Some(function) = parse_function(tokens, location.clone())
-                {
-                    branch.body.push(Expression::LocalFunction { function });
-                }
+                let function = parse_function(tokens, location.clone())
+                    .map(|function| Expression::LocalFunction { function })?;
+                branch.body.push(function);
             }
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
