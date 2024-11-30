@@ -1,4 +1,6 @@
-use crate::code::{IndexMap, Located, NamedFunction};
+use std::iter;
+
+use crate::code::{Function, IndexMap, Located, NamedFunction};
 
 /// # The syntax tree
 ///
@@ -30,5 +32,13 @@ impl SyntaxTree {
                 fragment: function,
                 location: index,
             })
+    }
+
+    /// # Iterate over all functions, both named and anonymous
+    pub fn all_functions(&self) -> impl Iterator<Item = Located<&Function>> {
+        self.named_functions().flat_map(|named_function| {
+            let function = named_function.into_located_function();
+            iter::once(function.clone()).chain(function.all_local_functions())
+        })
     }
 }
