@@ -265,6 +265,12 @@ fn parse_type_annotation(tokens: &mut Tokens) -> Option<Type> {
     };
     tokens.take()?;
 
+    let type_ = parse_type(tokens)?;
+
+    Some(type_)
+}
+
+fn parse_type(tokens: &mut Tokens) -> Option<Type> {
     let type_ = match tokens.take()? {
         Token::Identifier { name } => match name.as_str() {
             "Number" => Type::Number,
