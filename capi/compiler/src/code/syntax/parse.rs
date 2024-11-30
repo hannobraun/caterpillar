@@ -1,7 +1,8 @@
 use crate::code::{
     tokens::{Keyword::*, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Index, IndexMap, NamedFunction, Pattern, TypedExpression,
+    FunctionLocation, Index, IndexMap, NamedFunction, Pattern, Type,
+    TypedExpression,
 };
 
 /// # Parse the provided tokens
@@ -248,10 +249,16 @@ fn parse_expression(
         }
     };
 
+    let type_ = parse_type_annotation();
+
     let expression = TypedExpression {
         inner: expression,
-        type_: None,
+        type_,
     };
 
     Some(expression)
+}
+
+fn parse_type_annotation() -> Option<Type> {
+    None
 }
