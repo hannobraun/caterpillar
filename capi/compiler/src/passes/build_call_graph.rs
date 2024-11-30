@@ -335,8 +335,7 @@ mod tests {
     ) -> (SyntaxTree, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
         let (syntax_tree, functions) = parse(tokens);
-        let function_calls =
-            FunctionCalls::resolve(&syntax_tree, &functions, &NoHost);
+        let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let ordered_functions =
             super::order_functions_by_dependencies(&functions, &function_calls);
 

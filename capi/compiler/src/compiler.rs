@@ -33,8 +33,7 @@ impl Compiler {
         let tokens = Tokens::tokenize(input);
         let (syntax_tree, functions) = parse(tokens);
         let bindings = Bindings::resolve(&functions);
-        let function_calls =
-            FunctionCalls::resolve(&syntax_tree, &functions, host);
+        let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&functions);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);

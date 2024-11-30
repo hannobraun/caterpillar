@@ -7,7 +7,6 @@ use crate::{
 
 use super::{
     syntax::SyntaxTree, Expression, ExpressionLocation, FunctionLocation,
-    Functions,
 };
 
 /// # Tracks function calls
@@ -20,11 +19,7 @@ pub struct FunctionCalls {
 
 impl FunctionCalls {
     /// # Resolve all function calls
-    pub fn resolve(
-        syntax_tree: &SyntaxTree,
-        _: &Functions,
-        host: &impl Host,
-    ) -> Self {
+    pub fn resolve(syntax_tree: &SyntaxTree, host: &impl Host) -> Self {
         let mut to_host_functions = BTreeMap::new();
         let mut to_intrinsic_functions = BTreeMap::new();
         let mut to_user_defined_functions = BTreeMap::new();
@@ -214,8 +209,7 @@ mod tests {
     fn resolve_function_calls(input: &str) -> (Functions, FunctionCalls) {
         let tokens = Tokens::tokenize(input);
         let (syntax_tree, functions) = parse(tokens);
-        let function_calls =
-            FunctionCalls::resolve(&syntax_tree, &functions, &TestHost);
+        let function_calls = FunctionCalls::resolve(&syntax_tree, &TestHost);
 
         (functions, function_calls)
     }
