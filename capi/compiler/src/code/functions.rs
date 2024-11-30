@@ -32,24 +32,10 @@ impl Functions {
         &self,
         location: &FunctionLocation,
     ) -> Option<Located<&Function>> {
-        match location {
-            FunctionLocation::NamedFunction { index } => self
-                .named
-                .by_index(index)
-                .map(|named_function| named_function.into_located_function()),
-            FunctionLocation::AnonymousFunction { .. } => {
-                self.inner.iter().find_map(|(loc, function)| {
-                    if loc == location {
-                        Some(Located {
-                            fragment: function,
-                            location: location.clone(),
-                        })
-                    } else {
-                        None
-                    }
-                })
-            }
-        }
+        self.inner.get(location).map(|function| Located {
+            fragment: function,
+            location: location.clone(),
+        })
     }
 
     /// # Access the branch at the given location
