@@ -18,7 +18,7 @@ impl<'r> Located<&'r Branch> {
         let location = self.location.clone();
 
         self.body.iter().map(move |(&index, expression)| Located {
-            fragment: expression,
+            fragment: &expression.inner,
             location: ExpressionLocation {
                 parent: Box::new(location.clone()),
                 index,

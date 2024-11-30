@@ -1,7 +1,7 @@
 use crate::code::{
     tokens::{Keyword::*, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Index, IndexMap, NamedFunction, Pattern,
+    FunctionLocation, Index, IndexMap, NamedFunction, Pattern, TypedExpression,
 };
 
 /// # Parse the provided tokens
@@ -219,7 +219,10 @@ fn parse_branch_body(
                     index: branch.body.next_index(),
                 };
                 let expression = parse_expression(tokens, location)?;
-                branch.body.push(expression);
+                branch.body.push(TypedExpression {
+                    inner: expression,
+                    type_: None,
+                });
             }
         }
     }

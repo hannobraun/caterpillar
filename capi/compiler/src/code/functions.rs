@@ -4,7 +4,7 @@ use capi_runtime::Value;
 
 use super::{
     BranchLocation, Expression, ExpressionLocation, FunctionLocation, IndexMap,
-    Located,
+    Located, TypedExpression,
 };
 
 /// # All functions in the program
@@ -49,7 +49,10 @@ impl Functions {
         location: &ExpressionLocation,
     ) -> Option<&Expression> {
         let branch = self.branch_by_location(&location.parent)?;
-        branch.body.get(&location.index)
+        branch
+            .body
+            .get(&location.index)
+            .map(|expression| &expression.inner)
     }
 
     /// # Iterate over all functions, both named and anonymous
@@ -112,7 +115,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<Expression>,
+    pub body: IndexMap<TypedExpression>,
 }
 
 #[derive(

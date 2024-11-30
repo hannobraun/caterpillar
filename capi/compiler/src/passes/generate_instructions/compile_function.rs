@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         Branch, BranchLocation, Cluster, Expression, ExpressionLocation,
-        Function, FunctionLocation, IndexMap, Pattern,
+        Function, FunctionLocation, IndexMap, Pattern, TypedExpression,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -153,7 +153,7 @@ where
 }
 
 fn compile_branch_body(
-    body: IndexMap<Expression>,
+    body: IndexMap<TypedExpression>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -163,7 +163,7 @@ fn compile_branch_body(
 
     for (index, expression) in body {
         let addr = compile_expression(
-            expression,
+            expression.inner,
             ExpressionLocation {
                 parent: Box::new(location.clone()),
                 index,
