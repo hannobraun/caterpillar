@@ -110,7 +110,7 @@ mod tests {
         // The host can provide functions. Calls to these host functions should
         // be resolved as such.
 
-        let (functions, function_calls) = resolve_function_calls(
+        let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
                     \ ->
@@ -119,7 +119,7 @@ mod tests {
             ",
         );
 
-        let host_fn = functions
+        let host_fn = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -144,7 +144,7 @@ mod tests {
         // The compiler provides intrinsic functions. Calls to these should be
         // resolved as such.
 
-        let (functions, function_calls) = resolve_function_calls(
+        let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
                     \ ->
@@ -153,7 +153,7 @@ mod tests {
             ",
         );
 
-        let nop = functions
+        let nop = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -175,7 +175,7 @@ mod tests {
     fn resolve_user_defined_function() {
         // If a function is defined in the code, it should be resolved.
 
-        let (functions, function_calls) = resolve_function_calls(
+        let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
                     \ ->
@@ -188,7 +188,7 @@ mod tests {
             ",
         );
 
-        let nop = functions
+        let nop = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
