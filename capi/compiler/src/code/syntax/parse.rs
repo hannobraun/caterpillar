@@ -4,8 +4,6 @@ use crate::code::{
     FunctionLocation, Index, IndexMap, NamedFunction, Pattern,
 };
 
-use super::SyntaxTree;
-
 /// # Parse the provided tokens
 ///
 /// ## Implementation Note
@@ -32,23 +30,23 @@ use super::SyntaxTree;
 /// architecture, for little gain, only to re-solve it again for the new
 /// architecture, once that is necessary.
 pub fn parse(mut tokens: Tokens) -> IndexMap<NamedFunction> {
-    let mut syntax_tree = SyntaxTree::default();
+    let mut named_functions = IndexMap::default();
 
     loop {
-        let index = syntax_tree.named_functions.next_index();
+        let index = named_functions.next_index();
 
         let Some(function) = parse_named_function(&mut tokens, index) else {
             break;
         };
 
-        let actual_index = syntax_tree.named_functions.push(function);
+        let actual_index = named_functions.push(function);
         assert_eq!(
             index, actual_index,
             "Function has a different index than was initially assumed.",
         );
     }
 
-    syntax_tree.named_functions
+    named_functions
 }
 
 fn parse_named_function(
