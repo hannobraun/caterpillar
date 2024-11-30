@@ -249,7 +249,7 @@ fn parse_expression(
         }
     };
 
-    let type_ = parse_type_annotation();
+    let type_ = parse_type_annotation(tokens);
 
     let expression = TypedExpression {
         inner: expression,
@@ -259,6 +259,6 @@ fn parse_expression(
     Some(expression)
 }
 
-fn parse_type_annotation() -> Option<Type> {
+fn parse_type_annotation(_: &mut Tokens) -> Option<Type> {
     None
 }
