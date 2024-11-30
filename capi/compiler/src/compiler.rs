@@ -39,7 +39,7 @@ impl Compiler {
         };
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
-        let tail_expressions = TailExpressions::find(&functions);
+        let tail_expressions = TailExpressions::find(&syntax_tree);
         let ordered_functions =
             order_functions_by_dependencies(&functions, &function_calls);
         let recursion =

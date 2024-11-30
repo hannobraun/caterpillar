@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::{Expression, ExpressionLocation, Functions};
+use super::{syntax::SyntaxTree, Expression, ExpressionLocation};
 
 /// # Tracks tail expressions
 ///
@@ -19,7 +19,7 @@ pub struct TailExpressions {
 
 impl TailExpressions {
     /// # Find all tail expressions
-    pub fn find(functions: &Functions) -> Self {
+    pub fn find(functions: &SyntaxTree) -> Self {
         let mut tail_expressions = BTreeSet::new();
 
         for function in functions.all_functions() {
@@ -53,7 +53,7 @@ impl TailExpressions {
 mod tests {
     use itertools::Itertools;
 
-    use crate::code::{syntax::SyntaxTree, tokens::Tokens, Functions};
+    use crate::code::{syntax::SyntaxTree, tokens::Tokens};
 
     use super::TailExpressions;
 
@@ -120,13 +120,7 @@ mod tests {
     pub fn find_tail_expressions(input: &str) -> (SyntaxTree, TailExpressions) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
-        let functions = Functions {
-            inner: syntax_tree
-                .all_functions()
-                .map(|function| (function.location, function.fragment.clone()))
-                .collect(),
-        };
-        let tail_expressions = TailExpressions::find(&functions);
+        let tail_expressions = TailExpressions::find(&syntax_tree);
 
         (syntax_tree, tail_expressions)
     }
