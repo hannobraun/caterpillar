@@ -226,7 +226,11 @@ fn parse_branch_body(
                 break;
             }
             _ => {
-                let expression = parse_expression(tokens)?;
+                let location = ExpressionLocation {
+                    parent: Box::new(location.clone()),
+                    index: branch.body.next_index(),
+                };
+                let expression = parse_expression(tokens, location)?;
                 branch.body.push(expression);
             }
         }
@@ -235,7 +239,10 @@ fn parse_branch_body(
     Some(())
 }
 
-fn parse_expression(tokens: &mut Tokens) -> Option<Expression> {
+fn parse_expression(
+    tokens: &mut Tokens,
+    _: ExpressionLocation,
+) -> Option<Expression> {
     let expression = match tokens.take()? {
         Token::Comment { text } => Expression::Comment { text },
         Token::Identifier { name } => Expression::Identifier { name },
