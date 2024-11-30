@@ -40,8 +40,8 @@ impl Compiler {
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
-        let ordered_functions =
-            order_functions_by_dependencies(&functions, &function_calls);
+        let (functions, ordered_functions) =
+            order_functions_by_dependencies(functions, &function_calls);
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
         let changes = detect_changes(self.old_code.take(), &syntax_tree);

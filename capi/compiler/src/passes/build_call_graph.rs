@@ -11,12 +11,12 @@ use crate::code::{
 };
 
 pub fn order_functions_by_dependencies(
-    functions: &Functions,
+    functions: Functions,
     function_calls: &FunctionCalls,
-) -> OrderedFunctions {
-    let dependency_graph = build_dependency_graph(functions, function_calls);
+) -> (Functions, OrderedFunctions) {
+    let dependency_graph = build_dependency_graph(&functions, function_calls);
     let clusters = collect_functions_into_clusters(dependency_graph);
-    OrderedFunctions::from_clusters(clusters)
+    (functions, OrderedFunctions::from_clusters(clusters))
 }
 
 fn build_dependency_graph(
@@ -342,8 +342,8 @@ mod tests {
                 .collect(),
         };
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let ordered_functions =
-            super::order_functions_by_dependencies(&functions, &function_calls);
+        let (_, ordered_functions) =
+            super::order_functions_by_dependencies(functions, &function_calls);
 
         (syntax_tree, ordered_functions)
     }

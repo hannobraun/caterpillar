@@ -406,8 +406,8 @@ mod tests {
                 .collect(),
         };
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let ordered_functions =
-            order_functions_by_dependencies(&functions, &function_calls);
+        let (functions, ordered_functions) =
+            order_functions_by_dependencies(functions, &function_calls);
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
 
