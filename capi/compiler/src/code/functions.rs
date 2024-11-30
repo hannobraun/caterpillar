@@ -19,7 +19,7 @@ pub struct Functions {
     pub named: NamedFunctions,
 
     /// # The anonymous functions
-    pub anonymous: AnonymousFunctions,
+    pub anonymous: BTreeMap<ExpressionLocation, Function>,
 }
 
 impl Functions {
@@ -38,7 +38,7 @@ impl Functions {
                 .by_index(index)
                 .map(|named_function| named_function.into_located_function()),
             FunctionLocation::AnonymousFunction { location } => {
-                self.anonymous.inner.iter().find_map(|(loc, function)| {
+                self.anonymous.iter().find_map(|(loc, function)| {
                     if loc == location {
                         Some(Located {
                             fragment: function,
@@ -184,30 +184,6 @@ impl Deref for NamedFunctions {
 }
 
 impl DerefMut for NamedFunctions {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
-    }
-}
-
-/// # The anonymous functions in the program
-///
-/// Anonymous functions are defined within named functions (or recursively,
-/// within other anonymous functions). They are identified by their address
-/// in the code.
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct AnonymousFunctions {
-    inner: BTreeMap<ExpressionLocation, Function>,
-}
-
-impl Deref for AnonymousFunctions {
-    type Target = BTreeMap<ExpressionLocation, Function>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-
-impl DerefMut for AnonymousFunctions {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }

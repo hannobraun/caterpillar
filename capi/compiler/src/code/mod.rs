@@ -21,8 +21,7 @@ pub use self::{
     expression::Expression,
     function_calls::FunctionCalls,
     functions::{
-        AnonymousFunctions, Branch, Function, Functions, NamedFunction,
-        NamedFunctions, Pattern,
+        Branch, Function, Functions, NamedFunction, NamedFunctions, Pattern,
     },
     hash::Hash,
     index::{Index, IndexMap},
