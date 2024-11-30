@@ -210,18 +210,6 @@ fn parse_branch_body(
 ) -> Option<()> {
     while let Some(token) = tokens.peek() {
         match token {
-            Token::Keyword(Fn) => {
-                let location = FunctionLocation::AnonymousFunction {
-                    location: ExpressionLocation {
-                        parent: Box::new(location.clone()),
-                        index: branch.body.next_index(),
-                    },
-                };
-
-                let function = parse_function(tokens, location.clone())
-                    .map(|function| Expression::LocalFunction { function })?;
-                branch.body.push(function);
-            }
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
             }
@@ -241,16 +229,22 @@ fn parse_branch_body(
 
 fn parse_expression(
     tokens: &mut Tokens,
-    _: ExpressionLocation,
+    location: ExpressionLocation,
 ) -> Option<Expression> {
-    let expression = match tokens.take()? {
-        Token::Comment { text } => Expression::Comment { text },
-        Token::Identifier { name } => Expression::Identifier { name },
-        Token::IntegerLiteral { value } => Expression::LiteralNumber {
-            value: value.into(),
-        },
-        token => {
-            panic!("Unexpected token: {token:?}");
+    let expression = if let Token::Keyword(Fn) = tokens.peek()? {
+        let location = FunctionLocation::AnonymousFunction { location };
+        parse_function(tokens, location)
+            .map(|function| Expression::LocalFunction { function })?
+    } else {
+        match tokens.take()? {
+            Token::Comment { text } => Expression::Comment { text },
+            Token::Identifier { name } => Expression::Identifier { name },
+            Token::IntegerLiteral { value } => Expression::LiteralNumber {
+                value: value.into(),
+            },
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
         }
     };
 
