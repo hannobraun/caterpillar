@@ -101,8 +101,8 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::{parse, SyntaxTree},
-            Cluster, FunctionCalls, Functions, Index, OrderedFunctions, Tokens,
+            syntax::SyntaxTree, Cluster, FunctionCalls, Functions, Index,
+            OrderedFunctions, Tokens,
         },
         host::NoHost,
     };
@@ -334,7 +334,7 @@ mod tests {
         input: &str,
     ) -> (SyntaxTree, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
-        let syntax_tree = parse(tokens);
+        let syntax_tree = SyntaxTree::parse(tokens);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

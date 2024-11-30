@@ -175,8 +175,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::code::{
-        syntax::{parse, SyntaxTree},
-        Expression, FunctionLocation, Tokens,
+        syntax::SyntaxTree, Expression, FunctionLocation, Tokens,
     };
 
     use super::Bindings;
@@ -336,7 +335,7 @@ mod tests {
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
         let tokens = Tokens::tokenize(input);
-        let syntax_tree = parse(tokens);
+        let syntax_tree = SyntaxTree::parse(tokens);
         let bindings = Bindings::resolve(&syntax_tree);
 
         (syntax_tree, bindings)

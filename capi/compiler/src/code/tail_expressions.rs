@@ -53,11 +53,7 @@ impl TailExpressions {
 mod tests {
     use itertools::Itertools;
 
-    use crate::code::{
-        syntax::{parse, SyntaxTree},
-        tokens::Tokens,
-        Functions,
-    };
+    use crate::code::{syntax::SyntaxTree, tokens::Tokens, Functions};
 
     use super::TailExpressions;
 
@@ -123,7 +119,7 @@ mod tests {
 
     pub fn find_tail_expressions(input: &str) -> (SyntaxTree, TailExpressions) {
         let tokens = Tokens::tokenize(input);
-        let syntax_tree = parse(tokens);
+        let syntax_tree = SyntaxTree::parse(tokens);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

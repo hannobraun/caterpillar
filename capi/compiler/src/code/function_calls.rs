@@ -96,10 +96,7 @@ impl FunctionCalls {
 #[cfg(test)]
 mod tests {
     use crate::{
-        code::{
-            syntax::{parse, SyntaxTree},
-            Tokens,
-        },
+        code::{syntax::SyntaxTree, Tokens},
         host::{Host, HostFunction},
     };
 
@@ -208,7 +205,7 @@ mod tests {
 
     fn resolve_function_calls(input: &str) -> (SyntaxTree, FunctionCalls) {
         let tokens = Tokens::tokenize(input);
-        let syntax_tree = parse(tokens);
+        let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &TestHost);
 
         (syntax_tree, function_calls)

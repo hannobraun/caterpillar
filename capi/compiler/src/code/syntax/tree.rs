@@ -1,8 +1,10 @@
 use std::iter;
 
 use crate::code::{
-    Function, FunctionLocation, IndexMap, Located, NamedFunction,
+    Function, FunctionLocation, IndexMap, Located, NamedFunction, Tokens,
 };
+
+use super::parse::parse;
 
 /// # The syntax tree
 ///
@@ -13,6 +15,10 @@ pub struct SyntaxTree {
 }
 
 impl SyntaxTree {
+    pub fn parse(tokens: Tokens) -> Self {
+        parse(tokens)
+    }
+
     /// # Find the function with the provided name
     ///
     /// Return `None`, if no function with this name can be found.

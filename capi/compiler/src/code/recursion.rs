@@ -117,10 +117,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{
-            syntax::{parse, SyntaxTree},
-            FunctionCalls, Functions, Tokens,
-        },
+        code::{syntax::SyntaxTree, FunctionCalls, Functions, Tokens},
         host::NoHost,
         passes::order_functions_by_dependencies,
     };
@@ -401,7 +398,7 @@ mod tests {
 
     fn find_recursion(input: &str) -> (SyntaxTree, Recursion) {
         let tokens = Tokens::tokenize(input);
-        let syntax_tree = parse(tokens);
+        let syntax_tree = SyntaxTree::parse(tokens);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()
