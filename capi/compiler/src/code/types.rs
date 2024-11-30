@@ -63,9 +63,6 @@ pub struct Types {
     udigest::Digestable,
 )]
 pub enum Type {
-    /// # The type that has no values
-    Empty,
-
     /// # A function
     Function {
         /// # The function's signature
