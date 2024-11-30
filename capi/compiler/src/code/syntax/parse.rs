@@ -230,18 +230,12 @@ fn parse_branch_body(
                     parent: Box::new(location.clone()),
                     index: branch.body.next_index(),
                 };
+                let location = FunctionLocation::AnonymousFunction { location };
 
-                if let Some(function) = parse_function(
-                    tokens,
-                    FunctionLocation::AnonymousFunction {
-                        location: location.clone(),
-                    },
-                    functions,
-                ) {
-                    functions.anonymous.insert(
-                        FunctionLocation::AnonymousFunction { location },
-                        function.clone(),
-                    );
+                if let Some(function) =
+                    parse_function(tokens, location.clone(), functions)
+                {
+                    functions.anonymous.insert(location, function.clone());
                     branch.body.push(Expression::LocalFunction { function });
                 }
             }
