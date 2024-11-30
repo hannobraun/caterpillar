@@ -6,14 +6,20 @@ use petgraph::{
 };
 
 use crate::code::{
-    Cluster, Expression, FunctionCalls, FunctionLocation, Functions, IndexMap,
-    OrderedFunctions,
+    syntax::SyntaxTree, Cluster, Expression, FunctionCalls, FunctionLocation,
+    Functions, IndexMap, OrderedFunctions,
 };
 
 pub fn order_functions_by_dependencies(
-    functions: Functions,
+    syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> (Functions, OrderedFunctions) {
+    let functions = Functions {
+        inner: syntax_tree
+            .all_functions()
+            .map(|function| (function.location, function.fragment.clone()))
+            .collect(),
+    };
     let dependency_graph = build_dependency_graph(&functions, function_calls);
     let clusters = collect_functions_into_clusters(dependency_graph);
     (functions, OrderedFunctions::from_clusters(clusters))
@@ -101,7 +107,7 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::SyntaxTree, Cluster, FunctionCalls, Functions, Index,
+            syntax::SyntaxTree, Cluster, FunctionCalls, Index,
             OrderedFunctions, Tokens,
         },
         host::NoHost,
@@ -335,15 +341,11 @@ mod tests {
     ) -> (SyntaxTree, OrderedFunctions) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
-        let functions = Functions {
-            inner: syntax_tree
-                .all_functions()
-                .map(|function| (function.location, function.fragment.clone()))
-                .collect(),
-        };
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let (_, ordered_functions) =
-            super::order_functions_by_dependencies(functions, &function_calls);
+        let (_, ordered_functions) = super::order_functions_by_dependencies(
+            &syntax_tree,
+            &function_calls,
+        );
 
         (syntax_tree, ordered_functions)
     }
