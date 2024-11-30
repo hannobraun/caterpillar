@@ -19,10 +19,10 @@ pub struct TailExpressions {
 
 impl TailExpressions {
     /// # Find all tail expressions
-    pub fn find(functions: &SyntaxTree) -> Self {
+    pub fn find(syntax_tree: &SyntaxTree) -> Self {
         let mut tail_expressions = BTreeSet::new();
 
-        for function in functions.all_functions() {
+        for function in syntax_tree.all_functions() {
             for branch in function.branches() {
                 for expression in branch.body().rev() {
                     if let Expression::Comment { .. } = expression.fragment {
