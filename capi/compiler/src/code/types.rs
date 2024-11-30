@@ -79,16 +79,6 @@ pub enum Type {
     /// I expect that this will get split into multiple, more specific numeric
     /// types at some point.
     Number,
-
-    /// # The type is unknown
-    ///
-    /// This is used as a placeholder, while the type is still being inferred.
-    /// It can also be the end result, if the type _can't_ be inferred.
-    ///
-    /// For now, the type system isn't advanced enough to guarantee full
-    /// inference. Code that deals with types should be able to deal with this
-    /// variant.
-    Unknown,
 }
 
 /// # The signature of an expression
