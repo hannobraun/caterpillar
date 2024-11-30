@@ -238,7 +238,10 @@ fn parse_branch_body(
                     },
                     functions,
                 ) {
-                    functions.anonymous.insert(location, function.clone());
+                    functions.anonymous.insert(
+                        FunctionLocation::AnonymousFunction { location },
+                        function.clone(),
+                    );
                     branch.body.push(Expression::LocalFunction { function });
                 }
             }

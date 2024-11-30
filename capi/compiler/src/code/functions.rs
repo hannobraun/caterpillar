@@ -19,7 +19,7 @@ pub struct Functions {
     pub named: NamedFunctions,
 
     /// # The anonymous functions
-    pub anonymous: BTreeMap<ExpressionLocation, Function>,
+    pub anonymous: BTreeMap<FunctionLocation, Function>,
 }
 
 impl Functions {
@@ -37,14 +37,12 @@ impl Functions {
                 .named
                 .by_index(index)
                 .map(|named_function| named_function.into_located_function()),
-            FunctionLocation::AnonymousFunction { location } => {
+            FunctionLocation::AnonymousFunction { .. } => {
                 self.anonymous.iter().find_map(|(loc, function)| {
                     if loc == location {
                         Some(Located {
                             fragment: function,
-                            location: FunctionLocation::AnonymousFunction {
-                                location: location.clone(),
-                            },
+                            location: location.clone(),
                         })
                     } else {
                         None
@@ -87,9 +85,7 @@ impl Functions {
             })
             .chain(self.anonymous.iter().map(|(location, function)| Located {
                 fragment: function,
-                location: FunctionLocation::AnonymousFunction {
-                    location: location.clone(),
-                },
+                location: location.clone(),
             }))
     }
 
@@ -107,9 +103,7 @@ impl Functions {
             .chain(self.anonymous.iter_mut().map(|(location, function)| {
                 Located {
                     fragment: function,
-                    location: FunctionLocation::AnonymousFunction {
-                        location: location.clone(),
-                    },
+                    location: location.clone(),
                 }
             }))
     }
