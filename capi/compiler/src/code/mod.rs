@@ -20,9 +20,7 @@ pub use self::{
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::Expression,
     function_calls::FunctionCalls,
-    functions::{
-        Branch, Function, Functions, NamedFunction, NamedFunctions, Pattern,
-    },
+    functions::{Branch, Function, Functions, NamedFunction, Pattern},
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},

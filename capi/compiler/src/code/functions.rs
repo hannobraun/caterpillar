@@ -1,7 +1,4 @@
-use std::{
-    collections::BTreeMap,
-    ops::{Deref, DerefMut},
-};
+use std::collections::BTreeMap;
 
 use capi_runtime::Value;
 
@@ -13,9 +10,6 @@ use super::{
 /// # All functions in the program
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
-    /// # The named functions
-    pub named: NamedFunctions,
-
     /// # The functions
     pub inner: BTreeMap<FunctionLocation, Function>,
 }
@@ -64,57 +58,6 @@ impl Functions {
             fragment: function,
             location: location.clone(),
         })
-    }
-}
-
-/// # The named functions in the program
-///
-/// At this point, all named functions live in a single root context, and are
-/// addressed by an index into that root context. The language is expected to
-/// grow a module system in the future, and then this will change.
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct NamedFunctions {
-    inner: IndexMap<NamedFunction>,
-}
-
-impl NamedFunctions {
-    /// # Access the named parent function for the given function, if anonymous
-    ///
-    /// If the location of a named function is provided, that named function
-    /// itself is returned.
-    ///
-    /// Returns `None`, if no parent named function can be found.
-    pub fn by_child_function(
-        &self,
-        location: &FunctionLocation,
-    ) -> Option<Located<&NamedFunction>> {
-        let index = match location {
-            FunctionLocation::NamedFunction { index } => index,
-            FunctionLocation::AnonymousFunction { location } => {
-                return self.by_child_function(&location.parent.parent);
-            }
-        };
-
-        let named_function = self.inner.get(index)?;
-
-        Some(Located {
-            fragment: named_function,
-            location: *index,
-        })
-    }
-}
-
-impl Deref for NamedFunctions {
-    type Target = IndexMap<NamedFunction>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-
-impl DerefMut for NamedFunctions {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
