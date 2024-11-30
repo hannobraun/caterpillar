@@ -67,23 +67,6 @@ impl Functions {
             location: location.clone(),
         })
     }
-
-    /// # Iterate over all functions, both named and anonymous, mutably
-    pub fn all_functions_mut(
-        &mut self,
-    ) -> impl Iterator<Item = Located<&mut Function>> {
-        self.named
-            .inner
-            .iter_mut()
-            .map(|(&index, named_function)| Located {
-                fragment: &mut named_function.inner,
-                location: FunctionLocation::NamedFunction { index },
-            })
-            .chain(self.inner.iter_mut().map(|(location, function)| Located {
-                fragment: function,
-                location: location.clone(),
-            }))
-    }
 }
 
 /// # The named functions in the program
