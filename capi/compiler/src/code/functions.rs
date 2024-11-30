@@ -130,22 +130,6 @@ impl NamedFunctions {
         })
     }
 
-    /// # Access the function with the provided name
-    ///
-    /// Returns `None`, if no function has the provided name.
-    pub fn by_name(&self, name: &str) -> Option<Located<&NamedFunction>> {
-        self.inner.iter().find_map(|(&index, function)| {
-            if function.name == name {
-                Some(Located {
-                    fragment: function,
-                    location: index,
-                })
-            } else {
-                None
-            }
-        })
-    }
-
     /// # Access the named parent function for the given function, if anonymous
     ///
     /// If the location of a named function is provided, that named function
