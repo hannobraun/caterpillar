@@ -162,29 +162,6 @@ impl NamedFunctions {
             location: *index,
         })
     }
-
-    /// # Iterate over the named functions mutably
-    pub fn iter_mut(
-        &mut self,
-    ) -> impl Iterator<Item = Located<&mut NamedFunction>> {
-        self.inner
-            .iter_mut()
-            .map(|(index, named_function)| Located {
-                fragment: named_function,
-                location: *index,
-            })
-    }
-
-    /// # Convert this instance into an iterator over the named functions
-    #[allow(clippy::should_implement_trait)] // would require naming return type
-    pub fn into_iter(self) -> impl Iterator<Item = Located<NamedFunction>> {
-        self.inner
-            .into_iter()
-            .map(|(index, named_function)| Located {
-                fragment: named_function,
-                location: index,
-            })
-    }
 }
 
 impl Deref for NamedFunctions {
