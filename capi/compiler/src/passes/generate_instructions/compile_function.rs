@@ -321,12 +321,12 @@ fn compile_expression(
                         .compiled_functions_by_location
                         .get(callee_location)
                     else {
-                        let function =
-                            functions_context.functions.named.iter().find(
-                                |function| {
-                                    function.location() == *callee_location
-                                },
-                            );
+                        let function = functions_context
+                            .syntax_tree
+                            .named_functions()
+                            .find(|function| {
+                                function.location() == *callee_location
+                            });
 
                         unreachable!(
                             "Compiling call to this user-defined function: \
