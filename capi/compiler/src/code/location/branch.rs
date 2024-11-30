@@ -10,7 +10,7 @@ impl HasLocation for Branch {
     type Location = BranchLocation;
 }
 
-impl Located<&Branch> {
+impl<'r> Located<&'r Branch> {
     /// # Iterate over the expressions in the branch's body
     pub fn body(
         &self,
