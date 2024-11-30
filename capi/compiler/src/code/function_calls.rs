@@ -22,14 +22,14 @@ impl FunctionCalls {
     /// # Resolve all function calls
     pub fn resolve(
         syntax_tree: &SyntaxTree,
-        functions: &Functions,
+        _: &Functions,
         host: &impl Host,
     ) -> Self {
         let mut to_host_functions = BTreeMap::new();
         let mut to_intrinsic_functions = BTreeMap::new();
         let mut to_user_defined_functions = BTreeMap::new();
 
-        for function in functions.all_functions() {
+        for function in syntax_tree.all_functions() {
             for branch in function.branches() {
                 for expression in branch.body() {
                     if let Expression::Identifier { name } = expression.fragment
