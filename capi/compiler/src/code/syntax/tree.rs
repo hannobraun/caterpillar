@@ -1,6 +1,8 @@
 use std::iter;
 
-use crate::code::{Function, IndexMap, Located, NamedFunction};
+use crate::code::{
+    Function, FunctionLocation, IndexMap, Located, NamedFunction,
+};
 
 /// # The syntax tree
 ///
@@ -20,6 +22,32 @@ impl SyntaxTree {
     ) -> Option<Located<&NamedFunction>> {
         self.named_functions()
             .find(|function| function.name == name)
+    }
+
+    /// # Find the top-level parent of a given function
+    ///
+    /// If the function at the provided location has no parent, the function
+    /// itself is returned.
+    ///
+    /// Returns `None`, if there is no function at the provided location.
+    pub fn find_top_level_parent_function(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<Located<&NamedFunction>> {
+        let index = match location {
+            FunctionLocation::NamedFunction { index } => index,
+            FunctionLocation::AnonymousFunction { location } => {
+                return self
+                    .find_top_level_parent_function(&location.parent.parent);
+            }
+        };
+
+        let named_function = self.named_functions.get(index)?;
+
+        Some(Located {
+            fragment: named_function,
+            location: *index,
+        })
     }
 
     /// # Iterate over the named functions
