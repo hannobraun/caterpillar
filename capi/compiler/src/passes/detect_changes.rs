@@ -8,13 +8,13 @@ pub fn detect_changes(
     old_code: Option<SyntaxTree>,
     new_code: &SyntaxTree,
 ) -> Changes {
-    let old_functions = old_code.unwrap_or_default();
+    let old_code = old_code.unwrap_or_default();
 
     let mut added = BTreeMap::new();
     let mut updated = Vec::new();
 
     for new_function in new_code.named_functions() {
-        if old_functions.named_functions.values().any(|old_function| {
+        if old_code.named_functions.values().any(|old_function| {
             Hash::new(&old_function.inner)
                 == Hash::new(&new_function.fragment.inner)
         }) {
@@ -23,7 +23,7 @@ pub fn detect_changes(
         }
 
         if let Some(old_function) =
-            old_functions.function_by_name(&new_function.name)
+            old_code.function_by_name(&new_function.name)
         {
             // Found a function with the same name. But it can't have the same
             // hash, or we wouldn't have made it here. Assuming the new function
