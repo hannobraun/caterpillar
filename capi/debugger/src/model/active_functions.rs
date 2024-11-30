@@ -260,8 +260,8 @@ fn instruction_to_named_function(
         match current_location {
             FunctionLocation::NamedFunction { index } => {
                 let function = code
-                    .functions
-                    .named
+                    .syntax_tree
+                    .named_functions
                     .get(&index)
                     .expect(
                         "Function location in source map should refer to \
