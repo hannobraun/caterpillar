@@ -38,7 +38,18 @@ impl Functions {
                 .by_index(index)
                 .map(|named_function| named_function.into_located_function()),
             FunctionLocation::AnonymousFunction { location } => {
-                self.anonymous.by_location(location)
+                self.anonymous.inner.iter().find_map(|(loc, function)| {
+                    if loc == location {
+                        Some(Located {
+                            fragment: function,
+                            location: FunctionLocation::AnonymousFunction {
+                                location: location.clone(),
+                            },
+                        })
+                    } else {
+                        None
+                    }
+                })
             }
         }
     }
@@ -186,30 +197,6 @@ impl DerefMut for NamedFunctions {
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct AnonymousFunctions {
     inner: BTreeMap<ExpressionLocation, Function>,
-}
-
-impl AnonymousFunctions {
-    /// # Access the anonymous function at the provided location
-    ///
-    /// Returns `None`, if no anonymous function is defined at the given
-    /// location.
-    pub fn by_location(
-        &self,
-        location: &ExpressionLocation,
-    ) -> Option<Located<&Function>> {
-        self.inner.iter().find_map(|(loc, function)| {
-            if loc == location {
-                Some(Located {
-                    fragment: function,
-                    location: FunctionLocation::AnonymousFunction {
-                        location: location.clone(),
-                    },
-                })
-            } else {
-                None
-            }
-        })
-    }
 }
 
 impl Deref for AnonymousFunctions {
