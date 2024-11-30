@@ -33,7 +33,6 @@ use super::SyntaxTree;
 /// architecture, once that is necessary.
 pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
     let mut syntax_tree = SyntaxTree::default();
-    let mut functions = Functions::default();
 
     loop {
         let index = syntax_tree.named_functions.next_index();
@@ -49,6 +48,7 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
         );
     }
 
+    let mut functions = Functions::default();
     for function in syntax_tree.all_functions() {
         functions
             .inner
