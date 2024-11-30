@@ -49,7 +49,7 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
             index, actual_index,
             "Function has a different index than was initially assumed.",
         );
-        functions.anonymous.insert(
+        functions.inner.insert(
             FunctionLocation::NamedFunction { index },
             function.inner.clone(),
         );
@@ -240,7 +240,7 @@ fn parse_branch_body(
                 if let Some(function) =
                     parse_function(tokens, location.clone(), functions)
                 {
-                    functions.anonymous.insert(location, function.clone());
+                    functions.inner.insert(location, function.clone());
                     branch.body.push(Expression::LocalFunction { function });
                 }
             }
