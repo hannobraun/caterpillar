@@ -44,16 +44,17 @@ pub fn parse(mut tokens: Tokens) -> (SyntaxTree, Functions) {
             break;
         };
 
-        functions.inner.insert(
-            FunctionLocation::NamedFunction { index },
-            function.inner.clone(),
-        );
-
         let actual_index = syntax_tree.named_functions.push(function);
         assert_eq!(
             index, actual_index,
             "Function has a different index than was initially assumed.",
         );
+    }
+
+    for function in syntax_tree.all_functions() {
+        functions
+            .inner
+            .insert(function.location, function.fragment.clone());
     }
 
     (syntax_tree, functions)
@@ -235,7 +236,6 @@ fn parse_branch_body(
                 if let Some(function) =
                     parse_function(tokens, location.clone(), functions)
                 {
-                    functions.inner.insert(location, function.clone());
                     branch.body.push(Expression::LocalFunction { function });
                 }
             }
