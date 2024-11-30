@@ -53,9 +53,6 @@ pub enum Token {
         text: String,
     },
 
-    /// # A keyword
-    Keyword(Keyword),
-
     /// # An identifier
     Identifier {
         /// # The name of the identifier
@@ -67,6 +64,9 @@ pub enum Token {
         /// # The value of the integer literal
         value: i32,
     },
+
+    /// # A keyword
+    Keyword(Keyword),
 
     /// # A punctuator
     Punctuator(Punctuator),
