@@ -18,7 +18,7 @@ pub struct Functions {
     /// # The named functions
     pub named: NamedFunctions,
 
-    /// # The anonymous functions
+    /// # The functions
     pub inner: BTreeMap<FunctionLocation, Function>,
 }
 
