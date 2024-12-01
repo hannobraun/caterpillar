@@ -265,7 +265,9 @@ fn parse_type_annotation(tokens: &mut Tokens) -> Option<ConcreteSignature> {
     };
     tokens.take()?;
 
-    parse_signature(tokens)
+    let signature = parse_signature(tokens)?;
+
+    Some(signature)
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
