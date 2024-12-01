@@ -249,11 +249,7 @@ fn parse_expression(
         }
     };
 
-    let type_ = parse_type_annotation(tokens);
-    let signature = type_.map(|type_| ConcreteSignature {
-        inputs: vec![type_],
-        outputs: vec![],
-    });
+    let signature = parse_type_annotation(tokens);
 
     let expression = TypedExpression {
         inner: expression,
@@ -263,15 +259,18 @@ fn parse_expression(
     Some(expression)
 }
 
-fn parse_type_annotation(tokens: &mut Tokens) -> Option<Type> {
+fn parse_type_annotation(tokens: &mut Tokens) -> Option<ConcreteSignature> {
     let Token::Punctuator(Introducer) = tokens.peek()? else {
         return None;
     };
     tokens.take()?;
 
-    let type_ = parse_type(tokens)?;
+    let type_ = parse_type(tokens);
 
-    Some(type_)
+    type_.map(|type_| ConcreteSignature {
+        inputs: vec![type_],
+        outputs: vec![],
+    })
 }
 
 fn parse_type(tokens: &mut Tokens) -> Option<Type> {
