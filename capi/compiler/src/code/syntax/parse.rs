@@ -160,9 +160,7 @@ fn parse_branch_parameters(
     branch: &mut Branch,
 ) -> Result<()> {
     loop {
-        let Some(token) = tokens.take() else {
-            break;
-        };
+        let token = tokens.take().ok_or(())?;
 
         match parse_branch_parameter(token) {
             Ok(pattern) => {
