@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use super::{Function, Type};
+use super::{ConcreteSignature, Function};
 
 /// # An expression, optionally annotated with a type
 #[derive(
@@ -19,7 +19,7 @@ pub struct TypedExpression {
     pub inner: Expression,
 
     /// # The optional type annotation that applies to the expression
-    pub type_: Option<Type>,
+    pub type_: Option<ConcreteSignature>,
 }
 
 /// # An expression within a function

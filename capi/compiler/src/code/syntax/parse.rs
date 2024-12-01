@@ -1,7 +1,7 @@
 use crate::code::{
     tokens::{Keyword::*, Punctuator::*, Token, Tokens},
-    Branch, BranchLocation, Expression, ExpressionLocation, Function,
-    FunctionLocation, Index, IndexMap, NamedFunction, Pattern, Type,
+    Branch, BranchLocation, ConcreteSignature, Expression, ExpressionLocation,
+    Function, FunctionLocation, Index, IndexMap, NamedFunction, Pattern, Type,
     TypedExpression,
 };
 
@@ -250,10 +250,14 @@ fn parse_expression(
     };
 
     let type_ = parse_type_annotation(tokens);
+    let signature = type_.map(|type_| ConcreteSignature {
+        inputs: vec![type_],
+        outputs: vec![],
+    });
 
     let expression = TypedExpression {
         inner: expression,
-        type_,
+        type_: signature,
     };
 
     Some(expression)
