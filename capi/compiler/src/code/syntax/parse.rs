@@ -271,11 +271,14 @@ fn parse_type_annotation(tokens: &mut Tokens) -> Option<ConcreteSignature> {
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
+    let mut outputs = Vec::new();
+
     let type_ = parse_type(tokens)?;
+    outputs.push(type_);
 
     Some(ConcreteSignature {
         inputs: vec![],
-        outputs: vec![type_],
+        outputs,
     })
 }
 
