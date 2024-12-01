@@ -303,6 +303,6 @@ type Result<T> = result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
-    #[error("No more tokens")]
+    #[error(transparent)]
     NoMoreTokens(#[from] NoMoreTokens),
 }
