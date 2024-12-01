@@ -304,6 +304,8 @@ fn parse_type(tokens: &mut Tokens) -> Result<Type> {
 
 type Result<T> = result::Result<T, Error>;
 
+#[derive(Debug, thiserror::Error)]
 enum Error {
+    #[error("No more tokens")]
     NoMoreTokens,
 }
