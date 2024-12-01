@@ -159,7 +159,7 @@ fn parse_branch_parameters(
     tokens: &mut Tokens,
     parameters: &mut Vec<Pattern>,
 ) -> Result<()> {
-    while let Ok(pattern) = parse_branch_parameter(tokens) {
+    while let Some(pattern) = parse_branch_parameter(tokens)? {
         parameters.push(pattern);
 
         let Some(token) = tokens.take() else {
@@ -187,13 +187,13 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Pattern> {
+fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
     match tokens.take().ok_or(())? {
-        Token::Identifier { name } => Ok(Pattern::Identifier { name }),
-        Token::IntegerLiteral { value } => Ok(Pattern::Literal {
+        Token::Identifier { name } => Ok(Some(Pattern::Identifier { name })),
+        Token::IntegerLiteral { value } => Ok(Some(Pattern::Literal {
             value: value.into(),
-        }),
-        Token::Punctuator(Transformer) => Err(()),
+        })),
+        Token::Punctuator(Transformer) => Ok(None),
         token => {
             panic!("Unexpected token: {token:?}");
         }
