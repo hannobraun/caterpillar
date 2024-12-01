@@ -49,7 +49,6 @@ pub fn tokenize(input: &str) -> Vec<Token> {
                 }
                 ch => {
                     buffer.push(ch);
-                    state = State::Comment
                 }
             },
         }
