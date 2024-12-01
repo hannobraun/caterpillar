@@ -69,7 +69,7 @@ fn parse_named_function(
 
 fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
     let name = loop {
-        if let Ok(Token::Comment { .. }) = tokens.peek() {
+        if let Token::Comment { .. } = tokens.peek()? {
             // Comments in the top-level context are currently ignored.
             tokens.take()?;
             continue;
