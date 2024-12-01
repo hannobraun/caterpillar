@@ -257,7 +257,7 @@ fn parse_expression(
 
     let expression = TypedExpression {
         inner: expression,
-        type_: signature,
+        signature,
     };
 
     Some(expression)
