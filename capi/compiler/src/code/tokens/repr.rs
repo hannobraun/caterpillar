@@ -103,6 +103,10 @@ pub enum Punctuator {
     /// # The start of a branch, rendered as `\`
     BranchStart,
 
-    /// # The start of the body of a branch, rendered as `->`
+    /// # An indication that a thing is transformed to another, rendered as `->`
+    ///
+    /// Shows up in the form of `a -> b`, where `a` could be the parameter list
+    /// of a branch and `b` its body; or in a function type, with `a` as input
+    /// and `b` as the output types.
     BranchBodyStart,
 }
