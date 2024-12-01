@@ -188,16 +188,18 @@ fn parse_branch_parameters(
 }
 
 fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
-    match tokens.take().ok_or(())? {
-        Token::Identifier { name } => Ok(Some(Pattern::Identifier { name })),
-        Token::IntegerLiteral { value } => Ok(Some(Pattern::Literal {
+    let pattern = match tokens.take().ok_or(())? {
+        Token::Identifier { name } => Some(Pattern::Identifier { name }),
+        Token::IntegerLiteral { value } => Some(Pattern::Literal {
             value: value.into(),
-        })),
-        Token::Punctuator(Transformer) => Ok(None),
+        }),
+        Token::Punctuator(Transformer) => None,
         token => {
             panic!("Unexpected token: {token:?}");
         }
-    }
+    };
+
+    Ok(pattern)
 }
 
 fn parse_branch_body(
