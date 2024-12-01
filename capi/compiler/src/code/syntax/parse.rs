@@ -159,17 +159,8 @@ fn parse_branch_parameters(
     tokens: &mut Tokens,
     parameters: &mut Vec<Pattern>,
 ) -> Result<()> {
-    loop {
-        let token = tokens.take().ok_or(())?;
-
-        match parse_branch_parameter(token) {
-            Ok(pattern) => {
-                parameters.push(pattern);
-            }
-            Err(()) => {
-                break;
-            }
-        }
+    while let Ok(pattern) = parse_branch_parameter(tokens) {
+        parameters.push(pattern);
 
         let Some(token) = tokens.take() else {
             break;
@@ -196,8 +187,8 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_branch_parameter(token: Token) -> Result<Pattern> {
-    match token {
+fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Pattern> {
+    match tokens.take().ok_or(())? {
         Token::Identifier { name } => Ok(Pattern::Identifier { name }),
         Token::IntegerLiteral { value } => Ok(Pattern::Literal {
             value: value.into(),
