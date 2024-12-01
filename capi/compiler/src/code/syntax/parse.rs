@@ -162,9 +162,7 @@ fn parse_branch_parameters(
     while let Some(pattern) = parse_branch_parameter(tokens)? {
         parameters.push(pattern);
 
-        let token = tokens.take().ok_or(())?;
-
-        match token {
+        match tokens.take().ok_or(())? {
             Token::Punctuator(Delimiter) => {
                 // If we have a delimiter, then we're good here. Next loop
                 // iteration, we'll either parse the next parameter, or if it
