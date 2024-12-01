@@ -1,7 +1,15 @@
 use capi_runtime::Effect;
 use leptos::{
-    component, ev::MouseEvent, html::Span, view, wasm_bindgen::JsCast,
-    web_sys::HtmlSpanElement, CollectView, HtmlElement, IntoView, View,
+    component,
+    ev::MouseEvent,
+    prelude::{
+        AnyView, ClassAttribute, CollectView, CustomAttribute, ElementChild,
+        IntoAny, OnAttribute,
+    },
+    view,
+    wasm_bindgen::JsCast,
+    web_sys::HtmlSpanElement,
+    IntoView,
 };
 
 use crate::{
@@ -103,7 +111,7 @@ pub fn Expression(
                         {text}
                     </span>
                 }
-                .into_view(),
+                .into_any(),
                 None,
                 None,
             )
@@ -114,7 +122,7 @@ pub fn Expression(
                     branches=function.branches
                     actions=actions />
             }
-            .into_view(),
+            .into_any(),
             None,
             None,
         ),
@@ -150,7 +158,7 @@ fn make_single_expression(
     data: DebugExpressionData,
     class_outer: &mut String,
     actions_tx: ActionsTx,
-) -> (View, Option<HtmlElement<Span>>, Option<HtmlElement<Span>>) {
+) -> (AnyView, Option<AnyView>, Option<AnyView>) {
     if data.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
@@ -172,22 +180,25 @@ fn make_single_expression(
     let data_breakpoint = data.has_durable_breakpoint;
 
     let actions = if data.state.is_innermost_active_expression() {
-        Some(view! {
-            <span>
-                <Button
-                    label="Step In"
-                    action=UserAction::StepIn
-                    actions=actions_tx.clone() />
-                <Button
-                    label="Step Out"
-                    action=UserAction::StepOut
-                    actions=actions_tx.clone() />
-                <Button
-                    label="Step Over"
-                    action=UserAction::StepOver
-                    actions=actions_tx.clone() />
-            </span>
-        })
+        Some(
+            view! {
+                <span>
+                    <Button
+                        label="Step In"
+                        action=UserAction::StepIn
+                        actions=actions_tx.clone() />
+                    <Button
+                        label="Step Out"
+                        action=UserAction::StepOut
+                        actions=actions_tx.clone() />
+                    <Button
+                        label="Step Over"
+                        action=UserAction::StepOver
+                        actions=actions_tx.clone() />
+                </span>
+            }
+            .into_any(),
+        )
     } else {
         None
     };
@@ -217,7 +228,7 @@ fn make_single_expression(
             UserAction::BreakpointSet { expression }
         };
 
-        leptos::spawn_local(send_action(action, actions_tx.clone()));
+        leptos::task::spawn_local(send_action(action, actions_tx.clone()));
     };
 
     (
@@ -230,12 +241,15 @@ fn make_single_expression(
                 {expression}
             </span>
         }
-        .into_view(),
+        .into_any(),
         actions,
-        Some(view! {
-            <span class="mx-2 font-bold text-red-800">
-                {error}
-            </span>
-        }),
+        Some(
+            view! {
+                <span class="mx-2 font-bold text-red-800">
+                    {error}
+                </span>
+            }
+            .into_any(),
+        ),
     )
 }

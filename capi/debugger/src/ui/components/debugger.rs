@@ -1,4 +1,8 @@
-use leptos::{component, view, IntoView, ReadSignal, SignalGet};
+use leptos::{
+    component,
+    prelude::{ElementChild, Get, ReadSignal},
+    view, IntoView,
+};
 
 use crate::{
     model::{PersistentState, TransientState},

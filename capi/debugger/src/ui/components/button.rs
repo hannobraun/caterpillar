@@ -1,4 +1,8 @@
-use leptos::{component, view, IntoView};
+use leptos::{
+    component,
+    prelude::{ClassAttribute, OnAttribute},
+    view, IntoView,
+};
 
 use crate::{
     model::UserAction,
@@ -12,7 +16,7 @@ pub fn Button(
     actions: ActionsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(send_action(action.clone(), actions.clone()));
+        leptos::task::spawn_local(send_action(action.clone(), actions.clone()));
     };
 
     view! {

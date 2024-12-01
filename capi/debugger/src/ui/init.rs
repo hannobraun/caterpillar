@@ -1,4 +1,4 @@
-use leptos::ReadSignal;
+use leptos::prelude::ReadSignal;
 
 use crate::{
     model::{PersistentState, TransientState},
@@ -11,7 +11,7 @@ pub fn init(
     state: ReadSignal<(PersistentState, TransientState)>,
     actions: ActionsTx,
 ) {
-    leptos::mount_to_body(move || {
+    leptos::mount::mount_to_body(move || {
         leptos::view! {
             <Debugger
                 state=state

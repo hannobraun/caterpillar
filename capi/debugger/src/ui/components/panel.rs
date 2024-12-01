@@ -1,4 +1,9 @@
-use leptos::{component, view, Children, IntoView};
+use leptos::{
+    children::Children,
+    component,
+    prelude::{ClassAttribute, ElementChild},
+    view, IntoView,
+};
 
 #[component]
 pub fn Panel(children: Children, class: &'static str) -> impl IntoView {

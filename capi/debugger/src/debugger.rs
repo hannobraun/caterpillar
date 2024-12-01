@@ -2,7 +2,7 @@ use capi_protocol::{
     command::CommandExt,
     updates::{SerializedUpdate, UpdateFromHost},
 };
-use leptos::SignalSet;
+use leptos::reactive::prelude::Set;
 use tokio::{select, sync::mpsc};
 
 use crate::{
@@ -29,9 +29,11 @@ impl Debugger {
         let mut transient = persistent.generate_transient_state();
 
         let (state_read, state_write) =
-            leptos::create_signal((persistent.clone(), transient.clone()));
+            leptos::prelude::signal((persistent.clone(), transient.clone()));
 
-        leptos::spawn_local(async move {
+        leptos::task::Executor::init_wasm_bindgen().unwrap();
+
+        leptos::task::spawn_local(async move {
             let mut code =
                 CodeFetcher::new(&commands_to_runtime_tx, &mut persistent)
                     .await

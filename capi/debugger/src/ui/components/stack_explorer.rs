@@ -1,5 +1,9 @@
 use capi_runtime::Value;
-use leptos::{component, view, CollectView, IntoView};
+use leptos::{
+    component,
+    prelude::{ClassAttribute, CollectView, ElementChild},
+    view, IntoView,
+};
 
 use crate::ui::components::panel::Panel;
 

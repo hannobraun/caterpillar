@@ -1,4 +1,8 @@
-use leptos::{component, view, CollectView, IntoView};
+use leptos::{
+    component,
+    prelude::{ClassAttribute, CollectView, ElementChild, IntoAny},
+    view, IntoView,
+};
 
 use crate::{
     model::{ActiveFunctions, ActiveFunctionsEntry},
@@ -38,7 +42,7 @@ pub fn ActiveFunctions(
                                     </p>
                                 </span>
                             }
-                            .into_view()
+                            .into_any()
                         }
                     };
 
@@ -53,6 +57,7 @@ pub fn ActiveFunctions(
                             branches=function.branches
                             actions=actions.clone() />
                     }
+                    .into_any()
                 })
                 .collect_view();
 
@@ -61,7 +66,7 @@ pub fn ActiveFunctions(
                     {functions}
                 </ol>
             }
-            .into_view()
+            .into_any()
         }
         ActiveFunctions::Message { message } => view! {
             <p
@@ -70,7 +75,7 @@ pub fn ActiveFunctions(
                 {message.to_string()}
             </p>
         }
-        .into_view(),
+        .into_any(),
     };
 
     view! {
