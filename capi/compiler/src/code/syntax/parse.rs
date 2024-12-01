@@ -271,6 +271,13 @@ fn parse_type_annotation(tokens: &mut Tokens) -> Option<ConcreteSignature> {
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
+    match tokens.take()? {
+        Token::Punctuator(Transformer) => {}
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    }
+
     let mut outputs = Vec::new();
 
     let type_ = parse_type(tokens)?;
