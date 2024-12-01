@@ -204,8 +204,7 @@ fn parse_branch_body(
     location: BranchLocation,
 ) -> Result<()> {
     loop {
-        let token = tokens.peek()?;
-        match token {
+        match tokens.peek()? {
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
             }
