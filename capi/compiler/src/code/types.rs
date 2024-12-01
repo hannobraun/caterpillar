@@ -139,7 +139,17 @@ impl Signature {
 /// This type is only intended for type signatures that have a lifetime
 /// extending beyond that of a running compiler. Like those of intrinsic or host
 /// functions.
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct ConcreteSignature {
     /// # The inputs that the function consumes
     pub inputs: Vec<Type>,
