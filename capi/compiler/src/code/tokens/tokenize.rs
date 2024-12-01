@@ -9,7 +9,7 @@ pub fn tokenize(input: &str) -> Vec<Token> {
         (r",", Token::Punctuator(Delimiter)),
         (r":", Token::Punctuator(Introducer)),
         (r"\", Token::Punctuator(BranchStart)),
-        (r"->", Token::Punctuator(BranchBodyStart)),
+        (r"->", Token::Punctuator(Transformer)),
     ];
 
     let mut state = State::Initial;

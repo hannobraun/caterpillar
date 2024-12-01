@@ -179,7 +179,7 @@ fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
                 // was the last one, find the start of the branch body.
                 continue;
             }
-            Token::Punctuator(BranchBodyStart) => {
+            Token::Punctuator(Transformer) => {
                 // The last parameter doesn't need a delimiter, so this is fine
                 // too.
                 break;
@@ -197,7 +197,7 @@ fn parse_branch_parameter(token: Token) -> Option<Pattern> {
         Token::IntegerLiteral { value } => Some(Pattern::Literal {
             value: value.into(),
         }),
-        Token::Punctuator(BranchBodyStart) => None,
+        Token::Punctuator(Transformer) => None,
         token => {
             panic!("Unexpected token: {token:?}");
         }

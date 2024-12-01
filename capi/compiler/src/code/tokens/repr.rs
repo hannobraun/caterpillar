@@ -108,5 +108,5 @@ pub enum Punctuator {
     /// Shows up in the form of `a -> b`, where `a` could be the parameter list
     /// of a branch and `b` its body; or in a function type, with `a` as input
     /// and `b` as the output types.
-    BranchBodyStart,
+    Transformer,
 }
