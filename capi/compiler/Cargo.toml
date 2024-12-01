@@ -17,6 +17,10 @@ path = "../runtime"
 version = "*"
 features = ["derive"]
 
+[dependencies.thiserror]
+version = "*"
+default-features = false
+
 [dependencies.udigest]
 version = "*"
 features = ["derive"]

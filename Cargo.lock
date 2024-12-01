@@ -380,6 +380,7 @@ dependencies = [
  "itertools",
  "petgraph",
  "serde",
+ "thiserror 2.0.3",
  "udigest",
 ]
 
