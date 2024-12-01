@@ -274,8 +274,8 @@ fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
     let type_ = parse_type(tokens);
 
     type_.map(|type_| ConcreteSignature {
-        inputs: vec![type_],
-        outputs: vec![],
+        inputs: vec![],
+        outputs: vec![type_],
     })
 }
 
