@@ -114,7 +114,7 @@ fn parse_function(
             index: function.branches.next_index(),
         };
 
-        let Ok(branch) = parse_branch(tokens, location) else {
+        let Some(branch) = parse_branch(tokens, location)? else {
             break;
         };
 
@@ -134,13 +134,13 @@ fn parse_function(
 fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
-) -> Result<Branch> {
+) -> Result<Option<Branch>> {
     match tokens.peek().ok_or(())? {
         Token::Punctuator(BranchStart) => {
             tokens.take();
         }
         Token::Keyword(End) => {
-            return Err(());
+            return Ok(None);
         }
         token => {
             panic!("Unexpected token: {token:?}");
@@ -152,7 +152,7 @@ fn parse_branch(
     parse_branch_parameters(tokens, &mut branch);
     parse_branch_body(tokens, &mut branch, location)?;
 
-    Ok(branch)
+    Ok(Some(branch))
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
