@@ -150,7 +150,7 @@ fn parse_branch(
     let mut branch = Branch::default();
 
     parse_branch_parameters(tokens, &mut branch.parameters)?;
-    parse_branch_body(tokens, &mut branch, location)?;
+    parse_branch_body(tokens, &mut branch.body, location)?;
 
     Ok(Some(branch))
 }
@@ -211,7 +211,7 @@ fn parse_branch_parameter(token: Token) -> Result<Pattern> {
 
 fn parse_branch_body(
     tokens: &mut Tokens,
-    branch: &mut Branch,
+    body: &mut IndexMap<TypedExpression>,
     location: BranchLocation,
 ) -> Result<()> {
     while let Some(token) = tokens.peek() {
@@ -222,10 +222,10 @@ fn parse_branch_body(
             _ => {
                 let location = ExpressionLocation {
                     parent: Box::new(location.clone()),
-                    index: branch.body.next_index(),
+                    index: body.next_index(),
                 };
                 let expression = parse_expression(tokens, location)?;
-                branch.body.push(expression);
+                body.push(expression);
             }
         }
     }
