@@ -149,7 +149,7 @@ fn parse_branch(
 
     let mut branch = Branch::default();
 
-    parse_branch_parameters(tokens, &mut branch)?;
+    parse_branch_parameters(tokens, &mut branch.parameters)?;
     parse_branch_body(tokens, &mut branch, location)?;
 
     Ok(Some(branch))
@@ -157,14 +157,14 @@ fn parse_branch(
 
 fn parse_branch_parameters(
     tokens: &mut Tokens,
-    branch: &mut Branch,
+    parameters: &mut Vec<Pattern>,
 ) -> Result<()> {
     loop {
         let token = tokens.take().ok_or(())?;
 
         match parse_branch_parameter(token) {
             Ok(pattern) => {
-                branch.parameters.push(pattern);
+                parameters.push(pattern);
             }
             Err(()) => {
                 break;
