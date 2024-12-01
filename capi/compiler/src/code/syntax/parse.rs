@@ -142,7 +142,8 @@ fn parse_branch(
         Token::Keyword(End) => {
             return Ok(None);
         }
-        token => {
+        _ => {
+            let token = tokens.take()?;
             panic!("Unexpected token: {token:?}");
         }
     }
