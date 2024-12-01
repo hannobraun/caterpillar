@@ -86,7 +86,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
                 break name;
             }
             token => {
-                panic!("Unexpected token: {token:?}");
+                return Err(Error::UnexpectedToken { actual: token });
             }
         }
     };
@@ -94,7 +94,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
     match tokens.take()? {
         Token::Punctuator(Introducer) => {}
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     }
 
@@ -110,7 +110,7 @@ fn parse_function(
     match tokens.take()? {
         Token::Keyword(Fn) => {}
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     }
 
@@ -130,7 +130,7 @@ fn parse_function(
     match tokens.take()? {
         Token::Keyword(End) => {}
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     }
 
@@ -150,7 +150,7 @@ fn parse_branch(
         }
         _ => {
             let token = tokens.take()?;
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     }
 
@@ -182,7 +182,7 @@ fn parse_branch_parameters(
                 break;
             }
             token => {
-                panic!("Unexpected token: {token:?}");
+                return Err(Error::UnexpectedToken { actual: token });
             }
         }
     }
@@ -198,7 +198,7 @@ fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
         }),
         Token::Punctuator(Transformer) => None,
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     };
 
@@ -245,7 +245,7 @@ fn parse_expression(
                 value: value.into(),
             },
             token => {
-                panic!("Unexpected token: {token:?}");
+                return Err(Error::UnexpectedToken { actual: token });
             }
         }
     };
@@ -277,7 +277,7 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
     match tokens.take()? {
         Token::Punctuator(Transformer) => {}
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     }
 
@@ -299,7 +299,7 @@ fn parse_type(tokens: &mut Tokens) -> Result<Type> {
             type_ => panic!("Unknown type: `{type_}`"),
         },
         token => {
-            panic!("Unexpected token: {token:?}");
+            return Err(Error::UnexpectedToken { actual: token });
         }
     };
 
@@ -312,4 +312,7 @@ type Result<T> = result::Result<T, Error>;
 enum Error {
     #[error(transparent)]
     NoMoreTokens(#[from] NoMoreTokens),
+
+    #[error("Unexpected token: {actual:?}")]
+    UnexpectedToken { actual: Token },
 }
