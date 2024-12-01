@@ -243,7 +243,7 @@ fn parse_expression(
         }
     };
 
-    let signature = parse_type_annotation(tokens).ok();
+    let signature = parse_type_annotation(tokens)?;
 
     let expression = TypedExpression {
         inner: expression,
@@ -253,15 +253,17 @@ fn parse_expression(
     Ok(expression)
 }
 
-fn parse_type_annotation(tokens: &mut Tokens) -> Result<ConcreteSignature> {
+fn parse_type_annotation(
+    tokens: &mut Tokens,
+) -> Result<Option<ConcreteSignature>> {
     let Token::Punctuator(Introducer) = tokens.peek().ok_or(())? else {
-        return Err(());
+        return Ok(None);
     };
     tokens.take().ok_or(())?;
 
     let signature = parse_signature(tokens)?;
 
-    Ok(signature)
+    Ok(Some(signature))
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
