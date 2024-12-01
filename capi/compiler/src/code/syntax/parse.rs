@@ -1,3 +1,5 @@
+use std::result;
+
 use crate::code::{
     tokens::{Keyword::*, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, ConcreteSignature, Expression, ExpressionLocation,
@@ -36,7 +38,7 @@ pub fn parse(mut tokens: Tokens) -> IndexMap<NamedFunction> {
     loop {
         let index = named_functions.next_index();
 
-        let Some(function) = parse_named_function(&mut tokens, index) else {
+        let Ok(function) = parse_named_function(&mut tokens, index) else {
             break;
         };
 
@@ -53,19 +55,19 @@ pub fn parse(mut tokens: Tokens) -> IndexMap<NamedFunction> {
 fn parse_named_function(
     tokens: &mut Tokens,
     index: Index<NamedFunction>,
-) -> Option<NamedFunction> {
+) -> Result<NamedFunction> {
     let name = parse_function_name(tokens)?;
 
     let location = FunctionLocation::NamedFunction { index };
     let function = parse_function(tokens, location)?;
 
-    Some(NamedFunction {
+    Ok(NamedFunction {
         name,
         inner: function,
     })
 }
 
-fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
+fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
     let name = loop {
         if let Some(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
@@ -73,7 +75,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
             continue;
         }
 
-        match tokens.take()? {
+        match tokens.take().ok_or(())? {
             Token::Identifier { name } => {
                 break name;
             }
@@ -83,23 +85,23 @@ fn parse_function_name(tokens: &mut Tokens) -> Option<String> {
         }
     };
 
-    match tokens.take()? {
+    match tokens.take().ok_or(())? {
         Token::Punctuator(Introducer) => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
     }
 
-    Some(name)
+    Ok(name)
 }
 
 fn parse_function(
     tokens: &mut Tokens,
     location: FunctionLocation,
-) -> Option<Function> {
+) -> Result<Function> {
     let mut function = Function::default();
 
-    match tokens.take()? {
+    match tokens.take().ok_or(())? {
         Token::Keyword(Fn) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -112,33 +114,33 @@ fn parse_function(
             index: function.branches.next_index(),
         };
 
-        let Some(branch) = parse_branch(tokens, location) else {
+        let Ok(branch) = parse_branch(tokens, location) else {
             break;
         };
 
         function.branches.push(branch);
     }
 
-    match tokens.take()? {
+    match tokens.take().ok_or(())? {
         Token::Keyword(End) => {}
         token => {
             panic!("Unexpected token: {token:?}");
         }
     }
 
-    Some(function)
+    Ok(function)
 }
 
 fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
-) -> Option<Branch> {
-    match tokens.peek()? {
+) -> Result<Branch> {
+    match tokens.peek().ok_or(())? {
         Token::Punctuator(BranchStart) => {
             tokens.take();
         }
         Token::Keyword(End) => {
-            return None;
+            return Err(());
         }
         token => {
             panic!("Unexpected token: {token:?}");
@@ -150,7 +152,7 @@ fn parse_branch(
     parse_branch_parameters(tokens, &mut branch);
     parse_branch_body(tokens, &mut branch, location)?;
 
-    Some(branch)
+    Ok(branch)
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
@@ -160,10 +162,10 @@ fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
         };
 
         match parse_branch_parameter(token) {
-            Some(pattern) => {
+            Ok(pattern) => {
                 branch.parameters.push(pattern);
             }
-            None => {
+            Err(()) => {
                 break;
             }
         }
@@ -191,13 +193,13 @@ fn parse_branch_parameters(tokens: &mut Tokens, branch: &mut Branch) {
     }
 }
 
-fn parse_branch_parameter(token: Token) -> Option<Pattern> {
+fn parse_branch_parameter(token: Token) -> Result<Pattern> {
     match token {
-        Token::Identifier { name } => Some(Pattern::Identifier { name }),
-        Token::IntegerLiteral { value } => Some(Pattern::Literal {
+        Token::Identifier { name } => Ok(Pattern::Identifier { name }),
+        Token::IntegerLiteral { value } => Ok(Pattern::Literal {
             value: value.into(),
         }),
-        Token::Punctuator(Transformer) => None,
+        Token::Punctuator(Transformer) => Err(()),
         token => {
             panic!("Unexpected token: {token:?}");
         }
@@ -208,7 +210,7 @@ fn parse_branch_body(
     tokens: &mut Tokens,
     branch: &mut Branch,
     location: BranchLocation,
-) -> Option<()> {
+) -> Result<()> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
@@ -225,19 +227,19 @@ fn parse_branch_body(
         }
     }
 
-    Some(())
+    Ok(())
 }
 
 fn parse_expression(
     tokens: &mut Tokens,
     location: ExpressionLocation,
-) -> Option<TypedExpression> {
-    let expression = if let Token::Keyword(Fn) = tokens.peek()? {
+) -> Result<TypedExpression> {
+    let expression = if let Token::Keyword(Fn) = tokens.peek().ok_or(())? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
             .map(|function| Expression::LocalFunction { function })?
     } else {
-        match tokens.take()? {
+        match tokens.take().ok_or(())? {
             Token::Comment { text } => Expression::Comment { text },
             Token::Identifier { name } => Expression::Identifier { name },
             Token::IntegerLiteral { value } => Expression::LiteralNumber {
@@ -249,29 +251,29 @@ fn parse_expression(
         }
     };
 
-    let signature = parse_type_annotation(tokens);
+    let signature = parse_type_annotation(tokens).ok();
 
     let expression = TypedExpression {
         inner: expression,
         signature,
     };
 
-    Some(expression)
+    Ok(expression)
 }
 
-fn parse_type_annotation(tokens: &mut Tokens) -> Option<ConcreteSignature> {
-    let Token::Punctuator(Introducer) = tokens.peek()? else {
-        return None;
+fn parse_type_annotation(tokens: &mut Tokens) -> Result<ConcreteSignature> {
+    let Token::Punctuator(Introducer) = tokens.peek().ok_or(())? else {
+        return Err(());
     };
-    tokens.take()?;
+    tokens.take().ok_or(())?;
 
     let signature = parse_signature(tokens)?;
 
-    Some(signature)
+    Ok(signature)
 }
 
-fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
-    match tokens.take()? {
+fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
+    match tokens.take().ok_or(())? {
         Token::Punctuator(Transformer) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -283,14 +285,14 @@ fn parse_signature(tokens: &mut Tokens) -> Option<ConcreteSignature> {
     let type_ = parse_type(tokens)?;
     outputs.push(type_);
 
-    Some(ConcreteSignature {
+    Ok(ConcreteSignature {
         inputs: vec![],
         outputs,
     })
 }
 
-fn parse_type(tokens: &mut Tokens) -> Option<Type> {
-    let type_ = match tokens.take()? {
+fn parse_type(tokens: &mut Tokens) -> Result<Type> {
+    let type_ = match tokens.take().ok_or(())? {
         Token::Identifier { name } => match name.as_str() {
             "Number" => Type::Number,
             type_ => panic!("Unknown type: `{type_}`"),
@@ -300,5 +302,7 @@ fn parse_type(tokens: &mut Tokens) -> Option<Type> {
         }
     };
 
-    Some(type_)
+    Ok(type_)
 }
+
+type Result<T> = result::Result<T, ()>;
