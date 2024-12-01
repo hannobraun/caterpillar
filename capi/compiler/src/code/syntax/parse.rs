@@ -203,7 +203,8 @@ fn parse_branch_body(
     body: &mut IndexMap<TypedExpression>,
     location: BranchLocation,
 ) -> Result<()> {
-    while let Ok(token) = tokens.peek() {
+    loop {
+        let token = tokens.peek()?;
         match token {
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
