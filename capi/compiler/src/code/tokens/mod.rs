@@ -5,6 +5,10 @@
 //! that the compiler produces, laying the groundwork for parsing.
 
 mod repr;
+mod token;
 mod tokenize;
 
-pub use self::repr::{Keyword, Punctuator, Token, Tokens};
+pub use self::{
+    repr::Tokens,
+    token::{Keyword, Punctuator, Token},
+};
