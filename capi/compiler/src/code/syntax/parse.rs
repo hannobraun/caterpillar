@@ -38,8 +38,14 @@ pub fn parse(mut tokens: Tokens) -> IndexMap<NamedFunction> {
     loop {
         let index = named_functions.next_index();
 
-        let Ok(function) = parse_named_function(&mut tokens, index) else {
-            break;
+        let function = match parse_named_function(&mut tokens, index) {
+            Ok(function) => function,
+            Err(Error::NoMoreTokens(NoMoreTokens)) => {
+                break;
+            }
+            Err(err) => {
+                panic!("Parser error: {err:?}");
+            }
         };
 
         let actual_index = named_functions.push(function);
