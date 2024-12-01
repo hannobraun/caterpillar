@@ -22,12 +22,16 @@ impl Tokens {
     }
 
     /// # Peek at the next token without taking it
-    pub fn peek(&self) -> Option<&Token> {
-        self.inner.front()
+    pub fn peek(&self) -> Result<&Token, NoMoreTokens> {
+        self.inner.front().ok_or(NoMoreTokens)
     }
 
     /// # Take the next token
-    pub fn take(&mut self) -> Option<Token> {
-        self.inner.pop_front()
+    pub fn take(&mut self) -> Result<Token, NoMoreTokens> {
+        self.inner.pop_front().ok_or(NoMoreTokens)
     }
 }
+
+#[derive(Debug, thiserror::Error)]
+#[error("No more tokens")]
+pub struct NoMoreTokens;

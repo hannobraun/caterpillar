@@ -1,7 +1,7 @@
 use std::result;
 
 use crate::code::{
-    tokens::{Keyword::*, Punctuator::*, Token, Tokens},
+    tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
     Branch, BranchLocation, ConcreteSignature, Expression, ExpressionLocation,
     Function, FunctionLocation, Index, IndexMap, NamedFunction, Pattern, Type,
     TypedExpression,
@@ -69,13 +69,13 @@ fn parse_named_function(
 
 fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
     let name = loop {
-        if let Some(Token::Comment { .. }) = tokens.peek() {
+        if let Ok(Token::Comment { .. }) = tokens.peek() {
             // Comments in the top-level context are currently ignored.
-            tokens.take();
+            tokens.take()?;
             continue;
         }
 
-        match tokens.take().ok_or(Error::NoMoreTokens)? {
+        match tokens.take()? {
             Token::Identifier { name } => {
                 break name;
             }
@@ -85,7 +85,7 @@ fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
         }
     };
 
-    match tokens.take().ok_or(Error::NoMoreTokens)? {
+    match tokens.take()? {
         Token::Punctuator(Introducer) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -101,7 +101,7 @@ fn parse_function(
 ) -> Result<Function> {
     let mut function = Function::default();
 
-    match tokens.take().ok_or(Error::NoMoreTokens)? {
+    match tokens.take()? {
         Token::Keyword(Fn) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -121,7 +121,7 @@ fn parse_function(
         function.branches.push(branch);
     }
 
-    match tokens.take().ok_or(Error::NoMoreTokens)? {
+    match tokens.take()? {
         Token::Keyword(End) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -135,9 +135,9 @@ fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
 ) -> Result<Option<Branch>> {
-    match tokens.peek().ok_or(Error::NoMoreTokens)? {
+    match tokens.peek()? {
         Token::Punctuator(BranchStart) => {
-            tokens.take();
+            tokens.take()?;
         }
         Token::Keyword(End) => {
             return Ok(None);
@@ -162,7 +162,7 @@ fn parse_branch_parameters(
     while let Some(pattern) = parse_branch_parameter(tokens)? {
         parameters.push(pattern);
 
-        match tokens.take().ok_or(Error::NoMoreTokens)? {
+        match tokens.take()? {
             Token::Punctuator(Delimiter) => {
                 // If we have a delimiter, then we're good here. Next loop
                 // iteration, we'll either parse the next parameter, or if it
@@ -184,7 +184,7 @@ fn parse_branch_parameters(
 }
 
 fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
-    let pattern = match tokens.take().ok_or(Error::NoMoreTokens)? {
+    let pattern = match tokens.take()? {
         Token::Identifier { name } => Some(Pattern::Identifier { name }),
         Token::IntegerLiteral { value } => Some(Pattern::Literal {
             value: value.into(),
@@ -203,7 +203,7 @@ fn parse_branch_body(
     body: &mut IndexMap<TypedExpression>,
     location: BranchLocation,
 ) -> Result<()> {
-    while let Some(token) = tokens.peek() {
+    while let Ok(token) = tokens.peek() {
         match token {
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
                 break;
@@ -226,23 +226,22 @@ fn parse_expression(
     tokens: &mut Tokens,
     location: ExpressionLocation,
 ) -> Result<TypedExpression> {
-    let expression =
-        if let Token::Keyword(Fn) = tokens.peek().ok_or(Error::NoMoreTokens)? {
-            let location = FunctionLocation::AnonymousFunction { location };
-            parse_function(tokens, location)
-                .map(|function| Expression::LocalFunction { function })?
-        } else {
-            match tokens.take().ok_or(Error::NoMoreTokens)? {
-                Token::Comment { text } => Expression::Comment { text },
-                Token::Identifier { name } => Expression::Identifier { name },
-                Token::IntegerLiteral { value } => Expression::LiteralNumber {
-                    value: value.into(),
-                },
-                token => {
-                    panic!("Unexpected token: {token:?}");
-                }
+    let expression = if let Token::Keyword(Fn) = tokens.peek()? {
+        let location = FunctionLocation::AnonymousFunction { location };
+        parse_function(tokens, location)
+            .map(|function| Expression::LocalFunction { function })?
+    } else {
+        match tokens.take()? {
+            Token::Comment { text } => Expression::Comment { text },
+            Token::Identifier { name } => Expression::Identifier { name },
+            Token::IntegerLiteral { value } => Expression::LiteralNumber {
+                value: value.into(),
+            },
+            token => {
+                panic!("Unexpected token: {token:?}");
             }
-        };
+        }
+    };
 
     let signature = parse_type_annotation(tokens)?;
 
@@ -257,12 +256,10 @@ fn parse_expression(
 fn parse_type_annotation(
     tokens: &mut Tokens,
 ) -> Result<Option<ConcreteSignature>> {
-    let Token::Punctuator(Introducer) =
-        tokens.peek().ok_or(Error::NoMoreTokens)?
-    else {
+    let Token::Punctuator(Introducer) = tokens.peek()? else {
         return Ok(None);
     };
-    tokens.take().ok_or(Error::NoMoreTokens)?;
+    tokens.take()?;
 
     let signature = parse_signature(tokens)?;
 
@@ -270,7 +267,7 @@ fn parse_type_annotation(
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
-    match tokens.take().ok_or(Error::NoMoreTokens)? {
+    match tokens.take()? {
         Token::Punctuator(Transformer) => {}
         token => {
             panic!("Unexpected token: {token:?}");
@@ -289,7 +286,7 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
 }
 
 fn parse_type(tokens: &mut Tokens) -> Result<Type> {
-    let type_ = match tokens.take().ok_or(Error::NoMoreTokens)? {
+    let type_ = match tokens.take()? {
         Token::Identifier { name } => match name.as_str() {
             "Number" => Type::Number,
             type_ => panic!("Unknown type: `{type_}`"),
@@ -307,5 +304,5 @@ type Result<T> = result::Result<T, Error>;
 #[derive(Debug, thiserror::Error)]
 enum Error {
     #[error("No more tokens")]
-    NoMoreTokens,
+    NoMoreTokens(#[from] NoMoreTokens),
 }

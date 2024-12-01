@@ -10,5 +10,5 @@ mod tokens;
 
 pub use self::{
     token::{Keyword, Punctuator, Token},
-    tokens::Tokens,
+    tokens::{NoMoreTokens, Tokens},
 };
