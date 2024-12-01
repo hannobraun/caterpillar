@@ -4,11 +4,11 @@
 //! ignoring whitespace. They are the first semi-structured code representation
 //! that the compiler produces, laying the groundwork for parsing.
 
-mod repr;
 mod token;
 mod tokenize;
+mod tokens;
 
 pub use self::{
-    repr::Tokens,
     token::{Keyword, Punctuator, Token},
+    tokens::Tokens,
 };
