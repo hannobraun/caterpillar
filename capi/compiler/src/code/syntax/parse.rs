@@ -300,14 +300,14 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
 
     let mut outputs = Vec::new();
 
-    let type_ = parse_type(tokens)?;
-    outputs.push(type_);
-
-    match tokens.take()? {
-        Token::Punctuator(Terminator) => {}
-        token => {
-            return Err(Error::UnexpectedToken { actual: token });
+    loop {
+        if let Token::Punctuator(Terminator) = tokens.peek()? {
+            tokens.take()?;
+            break;
         }
+
+        let type_ = parse_type(tokens)?;
+        outputs.push(type_);
     }
 
     Ok(ConcreteSignature {
