@@ -4,7 +4,7 @@ main: fn
         size_x: -> Number .
         size_y: -> Number .
         tile_field_size: -> Number .
-        vec_store
+        vec_store: Number, Number, Number -> .
         init_frame_count
         init
         main_inner
