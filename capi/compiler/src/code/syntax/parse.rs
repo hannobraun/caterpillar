@@ -310,10 +310,7 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
         outputs.push(type_);
     }
 
-    Ok(ConcreteSignature {
-        inputs: vec![],
-        outputs,
-    })
+    Ok(ConcreteSignature { inputs, outputs })
 }
 
 fn parse_type(tokens: &mut Tokens) -> Result<Type> {
