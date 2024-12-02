@@ -1,9 +1,9 @@
 # Main loop
 main: fn
     \ size_x, size_y ->
-        size_x: -> Number
-        size_y: -> Number
-        tile_field_size: -> Number
+        size_x: -> Number .
+        size_y: -> Number .
+        tile_field_size: -> Number .
         vec_store
         init_frame_count
         init

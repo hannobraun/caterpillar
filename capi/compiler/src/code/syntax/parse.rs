@@ -303,6 +303,13 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
     let type_ = parse_type(tokens)?;
     outputs.push(type_);
 
+    match tokens.take()? {
+        Token::Punctuator(Terminator) => {}
+        token => {
+            return Err(Error::UnexpectedToken { actual: token });
+        }
+    }
+
     Ok(ConcreteSignature {
         inputs: vec![],
         outputs,
