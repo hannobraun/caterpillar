@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
         Cluster, Expression, ExpressionLocation, FunctionCalls,
-        FunctionLocation, Functions,
+        FunctionLocation, Functions, TypedExpression,
     },
     source_map::SourceMap,
 };
@@ -18,7 +18,7 @@ pub struct DebugExpression {
 impl DebugExpression {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        expression: Expression,
+        expression: TypedExpression,
         location: ExpressionLocation,
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
@@ -53,14 +53,14 @@ impl DebugExpression {
         });
 
         let data = DebugExpressionData {
-            expression: expression.clone(),
+            expression: expression.inner.clone(),
             location: location.clone(),
             state,
             has_durable_breakpoint,
             effect: active_effect,
         };
         let kind = DebugExpressionKind::new(
-            expression,
+            expression.inner,
             location,
             active_expression,
             is_in_innermost_active_function,

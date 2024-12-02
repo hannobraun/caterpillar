@@ -40,7 +40,7 @@ impl DebugBranch {
                     index,
                 };
                 DebugExpression::new(
-                    expression.inner,
+                    expression,
                     location,
                     active_expression,
                     is_in_innermost_active_function,
