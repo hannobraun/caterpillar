@@ -52,15 +52,9 @@ impl DebugExpression {
             }
         });
 
-        let data = DebugExpressionData {
-            location: location.clone(),
-            state,
-            has_durable_breakpoint,
-            effect: active_effect,
-        };
         let kind = DebugExpressionKind::new(
             expression.inner,
-            location,
+            location.clone(),
             active_expression,
             is_in_innermost_active_function,
             cluster,
@@ -70,6 +64,12 @@ impl DebugExpression {
             breakpoints,
             effect,
         );
+        let data = DebugExpressionData {
+            location,
+            state,
+            has_durable_breakpoint,
+            effect: active_effect,
+        };
 
         Self { kind, data }
     }
