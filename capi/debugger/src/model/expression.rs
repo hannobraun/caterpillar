@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
-        Cluster, Expression, ExpressionLocation, FunctionCalls,
-        FunctionLocation, Functions, TypedExpression,
+        Cluster, ConcreteSignature, Expression, ExpressionLocation,
+        FunctionCalls, FunctionLocation, Functions, TypedExpression,
     },
     source_map::SourceMap,
 };
@@ -65,6 +65,7 @@ impl DebugExpression {
             effect,
         );
         let data = DebugExpressionData {
+            signature: expression.signature,
             location,
             state,
             has_durable_breakpoint,
@@ -77,6 +78,7 @@ impl DebugExpression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpressionData {
+    pub signature: Option<ConcreteSignature>,
     pub location: ExpressionLocation,
     pub state: DebugExpressionState,
     pub has_durable_breakpoint: bool,
