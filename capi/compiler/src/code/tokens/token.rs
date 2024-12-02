@@ -75,4 +75,7 @@ pub enum Punctuator {
     /// of a branch and `b` its body; or in a function type, with `a` as input
     /// and `b` as the output types.
     Transformer,
+
+    /// # A token that ends an expression, where necessary, rendered as `.`
+    Terminator,
 }
