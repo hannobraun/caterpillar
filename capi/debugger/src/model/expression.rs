@@ -53,7 +53,6 @@ impl DebugExpression {
         });
 
         let data = DebugExpressionData {
-            expression: expression.clone(),
             location: location.clone(),
             state,
             has_durable_breakpoint,
@@ -78,7 +77,6 @@ impl DebugExpression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpressionData {
-    pub expression: TypedExpression,
     pub location: ExpressionLocation,
     pub state: DebugExpressionState,
     pub has_durable_breakpoint: bool,
