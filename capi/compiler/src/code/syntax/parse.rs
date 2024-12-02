@@ -274,10 +274,27 @@ fn parse_type_annotation(
 }
 
 fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
-    match tokens.take()? {
-        Token::Punctuator(Transformer) => {}
-        token => {
-            return Err(Error::UnexpectedToken { actual: token });
+    let mut inputs = Vec::new();
+
+    loop {
+        if let Token::Punctuator(Transformer) = tokens.peek()? {
+            tokens.take()?;
+            break;
+        }
+
+        let type_ = parse_type(tokens)?;
+        inputs.push(type_);
+
+        match tokens.take()? {
+            Token::Punctuator(Delimiter) => {
+                continue;
+            }
+            Token::Punctuator(Transformer) => {
+                break;
+            }
+            token => {
+                return Err(Error::UnexpectedToken { actual: token });
+            }
         }
     }
 
