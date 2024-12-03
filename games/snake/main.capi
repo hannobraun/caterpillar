@@ -219,7 +219,9 @@ end
 # Frame count
 init_frame_count: fn
     \ ->
-        1 frame_count store
+        1
+        frame_count
+        store
 end
 
 count_frame: fn
