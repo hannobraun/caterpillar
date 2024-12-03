@@ -745,13 +745,13 @@ vec_buf_init: fn
     \ vec_buf ->
         0: -> Number .
         vec_buf: -> Number . _vec_buf_first: Number -> Number .
-            store: Number, Number -> Number .
+            store: Number, Number -> .
         0: -> Number .
         vec_buf: -> Number . _vec_buf_next: Number -> Number .
-            store: Number, Number -> Number .
+            store: Number, Number -> .
         64: -> Number .
         vec_buf: -> Number . _vec_buf_capacity: Number -> Number .
-            store: Number, Number -> Number .
+            store: Number, Number -> .
 end
 
 vec_buf_get: fn
