@@ -643,7 +643,7 @@ end
 # Memory map
 tile_field_size: fn
     \ ->
-        0
+        0: -> Number .
 end
 
 frame_count: fn
@@ -704,14 +704,14 @@ end
 
 vec_store: fn
     \ x, y, address ->
-        x
-        address
-        store
-        y
-        address
-        1
-        add_s32
-        store
+        x: -> Number .
+        address: -> Number .
+        store: Number, Number -> .
+        y: -> Number .
+        address: -> Number .
+        1: -> Number .
+        add_s32: Number, Number -> Number .
+        store: Number, Number -> .
 end
 
 vec_copy: fn
