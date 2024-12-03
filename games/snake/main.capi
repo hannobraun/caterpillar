@@ -657,7 +657,7 @@ end
 
 should_game_run: fn
     \ ->
-        3
+        3: -> Number .
 end
 
 velocity: fn
