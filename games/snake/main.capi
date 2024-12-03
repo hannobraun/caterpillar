@@ -677,7 +677,7 @@ end
 
 snake_length: fn
     \ ->
-        10
+        10: -> Number .
 end
 
 positions: fn
