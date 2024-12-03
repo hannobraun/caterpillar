@@ -888,9 +888,9 @@ end
 
 _vec_buf_first: fn
     \ vec_buf ->
-        vec_buf
-        0
-            add_s32
+        vec_buf: -> Number .
+        0: -> Number .
+            add_s32: Number, Number -> Number .
 end
 
 _vec_buf_next: fn
