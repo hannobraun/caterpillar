@@ -684,7 +684,7 @@ end
 
 positions: fn
     \ ->
-        11
+        11: -> Number .
 end
 
 # Utilities - Vector
