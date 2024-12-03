@@ -650,7 +650,7 @@ end
 
 frame_count: fn
     \ ->
-        2
+        2: -> Number .
 end
 
 should_game_run: fn
