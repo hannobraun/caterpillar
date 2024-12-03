@@ -902,9 +902,9 @@ end
 
 _vec_buf_capacity: fn
     \ vec_buf ->
-        vec_buf
-        2
-            add_s32
+        vec_buf: -> Number .
+        2: -> Number .
+            add_s32: Number, Number -> Number .
 end
 
 _vec_buf_buffer: fn
