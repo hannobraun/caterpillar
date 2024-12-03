@@ -743,18 +743,18 @@ end
 # Utilities - Vector Buffer
 vec_buf_init: fn
     \ vec_buf ->
-        0
-        vec_buf
-        _vec_buf_first
-        store
-        0
-        vec_buf
-        _vec_buf_next
-        store
-        64
-        vec_buf
-        _vec_buf_capacity
-        store
+        0: -> Number .
+        vec_buf: -> Number .
+        _vec_buf_first: Number -> Number .
+        store: Number, Number -> Number .
+        0: -> Number .
+        vec_buf: -> Number .
+        _vec_buf_next: Number -> Number .
+        store: Number, Number -> Number .
+        64: -> Number .
+        vec_buf: -> Number .
+        _vec_buf_capacity: Number -> Number .
+        store: Number, Number -> Number .
 end
 
 vec_buf_get: fn
