@@ -251,7 +251,7 @@ end
 # Game state
 init: fn
     \ ->
-        init_should_game_run
+        init_should_game_run: -> .
         snake_init
         init_velocity
         init_next_position
