@@ -285,9 +285,9 @@ end
 # Game state - should game run
 init_should_game_run: fn
     \ ->
-        1
-        should_game_run
-            store
+        1: -> Number .
+        should_game_run: -> Number .
+            store: Number, Number -> .
 end
 
 # Game state - velocity
