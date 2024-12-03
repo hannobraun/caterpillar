@@ -473,13 +473,15 @@ snake_init: fn
     \ ->
         3
         snake_length
-        store
+            store
+
         positions
-        vec_buf_init
+            vec_buf_init
+
         positions
         15
         15
-        vec_buf_push
+            vec_buf_push
 end
 
 snake_head: fn
