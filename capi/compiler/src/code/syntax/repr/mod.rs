@@ -1,3 +1,3 @@
 pub mod expression;
 pub mod functions;
-pub mod tree;
+pub mod syntax_tree;
