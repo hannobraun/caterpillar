@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -231,11 +233,11 @@ fn make_single_expression(
         leptos::task::spawn_local(send_action(action, actions_tx.clone()));
     };
 
-    let typed_expression = if let Some(signature) = data.signature {
-        format!("{expression}: {:?}", signature)
-    } else {
-        expression
-    };
+    let mut typed_expression = expression;
+    if let Some(signature) = data.signature {
+        write!(typed_expression, ": {:?}", signature)
+            .expect("Writing to `String` can't fail.");
+    }
 
     (
         view! {
