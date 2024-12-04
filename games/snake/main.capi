@@ -906,9 +906,9 @@ end
 
 _vec_buf_buffer: fn
     \ vec_buf ->
-        vec_buf
-        3
-            add_s32
+        vec_buf: -> Number .
+        3: -> Number .
+            add_s32: Number, Number -> Number .
 end
 
 # Utilities - Miscellaneous
