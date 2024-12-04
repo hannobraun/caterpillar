@@ -7,7 +7,6 @@ mod tail_expressions;
 mod tokens;
 
 mod changes;
-mod expression;
 mod functions;
 mod hash;
 mod index;
@@ -18,7 +17,6 @@ mod types;
 pub use self::{
     bindings::Bindings,
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
-    expression::{Expression, TypedExpression},
     function_calls::FunctionCalls,
     functions::Functions,
     hash::Hash,
@@ -30,3 +28,5 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type, Types},
 };
+
+pub use self::syntax::{Expression, TypedExpression};

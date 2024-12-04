@@ -1,6 +1,8 @@
 use capi_runtime::Value;
 
-use super::{syntax::Function, ConcreteSignature};
+use crate::code::ConcreteSignature;
+
+use super::Function;
 
 /// # An expression, optionally annotated with a type
 #[derive(

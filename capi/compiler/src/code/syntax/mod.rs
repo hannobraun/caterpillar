@@ -16,11 +16,13 @@
 //! in the compiler. What the above documentation says might not be fully true
 //! yet.
 
+mod expression;
 mod functions;
 mod parse;
 mod tree;
 
 pub use self::{
+    expression::{Expression, TypedExpression},
     functions::{Branch, Function, NamedFunction, Pattern},
     tree::SyntaxTree,
 };
