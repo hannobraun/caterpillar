@@ -2,7 +2,9 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::{
-    code::{ExpressionLocation, FunctionLocation, Index, NamedFunction},
+    code::{
+        syntax::NamedFunction, ExpressionLocation, FunctionLocation, Index,
+    },
     CompilerOutput,
 };
 use capi_protocol::host_state::HostState;

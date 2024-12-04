@@ -3,11 +3,10 @@ use std::result;
 use crate::code::{
     tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
     BranchLocation, ConcreteSignature, Expression, ExpressionLocation,
-    FunctionLocation, Index, IndexMap, NamedFunction, Pattern, Type,
-    TypedExpression,
+    FunctionLocation, Index, IndexMap, Pattern, Type, TypedExpression,
 };
 
-use super::{Branch, Function};
+use super::{Branch, Function, NamedFunction};
 
 /// # Parse the provided tokens
 ///

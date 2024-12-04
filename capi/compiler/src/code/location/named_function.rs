@@ -1,4 +1,7 @@
-use crate::code::{syntax::Function, Index, NamedFunction};
+use crate::code::{
+    syntax::{Function, NamedFunction},
+    Index,
+};
 
 use super::{located::HasLocation, FunctionLocation, Located};
 

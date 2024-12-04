@@ -1,8 +1,8 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Branch, Function, SyntaxTree},
-    Index, NamedFunction,
+    syntax::{Branch, Function, NamedFunction, SyntaxTree},
+    Index,
 };
 
 use super::{
