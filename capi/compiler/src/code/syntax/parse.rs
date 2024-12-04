@@ -3,12 +3,11 @@ use std::result;
 use crate::code::{
     tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
     BranchLocation, ExpressionLocation, FunctionLocation, Index, IndexMap,
-    Type,
 };
 
 use super::{
-    AnnotatedExpression, Branch, Expression, Function, NamedFunction, Pattern,
-    Signature,
+    repr::types::Type, AnnotatedExpression, Branch, Expression, Function,
+    NamedFunction, Pattern, Signature,
 };
 
 /// # Parse the provided tokens
@@ -321,10 +320,7 @@ fn parse_signature(
 
 fn parse_type(tokens: &mut Tokens) -> Result<Type> {
     let type_ = match tokens.take()? {
-        Token::Identifier { name } => match name.as_str() {
-            "Number" => Type::Number,
-            type_ => panic!("Unknown type: `{type_}`"),
-        },
+        Token::Identifier { name } => Type::Identifier { name },
         token => {
             return Err(Error::UnexpectedToken { actual: token });
         }
