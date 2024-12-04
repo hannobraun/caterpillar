@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::{
-    code::{self, ExpressionLocation, FunctionLocation, Index, NamedFunction},
+    code::{ExpressionLocation, FunctionLocation, Index, NamedFunction},
     CompilerOutput,
 };
 use capi_protocol::host_state::HostState;
@@ -249,7 +249,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 fn instruction_to_named_function(
     address: &InstructionAddress,
     code: &CompilerOutput,
-) -> (code::NamedFunction, Index<NamedFunction>) {
+) -> (NamedFunction, Index<NamedFunction>) {
     let location = code.source_map.instruction_to_function(address).expect(
         "Expecting instructions on call stack to all map to a function.",
     );
