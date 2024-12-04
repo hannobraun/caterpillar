@@ -15,6 +15,10 @@ pub struct NamedFunction {
     pub inner: Function,
 }
 
+/// # A function
+///
+/// Functions can be named (see [`NamedFunction`]) or anonymous. Local functions
+/// that are defined within other functions are anonymous.
 #[derive(
     Clone,
     Debug,
