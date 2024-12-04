@@ -1,8 +1,8 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Expression, Function, SyntaxTree},
-    Index, TypedExpression,
+    syntax::{Expression, Function, SyntaxTree, TypedExpression},
+    Index,
 };
 
 use super::{located::HasLocation, BranchLocation, FunctionLocation, Located};

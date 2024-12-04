@@ -1,6 +1,8 @@
 use capi_runtime::Value;
 
-use crate::code::{IndexMap, TypedExpression};
+use crate::code::IndexMap;
+
+use super::TypedExpression;
 
 /// # A function that has a name
 ///
