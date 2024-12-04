@@ -10,7 +10,8 @@ use tokio::{
 use crate::build;
 
 pub async fn start() -> anyhow::Result<()> {
-    let crates_dir = PathBuf::from("capi").canonicalize()?;
+    let crates_dir_relative = "capi";
+    let crates_dir = PathBuf::from(crates_dir_relative).canonicalize()?;
 
     let watcher = Watcher::new(&crates_dir)?;
     let mut updates = build::start(watcher.changes);
