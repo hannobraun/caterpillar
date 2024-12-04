@@ -28,5 +28,3 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type, Types},
 };
-
-pub use self::syntax::TypedExpression;
