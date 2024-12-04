@@ -861,16 +861,16 @@ _vec_buf_address: fn
         #   actual address within the buffer.
         # - `offset`, which is the offset of the desired address
         #   `from base`.
-        base
-        offset
-        add_u8_wrap
-        vec_buf
-        _vec_buf_capacity
-        load
-        remainder_s32
-        vec_buf
-        _vec_buf_buffer
-        add_u8_wrap
+        base: -> Number .
+        offset: -> Number .
+        add_u8_wrap: Number, Number -> Number .
+        vec_buf: -> Number.
+        _vec_buf_capacity: Number -> Number .
+        load: Number -> Number .
+        remainder_s32: Number, Number -> Number .
+        vec_buf: -> Number .
+        _vec_buf_buffer: Number -> Number .
+        add_u8_wrap: Number, Number -> Number .
 end
 
 _vec_buf_inc_index: fn
