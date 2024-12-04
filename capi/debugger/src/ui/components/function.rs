@@ -236,7 +236,7 @@ fn make_single_expression(
 
     let mut typed_expression = expression;
     if let Some(signature) = data.signature {
-        render_signature(&mut typed_expression, signature)
+        render_type_annotation(&mut typed_expression, signature)
             .expect("Writing to `String` can't fail.");
     }
 
@@ -263,9 +263,13 @@ fn make_single_expression(
     )
 }
 
-fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
+fn render_type_annotation(s: &mut String, signature: Signature) -> fmt::Result {
     write!(s, ": ")?;
+    render_signature(s, signature)?;
+    Ok(())
+}
 
+fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
     let mut inputs = signature.inputs.into_iter().peekable();
     while let Some(input) = inputs.next() {
         render_type(s, input)?;
