@@ -4,9 +4,8 @@ use crate::code::{IndexMap, TypedExpression};
 
 /// # A function that has a name
 ///
-/// Named functions are defined in the top-level context. Functions that do not
-/// have a name are anonymous, and are defined as literal values within other
-/// functions.
+/// Named functions are defined in the top-level context. Functions that are
+/// defined locally within other functions do not have a name.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunction {
     /// # The name of the function
