@@ -4,9 +4,9 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        syntax::Branch, BranchLocation, Cluster, Expression,
-        ExpressionLocation, Function, FunctionLocation, IndexMap, Pattern,
-        TypedExpression,
+        syntax::{Branch, Function},
+        BranchLocation, Cluster, Expression, ExpressionLocation,
+        FunctionLocation, IndexMap, Pattern, TypedExpression,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,

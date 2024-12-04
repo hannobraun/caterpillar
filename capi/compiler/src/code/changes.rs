@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{Function, FunctionLocation};
+use super::{syntax::Function, FunctionLocation};
 
 /// # The changes between two versions of code
 #[derive(Debug)]

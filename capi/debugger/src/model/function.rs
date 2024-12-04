@@ -19,7 +19,7 @@ pub struct DebugFunction {
 impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        function: code::Function,
+        function: code::syntax::Function,
         name: Option<String>,
         location: FunctionLocation,
         active_expression: Option<&ExpressionLocation>,

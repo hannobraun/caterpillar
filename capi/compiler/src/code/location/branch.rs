@@ -1,8 +1,8 @@
 use std::{fmt, iter};
 
 use crate::code::{
-    syntax::{Branch, SyntaxTree},
-    Expression, Function, Index,
+    syntax::{Branch, Function, SyntaxTree},
+    Expression, Index,
 };
 
 use super::{

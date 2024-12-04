@@ -1,7 +1,7 @@
 use std::iter;
 
 use super::{
-    Function, FunctionLocation, Functions, Index, IndexMap, Located,
+    syntax::Function, FunctionLocation, Functions, Index, IndexMap, Located,
     NamedFunction,
 };
 
