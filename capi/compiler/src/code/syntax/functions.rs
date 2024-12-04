@@ -40,6 +40,11 @@ pub struct Function {
     pub branches: IndexMap<Branch>,
 }
 
+/// # A branch within a function
+///
+/// A function has zero or more branches. When the function is called, the
+/// arguments are matched against its branches. The first branch whose
+/// parameters match the arguments is executed.
 #[derive(
     Clone,
     Debug,
@@ -53,6 +58,10 @@ pub struct Function {
     udigest::Digestable,
 )]
 pub struct Branch {
+    /// # The parameters of the branch
+    ///
+    /// Each parameter is a pattern that can be matched against the arguments of
+    /// a call.
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
