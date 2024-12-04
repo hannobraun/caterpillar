@@ -1,6 +1,9 @@
 use std::collections::BTreeSet;
 
-use super::{syntax::SyntaxTree, Expression, ExpressionLocation};
+use super::{
+    syntax::{Expression, SyntaxTree},
+    ExpressionLocation,
+};
 
 /// # Tracks tail expressions
 ///

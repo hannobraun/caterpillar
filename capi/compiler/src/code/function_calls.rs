@@ -6,7 +6,8 @@ use crate::{
 };
 
 use super::{
-    syntax::SyntaxTree, Expression, ExpressionLocation, FunctionLocation,
+    syntax::{Expression, SyntaxTree},
+    ExpressionLocation, FunctionLocation,
 };
 
 /// # Tracks function calls

@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
-    syntax::{Branch, Function, Pattern, SyntaxTree},
-    Expression, ExpressionLocation, FunctionLocation, Located,
+    syntax::{Branch, Expression, Function, Pattern, SyntaxTree},
+    ExpressionLocation, FunctionLocation, Located,
 };
 
 /// # Tracks bindings
@@ -175,7 +175,8 @@ mod tests {
     use itertools::Itertools;
 
     use crate::code::{
-        syntax::SyntaxTree, Expression, FunctionLocation, Tokens,
+        syntax::{Expression, SyntaxTree},
+        FunctionLocation, Tokens,
     };
 
     use super::Bindings;
