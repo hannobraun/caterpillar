@@ -791,25 +791,25 @@ end
 
 vec_buf_push: fn
     \ vec_buf, x, y ->
-        vec_buf
-        _vec_buf_next
+        vec_buf: -> Number .
+        _vec_buf_next: Number -> Number .
         fn \ next_addr ->
-            vec_buf
-            next_addr
-            load
-            0
-            _vec_buf_address
+            vec_buf: -> Number .
+            next_addr: -> Number .
+            load: Number -> Number .
+            0: -> Number .
+            _vec_buf_address: Number, Number, Number -> Number .
             fn \ address ->
-                x
-                y
-                address
-                vec_store
-                next_addr
-                _vec_buf_inc_index
-            end
-                eval
-        end
-            eval
+                x: -> Number .
+                y: -> Number .
+                address: -> Number .
+                vec_store: Number, Number, Number -> .
+                next_addr: -> Number .
+                _vec_buf_inc_index: Number -> .
+            end: -> fn Number -> end .
+                eval: fn Number -> end -> .
+        end: -> fn Number -> end .
+            eval: fn Number -> end -> .
 end
 
 vec_buf_pop: fn
