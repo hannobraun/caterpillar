@@ -1,6 +1,6 @@
 use std::fmt::{self, Write};
 
-use capi_compiler::code::ConcreteSignature;
+use capi_compiler::code::syntax::Signature;
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -263,10 +263,7 @@ fn make_single_expression(
     )
 }
 
-fn render_signature(
-    s: &mut String,
-    signature: ConcreteSignature,
-) -> fmt::Result {
+fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
     write!(s, ": ")?;
 
     let mut inputs = signature.inputs.into_iter().peekable();

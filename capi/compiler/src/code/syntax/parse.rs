@@ -2,12 +2,13 @@ use std::result;
 
 use crate::code::{
     tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
-    BranchLocation, ConcreteSignature, ExpressionLocation, FunctionLocation,
-    Index, IndexMap, Type,
+    BranchLocation, ExpressionLocation, FunctionLocation, Index, IndexMap,
+    Type,
 };
 
 use super::{
-    Branch, Expression, Function, NamedFunction, Pattern, AnnotatedExpression,
+    AnnotatedExpression, Branch, Expression, Function, NamedFunction, Pattern,
+    Signature,
 };
 
 /// # Parse the provided tokens
@@ -263,9 +264,7 @@ fn parse_expression(
     Ok(expression)
 }
 
-fn parse_type_annotation(
-    tokens: &mut Tokens,
-) -> Result<Option<ConcreteSignature>> {
+fn parse_type_annotation(tokens: &mut Tokens) -> Result<Option<Signature>> {
     let Token::Punctuator(Introducer) = tokens.peek()? else {
         return Ok(None);
     };
@@ -280,7 +279,7 @@ fn parse_type_annotation(
 fn parse_signature(
     tokens: &mut Tokens,
     terminator: Token,
-) -> Result<ConcreteSignature> {
+) -> Result<Signature> {
     let mut inputs = Vec::new();
 
     loop {
@@ -317,7 +316,7 @@ fn parse_signature(
         outputs.push(type_);
     }
 
-    Ok(ConcreteSignature { inputs, outputs })
+    Ok(Signature { inputs, outputs })
 }
 
 fn parse_type(tokens: &mut Tokens) -> Result<Type> {

@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::code::ConcreteSignature;
+use crate::code::Type;
 
 use super::functions::Function;
 
@@ -113,5 +113,25 @@ pub struct AnnotatedExpression {
     pub inner: Expression,
 
     /// # The optional type annotation that applies to the expression
-    pub signature: Option<ConcreteSignature>,
+    pub signature: Option<Signature>,
+}
+
+/// # The type signature of an expression
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct Signature {
+    /// # The inputs of the expression
+    pub inputs: Vec<Type>,
+
+    /// # The outputs of the expression
+    pub outputs: Vec<Type>,
 }

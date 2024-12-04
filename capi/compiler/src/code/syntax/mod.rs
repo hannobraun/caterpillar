@@ -20,7 +20,7 @@ mod parse;
 mod repr;
 
 pub use self::repr::{
-    expression::{AnnotatedExpression, Expression},
+    expression::{AnnotatedExpression, Expression, Signature},
     functions::{Branch, Function, NamedFunction, Pattern},
     tree::SyntaxTree,
 };

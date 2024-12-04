@@ -1,8 +1,8 @@
 use capi_compiler::{
     code::{
-        syntax::{AnnotatedExpression, Expression},
-        Cluster, ConcreteSignature, ExpressionLocation, FunctionCalls,
-        FunctionLocation, Functions,
+        syntax::{AnnotatedExpression, Expression, Signature},
+        Cluster, ExpressionLocation, FunctionCalls, FunctionLocation,
+        Functions,
     },
     source_map::SourceMap,
 };
@@ -79,7 +79,7 @@ impl DebugExpression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpressionData {
-    pub signature: Option<ConcreteSignature>,
+    pub signature: Option<Signature>,
     pub location: ExpressionLocation,
     pub state: DebugExpressionState,
     pub has_durable_breakpoint: bool,
