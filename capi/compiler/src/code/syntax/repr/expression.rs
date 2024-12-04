@@ -4,26 +4,6 @@ use crate::code::ConcreteSignature;
 
 use super::functions::Function;
 
-/// # An expression, optionally annotated with a type
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct TypedExpression {
-    /// # The expression
-    pub inner: Expression,
-
-    /// # The optional type annotation that applies to the expression
-    pub signature: Option<ConcreteSignature>,
-}
-
 /// # An expression within a function
 ///
 /// ## Error Handling
@@ -114,4 +94,24 @@ impl Expression {
 
         Some(function)
     }
+}
+
+/// # An expression, optionally annotated with a type
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct TypedExpression {
+    /// # The expression
+    pub inner: Expression,
+
+    /// # The optional type annotation that applies to the expression
+    pub signature: Option<ConcreteSignature>,
 }
