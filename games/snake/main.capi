@@ -471,17 +471,17 @@ end
 # Game state - snake
 snake_init: fn
     \ ->
-        3
-        snake_length
-            store
+         3: -> Number .
+         snake_length: -> Number .
+            store: Number, Number -> .
 
-        positions
-            vec_buf_init
+        positions: -> Number .
+            vec_buf_init: Number -> .
 
-        positions
-        15
-        15
-            vec_buf_push
+        positions: -> Number .
+        15: -> Number .
+        15: -> Number .
+            vec_buf_push: Number, Number, Number -> .
 end
 
 snake_head: fn
