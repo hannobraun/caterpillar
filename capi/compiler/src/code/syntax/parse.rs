@@ -268,12 +268,16 @@ fn parse_type_annotation(
     };
     tokens.take()?;
 
-    let signature = parse_signature(tokens)?;
+    let terminator = Token::Punctuator(Terminator);
+    let signature = parse_signature(tokens, terminator)?;
 
     Ok(Some(signature))
 }
 
-fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
+fn parse_signature(
+    tokens: &mut Tokens,
+    terminator: Token,
+) -> Result<ConcreteSignature> {
     let mut inputs = Vec::new();
 
     loop {
@@ -301,7 +305,7 @@ fn parse_signature(tokens: &mut Tokens) -> Result<ConcreteSignature> {
     let mut outputs = Vec::new();
 
     loop {
-        if let Token::Punctuator(Terminator) = tokens.peek()? {
+        if *tokens.peek()? == terminator {
             tokens.take()?;
             break;
         }
