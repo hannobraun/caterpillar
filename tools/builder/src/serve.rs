@@ -1,5 +1,6 @@
 use std::{path::PathBuf, process::Stdio};
 
+use anyhow::Context;
 use capi_watch::Watcher;
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
@@ -11,7 +12,14 @@ use crate::build;
 
 pub async fn start() -> anyhow::Result<()> {
     let crates_dir_relative = "capi";
-    let crates_dir = PathBuf::from(crates_dir_relative).canonicalize()?;
+    let crates_dir = PathBuf::from(crates_dir_relative)
+        .canonicalize()
+        .with_context(|| {
+            format!(
+                "Canonicalizing relative crate directory \
+                `{crates_dir_relative}`"
+            )
+        })?;
 
     let watcher = Watcher::new(&crates_dir)?;
     let mut updates = build::start(watcher.changes);
