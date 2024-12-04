@@ -1,8 +1,10 @@
 use std::iter;
 
-use crate::code::{FunctionLocation, IndexMap, Located, Tokens};
+use crate::code::{
+    syntax::parse::parse, FunctionLocation, IndexMap, Located, Tokens,
+};
 
-use super::{parse::parse, Function, NamedFunction};
+use super::functions::{Function, NamedFunction};
 
 /// # The syntax tree
 ///

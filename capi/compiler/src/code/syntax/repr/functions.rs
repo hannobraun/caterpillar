@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::code::IndexMap;
 
-use super::TypedExpression;
+use super::expression::TypedExpression;
 
 /// # A function that has a name
 ///

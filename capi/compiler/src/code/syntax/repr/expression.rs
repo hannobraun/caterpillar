@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::code::ConcreteSignature;
 
-use super::Function;
+use super::functions::Function;
 
 /// # An expression, optionally annotated with a type
 #[derive(
