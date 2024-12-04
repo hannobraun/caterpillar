@@ -287,6 +287,14 @@ fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
 }
 
 fn render_type(s: &mut String, type_: Type) -> fmt::Result {
-    write!(s, "{type_:?} ")?;
+    match type_ {
+        Type::Function { .. } => {
+            write!(s, "{type_:?} ")?;
+        }
+        Type::Identifier { name } => {
+            write!(s, "{name}")?;
+        }
+    }
+
     Ok(())
 }
