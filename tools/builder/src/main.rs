@@ -4,6 +4,7 @@ mod serve;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    use anyhow::Context;
     use clap::Parser;
 
     tracing_subscriber::fmt().init();
@@ -11,10 +12,10 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     match args.command {
         Some(Command::Export) => {
-            export::run().await?;
+            export::run().await.context("Running `export` command")?;
         }
         None | Some(Command::Serve) => {
-            serve::start().await?;
+            serve::start().await.context("Running `serve` command")?;
         }
     }
 
