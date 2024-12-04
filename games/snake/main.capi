@@ -880,10 +880,12 @@ end
 _vec_buf_inc_index: fn
     \ index_addr ->
         index_addr: -> Number .
-        load: Number -> Number .
+            load: Number -> Number .
         2: -> Number .
-        add_u8_wrap: Number, Number -> Number .
+            add_u8_wrap: Number, Number -> Number .
+
         index_addr: -> Number .
+
         store: Number, Number -> .
 end
 
