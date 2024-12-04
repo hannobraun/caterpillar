@@ -29,4 +29,4 @@ pub use self::{
     types::{ConcreteSignature, Signature, Type, Types},
 };
 
-pub use self::syntax::{Expression, TypedExpression};
+pub use self::syntax::TypedExpression;
