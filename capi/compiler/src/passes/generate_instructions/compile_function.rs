@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        syntax::{Branch, Expression, Function, Pattern, TypedExpression},
+        syntax::{Branch, Expression, Function, Pattern, AnnotatedExpression},
         BranchLocation, Cluster, ExpressionLocation, FunctionLocation,
         IndexMap,
     },
@@ -154,7 +154,7 @@ where
 }
 
 fn compile_branch_body(
-    body: IndexMap<TypedExpression>,
+    body: IndexMap<AnnotatedExpression>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,

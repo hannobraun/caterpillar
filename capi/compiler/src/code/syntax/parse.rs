@@ -7,7 +7,7 @@ use crate::code::{
 };
 
 use super::{
-    Branch, Expression, Function, NamedFunction, Pattern, TypedExpression,
+    Branch, Expression, Function, NamedFunction, Pattern, AnnotatedExpression,
 };
 
 /// # Parse the provided tokens
@@ -210,7 +210,7 @@ fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
 
 fn parse_branch_body(
     tokens: &mut Tokens,
-    body: &mut IndexMap<TypedExpression>,
+    body: &mut IndexMap<AnnotatedExpression>,
     location: BranchLocation,
 ) -> Result<()> {
     loop {
@@ -235,7 +235,7 @@ fn parse_branch_body(
 fn parse_expression(
     tokens: &mut Tokens,
     location: ExpressionLocation,
-) -> Result<TypedExpression> {
+) -> Result<AnnotatedExpression> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
@@ -255,7 +255,7 @@ fn parse_expression(
 
     let signature = parse_type_annotation(tokens)?;
 
-    let expression = TypedExpression {
+    let expression = AnnotatedExpression {
         inner: expression,
         signature,
     };

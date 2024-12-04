@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::code::IndexMap;
 
-use super::expression::TypedExpression;
+use super::expression::AnnotatedExpression;
 
 /// # A function that has a name
 ///
@@ -67,7 +67,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<TypedExpression>,
+    pub body: IndexMap<AnnotatedExpression>,
 }
 
 /// # A pattern

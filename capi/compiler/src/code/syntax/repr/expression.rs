@@ -108,7 +108,7 @@ impl Expression {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct TypedExpression {
+pub struct AnnotatedExpression {
     /// # The expression
     pub inner: Expression,
 
