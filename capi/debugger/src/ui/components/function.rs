@@ -231,7 +231,11 @@ fn make_single_expression(
         leptos::task::spawn_local(send_action(action, actions_tx.clone()));
     };
 
-    let typed_expression = format!("{expression}: {:?}", data.signature);
+    let typed_expression = if let Some(signature) = data.signature {
+        format!("{expression}: {:?}", signature)
+    } else {
+        expression
+    };
 
     (
         view! {
