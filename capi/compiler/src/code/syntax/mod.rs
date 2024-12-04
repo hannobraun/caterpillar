@@ -23,5 +23,5 @@ pub use self::repr::{
     expression::Expression,
     functions::{Branch, Function, NamedFunction, Pattern},
     syntax_tree::SyntaxTree,
-    types::{AnnotatedExpression, Signature},
+    types::{AnnotatedExpression, Signature, Type},
 };
