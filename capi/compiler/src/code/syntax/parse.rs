@@ -321,6 +321,11 @@ fn parse_signature(
 fn parse_type(tokens: &mut Tokens) -> Result<Type> {
     let type_ = match tokens.take()? {
         Token::Identifier { name } => Type::Identifier { name },
+        Token::Keyword(Fn) => {
+            let terminator = Token::Keyword(End);
+            let signature = parse_signature(tokens, terminator)?;
+            Type::Function { signature }
+        }
         token => {
             return Err(Error::UnexpectedToken { actual: token });
         }
