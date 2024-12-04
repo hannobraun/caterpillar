@@ -1,5 +1,6 @@
-use std::fmt::Write;
+use std::fmt::{self, Write};
 
+use capi_compiler::code::ConcreteSignature;
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -235,7 +236,7 @@ fn make_single_expression(
 
     let mut typed_expression = expression;
     if let Some(signature) = data.signature {
-        write!(typed_expression, ": {:?}", signature)
+        render_signature(&mut typed_expression, signature)
             .expect("Writing to `String` can't fail.");
     }
 
@@ -260,4 +261,11 @@ fn make_single_expression(
             .into_any(),
         ),
     )
+}
+
+fn render_signature(
+    typed_expression: &mut String,
+    signature: ConcreteSignature,
+) -> fmt::Result {
+    write!(typed_expression, ": {:?}", signature)
 }
