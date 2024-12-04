@@ -31,4 +31,4 @@ pub use self::{
     types::{ConcreteSignature, Signature, Type, Types},
 };
 
-pub use self::syntax::{Branch, Function, NamedFunction, Pattern};
+pub use self::syntax::{Function, NamedFunction, Pattern};
