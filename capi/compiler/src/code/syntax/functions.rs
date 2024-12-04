@@ -68,6 +68,10 @@ pub struct Branch {
     pub body: IndexMap<TypedExpression>,
 }
 
+/// # A pattern
+///
+/// Patterns represent branch parameters. A pattern can be matched against a
+/// value.
 #[derive(
     Clone,
     Debug,
@@ -80,6 +84,22 @@ pub struct Branch {
     udigest::Digestable,
 )]
 pub enum Pattern {
-    Identifier { name: String },
-    Literal { value: Value },
+    /// # An identifier
+    ///
+    /// Identifier patterns match against any value. They are used to assign a
+    /// local name to a value.
+    Identifier {
+        /// # The name that is assigned to the value, once matched
+        name: String,
+    },
+
+    /// # A literal pattern
+    ///
+    /// Literal patterns only match against values that are equal to their
+    /// `value` field. They are used to select which branch is executed, based
+    /// on the arguments of the function call.
+    Literal {
+        /// # The value that an argument is matched against
+        value: Value,
+    },
 }
