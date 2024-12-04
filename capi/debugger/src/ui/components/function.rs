@@ -267,5 +267,19 @@ fn render_signature(
     s: &mut String,
     signature: ConcreteSignature,
 ) -> fmt::Result {
-    write!(s, ": {:?}", signature)
+    write!(s, ": ")?;
+
+    for input in signature.inputs {
+        write!(s, "{input:?} ")?;
+    }
+
+    write!(s, "->")?;
+
+    for output in signature.outputs {
+        write!(s, " {output:?}")?;
+    }
+
+    write!(s, " .")?;
+
+    Ok(())
 }
