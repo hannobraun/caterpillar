@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        self, BranchLocation, Cluster, ExpressionLocation, FunctionCalls,
+        syntax, BranchLocation, Cluster, ExpressionLocation, FunctionCalls,
         FunctionLocation, Functions,
     },
     source_map::SourceMap,
@@ -19,7 +19,7 @@ pub struct DebugFunction {
 impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        function: code::syntax::Function,
+        function: syntax::Function,
         name: Option<String>,
         location: FunctionLocation,
         active_expression: Option<&ExpressionLocation>,
