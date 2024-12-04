@@ -282,6 +282,9 @@ fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
     }
 
     write!(s, "->")?;
+    if !signature.outputs.is_empty() {
+        write!(s, " ")?;
+    }
 
     for output in signature.outputs {
         render_type(s, output)?;
