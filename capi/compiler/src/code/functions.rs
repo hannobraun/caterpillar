@@ -2,10 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::Value;
 
-use super::{
-    BranchLocation, Expression, ExpressionLocation, FunctionLocation, IndexMap,
-    Located, TypedExpression,
-};
+use super::{FunctionLocation, IndexMap, Located, TypedExpression};
 
 /// # All functions in the program
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -28,31 +25,6 @@ impl Functions {
             fragment: function,
             location: location.clone(),
         })
-    }
-
-    /// # Access the branch at the given location
-    ///
-    /// Returns `None`, if the given location does not identify a branch.
-    pub fn branch_by_location(
-        &self,
-        location: &BranchLocation,
-    ) -> Option<&Branch> {
-        let function = self.by_location(&location.parent)?;
-        function.branches.get(&location.index)
-    }
-
-    /// # Access the expression at the given location
-    ///
-    /// Returns `None`, if the given location does not identify an expression.
-    pub fn expression_by_location(
-        &self,
-        location: &ExpressionLocation,
-    ) -> Option<&Expression> {
-        let branch = self.branch_by_location(&location.parent)?;
-        branch
-            .body
-            .get(&location.index)
-            .map(|expression| &expression.inner)
     }
 
     /// # Iterate over all functions, both named and anonymous
