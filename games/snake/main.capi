@@ -863,13 +863,17 @@ _vec_buf_address: fn
         #   `from base`.
         base: -> Number .
         offset: -> Number .
-        add_u8_wrap: Number, Number -> Number .
+            add_u8_wrap: Number, Number -> Number .
+
         vec_buf: -> Number.
-        _vec_buf_capacity: Number -> Number .
-        load: Number -> Number .
+            _vec_buf_capacity: Number -> Number .
+            load: Number -> Number .
+
         remainder_s32: Number, Number -> Number .
+
         vec_buf: -> Number .
-        _vec_buf_buffer: Number -> Number .
+            _vec_buf_buffer: Number -> Number .
+
         add_u8_wrap: Number, Number -> Number .
 end
 
