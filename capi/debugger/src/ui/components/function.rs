@@ -264,8 +264,8 @@ fn make_single_expression(
 }
 
 fn render_signature(
-    typed_expression: &mut String,
+    s: &mut String,
     signature: ConcreteSignature,
 ) -> fmt::Result {
-    write!(typed_expression, ": {:?}", signature)
+    write!(s, ": {:?}", signature)
 }
