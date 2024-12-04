@@ -231,6 +231,8 @@ fn make_single_expression(
         leptos::task::spawn_local(send_action(action, actions_tx.clone()));
     };
 
+    let typed_expression = format!("{expression}: {:?}", data.signature);
+
     (
         view! {
             <span
@@ -238,7 +240,7 @@ fn make_single_expression(
                 data-expression=data_expression
                 data-breakpoint=data_breakpoint
                 on:click=toggle_breakpoint>
-                {expression}
+                {typed_expression}
             </span>
         }
         .into_any(),
