@@ -269,8 +269,13 @@ fn render_signature(
 ) -> fmt::Result {
     write!(s, ": ")?;
 
-    for input in signature.inputs {
+    let mut inputs = signature.inputs.into_iter().peekable();
+    while let Some(input) = inputs.next() {
         write!(s, "{input:?} ")?;
+
+        if inputs.peek().is_some() {
+            write!(s, ", ")?;
+        }
     }
 
     write!(s, "->")?;
