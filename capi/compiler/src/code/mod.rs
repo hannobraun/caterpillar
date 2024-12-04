@@ -20,7 +20,7 @@ pub use self::{
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     expression::{Expression, TypedExpression},
     function_calls::FunctionCalls,
-    functions::{Branch, Function, Functions, NamedFunction, Pattern},
+    functions::Functions,
     hash::Hash,
     index::{Index, IndexMap},
     location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
@@ -30,3 +30,5 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type, Types},
 };
+
+pub use self::syntax::{Branch, Function, NamedFunction, Pattern};

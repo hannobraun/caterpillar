@@ -16,7 +16,11 @@
 //! in the compiler. What the above documentation says might not be fully true
 //! yet.
 
+mod functions;
 mod parse;
 mod tree;
 
-pub use self::tree::SyntaxTree;
+pub use self::{
+    functions::{Branch, Function, NamedFunction, Pattern},
+    tree::SyntaxTree,
+};
