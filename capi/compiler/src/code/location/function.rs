@@ -1,6 +1,9 @@
 use std::fmt;
 
-use crate::code::{syntax::SyntaxTree, Branch, Function, Index, NamedFunction};
+use crate::code::{
+    syntax::{Branch, SyntaxTree},
+    Function, Index, NamedFunction,
+};
 
 use super::{
     located::HasLocation, BranchLocation, ExpressionLocation, Located,

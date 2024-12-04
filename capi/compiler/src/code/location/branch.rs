@@ -1,6 +1,9 @@
 use std::{fmt, iter};
 
-use crate::code::{syntax::SyntaxTree, Branch, Expression, Function, Index};
+use crate::code::{
+    syntax::{Branch, SyntaxTree},
+    Expression, Function, Index,
+};
 
 use super::{
     located::HasLocation, ExpressionLocation, FunctionLocation, Located,

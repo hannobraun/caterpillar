@@ -1,8 +1,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
-    syntax::SyntaxTree, Branch, Expression, ExpressionLocation, Function,
-    FunctionLocation, Located, Pattern,
+    syntax::{Branch, SyntaxTree},
+    Expression, ExpressionLocation, Function, FunctionLocation, Located,
+    Pattern,
 };
 
 /// # Tracks bindings
