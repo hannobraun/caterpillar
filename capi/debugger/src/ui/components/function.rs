@@ -275,8 +275,10 @@ fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
         render_type(s, input)?;
 
         if inputs.peek().is_some() {
-            write!(s, ", ")?;
+            write!(s, ",")?;
         }
+
+        write!(s, " ")?;
     }
 
     write!(s, "->")?;
