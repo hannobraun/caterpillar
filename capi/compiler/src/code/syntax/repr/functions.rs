@@ -105,3 +105,23 @@ pub enum Pattern {
         value: Value,
     },
 }
+
+/// # A basic syntax node
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub enum SyntaxNode {
+    /// # The syntax node is an expression
+    Expression {
+        /// # The expression
+        expression: AnnotatedExpression,
+    },
+}
