@@ -31,17 +31,12 @@ impl<'r> Located<&'r Branch> {
     pub fn expressions(
         self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
-        let location = self.location.clone();
-
-        self.body.iter().map(move |(&index, member)| {
-            let Member::Expression { expression, .. } = member;
+        self.members().map(move |member| {
+            let Member::Expression { expression, .. } = member.fragment;
 
             Located {
                 fragment: expression,
-                location: MemberLocation {
-                    parent: Box::new(location.clone()),
-                    index,
-                },
+                location: member.location,
             }
         })
     }
