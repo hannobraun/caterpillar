@@ -71,17 +71,6 @@ pub enum Expression {
 }
 
 impl Expression {
-    /// # Convert the expression into a comment
-    ///
-    /// Returns `None`, if this expression is not a comment.
-    pub fn as_comment(&self) -> Option<&String> {
-        let Expression::Comment { text } = self else {
-            return None;
-        };
-
-        Some(text)
-    }
-
     /// # Convert the expression into a local function
     ///
     /// Returns `None`, if this expression is not a local function.
