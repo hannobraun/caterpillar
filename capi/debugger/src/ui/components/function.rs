@@ -17,7 +17,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugExpression, DebugExpressionData, DebugMemberKind,
+        DebugBranch, DebugExpression, DebugMemberData, DebugMemberKind,
         UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -156,7 +156,7 @@ pub fn Expression(
 
 fn make_single_expression(
     expression: String,
-    data: DebugExpressionData,
+    data: DebugMemberData,
     class_outer: &mut String,
     actions_tx: ActionsTx,
 ) -> (AnyView, Option<AnyView>, Option<AnyView>) {

@@ -13,7 +13,7 @@ use super::{Breakpoints, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpression {
-    pub data: DebugExpressionData,
+    pub data: DebugMemberData,
     pub kind: DebugMemberKind,
 }
 
@@ -71,7 +71,7 @@ impl DebugExpression {
             breakpoints,
             effect,
         );
-        let data = DebugExpressionData {
+        let data = DebugMemberData {
             signature,
             location,
             state,
@@ -84,7 +84,7 @@ impl DebugExpression {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugExpressionData {
+pub struct DebugMemberData {
     pub signature: Option<Signature>,
     pub location: MemberLocation,
     pub state: DebugMemberState,
