@@ -13,9 +13,7 @@ impl HasLocation for Branch {
 
 impl<'r> Located<&'r Branch> {
     /// # Iterate over the members of the branch's body
-    pub fn members(
-        self,
-    ) -> impl DoubleEndedIterator<Item = Located<&'r Member>> {
+    pub fn body(self) -> impl DoubleEndedIterator<Item = Located<&'r Member>> {
         let location = self.location.clone();
 
         self.body.iter().map(move |(&index, member)| Located {
@@ -31,7 +29,7 @@ impl<'r> Located<&'r Branch> {
     pub fn expressions(
         self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
-        self.members().filter_map(|member| member.into_expression())
+        self.body().filter_map(|member| member.into_expression())
     }
 
     /// # Iterate over all local functions in this branch, recursively
