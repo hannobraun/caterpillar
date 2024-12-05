@@ -53,8 +53,10 @@ impl DebugExpression {
             }
         });
 
-        let SyntaxNode::Expression { expression, .. } = expression;
-        let signature = expression.signature;
+        let SyntaxNode::Expression {
+            expression,
+            signature,
+        } = expression;
         let expression = expression.inner;
 
         let kind = DebugExpressionKind::new(
