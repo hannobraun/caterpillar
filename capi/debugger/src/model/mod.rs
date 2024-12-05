@@ -2,8 +2,8 @@ mod active_functions;
 mod branch;
 mod breakpoints;
 mod code;
-mod expression;
 mod function;
+mod member;
 mod state;
 mod user_action;
 
@@ -15,8 +15,8 @@ pub use self::{
     branch::DebugBranch,
     breakpoints::Breakpoints,
     code::DebugCode,
-    expression::{DebugMember, DebugMemberData, DebugMemberKind},
     function::DebugFunction,
+    member::{DebugMember, DebugMemberData, DebugMemberKind},
     state::{PersistentState, TransientState},
     user_action::UserAction,
 };
