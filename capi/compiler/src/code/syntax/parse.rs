@@ -223,10 +223,14 @@ fn parse_branch_body(
                     parent: Box::new(location.clone()),
                     index: body.next_index(),
                 };
-                let expression = parse_expression(tokens, location)?;
+                let (expression, signature) =
+                    parse_expression(tokens, location)?;
                 let syntax_node = SyntaxNode::Expression {
-                    expression: expression.clone(),
-                    signature: expression.signature,
+                    expression: AnnotatedExpression {
+                        inner: expression,
+                        signature: signature.clone(),
+                    },
+                    signature,
                 };
                 body.push(syntax_node);
             }
@@ -239,7 +243,7 @@ fn parse_branch_body(
 fn parse_expression(
     tokens: &mut Tokens,
     location: ExpressionLocation,
-) -> Result<AnnotatedExpression> {
+) -> Result<(Expression, Option<Signature>)> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
@@ -259,12 +263,7 @@ fn parse_expression(
 
     let signature = parse_type_annotation(tokens)?;
 
-    let expression = AnnotatedExpression {
-        inner: expression,
-        signature,
-    };
-
-    Ok(expression)
+    Ok((expression, signature))
 }
 
 fn parse_type_annotation(tokens: &mut Tokens) -> Result<Option<Signature>> {
