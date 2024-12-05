@@ -253,7 +253,7 @@ init: fn
     \ ->
         init_should_game_run: -> .
         snake_init: -> .
-        init_velocity
+        init_velocity: -> .
         init_next_position
         food_init
 end
