@@ -14,7 +14,7 @@ use super::{Breakpoints, DebugFunction};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugExpression {
     pub data: DebugExpressionData,
-    pub kind: DebugExpressionKind,
+    pub kind: DebugMemberKind,
 }
 
 impl DebugExpression {
@@ -59,7 +59,7 @@ impl DebugExpression {
             signature,
         } = member;
 
-        let kind = DebugExpressionKind::new(
+        let kind = DebugMemberKind::new(
             expression,
             location.clone(),
             active_expression,
@@ -120,14 +120,14 @@ impl DebugExpressionState {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum DebugExpressionKind {
+pub enum DebugMemberKind {
     Comment { text: String },
     Function { function: DebugFunction },
     Identifier { name: String },
     Value { as_string: String },
 }
 
-impl DebugExpressionKind {
+impl DebugMemberKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         expression: Expression,

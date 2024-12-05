@@ -13,7 +13,7 @@ use capi_protocol::updates::Updates;
 
 use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugExpression,
-    DebugExpressionKind, DebugFunction, PersistentState, TransientState,
+    DebugFunction, DebugMemberKind, PersistentState, TransientState,
     UserAction,
 };
 
@@ -315,7 +315,7 @@ impl DebugExpressionExt for DebugExpression {
     }
 
     fn expect_function(self) -> DebugFunction {
-        let DebugExpressionKind::Function { function } = self.kind else {
+        let DebugMemberKind::Function { function } = self.kind else {
             panic!("Expected function");
         };
 

@@ -6,7 +6,7 @@ use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Value};
 
 use super::{
-    ActiveFunctions, Breakpoints, DebugCode, DebugExpressionKind, UserAction,
+    ActiveFunctions, Breakpoints, DebugCode, DebugMemberKind, UserAction,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -135,7 +135,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        if let DebugMemberKind::Comment { .. } = after.kind
                         {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();
@@ -182,7 +182,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        if let DebugMemberKind::Comment { .. } = after.kind
                         {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();
@@ -228,7 +228,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugExpressionKind::Comment { .. } = after.kind
+                        if let DebugMemberKind::Comment { .. } = after.kind
                         {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();

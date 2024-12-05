@@ -17,7 +17,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugExpression, DebugExpressionData, DebugExpressionKind,
+        DebugBranch, DebugExpression, DebugExpressionData, DebugMemberKind,
         UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -106,7 +106,7 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
 
     let (expression, actions, error) = match expression.kind {
-        DebugExpressionKind::Comment { text } => {
+        DebugMemberKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
             (
                 view! {
@@ -119,7 +119,7 @@ pub fn Expression(
                 None,
             )
         }
-        DebugExpressionKind::Function { function } => (
+        DebugMemberKind::Function { function } => (
             view! {
                 <Function
                     branches=function.branches
@@ -129,13 +129,13 @@ pub fn Expression(
             None,
             None,
         ),
-        DebugExpressionKind::Identifier { name } => make_single_expression(
+        DebugMemberKind::Identifier { name } => make_single_expression(
             name,
             expression.data,
             &mut class_outer,
             actions,
         ),
-        DebugExpressionKind::Value { as_string } => make_single_expression(
+        DebugMemberKind::Value { as_string } => make_single_expression(
             as_string,
             expression.data,
             &mut class_outer,
