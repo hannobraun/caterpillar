@@ -224,8 +224,8 @@ fn parse_branch_body(
                     parent: Box::new(location.clone()),
                     index: body.next_index(),
                 };
-                let syntax_node = parse_member(tokens, location)?;
-                body.push(syntax_node);
+                let member = parse_member(tokens, location)?;
+                body.push(member);
             }
         }
     }
