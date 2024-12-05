@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        syntax::{Branch, Expression, Function, Pattern, AnnotatedExpression},
+        syntax::{AnnotatedExpression, Branch, Expression, Function, Pattern},
         BranchLocation, Cluster, ExpressionLocation, FunctionLocation,
         IndexMap,
     },

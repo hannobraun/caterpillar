@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Expression, Function, SyntaxTree, AnnotatedExpression},
+    syntax::{AnnotatedExpression, Expression, Function, SyntaxTree},
     Index,
 };
 
