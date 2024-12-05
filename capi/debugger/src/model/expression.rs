@@ -19,7 +19,7 @@ pub struct DebugExpression {
 impl DebugExpression {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        syntax_node: Member,
+        member: Member,
         location: ExpressionLocation,
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
@@ -56,7 +56,7 @@ impl DebugExpression {
         let Member::Expression {
             expression,
             signature,
-        } = syntax_node;
+        } = member;
 
         let kind = DebugExpressionKind::new(
             expression,
