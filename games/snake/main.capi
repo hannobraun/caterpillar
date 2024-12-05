@@ -772,10 +772,14 @@ vec_buf_get: fn
                 offset: -> Number .
                 _vec_buf_address: Number, Number, Number -> Number .
                 vec_load: Number -> Number, Number .
-            end
-                eval
-        end
-            eval
+            end: -> fn Number -> Number, Number end .
+                eval:
+                    Number,
+                    fn Number -> Number, Number end
+                        ->
+                    Number, Number .
+        end: -> fn Number -> Number, Number end .
+            eval: Number, fn Number -> Number, Number end -> Number, Number .
 end
 
 vec_buf_last: fn
