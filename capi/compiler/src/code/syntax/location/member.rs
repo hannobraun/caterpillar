@@ -5,7 +5,11 @@ use crate::code::{
     Index,
 };
 
-use super::BranchLocation;
+use super::{located::HasLocation, BranchLocation};
+
+impl HasLocation for Member {
+    type Location = MemberLocation;
+}
 
 /// # The location of a member of a branch body
 #[derive(
