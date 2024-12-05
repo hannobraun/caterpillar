@@ -10,7 +10,6 @@ mod changes;
 mod functions;
 mod hash;
 mod index;
-mod location;
 mod ordered_functions;
 mod types;
 
@@ -21,10 +20,13 @@ pub use self::{
     functions::Functions,
     hash::Hash,
     index::{Index, IndexMap},
-    location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
     ordered_functions::{Cluster, OrderedFunctions},
     recursion::Recursion,
     tail_expressions::TailExpressions,
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type},
+};
+
+pub use syntax::{
+    BranchLocation, ExpressionLocation, FunctionLocation, Located,
 };

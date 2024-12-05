@@ -16,12 +16,16 @@
 //! in the compiler. What the above documentation says might not be fully true
 //! yet.
 
+mod location;
 mod parse;
 mod repr;
 
-pub use self::repr::{
-    expression::Expression,
-    functions::{Branch, Function, Member, NamedFunction, Pattern},
-    syntax_tree::SyntaxTree,
-    types::{Signature, Type},
+pub use self::{
+    location::{BranchLocation, ExpressionLocation, FunctionLocation, Located},
+    repr::{
+        expression::Expression,
+        functions::{Branch, Function, Member, NamedFunction, Pattern},
+        syntax_tree::SyntaxTree,
+        types::{Signature, Type},
+    },
 };
