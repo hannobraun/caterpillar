@@ -8,7 +8,7 @@ use crate::code::{
 use super::{located::HasLocation, BranchLocation, FunctionLocation, Located};
 
 impl HasLocation for Expression {
-    type Location = ExpressionLocation;
+    type Location = MemberLocation;
 }
 
 impl<'r> Located<&'r Expression> {
@@ -34,12 +34,12 @@ impl<'r> Located<&'r Expression> {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct ExpressionLocation {
+pub struct MemberLocation {
     pub parent: Box<BranchLocation>,
     pub index: Index<Member>,
 }
 
-impl ExpressionLocation {
+impl MemberLocation {
     /// # Create a helper that implements [`fmt::Display`]
     pub fn display<'r>(
         &'r self,
@@ -56,7 +56,7 @@ impl ExpressionLocation {
 ///
 /// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
 pub struct ExpressionLocationDisplay<'r> {
-    location: &'r ExpressionLocation,
+    location: &'r MemberLocation,
     syntax_tree: &'r SyntaxTree,
 }
 

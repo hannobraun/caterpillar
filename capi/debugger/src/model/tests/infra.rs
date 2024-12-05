@@ -1,6 +1,6 @@
 use capi_compiler::{
     code::{
-        syntax::{ExpressionLocation, SyntaxTree},
+        syntax::{MemberLocation, SyntaxTree},
         FunctionCalls,
     },
     Compiler,
@@ -105,7 +105,7 @@ impl TestDebugger {
 
     pub fn expect_expression(
         &mut self,
-        location: &ExpressionLocation,
+        location: &MemberLocation,
     ) -> DebugExpression {
         let Some(expression) = self
             .transient_state()

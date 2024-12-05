@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::code::syntax::{ExpressionLocation, FunctionLocation};
+use crate::code::syntax::{FunctionLocation, MemberLocation};
 
 /// # Mapping of pre-compiled source code to fully compiled instructions
 #[derive(
@@ -10,8 +10,8 @@ use crate::code::syntax::{ExpressionLocation, FunctionLocation};
 )]
 pub struct SourceMap {
     expression_to_instructions:
-        BTreeMap<ExpressionLocation, Vec<InstructionAddress>>,
-    instruction_to_expression: BTreeMap<InstructionAddress, ExpressionLocation>,
+        BTreeMap<MemberLocation, Vec<InstructionAddress>>,
+    instruction_to_expression: BTreeMap<InstructionAddress, MemberLocation>,
     function_to_instructions:
         BTreeMap<FunctionLocation, [InstructionAddress; 2]>,
 }
@@ -23,7 +23,7 @@ impl SourceMap {
     /// associated instructions, use the returned [`Mapping`].
     pub fn map_expression_to_instructions(
         &mut self,
-        expression: ExpressionLocation,
+        expression: MemberLocation,
     ) -> Mapping {
         // Make sure we don't have a previous mapping whose leftovers might
         // corrupt the new one.
@@ -51,7 +51,7 @@ impl SourceMap {
     pub fn instruction_to_expression(
         &self,
         instruction: &InstructionAddress,
-    ) -> Option<&ExpressionLocation> {
+    ) -> Option<&MemberLocation> {
         self.instruction_to_expression.get(instruction)
     }
 
@@ -61,7 +61,7 @@ impl SourceMap {
     /// instructions.
     pub fn expression_to_instructions(
         &self,
-        expression: &ExpressionLocation,
+        expression: &MemberLocation,
     ) -> &Vec<InstructionAddress> {
         static EMPTY: Vec<InstructionAddress> = Vec::new();
 
@@ -96,7 +96,7 @@ impl SourceMap {
 ///
 /// Returned by [`SourceMap::define_mapping`].
 pub struct Mapping<'r> {
-    expression: ExpressionLocation,
+    expression: MemberLocation,
     source_map: &'r mut SourceMap,
 }
 

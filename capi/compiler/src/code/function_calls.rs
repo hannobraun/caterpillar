@@ -5,16 +5,14 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::syntax::{
-    Expression, ExpressionLocation, FunctionLocation, SyntaxTree,
-};
+use super::syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree};
 
 /// # Tracks function calls
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCalls {
-    to_host_functions: BTreeMap<ExpressionLocation, HostFunction>,
-    to_intrinsic_functions: BTreeMap<ExpressionLocation, IntrinsicFunction>,
-    to_user_defined_functions: BTreeMap<ExpressionLocation, FunctionLocation>,
+    to_host_functions: BTreeMap<MemberLocation, HostFunction>,
+    to_intrinsic_functions: BTreeMap<MemberLocation, IntrinsicFunction>,
+    to_user_defined_functions: BTreeMap<MemberLocation, FunctionLocation>,
 }
 
 impl FunctionCalls {
@@ -71,7 +69,7 @@ impl FunctionCalls {
     /// # Determine, if an expression is a call to a host function
     pub fn is_call_to_host_function(
         &self,
-        location: &ExpressionLocation,
+        location: &MemberLocation,
     ) -> Option<&HostFunction> {
         self.to_host_functions.get(location)
     }
@@ -79,7 +77,7 @@ impl FunctionCalls {
     /// # Determine, if an expression is a call to an intrinsic function
     pub fn is_call_to_intrinsic_function(
         &self,
-        location: &ExpressionLocation,
+        location: &MemberLocation,
     ) -> Option<&IntrinsicFunction> {
         self.to_intrinsic_functions.get(location)
     }
@@ -87,7 +85,7 @@ impl FunctionCalls {
     /// # Determine, if an expression is a call to a user-defined function
     pub fn is_call_to_user_defined_function(
         &self,
-        location: &ExpressionLocation,
+        location: &MemberLocation,
     ) -> Option<&FunctionLocation> {
         self.to_user_defined_functions.get(location)
     }

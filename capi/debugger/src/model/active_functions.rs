@@ -3,7 +3,7 @@ use std::{collections::VecDeque, fmt};
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{ExpressionLocation, FunctionLocation, NamedFunction},
+        syntax::{FunctionLocation, MemberLocation, NamedFunction},
         Index,
     },
     CompilerOutput,
@@ -159,7 +159,7 @@ impl ActiveFunctionsEntries {
     pub fn find_next_expression_or_next_after_caller(
         &self,
         branch: &DebugBranch,
-        expression: &ExpressionLocation,
+        expression: &MemberLocation,
     ) -> anyhow::Result<Option<DebugExpression>> {
         if let Some(after) = branch.expression_after(expression)? {
             return Ok(Some(after.clone()));
@@ -170,7 +170,7 @@ impl ActiveFunctionsEntries {
 
     pub fn find_next_expression_after_caller(
         &self,
-        expression: &ExpressionLocation,
+        expression: &MemberLocation,
     ) -> anyhow::Result<Option<DebugExpression>> {
         let caller_branch = self
             .inner
@@ -332,7 +332,7 @@ fn reconstruct_function(
 }
 
 fn function_call_to_function_name(
-    function_call: &ExpressionLocation,
+    function_call: &MemberLocation,
     code: &CompilerOutput,
 ) -> Option<String> {
     let function_location = code

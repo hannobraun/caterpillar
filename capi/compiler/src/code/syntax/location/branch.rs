@@ -5,9 +5,7 @@ use crate::code::{
     Index,
 };
 
-use super::{
-    located::HasLocation, ExpressionLocation, FunctionLocation, Located,
-};
+use super::{located::HasLocation, FunctionLocation, Located, MemberLocation};
 
 impl HasLocation for Branch {
     type Location = BranchLocation;
@@ -25,7 +23,7 @@ impl<'r> Located<&'r Branch> {
 
             Located {
                 fragment: expression,
-                location: ExpressionLocation {
+                location: MemberLocation {
                     parent: Box::new(location.clone()),
                     index,
                 },

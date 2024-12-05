@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::syntax::{Expression, ExpressionLocation, SyntaxTree};
+use super::syntax::{Expression, MemberLocation, SyntaxTree};
 
 /// # Tracks tail expressions
 ///
@@ -14,7 +14,7 @@ use super::syntax::{Expression, ExpressionLocation, SyntaxTree};
 /// tail calls.
 #[derive(Debug)]
 pub struct TailExpressions {
-    inner: BTreeSet<ExpressionLocation>,
+    inner: BTreeSet<MemberLocation>,
 }
 
 impl TailExpressions {
@@ -44,7 +44,7 @@ impl TailExpressions {
     }
 
     /// # Determine if the expression at the provided location is a tail
-    pub fn is_tail_expression(&self, location: &ExpressionLocation) -> bool {
+    pub fn is_tail_expression(&self, location: &MemberLocation) -> bool {
         self.inner.contains(location)
     }
 }

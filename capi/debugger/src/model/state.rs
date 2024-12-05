@@ -1,5 +1,5 @@
 use capi_compiler::{
-    code::syntax::ExpressionLocation, CompilerOutput, Instructions,
+    code::syntax::MemberLocation, CompilerOutput, Instructions,
 };
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
@@ -274,8 +274,8 @@ impl PersistentState {
 
     fn step_or_continue(
         &mut self,
-        origin: &ExpressionLocation,
-        targets: Vec<ExpressionLocation>,
+        origin: &MemberLocation,
+        targets: Vec<MemberLocation>,
         commands: &mut Vec<Command>,
     ) -> anyhow::Result<()> {
         let origin = self.code.expression_to_instruction(origin)?;

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    syntax::{Expression, ExpressionLocation, FunctionLocation},
+    syntax::{Expression, FunctionLocation, MemberLocation},
     FunctionCalls, Functions, Index, OrderedFunctions,
 };
 
@@ -35,7 +35,7 @@ use super::{
 /// subject to an ongoing transition.
 #[derive(Debug)]
 pub struct Recursion {
-    inner: BTreeMap<ExpressionLocation, Index<FunctionLocation>>,
+    inner: BTreeMap<MemberLocation, Index<FunctionLocation>>,
 }
 
 impl Recursion {
@@ -105,7 +105,7 @@ impl Recursion {
     /// expression is defined in.
     pub fn is_recursive_expression(
         &self,
-        location: &ExpressionLocation,
+        location: &MemberLocation,
     ) -> Option<Index<FunctionLocation>> {
         self.inner.get(location).copied()
     }

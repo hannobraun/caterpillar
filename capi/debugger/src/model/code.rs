@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{code::syntax::ExpressionLocation, CompilerOutput};
+use capi_compiler::{code::syntax::MemberLocation, CompilerOutput};
 use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
@@ -16,7 +16,7 @@ impl DebugCode {
 
     pub fn expression_to_instruction(
         &self,
-        expression: &ExpressionLocation,
+        expression: &MemberLocation,
     ) -> anyhow::Result<InstructionAddress> {
         let code = self.get()?;
         code.source_map

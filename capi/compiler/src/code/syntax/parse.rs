@@ -6,8 +6,9 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::Type, Branch, BranchLocation, Expression, ExpressionLocation,
-    Function, FunctionLocation, Member, NamedFunction, Pattern, Signature,
+    repr::types::Type, Branch, BranchLocation, Expression, Function,
+    FunctionLocation, Member, MemberLocation, NamedFunction, Pattern,
+    Signature,
 };
 
 /// # Parse the provided tokens
@@ -219,7 +220,7 @@ fn parse_branch_body(
                 break;
             }
             _ => {
-                let location = ExpressionLocation {
+                let location = MemberLocation {
                     parent: Box::new(location.clone()),
                     index: body.next_index(),
                 };
@@ -234,7 +235,7 @@ fn parse_branch_body(
 
 fn parse_syntax_node(
     tokens: &mut Tokens,
-    location: ExpressionLocation,
+    location: MemberLocation,
 ) -> Result<Member> {
     let (expression, signature) = parse_expression(tokens, location)?;
 
@@ -248,7 +249,7 @@ fn parse_syntax_node(
 
 fn parse_expression(
     tokens: &mut Tokens,
-    location: ExpressionLocation,
+    location: MemberLocation,
 ) -> Result<(Expression, Option<Signature>)> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };

@@ -5,9 +5,7 @@ use crate::code::{
     Index,
 };
 
-use super::{
-    located::HasLocation, BranchLocation, ExpressionLocation, Located,
-};
+use super::{located::HasLocation, BranchLocation, Located, MemberLocation};
 
 impl HasLocation for Function {
     type Location = FunctionLocation;
@@ -78,7 +76,7 @@ impl<'r> Located<&'r Function> {
 )]
 pub enum FunctionLocation {
     NamedFunction { index: Index<NamedFunction> },
-    AnonymousFunction { location: ExpressionLocation },
+    AnonymousFunction { location: MemberLocation },
 }
 
 impl FunctionLocation {
@@ -100,8 +98,8 @@ impl From<Index<NamedFunction>> for FunctionLocation {
     }
 }
 
-impl From<ExpressionLocation> for FunctionLocation {
-    fn from(location: ExpressionLocation) -> Self {
+impl From<MemberLocation> for FunctionLocation {
+    fn from(location: MemberLocation) -> Self {
         Self::AnonymousFunction { location }
     }
 }

@@ -5,6 +5,6 @@ mod located;
 mod named_function;
 
 pub use self::{
-    branch::BranchLocation, expression::ExpressionLocation,
+    branch::BranchLocation, expression::MemberLocation,
     function::FunctionLocation, located::Located,
 };

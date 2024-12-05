@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{Branch, BranchLocation, ExpressionLocation, Pattern},
+        syntax::{Branch, BranchLocation, MemberLocation, Pattern},
         Cluster, FunctionCalls, Functions,
     },
     source_map::SourceMap,
@@ -22,7 +22,7 @@ impl DebugBranch {
     pub fn new(
         branch: Branch,
         location: BranchLocation,
-        active_expression: Option<&ExpressionLocation>,
+        active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
         cluster: &Cluster,
         functions: &Functions,
@@ -35,7 +35,7 @@ impl DebugBranch {
             .body
             .into_iter()
             .map(|(index, expression)| {
-                let location = ExpressionLocation {
+                let location = MemberLocation {
                     parent: Box::new(location.clone()),
                     index,
                 };
@@ -88,7 +88,7 @@ impl DebugBranch {
 
     pub fn expression_after(
         &self,
-        expression: &ExpressionLocation,
+        expression: &MemberLocation,
     ) -> anyhow::Result<Option<&DebugExpression>> {
         if !self.body.iter().any(|f| f.data.location == *expression) {
             return Err(anyhow!(

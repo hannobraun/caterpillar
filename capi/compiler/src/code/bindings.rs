@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use super::syntax::{
-    Branch, Expression, ExpressionLocation, Function, FunctionLocation,
-    Located, Pattern, SyntaxTree,
+    Branch, Expression, Function, FunctionLocation, Located, MemberLocation,
+    Pattern, SyntaxTree,
 };
 
 /// # Tracks bindings
@@ -11,7 +11,7 @@ use super::syntax::{
 /// to a name.
 #[derive(Debug)]
 pub struct Bindings {
-    bindings: BTreeSet<ExpressionLocation>,
+    bindings: BTreeSet<MemberLocation>,
     environments: BTreeMap<FunctionLocation, Environment>,
 }
 
@@ -30,7 +30,7 @@ impl Bindings {
     }
 
     /// # Determine, if the expression at the given location is a binding
-    pub fn is_binding(&self, location: &ExpressionLocation) -> bool {
+    pub fn is_binding(&self, location: &MemberLocation) -> bool {
         self.bindings.contains(location)
     }
 
@@ -49,7 +49,7 @@ pub type Environment = BTreeSet<String>;
 
 fn resolve_bindings(
     syntax_tree: &SyntaxTree,
-    bindings: &mut BTreeSet<ExpressionLocation>,
+    bindings: &mut BTreeSet<MemberLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     let mut scopes = Scopes::new();
@@ -67,7 +67,7 @@ fn resolve_bindings(
 fn resolve_bindings_in_function(
     function: Located<&Function>,
     scopes: &mut Scopes,
-    bindings: &mut BTreeSet<ExpressionLocation>,
+    bindings: &mut BTreeSet<MemberLocation>,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) -> Environment {
     let location = function.location.clone();
@@ -95,7 +95,7 @@ fn resolve_bindings_in_function(
 fn resolve_bindings_in_branch(
     branch: Located<&Branch>,
     scopes: &mut Scopes,
-    bindings: &mut BTreeSet<ExpressionLocation>,
+    bindings: &mut BTreeSet<MemberLocation>,
     environment: &mut Environment,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {

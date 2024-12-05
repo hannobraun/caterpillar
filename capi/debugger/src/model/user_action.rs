@@ -1,9 +1,9 @@
-use capi_compiler::code::syntax::ExpressionLocation;
+use capi_compiler::code::syntax::MemberLocation;
 
 #[derive(Clone)]
 pub enum UserAction {
-    BreakpointClear { expression: ExpressionLocation },
-    BreakpointSet { expression: ExpressionLocation },
+    BreakpointClear { expression: MemberLocation },
+    BreakpointSet { expression: MemberLocation },
     Continue,
     Reset,
     StepIn,

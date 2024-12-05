@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{self, BranchLocation, ExpressionLocation, FunctionLocation},
+        syntax::{self, BranchLocation, FunctionLocation, MemberLocation},
         Cluster, FunctionCalls, Functions,
     },
     source_map::SourceMap,
@@ -22,7 +22,7 @@ impl DebugFunction {
         function: syntax::Function,
         name: Option<String>,
         location: FunctionLocation,
-        active_expression: Option<&ExpressionLocation>,
+        active_expression: Option<&MemberLocation>,
         is_innermost_active_function: bool,
         cluster: &Cluster,
         functions: &Functions,
