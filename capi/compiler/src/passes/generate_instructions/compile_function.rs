@@ -163,8 +163,10 @@ fn compile_branch_body(
     let mut first_instruction = None;
 
     for (index, expression) in body {
+        let expression = expression.inner;
+
         let addr = compile_expression(
-            expression.inner,
+            expression,
             ExpressionLocation {
                 parent: Box::new(location.clone()),
                 index,
