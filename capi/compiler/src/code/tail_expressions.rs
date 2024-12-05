@@ -24,16 +24,10 @@ impl TailExpressions {
 
         for function in syntax_tree.all_functions() {
             for branch in function.branches() {
-                for expression in branch.expressions().rev() {
-                    if let Expression::Comment { .. } = expression.fragment {
-                        continue;
-                    }
-
+                if let Some(expression) = branch.expressions().last() {
                     if let Expression::Identifier { .. } = expression.fragment {
                         tail_expressions.insert(expression.location);
                     }
-
-                    break;
                 }
             }
         }
