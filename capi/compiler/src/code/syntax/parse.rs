@@ -223,18 +223,27 @@ fn parse_branch_body(
                     parent: Box::new(location.clone()),
                     index: body.next_index(),
                 };
-                let (expression, signature) =
-                    parse_expression(tokens, location)?;
-                let syntax_node = SyntaxNode::Expression {
-                    expression,
-                    signature,
-                };
+                let syntax_node = parse_syntax_node(tokens, location)?;
                 body.push(syntax_node);
             }
         }
     }
 
     Ok(())
+}
+
+fn parse_syntax_node(
+    tokens: &mut Tokens,
+    location: ExpressionLocation,
+) -> Result<SyntaxNode> {
+    let (expression, signature) = parse_expression(tokens, location)?;
+
+    let syntax_node = SyntaxNode::Expression {
+        expression,
+        signature,
+    };
+
+    Ok(syntax_node)
 }
 
 fn parse_expression(
