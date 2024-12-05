@@ -17,8 +17,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugExpression, DebugMemberData, DebugMemberKind,
-        UserAction,
+        DebugBranch, DebugMember, DebugMemberData, DebugMemberKind, UserAction,
     },
     ui::{actions::send_action, ActionsTx},
 };
@@ -71,7 +70,7 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
 #[component]
 fn Branch(
     parameters: Vec<String>,
-    body: Vec<DebugExpression>,
+    body: Vec<DebugMember>,
     actions: ActionsTx,
 ) -> impl IntoView {
     let parameters = parameters.join(" ");
@@ -80,7 +79,7 @@ fn Branch(
         .map(|expression| {
             view! {
                 <li class="ml-8">
-                    <Expression
+                    <Member
                         expression=expression
                         actions=actions.clone() />
                 </li>
@@ -99,10 +98,7 @@ fn Branch(
 }
 
 #[component]
-pub fn Expression(
-    expression: DebugExpression,
-    actions: ActionsTx,
-) -> impl IntoView {
+pub fn Member(expression: DebugMember, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
     let (expression, actions, error) = match expression.kind {
