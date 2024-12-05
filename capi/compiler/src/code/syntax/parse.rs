@@ -263,7 +263,6 @@ fn parse_expression(
             .map(|function| Expression::LocalFunction { function })?
     } else {
         match tokens.take()? {
-            Token::Comment { text } => Expression::Comment { text },
             Token::Identifier { name } => Expression::Identifier { name },
             Token::IntegerLiteral { value } => Expression::LiteralNumber {
                 value: value.into(),
