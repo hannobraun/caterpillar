@@ -162,8 +162,8 @@ fn compile_branch_body(
 ) -> [InstructionAddress; 2] {
     let mut first_instruction = None;
 
-    for (index, expression) in body {
-        let SyntaxNode::Expression { expression, .. } = expression;
+    for (index, syntax_node) in body {
+        let SyntaxNode::Expression { expression, .. } = syntax_node;
 
         let addr = compile_expression(
             expression,
