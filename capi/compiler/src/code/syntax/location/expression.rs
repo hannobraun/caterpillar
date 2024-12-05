@@ -23,7 +23,7 @@ impl<'r> Located<&'r Expression> {
     }
 }
 
-/// # The location of an expression in the source code
+/// # The location of a member of a branch body
 #[derive(
     Clone,
     Debug,
