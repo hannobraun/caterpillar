@@ -176,13 +176,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         .find_single_branch()
         .unwrap()
         .expressions()
-        .filter_map(|expression| {
-            if expression.as_comment().is_none() {
-                Some(expression.location)
-            } else {
-                None
-            }
-        })
+        .map(|expression| expression.location)
         .collect_tuple()
         .unwrap();
 
@@ -468,13 +462,7 @@ fn step_over_function_call() {
         .find_single_branch()
         .unwrap()
         .expressions()
-        .filter_map(|expression| {
-            if expression.as_comment().is_none() {
-                Some(expression.location)
-            } else {
-                None
-            }
-        })
+        .map(|expression| expression.location)
         .collect_tuple()
         .unwrap();
 
