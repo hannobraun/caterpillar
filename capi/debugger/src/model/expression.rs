@@ -12,12 +12,12 @@ use capi_runtime::Effect;
 use super::{Breakpoints, DebugFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DebugExpression {
+pub struct DebugMember {
     pub data: DebugMemberData,
     pub kind: DebugMemberKind,
 }
 
-impl DebugExpression {
+impl DebugMember {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         member: Member,

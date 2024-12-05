@@ -8,12 +8,12 @@ use capi_compiler::{
 };
 use capi_runtime::Effect;
 
-use super::{Breakpoints, DebugExpression};
+use super::{Breakpoints, DebugMember};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugBranch {
     pub parameters: Vec<String>,
-    pub body: Vec<DebugExpression>,
+    pub body: Vec<DebugMember>,
     pub is_active: bool,
 }
 
@@ -39,7 +39,7 @@ impl DebugBranch {
                     parent: Box::new(location.clone()),
                     index,
                 };
-                DebugExpression::new(
+                DebugMember::new(
                     expression,
                     location,
                     active_expression,
@@ -73,7 +73,7 @@ impl DebugBranch {
         }
     }
 
-    pub fn active_expression(&self) -> anyhow::Result<&DebugExpression> {
+    pub fn active_expression(&self) -> anyhow::Result<&DebugMember> {
         self.body
             .iter()
             .find(|expression| expression.data.state.is_active())
@@ -89,7 +89,7 @@ impl DebugBranch {
     pub fn expression_after(
         &self,
         expression: &MemberLocation,
-    ) -> anyhow::Result<Option<&DebugExpression>> {
+    ) -> anyhow::Result<Option<&DebugMember>> {
         if !self.body.iter().any(|f| f.data.location == *expression) {
             return Err(anyhow!(
                 "Expected expression to be in branch, but could not find it. \

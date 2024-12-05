@@ -12,7 +12,7 @@ use capi_game_engine::{
 use capi_protocol::updates::Updates;
 
 use crate::model::{
-    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugExpression,
+    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugMember,
     DebugFunction, DebugMemberKind, PersistentState, TransientState,
     UserAction,
 };
@@ -106,7 +106,7 @@ impl TestDebugger {
     pub fn expect_expression(
         &mut self,
         location: &MemberLocation,
-    ) -> DebugExpression {
+    ) -> DebugMember {
         let Some(expression) = self
             .transient_state()
             .active_functions
@@ -201,12 +201,12 @@ impl FunctionsExt for Vec<DebugFunction> {
 }
 
 pub trait DebugFunctionExt {
-    fn active_expression(self) -> DebugExpression;
+    fn active_expression(self) -> DebugMember;
     fn only_branch(self) -> DebugBranch;
 }
 
 impl DebugFunctionExt for DebugFunction {
-    fn active_expression(self) -> DebugExpression {
+    fn active_expression(self) -> DebugMember {
         self.branches
             .into_iter()
             .find_map(|branch| {
@@ -231,11 +231,11 @@ impl DebugFunctionExt for DebugFunction {
 }
 
 pub trait DebugBranchExt {
-    fn expression(&self, i: usize) -> DebugExpression;
+    fn expression(&self, i: usize) -> DebugMember;
 }
 
 impl DebugBranchExt for DebugBranch {
-    fn expression(&self, i: usize) -> DebugExpression {
+    fn expression(&self, i: usize) -> DebugMember {
         let Some(expression) = self.body.get(i) else {
             panic!("{i}-th expression in `{:?}` not available", self.body);
         };
@@ -264,7 +264,7 @@ pub trait DebugExpressionExt {
     fn expect_function(self) -> DebugFunction;
 }
 
-impl DebugExpressionExt for DebugExpression {
+impl DebugExpressionExt for DebugMember {
     fn expect_call_to_function(
         self,
         called_name: &str,
