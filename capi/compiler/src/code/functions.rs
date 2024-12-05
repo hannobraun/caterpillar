@@ -1,9 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{
-    syntax::{Function, FunctionLocation},
-    Located,
-};
+use super::syntax::{Function, FunctionLocation, Located};
 
 /// # All functions in the program
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
