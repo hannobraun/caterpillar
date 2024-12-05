@@ -948,10 +948,11 @@ abs: fn
         -1
         greater_s32
         fn
-            \ 0 ->
-                neg_s32
+            \ v, 0 ->
+                v neg_s32
 
-            \ _ ->
+            \ v, _ ->
+                v
         end
             eval
 end
