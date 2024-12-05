@@ -26,5 +26,3 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{ConcreteSignature, Signature, Type},
 };
-
-pub use syntax::Located;
