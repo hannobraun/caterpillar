@@ -703,12 +703,12 @@ end
 
 vec_load: fn
     \ address ->
-        address
-        load
-        address
-        1
-        add_s32
-        load
+        address: -> Number .
+        load: Number -> Number .
+        address: -> Number .
+        1: -> Number .
+        add_s32: Number, Number -> Number .
+        load: Number -> Number .
 end
 
 vec_store: fn
