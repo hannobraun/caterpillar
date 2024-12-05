@@ -20,12 +20,16 @@ impl<'r> Located<&'r Branch> {
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
         let location = self.location.clone();
 
-        self.body.iter().map(move |(&index, expression)| Located {
-            fragment: &expression.inner,
-            location: ExpressionLocation {
-                parent: Box::new(location.clone()),
-                index,
-            },
+        self.body.iter().map(move |(&index, expression)| {
+            let expression = &expression.inner;
+
+            Located {
+                fragment: expression,
+                location: ExpressionLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            }
         })
     }
 
