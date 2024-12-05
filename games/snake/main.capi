@@ -927,18 +927,18 @@ end
 # Utilities - Miscellaneous
 negatable_random: fn
     \ ->
-        read_random
-        _negatable_random_return_or_continue
+        read_random: -> Number .
+        _negatable_random_return_or_continue: Number -> Number .
 end
 
 _negatable_random_return_or_continue: fn
     \ -2147483648 ->
         # Negating the minimum number would result in an
         # integer overflow.
-        negatable_random
+        negatable_random: -> Number .
 
     \ random ->
-        random
+        random: -> Number .
 end
 
 abs: fn
