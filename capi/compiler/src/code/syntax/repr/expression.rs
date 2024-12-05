@@ -26,29 +26,6 @@ use super::functions::Function;
     udigest::Digestable,
 )]
 pub enum Expression {
-    /// # A comment, which does not influence the execution of the code
-    ///
-    /// ## Implementation Note
-    ///
-    /// A comment is not really an expression, as it doesn't consume or produce
-    /// any values. Thus, it's questionable whether it should be here.
-    ///
-    /// In addition, the comment being here, changes the hash of the function
-    /// that it is in. This is unnecessary, as it would cause a function that
-    /// hasn't actually changed to be considered different.
-    ///
-    /// For these reasons, it might be better to move comments into a separate
-    /// data structure. However, so far, none of the above has been an actual
-    /// problem. And for now, it's simpler to just treat comments as expressions
-    /// that consume and produce nothing.
-    ///
-    /// Probably, it needs to move elsewhere, eventually. But there doesn't seem
-    /// to be a compelling reasons to do that now.
-    Comment {
-        /// # The text of the comment
-        text: String,
-    },
-
     /// # An identifier
     ///
     /// Can refer to a binding or function.

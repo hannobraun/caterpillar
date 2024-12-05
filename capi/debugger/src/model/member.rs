@@ -146,9 +146,6 @@ impl DebugMemberKind {
                 text: format!("# {text}"),
             },
             Member::Expression { expression, .. } => match expression {
-                Expression::Comment { text } => Self::Comment {
-                    text: format!("# {text}"),
-                },
                 Expression::Identifier { name } => Self::Identifier { name },
                 Expression::LiteralNumber { value } => Self::Value {
                     as_string: value.to_string(),

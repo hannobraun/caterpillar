@@ -229,7 +229,6 @@ fn compile_expression(
         .map_expression_to_instructions(location.clone());
 
     match expression {
-        Expression::Comment { .. } => None,
         Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location) {
                 let address = generate_instruction(
