@@ -302,11 +302,11 @@ end
 # Game state - next position
 init_next_position: fn
     \ ->
-        positions
-        0
-        vec_buf_get
-        next_position
-        vec_store
+        positions: -> Number .
+        0: -> Number .
+        vec_buf_get: Number, Number -> Number, Number .
+        next_position: -> Number .
+        vec_store: Number, Number, Number -> .
 end
 
 update_next_position: fn
