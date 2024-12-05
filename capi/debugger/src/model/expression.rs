@@ -54,9 +54,10 @@ impl DebugExpression {
         });
 
         let signature = expression.signature;
+        let expression = expression.inner;
 
         let kind = DebugExpressionKind::new(
-            expression.inner,
+            expression,
             location.clone(),
             active_expression,
             is_in_innermost_active_function,
