@@ -2,12 +2,12 @@ use std::result;
 
 use crate::code::{
     tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
-    BranchLocation, ExpressionLocation, FunctionLocation, Index, IndexMap,
+    ExpressionLocation, FunctionLocation, Index, IndexMap,
 };
 
 use super::{
-    repr::types::Type, Branch, Expression, Function, Member, NamedFunction,
-    Pattern, Signature,
+    repr::types::Type, Branch, BranchLocation, Expression, Function, Member,
+    NamedFunction, Pattern, Signature,
 };
 
 /// # Parse the provided tokens
