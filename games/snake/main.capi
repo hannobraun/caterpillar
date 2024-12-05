@@ -293,7 +293,10 @@ end
 # Game state - velocity
 init_velocity: fn
     \ ->
-        1 0 velocity vec_store
+        1
+        0
+        velocity
+            vec_store
 end
 
 # Game state - next position
