@@ -126,9 +126,9 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
             None,
         ),
         DebugMemberKind::Identifier { name } => {
-            make_single_expression(name, member.data, &mut class_outer, actions)
+            make_single_member(name, member.data, &mut class_outer, actions)
         }
-        DebugMemberKind::Value { as_string } => make_single_expression(
+        DebugMemberKind::Value { as_string } => make_single_member(
             as_string,
             member.data,
             &mut class_outer,
@@ -147,7 +147,7 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
     }
 }
 
-fn make_single_expression(
+fn make_single_member(
     expression: String,
     data: DebugMemberData,
     class_outer: &mut String,
