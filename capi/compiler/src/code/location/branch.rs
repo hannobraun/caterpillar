@@ -20,8 +20,8 @@ impl<'r> Located<&'r Branch> {
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
         let location = self.location.clone();
 
-        self.body.iter().map(move |(&index, syntax_node)| {
-            let Member::Expression { expression, .. } = syntax_node;
+        self.body.iter().map(move |(&index, member)| {
+            let Member::Expression { expression, .. } = member;
 
             Located {
                 fragment: expression,
