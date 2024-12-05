@@ -33,12 +33,12 @@ impl DebugExpression {
     ) -> Self {
         let state = if Some(&location) == active_expression {
             if is_in_innermost_active_function {
-                DebugExpressionState::InnermostActiveExpression
+                DebugMemberState::InnermostActiveExpression
             } else {
-                DebugExpressionState::ActiveCaller
+                DebugMemberState::ActiveCaller
             }
         } else {
-            DebugExpressionState::NotActive
+            DebugMemberState::NotActive
         };
 
         let has_durable_breakpoint = source_map
@@ -87,19 +87,19 @@ impl DebugExpression {
 pub struct DebugExpressionData {
     pub signature: Option<Signature>,
     pub location: MemberLocation,
-    pub state: DebugExpressionState,
+    pub state: DebugMemberState,
     pub has_durable_breakpoint: bool,
     pub effect: Option<Effect>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum DebugExpressionState {
+pub enum DebugMemberState {
     InnermostActiveExpression,
     ActiveCaller,
     NotActive,
 }
 
-impl DebugExpressionState {
+impl DebugMemberState {
     /// # Indicate whether this is the innermost active expression
     ///
     /// The innermost active expression is the active expression in the
