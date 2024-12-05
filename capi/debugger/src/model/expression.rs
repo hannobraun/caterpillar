@@ -55,6 +55,7 @@ impl DebugMember {
         });
 
         let signature = match &member {
+            Member::Comment { .. } => None,
             Member::Expression { signature, .. } => signature.clone(),
         };
 
@@ -141,6 +142,9 @@ impl DebugMemberKind {
         effect: Option<&Effect>,
     ) -> Self {
         match member {
+            Member::Comment { text } => Self::Comment {
+                text: format!("# {text}"),
+            },
             Member::Expression { expression, .. } => match expression {
                 Expression::Comment { text } => Self::Comment {
                     text: format!("# {text}"),

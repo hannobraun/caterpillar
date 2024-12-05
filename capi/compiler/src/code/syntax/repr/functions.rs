@@ -119,6 +119,12 @@ pub enum Pattern {
     udigest::Digestable,
 )]
 pub enum Member {
+    /// # A code comment
+    Comment {
+        /// # The text of the comment
+        text: String,
+    },
+
     /// # The syntax node is an expression
     Expression {
         /// # The expression

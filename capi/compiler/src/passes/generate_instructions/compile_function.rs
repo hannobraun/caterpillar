@@ -165,7 +165,9 @@ fn compile_branch_body(
     let mut first_instruction = None;
 
     for (index, member) in body {
-        let Member::Expression { expression, .. } = member;
+        let Member::Expression { expression, .. } = member else {
+            continue;
+        };
 
         let addr = compile_expression(
             expression,
