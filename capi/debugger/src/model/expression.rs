@@ -129,7 +129,7 @@ pub enum DebugMemberKind {
 impl DebugMemberKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        expression: Member,
+        member: Member,
         location: MemberLocation,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
@@ -140,7 +140,7 @@ impl DebugMemberKind {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        let Member::Expression { expression, .. } = expression;
+        let Member::Expression { expression, .. } = member;
 
         match expression {
             Expression::Comment { text } => Self::Comment {
