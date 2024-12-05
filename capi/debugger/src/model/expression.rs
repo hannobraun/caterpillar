@@ -57,10 +57,9 @@ impl DebugMember {
         let signature = match &member {
             Member::Expression { signature, .. } => signature.clone(),
         };
-        let Member::Expression { expression, .. } = member;
 
         let kind = DebugMemberKind::new(
-            expression,
+            member,
             location.clone(),
             active_expression,
             is_in_innermost_active_function,
@@ -130,7 +129,7 @@ pub enum DebugMemberKind {
 impl DebugMemberKind {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        expression: Expression,
+        expression: Member,
         location: MemberLocation,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
@@ -141,6 +140,8 @@ impl DebugMemberKind {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
+        let Member::Expression { expression, .. } = expression;
+
         match expression {
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
