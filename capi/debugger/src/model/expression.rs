@@ -1,6 +1,6 @@
 use capi_compiler::{
     code::{
-        syntax::{AnnotatedExpression, Expression, Signature},
+        syntax::{Expression, Signature, SyntaxNode},
         Cluster, ExpressionLocation, FunctionCalls, FunctionLocation,
         Functions,
     },
@@ -19,7 +19,7 @@ pub struct DebugExpression {
 impl DebugExpression {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        expression: AnnotatedExpression,
+        expression: SyntaxNode,
         location: ExpressionLocation,
         active_expression: Option<&ExpressionLocation>,
         is_in_innermost_active_function: bool,
@@ -53,6 +53,7 @@ impl DebugExpression {
             }
         });
 
+        let SyntaxNode::Expression { expression } = expression;
         let signature = expression.signature;
         let expression = expression.inner;
 

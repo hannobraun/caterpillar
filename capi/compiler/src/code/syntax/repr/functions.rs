@@ -67,7 +67,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<AnnotatedExpression>,
+    pub body: IndexMap<SyntaxNode>,
 }
 
 /// # A pattern
