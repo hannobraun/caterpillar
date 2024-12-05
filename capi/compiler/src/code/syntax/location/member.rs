@@ -12,13 +12,13 @@ impl HasLocation for Member {
 }
 
 impl<'r> Located<&'r Member> {
-    pub fn into_expression(self) -> Located<&'r Expression> {
+    pub fn into_expression(self) -> Option<Located<&'r Expression>> {
         let Member::Expression { expression, .. } = self.fragment;
 
-        Located {
+        Some(Located {
             fragment: expression,
             location: self.location,
-        }
+        })
     }
 }
 
