@@ -237,6 +237,12 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
+    if let Token::Comment { text } = tokens.peek()? {
+        let text = text.clone();
+        tokens.take()?;
+        return Ok(Member::Comment { text });
+    }
+
     let (expression, signature) = parse_expression(tokens, location)?;
 
     let syntax_node = Member::Expression {
