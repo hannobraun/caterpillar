@@ -54,10 +54,10 @@ impl DebugMember {
             }
         });
 
-        let Member::Expression {
-            expression,
-            signature,
-        } = member;
+        let signature = match &member {
+            Member::Expression { signature, .. } => signature.clone(),
+        };
+        let Member::Expression { expression, .. } = member;
 
         let kind = DebugMemberKind::new(
             expression,
