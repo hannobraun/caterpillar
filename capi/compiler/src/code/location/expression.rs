@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Expression, Function, SyntaxNode, SyntaxTree},
+    syntax::{Expression, Function, Member, SyntaxTree},
     Index,
 };
 
@@ -36,7 +36,7 @@ impl<'r> Located<&'r Expression> {
 )]
 pub struct ExpressionLocation {
     pub parent: Box<BranchLocation>,
-    pub index: Index<SyntaxNode>,
+    pub index: Index<Member>,
 }
 
 impl ExpressionLocation {

@@ -4,7 +4,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
-        syntax::{Branch, Expression, Function, Pattern, SyntaxNode},
+        syntax::{Branch, Expression, Function, Member, Pattern},
         BranchLocation, Cluster, ExpressionLocation, FunctionLocation,
         IndexMap,
     },
@@ -154,7 +154,7 @@ where
 }
 
 fn compile_branch_body(
-    body: IndexMap<SyntaxNode>,
+    body: IndexMap<Member>,
     location: BranchLocation,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -163,7 +163,7 @@ fn compile_branch_body(
     let mut first_instruction = None;
 
     for (index, syntax_node) in body {
-        let SyntaxNode::Expression { expression, .. } = syntax_node;
+        let Member::Expression { expression, .. } = syntax_node;
 
         let addr = compile_expression(
             expression,

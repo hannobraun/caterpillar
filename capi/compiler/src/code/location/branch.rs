@@ -1,7 +1,7 @@
 use std::{fmt, iter};
 
 use crate::code::{
-    syntax::{Branch, Expression, Function, SyntaxNode, SyntaxTree},
+    syntax::{Branch, Expression, Function, Member, SyntaxTree},
     Index,
 };
 
@@ -21,7 +21,7 @@ impl<'r> Located<&'r Branch> {
         let location = self.location.clone();
 
         self.body.iter().map(move |(&index, syntax_node)| {
-            let SyntaxNode::Expression { expression, .. } = syntax_node;
+            let Member::Expression { expression, .. } = syntax_node;
 
             Located {
                 fragment: expression,

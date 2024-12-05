@@ -67,7 +67,7 @@ pub struct Branch {
     pub parameters: Vec<Pattern>,
 
     /// # The body of the branch
-    pub body: IndexMap<SyntaxNode>,
+    pub body: IndexMap<Member>,
 }
 
 /// # A pattern
@@ -118,7 +118,7 @@ pub enum Pattern {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub enum SyntaxNode {
+pub enum Member {
     /// # The syntax node is an expression
     Expression {
         /// # The expression

@@ -21,7 +21,7 @@ mod repr;
 
 pub use self::repr::{
     expression::Expression,
-    functions::{Branch, Function, NamedFunction, Pattern, SyntaxNode},
+    functions::{Branch, Function, Member, NamedFunction, Pattern},
     syntax_tree::SyntaxTree,
     types::{Signature, Type},
 };

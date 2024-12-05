@@ -6,8 +6,8 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::Type, Branch, Expression, Function, NamedFunction, Pattern,
-    Signature, SyntaxNode,
+    repr::types::Type, Branch, Expression, Function, Member, NamedFunction,
+    Pattern, Signature,
 };
 
 /// # Parse the provided tokens
@@ -210,7 +210,7 @@ fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
 
 fn parse_branch_body(
     tokens: &mut Tokens,
-    body: &mut IndexMap<SyntaxNode>,
+    body: &mut IndexMap<Member>,
     location: BranchLocation,
 ) -> Result<()> {
     loop {
@@ -235,10 +235,10 @@ fn parse_branch_body(
 fn parse_syntax_node(
     tokens: &mut Tokens,
     location: ExpressionLocation,
-) -> Result<SyntaxNode> {
+) -> Result<Member> {
     let (expression, signature) = parse_expression(tokens, location)?;
 
-    let syntax_node = SyntaxNode::Expression {
+    let syntax_node = Member::Expression {
         expression,
         signature,
     };
