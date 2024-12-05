@@ -2,9 +2,10 @@ mod branch;
 mod expression;
 mod function;
 mod located;
+mod member;
 mod named_function;
 
 pub use self::{
-    branch::BranchLocation, expression::MemberLocation,
-    function::FunctionLocation, located::Located,
+    branch::BranchLocation, function::FunctionLocation, located::Located,
+    member::MemberLocation,
 };
