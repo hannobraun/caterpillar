@@ -53,6 +53,8 @@ impl DebugExpression {
             }
         });
 
+        let signature = expression.signature;
+
         let kind = DebugExpressionKind::new(
             expression.inner,
             location.clone(),
@@ -66,7 +68,7 @@ impl DebugExpression {
             effect,
         );
         let data = DebugExpressionData {
-            signature: expression.signature,
+            signature,
             location,
             state,
             has_durable_breakpoint,
