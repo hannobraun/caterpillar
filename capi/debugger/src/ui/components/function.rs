@@ -80,7 +80,7 @@ fn Branch(
             view! {
                 <li class="ml-8">
                     <Member
-                        expression=expression
+                        member=expression
                         actions=actions.clone() />
                 </li>
             }
@@ -98,10 +98,10 @@ fn Branch(
 }
 
 #[component]
-pub fn Member(expression: DebugMember, actions: ActionsTx) -> impl IntoView {
+pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (expression, actions, error) = match expression.kind {
+    let (expression, actions, error) = match member.kind {
         DebugMemberKind::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
             (
@@ -125,15 +125,12 @@ pub fn Member(expression: DebugMember, actions: ActionsTx) -> impl IntoView {
             None,
             None,
         ),
-        DebugMemberKind::Identifier { name } => make_single_expression(
-            name,
-            expression.data,
-            &mut class_outer,
-            actions,
-        ),
+        DebugMemberKind::Identifier { name } => {
+            make_single_expression(name, member.data, &mut class_outer, actions)
+        }
         DebugMemberKind::Value { as_string } => make_single_expression(
             as_string,
-            expression.data,
+            member.data,
             &mut class_outer,
             actions,
         ),
