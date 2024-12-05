@@ -140,33 +140,33 @@ impl DebugMemberKind {
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
     ) -> Self {
-        let Member::Expression { expression, .. } = member;
+        match member {
+            Member::Expression { expression, .. } => match expression {
+                Expression::Comment { text } => Self::Comment {
+                    text: format!("# {text}"),
+                },
+                Expression::Identifier { name } => Self::Identifier { name },
+                Expression::LiteralNumber { value } => Self::Value {
+                    as_string: value.to_string(),
+                },
+                Expression::LocalFunction { function } => {
+                    let function = DebugFunction::new(
+                        function,
+                        None,
+                        FunctionLocation::AnonymousFunction { location },
+                        active_expression,
+                        is_in_innermost_active_function,
+                        cluster,
+                        functions,
+                        function_calls,
+                        source_map,
+                        breakpoints,
+                        effect,
+                    );
 
-        match expression {
-            Expression::Comment { text } => Self::Comment {
-                text: format!("# {text}"),
+                    Self::Function { function }
+                }
             },
-            Expression::Identifier { name } => Self::Identifier { name },
-            Expression::LiteralNumber { value } => Self::Value {
-                as_string: value.to_string(),
-            },
-            Expression::LocalFunction { function } => {
-                let function = DebugFunction::new(
-                    function,
-                    None,
-                    FunctionLocation::AnonymousFunction { location },
-                    active_expression,
-                    is_in_innermost_active_function,
-                    cluster,
-                    functions,
-                    function_calls,
-                    source_map,
-                    breakpoints,
-                    effect,
-                );
-
-                Self::Function { function }
-            }
         }
     }
 }
