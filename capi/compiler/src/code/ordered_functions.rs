@@ -1,8 +1,8 @@
 use std::iter;
 
 use super::{
-    syntax::{Function, NamedFunction},
-    FunctionLocation, Functions, Index, IndexMap, Located,
+    syntax::{Function, FunctionLocation, NamedFunction},
+    Functions, Index, IndexMap, Located,
 };
 
 /// # All functions, ordered by their dependencies

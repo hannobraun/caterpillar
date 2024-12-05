@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::code::{syntax::ExpressionLocation, FunctionLocation};
+use crate::code::syntax::{ExpressionLocation, FunctionLocation};
 
 /// # Mapping of pre-compiled source code to fully compiled instructions
 #[derive(

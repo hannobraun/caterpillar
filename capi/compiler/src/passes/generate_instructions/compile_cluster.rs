@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use crate::code::{Changes, Cluster, FunctionLocation};
+use crate::code::{syntax::FunctionLocation, Changes, Cluster};
 
 use super::{
     compile_function::{

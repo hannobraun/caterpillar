@@ -3,8 +3,8 @@ use std::{collections::VecDeque, fmt};
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{ExpressionLocation, NamedFunction},
-        FunctionLocation, Index,
+        syntax::{ExpressionLocation, FunctionLocation, NamedFunction},
+        Index,
     },
     CompilerOutput,
 };

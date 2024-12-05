@@ -4,8 +4,9 @@ use capi_runtime::Instruction;
 
 use crate::{
     code::{
-        syntax::SyntaxTree, Bindings, Changes, FunctionCalls, FunctionLocation,
-        Functions, OrderedFunctions, Recursion, TailExpressions,
+        syntax::{FunctionLocation, SyntaxTree},
+        Bindings, Changes, FunctionCalls, Functions, OrderedFunctions,
+        Recursion, TailExpressions,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,

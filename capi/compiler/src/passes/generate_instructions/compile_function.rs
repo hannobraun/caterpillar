@@ -6,9 +6,9 @@ use crate::{
     code::{
         syntax::{
             Branch, BranchLocation, Expression, ExpressionLocation, Function,
-            Member, Pattern,
+            FunctionLocation, Member, Pattern,
         },
-        Cluster, FunctionLocation, IndexMap,
+        Cluster, IndexMap,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,

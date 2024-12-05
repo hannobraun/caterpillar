@@ -5,9 +5,8 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::{
-    syntax::{Expression, ExpressionLocation, SyntaxTree},
-    FunctionLocation,
+use super::syntax::{
+    Expression, ExpressionLocation, FunctionLocation, SyntaxTree,
 };
 
 /// # Tracks function calls

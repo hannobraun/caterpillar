@@ -6,9 +6,8 @@ use petgraph::{
 };
 
 use crate::code::{
-    syntax::{Expression, SyntaxTree},
-    Cluster, FunctionCalls, FunctionLocation, Functions, IndexMap,
-    OrderedFunctions,
+    syntax::{Expression, FunctionLocation, SyntaxTree},
+    Cluster, FunctionCalls, Functions, IndexMap, OrderedFunctions,
 };
 
 pub fn order_functions_by_dependencies(
