@@ -123,7 +123,7 @@ impl DebugExpressionState {
 pub enum DebugExpressionKind {
     Comment { text: String },
     Function { function: DebugFunction },
-    UnresolvedIdentifier { name: String },
+    Identifier { name: String },
     Value { as_string: String },
 }
 
@@ -145,9 +145,7 @@ impl DebugExpressionKind {
             Expression::Comment { text } => Self::Comment {
                 text: format!("# {text}"),
             },
-            Expression::Identifier { name } => {
-                Self::UnresolvedIdentifier { name }
-            }
+            Expression::Identifier { name } => Self::Identifier { name },
             Expression::LiteralNumber { value } => Self::Value {
                 as_string: value.to_string(),
             },

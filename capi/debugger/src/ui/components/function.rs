@@ -129,14 +129,12 @@ pub fn Expression(
             None,
             None,
         ),
-        DebugExpressionKind::UnresolvedIdentifier { name } => {
-            make_single_expression(
-                name,
-                expression.data,
-                &mut class_outer,
-                actions,
-            )
-        }
+        DebugExpressionKind::Identifier { name } => make_single_expression(
+            name,
+            expression.data,
+            &mut class_outer,
+            actions,
+        ),
         DebugExpressionKind::Value { as_string } => make_single_expression(
             as_string,
             expression.data,
