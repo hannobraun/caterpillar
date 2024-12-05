@@ -163,7 +163,7 @@ fn compile_branch_body(
     let mut first_instruction = None;
 
     for (index, expression) in body {
-        let SyntaxNode::Expression { expression } = expression;
+        let SyntaxNode::Expression { expression, .. } = expression;
         let expression = expression.inner;
 
         let addr = compile_expression(
