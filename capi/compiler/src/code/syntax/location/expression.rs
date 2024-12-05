@@ -44,8 +44,8 @@ impl MemberLocation {
     pub fn display<'r>(
         &'r self,
         syntax_tree: &'r SyntaxTree,
-    ) -> ExpressionLocationDisplay<'r> {
-        ExpressionLocationDisplay {
+    ) -> MemberLocationDisplay<'r> {
+        MemberLocationDisplay {
             location: self,
             syntax_tree,
         }
@@ -55,12 +55,12 @@ impl MemberLocation {
 /// # Helper struct to display [`ExpressionLocation`]
 ///
 /// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
-pub struct ExpressionLocationDisplay<'r> {
+pub struct MemberLocationDisplay<'r> {
     location: &'r MemberLocation,
     syntax_tree: &'r SyntaxTree,
 }
 
-impl fmt::Display for ExpressionLocationDisplay<'_> {
+impl fmt::Display for MemberLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
