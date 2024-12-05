@@ -1,4 +1,6 @@
-use capi_compiler::{code::ExpressionLocation, CompilerOutput, Instructions};
+use capi_compiler::{
+    code::syntax::ExpressionLocation, CompilerOutput, Instructions,
+};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
 use capi_runtime::{Effect, Instruction, Value};

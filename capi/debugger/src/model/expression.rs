@@ -1,8 +1,7 @@
 use capi_compiler::{
     code::{
-        syntax::{Expression, Member, Signature},
-        Cluster, ExpressionLocation, FunctionCalls, FunctionLocation,
-        Functions,
+        syntax::{Expression, ExpressionLocation, Member, Signature},
+        Cluster, FunctionCalls, FunctionLocation, Functions,
     },
     source_map::SourceMap,
 };

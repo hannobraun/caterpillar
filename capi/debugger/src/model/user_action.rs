@@ -1,4 +1,4 @@
-use capi_compiler::code::ExpressionLocation;
+use capi_compiler::code::syntax::ExpressionLocation;
 
 #[derive(Clone)]
 pub enum UserAction {

@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{code::ExpressionLocation, CompilerOutput};
+use capi_compiler::{code::syntax::ExpressionLocation, CompilerOutput};
 use capi_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]

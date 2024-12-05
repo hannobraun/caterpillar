@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    syntax::Expression, ExpressionLocation, FunctionCalls, FunctionLocation,
-    Functions, Index, OrderedFunctions,
+    syntax::{Expression, ExpressionLocation},
+    FunctionCalls, FunctionLocation, Functions, Index, OrderedFunctions,
 };
 
 /// # Tracks recursive expressions

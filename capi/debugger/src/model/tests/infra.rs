@@ -1,5 +1,8 @@
 use capi_compiler::{
-    code::{syntax::SyntaxTree, ExpressionLocation, FunctionCalls},
+    code::{
+        syntax::{ExpressionLocation, SyntaxTree},
+        FunctionCalls,
+    },
     Compiler,
 };
 use capi_game_engine::{

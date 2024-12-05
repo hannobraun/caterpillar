@@ -1,9 +1,8 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{self, BranchLocation},
-        Cluster, ExpressionLocation, FunctionCalls, FunctionLocation,
-        Functions,
+        syntax::{self, BranchLocation, ExpressionLocation},
+        Cluster, FunctionCalls, FunctionLocation, Functions,
     },
     source_map::SourceMap,
 };
