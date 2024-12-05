@@ -5,7 +5,7 @@ use crate::code::{
     IndexMap, Tokens,
 };
 
-use super::functions::{Function, NamedFunction};
+use super::function::{Function, NamedFunction};
 
 /// # The syntax tree
 ///

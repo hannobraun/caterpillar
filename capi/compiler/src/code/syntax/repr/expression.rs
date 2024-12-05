@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use super::functions::Function;
+use super::function::Function;
 
 /// # An expression within a function
 ///
