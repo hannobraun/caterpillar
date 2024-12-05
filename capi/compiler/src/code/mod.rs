@@ -27,4 +27,4 @@ pub use self::{
     types::{ConcreteSignature, Signature, Type},
 };
 
-pub use syntax::{FunctionLocation, Located};
+pub use syntax::Located;
