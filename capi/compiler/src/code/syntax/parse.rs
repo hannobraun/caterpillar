@@ -224,7 +224,7 @@ fn parse_branch_body(
                     parent: Box::new(location.clone()),
                     index: body.next_index(),
                 };
-                let syntax_node = parse_syntax_node(tokens, location)?;
+                let syntax_node = parse_member(tokens, location)?;
                 body.push(syntax_node);
             }
         }
@@ -233,7 +233,7 @@ fn parse_branch_body(
     Ok(())
 }
 
-fn parse_syntax_node(
+fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
