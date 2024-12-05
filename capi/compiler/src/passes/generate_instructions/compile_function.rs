@@ -179,7 +179,7 @@ fn compile_branch_body(
             cluster_context,
             functions_context,
         );
-        first_instruction = first_instruction.or(addr);
+        first_instruction = first_instruction.or(Some(addr));
     }
 
     // Unconditionally generating a return instruction, like we do here, is
@@ -219,7 +219,7 @@ fn compile_expression(
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
-) -> Option<InstructionAddress> {
+) -> InstructionAddress {
     let is_tail_expression = functions_context
         .tail_expressions
         .is_tail_expression(&location);
@@ -231,23 +231,21 @@ fn compile_expression(
     match expression {
         Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location) {
-                let address = generate_instruction(
+                generate_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },
                     functions_context.instructions,
                     Some(&mut mapping),
-                );
-                Some(address)
+                )
             } else if let Some(function) = functions_context
                 .function_calls
                 .is_call_to_intrinsic_function(&location)
             {
-                let address = compile_intrinsic(
+                compile_intrinsic(
                     function,
                     is_tail_expression,
                     functions_context.instructions,
                     &mut mapping,
-                );
-                Some(address)
+                )
             } else if let Some(function) = functions_context
                 .function_calls
                 .is_call_to_host_function(&location)
@@ -266,7 +264,7 @@ fn compile_expression(
                     functions_context.instructions,
                     Some(&mut mapping),
                 );
-                Some(address)
+                address
             } else if let Some(callee_location) = functions_context
                 .function_calls
                 .is_call_to_user_defined_function(&location)
@@ -321,7 +319,7 @@ fn compile_expression(
                         .or_default()
                         .push(address);
 
-                    Some(address)
+                    address
                 } else {
                     let Some(function) = functions_context
                         .compiled_functions_by_location
@@ -372,27 +370,23 @@ fn compile_expression(
                         .or_default()
                         .push(address);
 
-                    Some(address)
+                    address
                 }
             } else {
-                let address = generate_instruction(
+                generate_instruction(
                     Instruction::TriggerEffect {
                         effect: Effect::BuildError,
                     },
                     functions_context.instructions,
                     Some(&mut mapping),
-                );
-                Some(address)
+                )
             }
         }
-        Expression::LiteralNumber { value } => {
-            let address = generate_instruction(
-                Instruction::Push { value },
-                functions_context.instructions,
-                Some(&mut mapping),
-            );
-            Some(address)
-        }
+        Expression::LiteralNumber { value } => generate_instruction(
+            Instruction::Push { value },
+            functions_context.instructions,
+            Some(&mut mapping),
+        ),
         Expression::LocalFunction { function: _ } => {
             if let Some(index) = functions_context
                 .recursion
@@ -408,14 +402,13 @@ fn compile_expression(
                         .expect("Function referenced from cluster must exist.")
                 };
 
-                let address = compile_local_function(
+                compile_local_function(
                     &function,
                     location,
                     cluster_context,
                     functions_context.instructions,
                     &mut mapping,
-                );
-                Some(address)
+                )
             } else {
                 let function_location =
                     FunctionLocation::from(location.clone());
@@ -428,14 +421,13 @@ fn compile_expression(
                         must be available.",
                     );
 
-                let address = compile_local_function(
+                compile_local_function(
                     &function,
                     location,
                     cluster_context,
                     functions_context.instructions,
                     &mut mapping,
-                );
-                Some(address)
+                )
             }
         }
     }
