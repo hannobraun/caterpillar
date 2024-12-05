@@ -672,7 +672,7 @@ end
 
 next_position: fn
     \ ->
-        6
+        6: -> Number .
 end
 
 food_position: fn
