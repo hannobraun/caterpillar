@@ -106,7 +106,7 @@ pub enum Pattern {
     },
 }
 
-/// # A basic syntax node
+/// # A part of a branch's body
 #[derive(
     Clone,
     Debug,
