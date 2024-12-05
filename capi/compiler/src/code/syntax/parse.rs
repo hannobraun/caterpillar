@@ -224,8 +224,8 @@ fn parse_branch_body(
                     index: body.next_index(),
                 };
                 let expression = parse_expression(tokens, location)?;
-                let expression = SyntaxNode::Expression { expression };
-                body.push(expression);
+                let syntax_node = SyntaxNode::Expression { expression };
+                body.push(syntax_node);
             }
         }
     }
