@@ -1,14 +1,25 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Member, SyntaxTree},
+    syntax::{Expression, Member, SyntaxTree},
     Index,
 };
 
-use super::{located::HasLocation, BranchLocation};
+use super::{located::HasLocation, BranchLocation, Located};
 
 impl HasLocation for Member {
     type Location = MemberLocation;
+}
+
+impl<'r> Located<&'r Member> {
+    pub fn into_expression(self) -> Located<&'r Expression> {
+        let Member::Expression { expression, .. } = self.fragment;
+
+        Located {
+            fragment: expression,
+            location: self.location,
+        }
+    }
 }
 
 /// # The location of a member of a branch body

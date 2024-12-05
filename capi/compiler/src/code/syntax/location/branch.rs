@@ -32,12 +32,7 @@ impl<'r> Located<&'r Branch> {
         self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
         self.members().map(move |member| {
-            let Member::Expression { expression, .. } = member.fragment;
-
-            Located {
-                fragment: expression,
-                location: member.location,
-            }
+            member.into_expression()
         })
     }
 
