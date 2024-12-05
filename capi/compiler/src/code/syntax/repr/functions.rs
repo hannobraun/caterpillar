@@ -2,7 +2,7 @@ use capi_runtime::Value;
 
 use crate::code::IndexMap;
 
-use super::types::{AnnotatedExpression, Signature};
+use super::{expression::Expression, types::Signature};
 
 /// # A function that has a name
 ///
@@ -122,7 +122,7 @@ pub enum SyntaxNode {
     /// # The syntax node is an expression
     Expression {
         /// # The expression
-        expression: AnnotatedExpression,
+        expression: Expression,
 
         /// # The optional type annotation that applies to the expression
         signature: Option<Signature>,

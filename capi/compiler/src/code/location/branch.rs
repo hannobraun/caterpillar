@@ -22,7 +22,6 @@ impl<'r> Located<&'r Branch> {
 
         self.body.iter().map(move |(&index, syntax_node)| {
             let SyntaxNode::Expression { expression, .. } = syntax_node;
-            let expression = &expression.inner;
 
             Located {
                 fragment: expression,

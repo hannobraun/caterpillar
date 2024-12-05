@@ -6,8 +6,8 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::Type, AnnotatedExpression, Branch, Expression, Function,
-    NamedFunction, Pattern, Signature, SyntaxNode,
+    repr::types::Type, Branch, Expression, Function, NamedFunction, Pattern,
+    Signature, SyntaxNode,
 };
 
 /// # Parse the provided tokens
@@ -226,10 +226,7 @@ fn parse_branch_body(
                 let (expression, signature) =
                     parse_expression(tokens, location)?;
                 let syntax_node = SyntaxNode::Expression {
-                    expression: AnnotatedExpression {
-                        inner: expression,
-                        signature: signature.clone(),
-                    },
+                    expression,
                     signature,
                 };
                 body.push(syntax_node);

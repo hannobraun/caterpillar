@@ -57,7 +57,6 @@ impl DebugExpression {
             expression,
             signature,
         } = expression;
-        let expression = expression.inner;
 
         let kind = DebugExpressionKind::new(
             expression,

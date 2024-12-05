@@ -164,7 +164,6 @@ fn compile_branch_body(
 
     for (index, expression) in body {
         let SyntaxNode::Expression { expression, .. } = expression;
-        let expression = expression.inner;
 
         let addr = compile_expression(
             expression,
