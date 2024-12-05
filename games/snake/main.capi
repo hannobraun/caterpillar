@@ -759,19 +759,19 @@ end
 
 vec_buf_get: fn
     \ vec_buf, index ->
-        index
-        2
-        mul_u8_wrap
+        index: -> Number .
+        2: -> Number .
+        mul_u8_wrap: Number, Number -> Number .
         fn \ offset ->
-            vec_buf
-            _vec_buf_first
-            load
+            vec_buf: -> Number .
+            _vec_buf_first: Number -> Number .
+            load: Number -> Number .
             fn \ base ->
-                vec_buf
-                base
-                offset
-                _vec_buf_address
-                vec_load
+                vec_buf: -> Number .
+                base: -> Number .
+                offset: -> Number .
+                _vec_buf_address: Number, Number, Number -> Number .
+                vec_load: Number -> Number Number .
             end
                 eval
         end
