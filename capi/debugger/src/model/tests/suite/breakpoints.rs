@@ -32,7 +32,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .into_located_function()
         .find_single_branch()
         .unwrap()
-        .body()
+        .expressions()
         .next()
         .unwrap()
         .location;
@@ -68,7 +68,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
         .into_located_function()
         .find_single_branch()
         .unwrap()
-        .body()
+        .expressions()
         .next()
         .unwrap()
         .location;
@@ -117,7 +117,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         .into_located_function()
         .find_single_branch()
         .unwrap()
-        .body()
+        .expressions()
         .map(|expression| expression.location)
         .collect_tuple()
         .unwrap();
@@ -175,7 +175,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
         .into_located_function()
         .find_single_branch()
         .unwrap()
-        .body()
+        .expressions()
         .filter_map(|expression| {
             if expression.as_comment().is_none() {
                 Some(expression.location)
@@ -286,7 +286,7 @@ fn step_into_function() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .nth(2)
             .unwrap()
             .location;
@@ -297,7 +297,7 @@ fn step_into_function() {
             .branches()
             .next()
             .unwrap()
-            .body()
+            .expressions()
             .next()
             .unwrap()
             .location;
@@ -356,7 +356,7 @@ fn step_out_of_function_if_at_last_expression() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .nth(1)
             .unwrap()
             .location;
@@ -366,7 +366,7 @@ fn step_out_of_function_if_at_last_expression() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .next()
             .unwrap()
             .location;
@@ -420,7 +420,7 @@ fn step_out_of_main_function() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .next()
             .unwrap()
             .location
@@ -467,7 +467,7 @@ fn step_over_function_call() {
         .into_located_function()
         .find_single_branch()
         .unwrap()
-        .body()
+        .expressions()
         .filter_map(|expression| {
             if expression.as_comment().is_none() {
                 Some(expression.location)
@@ -526,7 +526,7 @@ fn step_out_of_function() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .next()
             .unwrap()
             .location;
@@ -536,7 +536,7 @@ fn step_out_of_function() {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .nth(1)
             .unwrap()
             .location;

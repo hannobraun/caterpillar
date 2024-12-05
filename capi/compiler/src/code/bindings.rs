@@ -114,7 +114,7 @@ fn resolve_bindings_in_branch(
             .collect(),
     );
 
-    for expression in branch.body() {
+    for expression in branch.expressions() {
         match expression.fragment {
             Expression::Identifier { name } => {
                 let is_known_binding =
@@ -202,7 +202,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -235,7 +235,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .filter_map(|expression| expression.into_local_function())
             .next()
             .unwrap()
@@ -244,7 +244,7 @@ mod tests {
             .as_ref()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -281,7 +281,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .nth(1)
             .unwrap();
@@ -317,7 +317,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .filter_map(|expression| {
                 if let Expression::LocalFunction { function: _ } =
                     expression.fragment

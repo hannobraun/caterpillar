@@ -50,7 +50,7 @@ impl Recursion {
         for cluster in ordered_functions.clusters_from_leaves() {
             for function in cluster.functions(functions) {
                 for branch in function.branches() {
-                    for expression in branch.body() {
+                    for expression in branch.expressions() {
                         match expression.fragment {
                             Expression::Identifier { name: _ } => {
                                 let Some(location) = function_calls
@@ -142,7 +142,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -172,13 +172,13 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .filter_map(|expression| expression.into_local_function())
             .next()
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -210,7 +210,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -245,13 +245,13 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .filter_map(|expression| expression.into_local_function())
             .next()
             .unwrap()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -281,7 +281,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -314,7 +314,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -349,7 +349,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -387,7 +387,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();

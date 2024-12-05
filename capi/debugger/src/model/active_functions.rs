@@ -297,7 +297,7 @@ fn reconstruct_function(
     {
         let mut tail_call = None;
 
-        for expression in branch.body() {
+        for expression in branch.expressions() {
             tail_call = Some(expression.location);
         }
 

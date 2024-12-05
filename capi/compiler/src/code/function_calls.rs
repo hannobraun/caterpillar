@@ -24,7 +24,7 @@ impl FunctionCalls {
 
         for function in syntax_tree.all_functions() {
             for branch in function.branches() {
-                for expression in branch.body() {
+                for expression in branch.expressions() {
                     if let Expression::Identifier { name } = expression.fragment
                     {
                         // If multiple functions of different types have the
@@ -120,7 +120,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();
@@ -154,7 +154,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();
@@ -189,7 +189,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();

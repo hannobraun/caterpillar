@@ -108,7 +108,7 @@ impl PersistentState {
                         .into_located_function()
                         .branches()
                         .filter_map(|branch| {
-                            let expression = branch.body().next()?;
+                            let expression = branch.expressions().next()?;
                             Some(expression.location)
                         })
                         .collect()

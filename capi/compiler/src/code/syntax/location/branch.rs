@@ -13,7 +13,7 @@ impl HasLocation for Branch {
 
 impl<'r> Located<&'r Branch> {
     /// # Iterate over the expressions in the branch's body
-    pub fn body(
+    pub fn expressions(
         self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
         let location = self.location.clone();
@@ -35,7 +35,7 @@ impl<'r> Located<&'r Branch> {
     pub fn all_local_functions(
         self,
     ) -> impl Iterator<Item = Located<&'r Function>> {
-        self.body()
+        self.expressions()
             .filter_map(|expression| expression.into_local_function())
             .flat_map(|function| {
                 iter::once(function.clone())

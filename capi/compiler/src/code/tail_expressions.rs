@@ -24,7 +24,7 @@ impl TailExpressions {
 
         for function in syntax_tree.all_functions() {
             for branch in function.branches() {
-                for expression in branch.body().rev() {
+                for expression in branch.expressions().rev() {
                     if let Expression::Comment { .. } = expression.fragment {
                         continue;
                     }
@@ -78,7 +78,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .collect_tuple()
             .unwrap();
@@ -109,7 +109,7 @@ mod tests {
             .into_located_function()
             .find_single_branch()
             .unwrap()
-            .body()
+            .expressions()
             .map(|expression| expression.location)
             .nth(1)
             .unwrap();

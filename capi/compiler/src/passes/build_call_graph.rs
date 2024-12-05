@@ -42,7 +42,7 @@ fn build_dependency_graph(
         let depender = graph_index_by_function_location[&function.location];
 
         for branch in function.branches() {
-            for expression in branch.body() {
+            for expression in branch.expressions() {
                 let dependee = match expression.fragment {
                     Expression::Identifier { .. } => function_calls
                         .is_call_to_user_defined_function(&expression.location)
@@ -305,7 +305,7 @@ mod tests {
                 .into_located_function()
                 .find_single_branch()
                 .unwrap()
-                .body()
+                .expressions()
                 .next()
                 .unwrap()
                 .into_local_function()
