@@ -771,7 +771,7 @@ vec_buf_get: fn
                 base: -> Number .
                 offset: -> Number .
                 _vec_buf_address: Number, Number, Number -> Number .
-                vec_load: Number -> Number Number .
+                vec_load: Number -> Number, Number .
             end
                 eval
         end

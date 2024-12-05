@@ -306,6 +306,10 @@ fn parse_signature(
     let mut outputs = Vec::new();
 
     loop {
+        // We already handle the terminator at the end of the loop. We have to
+        // also handle it here, since it's allowed to not have any outputs,
+        // which would make the terminator the first token we encounter in this
+        // loop.
         if *tokens.peek()? == terminator {
             tokens.take()?;
             break;
@@ -313,6 +317,18 @@ fn parse_signature(
 
         let type_ = parse_type(tokens)?;
         outputs.push(type_);
+
+        match tokens.take()? {
+            Token::Punctuator(Delimiter) => {
+                continue;
+            }
+            token if token == terminator => {
+                break;
+            }
+            token => {
+                return Err(Error::UnexpectedToken { actual: token });
+            }
+        }
     }
 
     Ok(Signature { inputs, outputs })
