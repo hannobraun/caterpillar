@@ -24,5 +24,5 @@ pub use self::{
     recursion::Recursion,
     tail_expressions::TailExpressions,
     tokens::{Token, Tokens},
-    types::{Signature, Type},
+    types::{ExplicitTypes, Signature, Type},
 };

@@ -1,3 +1,4 @@
 mod repr;
+mod resolve;
 
-pub use self::repr::{Signature, Type};
+pub use self::repr::{ExplicitTypes, Signature, Type};
