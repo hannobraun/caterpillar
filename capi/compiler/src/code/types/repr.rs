@@ -70,7 +70,7 @@ impl Types {
                             Inferred type: {inferred:?}\n\
                             Explicit type: {explicit:?}\n\
                             \n\
-                            At expression: {}",
+                            At {}\n",
                             expression.location.display(syntax_tree),
                         );
                     }
