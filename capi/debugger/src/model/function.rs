@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use capi_compiler::{
     code::{
         syntax::{self, BranchLocation, FunctionLocation, MemberLocation},
-        Cluster, FunctionCalls, Functions,
+        Cluster, FunctionCalls, Functions, Types,
     },
     source_map::SourceMap,
 };
@@ -27,6 +27,7 @@ impl DebugFunction {
         cluster: &Cluster,
         functions: &Functions,
         function_calls: &FunctionCalls,
+        types: &Types,
         source_map: &SourceMap,
         breakpoints: &Breakpoints,
         effect: Option<&Effect>,
@@ -46,6 +47,7 @@ impl DebugFunction {
                     cluster,
                     functions,
                     function_calls,
+                    types,
                     source_map,
                     breakpoints,
                     effect,
