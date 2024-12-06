@@ -53,8 +53,6 @@ impl DebugMember {
             }
         });
 
-        let signature = types.signature_of(&location).cloned();
-
         let kind = DebugMemberKind::new(
             member,
             location.clone(),
@@ -69,7 +67,7 @@ impl DebugMember {
             effect,
         );
         let data = DebugMemberData {
-            signature,
+            signature: types.signature_of(&location).cloned(),
             location,
             state,
             has_durable_breakpoint,
