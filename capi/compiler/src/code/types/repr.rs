@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::code::syntax::{MemberLocation, SyntaxTree};
 
-use super::resolve::resolve_type_annotations;
+use super::{infer::infer_expression, resolve::resolve_type_annotations};
 
 /// # The types that are explicitly specified in the code
 ///
@@ -19,6 +19,69 @@ impl ExplicitTypes {
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
         let types_ = resolve_type_annotations(syntax_tree);
+        Self { inner: types_ }
+    }
+
+    /// # Access the signature of the expression at the given location, if any
+    pub fn signature_of(
+        &self,
+        location: &MemberLocation,
+    ) -> Option<&Signature> {
+        self.inner.get(location)
+    }
+}
+
+/// # The resolved types
+#[derive(Debug)]
+pub struct Types {
+    inner: BTreeMap<MemberLocation, Signature>,
+}
+
+impl Types {
+    /// # Infer types
+    ///
+    /// ## Implementation Note
+    ///
+    /// This current also uses the explicitly specified types where it can't
+    /// infer yet, but the plan is to remove any explicit annotations in favor
+    /// of full type inference.
+    pub fn infer(
+        syntax_tree: &SyntaxTree,
+        explicit_types: ExplicitTypes,
+    ) -> Self {
+        let mut types_ = BTreeMap::new();
+
+        for function in syntax_tree.all_functions() {
+            for branch in function.branches() {
+                for expression in branch.expressions() {
+                    let inferred = infer_expression(expression.fragment);
+                    let explicit =
+                        explicit_types.signature_of(&expression.location);
+
+                    if let (Some(inferred), Some(explicit)) =
+                        (inferred.as_ref(), explicit)
+                    {
+                        panic!(
+                            "Type that could be inferred was also specified \
+                            explicitly. This is currently not allowed, as the \
+                            goal is to transition away from explicit \
+                            annotations completely.\n\
+                            \n\
+                            Inferred type: {inferred:?}\n\
+                            Explicit type: {explicit:?}\n\
+                            \n\
+                            At expression: {}",
+                            expression.location.display(syntax_tree),
+                        );
+                    }
+
+                    if let Some(signature) = inferred.or(explicit.cloned()) {
+                        types_.insert(expression.location, signature);
+                    }
+                }
+            }
+        }
+
         Self { inner: types_ }
     }
 
