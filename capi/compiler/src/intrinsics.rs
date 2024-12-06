@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::code::{ConcreteSignature, Type};
+use crate::code::{Signature, Type};
 
 macro_rules! intrinsics {
     (
@@ -61,11 +61,11 @@ macro_rules! intrinsics {
             /// type system is not advanced enough to express them. In this
             /// case, this method returns `None`, and the caller needs to
             /// implement special handling.
-            pub fn signature(&self) -> Option<ConcreteSignature> {
+            pub fn signature(&self) -> Option<Signature> {
                 match self {
                     $(
                         Self::$variant => {
-                            $signature.map(ConcreteSignature::from)
+                            $signature.map(Signature::from)
                         }
                     )*
                 }

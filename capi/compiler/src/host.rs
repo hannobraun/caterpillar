@@ -1,4 +1,4 @@
-use crate::code::ConcreteSignature;
+use crate::code::Signature;
 
 /// # A host into which a Caterpillar application is embedded
 pub trait Host {
@@ -38,7 +38,7 @@ pub struct HostFunction {
     pub number: u8,
 
     /// # The type signature of the function
-    pub signature: ConcreteSignature,
+    pub signature: Signature,
 }
 
 /// # A [`Host`] implementation that can be used where no host is required

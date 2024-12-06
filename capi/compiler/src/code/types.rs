@@ -14,7 +14,7 @@ pub enum Type {
     /// # A function
     Function {
         /// # The function's signature
-        signature: ConcreteSignature,
+        signature: Signature,
     },
 
     /// # A number
@@ -48,7 +48,7 @@ pub enum Type {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct ConcreteSignature {
+pub struct Signature {
     /// # The inputs that the function consumes
     pub inputs: Vec<Type>,
 
@@ -56,7 +56,7 @@ pub struct ConcreteSignature {
     pub outputs: Vec<Type>,
 }
 
-impl<I, O> From<(I, O)> for ConcreteSignature
+impl<I, O> From<(I, O)> for Signature
 where
     I: IntoIterator<Item = Type>,
     O: IntoIterator<Item = Type>,
