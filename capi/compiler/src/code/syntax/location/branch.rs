@@ -1,7 +1,9 @@
 use std::{fmt, iter};
 
 use crate::code::{
-    syntax::{Branch, Expression, Function, Member, SyntaxTree},
+    syntax::{
+        Branch, Expression, Function, Member, SyntaxSignature, SyntaxTree,
+    },
     Index,
 };
 
@@ -23,6 +25,15 @@ impl<'r> Located<&'r Branch> {
                 index,
             },
         })
+    }
+
+    /// # Iterate over the type-annotated expressions in the branch's body
+    pub fn annotated_expressions(
+        self,
+    ) -> impl DoubleEndedIterator<
+        Item = (Located<&'r Expression>, Option<&'r SyntaxSignature>),
+    > {
+        self.body().filter_map(|member| member.into_expression())
     }
 
     /// # Iterate over the expressions in the branch's body
