@@ -135,8 +135,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugMemberKind::Comment { .. } = after.kind
-                        {
+                        if let DebugMemberKind::Comment { .. } = after.kind {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();
                             continue;
@@ -182,8 +181,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugMemberKind::Comment { .. } = after.kind
-                        {
+                        if let DebugMemberKind::Comment { .. } = after.kind {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();
                             continue;
@@ -228,8 +226,7 @@ impl PersistentState {
                             return Ok(commands);
                         };
 
-                        if let DebugMemberKind::Comment { .. } = after.kind
-                        {
+                        if let DebugMemberKind::Comment { .. } = after.kind {
                             // Can't step to comments! Need to ignore them.
                             expression = after.clone();
                             continue;

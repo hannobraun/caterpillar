@@ -12,9 +12,8 @@ use capi_game_engine::{
 use capi_protocol::updates::Updates;
 
 use crate::model::{
-    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugMember,
-    DebugFunction, DebugMemberKind, PersistentState, TransientState,
-    UserAction,
+    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFunction,
+    DebugMember, DebugMemberKind, PersistentState, TransientState, UserAction,
 };
 
 pub fn debugger() -> TestDebugger {
