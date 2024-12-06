@@ -20,8 +20,8 @@ pub struct Signature {
 
 /// # A type, as it appears in the syntax
 ///
-/// This is distinct from a type that has been resolved, and that the compiler
-/// can reason about.
+/// This is distinct from a type that has been resolved, which the compiler can
+/// reason about.
 #[derive(
     Clone,
     Debug,
