@@ -219,7 +219,7 @@ end
 # Frame count
 init_frame_count: fn
     \ ->
-        1: -> Number .
+        1
         frame_count: -> Number .
         store: Number, Number -> .
 end
@@ -285,7 +285,7 @@ end
 # Game state - should game run
 init_should_game_run: fn
     \ ->
-        1: -> Number .
+        1
         should_game_run: -> Number .
             store: Number, Number -> .
 end
@@ -293,8 +293,8 @@ end
 # Game state - velocity
 init_velocity: fn
     \ ->
-        1: -> Number .
-        0: -> Number .
+        1
+        0
         velocity: -> Number .
             vec_store: Number, Number, Number -> .
 end
@@ -303,7 +303,7 @@ end
 init_next_position: fn
     \ ->
         positions: -> Number .
-        0: -> Number .
+        0
         vec_buf_get: Number, Number -> Number, Number .
         next_position: -> Number .
         vec_store: Number, Number, Number -> .
@@ -474,7 +474,7 @@ end
 # Game state - snake
 snake_init: fn
     \ ->
-         3: -> Number .
+         3
          snake_length: -> Number .
             store: Number, Number -> .
 
@@ -482,8 +482,8 @@ snake_init: fn
             vec_buf_init: Number -> .
 
         positions: -> Number .
-        15: -> Number .
-        15: -> Number .
+        15
+        15
             vec_buf_push: Number, Number, Number -> .
 end
 
@@ -652,17 +652,17 @@ end
 # Memory map
 tile_field_size: fn
     \ ->
-        0: -> Number .
+        0
 end
 
 frame_count: fn
     \ ->
-        2: -> Number .
+        2
 end
 
 should_game_run: fn
     \ ->
-        3: -> Number .
+        3
 end
 
 velocity: fn
@@ -672,7 +672,7 @@ end
 
 next_position: fn
     \ ->
-        6: -> Number .
+        6
 end
 
 food_position: fn
@@ -682,12 +682,12 @@ end
 
 snake_length: fn
     \ ->
-        10: -> Number .
+        10
 end
 
 positions: fn
     \ ->
-        11: -> Number .
+        11
 end
 
 # Utilities - Vector
@@ -706,7 +706,7 @@ vec_load: fn
         address: -> Number .
         load: Number -> Number .
         address: -> Number .
-        1: -> Number .
+        1
         add_s32: Number, Number -> Number .
         load: Number -> Number .
 end
@@ -718,7 +718,7 @@ vec_store: fn
         store: Number, Number -> .
         y: -> Number .
         address: -> Number .
-        1: -> Number .
+        1
         add_s32: Number, Number -> Number .
         store: Number, Number -> .
 end
@@ -746,13 +746,13 @@ end
 # Utilities - Vector Buffer
 vec_buf_init: fn
     \ vec_buf ->
-        0: -> Number .
+        0
         vec_buf: -> Number . _vec_buf_first: Number -> Number .
             store: Number, Number -> .
-        0: -> Number .
+        0
         vec_buf: -> Number . _vec_buf_next: Number -> Number .
             store: Number, Number -> .
-        64: -> Number .
+        64
         vec_buf: -> Number . _vec_buf_capacity: Number -> Number .
             store: Number, Number -> .
 end
@@ -760,7 +760,7 @@ end
 vec_buf_get: fn
     \ vec_buf, index ->
         index: -> Number .
-        2: -> Number .
+        2
         mul_u8_wrap: Number, Number -> Number .
         fn \ offset ->
             vec_buf: -> Number .
@@ -804,7 +804,7 @@ vec_buf_push: fn
             vec_buf: -> Number .
             next_addr: -> Number .
             load: Number -> Number .
-            0: -> Number .
+            0
             _vec_buf_address: Number, Number, Number -> Number .
             fn \ address ->
                 x: -> Number .
@@ -888,7 +888,7 @@ _vec_buf_inc_index: fn
     \ index_addr ->
         index_addr: -> Number .
             load: Number -> Number .
-        2: -> Number .
+        2
             add_u8_wrap: Number, Number -> Number .
 
         index_addr: -> Number .
@@ -899,28 +899,28 @@ end
 _vec_buf_first: fn
     \ vec_buf ->
         vec_buf: -> Number .
-        0: -> Number .
+        0
             add_s32: Number, Number -> Number .
 end
 
 _vec_buf_next: fn
     \ vec_buf ->
         vec_buf: -> Number .
-        1: -> Number .
+        1
             add_s32: Number, Number -> Number .
 end
 
 _vec_buf_capacity: fn
     \ vec_buf ->
         vec_buf: -> Number .
-        2: -> Number .
+        2
             add_s32: Number, Number -> Number .
 end
 
 _vec_buf_buffer: fn
     \ vec_buf ->
         vec_buf: -> Number .
-        3: -> Number .
+        3
             add_s32: Number, Number -> Number .
 end
 
