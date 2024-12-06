@@ -1,6 +1,6 @@
 use std::fmt::{self, Write};
 
-use capi_compiler::code::syntax::{SyntaxSignature, SyntaxType};
+use capi_compiler::code::{Signature, Type};
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -254,16 +254,13 @@ fn make_single_member(
     )
 }
 
-fn render_type_annotation(
-    s: &mut String,
-    signature: SyntaxSignature,
-) -> fmt::Result {
+fn render_type_annotation(s: &mut String, signature: Signature) -> fmt::Result {
     write!(s, ": ")?;
     render_signature(s, signature)?;
     Ok(())
 }
 
-fn render_signature(s: &mut String, signature: SyntaxSignature) -> fmt::Result {
+fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
     let mut inputs = signature.inputs.into_iter().peekable();
     while let Some(input) = inputs.next() {
         render_type(s, input)?;
@@ -289,15 +286,15 @@ fn render_signature(s: &mut String, signature: SyntaxSignature) -> fmt::Result {
     Ok(())
 }
 
-fn render_type(s: &mut String, type_: SyntaxType) -> fmt::Result {
+fn render_type(s: &mut String, type_: Type) -> fmt::Result {
     match type_ {
-        SyntaxType::Function { signature } => {
+        Type::Function { signature } => {
             write!(s, "fn ")?;
             render_signature(s, signature)?;
             write!(s, " end ")?;
         }
-        SyntaxType::Identifier { name } => {
-            write!(s, "{name}")?;
+        Type::Number => {
+            write!(s, "Number")?;
         }
     }
 

@@ -1,10 +1,7 @@
 use capi_compiler::{
     code::{
-        syntax::{
-            Expression, FunctionLocation, Member, MemberLocation,
-            SyntaxSignature,
-        },
-        Cluster, FunctionCalls, Functions, Types,
+        syntax::{Expression, FunctionLocation, Member, MemberLocation},
+        Cluster, FunctionCalls, Functions, Signature, Types,
     },
     source_map::SourceMap,
 };
@@ -56,10 +53,7 @@ impl DebugMember {
             }
         });
 
-        let signature = match &member {
-            Member::Comment { .. } => None,
-            Member::Expression { signature, .. } => signature.clone(),
-        };
+        let signature = types.signature_of(&location).cloned();
 
         let kind = DebugMemberKind::new(
             member,
@@ -88,7 +82,7 @@ impl DebugMember {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugMemberData {
-    pub signature: Option<SyntaxSignature>,
+    pub signature: Option<Signature>,
     pub location: MemberLocation,
     pub state: DebugMemberState,
     pub has_durable_breakpoint: bool,
