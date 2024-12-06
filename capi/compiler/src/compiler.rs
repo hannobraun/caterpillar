@@ -37,7 +37,6 @@ impl Compiler {
         let tail_expressions = TailExpressions::find(&syntax_tree);
         let explicit_types = ExplicitTypes::resolve(&syntax_tree);
         let types = Types::infer(&syntax_tree, explicit_types);
-        dbg!(types);
         let (functions, ordered_functions) =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
         let recursion =
@@ -66,6 +65,7 @@ impl Compiler {
             functions,
             function_calls,
             ordered_functions,
+            types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
         }
@@ -83,6 +83,7 @@ pub struct CompilerOutput {
     pub functions: Functions,
     pub function_calls: FunctionCalls,
     pub ordered_functions: OrderedFunctions,
+    pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,
 }
