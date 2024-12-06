@@ -22,6 +22,11 @@ pub struct Signature {
 ///
 /// This is distinct from a type that has been resolved, which the compiler can
 /// reason about.
+///
+/// ## Implementation Note
+///
+/// This type is a stopgap. The plan is to eventually remove it, once full type
+/// inference is supported.
 #[derive(
     Clone,
     Debug,
