@@ -1,4 +1,9 @@
-/// # The type signature of an expression
+/// # The type signature of an expression, as it appears in the syntax
+///
+/// ## Implementation Note
+///
+/// This type is a stopgap. The plan is to eventually remove it, once full type
+/// inference is supported.
 #[derive(
     Clone,
     Debug,
