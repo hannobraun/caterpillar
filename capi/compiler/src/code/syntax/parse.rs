@@ -8,7 +8,7 @@ use crate::code::{
 use super::{
     repr::types::SyntaxType, Branch, BranchLocation, Expression, Function,
     FunctionLocation, Member, MemberLocation, NamedFunction, Pattern,
-    Signature,
+    SyntaxSignature,
 };
 
 /// # Parse the provided tokens
@@ -256,7 +256,7 @@ fn parse_member(
 fn parse_expression(
     tokens: &mut Tokens,
     location: MemberLocation,
-) -> Result<(Expression, Option<Signature>)> {
+) -> Result<(Expression, Option<SyntaxSignature>)> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
@@ -278,7 +278,9 @@ fn parse_expression(
     Ok((expression, signature))
 }
 
-fn parse_type_annotation(tokens: &mut Tokens) -> Result<Option<Signature>> {
+fn parse_type_annotation(
+    tokens: &mut Tokens,
+) -> Result<Option<SyntaxSignature>> {
     let Token::Punctuator(Introducer) = tokens.peek()? else {
         return Ok(None);
     };
@@ -293,7 +295,7 @@ fn parse_type_annotation(tokens: &mut Tokens) -> Result<Option<Signature>> {
 fn parse_signature(
     tokens: &mut Tokens,
     terminator: Token,
-) -> Result<Signature> {
+) -> Result<SyntaxSignature> {
     let mut inputs = Vec::new();
 
     loop {
@@ -346,7 +348,7 @@ fn parse_signature(
         }
     }
 
-    Ok(Signature { inputs, outputs })
+    Ok(SyntaxSignature { inputs, outputs })
 }
 
 fn parse_type(tokens: &mut Tokens) -> Result<SyntaxType> {

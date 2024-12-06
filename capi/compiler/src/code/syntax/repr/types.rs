@@ -15,7 +15,7 @@
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct Signature {
+pub struct SyntaxSignature {
     /// # The inputs of the expression
     pub inputs: Vec<SyntaxType>,
 
@@ -47,7 +47,7 @@ pub enum SyntaxType {
     /// # A function type
     Function {
         /// # The signature of the function
-        signature: Signature,
+        signature: SyntaxSignature,
     },
 
     /// # An identifier that refers to a type

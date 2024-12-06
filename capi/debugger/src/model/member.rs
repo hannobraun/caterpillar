@@ -1,7 +1,8 @@
 use capi_compiler::{
     code::{
         syntax::{
-            Expression, FunctionLocation, Member, MemberLocation, Signature,
+            Expression, FunctionLocation, Member, MemberLocation,
+            SyntaxSignature,
         },
         Cluster, FunctionCalls, Functions,
     },
@@ -85,7 +86,7 @@ impl DebugMember {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugMemberData {
-    pub signature: Option<Signature>,
+    pub signature: Option<SyntaxSignature>,
     pub location: MemberLocation,
     pub state: DebugMemberState,
     pub has_durable_breakpoint: bool,
