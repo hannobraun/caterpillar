@@ -32,7 +32,7 @@ impl ExplicitTypes {
 }
 
 /// # The resolved types
-#[derive(Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
     inner: BTreeMap<MemberLocation, Signature>,
 }
