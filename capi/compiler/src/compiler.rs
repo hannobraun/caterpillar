@@ -5,8 +5,8 @@ use capi_runtime::InstructionAddress;
 use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
-        Bindings, FunctionCalls, Functions, OrderedFunctions, Recursion,
-        TailExpressions, Tokens,
+        Bindings, ExplicitTypes, FunctionCalls, Functions, OrderedFunctions,
+        Recursion, TailExpressions, Tokens,
     },
     host::Host,
     passes::{
@@ -35,6 +35,8 @@ impl Compiler {
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
+        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
+        dbg!(explicit_types);
         let (functions, ordered_functions) =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
         let recursion =
