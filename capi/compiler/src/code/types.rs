@@ -1,5 +1,3 @@
-use super::Index;
-
 /// # The type of a value
 #[derive(
     Clone,
@@ -29,27 +27,6 @@ pub enum Type {
     /// I expect that this will get split into multiple, more specific numeric
     /// types at some point.
     Number,
-}
-
-/// # The signature of an expression
-#[derive(
-    Clone,
-    Debug,
-    Default,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-    udigest::Digestable,
-)]
-pub struct Signature {
-    /// # The inputs that the expression consumes
-    pub inputs: Vec<Index<Type>>,
-
-    /// # The outputs that the expression produces
-    pub outputs: Vec<Index<Type>>,
 }
 
 /// # A concrete signature
