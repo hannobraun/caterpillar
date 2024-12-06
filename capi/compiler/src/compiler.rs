@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
         Bindings, ExplicitTypes, FunctionCalls, Functions, OrderedFunctions,
-        Recursion, TailExpressions, Tokens,
+        Recursion, TailExpressions, Tokens, Types,
     },
     host::Host,
     passes::{
@@ -36,7 +36,8 @@ impl Compiler {
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
         let explicit_types = ExplicitTypes::resolve(&syntax_tree);
-        dbg!(explicit_types);
+        let types = Types::infer(&syntax_tree, explicit_types);
+        dbg!(types);
         let (functions, ordered_functions) =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
         let recursion =
