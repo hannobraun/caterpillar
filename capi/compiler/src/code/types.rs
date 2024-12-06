@@ -29,14 +29,7 @@ pub enum Type {
     Number,
 }
 
-/// # A concrete signature
-///
-/// Most code should use `Signature` instead, which references into signatures
-/// stored in `Types`.
-///
-/// This type is only intended for type signatures that have a lifetime
-/// extending beyond that of a running compiler. Like those of intrinsic or host
-/// functions.
+/// # A type signature that applies to a function or expression
 #[derive(
     Clone,
     Debug,
@@ -49,10 +42,10 @@ pub enum Type {
     udigest::Digestable,
 )]
 pub struct Signature {
-    /// # The inputs that the function consumes
+    /// # The inputs that the function or expression consumes
     pub inputs: Vec<Type>,
 
-    /// # The outputs that the function produces
+    /// # The outputs that the function or expression produces
     pub outputs: Vec<Type>,
 }
 
