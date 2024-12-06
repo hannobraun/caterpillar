@@ -40,10 +40,8 @@ impl<'r> Located<&'r Branch> {
     pub fn expressions(
         self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
-        self.body().filter_map(|member| {
-            let (expression, _) = member.into_expression()?;
-            Some(expression)
-        })
+        self.annotated_expressions()
+            .map(|(expression, _)| expression)
     }
 
     /// # Iterate over all local functions in this branch, recursively
