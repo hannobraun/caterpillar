@@ -1,6 +1,6 @@
 use std::fmt::{self, Write};
 
-use capi_compiler::code::syntax::{Signature, Type};
+use capi_compiler::code::syntax::{Signature, SyntaxType};
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -286,14 +286,14 @@ fn render_signature(s: &mut String, signature: Signature) -> fmt::Result {
     Ok(())
 }
 
-fn render_type(s: &mut String, type_: Type) -> fmt::Result {
+fn render_type(s: &mut String, type_: SyntaxType) -> fmt::Result {
     match type_ {
-        Type::Function { signature } => {
+        SyntaxType::Function { signature } => {
             write!(s, "fn ")?;
             render_signature(s, signature)?;
             write!(s, " end ")?;
         }
-        Type::Identifier { name } => {
+        SyntaxType::Identifier { name } => {
             write!(s, "{name}")?;
         }
     }

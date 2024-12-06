@@ -12,10 +12,10 @@
 )]
 pub struct Signature {
     /// # The inputs of the expression
-    pub inputs: Vec<Type>,
+    pub inputs: Vec<SyntaxType>,
 
     /// # The outputs of the expression
-    pub outputs: Vec<Type>,
+    pub outputs: Vec<SyntaxType>,
 }
 
 /// # A type, as it appears in the syntax
@@ -33,7 +33,7 @@ pub struct Signature {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub enum Type {
+pub enum SyntaxType {
     /// # A function type
     Function {
         /// # The signature of the function

@@ -6,7 +6,7 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::Type, Branch, BranchLocation, Expression, Function,
+    repr::types::SyntaxType, Branch, BranchLocation, Expression, Function,
     FunctionLocation, Member, MemberLocation, NamedFunction, Pattern,
     Signature,
 };
@@ -349,13 +349,13 @@ fn parse_signature(
     Ok(Signature { inputs, outputs })
 }
 
-fn parse_type(tokens: &mut Tokens) -> Result<Type> {
+fn parse_type(tokens: &mut Tokens) -> Result<SyntaxType> {
     let type_ = match tokens.take()? {
-        Token::Identifier { name } => Type::Identifier { name },
+        Token::Identifier { name } => SyntaxType::Identifier { name },
         Token::Keyword(Fn) => {
             let terminator = Token::Keyword(End);
             let signature = parse_signature(tokens, terminator)?;
-            Type::Function { signature }
+            SyntaxType::Function { signature }
         }
         token => {
             return Err(Error::UnexpectedToken { actual: token });
