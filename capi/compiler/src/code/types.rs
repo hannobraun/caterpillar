@@ -16,7 +16,7 @@ pub enum Type {
     /// # A function
     Function {
         /// # The function's signature
-        signature: Signature,
+        signature: ConcreteSignature,
     },
 
     /// # A number
