@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Expression, Member, SyntaxTree},
+    syntax::{Expression, Member, SyntaxSignature, SyntaxTree},
     Index,
 };
 
@@ -12,15 +12,24 @@ impl HasLocation for Member {
 }
 
 impl<'r> Located<&'r Member> {
-    pub fn into_expression(self) -> Option<Located<&'r Expression>> {
-        let Member::Expression { expression, .. } = self.fragment else {
+    pub fn into_expression(
+        self,
+    ) -> Option<(Located<&'r Expression>, Option<&'r SyntaxSignature>)> {
+        let Member::Expression {
+            expression,
+            signature,
+        } = self.fragment
+        else {
             return None;
         };
 
-        Some(Located {
-            fragment: expression,
-            location: self.location,
-        })
+        Some((
+            Located {
+                fragment: expression,
+                location: self.location,
+            },
+            signature.as_ref(),
+        ))
     }
 }
 
