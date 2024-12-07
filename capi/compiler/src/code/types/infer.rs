@@ -1,9 +1,13 @@
-use crate::code::{syntax::Expression, FunctionCalls};
+use crate::code::{
+    syntax::{Expression, MemberLocation},
+    FunctionCalls,
+};
 
 use super::{Signature, Type};
 
 pub fn infer_expression(
     expression: &Expression,
+    _: &MemberLocation,
     _: &FunctionCalls,
 ) -> Option<Signature> {
     match expression {

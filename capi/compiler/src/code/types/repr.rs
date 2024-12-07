@@ -60,8 +60,11 @@ impl Types {
                 for expression in branch.expressions() {
                     let explicit =
                         explicit_types.signature_of(&expression.location);
-                    let inferred =
-                        infer_expression(expression.fragment, function_calls);
+                    let inferred = infer_expression(
+                        expression.fragment,
+                        &expression.location,
+                        function_calls,
+                    );
 
                     if let (Some(explicit), Some(inferred)) =
                         (explicit, inferred.as_ref())
