@@ -1,8 +1,11 @@
-use crate::code::syntax::Expression;
+use crate::code::{syntax::Expression, FunctionCalls};
 
 use super::{Signature, Type};
 
-pub fn infer_expression(expression: &Expression) -> Option<Signature> {
+pub fn infer_expression(
+    expression: &Expression,
+    _: &FunctionCalls,
+) -> Option<Signature> {
     match expression {
         Expression::LiteralNumber { .. } => Some(Signature {
             inputs: vec![],

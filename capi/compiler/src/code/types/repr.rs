@@ -51,14 +51,15 @@ impl Types {
     pub fn infer(
         syntax_tree: &SyntaxTree,
         explicit_types: ExplicitTypes,
-        _: &FunctionCalls,
+        function_calls: &FunctionCalls,
     ) -> Self {
         let mut types_ = BTreeMap::new();
 
         for function in syntax_tree.all_functions() {
             for branch in function.branches() {
                 for expression in branch.expressions() {
-                    let inferred = infer_expression(expression.fragment);
+                    let inferred =
+                        infer_expression(expression.fragment, function_calls);
                     let explicit =
                         explicit_types.signature_of(&expression.location);
 
