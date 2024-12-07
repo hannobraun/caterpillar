@@ -707,7 +707,7 @@ vec_load: fn
         load: Number -> Number .
         address: -> Number .
         1
-        add_s32: Number, Number -> Number .
+        add_s32
         load: Number -> Number .
 end
 
@@ -719,7 +719,7 @@ vec_store: fn
         y: -> Number .
         address: -> Number .
         1
-        add_s32: Number, Number -> Number .
+        add_s32
         store: Number, Number -> .
 end
 
@@ -761,7 +761,7 @@ vec_buf_get: fn
     \ vec_buf, index ->
         index: -> Number .
         2
-        mul_u8_wrap: Number, Number -> Number .
+        mul_u8_wrap
         fn \ offset ->
             vec_buf: -> Number .
             _vec_buf_first: Number -> Number .
@@ -870,18 +870,18 @@ _vec_buf_address: fn
         #   `from base`.
         base: -> Number .
         offset: -> Number .
-            add_u8_wrap: Number, Number -> Number .
+            add_u8_wrap
 
         vec_buf: -> Number.
             _vec_buf_capacity: Number -> Number .
             load: Number -> Number .
 
-        remainder_s32: Number, Number -> Number .
+        remainder_s32
 
         vec_buf: -> Number .
             _vec_buf_buffer: Number -> Number .
 
-        add_u8_wrap: Number, Number -> Number .
+        add_u8_wrap
 end
 
 _vec_buf_inc_index: fn
@@ -889,7 +889,7 @@ _vec_buf_inc_index: fn
         index_addr: -> Number .
             load: Number -> Number .
         2
-            add_u8_wrap: Number, Number -> Number .
+            add_u8_wrap
 
         index_addr: -> Number .
 
@@ -900,28 +900,28 @@ _vec_buf_first: fn
     \ vec_buf ->
         vec_buf: -> Number .
         0
-            add_s32: Number, Number -> Number .
+            add_s32
 end
 
 _vec_buf_next: fn
     \ vec_buf ->
         vec_buf: -> Number .
         1
-            add_s32: Number, Number -> Number .
+            add_s32
 end
 
 _vec_buf_capacity: fn
     \ vec_buf ->
         vec_buf: -> Number .
         2
-            add_s32: Number, Number -> Number .
+            add_s32
 end
 
 _vec_buf_buffer: fn
     \ vec_buf ->
         vec_buf: -> Number .
         3
-            add_s32: Number, Number -> Number .
+            add_s32
 end
 
 # Utilities - Miscellaneous
