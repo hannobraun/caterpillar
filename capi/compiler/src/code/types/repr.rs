@@ -72,8 +72,8 @@ impl Types {
                             goal is to transition away from explicit \
                             annotations completely.\n\
                             \n\
-                            Inferred type: {inferred:?}\n\
                             Explicit type: {explicit:?}\n\
+                            Inferred type: {inferred:?}\n\
                             \n\
                             At {}\n",
                             expression.location.display(syntax_tree),
