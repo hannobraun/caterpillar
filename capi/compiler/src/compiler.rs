@@ -36,7 +36,7 @@ impl Compiler {
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
         let explicit_types = ExplicitTypes::resolve(&syntax_tree);
-        let types = Types::infer(&syntax_tree, explicit_types);
+        let types = Types::infer(&syntax_tree, explicit_types, &function_calls);
         let (functions, ordered_functions) =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
         let recursion =

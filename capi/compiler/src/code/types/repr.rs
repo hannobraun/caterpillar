@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::code::syntax::{MemberLocation, SyntaxTree};
+use crate::code::{
+    syntax::{MemberLocation, SyntaxTree},
+    FunctionCalls,
+};
 
 use super::{infer::infer_expression, resolve::resolve_type_annotations};
 
@@ -48,6 +51,7 @@ impl Types {
     pub fn infer(
         syntax_tree: &SyntaxTree,
         explicit_types: ExplicitTypes,
+        _: &FunctionCalls,
     ) -> Self {
         let mut types_ = BTreeMap::new();
 
