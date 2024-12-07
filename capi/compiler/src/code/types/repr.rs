@@ -63,8 +63,8 @@ impl Types {
                     let inferred =
                         infer_expression(expression.fragment, function_calls);
 
-                    if let (Some(inferred), Some(explicit)) =
-                        (inferred.as_ref(), explicit)
+                    if let (Some(explicit), Some(inferred)) =
+                        (explicit, inferred.as_ref())
                     {
                         panic!(
                             "Type that could be inferred was also specified \
