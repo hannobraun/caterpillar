@@ -221,7 +221,7 @@ init_frame_count: fn
     \ ->
         1
         frame_count: -> Number .
-        store: Number, Number -> .
+        store
 end
 
 count_frame: fn
@@ -287,7 +287,7 @@ init_should_game_run: fn
     \ ->
         1
         should_game_run: -> Number .
-            store: Number, Number -> .
+            store
 end
 
 # Game state - velocity
@@ -476,7 +476,7 @@ snake_init: fn
     \ ->
          3
          snake_length: -> Number .
-            store: Number, Number -> .
+            store
 
         positions: -> Number .
             vec_buf_init: Number -> .
@@ -704,23 +704,23 @@ end
 vec_load: fn
     \ address ->
         address: -> Number .
-        load: Number -> Number .
+        load
         address: -> Number .
         1
         add_s32
-        load: Number -> Number .
+        load
 end
 
 vec_store: fn
     \ x, y, address ->
         x: -> Number .
         address: -> Number .
-        store: Number, Number -> .
+        store
         y: -> Number .
         address: -> Number .
         1
         add_s32
-        store: Number, Number -> .
+        store
 end
 
 vec_copy: fn
@@ -748,13 +748,13 @@ vec_buf_init: fn
     \ vec_buf ->
         0
         vec_buf: -> Number . _vec_buf_first: Number -> Number .
-            store: Number, Number -> .
+            store
         0
         vec_buf: -> Number . _vec_buf_next: Number -> Number .
-            store: Number, Number -> .
+            store
         64
         vec_buf: -> Number . _vec_buf_capacity: Number -> Number .
-            store: Number, Number -> .
+            store
 end
 
 vec_buf_get: fn
@@ -765,7 +765,7 @@ vec_buf_get: fn
         fn \ offset ->
             vec_buf: -> Number .
             _vec_buf_first: Number -> Number .
-            load: Number -> Number .
+            load
             fn \ base ->
                 vec_buf: -> Number .
                 base: -> Number .
@@ -803,7 +803,7 @@ vec_buf_push: fn
         fn \ next_addr ->
             vec_buf: -> Number .
             next_addr: -> Number .
-            load: Number -> Number .
+            load
             0
             _vec_buf_address: Number, Number, Number -> Number .
             fn \ address ->
@@ -874,7 +874,7 @@ _vec_buf_address: fn
 
         vec_buf: -> Number.
             _vec_buf_capacity: Number -> Number .
-            load: Number -> Number .
+            load
 
         remainder_s32
 
@@ -887,13 +887,13 @@ end
 _vec_buf_inc_index: fn
     \ index_addr ->
         index_addr: -> Number .
-            load: Number -> Number .
+            load
         2
             add_u8_wrap
 
         index_addr: -> Number .
 
-        store: Number, Number -> .
+        store
 end
 
 _vec_buf_first: fn
@@ -927,7 +927,7 @@ end
 # Utilities - Miscellaneous
 negatable_random: fn
     \ ->
-        read_random: -> Number .
+        read_random
         _negatable_random_return_or_continue: Number -> Number .
 end
 
