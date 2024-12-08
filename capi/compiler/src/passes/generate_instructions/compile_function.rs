@@ -101,7 +101,7 @@ fn compile_branch(
         }
     });
     let bindings_address =
-        compile_binding(parameters, functions_context.instructions);
+        compile_bindings(parameters, functions_context.instructions);
 
     let [branch_address, last_address] = compile_branch_body(
         branch.body,
@@ -133,7 +133,7 @@ fn compile_branch(
     (branch, [first_address, last_address])
 }
 
-fn compile_binding<'r, N>(
+fn compile_bindings<'r, N>(
     names: N,
     instructions: &mut Instructions,
 ) -> Option<InstructionAddress>
