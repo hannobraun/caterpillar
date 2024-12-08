@@ -157,8 +157,9 @@ fn resolve_bindings_in_branch(
     for expression in branch.expressions() {
         match expression.fragment {
             Expression::Identifier { name } => {
-                let is_known_binding =
-                    scopes.iter().any(|scope| scope.contains_key(name));
+                let is_known_binding = scopes
+                    .iter()
+                    .any(|scope| scope.iter().any(|(n, _)| n == name));
 
                 if is_known_binding {
                     bindings.insert(expression.location);
