@@ -119,7 +119,7 @@ fn resolve_bindings_in_branch(
                 (
                     identifier,
                     IdentifierIndex {
-                        value: i,
+                        identifier_index: i,
                         branch: branch.location.clone(),
                     },
                 )

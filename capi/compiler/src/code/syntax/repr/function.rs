@@ -122,7 +122,7 @@ pub enum Pattern {
 #[derive(Debug)]
 pub struct IdentifierIndex {
     /// # The value of the index
-    pub value: u32,
+    pub identifier_index: u32,
 
     /// # The branch which the indexed identifier is part of
     pub branch: BranchLocation,
