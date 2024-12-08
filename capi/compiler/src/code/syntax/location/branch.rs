@@ -2,8 +2,7 @@ use std::{fmt, iter};
 
 use crate::code::{
     syntax::{
-        Branch, Expression, Function, IdentifierIndex, Member, Pattern,
-        SyntaxSignature, SyntaxTree,
+        Branch, Expression, Function, Member, SyntaxSignature, SyntaxTree,
     },
     Index,
 };
@@ -55,23 +54,6 @@ impl<'r> Located<&'r Branch> {
                 iter::once(function.clone())
                     .chain(function.all_local_functions())
             })
-    }
-
-    /// # Compute the index of the identifier with the given name, if any
-    pub fn identifier_index(&self, name: &str) -> Option<IdentifierIndex> {
-        let indices = iter::successors(Some(0), |i| Some(i + 1));
-        let identifiers =
-            self.parameters.iter().filter_map(|pattern| match pattern {
-                Pattern::Identifier { name } => Some(name),
-                Pattern::Literal { .. } => None,
-            });
-
-        indices.zip(identifiers).find_map(|(i, identifier)| {
-            (identifier == name).then_some(IdentifierIndex {
-                value: i,
-                branch: self.location.clone(),
-            })
-        })
     }
 }
 
