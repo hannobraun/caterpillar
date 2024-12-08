@@ -99,20 +99,16 @@ fn resolve_bindings_in_branch(
     environment: &mut Environment,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
-    scopes.push(
-        branch
-            .parameters
-            .clone()
-            .into_iter()
-            .filter_map(|pattern| {
-                if let Pattern::Identifier { name } = pattern {
-                    Some(name)
-                } else {
-                    None
-                }
-            })
-            .collect(),
-    );
+    let identifiers =
+        branch.parameters.clone().into_iter().filter_map(|pattern| {
+            if let Pattern::Identifier { name } = pattern {
+                Some(name)
+            } else {
+                None
+            }
+        });
+
+    scopes.push(identifiers.collect());
 
     for expression in branch.expressions() {
         match expression.fragment {
