@@ -1,5 +1,3 @@
-use std::iter;
-
 use capi_runtime::Value;
 
 use crate::code::IndexMap;
@@ -70,22 +68,6 @@ pub struct Branch {
 
     /// # The body of the branch
     pub body: IndexMap<Member>,
-}
-
-impl Branch {
-    /// # Compute the index of the identifier with the given name, if any
-    pub fn identifier_index(&self, name: &str) -> Option<IdentifierIndex> {
-        let indices = iter::successors(Some(0), |i| Some(i + 1));
-        let identifiers =
-            self.parameters.iter().filter_map(|pattern| match pattern {
-                Pattern::Identifier { name } => Some(name),
-                Pattern::Literal { .. } => None,
-            });
-
-        indices.zip(identifiers).find_map(|(i, identifier)| {
-            (identifier == name).then_some(IdentifierIndex { value: i })
-        })
-    }
 }
 
 /// # A pattern
