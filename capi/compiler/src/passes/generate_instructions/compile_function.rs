@@ -230,7 +230,7 @@ fn compile_expression(
 
     match expression {
         Expression::Identifier { name } => {
-            if functions_context.bindings.is_binding(&location) {
+            if functions_context.bindings.is_binding(&location).is_some() {
                 generate_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },
                     functions_context.instructions,

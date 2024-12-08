@@ -33,8 +33,8 @@ impl Bindings {
     }
 
     /// # Determine, if the expression at the given location is a binding
-    pub fn is_binding(&self, location: &MemberLocation) -> bool {
-        self.bindings.contains_key(location)
+    pub fn is_binding(&self, location: &MemberLocation) -> Option<&Binding> {
+        self.bindings.get(location)
     }
 
     /// # Access the environment of the function at the provided location
@@ -250,8 +250,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(bindings.is_binding(&parameter));
-        assert!(!bindings.is_binding(&no_parameter));
+        assert!(bindings.is_binding(&parameter).is_some());
+        assert!(bindings.is_binding(&no_parameter).is_none());
     }
 
     #[test]
@@ -292,8 +292,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(bindings.is_binding(&parameter));
-        assert!(!bindings.is_binding(&no_parameter));
+        assert!(bindings.is_binding(&parameter).is_some());
+        assert!(bindings.is_binding(&no_parameter).is_none());
 
         assert!(bindings
             .environment_of(&function.location)
@@ -329,7 +329,7 @@ mod tests {
             .nth(1)
             .unwrap();
 
-        assert!(!bindings.is_binding(&child_parameter));
+        assert!(bindings.is_binding(&child_parameter).is_none());
     }
 
     #[test]
