@@ -14,7 +14,7 @@ mod ordered_functions;
 mod types;
 
 pub use self::{
-    bindings::Bindings,
+    bindings::{Binding, Bindings},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     function_calls::FunctionCalls,
     functions::Functions,
