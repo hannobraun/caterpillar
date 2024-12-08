@@ -159,7 +159,12 @@ fn resolve_bindings_in_branch(
             Expression::Identifier { name } => {
                 let is_known_binding = scopes
                     .iter()
-                    .any(|scope| scope.iter().any(|(n, _)| n == name));
+                    .find_map(|scope| {
+                        scope.iter().find_map(|(n, binding)| {
+                            (n == name).then_some(binding)
+                        })
+                    })
+                    .is_some();
 
                 if is_known_binding {
                     bindings.insert(expression.location);
