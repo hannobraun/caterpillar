@@ -14,7 +14,7 @@ use super::syntax::{
 /// to a name.
 #[derive(Debug)]
 pub struct Bindings {
-    bindings: BTreeSet<MemberLocation>,
+    bindings: BindingsMap,
     environments: BTreeMap<FunctionLocation, Environment>,
 }
 
@@ -43,6 +43,8 @@ impl Bindings {
         self.environments.get(location).unwrap_or(&EMPTY)
     }
 }
+
+type BindingsMap = BTreeSet<MemberLocation>;
 
 /// # A binding
 ///
@@ -76,7 +78,7 @@ pub type Environment = BTreeSet<String>;
 
 fn resolve_bindings(
     syntax_tree: &SyntaxTree,
-    bindings: &mut BTreeSet<MemberLocation>,
+    bindings: &mut BindingsMap,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
     let mut scopes = Scopes::new();
@@ -94,7 +96,7 @@ fn resolve_bindings(
 fn resolve_bindings_in_function(
     function: Located<&Function>,
     scopes: &mut Scopes,
-    bindings: &mut BTreeSet<MemberLocation>,
+    bindings: &mut BindingsMap,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) -> Environment {
     let location = function.location.clone();
@@ -122,7 +124,7 @@ fn resolve_bindings_in_function(
 fn resolve_bindings_in_branch(
     branch: Located<&Branch>,
     scopes: &mut Scopes,
-    bindings: &mut BTreeSet<MemberLocation>,
+    bindings: &mut BindingsMap,
     environment: &mut Environment,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
