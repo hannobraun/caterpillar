@@ -137,6 +137,7 @@ pub enum Pattern {
 /// This index is required to keep track of the branch parameters on the
 /// stack. Parameters that do not bind to an identifier are not relevant for
 /// that, since they are not available in the branch.
+#[derive(Debug)]
 pub struct IdentifierIndex {
     /// # The value of the index
     pub value: u32,
