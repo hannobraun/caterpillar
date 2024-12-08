@@ -1,8 +1,11 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    iter,
+};
 
 use super::syntax::{
-    Branch, Expression, Function, FunctionLocation, Located, MemberLocation,
-    Pattern, SyntaxTree,
+    Branch, Expression, Function, FunctionLocation, IdentifierIndex, Located,
+    MemberLocation, Pattern, SyntaxTree,
 };
 
 /// # Tracks bindings
@@ -99,6 +102,7 @@ fn resolve_bindings_in_branch(
     environment: &mut Environment,
     environments: &mut BTreeMap<FunctionLocation, Environment>,
 ) {
+    let indices = iter::successors(Some(0), |i| Some(i + 1));
     let identifiers =
         branch.parameters.clone().into_iter().filter_map(|pattern| {
             if let Pattern::Identifier { name } = pattern {
@@ -108,19 +112,32 @@ fn resolve_bindings_in_branch(
             }
         });
 
-    scopes.push(identifiers.collect());
+    scopes.push(
+        indices
+            .zip(identifiers)
+            .map(|(i, identifier)| {
+                (
+                    identifier,
+                    IdentifierIndex {
+                        value: i,
+                        branch: branch.location.clone(),
+                    },
+                )
+            })
+            .collect(),
+    );
 
     for expression in branch.expressions() {
         match expression.fragment {
             Expression::Identifier { name } => {
                 let is_known_binding =
-                    scopes.iter().any(|scope| scope.contains(name));
+                    scopes.iter().any(|scope| scope.contains_key(name));
 
                 if is_known_binding {
                     bindings.insert(expression.location);
 
                     if let Some(scope) = scopes.last() {
-                        if !scope.contains(name) {
+                        if !scope.contains_key(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
                             environment.insert(name.clone());
@@ -143,7 +160,7 @@ fn resolve_bindings_in_branch(
 
                 for name in child_environment {
                     if let Some(bindings) = scopes.last() {
-                        if !bindings.contains(&name) {
+                        if !bindings.contains_key(&name) {
                             // The child function that we just resolved bindings
                             // in has a function in its environment that is not
                             // known in the current scope.
@@ -164,7 +181,7 @@ fn resolve_bindings_in_branch(
 }
 
 type Scopes = Vec<BindingsInScope>;
-type BindingsInScope = BTreeSet<String>;
+type BindingsInScope = BTreeMap<String, IdentifierIndex>;
 
 #[cfg(test)]
 mod tests {
