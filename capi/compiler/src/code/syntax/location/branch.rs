@@ -67,7 +67,10 @@ impl<'r> Located<&'r Branch> {
             });
 
         indices.zip(identifiers).find_map(|(i, identifier)| {
-            (identifier == name).then_some(IdentifierIndex { value: i })
+            (identifier == name).then_some(IdentifierIndex {
+                value: i,
+                branch: self.location.clone(),
+            })
         })
     }
 }

@@ -1,6 +1,6 @@
 use capi_runtime::Value;
 
-use crate::code::IndexMap;
+use crate::code::{syntax::BranchLocation, IndexMap};
 
 use super::{expression::Expression, types::SyntaxSignature};
 
@@ -123,6 +123,9 @@ pub enum Pattern {
 pub struct IdentifierIndex {
     /// # The value of the index
     pub value: u32,
+
+    /// # The branch which the indexed identifier is part of
+    pub branch: BranchLocation,
 }
 
 /// # A part of a branch's body
