@@ -86,7 +86,7 @@ impl Branch {
     /// This index is required to keep track of the branch parameters on the
     /// stack. Parameters that do not bind to an identifier are not relevant for
     /// that, since they are not available in the branch.
-    pub fn identifier_index(&self, name: &str) -> Option<u32> {
+    pub fn identifier_index(&self, name: &str) -> Option<IdentifierIndex> {
         let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
             self.parameters.iter().filter_map(|pattern| match pattern {
@@ -94,9 +94,9 @@ impl Branch {
                 Pattern::Literal { .. } => None,
             });
 
-        indices
-            .zip(identifiers)
-            .find_map(|(i, identifier)| (identifier == name).then_some(i))
+        indices.zip(identifiers).find_map(|(i, identifier)| {
+            (identifier == name).then_some(IdentifierIndex { value: i })
+        })
     }
 }
 
@@ -134,6 +134,24 @@ pub enum Pattern {
         /// # The value that an argument is matched against
         value: Value,
     },
+}
+
+/// # The index of an identifier within a branch
+///
+/// An identifier index is the 0-based index of a parameter within a branch's
+/// list of parameters, only counting parameters that bind to an identifier
+/// within the branch.
+///
+/// Parameters are patterns that could bind a value to an identifier that is
+/// then available within the branch, or they could just match an argument,
+/// but not make any value available in the branch.
+///
+/// This index is required to keep track of the branch parameters on the
+/// stack. Parameters that do not bind to an identifier are not relevant for
+/// that, since they are not available in the branch.
+pub struct IdentifierIndex {
+    /// # The value of the index
+    pub value: u32,
 }
 
 /// # A part of a branch's body
