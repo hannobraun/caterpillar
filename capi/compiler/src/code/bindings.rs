@@ -157,16 +157,13 @@ fn resolve_bindings_in_branch(
     for expression in branch.expressions() {
         match expression.fragment {
             Expression::Identifier { name } => {
-                let is_known_binding = scopes
-                    .iter()
-                    .find_map(|scope| {
-                        scope.iter().find_map(|(n, binding)| {
-                            (n == name).then_some(binding)
-                        })
-                    })
-                    .is_some();
+                let binding = scopes.iter().find_map(|scope| {
+                    scope
+                        .iter()
+                        .find_map(|(n, binding)| (n == name).then_some(binding))
+                });
 
-                if is_known_binding {
+                if binding.is_some() {
                     bindings.insert(expression.location);
 
                     if let Some(scope) = scopes.last() {
