@@ -21,7 +21,7 @@ pub struct Bindings {
 impl Bindings {
     /// # Resolve all bindings
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
-        let mut bindings = BTreeSet::new();
+        let mut bindings = BTreeMap::new();
         let mut environments = BTreeMap::new();
 
         resolve_bindings(syntax_tree, &mut bindings, &mut environments);
@@ -34,7 +34,7 @@ impl Bindings {
 
     /// # Determine, if the expression at the given location is a binding
     pub fn is_binding(&self, location: &MemberLocation) -> bool {
-        self.bindings.contains(location)
+        self.bindings.contains_key(location)
     }
 
     /// # Access the environment of the function at the provided location
@@ -44,7 +44,7 @@ impl Bindings {
     }
 }
 
-type BindingsMap = BTreeSet<MemberLocation>;
+type BindingsMap = BTreeMap<MemberLocation, Binding>;
 type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 
 /// # A binding
@@ -163,8 +163,8 @@ fn resolve_bindings_in_branch(
                         .find_map(|(n, binding)| (n == name).then_some(binding))
                 });
 
-                if binding.is_some() {
-                    bindings.insert(expression.location);
+                if let Some(binding) = binding {
+                    bindings.insert(expression.location, binding.clone());
 
                     if let Some(scope) = scopes.last() {
                         if !scope.contains_key(name) {
