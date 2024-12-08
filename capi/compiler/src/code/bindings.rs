@@ -4,7 +4,7 @@ use std::{
 };
 
 use super::syntax::{
-    Branch, Expression, Function, FunctionLocation, IdentifierIndex, Located,
+    Binding, Branch, Expression, Function, FunctionLocation, Located,
     MemberLocation, Pattern, SyntaxTree,
 };
 
@@ -118,7 +118,7 @@ fn resolve_bindings_in_branch(
             .map(|(i, identifier)| {
                 (
                     identifier,
-                    IdentifierIndex {
+                    Binding {
                         identifier_index: i,
                         branch: branch.location.clone(),
                     },
@@ -181,7 +181,7 @@ fn resolve_bindings_in_branch(
 }
 
 type Scopes = Vec<BindingsInScope>;
-type BindingsInScope = BTreeMap<String, IdentifierIndex>;
+type BindingsInScope = BTreeMap<String, Binding>;
 
 #[cfg(test)]
 mod tests {

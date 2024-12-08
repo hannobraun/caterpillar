@@ -120,7 +120,7 @@ pub enum Pattern {
 /// stack. Parameters that do not bind to an identifier are not relevant for
 /// that, since they are not available in the branch.
 #[derive(Debug)]
-pub struct IdentifierIndex {
+pub struct Binding {
     /// # The value of the index
     pub identifier_index: u32,
 
