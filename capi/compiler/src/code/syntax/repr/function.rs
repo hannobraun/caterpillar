@@ -73,19 +73,7 @@ pub struct Branch {
 }
 
 impl Branch {
-    /// # Compute the index of given identifier
-    ///
-    /// Compute the 0-based index of the parameter with the given name, within
-    /// the list of this branch's parameters, only counting parameters that bind
-    /// to an identifier within the branch.
-    ///
-    /// Parameters are patterns that could bind a value to an identifier that is
-    /// then available within the branch, or they could just match an argument,
-    /// but not make any value available in the branch.
-    ///
-    /// This index is required to keep track of the branch parameters on the
-    /// stack. Parameters that do not bind to an identifier are not relevant for
-    /// that, since they are not available in the branch.
+    /// # Compute the index of the identifier with the given name, if any
     pub fn identifier_index(&self, name: &str) -> Option<IdentifierIndex> {
         let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
