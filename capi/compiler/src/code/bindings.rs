@@ -50,7 +50,7 @@ type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 /// # A binding
 ///
 /// A binding is a value that has been bound to a name, locally within a branch.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Binding {
     /// # The index of the identifier parameter that defines the binding
     ///
