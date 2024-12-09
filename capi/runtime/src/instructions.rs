@@ -159,6 +159,13 @@ pub enum Instruction {
     Copy,
 
     /// # Copy the top value on the stack
+    ///
+    /// ## Implementation Note
+    ///
+    /// This instruction is redundant, as the same effect can be achieve with
+    /// [`Instruction::Copy`]. However, using that to copy the top of the stack
+    /// requires the compiler to track the types on the stack, which it doesn't
+    /// do yet.
     CopyTopValue,
 
     /// # Divide two signed 32-bit integers
