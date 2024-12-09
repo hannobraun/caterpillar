@@ -192,6 +192,21 @@ fn evaluate_instruction(
 
             stack.push_operand(v);
         }
+        Instruction::Copy => {
+            let address = stack.pop_operand()?;
+            let address = address
+                .to_u32()
+                .try_into()
+                .expect("All supported platforms can convert `u32` to `usize`");
+
+            let value = stack.operands().nth(address).copied();
+
+            if let Some(value) = value {
+                stack.push_operand(value);
+            } else {
+                return Err(Effect::InvalidAddress);
+            }
+        }
         Instruction::CopyTopValue => {
             let v = stack.pop_operand()?;
 
