@@ -1,11 +1,8 @@
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    iter,
-};
+use std::collections::{BTreeMap, BTreeSet};
 
 use super::syntax::{
     Branch, BranchLocation, Expression, Function, FunctionLocation, Located,
-    MemberLocation, Pattern, SyntaxTree,
+    MemberLocation, SyntaxTree,
 };
 
 /// # Tracks bindings
@@ -129,30 +126,7 @@ fn resolve_bindings_in_branch(
     environment: &mut Environment,
     environments: &mut EnvironmentsMap,
 ) {
-    let indices = iter::successors(Some(0), |i| Some(i + 1));
-    let identifiers =
-        branch.parameters.clone().into_iter().filter_map(|pattern| {
-            if let Pattern::Identifier { name } = pattern {
-                Some(name)
-            } else {
-                None
-            }
-        });
-
-    scopes.push(
-        indices
-            .zip(identifiers)
-            .map(|(i, identifier)| {
-                (
-                    identifier,
-                    Binding {
-                        identifier_index: i,
-                        branch: branch.location.clone(),
-                    },
-                )
-            })
-            .collect(),
-    );
+    scopes.push(branch.bindings().collect());
 
     for expression in branch.expressions() {
         match expression.fragment {

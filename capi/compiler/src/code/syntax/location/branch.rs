@@ -2,9 +2,10 @@ use std::{fmt, iter};
 
 use crate::code::{
     syntax::{
-        Branch, Expression, Function, Member, SyntaxSignature, SyntaxTree,
+        Branch, Expression, Function, Member, Pattern, SyntaxSignature,
+        SyntaxTree,
     },
-    Index,
+    Binding, Index,
 };
 
 use super::{located::HasLocation, FunctionLocation, Located, MemberLocation};
@@ -14,6 +15,32 @@ impl HasLocation for Branch {
 }
 
 impl<'r> Located<&'r Branch> {
+    /// # Iterate over the parameters of the function that bind a value
+    pub fn bindings(&self) -> impl Iterator<Item = (String, Binding)> + 'r {
+        let indices = iter::successors(Some(0), |i| Some(i + 1));
+        let identifiers =
+            self.fragment.parameters.clone().into_iter().filter_map(
+                |pattern| {
+                    if let Pattern::Identifier { name } = pattern {
+                        Some(name)
+                    } else {
+                        None
+                    }
+                },
+            );
+        let location = self.location.clone();
+
+        indices.zip(identifiers).map(move |(i, identifier)| {
+            (
+                identifier,
+                Binding {
+                    identifier_index: i,
+                    branch: location.clone(),
+                },
+            )
+        })
+    }
+
     /// # Iterate over the members of the branch's body
     pub fn body(self) -> impl DoubleEndedIterator<Item = Located<&'r Member>> {
         let location = self.location.clone();
