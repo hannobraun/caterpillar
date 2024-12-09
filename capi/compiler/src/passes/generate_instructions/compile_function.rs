@@ -274,7 +274,7 @@ fn compile_expression(
                     .is_recursive_expression(&location)
                     .is_some()
                 {
-                    let called_function = functions_context
+                    let callee = functions_context
                         .functions
                         .by_location(callee_location)
                         .expect(
@@ -298,7 +298,7 @@ fn compile_expression(
                     );
                     cluster_context
                         .recursive_calls_by_callee
-                        .entry(called_function.location)
+                        .entry(callee.location)
                         .or_default()
                         .push(CallToFunction {
                             address,
