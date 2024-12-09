@@ -29,6 +29,7 @@ impl Updates {
                     current_operands: runtime
                         .stack()
                         .operands()
+                        .rev()
                         .copied()
                         .collect::<Vec<_>>(),
                 },

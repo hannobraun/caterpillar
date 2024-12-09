@@ -53,7 +53,7 @@ impl Stack {
     }
 
     pub fn operands(&self) -> impl DoubleEndedIterator<Item = &Value> + '_ {
-        self.inner.iter().rev().filter_map(|element| match element {
+        self.inner.iter().filter_map(|element| match element {
             StackElement::Operand(value) => Some(value),
             _ => None,
         })
