@@ -52,6 +52,7 @@ impl Stack {
             })
     }
 
+    /// # Iterate over the operands on the stack, from the base
     pub fn operands(&self) -> impl DoubleEndedIterator<Item = &Value> + '_ {
         self.inner.iter().filter_map(|element| match element {
             StackElement::Operand(value) => Some(value),
