@@ -269,19 +269,16 @@ fn compile_expression(
                 .function_calls
                 .is_call_to_user_defined_function(&location)
             {
+                let callee = functions_context
+                    .functions
+                    .by_location(callee_location)
+                    .expect("Function referred to from cluster must exist.");
+
                 if functions_context
                     .recursion
                     .is_recursive_expression(&location)
                     .is_some()
                 {
-                    let callee = functions_context
-                        .functions
-                        .by_location(callee_location)
-                        .expect(
-                            "Function referred to from cluster must \
-                            exist.",
-                        );
-
                     // For recursive calls, we can't generally assume that the
                     // called function has been compiled yet. It's a recursive
                     // call, after all!
