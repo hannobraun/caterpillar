@@ -144,7 +144,7 @@ where
     let mut first_address = None;
 
     for name in names.into_iter().rev() {
-        let address = generate_instruction(
+        let address = emit_instruction(
             Instruction::Bind { name: name.clone() },
             instructions,
             None,
@@ -202,7 +202,7 @@ fn compile_branch_body(
     //   compiler optimizations. I'd rather have that, instead of making
     //   this change blindly. It will probably make the code more
     //   complicated, so it needs to be justified.
-    let last_instruction = generate_instruction(
+    let last_instruction = emit_instruction(
         Instruction::Return,
         functions_context.instructions,
         None,
@@ -231,7 +231,7 @@ fn compile_expression(
     match expression {
         Expression::Identifier { name } => {
             if functions_context.bindings.is_binding(&location).is_some() {
-                generate_instruction(
+                emit_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },
                     functions_context.instructions,
                     Some(&mut mapping),
@@ -250,14 +250,14 @@ fn compile_expression(
                 .function_calls
                 .is_call_to_host_function(&location)
             {
-                let address = generate_instruction(
+                let address = emit_instruction(
                     Instruction::Push {
                         value: function.number.into(),
                     },
                     functions_context.instructions,
                     Some(&mut mapping),
                 );
-                generate_instruction(
+                emit_instruction(
                     Instruction::TriggerEffect {
                         effect: Effect::Host,
                     },
@@ -289,7 +289,7 @@ fn compile_expression(
                     // Let's emit a placeholder instruction and arrange for that
                     // to be replaced later, once all of the functions in the
                     // cluster have been compiled.
-                    let address = generate_instruction(
+                    let address = emit_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::CompilerBug,
                         },
@@ -347,7 +347,7 @@ fn compile_expression(
                         )
                     };
 
-                    let address = generate_instruction(
+                    let address = emit_instruction(
                         Instruction::CallFunction {
                             function: function.clone(),
                             is_tail_call: is_tail_expression,
@@ -373,7 +373,7 @@ fn compile_expression(
                     address
                 }
             } else {
-                generate_instruction(
+                emit_instruction(
                     Instruction::TriggerEffect {
                         effect: Effect::BuildError,
                     },
@@ -382,7 +382,7 @@ fn compile_expression(
                 )
             }
         }
-        Expression::LiteralNumber { value } => generate_instruction(
+        Expression::LiteralNumber { value } => emit_instruction(
             Instruction::Push { value },
             functions_context.instructions,
             Some(&mut mapping),
@@ -489,7 +489,7 @@ fn compile_intrinsic(
         IntrinsicFunction::SubU8Wrap => Instruction::SubU8Wrap,
     };
 
-    generate_instruction(instruction, instructions, Some(mapping))
+    emit_instruction(instruction, instructions, Some(mapping))
 }
 
 fn compile_local_function(
@@ -516,7 +516,7 @@ fn compile_local_function(
     //
     // For now, we'll just emit a placeholder that can be replaced with the real
     // instruction then.
-    let address = generate_instruction(
+    let address = emit_instruction(
         Instruction::TriggerEffect {
             effect: Effect::CompilerBug,
         },
@@ -538,7 +538,7 @@ fn compile_local_function(
     address
 }
 
-fn generate_instruction(
+fn emit_instruction(
     instruction: Instruction,
     instructions: &mut Instructions,
     mapping: Option<&mut Mapping<'_>>,
