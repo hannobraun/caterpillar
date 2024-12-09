@@ -42,7 +42,7 @@ impl<'r> Located<&'r Branch> {
     }
 
     /// # Iterate over the members of the branch's body
-    pub fn body(self) -> impl DoubleEndedIterator<Item = Located<&'r Member>> {
+    pub fn body(&self) -> impl DoubleEndedIterator<Item = Located<&'r Member>> {
         let location = self.location.clone();
 
         self.body.iter().map(move |(&index, member)| Located {
@@ -56,7 +56,7 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the type-annotated expressions in the branch's body
     pub fn annotated_expressions(
-        self,
+        &self,
     ) -> impl DoubleEndedIterator<
         Item = (Located<&'r Expression>, Option<&'r SyntaxSignature>),
     > {
@@ -65,7 +65,7 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the expressions in the branch's body
     pub fn expressions(
-        self,
+        &self,
     ) -> impl DoubleEndedIterator<Item = Located<&'r Expression>> {
         self.annotated_expressions()
             .map(|(expression, _)| expression)
