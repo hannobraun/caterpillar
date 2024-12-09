@@ -81,6 +81,9 @@ pub enum Effect {
     #[error("Integer overflow")]
     IntegerOverflow,
 
+    #[error("Invalid address")]
+    InvalidAddress,
+
     #[error("Invalid function")]
     InvalidFunction,
 
