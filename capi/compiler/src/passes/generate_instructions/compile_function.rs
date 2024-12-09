@@ -333,14 +333,13 @@ fn compile_expression(
                             "Compiling call to this user-defined function: \
                             `{}` \
                             Expecting functions to be compiled before any \
-                            non-recursive calls to them, but can't find the compiled \
-                            version of this one.\n\
+                            non-recursive calls to them, but can't find the \
+                            compiled version of this one.\n\
                             \n\
                             Function:\n\
                             {function:#?}",
-                            callee_location.display(
-                                functions_context.syntax_tree,
-                            ),
+                            callee_location
+                                .display(functions_context.syntax_tree,),
                         )
                     };
 
