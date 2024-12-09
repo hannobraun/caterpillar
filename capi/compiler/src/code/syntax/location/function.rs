@@ -13,7 +13,7 @@ impl HasLocation for Function {
 
 impl<'r> Located<&'r Function> {
     /// # Iterate over the function's branches
-    pub fn branches(self) -> impl Iterator<Item = Located<&'r Branch>> {
+    pub fn branches(&self) -> impl Iterator<Item = Located<&'r Branch>> {
         let function = self.fragment;
         let location = self.location.clone();
 
