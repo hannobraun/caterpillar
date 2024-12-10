@@ -19,14 +19,18 @@ pub fn infer_types(
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
-            if let Err(TypeError) = infer_branch(
+            if let Err(TypeError { expected, actual }) = infer_branch(
                 branch,
                 syntax_tree,
                 explicit_types,
                 function_calls,
                 &mut types,
             ) {
-                panic!("Type error");
+                let actual = actual
+                    .map(|type_| format!("`{type_}`"))
+                    .unwrap_or_else(|| "nothing".to_string());
+
+                panic!("Type error: expected `{expected}`, got {actual}");
             }
         }
     }
@@ -141,4 +145,7 @@ fn infer_intrinsic(
 
 type Stack = Option<Vec<Type>>;
 
-struct TypeError;
+struct TypeError {
+    expected: Type,
+    actual: Option<Type>,
+}
