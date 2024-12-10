@@ -5,13 +5,13 @@ use crate::code::{
     FunctionCalls,
 };
 
-use super::{ExplicitTypes, Signature, Type};
+use super::{repr::TypesInner, ExplicitTypes, Signature, Type};
 
 pub fn infer_types(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-) -> BTreeMap<MemberLocation, Signature> {
+) -> TypesInner {
     let mut types = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {

@@ -37,7 +37,7 @@ impl ExplicitTypes {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
-    inner: BTreeMap<MemberLocation, Signature>,
+    inner: TypesInner,
 }
 
 impl Types {
@@ -65,6 +65,8 @@ impl Types {
         self.inner.get(location)
     }
 }
+
+pub type TypesInner = BTreeMap<MemberLocation, Signature>;
 
 /// # The type of a value
 #[derive(
