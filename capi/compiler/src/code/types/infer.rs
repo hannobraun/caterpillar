@@ -72,7 +72,7 @@ pub fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
-                (None, Some(intrinsic)) => infer_intrinsic(intrinsic),
+                (None, Some(intrinsic)) => infer_intrinsic(intrinsic, stack),
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -126,7 +126,10 @@ pub fn infer_expression(
     }
 }
 
-fn infer_intrinsic(intrinsic: &IntrinsicFunction) -> Option<Signature> {
+fn infer_intrinsic(
+    intrinsic: &IntrinsicFunction,
+    _: &mut Stack,
+) -> Option<Signature> {
     intrinsic.signature()
 }
 
