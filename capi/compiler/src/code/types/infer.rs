@@ -12,7 +12,7 @@ pub fn infer_types(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> BTreeMap<MemberLocation, Signature> {
-    let mut types_ = BTreeMap::new();
+    let mut types = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -43,13 +43,13 @@ pub fn infer_types(
                 }
 
                 if let Some(signature) = inferred.or(explicit.cloned()) {
-                    types_.insert(expression.location, signature);
+                    types.insert(expression.location, signature);
                 }
             }
         }
     }
 
-    types_
+    types
 }
 
 pub fn infer_expression(
