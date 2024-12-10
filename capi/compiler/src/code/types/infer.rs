@@ -35,9 +35,10 @@ pub fn infer_types(
                     .unwrap_or_else(|| "nothing".to_string());
 
                 panic!(
-                    "Type error: expected {expected}, got {actual}\n\
+                    "\n\
+                    Type error: expected {expected}, got {actual}\n\
                     \n\
-                    at {}",
+                    at {}\n",
                     location.display(syntax_tree),
                 );
             }
