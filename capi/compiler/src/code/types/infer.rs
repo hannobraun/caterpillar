@@ -77,7 +77,7 @@ fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
-    stack: &mut Stack,
+    stack: &mut Option<Stack>,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
 
@@ -154,7 +154,7 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    stack: &mut Stack,
+    stack: &mut Option<Stack>,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
@@ -191,7 +191,7 @@ fn infer_intrinsic(
     Ok(signature)
 }
 
-type Stack = Option<Vec<Type>>;
+type Stack = Vec<Type>;
 
 struct TypeError {
     expected: ExpectedType,
