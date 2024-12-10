@@ -34,10 +34,10 @@ pub fn compile_function(
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
-    for (index, branch) in function.fragment.branches.into_iter() {
+    for (&index, branch) in function.fragment.branches.iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
             Located {
-                fragment: &branch,
+                fragment: branch,
                 location: BranchLocation {
                     parent: Box::new(function.location.clone()),
                     index,
