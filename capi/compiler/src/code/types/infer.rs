@@ -59,7 +59,7 @@ pub fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
-    stack: &mut Option<Vec<Type>>,
+    stack: &mut Stack,
 ) {
     let explicit = explicit_types.signature_of(&expression.location);
 
@@ -129,3 +129,5 @@ pub fn infer_expression(
 fn infer_intrinsic(intrinsic: &IntrinsicFunction) -> Option<Signature> {
     intrinsic.signature()
 }
+
+type Stack = Option<Vec<Type>>;
