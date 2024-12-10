@@ -153,11 +153,6 @@ pub enum Instruction {
     /// # Convert a signed 32-bit number to a signed 8-bit number
     ConvertS32ToS8,
 
-    /// # Copy a value on the stack, placing the copy at the top of the stack
-    ///
-    /// Reads the address of the value to copy from the stack.
-    Copy,
-
     /// # Copy the top value on the stack
     ///
     /// ## Implementation Note
