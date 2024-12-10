@@ -176,7 +176,7 @@ fn compile_branch_body(
         };
 
         let addr = compile_expression(
-            expression,
+            &expression,
             MemberLocation {
                 parent: Box::new(location.clone()),
                 index,
@@ -220,7 +220,7 @@ fn compile_branch_body(
 }
 
 fn compile_expression(
-    expression: Expression,
+    expression: &Expression,
     location: MemberLocation,
     function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
@@ -385,7 +385,7 @@ fn compile_expression(
             }
         }
         Expression::LiteralNumber { value } => emit_instruction(
-            Instruction::Push { value },
+            Instruction::Push { value: *value },
             functions_context.instructions,
             Some(&mut mapping),
         ),
