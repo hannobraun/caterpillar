@@ -5,8 +5,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
 use crate::{
     code::{
         syntax::{
-            Branch, BranchLocation, Expression, Function, FunctionLocation,
-            Located, MemberLocation, Pattern,
+            Branch, Expression, Function, FunctionLocation, Located,
+            MemberLocation, Pattern,
         },
         Cluster,
     },
@@ -34,15 +34,9 @@ pub fn compile_function(
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
-    for (&index, branch) in function.fragment.branches.iter() {
+    for branch in function.branches() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
-            Located {
-                fragment: branch,
-                location: BranchLocation {
-                    parent: Box::new(function.location.clone()),
-                    index,
-                },
-            },
+            branch,
             &mut context,
             cluster_context,
             functions_context,
