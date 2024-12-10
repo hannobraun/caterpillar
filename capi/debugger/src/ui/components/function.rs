@@ -1,6 +1,5 @@
-use std::fmt::{self, Write};
+use std::fmt::Write;
 
-use capi_compiler::code::Signature;
 use capi_runtime::Effect;
 use leptos::{
     component,
@@ -227,7 +226,7 @@ fn make_single_member(
 
     let mut typed_expression = expression;
     if let Some(signature) = data.signature {
-        render_type_annotation(&mut typed_expression, signature)
+        write!(typed_expression, ": {signature}")
             .expect("Writing to `String` can't fail.");
     }
 
@@ -252,9 +251,4 @@ fn make_single_member(
             .into_any(),
         ),
     )
-}
-
-fn render_type_annotation(s: &mut String, signature: Signature) -> fmt::Result {
-    write!(s, ": {signature}")?;
-    Ok(())
 }
