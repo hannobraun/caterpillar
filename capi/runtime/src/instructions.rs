@@ -161,7 +161,7 @@ pub enum Instruction {
     /// [`Instruction::Copy`]. However, using that to copy the top of the stack
     /// requires the compiler to track the types on the stack, which it doesn't
     /// do yet.
-    CopyTopValue,
+    Copy,
 
     /// # Divide two signed 32-bit integers
     DivS32,

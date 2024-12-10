@@ -192,7 +192,7 @@ fn evaluate_instruction(
 
             stack.push_operand(v);
         }
-        Instruction::CopyTopValue => {
+        Instruction::Copy => {
             let v = stack.pop_operand()?;
 
             stack.push_operand(v);
