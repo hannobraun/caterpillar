@@ -24,7 +24,7 @@ struct FunctionContext<'r> {
 }
 
 pub fn compile_function(
-    function: Located<Function>,
+    function: Located<&Function>,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,

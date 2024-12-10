@@ -57,7 +57,7 @@ pub fn compile_cluster(
     {
         let runtime_function = compile_function(
             Located {
-                fragment: function_to_compile.function,
+                fragment: &function_to_compile.function,
                 location: function_to_compile.location.clone(),
             },
             function_to_compile.address_of_instruction_to_make_anon_function,
