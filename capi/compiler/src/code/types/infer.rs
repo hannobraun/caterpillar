@@ -84,7 +84,7 @@ fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
-    _: &mut Stacks,
+    stacks: &mut Stacks,
     stack: &mut Option<Stack>,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
@@ -149,6 +149,8 @@ fn infer_expression(
             for output in signature.outputs.iter().cloned() {
                 stack.push(output);
             }
+
+            stacks.insert(expression.location.clone(), stack.clone());
         }
 
         signatures.insert(expression.location, signature);
