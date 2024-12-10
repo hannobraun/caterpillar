@@ -126,8 +126,6 @@ impl fmt::Display for Signature {
             }
         }
 
-        write!(f, " .")?;
-
         Ok(())
     }
 }

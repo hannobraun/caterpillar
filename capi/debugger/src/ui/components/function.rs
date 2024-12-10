@@ -226,7 +226,7 @@ fn make_single_member(
 
     let mut typed_expression = expression;
     if let Some(signature) = data.signature {
-        write!(typed_expression, ": {signature}")
+        write!(typed_expression, ": {signature} .")
             .expect("Writing to `String` can't fail.");
     }
 
