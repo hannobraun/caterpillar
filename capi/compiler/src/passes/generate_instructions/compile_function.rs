@@ -112,14 +112,14 @@ fn compile_branch(
     let [body_address, last_address] = {
         let mut body_address = None;
 
-        for (index, member) in branch.body {
+        for (&index, member) in &branch.body {
             let Member::Expression { expression, .. } = member else {
                 continue;
             };
 
             let addr = compile_expression(
                 Located {
-                    fragment: &expression,
+                    fragment: expression,
                     location: MemberLocation {
                         parent: Box::new(location.clone()),
                         index,
