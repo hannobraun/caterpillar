@@ -108,13 +108,11 @@ impl fmt::Display for Signature {
             write!(f, "{input}")?;
 
             if inputs.peek().is_some() {
-                write!(f, ",")?;
+                write!(f, ", ")?;
             }
-
-            write!(f, " ")?;
         }
 
-        write!(f, "->")?;
+        write!(f, " ->")?;
         if !self.outputs.is_empty() {
             write!(f, " ")?;
         }
