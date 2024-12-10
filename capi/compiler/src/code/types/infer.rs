@@ -32,7 +32,7 @@ pub fn infer_types(
     types
 }
 
-pub fn infer_branch(
+fn infer_branch(
     branch: Located<&Branch>,
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
@@ -53,7 +53,7 @@ pub fn infer_branch(
     }
 }
 
-pub fn infer_expression(
+fn infer_expression(
     expression: Located<&Expression>,
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
