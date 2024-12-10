@@ -153,14 +153,10 @@ pub enum Instruction {
     /// # Convert a signed 32-bit number to a signed 8-bit number
     ConvertS32ToS8,
 
-    /// # Copy the top value on the stack
+    /// # Copy a value on the stack to the top of the stack
     ///
-    /// ## Implementation Note
-    ///
-    /// This instruction is redundant, as the same effect can be achieve with
-    /// [`Instruction::Copy`]. However, using that to copy the top of the stack
-    /// requires the compiler to track the types on the stack, which it doesn't
-    /// do yet.
+    /// The value to copy is identified by an offset from the top of the stack,
+    /// which this instruction expects as an argument.
     Copy,
 
     /// # Divide two signed 32-bit integers
