@@ -17,7 +17,7 @@ pub fn infer_types(
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
             for expression in branch.expressions() {
-                let inferred = infer_expression(
+                infer_expression(
                     expression.fragment,
                     &expression.location,
                     syntax_tree,
@@ -25,10 +25,6 @@ pub fn infer_types(
                     function_calls,
                     &mut types,
                 );
-
-                if let Some(signature) = inferred {
-                    types.insert(expression.location, signature);
-                }
             }
         }
     }
@@ -42,8 +38,8 @@ pub fn infer_expression(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    _: &mut TypesInner,
-) -> Option<Signature> {
+    types: &mut TypesInner,
+) {
     let explicit = explicit_types.signature_of(location);
 
     let inferred = match expression {
@@ -85,5 +81,7 @@ pub fn infer_expression(
         );
     }
 
-    inferred.or(explicit.cloned())
+    if let Some(signature) = inferred.or(explicit.cloned()) {
+        types.insert(location.clone(), signature);
+    }
 }
