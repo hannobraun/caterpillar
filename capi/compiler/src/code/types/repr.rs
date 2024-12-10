@@ -72,7 +72,7 @@ impl Types {
                         panic!(
                             "Type that could be inferred was also specified \
                             explicitly. This is currently not allowed, as the \
-                            goal is to transition away from explicit \
+                            goal is to transition away from explicit type \
                             annotations completely.\n\
                             \n\
                             Explicit type: {explicit:?}\n\
