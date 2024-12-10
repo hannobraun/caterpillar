@@ -8,7 +8,7 @@ use crate::{
             Branch, BranchLocation, Expression, Function, FunctionLocation,
             Member, MemberLocation, Pattern,
         },
-        Cluster, IndexMap,
+        Binding, Cluster, IndexMap,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -27,6 +27,7 @@ pub fn compile_function(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
+    let mut stack = Vec::new();
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
@@ -38,6 +39,7 @@ pub fn compile_function(
                 index,
             },
             cluster,
+            &mut stack,
             cluster_context,
             functions_context,
         );
@@ -85,6 +87,7 @@ fn compile_branch(
     branch: Branch,
     location: BranchLocation,
     cluster: &Cluster,
+    stack: &mut Stack,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -107,6 +110,7 @@ fn compile_branch(
         branch.body,
         location,
         cluster,
+        stack,
         cluster_context,
         functions_context,
     );
@@ -159,6 +163,7 @@ fn compile_branch_body(
     body: IndexMap<Member>,
     location: BranchLocation,
     cluster: &Cluster,
+    stack: &mut Stack,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> [InstructionAddress; 2] {
@@ -176,6 +181,7 @@ fn compile_branch_body(
                 index,
             },
             cluster,
+            stack,
             cluster_context,
             functions_context,
         );
@@ -217,6 +223,7 @@ fn compile_expression(
     expression: Expression,
     location: MemberLocation,
     cluster: &Cluster,
+    _: &mut Stack,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
@@ -558,6 +565,8 @@ fn emit_instruction(
     }
     addr
 }
+
+type Stack = Vec<Option<Binding>>;
 
 pub struct CallToFunction {
     pub address: InstructionAddress,
