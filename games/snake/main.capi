@@ -943,8 +943,8 @@ end
 
 abs: fn
     \ v ->
-        v
-        v
+        v: -> Number .
+        v: -> Number .
         -1
         greater_s32
         fn
@@ -953,6 +953,6 @@ abs: fn
 
             \ v, _ ->
                 v
-        end
+        end: -> fn Number, Number -> Number end .
             eval
 end
