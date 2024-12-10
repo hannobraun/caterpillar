@@ -100,6 +100,15 @@ pub fn infer_expression(
     }
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
+        if let Some(stack) = stack {
+            for _ in signature.inputs.iter().rev() {
+                stack.pop();
+            }
+            for output in signature.outputs.iter().cloned() {
+                stack.push(output);
+            }
+        }
+
         types.insert(expression.location, signature);
     } else {
         *stack = None;
