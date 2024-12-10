@@ -94,12 +94,12 @@ pub type Stack = Vec<Type>;
     serde::Serialize,
     udigest::Digestable,
 )]
-pub struct Signature {
+pub struct Signature<T = Type> {
     /// # The inputs that the function or expression consumes
-    pub inputs: Vec<Type>,
+    pub inputs: Vec<T>,
 
     /// # The outputs that the function or expression produces
-    pub outputs: Vec<Type>,
+    pub outputs: Vec<T>,
 }
 
 impl<I, O> From<(I, O)> for Signature
