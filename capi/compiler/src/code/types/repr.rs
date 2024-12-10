@@ -53,8 +53,9 @@ impl Types {
         explicit_types: ExplicitTypes,
         function_calls: &FunctionCalls,
     ) -> Self {
-        let types = infer_types(syntax_tree, &explicit_types, function_calls);
-        Self { signatures: types }
+        let signatures =
+            infer_types(syntax_tree, &explicit_types, function_calls);
+        Self { signatures }
     }
 
     /// # Access the signature of the expression at the given location, if any
