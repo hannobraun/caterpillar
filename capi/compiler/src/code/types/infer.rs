@@ -23,6 +23,7 @@ pub fn infer_types(
                     syntax_tree,
                     explicit_types,
                     function_calls,
+                    &mut types,
                 );
 
                 if let Some(signature) = inferred {
@@ -41,6 +42,7 @@ pub fn infer_expression(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
+    _: &mut TypesInner,
 ) -> Option<Signature> {
     let explicit = explicit_types.signature_of(location);
 
