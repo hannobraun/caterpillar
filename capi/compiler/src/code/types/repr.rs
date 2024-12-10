@@ -15,7 +15,7 @@ use super::{infer::infer_types, resolve::resolve_type_annotations};
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
 pub struct ExplicitTypes {
-    inner: BTreeMap<MemberLocation, Signature>,
+    inner: Signatures,
 }
 
 impl ExplicitTypes {
