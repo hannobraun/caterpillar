@@ -101,8 +101,16 @@ pub fn infer_expression(
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
         if let Some(stack) = stack {
-            for _ in signature.inputs.iter().rev() {
-                stack.pop();
+            for input in signature.inputs.iter().rev() {
+                match stack.pop() {
+                    Some(type_) if type_ == *input => {}
+                    Some(type_) => {
+                        panic!("Expected `{input}` but found `{type_}`");
+                    }
+                    None => {
+                        panic!("Expected `{input}` but found nothing");
+                    }
+                }
             }
             for output in signature.outputs.iter().cloned() {
                 stack.push(output);
