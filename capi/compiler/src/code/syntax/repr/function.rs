@@ -1,8 +1,8 @@
 use capi_runtime::Value;
 
-use crate::code::IndexMap;
+use crate::code::{IndexMap, Signature};
 
-use super::{expression::Expression, types::SyntaxSignature};
+use super::{expression::Expression, types::SyntaxType};
 
 /// # A function that has a name
 ///
@@ -131,6 +131,6 @@ pub enum Member {
         expression: Expression,
 
         /// # The optional type annotation that applies to the expression
-        signature: Option<SyntaxSignature>,
+        signature: Option<Signature<SyntaxType>>,
     },
 }

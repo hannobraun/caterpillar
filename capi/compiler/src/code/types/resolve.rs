@@ -1,8 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::code::syntax::{
-    MemberLocation, SyntaxSignature, SyntaxTree, SyntaxType,
-};
+use crate::code::syntax::{MemberLocation, SyntaxTree, SyntaxType};
 
 use super::{Signature, Type};
 
@@ -28,7 +26,7 @@ pub fn resolve_type_annotations(
     types_
 }
 
-fn resolve_signature(signature: &SyntaxSignature) -> Signature {
+fn resolve_signature(signature: &Signature<SyntaxType>) -> Signature {
     Signature {
         inputs: resolve_types(&signature.inputs),
         outputs: resolve_types(&signature.outputs),

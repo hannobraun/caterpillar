@@ -2,13 +2,12 @@ use std::result;
 
 use crate::code::{
     tokens::{Keyword::*, NoMoreTokens, Punctuator::*, Token, Tokens},
-    Index, IndexMap,
+    Index, IndexMap, Signature,
 };
 
 use super::{
     repr::types::SyntaxType, Branch, BranchLocation, Expression, Function,
     FunctionLocation, Member, MemberLocation, NamedFunction, Pattern,
-    SyntaxSignature,
 };
 
 /// # Parse the provided tokens
@@ -256,7 +255,7 @@ fn parse_member(
 fn parse_expression(
     tokens: &mut Tokens,
     location: MemberLocation,
-) -> Result<(Expression, Option<SyntaxSignature>)> {
+) -> Result<(Expression, Option<Signature<SyntaxType>>)> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
         let location = FunctionLocation::AnonymousFunction { location };
         parse_function(tokens, location)
@@ -280,7 +279,7 @@ fn parse_expression(
 
 fn parse_type_annotation(
     tokens: &mut Tokens,
-) -> Result<Option<SyntaxSignature>> {
+) -> Result<Option<Signature<SyntaxType>>> {
     let Token::Punctuator(Introducer) = tokens.peek()? else {
         return Ok(None);
     };
@@ -295,7 +294,7 @@ fn parse_type_annotation(
 fn parse_signature(
     tokens: &mut Tokens,
     terminator: Token,
-) -> Result<SyntaxSignature> {
+) -> Result<Signature<SyntaxType>> {
     let mut inputs = Vec::new();
 
     loop {
@@ -348,7 +347,7 @@ fn parse_signature(
         }
     }
 
-    Ok(SyntaxSignature { inputs, outputs })
+    Ok(Signature { inputs, outputs })
 }
 
 fn parse_type(tokens: &mut Tokens) -> Result<SyntaxType> {

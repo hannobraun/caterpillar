@@ -26,6 +26,6 @@ pub use self::{
         expression::Expression,
         function::{Branch, Function, Member, NamedFunction, Pattern},
         syntax_tree::SyntaxTree,
-        types::{SyntaxSignature, SyntaxType},
+        types::SyntaxType,
     },
 };

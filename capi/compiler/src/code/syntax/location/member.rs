@@ -1,8 +1,8 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Expression, Member, SyntaxSignature, SyntaxTree},
-    Index,
+    syntax::{Expression, Member, SyntaxTree, SyntaxType},
+    Index, Signature,
 };
 
 use super::{located::HasLocation, BranchLocation, Located};
@@ -14,7 +14,8 @@ impl HasLocation for Member {
 impl<'r> Located<&'r Member> {
     pub fn into_expression(
         self,
-    ) -> Option<(Located<&'r Expression>, Option<&'r SyntaxSignature>)> {
+    ) -> Option<(Located<&'r Expression>, Option<&'r Signature<SyntaxType>>)>
+    {
         let Member::Expression {
             expression,
             signature,

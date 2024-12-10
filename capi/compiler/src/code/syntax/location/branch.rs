@@ -2,10 +2,9 @@ use std::{fmt, iter};
 
 use crate::code::{
     syntax::{
-        Branch, Expression, Function, Member, Pattern, SyntaxSignature,
-        SyntaxTree,
+        Branch, Expression, Function, Member, Pattern, SyntaxTree, SyntaxType,
     },
-    Binding, Index,
+    Binding, Index, Signature,
 };
 
 use super::{located::HasLocation, FunctionLocation, Located, MemberLocation};
@@ -58,7 +57,7 @@ impl<'r> Located<&'r Branch> {
     pub fn annotated_expressions(
         &self,
     ) -> impl DoubleEndedIterator<
-        Item = (Located<&'r Expression>, Option<&'r SyntaxSignature>),
+        Item = (Located<&'r Expression>, Option<&'r Signature<SyntaxType>>),
     > {
         self.body().filter_map(|member| member.into_expression())
     }
