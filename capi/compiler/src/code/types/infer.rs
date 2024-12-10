@@ -51,7 +51,7 @@ fn infer_branch(
             function_calls,
             types,
             &mut stack,
-        );
+        )?;
     }
 
     Ok(())
@@ -64,7 +64,7 @@ fn infer_expression(
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
     stack: &mut Stack,
-) {
+) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
 
     let inferred = match expression.fragment {
@@ -128,6 +128,8 @@ fn infer_expression(
     } else {
         *stack = None;
     }
+
+    Ok(())
 }
 
 fn infer_intrinsic(
