@@ -1,8 +1,11 @@
 use std::collections::BTreeMap;
 
-use crate::code::{
-    syntax::{Branch, Expression, Located, SyntaxTree},
-    FunctionCalls,
+use crate::{
+    code::{
+        syntax::{Branch, Expression, Located, SyntaxTree},
+        FunctionCalls,
+    },
+    intrinsics::IntrinsicFunction,
 };
 
 use super::{repr::TypesInner, ExplicitTypes, Signature, Type};
@@ -69,7 +72,7 @@ pub fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
-                (None, Some(intrinsic)) => intrinsic.signature(),
+                (None, Some(intrinsic)) => infer_intrinsic(intrinsic),
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -121,4 +124,8 @@ pub fn infer_expression(
     } else {
         *stack = None;
     }
+}
+
+fn infer_intrinsic(intrinsic: &IntrinsicFunction) -> Option<Signature> {
+    intrinsic.signature()
 }
