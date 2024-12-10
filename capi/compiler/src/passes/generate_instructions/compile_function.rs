@@ -109,7 +109,7 @@ fn compile_branch(
     let bindings_address =
         compile_bindings(parameters, functions_context.instructions);
 
-    let [branch_address, last_address] = {
+    let [body_address, last_address] = {
         let mut body_address = None;
 
         for (index, member) in branch.body {
@@ -163,7 +163,7 @@ fn compile_branch(
         [first_instruction, last_instruction]
     };
 
-    let first_address = bindings_address.unwrap_or(branch_address);
+    let first_address = bindings_address.unwrap_or(body_address);
 
     let branch = capi_runtime::Branch {
         parameters: branch
