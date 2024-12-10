@@ -56,7 +56,7 @@ pub fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
-    _: &mut Option<Vec<Type>>,
+    stack: &mut Option<Vec<Type>>,
 ) {
     let explicit = explicit_types.signature_of(&expression.location);
 
@@ -101,5 +101,7 @@ pub fn infer_expression(
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
         types.insert(expression.location, signature);
+    } else {
+        *stack = None;
     }
 }
