@@ -36,6 +36,8 @@ pub fn infer_branch(
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
 ) {
+    let mut stack = Some(Vec::new());
+
     for expression in branch.expressions() {
         infer_expression(
             expression,
@@ -43,6 +45,7 @@ pub fn infer_branch(
             explicit_types,
             function_calls,
             types,
+            &mut stack,
         );
     }
 }
@@ -53,6 +56,7 @@ pub fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
+    _: &mut Option<Vec<Type>>,
 ) {
     let explicit = explicit_types.signature_of(&expression.location);
 
