@@ -68,6 +68,7 @@ impl Types {
 }
 
 pub type Signatures = BTreeMap<MemberLocation, Signature>;
+pub type Stack = Vec<Type>;
 
 /// # A type signature that applies to a function or expression
 #[derive(

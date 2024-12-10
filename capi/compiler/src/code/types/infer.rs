@@ -8,7 +8,10 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::{repr::Signatures, ExplicitTypes, Signature, Type};
+use super::{
+    repr::{Signatures, Stack},
+    ExplicitTypes, Signature, Type,
+};
 
 pub fn infer_types(
     syntax_tree: &SyntaxTree,
@@ -190,8 +193,6 @@ fn infer_intrinsic(
 
     Ok(signature)
 }
-
-type Stack = Vec<Type>;
 
 struct TypeError {
     expected: ExpectedType,
