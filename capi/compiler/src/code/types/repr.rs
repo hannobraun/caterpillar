@@ -5,7 +5,7 @@ use crate::code::{
     FunctionCalls,
 };
 
-use super::{infer::infer_expression, resolve::resolve_type_annotations};
+use super::{infer::infer_types, resolve::resolve_type_annotations};
 
 /// # The types that are explicitly specified in the code
 ///
@@ -53,43 +53,7 @@ impl Types {
         explicit_types: ExplicitTypes,
         function_calls: &FunctionCalls,
     ) -> Self {
-        let mut types_ = BTreeMap::new();
-
-        for function in syntax_tree.all_functions() {
-            for branch in function.branches() {
-                for expression in branch.expressions() {
-                    let explicit =
-                        explicit_types.signature_of(&expression.location);
-                    let inferred = infer_expression(
-                        expression.fragment,
-                        &expression.location,
-                        function_calls,
-                    );
-
-                    if let (Some(explicit), Some(inferred)) =
-                        (explicit, inferred.as_ref())
-                    {
-                        panic!(
-                            "Type that could be inferred was also specified \
-                            explicitly. This is currently not allowed, as the \
-                            goal is to transition away from explicit type \
-                            annotations completely.\n\
-                            \n\
-                            Explicit type: {explicit:?}\n\
-                            Inferred type: {inferred:?}\n\
-                            \n\
-                            At {}\n",
-                            expression.location.display(syntax_tree),
-                        );
-                    }
-
-                    if let Some(signature) = inferred.or(explicit.cloned()) {
-                        types_.insert(expression.location, signature);
-                    }
-                }
-            }
-        }
-
+        let types_ = infer_types(syntax_tree, &explicit_types, function_calls);
         Self { inner: types_ }
     }
 
