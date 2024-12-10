@@ -19,13 +19,15 @@ pub fn infer_types(
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
-            infer_branch(
+            if let Err(TypeError) = infer_branch(
                 branch,
                 syntax_tree,
                 explicit_types,
                 function_calls,
                 &mut types,
-            );
+            ) {
+                panic!("Type error");
+            }
         }
     }
 
@@ -38,7 +40,7 @@ fn infer_branch(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
-) {
+) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
     for expression in branch.expressions() {
@@ -51,6 +53,8 @@ fn infer_branch(
             &mut stack,
         );
     }
+
+    Ok(())
 }
 
 fn infer_expression(
@@ -134,3 +138,5 @@ fn infer_intrinsic(
 }
 
 type Stack = Option<Vec<Type>>;
+
+struct TypeError;
