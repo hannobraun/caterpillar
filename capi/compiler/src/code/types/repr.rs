@@ -83,6 +83,11 @@ pub type Stacks = BTreeMap<MemberLocation, Stack>;
 pub type Stack = Vec<Type>;
 
 /// # A type signature that applies to a function or expression
+///
+/// This struct is generic over the type of the type in the signature. Usually
+/// it's going to be [`Type`], but there are various specialized situation where
+/// more specialized signatures are needed, and this type parameter enables that
+/// without duplication.
 #[derive(
     Clone,
     Debug,
