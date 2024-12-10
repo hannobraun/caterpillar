@@ -773,13 +773,9 @@ vec_buf_get: fn
                 _vec_buf_address: Number, Number, Number -> Number .
                 vec_load: Number -> Number, Number .
             end: -> fn Number -> Number, Number end .
-                eval:
-                    Number,
-                    fn Number -> Number, Number end
-                        ->
-                    Number, Number .
+                eval
         end: -> fn Number -> Number, Number end .
-            eval: Number, fn Number -> Number, Number end -> Number, Number .
+            eval
 end
 
 vec_buf_last: fn
@@ -814,9 +810,9 @@ vec_buf_push: fn
                 next_addr: -> Number .
                 _vec_buf_inc_index: Number -> .
             end: -> fn Number -> end .
-                eval: fn Number -> end -> .
+                eval
         end: -> fn Number -> end .
-            eval: fn Number -> end -> .
+            eval
 end
 
 vec_buf_pop: fn

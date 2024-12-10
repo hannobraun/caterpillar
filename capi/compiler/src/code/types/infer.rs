@@ -153,10 +153,41 @@ fn infer_expression(
 
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
-    _: &MemberLocation,
-    _: &mut Stack,
+    location: &MemberLocation,
+    stack: &mut Stack,
 ) -> Result<Option<Signature>, TypeError> {
-    let signature = intrinsic.signature();
+    let signature = match intrinsic {
+        IntrinsicFunction::Eval => {
+            let Some(stack) = stack.as_mut() else {
+                return Ok(None);
+            };
+
+            match stack.last() {
+                Some(Type::Function { signature }) => {
+                    let outputs = signature.outputs.clone();
+                    let inputs = signature
+                        .inputs
+                        .clone()
+                        .into_iter()
+                        .chain([Type::Function {
+                            signature: signature.clone(),
+                        }])
+                        .collect();
+
+                    Some(Signature { inputs, outputs })
+                }
+                actual => {
+                    return Err(TypeError {
+                        expected: ExpectedType::Function,
+                        actual: actual.cloned(),
+                        location: location.clone(),
+                    });
+                }
+            }
+        }
+        intrinsic => intrinsic.signature(),
+    };
+
     Ok(signature)
 }
 
@@ -169,12 +200,14 @@ struct TypeError {
 }
 
 enum ExpectedType {
+    Function,
     Specific(Type),
 }
 
 impl fmt::Display for ExpectedType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            Self::Function => write!(f, "function"),
             Self::Specific(type_) => write!(f, "`{type_}`"),
         }
     }
