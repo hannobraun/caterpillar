@@ -15,7 +15,7 @@ pub fn infer_types(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> Signatures {
-    let mut types = BTreeMap::new();
+    let mut signatures = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -28,7 +28,7 @@ pub fn infer_types(
                 syntax_tree,
                 explicit_types,
                 function_calls,
-                &mut types,
+                &mut signatures,
             ) {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
@@ -45,7 +45,7 @@ pub fn infer_types(
         }
     }
 
-    types
+    signatures
 }
 
 fn infer_branch(
