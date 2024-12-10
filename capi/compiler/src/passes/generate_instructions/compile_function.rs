@@ -8,7 +8,7 @@ use crate::{
             Branch, BranchLocation, Expression, Function, FunctionLocation,
             Located, Member, MemberLocation, Pattern,
         },
-        Cluster, IndexMap,
+        Cluster,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -109,13 +109,59 @@ fn compile_branch(
     let bindings_address =
         compile_bindings(parameters, functions_context.instructions);
 
-    let [branch_address, last_address] = compile_branch_body(
-        branch.body,
-        location,
-        function_context,
-        cluster_context,
-        functions_context,
-    );
+    let [branch_address, last_address] = {
+        let mut first_instruction = None;
+
+        for (index, member) in branch.body {
+            let Member::Expression { expression, .. } = member else {
+                continue;
+            };
+
+            let addr = compile_expression(
+                Located {
+                    fragment: &expression,
+                    location: MemberLocation {
+                        parent: Box::new(location.clone()),
+                        index,
+                    },
+                },
+                function_context,
+                cluster_context,
+                functions_context,
+            );
+            first_instruction = first_instruction.or(Some(addr));
+        }
+
+        // Unconditionally generating a return instruction, like we do here, is
+        // redundant. If the previous expression was a tail call, it didn't
+        // create a new stack frame.
+        //
+        // In this case, the return instruction at the end of the called
+        // function returns to the current function's caller, and we never get
+        // to the return we generated here. It's just a junk instruction that
+        // has no effect, except to make the code bigger.
+        //
+        // I don't think it's worth fixing right now, for the following reasons:
+        //
+        // - Tail call elimination still partially happens at runtime. The
+        //   plan is to move it to compile-time completely. Adding other
+        //   optimizations (like omitting this return instruction) will make
+        //   this transition more complicated, for little gain in the
+        //   meantime.
+        // - There's no infrastructure in place to measure the impact of
+        //   compiler optimizations. I'd rather have that, instead of making
+        //   this change blindly. It will probably make the code more
+        //   complicated, so it needs to be justified.
+        let last_instruction = emit_instruction(
+            Instruction::Return,
+            functions_context.instructions,
+            None,
+        );
+
+        let first_instruction = first_instruction.unwrap_or(last_instruction);
+
+        [first_instruction, last_instruction]
+    };
 
     let first_address = bindings_address.unwrap_or(branch_address);
 
@@ -159,66 +205,6 @@ where
     }
 
     first_address
-}
-
-fn compile_branch_body(
-    body: IndexMap<Member>,
-    location: BranchLocation,
-    function_context: &mut FunctionContext,
-    cluster_context: &mut ClusterContext,
-    functions_context: &mut FunctionsContext,
-) -> [InstructionAddress; 2] {
-    let mut first_instruction = None;
-
-    for (index, member) in body {
-        let Member::Expression { expression, .. } = member else {
-            continue;
-        };
-
-        let addr = compile_expression(
-            Located {
-                fragment: &expression,
-                location: MemberLocation {
-                    parent: Box::new(location.clone()),
-                    index,
-                },
-            },
-            function_context,
-            cluster_context,
-            functions_context,
-        );
-        first_instruction = first_instruction.or(Some(addr));
-    }
-
-    // Unconditionally generating a return instruction, like we do here, is
-    // redundant. If the previous expression was a tail call, it didn't create a
-    // new stack frame.
-    //
-    // In this case, the return instruction at the end of the called function
-    // returns to the current function's caller, and we never get to the return
-    // we generated here. It's just a junk instruction that has no effect,
-    // except to make the code bigger.
-    //
-    // I don't think it's worth fixing right now, for the following reasons:
-    //
-    // - Tail call elimination still partially happens at runtime. The
-    //   plan is to move it to compile-time completely. Adding other
-    //   optimizations (like omitting this return instruction) will make
-    //   this transition more complicated, for little gain in the
-    //   meantime.
-    // - There's no infrastructure in place to measure the impact of
-    //   compiler optimizations. I'd rather have that, instead of making
-    //   this change blindly. It will probably make the code more
-    //   complicated, so it needs to be justified.
-    let last_instruction = emit_instruction(
-        Instruction::Return,
-        functions_context.instructions,
-        None,
-    );
-
-    let first_instruction = first_instruction.unwrap_or(last_instruction);
-
-    [first_instruction, last_instruction]
 }
 
 fn compile_expression(
