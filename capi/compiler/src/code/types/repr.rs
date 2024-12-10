@@ -119,8 +119,13 @@ impl fmt::Display for Signature {
             write!(f, " ")?;
         }
 
-        for output in &self.outputs {
+        let mut outputs = self.outputs.iter().peekable();
+        while let Some(output) = outputs.next() {
             write!(f, "{output}")?;
+
+            if outputs.peek().is_some() {
+                write!(f, ", ")?;
+            }
         }
 
         write!(f, " .")?;
