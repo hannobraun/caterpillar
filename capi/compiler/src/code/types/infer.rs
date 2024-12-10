@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use crate::{
     code::{
-        syntax::{Branch, Expression, Located, SyntaxTree},
+        syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
         FunctionCalls,
     },
     intrinsics::IntrinsicFunction,
@@ -19,7 +19,11 @@ pub fn infer_types(
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
-            if let Err(TypeError { expected, actual }) = infer_branch(
+            if let Err(TypeError {
+                expected,
+                actual,
+                location,
+            }) = infer_branch(
                 branch,
                 syntax_tree,
                 explicit_types,
@@ -30,7 +34,12 @@ pub fn infer_types(
                     .map(|type_| format!("`{type_}`"))
                     .unwrap_or_else(|| "nothing".to_string());
 
-                panic!("Type error: expected {expected}, got {actual}");
+                panic!(
+                    "Type error: expected {expected}, got {actual}\n\
+                    \n\
+                    at {}",
+                    location.display(syntax_tree),
+                );
             }
         }
     }
@@ -119,6 +128,7 @@ fn infer_expression(
                         return Err(TypeError {
                             expected: ExpectedType::Specific(input.clone()),
                             actual,
+                            location: expression.location,
                         });
                     }
                 }
@@ -149,6 +159,7 @@ type Stack = Option<Vec<Type>>;
 struct TypeError {
     expected: ExpectedType,
     actual: Option<Type>,
+    location: MemberLocation,
 }
 
 enum ExpectedType {
