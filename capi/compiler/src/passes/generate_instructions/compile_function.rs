@@ -8,7 +8,7 @@ use crate::{
             Branch, Expression, Function, FunctionLocation, Located,
             MemberLocation, Pattern,
         },
-        Cluster,
+        Binding, Cluster,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -110,6 +110,7 @@ fn compile_branch(
         for expression in branch.expressions() {
             let addr = compile_expression(
                 expression,
+                branch.bindings().collect(),
                 function_context,
                 cluster_context,
                 functions_context,
@@ -194,6 +195,7 @@ where
 
 fn compile_expression(
     expression: Located<&Expression>,
+    _: BTreeMap<String, Binding>,
     function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
