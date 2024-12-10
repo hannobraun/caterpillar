@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    syntax::{Expression, Located, SyntaxTree},
+    syntax::{Branch, Expression, Located, SyntaxTree},
     FunctionCalls,
 };
 
@@ -16,19 +16,35 @@ pub fn infer_types(
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
-            for expression in branch.expressions() {
-                infer_expression(
-                    expression,
-                    syntax_tree,
-                    explicit_types,
-                    function_calls,
-                    &mut types,
-                );
-            }
+            infer_branch(
+                branch,
+                syntax_tree,
+                explicit_types,
+                function_calls,
+                &mut types,
+            );
         }
     }
 
     types
+}
+
+pub fn infer_branch(
+    branch: Located<&Branch>,
+    syntax_tree: &SyntaxTree,
+    explicit_types: &ExplicitTypes,
+    function_calls: &FunctionCalls,
+    types: &mut TypesInner,
+) {
+    for expression in branch.expressions() {
+        infer_expression(
+            expression,
+            syntax_tree,
+            explicit_types,
+            function_calls,
+            types,
+        );
+    }
 }
 
 pub fn infer_expression(
