@@ -19,6 +19,11 @@ use super::{
     compile_cluster::ClusterContext, compile_functions::FunctionsContext,
 };
 
+struct FunctionContext<'r> {
+    cluster: &'r Cluster,
+    stack: Stack,
+}
+
 pub fn compile_function(
     function: Function,
     location: FunctionLocation,
@@ -27,7 +32,10 @@ pub fn compile_function(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
-    let mut stack = Vec::new();
+    let mut context = FunctionContext {
+        cluster,
+        stack: Vec::new(),
+    };
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
@@ -38,8 +46,8 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            cluster,
-            &mut stack,
+            context.cluster,
+            &mut context.stack,
             cluster_context,
             functions_context,
         );
