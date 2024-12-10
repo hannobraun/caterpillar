@@ -180,7 +180,7 @@ fn compile_branch_body(
                 parent: Box::new(location.clone()),
                 index,
             },
-            function_context.cluster,
+            function_context,
             cluster_context,
             functions_context,
         );
@@ -221,7 +221,7 @@ fn compile_branch_body(
 fn compile_expression(
     expression: Expression,
     location: MemberLocation,
-    cluster: &Cluster,
+    function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
@@ -394,10 +394,11 @@ fn compile_expression(
                 .is_recursive_expression(&location)
             {
                 let function = {
-                    let location = cluster.functions.get(&index).expect(
-                        "Resolved local recursive function must exist in \
-                        cluster.",
-                    );
+                    let location =
+                        function_context.cluster.functions.get(&index).expect(
+                            "Resolved local recursive function must exist in \
+                            cluster.",
+                        );
                     functions_context
                         .functions
                         .by_location(location)
