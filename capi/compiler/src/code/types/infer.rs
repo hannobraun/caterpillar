@@ -30,7 +30,7 @@ pub fn infer_types(
                     .map(|type_| format!("`{type_}`"))
                     .unwrap_or_else(|| "nothing".to_string());
 
-                panic!("Type error: expected `{expected}`, got {actual}");
+                panic!("Type error: expected {expected}, got {actual}");
             }
         }
     }
@@ -158,7 +158,7 @@ enum ExpectedType {
 impl fmt::Display for ExpectedType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Specific(type_) => write!(f, "{type_}"),
+            Self::Specific(type_) => write!(f, "`{type_}`"),
         }
     }
 }
