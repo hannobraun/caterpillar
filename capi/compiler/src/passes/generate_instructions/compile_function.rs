@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{
             Branch, BranchLocation, Expression, Function, FunctionLocation,
-            Member, MemberLocation, Pattern,
+            Located, Member, MemberLocation, Pattern,
         },
         Cluster, IndexMap,
     },
@@ -24,8 +24,7 @@ struct FunctionContext<'r> {
 }
 
 pub fn compile_function(
-    function: Function,
-    location: FunctionLocation,
+    function: Located<Function>,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
     cluster: &Cluster,
     cluster_context: &mut ClusterContext,
@@ -35,11 +34,11 @@ pub fn compile_function(
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
-    for (index, branch) in function.branches.into_iter() {
+    for (index, branch) in function.fragment.branches.into_iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
             branch,
             BranchLocation {
-                parent: Box::new(location.clone()),
+                parent: Box::new(function.location.clone()),
                 index,
             },
             &mut context,
@@ -57,13 +56,15 @@ pub fn compile_function(
         };
     }
 
-    let environment =
-        functions_context.bindings.environment_of(&location).clone();
+    let environment = functions_context
+        .bindings
+        .environment_of(&function.location)
+        .clone();
 
     if let Some(instruction_range) = instruction_range {
         functions_context
             .source_map
-            .map_function_to_instructions(location, instruction_range);
+            .map_function_to_instructions(function.location, instruction_range);
     }
 
     if let Some(address) = address_of_instruction_to_make_anon_function {

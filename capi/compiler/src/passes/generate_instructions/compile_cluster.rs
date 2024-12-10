@@ -1,6 +1,9 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use crate::code::{syntax::FunctionLocation, Changes, Cluster};
+use crate::code::{
+    syntax::{FunctionLocation, Located},
+    Changes, Cluster,
+};
 
 use super::{
     compile_function::{
@@ -53,8 +56,10 @@ pub fn compile_cluster(
         context.queue_of_functions_to_compile.pop_front()
     {
         let runtime_function = compile_function(
-            function_to_compile.function,
-            function_to_compile.location.clone(),
+            Located {
+                fragment: function_to_compile.function,
+                location: function_to_compile.location.clone(),
+            },
             function_to_compile.address_of_instruction_to_make_anon_function,
             cluster,
             &mut context,
