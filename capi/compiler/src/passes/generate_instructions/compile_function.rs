@@ -110,7 +110,7 @@ fn compile_branch(
         compile_bindings(parameters, functions_context.instructions);
 
     let [branch_address, last_address] = {
-        let mut first_instruction = None;
+        let mut body_address = None;
 
         for (index, member) in branch.body {
             let Member::Expression { expression, .. } = member else {
@@ -129,7 +129,7 @@ fn compile_branch(
                 cluster_context,
                 functions_context,
             );
-            first_instruction = first_instruction.or(Some(addr));
+            body_address = body_address.or(Some(addr));
         }
 
         // Unconditionally generating a return instruction, like we do here, is
@@ -158,7 +158,7 @@ fn compile_branch(
             None,
         );
 
-        let first_instruction = first_instruction.unwrap_or(last_instruction);
+        let first_instruction = body_address.unwrap_or(last_instruction);
 
         [first_instruction, last_instruction]
     };
