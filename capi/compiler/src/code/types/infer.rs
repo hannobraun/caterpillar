@@ -30,14 +30,14 @@ pub fn infer_types(
                 {
                     panic!(
                         "Type that could be inferred was also specified \
-                            explicitly. This is currently not allowed, as the \
-                            goal is to transition away from explicit type \
-                            annotations completely.\n\
-                            \n\
-                            Explicit type: {explicit:?}\n\
-                            Inferred type: {inferred:?}\n\
-                            \n\
-                            At {}\n",
+                        explicitly. This is currently not allowed, as the goal \
+                        is to transition away from explicit type annotations \
+                        completely.\n\
+                        \n\
+                        Explicit type: {explicit:?}\n\
+                        Inferred type: {inferred:?}\n\
+                        \n\
+                        At {}\n",
                         expression.location.display(syntax_tree),
                     );
                 }
