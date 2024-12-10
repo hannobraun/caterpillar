@@ -126,7 +126,9 @@ fn infer_expression(
         if let Some(stack) = stack {
             for input in signature.inputs.iter().rev() {
                 match stack.pop() {
-                    Some(type_) if type_ == *input => {}
+                    Some(type_) if type_ == *input => {
+                        // Type checks out!
+                    }
                     actual => {
                         return Err(TypeError {
                             expected: ExpectedType::Specific(input.clone()),
