@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
         Bindings, Changes, FunctionCalls, Functions, OrderedFunctions,
-        Recursion, TailExpressions,
+        Recursion, TailExpressions, Types,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -38,6 +38,7 @@ pub fn compile_functions(
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
+    _: &Types,
     recursion: &Recursion,
     instructions: &mut Instructions,
     source_map: &mut SourceMap,

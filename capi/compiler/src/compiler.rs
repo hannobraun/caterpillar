@@ -52,6 +52,7 @@ impl Compiler {
             &bindings,
             &function_calls,
             &tail_expressions,
+            &types,
             &recursion,
             &changes,
             &mut self.instructions,
