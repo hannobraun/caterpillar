@@ -19,7 +19,7 @@ pub fn infer_types(
     function_calls: &FunctionCalls,
 ) -> (Signatures, Stacks) {
     let mut signatures = BTreeMap::new();
-    let stacks = BTreeMap::new();
+    let mut stacks = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -33,6 +33,7 @@ pub fn infer_types(
                 explicit_types,
                 function_calls,
                 &mut signatures,
+                &mut stacks,
             ) {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
@@ -58,6 +59,7 @@ fn infer_branch(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
+    _: &mut Stacks,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
