@@ -945,7 +945,8 @@ abs: fn
         greater_s32
         fn
             \ v, 0 ->
-                v neg_s32
+                v
+                    neg_s32
 
             \ v, _ ->
                 v
