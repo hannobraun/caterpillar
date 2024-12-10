@@ -68,6 +68,11 @@ impl Types {
     }
 
     /// # Access the stack, as of the expression at the given location, if any
+    ///
+    /// The stack returned here is always local to the function that the
+    /// expression is in. Tracking the global stack at compile-time is not
+    /// possible, and only the local contents of the stack are relevant to what
+    /// the expression can do anyway.
     pub fn stack_at(&self, location: &MemberLocation) -> Option<&[Type]> {
         self.stacks.get(location).map(|stack| &**stack)
     }
