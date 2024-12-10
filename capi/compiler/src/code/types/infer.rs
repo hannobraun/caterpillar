@@ -22,6 +22,8 @@ pub fn infer_types(
                 let inferred = infer_expression(
                     expression.fragment,
                     &expression.location,
+                    syntax_tree,
+                    explicit_types,
                     function_calls,
                 );
 
@@ -55,6 +57,8 @@ pub fn infer_types(
 pub fn infer_expression(
     expression: &Expression,
     location: &MemberLocation,
+    _: &SyntaxTree,
+    _: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> Option<Signature> {
     match expression {
