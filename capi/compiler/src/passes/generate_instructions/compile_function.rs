@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::{Effect, Instruction, InstructionAddress};
+use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
 
 use crate::{
     code::{
@@ -464,7 +464,20 @@ fn compile_intrinsic(
         IntrinsicFunction::Brk => Instruction::TriggerEffect {
             effect: Effect::Breakpoint,
         },
-        IntrinsicFunction::Copy => Instruction::Copy,
+        IntrinsicFunction::Copy => {
+            let offset_from_top = Value::from(0);
+
+            let address = emit_instruction(
+                Instruction::Push {
+                    value: offset_from_top,
+                },
+                instructions,
+                Some(mapping),
+            );
+            emit_instruction(Instruction::Copy, instructions, Some(mapping));
+
+            return address;
+        }
         IntrinsicFunction::DivS32 => Instruction::DivS32,
         IntrinsicFunction::DivU8 => Instruction::DivU8,
         IntrinsicFunction::Drop => Instruction::Drop,

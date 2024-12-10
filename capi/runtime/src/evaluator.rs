@@ -193,10 +193,15 @@ fn evaluate_instruction(
             stack.push_operand(v);
         }
         Instruction::Copy => {
-            let v = stack.pop_operand()?;
+            let offset_from_top = stack.pop_operand()?.to_usize();
 
-            stack.push_operand(v);
-            stack.push_operand(v);
+            let Some(value) =
+                stack.operands().rev().nth(offset_from_top).copied()
+            else {
+                return Err(Effect::InvalidArgument);
+            };
+
+            stack.push_operand(value);
         }
         Instruction::DivS32 => {
             let b = stack.pop_operand()?;
