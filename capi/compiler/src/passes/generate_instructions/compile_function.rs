@@ -46,8 +46,7 @@ pub fn compile_function(
                 parent: Box::new(location.clone()),
                 index,
             },
-            context.cluster,
-            &mut context.stack,
+            &mut context,
             cluster_context,
             functions_context,
         );
@@ -94,8 +93,7 @@ pub fn compile_function(
 fn compile_branch(
     branch: Branch,
     location: BranchLocation,
-    cluster: &Cluster,
-    stack: &mut Stack,
+    function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
@@ -117,8 +115,8 @@ fn compile_branch(
     let [branch_address, last_address] = compile_branch_body(
         branch.body,
         location,
-        cluster,
-        stack,
+        function_context.cluster,
+        &mut function_context.stack,
         cluster_context,
         functions_context,
     );
