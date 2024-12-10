@@ -55,7 +55,10 @@ pub fn compile_function(
     let environment = functions_context
         .bindings
         .environment_of(&function.location)
-        .clone();
+        .iter()
+        .map(|(name, _)| name)
+        .cloned()
+        .collect();
 
     if let Some(instruction_range) = instruction_range {
         functions_context

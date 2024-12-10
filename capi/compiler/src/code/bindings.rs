@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use super::syntax::{
     Branch, BranchLocation, Expression, Function, FunctionLocation, Located,
@@ -72,7 +72,7 @@ pub struct Binding {
 ///
 /// The environment of a function is the set of bindings it accesses, that are
 /// not its own parameters.
-pub type Environment = BTreeSet<String>;
+pub type Environment = BTreeMap<String, Binding>;
 
 fn resolve_bindings(
     syntax_tree: &SyntaxTree,
@@ -144,7 +144,7 @@ fn resolve_bindings_in_branch(
                         if !scope.contains_key(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-                            environment.insert(name.clone());
+                            environment.insert(name.clone(), binding.clone());
                         }
                     }
                 }
@@ -162,7 +162,7 @@ fn resolve_bindings_in_branch(
                     environments,
                 );
 
-                for name in child_environment {
+                for (name, binding) in child_environment {
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains_key(&name) {
                             // The child function that we just resolved bindings
@@ -172,7 +172,7 @@ fn resolve_bindings_in_branch(
                             // This means it must come from this function's
                             // parent scopes, and must be added to this
                             // environment too.
-                            environment.insert(name.clone());
+                            environment.insert(name.clone(), binding);
                         }
                     }
                 }
@@ -271,7 +271,7 @@ mod tests {
 
         assert!(bindings
             .environment_of(&function.location)
-            .contains("parameter"));
+            .contains_key("parameter"));
     }
 
     #[test]
@@ -348,7 +348,7 @@ mod tests {
             .next()
             .unwrap();
 
-        assert!(bindings.environment_of(&function).contains("binding"));
+        assert!(bindings.environment_of(&function).contains_key("binding"));
     }
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
