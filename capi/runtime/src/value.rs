@@ -36,6 +36,25 @@ impl Value {
     pub fn to_u32(&self) -> u32 {
         u32::from_le_bytes(self.0)
     }
+
+    /// # Convert value to `usize`
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if this is running on a platform where `u32` can not be
+    /// losslessly converted to `usize`. This should never be an issue on 32-bit
+    /// and 64-bit platforms.
+    pub fn to_usize(&self) -> usize {
+        assert!(
+            size_of::<usize>() >= size_of::<u32>(),
+            "Expecting lossless conversion of `u32` to `usize` to be possible \
+            on all supported platforms.",
+        );
+
+        self.to_u32().try_into().expect(
+            "Just checked, that `u32` can alway be converted to `usize`",
+        )
+    }
 }
 
 impl From<i8> for Value {
