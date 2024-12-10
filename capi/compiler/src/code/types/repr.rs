@@ -54,9 +54,8 @@ impl Types {
         explicit_types: ExplicitTypes,
         function_calls: &FunctionCalls,
     ) -> Self {
-        let signatures =
+        let (signatures, stacks) =
             infer_types(syntax_tree, &explicit_types, function_calls);
-        let stacks = BTreeMap::new();
         Self { signatures, stacks }
     }
 

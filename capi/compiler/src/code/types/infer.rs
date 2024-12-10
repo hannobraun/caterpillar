@@ -9,7 +9,7 @@ use crate::{
 };
 
 use super::{
-    repr::{Signatures, Stack},
+    repr::{Signatures, Stack, Stacks},
     ExplicitTypes, Signature, Type,
 };
 
@@ -17,8 +17,9 @@ pub fn infer_types(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-) -> Signatures {
+) -> (Signatures, Stacks) {
     let mut signatures = BTreeMap::new();
+    let stacks = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -48,7 +49,7 @@ pub fn infer_types(
         }
     }
 
-    signatures
+    (signatures, stacks)
 }
 
 fn infer_branch(
