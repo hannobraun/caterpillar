@@ -116,10 +116,16 @@ fn infer_expression(
                 match stack.pop() {
                     Some(type_) if type_ == *input => {}
                     Some(type_) => {
-                        panic!("Expected `{input}` but found `{type_}`");
+                        return Err(TypeError {
+                            expected: input.clone(),
+                            actual: Some(type_),
+                        });
                     }
                     None => {
-                        panic!("Expected `{input}` but found nothing");
+                        return Err(TypeError {
+                            expected: input.clone(),
+                            actual: None,
+                        });
                     }
                 }
             }
