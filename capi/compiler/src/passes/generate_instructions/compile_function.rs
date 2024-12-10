@@ -8,7 +8,7 @@ use crate::{
             Branch, BranchLocation, Expression, Function, FunctionLocation,
             Member, MemberLocation, Pattern,
         },
-        Binding, Cluster, IndexMap,
+        Cluster, IndexMap,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -21,7 +21,6 @@ use super::{
 
 struct FunctionContext<'r> {
     cluster: &'r Cluster,
-    stack: Stack,
 }
 
 pub fn compile_function(
@@ -32,10 +31,7 @@ pub fn compile_function(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
-    let mut context = FunctionContext {
-        cluster,
-        stack: Vec::new(),
-    };
+    let mut context = FunctionContext { cluster };
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
@@ -185,7 +181,6 @@ fn compile_branch_body(
                 index,
             },
             function_context.cluster,
-            &mut function_context.stack,
             cluster_context,
             functions_context,
         );
@@ -227,7 +222,6 @@ fn compile_expression(
     expression: Expression,
     location: MemberLocation,
     cluster: &Cluster,
-    _: &mut Stack,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
@@ -569,8 +563,6 @@ fn emit_instruction(
     }
     addr
 }
-
-type Stack = Vec<Option<Binding>>;
 
 pub struct CallToFunction {
     pub address: InstructionAddress,
