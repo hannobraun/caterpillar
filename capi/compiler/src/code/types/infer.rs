@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, fmt};
 
 use crate::{
     code::{
@@ -117,7 +117,7 @@ fn infer_expression(
                     Some(type_) if type_ == *input => {}
                     actual => {
                         return Err(TypeError {
-                            expected: input.clone(),
+                            expected: ExpectedType::Specific(input.clone()),
                             actual,
                         });
                     }
@@ -147,6 +147,18 @@ fn infer_intrinsic(
 type Stack = Option<Vec<Type>>;
 
 struct TypeError {
-    expected: Type,
+    expected: ExpectedType,
     actual: Option<Type>,
+}
+
+enum ExpectedType {
+    Specific(Type),
+}
+
+impl fmt::Display for ExpectedType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Specific(type_) => write!(f, "{type_}"),
+        }
+    }
 }
