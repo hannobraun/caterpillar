@@ -115,8 +115,7 @@ fn compile_branch(
     let [branch_address, last_address] = compile_branch_body(
         branch.body,
         location,
-        function_context.cluster,
-        &mut function_context.stack,
+        function_context,
         cluster_context,
         functions_context,
     );
@@ -168,8 +167,7 @@ where
 fn compile_branch_body(
     body: IndexMap<Member>,
     location: BranchLocation,
-    cluster: &Cluster,
-    stack: &mut Stack,
+    function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> [InstructionAddress; 2] {
@@ -186,8 +184,8 @@ fn compile_branch_body(
                 parent: Box::new(location.clone()),
                 index,
             },
-            cluster,
-            stack,
+            function_context.cluster,
+            &mut function_context.stack,
             cluster_context,
             functions_context,
         );
