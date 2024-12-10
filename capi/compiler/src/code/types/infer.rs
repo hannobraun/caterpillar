@@ -53,7 +53,7 @@ fn infer_branch(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    types: &mut Signatures,
+    signatures: &mut Signatures,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
@@ -63,7 +63,7 @@ fn infer_branch(
             syntax_tree,
             explicit_types,
             function_calls,
-            types,
+            signatures,
             &mut stack,
         )?;
     }
