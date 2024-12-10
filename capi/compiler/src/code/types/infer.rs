@@ -115,16 +115,10 @@ fn infer_expression(
             for input in signature.inputs.iter().rev() {
                 match stack.pop() {
                     Some(type_) if type_ == *input => {}
-                    Some(type_) => {
+                    actual => {
                         return Err(TypeError {
                             expected: input.clone(),
-                            actual: Some(type_),
-                        });
-                    }
-                    None => {
-                        return Err(TypeError {
-                            expected: input.clone(),
-                            actual: None,
+                            actual,
                         });
                     }
                 }
