@@ -66,6 +66,11 @@ impl Types {
     ) -> Option<&Signature> {
         self.signatures.get(location)
     }
+
+    /// # Access the stack, as of the expression at the given location, if any
+    pub fn stack_at(&self, location: &MemberLocation) -> Option<&[Type]> {
+        self.stacks.get(location).map(|stack| &**stack)
+    }
 }
 
 pub type Signatures = BTreeMap<MemberLocation, Signature>;
