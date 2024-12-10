@@ -111,9 +111,11 @@ fn compile_branch(
         let mut body_address = None;
 
         for expression in branch.expressions() {
+            let bindings = branch.bindings().collect();
+
             let addr = compile_expression(
                 expression,
-                branch.bindings().collect(),
+                bindings,
                 function_context,
                 cluster_context,
                 functions_context,
