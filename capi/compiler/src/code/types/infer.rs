@@ -8,13 +8,13 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::{repr::TypesInner, ExplicitTypes, Signature, Type};
+use super::{repr::Signatures, ExplicitTypes, Signature, Type};
 
 pub fn infer_types(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-) -> TypesInner {
+) -> Signatures {
     let mut types = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
@@ -53,7 +53,7 @@ fn infer_branch(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    types: &mut TypesInner,
+    types: &mut Signatures,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
@@ -76,7 +76,7 @@ fn infer_expression(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    types: &mut TypesInner,
+    types: &mut Signatures,
     stack: &mut Stack,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);

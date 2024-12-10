@@ -37,7 +37,7 @@ impl ExplicitTypes {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
-    signatures: TypesInner,
+    signatures: Signatures,
 }
 
 impl Types {
@@ -67,7 +67,7 @@ impl Types {
     }
 }
 
-pub type TypesInner = BTreeMap<MemberLocation, Signature>;
+pub type Signatures = BTreeMap<MemberLocation, Signature>;
 
 /// # A type signature that applies to a function or expression
 #[derive(
