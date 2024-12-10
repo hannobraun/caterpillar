@@ -176,10 +176,12 @@ fn compile_branch_body(
         };
 
         let addr = compile_expression(
-            &expression,
-            MemberLocation {
-                parent: Box::new(location.clone()),
-                index,
+            Located {
+                fragment: &expression,
+                location: MemberLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
             },
             function_context,
             cluster_context,
@@ -220,23 +222,26 @@ fn compile_branch_body(
 }
 
 fn compile_expression(
-    expression: &Expression,
-    location: MemberLocation,
+    expression: Located<&Expression>,
     function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
     let is_tail_expression = functions_context
         .tail_expressions
-        .is_tail_expression(&location);
+        .is_tail_expression(&expression.location);
 
     let mut mapping = functions_context
         .source_map
-        .map_expression_to_instructions(location.clone());
+        .map_expression_to_instructions(expression.location.clone());
 
-    match expression {
+    match expression.fragment {
         Expression::Identifier { name } => {
-            if functions_context.bindings.is_binding(&location).is_some() {
+            if functions_context
+                .bindings
+                .is_binding(&expression.location)
+                .is_some()
+            {
                 emit_instruction(
                     Instruction::BindingEvaluate { name: name.clone() },
                     functions_context.instructions,
@@ -244,7 +249,7 @@ fn compile_expression(
                 )
             } else if let Some(function) = functions_context
                 .function_calls
-                .is_call_to_intrinsic_function(&location)
+                .is_call_to_intrinsic_function(&expression.location)
             {
                 compile_intrinsic(
                     function,
@@ -254,7 +259,7 @@ fn compile_expression(
                 )
             } else if let Some(function) = functions_context
                 .function_calls
-                .is_call_to_host_function(&location)
+                .is_call_to_host_function(&expression.location)
             {
                 let address = emit_instruction(
                     Instruction::Push {
@@ -273,7 +278,7 @@ fn compile_expression(
                 address
             } else if let Some(callee_location) = functions_context
                 .function_calls
-                .is_call_to_user_defined_function(&location)
+                .is_call_to_user_defined_function(&expression.location)
             {
                 let callee = functions_context
                     .functions
@@ -282,7 +287,7 @@ fn compile_expression(
 
                 if functions_context
                     .recursion
-                    .is_recursive_expression(&location)
+                    .is_recursive_expression(&expression.location)
                     .is_some()
                 {
                     // For recursive calls, we can't generally assume that the
@@ -392,7 +397,7 @@ fn compile_expression(
         Expression::LocalFunction { function: _ } => {
             if let Some(index) = functions_context
                 .recursion
-                .is_recursive_expression(&location)
+                .is_recursive_expression(&expression.location)
             {
                 let function = {
                     let location =
@@ -408,14 +413,14 @@ fn compile_expression(
 
                 compile_local_function(
                     &function,
-                    location,
+                    expression.location,
                     cluster_context,
                     functions_context.instructions,
                     &mut mapping,
                 )
             } else {
                 let function_location =
-                    FunctionLocation::from(location.clone());
+                    FunctionLocation::from(expression.location.clone());
 
                 let function = functions_context
                     .functions
@@ -427,7 +432,7 @@ fn compile_expression(
 
                 compile_local_function(
                     &function,
-                    location,
+                    expression.location,
                     cluster_context,
                     functions_context.instructions,
                     &mut mapping,
