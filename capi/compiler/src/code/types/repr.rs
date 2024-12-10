@@ -37,7 +37,7 @@ impl ExplicitTypes {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
-    inner: TypesInner,
+    signatures: TypesInner,
 }
 
 impl Types {
@@ -54,7 +54,7 @@ impl Types {
         function_calls: &FunctionCalls,
     ) -> Self {
         let types = infer_types(syntax_tree, &explicit_types, function_calls);
-        Self { inner: types }
+        Self { signatures: types }
     }
 
     /// # Access the signature of the expression at the given location, if any
@@ -62,7 +62,7 @@ impl Types {
         &self,
         location: &MemberLocation,
     ) -> Option<&Signature> {
-        self.inner.get(location)
+        self.signatures.get(location)
     }
 }
 
