@@ -20,6 +20,7 @@ use super::{
 };
 
 struct FunctionContext<'r> {
+    location: &'r FunctionLocation,
     cluster: &'r Cluster,
 }
 
@@ -30,7 +31,10 @@ pub fn compile_function(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
-    let mut context = FunctionContext { cluster };
+    let mut context = FunctionContext {
+        location: &function.location,
+        cluster,
+    };
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
 
@@ -111,7 +115,15 @@ fn compile_branch(
         let mut body_address = None;
 
         for expression in branch.expressions() {
-            let bindings = branch.bindings().collect();
+            let bindings = branch
+                .bindings()
+                .chain(
+                    functions_context
+                        .bindings
+                        .environment_of(function_context.location)
+                        .clone(),
+                )
+                .collect();
 
             let addr = compile_expression(
                 expression,
