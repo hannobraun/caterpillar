@@ -67,15 +67,14 @@ pub fn infer_expression(
 
     if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
         panic!(
-            "Type that could be inferred was also specified \
-                        explicitly. This is currently not allowed, as the goal \
-                        is to transition away from explicit type annotations \
-                        completely.\n\
-                        \n\
-                        Explicit type: {explicit:?}\n\
-                        Inferred type: {inferred:?}\n\
-                        \n\
-                        At {}\n",
+            "Type that could be inferred was also specified explicitly. This \
+            is currently not allowed, as the goal is to transition away from \
+            explicit type annotations completely.\n\
+            \n\
+            Explicit type: {explicit:?}\n\
+            Inferred type: {inferred:?}\n\
+            \n\
+            At {}\n",
             expression.location.display(syntax_tree),
         );
     }
