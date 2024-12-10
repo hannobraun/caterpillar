@@ -89,7 +89,9 @@ fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
-                (None, Some(intrinsic)) => infer_intrinsic(intrinsic, stack)?,
+                (None, Some(intrinsic)) => {
+                    infer_intrinsic(intrinsic, &expression.location, stack)?
+                }
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -148,6 +150,7 @@ fn infer_expression(
 
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
+    _: &MemberLocation,
     _: &mut Stack,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = intrinsic.signature();
