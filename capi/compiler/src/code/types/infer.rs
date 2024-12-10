@@ -76,7 +76,7 @@ fn infer_expression(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    types: &mut Signatures,
+    signatures: &mut Signatures,
     stack: &mut Stack,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
@@ -143,7 +143,7 @@ fn infer_expression(
             }
         }
 
-        types.insert(expression.location, signature);
+        signatures.insert(expression.location, signature);
     } else {
         *stack = None;
     }
