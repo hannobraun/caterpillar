@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{
             Branch, BranchLocation, Expression, Function, FunctionLocation,
-            Located, Member, MemberLocation, Pattern,
+            Located, MemberLocation, Pattern,
         },
         Cluster,
     },
@@ -113,16 +113,9 @@ fn compile_branch(
     let [body_address, last_address] = {
         let mut body_address = None;
 
-        for member in branch.body() {
-            let Member::Expression { expression, .. } = member.fragment else {
-                continue;
-            };
-
+        for expression in branch.expressions() {
             let addr = compile_expression(
-                Located {
-                    fragment: expression,
-                    location: member.location,
-                },
+                expression,
                 function_context,
                 cluster_context,
                 functions_context,
