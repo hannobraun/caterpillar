@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    syntax::{Expression, MemberLocation, SyntaxTree},
+    syntax::{Expression, Located, SyntaxTree},
     FunctionCalls,
 };
 
@@ -18,8 +18,7 @@ pub fn infer_types(
         for branch in function.branches() {
             for expression in branch.expressions() {
                 infer_expression(
-                    expression.fragment,
-                    &expression.location,
+                    expression,
                     syntax_tree,
                     explicit_types,
                     function_calls,
@@ -33,20 +32,20 @@ pub fn infer_types(
 }
 
 pub fn infer_expression(
-    expression: &Expression,
-    location: &MemberLocation,
+    expression: Located<&Expression>,
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     types: &mut TypesInner,
 ) {
-    let explicit = explicit_types.signature_of(location);
+    let explicit = explicit_types.signature_of(&expression.location);
 
-    let inferred = match expression {
+    let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
-            let host = function_calls.is_call_to_host_function(location);
-            let intrinsic =
-                function_calls.is_call_to_intrinsic_function(location);
+            let host =
+                function_calls.is_call_to_host_function(&expression.location);
+            let intrinsic = function_calls
+                .is_call_to_intrinsic_function(&expression.location);
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
@@ -77,11 +76,11 @@ pub fn infer_expression(
                         Inferred type: {inferred:?}\n\
                         \n\
                         At {}\n",
-            location.display(syntax_tree),
+            expression.location.display(syntax_tree),
         );
     }
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
-        types.insert(location.clone(), signature);
+        types.insert(expression.location, signature);
     }
 }
