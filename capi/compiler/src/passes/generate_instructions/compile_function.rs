@@ -395,8 +395,9 @@ fn compile_expression(
             {
                 let function = {
                     let location = cluster.functions.get(&index).expect(
-                    "Resolved local recursive function must exist in cluster.",
-                );
+                        "Resolved local recursive function must exist in \
+                        cluster.",
+                    );
                     functions_context
                         .functions
                         .by_location(location)
