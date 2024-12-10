@@ -38,6 +38,7 @@ impl ExplicitTypes {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
     signatures: Signatures,
+    stacks: Stacks,
 }
 
 impl Types {
@@ -55,7 +56,8 @@ impl Types {
     ) -> Self {
         let signatures =
             infer_types(syntax_tree, &explicit_types, function_calls);
-        Self { signatures }
+        let stacks = BTreeMap::new();
+        Self { signatures, stacks }
     }
 
     /// # Access the signature of the expression at the given location, if any
@@ -68,6 +70,7 @@ impl Types {
 }
 
 pub type Signatures = BTreeMap<MemberLocation, Signature>;
+pub type Stacks = BTreeMap<MemberLocation, Stack>;
 pub type Stack = Vec<Type>;
 
 /// # A type signature that applies to a function or expression
