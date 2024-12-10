@@ -36,10 +36,12 @@ pub fn compile_function(
 
     for (index, branch) in function.fragment.branches.into_iter() {
         let (runtime_branch, [first_address, last_address]) = compile_branch(
-            &branch,
-            BranchLocation {
-                parent: Box::new(function.location.clone()),
-                index,
+            Located {
+                fragment: &branch,
+                location: BranchLocation {
+                    parent: Box::new(function.location.clone()),
+                    index,
+                },
             },
             &mut context,
             cluster_context,
@@ -88,8 +90,7 @@ pub fn compile_function(
 }
 
 fn compile_branch(
-    branch: &Branch,
-    location: BranchLocation,
+    branch: Located<&Branch>,
     function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
@@ -121,7 +122,7 @@ fn compile_branch(
                 Located {
                     fragment: expression,
                     location: MemberLocation {
-                        parent: Box::new(location.clone()),
+                        parent: Box::new(branch.location.clone()),
                         index,
                     },
                 },
