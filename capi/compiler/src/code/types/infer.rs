@@ -17,8 +17,6 @@ pub fn infer_types(
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
             for expression in branch.expressions() {
-                let explicit =
-                    explicit_types.signature_of(&expression.location);
                 let inferred = infer_expression(
                     expression.fragment,
                     &expression.location,
@@ -27,24 +25,7 @@ pub fn infer_types(
                     function_calls,
                 );
 
-                if let (Some(explicit), Some(inferred)) =
-                    (explicit, inferred.as_ref())
-                {
-                    panic!(
-                        "Type that could be inferred was also specified \
-                        explicitly. This is currently not allowed, as the goal \
-                        is to transition away from explicit type annotations \
-                        completely.\n\
-                        \n\
-                        Explicit type: {explicit:?}\n\
-                        Inferred type: {inferred:?}\n\
-                        \n\
-                        At {}\n",
-                        expression.location.display(syntax_tree),
-                    );
-                }
-
-                if let Some(signature) = inferred.or(explicit.cloned()) {
+                if let Some(signature) = inferred {
                     types.insert(expression.location, signature);
                 }
             }
@@ -57,11 +38,13 @@ pub fn infer_types(
 pub fn infer_expression(
     expression: &Expression,
     location: &MemberLocation,
-    _: &SyntaxTree,
-    _: &ExplicitTypes,
+    syntax_tree: &SyntaxTree,
+    explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> Option<Signature> {
-    match expression {
+    let explicit = explicit_types.signature_of(location);
+
+    let inferred = match expression {
         Expression::Identifier { .. } => {
             let host = function_calls.is_call_to_host_function(location);
             let intrinsic =
@@ -83,5 +66,22 @@ pub fn infer_expression(
             outputs: vec![Type::Number],
         }),
         _ => None,
+    };
+
+    if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
+        panic!(
+            "Type that could be inferred was also specified \
+                        explicitly. This is currently not allowed, as the goal \
+                        is to transition away from explicit type annotations \
+                        completely.\n\
+                        \n\
+                        Explicit type: {explicit:?}\n\
+                        Inferred type: {inferred:?}\n\
+                        \n\
+                        At {}\n",
+            location.display(syntax_tree),
+        );
     }
+
+    inferred.or(explicit.cloned())
 }
