@@ -80,7 +80,7 @@ fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
-                (None, Some(intrinsic)) => infer_intrinsic(intrinsic, stack),
+                (None, Some(intrinsic)) => infer_intrinsic(intrinsic, stack)?,
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -139,8 +139,9 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     _: &mut Stack,
-) -> Option<Signature> {
-    intrinsic.signature()
+) -> Result<Option<Signature>, TypeError> {
+    let signature = intrinsic.signature();
+    Ok(signature)
 }
 
 type Stack = Option<Vec<Type>>;
