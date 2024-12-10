@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, fmt};
 
 use crate::code::{
     syntax::{MemberLocation, SyntaxTree},
@@ -101,6 +101,34 @@ where
     }
 }
 
+impl fmt::Display for Signature {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut inputs = self.inputs.iter().peekable();
+        while let Some(input) = inputs.next() {
+            write!(f, "{input}")?;
+
+            if inputs.peek().is_some() {
+                write!(f, ",")?;
+            }
+
+            write!(f, " ")?;
+        }
+
+        write!(f, "->")?;
+        if !self.outputs.is_empty() {
+            write!(f, " ")?;
+        }
+
+        for output in &self.outputs {
+            write!(f, "{output}")?;
+        }
+
+        write!(f, " .")?;
+
+        Ok(())
+    }
+}
+
 /// # The type of a value
 #[derive(
     Clone,
@@ -130,4 +158,19 @@ pub enum Type {
     /// I expect that this will get split into multiple, more specific numeric
     /// types at some point.
     Number,
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Function { signature } => {
+                write!(f, "fn {signature} end")?;
+            }
+            Self::Number => {
+                write!(f, "Number")?;
+            }
+        }
+
+        Ok(())
+    }
 }
