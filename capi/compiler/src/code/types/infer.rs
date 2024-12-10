@@ -59,7 +59,7 @@ fn infer_branch(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
-    _: &mut Stacks,
+    stacks: &mut Stacks,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
@@ -70,6 +70,7 @@ fn infer_branch(
             explicit_types,
             function_calls,
             signatures,
+            stacks,
             &mut stack,
         )?;
     }
@@ -83,6 +84,7 @@ fn infer_expression(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
+    _: &mut Stacks,
     stack: &mut Option<Stack>,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
