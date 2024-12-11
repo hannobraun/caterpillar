@@ -73,8 +73,6 @@ fn infer_branch(
         )?;
     }
 
-    dbg!(local_types);
-
     Ok(())
 }
 
