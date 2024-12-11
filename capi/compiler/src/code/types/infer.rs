@@ -3,7 +3,7 @@ use std::fmt;
 use crate::{
     code::{
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
-        FunctionCalls,
+        FunctionCalls, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -60,17 +60,27 @@ fn infer_branch(
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
+    let mut local_types = IndexMap::default();
     let mut local_stack = Some(Vec::new());
 
     for expression in branch.expressions() {
-        infer_expression(expression, &mut local_stack, context, output)?;
+        infer_expression(
+            expression,
+            &mut local_types,
+            &mut local_stack,
+            context,
+            output,
+        )?;
     }
+
+    dbg!(local_types);
 
     Ok(())
 }
 
 fn infer_expression(
     expression: Located<&Expression>,
+    local_types: &mut IndexMap<Type>,
     local_stack: &mut Option<Stack>,
     context: Context,
     output: &mut InferenceOutput,
@@ -89,13 +99,22 @@ fn infer_expression(
             match (host, intrinsic) {
                 (Some(host), None) => {
                     let signature = host.signature.clone();
+                    make_indirect(&signature, local_types);
                     Some(signature)
                 }
-                (None, Some(intrinsic)) => infer_intrinsic(
-                    intrinsic,
-                    &expression.location,
-                    local_stack,
-                )?,
+                (None, Some(intrinsic)) => {
+                    let signature = infer_intrinsic(
+                        intrinsic,
+                        &expression.location,
+                        local_stack,
+                    )?;
+
+                    if let Some(signature) = &signature {
+                        make_indirect(signature, local_types);
+                    }
+
+                    signature
+                }
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -109,6 +128,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
+            make_indirect(&signature, local_types);
             Some(signature)
         }
         _ => None,
@@ -199,6 +219,15 @@ fn infer_intrinsic(
     };
 
     Ok(signature)
+}
+
+fn make_indirect(signature: &Signature, local_types: &mut IndexMap<Type>) {
+    for input in &signature.inputs {
+        local_types.push(input.clone());
+    }
+    for output in &signature.outputs {
+        local_types.push(output.clone());
+    }
 }
 
 struct TypeError {
