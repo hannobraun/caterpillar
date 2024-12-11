@@ -66,12 +66,12 @@ fn infer_branch(
     for expression in branch.expressions() {
         infer_expression(
             expression,
+            &mut stack,
             syntax_tree,
             explicit_types,
             function_calls,
             signatures,
             stacks,
-            &mut stack,
         )?;
     }
 
@@ -80,12 +80,12 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
+    stack: &mut Option<Stack>,
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
     signatures: &mut Signatures,
     stacks: &mut Stacks,
-    stack: &mut Option<Stack>,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
 
