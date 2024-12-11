@@ -196,10 +196,10 @@ fn infer_intrinsic(
 }
 
 #[derive(Clone, Copy)]
-struct Context<'r> {
-    syntax_tree: &'r SyntaxTree,
-    explicit_types: &'r ExplicitTypes,
-    function_calls: &'r FunctionCalls,
+pub struct Context<'r> {
+    pub syntax_tree: &'r SyntaxTree,
+    pub explicit_types: &'r ExplicitTypes,
+    pub function_calls: &'r FunctionCalls,
 }
 
 struct TypeError {
