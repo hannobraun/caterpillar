@@ -13,12 +13,6 @@ use super::{
     ExplicitTypes, Signature, Type,
 };
 
-#[derive(Default)]
-pub struct InferenceOutput {
-    pub signatures: Signatures,
-    pub stacks: Stacks,
-}
-
 pub fn infer_types(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
@@ -55,6 +49,12 @@ pub fn infer_types(
     }
 
     output
+}
+
+#[derive(Default)]
+pub struct InferenceOutput {
+    pub signatures: Signatures,
+    pub stacks: Stacks,
 }
 
 fn infer_branch(
