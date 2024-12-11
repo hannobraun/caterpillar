@@ -87,7 +87,10 @@ fn infer_expression(
                 .is_call_to_intrinsic_function(&expression.location);
 
             match (host, intrinsic) {
-                (Some(host), None) => Some(host.signature.clone()),
+                (Some(host), None) => {
+                    let signature = host.signature.clone();
+                    Some(signature)
+                }
                 (None, Some(intrinsic)) => infer_intrinsic(
                     intrinsic,
                     &expression.location,
