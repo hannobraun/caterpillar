@@ -42,6 +42,13 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     output
 }
 
+#[derive(Clone, Copy)]
+pub struct Context<'r> {
+    pub syntax_tree: &'r SyntaxTree,
+    pub explicit_types: &'r ExplicitTypes,
+    pub function_calls: &'r FunctionCalls,
+}
+
 #[derive(Default)]
 pub struct InferenceOutput {
     pub signatures: Signatures,
@@ -184,13 +191,6 @@ fn infer_intrinsic(
     };
 
     Ok(signature)
-}
-
-#[derive(Clone, Copy)]
-pub struct Context<'r> {
-    pub syntax_tree: &'r SyntaxTree,
-    pub explicit_types: &'r ExplicitTypes,
-    pub function_calls: &'r FunctionCalls,
 }
 
 struct TypeError {
