@@ -109,9 +109,9 @@ fn infer_expression(
                         local_stack,
                     )?;
 
-                    if let Some(signature) = &signature {
-                        make_indirect(signature.clone(), local_types);
-                    }
+                    signature.as_ref().map(|signature| {
+                        make_indirect(signature.clone(), local_types)
+                    });
 
                     signature
                 }
