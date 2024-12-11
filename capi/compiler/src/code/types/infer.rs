@@ -225,17 +225,16 @@ fn make_indirect(
     signature: Signature,
     local_types: &mut IndexMap<Type>,
 ) -> Signature<Index<Type>> {
-    let mut inputs = Vec::new();
-    let mut outputs = Vec::new();
-
-    for input in signature.inputs {
-        let input = local_types.push(input);
-        inputs.push(input);
-    }
-    for output in signature.outputs {
-        let output = local_types.push(output);
-        outputs.push(output);
-    }
+    let inputs = signature
+        .inputs
+        .into_iter()
+        .map(|input| local_types.push(input))
+        .collect();
+    let outputs = signature
+        .outputs
+        .into_iter()
+        .map(|output| local_types.push(output))
+        .collect();
 
     Signature { inputs, outputs }
 }
