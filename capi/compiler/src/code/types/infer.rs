@@ -228,12 +228,12 @@ fn make_indirect(
     let mut inputs = Vec::new();
     let mut outputs = Vec::new();
 
-    for input in &signature.inputs {
-        let input = local_types.push(input.clone());
+    for input in signature.inputs {
+        let input = local_types.push(input);
         inputs.push(input);
     }
-    for output in &signature.outputs {
-        let output = local_types.push(output.clone());
+    for output in signature.outputs {
+        let output = local_types.push(output);
         outputs.push(output);
     }
 
