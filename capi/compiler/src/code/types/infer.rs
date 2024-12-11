@@ -73,8 +73,7 @@ fn infer_branch(
             syntax_tree,
             explicit_types,
             function_calls,
-            &mut output.signatures,
-            &mut output.stacks,
+            output,
         )?;
     }
 
@@ -87,8 +86,7 @@ fn infer_expression(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    signatures: &mut Signatures,
-    stacks: &mut Stacks,
+    output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
     let explicit = explicit_types.signature_of(&expression.location);
 
@@ -153,10 +151,12 @@ fn infer_expression(
                 stack.push(output);
             }
 
-            stacks.insert(expression.location.clone(), stack.clone());
+            output
+                .stacks
+                .insert(expression.location.clone(), stack.clone());
         }
 
-        signatures.insert(expression.location, signature);
+        output.signatures.insert(expression.location, signature);
     } else {
         *stack = None;
     }
