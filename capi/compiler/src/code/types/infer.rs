@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt};
+use std::fmt;
 
 use crate::{
     code::{
@@ -13,6 +13,7 @@ use super::{
     ExplicitTypes, Signature, Type,
 };
 
+#[derive(Default)]
 pub struct InferenceOutput {
     pub signatures: Signatures,
     pub stacks: Stacks,
@@ -23,10 +24,7 @@ pub fn infer_types(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> InferenceOutput {
-    let mut output = InferenceOutput {
-        signatures: BTreeMap::new(),
-        stacks: BTreeMap::new(),
-    };
+    let mut output = InferenceOutput::default();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
