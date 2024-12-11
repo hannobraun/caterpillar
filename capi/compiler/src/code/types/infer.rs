@@ -104,10 +104,13 @@ fn infer_expression(
                 }
             }
         }
-        Expression::LiteralNumber { .. } => Some(Signature {
-            inputs: vec![],
-            outputs: vec![Type::Number],
-        }),
+        Expression::LiteralNumber { .. } => {
+            let signature = Signature {
+                inputs: vec![],
+                outputs: vec![Type::Number],
+            };
+            Some(signature)
+        }
         _ => None,
     };
 
