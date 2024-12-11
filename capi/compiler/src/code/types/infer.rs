@@ -231,10 +231,10 @@ fn make_indirect(
             .collect()
     };
 
-    let inputs = map(signature.inputs);
-    let outputs = map(signature.outputs);
-
-    Signature { inputs, outputs }
+    Signature {
+        inputs: map(signature.inputs),
+        outputs: map(signature.outputs),
+    }
 }
 
 struct TypeError {
