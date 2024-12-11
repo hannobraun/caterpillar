@@ -158,11 +158,11 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    stack: &mut Option<Stack>,
+    local_stack: &mut Option<Stack>,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
-            let Some(stack) = stack.as_mut() else {
+            let Some(stack) = local_stack.as_mut() else {
                 return Ok(None);
             };
 
