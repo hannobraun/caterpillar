@@ -109,7 +109,7 @@ fn infer_expression(
                         local_stack,
                     )?;
 
-                    signature.as_ref().map(|signature| {
+                    signature.map(|signature| {
                         make_indirect(signature.clone(), local_types)
                     })
                 }
