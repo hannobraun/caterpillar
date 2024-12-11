@@ -3,7 +3,7 @@ use std::fmt;
 use crate::{
     code::{
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
-        FunctionCalls, IndexMap,
+        FunctionCalls, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -221,13 +221,23 @@ fn infer_intrinsic(
     Ok(signature)
 }
 
-fn make_indirect(signature: Signature, local_types: &mut IndexMap<Type>) {
+fn make_indirect(
+    signature: Signature,
+    local_types: &mut IndexMap<Type>,
+) -> Signature<Index<Type>> {
+    let mut inputs = Vec::new();
+    let mut outputs = Vec::new();
+
     for input in &signature.inputs {
-        local_types.push(input.clone());
+        let input = local_types.push(input.clone());
+        inputs.push(input);
     }
     for output in &signature.outputs {
-        local_types.push(output.clone());
+        let output = local_types.push(output.clone());
+        outputs.push(output);
     }
+
+    Signature { inputs, outputs }
 }
 
 struct TypeError {
