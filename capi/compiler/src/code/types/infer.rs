@@ -13,19 +13,10 @@ use super::{
     ExplicitTypes, Signature, Type,
 };
 
-pub fn infer_types(
-    syntax_tree: &SyntaxTree,
-    explicit_types: &ExplicitTypes,
-    function_calls: &FunctionCalls,
-) -> InferenceOutput {
-    let context = Context {
-        syntax_tree,
-        explicit_types,
-        function_calls,
-    };
+pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
-    for function in syntax_tree.all_functions() {
+    for function in context.syntax_tree.all_functions() {
         for branch in function.branches() {
             if let Err(TypeError {
                 expected,
@@ -42,7 +33,7 @@ pub fn infer_types(
                     Type error: expected {expected}, got {actual}\n\
                     \n\
                     at {}\n",
-                    location.display(syntax_tree),
+                    location.display(context.syntax_tree),
                 );
             }
         }

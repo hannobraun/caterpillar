@@ -6,7 +6,7 @@ use crate::code::{
 };
 
 use super::{
-    infer::{infer_types, InferenceOutput},
+    infer::{infer_types, Context, InferenceOutput},
     resolve::resolve_type_annotations,
 };
 
@@ -57,8 +57,11 @@ impl Types {
         explicit_types: ExplicitTypes,
         function_calls: &FunctionCalls,
     ) -> Self {
-        let InferenceOutput { signatures, stacks } =
-            infer_types(syntax_tree, &explicit_types, function_calls);
+        let InferenceOutput { signatures, stacks } = infer_types(Context {
+            syntax_tree,
+            explicit_types: &explicit_types,
+            function_calls,
+        });
         Self { signatures, stacks }
     }
 
