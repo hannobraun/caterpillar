@@ -18,6 +18,11 @@ pub fn infer_types(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> InferenceOutput {
+    let context = Context {
+        syntax_tree,
+        explicit_types,
+        function_calls,
+    };
     let mut output = InferenceOutput::default();
 
     for function in syntax_tree.all_functions() {
@@ -26,13 +31,8 @@ pub fn infer_types(
                 expected,
                 actual,
                 location,
-            }) = infer_branch(
-                branch,
-                syntax_tree,
-                explicit_types,
-                function_calls,
-                &mut output,
-            ) {
+            }) = infer_branch(branch, context, &mut output)
+            {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
                     .unwrap_or_else(|| "nothing".to_string());
@@ -59,22 +59,13 @@ pub struct InferenceOutput {
 
 fn infer_branch(
     branch: Located<&Branch>,
-    syntax_tree: &SyntaxTree,
-    explicit_types: &ExplicitTypes,
-    function_calls: &FunctionCalls,
+    context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
     for expression in branch.expressions() {
-        infer_expression(
-            expression,
-            &mut stack,
-            syntax_tree,
-            explicit_types,
-            function_calls,
-            output,
-        )?;
+        infer_expression(expression, &mut stack, context, output)?;
     }
 
     Ok(())
@@ -83,18 +74,18 @@ fn infer_branch(
 fn infer_expression(
     expression: Located<&Expression>,
     stack: &mut Option<Stack>,
-    syntax_tree: &SyntaxTree,
-    explicit_types: &ExplicitTypes,
-    function_calls: &FunctionCalls,
+    context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
-    let explicit = explicit_types.signature_of(&expression.location);
+    let explicit = context.explicit_types.signature_of(&expression.location);
 
     let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
-            let host =
-                function_calls.is_call_to_host_function(&expression.location);
-            let intrinsic = function_calls
+            let host = context
+                .function_calls
+                .is_call_to_host_function(&expression.location);
+            let intrinsic = context
+                .function_calls
                 .is_call_to_intrinsic_function(&expression.location);
 
             match (host, intrinsic) {
@@ -127,7 +118,7 @@ fn infer_expression(
             Inferred type: {inferred:?}\n\
             \n\
             At {}\n",
-            expression.location.display(syntax_tree),
+            expression.location.display(context.syntax_tree),
         );
     }
 
@@ -202,6 +193,13 @@ fn infer_intrinsic(
     };
 
     Ok(signature)
+}
+
+#[derive(Clone, Copy)]
+struct Context<'r> {
+    syntax_tree: &'r SyntaxTree,
+    explicit_types: &'r ExplicitTypes,
+    function_calls: &'r FunctionCalls,
 }
 
 struct TypeError {
