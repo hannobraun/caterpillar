@@ -99,7 +99,8 @@ fn infer_expression(
             match (host, intrinsic) {
                 (Some(host), None) => {
                     let signature = host.signature.clone();
-                    make_indirect(signature.clone(), local_types);
+                    let signature =
+                        make_indirect(signature.clone(), local_types);
                     Some(signature)
                 }
                 (None, Some(intrinsic)) => {
@@ -111,9 +112,7 @@ fn infer_expression(
 
                     signature.as_ref().map(|signature| {
                         make_indirect(signature.clone(), local_types)
-                    });
-
-                    signature
+                    })
                 }
                 (None, None) => None,
                 _ => {
@@ -128,11 +127,14 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            make_indirect(signature.clone(), local_types);
+            let signature = make_indirect(signature.clone(), local_types);
             Some(signature)
         }
         _ => None,
     };
+
+    let inferred =
+        inferred.and_then(|inferred| make_direct(inferred, local_types));
 
     if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
         panic!(
@@ -235,6 +237,22 @@ fn make_indirect(
         inputs: map(signature.inputs),
         outputs: map(signature.outputs),
     }
+}
+
+fn make_direct(
+    signature: Signature<Index<Type>>,
+    local_types: &IndexMap<Type>,
+) -> Option<Signature<Type>> {
+    let try_map = |from: Vec<Index<Type>>| {
+        from.into_iter()
+            .map(|index| local_types.get(&index).cloned())
+            .collect::<Option<_>>()
+    };
+
+    let inputs = try_map(signature.inputs)?;
+    let outputs = try_map(signature.outputs)?;
+
+    Some(Signature { inputs, outputs })
 }
 
 struct TypeError {
