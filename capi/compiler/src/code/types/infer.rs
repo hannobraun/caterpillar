@@ -109,9 +109,8 @@ fn infer_expression(
                         local_stack,
                     )?;
 
-                    signature.map(|signature| {
-                        make_indirect(signature.clone(), local_types)
-                    })
+                    signature
+                        .map(|signature| make_indirect(signature, local_types))
                 }
                 (None, None) => None,
                 _ => {
