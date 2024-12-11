@@ -123,9 +123,9 @@ fn infer_expression(
     }
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
-        if let Some(stack) = local_stack {
+        if let Some(local_stack) = local_stack {
             for input in signature.inputs.iter().rev() {
-                match stack.pop() {
+                match local_stack.pop() {
                     Some(type_) if type_ == *input => {
                         // Type checks out!
                     }
@@ -139,12 +139,12 @@ fn infer_expression(
                 }
             }
             for output in signature.outputs.iter().cloned() {
-                stack.push(output);
+                local_stack.push(output);
             }
 
             output
                 .stacks
-                .insert(expression.location.clone(), stack.clone());
+                .insert(expression.location.clone(), local_stack.clone());
         }
 
         output.signatures.insert(expression.location, signature);
