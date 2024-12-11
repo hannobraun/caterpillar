@@ -71,7 +71,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    stack: &mut Option<Stack>,
+    local_stack: &mut Option<Stack>,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
@@ -88,9 +88,11 @@ fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => Some(host.signature.clone()),
-                (None, Some(intrinsic)) => {
-                    infer_intrinsic(intrinsic, &expression.location, stack)?
-                }
+                (None, Some(intrinsic)) => infer_intrinsic(
+                    intrinsic,
+                    &expression.location,
+                    local_stack,
+                )?,
                 (None, None) => None,
                 _ => {
                     unreachable!(
@@ -121,7 +123,7 @@ fn infer_expression(
     }
 
     if let Some(signature) = inferred.or(explicit.cloned()) {
-        if let Some(stack) = stack {
+        if let Some(stack) = local_stack {
             for input in signature.inputs.iter().rev() {
                 match stack.pop() {
                     Some(type_) if type_ == *input => {
@@ -147,7 +149,7 @@ fn infer_expression(
 
         output.signatures.insert(expression.location, signature);
     } else {
-        *stack = None;
+        *local_stack = None;
     }
 
     Ok(())
