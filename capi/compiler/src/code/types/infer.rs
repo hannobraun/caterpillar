@@ -98,8 +98,8 @@ fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => {
-                    let signature = host.signature.clone();
-                    let signature = make_indirect(signature, local_types);
+                    let signature =
+                        make_indirect(host.signature.clone(), local_types);
                     Some(signature)
                 }
                 (None, Some(intrinsic)) => {
