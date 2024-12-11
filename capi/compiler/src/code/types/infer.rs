@@ -125,7 +125,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature = make_indirect(signature.clone(), local_types);
+            let signature = make_indirect(signature, local_types);
             Some(signature)
         }
         _ => None,
