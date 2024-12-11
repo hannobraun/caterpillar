@@ -37,8 +37,7 @@ pub fn infer_types(
                 syntax_tree,
                 explicit_types,
                 function_calls,
-                &mut output.signatures,
-                &mut output.stacks,
+                &mut output,
             ) {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
@@ -63,8 +62,7 @@ fn infer_branch(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-    signatures: &mut Signatures,
-    stacks: &mut Stacks,
+    output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
     let mut stack = Some(Vec::new());
 
@@ -75,8 +73,8 @@ fn infer_branch(
             syntax_tree,
             explicit_types,
             function_calls,
-            signatures,
-            stacks,
+            &mut output.signatures,
+            &mut output.stacks,
         )?;
     }
 
