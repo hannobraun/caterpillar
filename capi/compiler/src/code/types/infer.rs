@@ -99,7 +99,7 @@ fn infer_expression(
             match (host, intrinsic) {
                 (Some(host), None) => {
                     let signature = host.signature.clone();
-                    make_indirect(&signature, local_types);
+                    make_indirect(signature.clone(), local_types);
                     Some(signature)
                 }
                 (None, Some(intrinsic)) => {
@@ -110,7 +110,7 @@ fn infer_expression(
                     )?;
 
                     if let Some(signature) = &signature {
-                        make_indirect(signature, local_types);
+                        make_indirect(signature.clone(), local_types);
                     }
 
                     signature
@@ -128,7 +128,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            make_indirect(&signature, local_types);
+            make_indirect(signature.clone(), local_types);
             Some(signature)
         }
         _ => None,
@@ -221,7 +221,7 @@ fn infer_intrinsic(
     Ok(signature)
 }
 
-fn make_indirect(signature: &Signature, local_types: &mut IndexMap<Type>) {
+fn make_indirect(signature: Signature, local_types: &mut IndexMap<Type>) {
     for input in &signature.inputs {
         local_types.push(input.clone());
     }
