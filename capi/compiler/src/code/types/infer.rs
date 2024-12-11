@@ -13,11 +13,16 @@ use super::{
     ExplicitTypes, Signature, Type,
 };
 
+pub struct InferenceOutput {
+    pub signatures: Signatures,
+    pub stacks: Stacks,
+}
+
 pub fn infer_types(
     syntax_tree: &SyntaxTree,
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
-) -> (Signatures, Stacks) {
+) -> InferenceOutput {
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -50,7 +55,7 @@ pub fn infer_types(
         }
     }
 
-    (signatures, stacks)
+    InferenceOutput { signatures, stacks }
 }
 
 fn infer_branch(

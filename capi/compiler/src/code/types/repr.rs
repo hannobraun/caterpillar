@@ -5,7 +5,10 @@ use crate::code::{
     FunctionCalls,
 };
 
-use super::{infer::infer_types, resolve::resolve_type_annotations};
+use super::{
+    infer::{infer_types, InferenceOutput},
+    resolve::resolve_type_annotations,
+};
 
 /// # The types that are explicitly specified in the code
 ///
@@ -54,7 +57,7 @@ impl Types {
         explicit_types: ExplicitTypes,
         function_calls: &FunctionCalls,
     ) -> Self {
-        let (signatures, stacks) =
+        let InferenceOutput { signatures, stacks } =
             infer_types(syntax_tree, &explicit_types, function_calls);
         Self { signatures, stacks }
     }
