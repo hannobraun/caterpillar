@@ -60,10 +60,10 @@ fn infer_branch(
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
-    let mut stack = Some(Vec::new());
+    let mut local_stack = Some(Vec::new());
 
     for expression in branch.expressions() {
-        infer_expression(expression, &mut stack, context, output)?;
+        infer_expression(expression, &mut local_stack, context, output)?;
     }
 
     Ok(())
