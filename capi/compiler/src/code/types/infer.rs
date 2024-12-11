@@ -23,8 +23,10 @@ pub fn infer_types(
     explicit_types: &ExplicitTypes,
     function_calls: &FunctionCalls,
 ) -> InferenceOutput {
-    let mut signatures = BTreeMap::new();
-    let mut stacks = BTreeMap::new();
+    let mut output = InferenceOutput {
+        signatures: BTreeMap::new(),
+        stacks: BTreeMap::new(),
+    };
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -37,8 +39,8 @@ pub fn infer_types(
                 syntax_tree,
                 explicit_types,
                 function_calls,
-                &mut signatures,
-                &mut stacks,
+                &mut output.signatures,
+                &mut output.stacks,
             ) {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
@@ -55,7 +57,7 @@ pub fn infer_types(
         }
     }
 
-    InferenceOutput { signatures, stacks }
+    output
 }
 
 fn infer_branch(
