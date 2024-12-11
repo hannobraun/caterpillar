@@ -162,11 +162,11 @@ fn infer_intrinsic(
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
-            let Some(stack) = local_stack.as_mut() else {
+            let Some(local_stack) = local_stack.as_mut() else {
                 return Ok(None);
             };
 
-            match stack.last() {
+            match local_stack.last() {
                 Some(Type::Function { signature }) => {
                     let outputs = signature.outputs.clone();
                     let inputs = signature
