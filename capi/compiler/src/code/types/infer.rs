@@ -225,7 +225,7 @@ fn make_indirect(
 ) -> Signature<Index<InferredType>> {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
-            .map(|type_| local_types.inner.push(InferredType::Known(type_)))
+            .map(|type_| local_types.push(InferredType::Known(type_)))
             .collect()
     };
 
@@ -266,6 +266,12 @@ struct TypeError {
 #[derive(Default)]
 struct LocalTypes {
     inner: IndexMap<InferredType>,
+}
+
+impl LocalTypes {
+    fn push(&mut self, type_: InferredType) -> Index<InferredType> {
+        self.inner.push(type_)
+    }
 }
 
 #[derive(Clone, Debug)]
