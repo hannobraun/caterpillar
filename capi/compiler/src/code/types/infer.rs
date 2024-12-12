@@ -3,7 +3,7 @@ use std::fmt;
 use crate::{
     code::{
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
-        FunctionCalls, Index, IndexMap,
+        Bindings, FunctionCalls, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -45,6 +45,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 #[derive(Clone, Copy)]
 pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
+    pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
     pub explicit_types: &'r ExplicitTypes,
 }
@@ -91,6 +92,7 @@ fn infer_expression(
 
     let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
+            let binding = context.bindings.is_binding(&expression.location);
             let host = context
                 .function_calls
                 .is_call_to_host_function(&expression.location);
@@ -98,13 +100,21 @@ fn infer_expression(
                 .function_calls
                 .is_call_to_intrinsic_function(&expression.location);
 
-            match (host, intrinsic) {
-                (Some(host), None) => {
+            match (binding, host, intrinsic) {
+                (Some(_binding), None, None) => {
+                    let output = local_types.push(InferredType::Unknown);
+                    let signature = Signature {
+                        inputs: vec![],
+                        outputs: vec![output],
+                    };
+                    Some(signature)
+                }
+                (None, Some(host), None) => {
                     let signature =
                         make_indirect(host.signature.clone(), local_types);
                     Some(signature)
                 }
-                (None, Some(intrinsic)) => {
+                (None, None, Some(intrinsic)) => {
                     let signature = infer_intrinsic(
                         intrinsic,
                         &expression.location,
@@ -115,7 +125,7 @@ fn infer_expression(
                     signature
                         .map(|signature| make_indirect(signature, local_types))
                 }
-                (None, None) => None,
+                (None, None, None) => None,
                 _ => {
                     unreachable!("Single identifier resolved multiple times.");
                 }
@@ -133,7 +143,9 @@ fn infer_expression(
     };
 
     if let [Some(explicit), Some(inferred)] =
-        [explicit.as_ref(), inferred.as_ref()]
+        [explicit.as_ref(), inferred.as_ref()].map(|signature| {
+            signature.and_then(|signature| make_direct(signature, local_types))
+        })
     {
         panic!(
             "Type that could be inferred was also specified explicitly. This \
@@ -174,6 +186,23 @@ fn infer_expression(
                                     });
                                 }
                             }
+                            (
+                                InferredType::Known(_operand),
+                                InferredType::Unknown,
+                            ) => {
+                                // We could infer the type of the binding here.
+                            }
+                            (
+                                InferredType::Unknown,
+                                InferredType::Known(_input),
+                            ) => {
+                                // We could infer the type of the operand here.
+                            }
+                            (InferredType::Unknown, InferredType::Unknown) => {
+                                // We could unify the two types here, to make
+                                // sure that if one gets inferred, the other is
+                                // known too.
+                            }
                         }
                     }
                     None => {
@@ -181,6 +210,7 @@ fn infer_expression(
                             InferredType::Known(input) => {
                                 ExpectedType::Specific(input.clone())
                             }
+                            InferredType::Unknown => ExpectedType::Unknown,
                         };
 
                         return Err(TypeError {
@@ -254,6 +284,7 @@ fn infer_intrinsic(
                         location: location.clone(),
                     });
                 }
+                Some(InferredType::Unknown) => None,
                 None => {
                     return Err(TypeError {
                         expected: ExpectedType::Function,
@@ -352,12 +383,14 @@ impl Default for LocalStack {
 #[derive(Clone, Debug)]
 enum InferredType {
     Known(Type),
+    Unknown,
 }
 
 impl InferredType {
     pub fn into_type(self) -> Option<Type> {
         match self {
             Self::Known(type_) => Some(type_),
+            Self::Unknown => None,
         }
     }
 }
@@ -365,6 +398,7 @@ impl InferredType {
 enum ExpectedType {
     Function,
     Specific(Type),
+    Unknown,
 }
 
 impl fmt::Display for ExpectedType {
@@ -372,6 +406,7 @@ impl fmt::Display for ExpectedType {
         match self {
             Self::Function => write!(f, "function"),
             Self::Specific(type_) => write!(f, "`{type_}`"),
+            Self::Unknown => write!(f, "unknown type"),
         }
     }
 }

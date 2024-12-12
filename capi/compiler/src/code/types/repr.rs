@@ -54,12 +54,13 @@ impl Types {
     /// of full type inference.
     pub fn infer(
         syntax_tree: &SyntaxTree,
-        _: &Bindings,
+        bindings: &Bindings,
         function_calls: &FunctionCalls,
         explicit_types: ExplicitTypes,
     ) -> Self {
         let InferenceOutput { signatures, stacks } = infer_types(Context {
             syntax_tree,
+            bindings,
             function_calls,
             explicit_types: &explicit_types,
         });
