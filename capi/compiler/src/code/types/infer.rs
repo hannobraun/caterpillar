@@ -60,13 +60,13 @@ fn infer_branch(
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
-    let mut local_types = IndexMap::default();
+    let mut local_types = LocalTypes::default();
     let mut local_stack = Some(Vec::new());
 
     for expression in branch.expressions() {
         infer_expression(
             expression,
-            &mut local_types,
+            &mut local_types.inner,
             &mut local_stack,
             context,
             output,
@@ -260,6 +260,11 @@ struct TypeError {
     expected: ExpectedType,
     actual: Option<Type>,
     location: MemberLocation,
+}
+
+#[derive(Default)]
+struct LocalTypes {
+    inner: IndexMap<InferredType>,
 }
 
 #[derive(Clone, Debug)]
