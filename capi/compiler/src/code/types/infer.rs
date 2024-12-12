@@ -178,9 +178,7 @@ fn infer_expression(
                                     // Type checks out!
                                 } else {
                                     return Err(TypeError {
-                                        expected: ExpectedType::Specific(
-                                            input.clone(),
-                                        ),
+                                        expected: ExpectedType::Specific(input),
                                         actual: Some(operand),
                                         location: expression.location,
                                     });
