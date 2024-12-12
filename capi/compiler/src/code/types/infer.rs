@@ -357,6 +357,7 @@ impl LocalTypes {
     }
 }
 
+#[derive(Debug)]
 struct LocalStack {
     inner: Option<Vec<Index<InferredType>>>,
 }
