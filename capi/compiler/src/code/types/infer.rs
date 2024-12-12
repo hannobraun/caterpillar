@@ -191,7 +191,50 @@ fn infer_expression(
         );
     }
 
-    let signature = inferred.or(explicit);
+    let signature = match (inferred, explicit) {
+        (Some(inferred), Some(explicit)) => {
+            let merge = |a: &Vec<Index<InferredType>>, b| {
+                let mut indices = Vec::new();
+
+                for (a, b) in a.iter().zip(b) {
+                    let index = match [a, b].map(|index| local_types.get(index))
+                    {
+                        [InferredType::Known(_), InferredType::Known(_)] => {
+                            if a == b {
+                                a
+                            } else {
+                                panic!(
+                                    "Explicit type annotation conflicts with \
+                                    inferred type.\n\
+                                    \n\
+                                    Explicit type: {explicit:?}\n\
+                                    Inferred type: {inferred:?}\n\
+                                    \n\
+                                    At {}\n",
+                                    expression
+                                        .location
+                                        .display(context.syntax_tree),
+                                );
+                            }
+                        }
+                        [InferredType::Known(_), InferredType::Unknown] => a,
+                        [InferredType::Unknown, InferredType::Known(_)] => b,
+                        [InferredType::Unknown, InferredType::Unknown] => a,
+                    };
+
+                    indices.push(*index);
+                }
+
+                indices
+            };
+
+            Some(Signature {
+                inputs: merge(&inferred.inputs, &explicit.inputs),
+                outputs: merge(&inferred.outputs, &explicit.outputs),
+            })
+        }
+        (inferred, explicit) => inferred.or(explicit),
+    };
 
     if let Some(signature) = signature {
         if let Some(local_stack) = local_stack.get_mut() {
