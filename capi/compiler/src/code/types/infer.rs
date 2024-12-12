@@ -66,7 +66,7 @@ fn infer_branch(
     for expression in branch.expressions() {
         infer_expression(
             expression,
-            &mut local_types.inner,
+            &mut local_types,
             &mut local_stack,
             context,
             output,
@@ -78,7 +78,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    local_types: &mut IndexMap<InferredType>,
+    local_types: &mut LocalTypes,
     local_stack: &mut Option<Stack>,
     context: Context,
     output: &mut InferenceOutput,
@@ -96,8 +96,10 @@ fn infer_expression(
 
             match (host, intrinsic) {
                 (Some(host), None) => {
-                    let signature =
-                        make_indirect(host.signature.clone(), local_types);
+                    let signature = make_indirect(
+                        host.signature.clone(),
+                        &mut local_types.inner,
+                    );
                     Some(signature)
                 }
                 (None, Some(intrinsic)) => {
@@ -107,8 +109,9 @@ fn infer_expression(
                         local_stack,
                     )?;
 
-                    signature
-                        .map(|signature| make_indirect(signature, local_types))
+                    signature.map(|signature| {
+                        make_indirect(signature, &mut local_types.inner)
+                    })
                 }
                 (None, None) => None,
                 _ => {
@@ -123,14 +126,14 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature = make_indirect(signature, local_types);
+            let signature = make_indirect(signature, &mut local_types.inner);
             Some(signature)
         }
         _ => None,
     };
 
     let inferred =
-        inferred.and_then(|inferred| make_direct(inferred, local_types));
+        inferred.and_then(|inferred| make_direct(inferred, &local_types.inner));
 
     if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
         panic!(
