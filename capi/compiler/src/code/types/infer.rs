@@ -289,14 +289,14 @@ fn make_direct(
     signature: Signature<Index<InferredType>>,
     local_types: &LocalTypes,
 ) -> Option<Signature<Type>> {
-    let try_map = |from: Vec<Index<InferredType>>| {
-        from.into_iter()
-            .map(|index| local_types.get(&index).clone().into_type())
+    let try_map = |from: &Vec<Index<InferredType>>| {
+        from.iter()
+            .map(|index| local_types.get(index).clone().into_type())
             .collect::<Option<_>>()
     };
 
-    let inputs = try_map(signature.inputs)?;
-    let outputs = try_map(signature.outputs)?;
+    let inputs = try_map(&signature.inputs)?;
+    let outputs = try_map(&signature.outputs)?;
 
     Some(Signature { inputs, outputs })
 }
