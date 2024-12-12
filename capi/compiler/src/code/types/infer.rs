@@ -208,7 +208,7 @@ fn infer_expression(
                 });
         }
 
-        if let Some(signature) = make_direct(signature, local_types) {
+        if let Some(signature) = make_direct(&signature, local_types) {
             output.signatures.insert(expression.location, signature);
         }
     } else {
@@ -286,7 +286,7 @@ fn make_indirect(
 }
 
 fn make_direct(
-    signature: Signature<Index<InferredType>>,
+    signature: &Signature<Index<InferredType>>,
     local_types: &LocalTypes,
 ) -> Option<Signature<Type>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
