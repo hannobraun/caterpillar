@@ -83,7 +83,10 @@ fn infer_expression(
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
-    let explicit = context.explicit_types.signature_of(&expression.location);
+    let explicit = context
+        .explicit_types
+        .signature_of(&expression.location)
+        .cloned();
 
     let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
@@ -132,7 +135,9 @@ fn infer_expression(
     let inferred =
         inferred.and_then(|inferred| make_direct(inferred, local_types));
 
-    if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
+    if let (Some(explicit), Some(inferred)) =
+        (explicit.as_ref(), inferred.as_ref())
+    {
         panic!(
             "Type that could be inferred was also specified explicitly. This \
             is currently not allowed, as the goal is to transition away from \
@@ -146,7 +151,7 @@ fn infer_expression(
         );
     }
 
-    if let Some(signature) = inferred.or(explicit.cloned()) {
+    if let Some(signature) = inferred.or(explicit) {
         if let Some(local_stack) = local_stack {
             for input in signature.inputs.iter().rev() {
                 match local_stack.pop() {
