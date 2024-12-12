@@ -234,10 +234,17 @@ fn infer_intrinsic(
 
                     Some(Signature { inputs, outputs })
                 }
-                actual => {
+                Some(actual) => {
                     return Err(TypeError {
                         expected: ExpectedType::Function,
-                        actual: actual.cloned(),
+                        actual: Some(actual.clone()),
+                        location: location.clone(),
+                    });
+                }
+                None => {
+                    return Err(TypeError {
+                        expected: ExpectedType::Function,
+                        actual: None,
                         location: location.clone(),
                     });
                 }
