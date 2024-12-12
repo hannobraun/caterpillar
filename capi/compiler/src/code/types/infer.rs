@@ -82,6 +82,15 @@ fn infer_branch(
         }
     }
 
+    // Information from a later expression could have allowed us to infer the
+    // type of an earlier one. So let's handle the signatures we collected
+    // _after_ we look at all of the expressions.
+    for (location, signature) in signatures {
+        if let Some(signature) = make_direct(&signature, &local_types) {
+            output.signatures.insert(location, signature);
+        }
+    }
+
     Ok(())
 }
 
@@ -242,10 +251,6 @@ fn infer_expression(
                         local_stack.clone(),
                     );
                 });
-        }
-
-        if let Some(signature) = make_direct(&signature, local_types) {
-            output.signatures.insert(expression.location, signature);
         }
 
         return Ok(Some(signature));
