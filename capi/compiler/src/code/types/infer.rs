@@ -163,7 +163,7 @@ fn infer_expression(
     if let Some(signature) = inferred.or(explicit) {
         if let Some(local_stack) = local_stack.get_mut() {
             for input_index in signature.inputs.iter().rev() {
-                let input = local_types.get(input_index);
+                let input = local_types.get(input_index).clone();
 
                 match local_stack.pop() {
                     Some(operand_index) => {
@@ -174,7 +174,7 @@ fn infer_expression(
                                 InferredType::Known(operand),
                                 InferredType::Known(input),
                             ) => {
-                                if operand == *input {
+                                if operand == input {
                                     // Type checks out!
                                 } else {
                                     return Err(TypeError {
