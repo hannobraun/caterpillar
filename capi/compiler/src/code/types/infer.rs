@@ -78,7 +78,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    local_types: &mut IndexMap<Type>,
+    local_types: &mut IndexMap<InferredType>,
     local_stack: &mut Option<Stack>,
     context: Context,
     output: &mut InferenceOutput,
@@ -221,11 +221,11 @@ fn infer_intrinsic(
 
 fn make_indirect(
     signature: Signature,
-    local_types: &mut IndexMap<Type>,
-) -> Signature<Index<Type>> {
+    local_types: &mut IndexMap<InferredType>,
+) -> Signature<Index<InferredType>> {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
-            .map(|type_| local_types.push(type_))
+            .map(|type_| local_types.push(InferredType::Known(type_)))
             .collect()
     };
 
@@ -236,12 +236,17 @@ fn make_indirect(
 }
 
 fn make_direct(
-    signature: Signature<Index<Type>>,
-    local_types: &IndexMap<Type>,
+    signature: Signature<Index<InferredType>>,
+    local_types: &IndexMap<InferredType>,
 ) -> Option<Signature<Type>> {
-    let try_map = |from: Vec<Index<Type>>| {
+    let try_map = |from: Vec<Index<InferredType>>| {
         from.into_iter()
-            .map(|index| local_types.get(&index).cloned())
+            .map(|index| {
+                local_types
+                    .get(&index)
+                    .cloned()
+                    .map(|InferredType::Known(type_)| type_)
+            })
             .collect::<Option<_>>()
     };
 
@@ -255,6 +260,11 @@ struct TypeError {
     expected: ExpectedType,
     actual: Option<Type>,
     location: MemberLocation,
+}
+
+#[derive(Clone, Debug)]
+enum InferredType {
+    Known(Type),
 }
 
 enum ExpectedType {
