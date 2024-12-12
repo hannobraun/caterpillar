@@ -725,7 +725,10 @@ end
 
 vec_copy: fn
     \ vx, vy ->
-        vx vy vx vy
+        vx
+        vy
+        vx
+        vy
 end
 
 vec_drop: fn
