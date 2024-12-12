@@ -150,7 +150,7 @@ fn infer_expression(
         if let Some(local_stack) = local_stack {
             for input in signature.inputs.iter().rev() {
                 match local_stack.pop() {
-                    Some(type_) if type_ == *input => {
+                    Some(operand) if operand == *input => {
                         // Type checks out!
                     }
                     actual => {
