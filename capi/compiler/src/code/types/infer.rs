@@ -74,7 +74,7 @@ fn infer_branch(
             stacks.insert(location.clone(), stack);
         }
 
-        let (signature, _) = infer_expression(
+        let signature = infer_expression(
             expression,
             &mut local_types,
             &mut local_stack,
@@ -115,10 +115,7 @@ fn infer_expression(
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
-) -> Result<(
-    Option<Signature<Index<InferredType>>>,
-    Option<Vec<Index<InferredType>>>,
-)> {
+) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = context
         .explicit_types
         .signature_of(&expression.location)
@@ -262,12 +259,12 @@ fn infer_expression(
             }
         }
 
-        return Ok((Some(signature), local_stack.get_mut().cloned()));
+        return Ok(Some(signature));
     } else {
         local_stack.invalidate();
     }
 
-    Ok((None, None))
+    Ok(None)
 }
 
 fn infer_intrinsic(
