@@ -155,16 +155,21 @@ fn infer_expression(
 
                 match local_stack.pop() {
                     Some(operand) => {
-                        match input {
-                            InferredType::Known(input) => {
-                                if operand == *input {
+                        let operand = local_types.get(&operand);
+
+                        match (operand, input) {
+                            (
+                                InferredType::Known(operand),
+                                InferredType::Known(input),
+                            ) => {
+                                if operand == input {
                                     // Type checks out!
                                 } else {
                                     return Err(TypeError {
                                         expected: ExpectedType::Specific(
                                             input.clone(),
                                         ),
-                                        actual: Some(operand),
+                                        actual: Some(operand.clone()),
                                         location: expression.location,
                                     });
                                 }
@@ -187,13 +192,20 @@ fn infer_expression(
                 }
             }
             for output in signature.outputs.iter() {
-                let InferredType::Known(output) = local_types.get(output);
-                local_stack.push(output.clone());
+                local_stack.push(*output);
             }
 
-            output
-                .stacks
-                .insert(expression.location.clone(), local_stack.clone());
+            local_stack
+                .iter()
+                .map(|index| local_types.get(index).clone().into_type())
+                .collect::<Option<Vec<_>>>()
+                .into_iter()
+                .for_each(|local_stack| {
+                    output.stacks.insert(
+                        expression.location.clone(),
+                        local_stack.clone(),
+                    );
+                });
         }
 
         if let Some(signature) = make_direct(signature, local_types) {
@@ -209,7 +221,7 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    _: &mut LocalTypes,
+    local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
@@ -218,10 +230,11 @@ fn infer_intrinsic(
                 return Ok(None);
             };
 
-            let top_operand = local_stack.last();
+            let top_operand =
+                local_stack.last().map(|index| local_types.get(index));
 
             match top_operand {
-                Some(Type::Function { signature }) => {
+                Some(InferredType::Known(Type::Function { signature })) => {
                     let outputs = signature.outputs.clone();
                     let inputs = signature
                         .inputs
@@ -234,7 +247,7 @@ fn infer_intrinsic(
 
                     Some(Signature { inputs, outputs })
                 }
-                Some(actual) => {
+                Some(InferredType::Known(actual)) => {
                     return Err(TypeError {
                         expected: ExpectedType::Function,
                         actual: Some(actual.clone()),
@@ -316,10 +329,10 @@ impl LocalTypes {
 }
 
 struct LocalStack {
-    inner: Option<Vec<Type>>,
+    inner: Option<Vec<Index<InferredType>>>,
 }
 impl LocalStack {
-    fn get_mut(&mut self) -> Option<&mut Vec<Type>> {
+    fn get_mut(&mut self) -> Option<&mut Vec<Index<InferredType>>> {
         self.inner.as_mut()
     }
 
