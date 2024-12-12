@@ -212,7 +212,7 @@ fn infer_intrinsic(
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
-            let Some(local_stack) = local_stack.inner.as_mut() else {
+            let Some(local_stack) = local_stack.get_mut() else {
                 return Ok(None);
             };
 
