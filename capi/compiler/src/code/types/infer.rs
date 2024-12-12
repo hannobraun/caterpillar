@@ -94,6 +94,16 @@ fn infer_branch(
             output.signatures.insert(location, signature);
         }
     }
+    for (location, local_stack) in stacks {
+        local_stack
+            .into_iter()
+            .map(|index| local_types.get(&index).clone().into_type())
+            .collect::<Option<Vec<_>>>()
+            .into_iter()
+            .for_each(|local_stack| {
+                output.stacks.insert(location.clone(), local_stack.clone());
+            });
+    }
 
     Ok(())
 }
@@ -104,7 +114,7 @@ fn infer_expression(
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
-    output: &mut InferenceOutput,
+    _: &mut InferenceOutput,
 ) -> Result<(
     Option<Signature<Index<InferredType>>>,
     Option<Vec<Index<InferredType>>>,
@@ -250,18 +260,6 @@ fn infer_expression(
             for output in signature.outputs.iter() {
                 local_stack.push(*output);
             }
-
-            local_stack
-                .iter()
-                .map(|index| local_types.get(index).clone().into_type())
-                .collect::<Option<Vec<_>>>()
-                .into_iter()
-                .for_each(|local_stack| {
-                    output.stacks.insert(
-                        expression.location.clone(),
-                        local_stack.clone(),
-                    );
-                });
         }
 
         return Ok((Some(signature), local_stack.get_mut().cloned()));
