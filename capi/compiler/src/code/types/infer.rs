@@ -109,7 +109,6 @@ fn infer_branch(
     Ok(())
 }
 
-#[allow(clippy::type_complexity)]
 fn infer_expression(
     expression: Located<&Expression>,
     local_types: &mut LocalTypes,
