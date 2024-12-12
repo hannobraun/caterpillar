@@ -155,14 +155,14 @@ fn infer_expression(
 
                 match local_stack.pop() {
                     Some(operand) => {
-                        let operand = local_types.get(&operand);
+                        let operand = local_types.get(&operand).clone();
 
                         match (operand, input) {
                             (
                                 InferredType::Known(operand),
                                 InferredType::Known(input),
                             ) => {
-                                if operand == input {
+                                if operand == *input {
                                     // Type checks out!
                                 } else {
                                     return Err(TypeError {
