@@ -65,11 +65,12 @@ fn infer_branch(
     let mut local_stack = LocalStack::default();
 
     let mut signatures = BTreeMap::new();
+    let mut stacks = BTreeMap::new();
 
     for expression in branch.expressions() {
         let location = expression.location.clone();
 
-        let signature = infer_expression(
+        let (signature, stack) = infer_expression(
             expression,
             &mut local_types,
             &mut local_stack,
@@ -78,7 +79,10 @@ fn infer_branch(
         )?;
 
         if let Some(signature) = signature {
-            signatures.insert(location, signature);
+            signatures.insert(location.clone(), signature);
+        }
+        if let Some(stack) = stack {
+            stacks.insert(location, stack);
         }
     }
 
@@ -94,13 +98,17 @@ fn infer_branch(
     Ok(())
 }
 
+#[allow(clippy::type_complexity)]
 fn infer_expression(
     expression: Located<&Expression>,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<Option<Signature<Index<InferredType>>>> {
+) -> Result<(
+    Option<Signature<Index<InferredType>>>,
+    Option<Vec<Index<InferredType>>>,
+)> {
     let explicit = context
         .explicit_types
         .signature_of(&expression.location)
@@ -256,12 +264,12 @@ fn infer_expression(
                 });
         }
 
-        return Ok(Some(signature));
+        return Ok((Some(signature), local_stack.get_mut().cloned()));
     } else {
         local_stack.invalidate();
     }
 
-    Ok(None)
+    Ok((None, None))
 }
 
 fn infer_intrinsic(
