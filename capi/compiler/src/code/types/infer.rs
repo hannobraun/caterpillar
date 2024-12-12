@@ -209,7 +209,7 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    _: &LocalTypes,
+    _: &mut LocalTypes,
     local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
