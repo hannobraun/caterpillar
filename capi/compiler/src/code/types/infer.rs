@@ -61,7 +61,9 @@ fn infer_branch(
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
     let mut local_types = LocalTypes::default();
-    let mut local_stack = Some(Vec::new());
+    let mut local_stack = LocalStack {
+        inner: Some(Vec::new()),
+    };
 
     for expression in branch.expressions() {
         infer_expression(
@@ -79,7 +81,7 @@ fn infer_branch(
 fn infer_expression(
     expression: Located<&Expression>,
     local_types: &mut LocalTypes,
-    local_stack: &mut Option<Stack>,
+    local_stack: &mut LocalStack,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
@@ -148,7 +150,7 @@ fn infer_expression(
     }
 
     if let Some(signature) = inferred.or(explicit) {
-        if let Some(local_stack) = local_stack {
+        if let Some(local_stack) = &mut local_stack.inner {
             for input_index in signature.inputs.iter().rev() {
                 let input = local_types.get(input_index);
 
@@ -199,7 +201,7 @@ fn infer_expression(
             output.signatures.insert(expression.location, signature);
         }
     } else {
-        *local_stack = None;
+        local_stack.inner = None;
     }
 
     Ok(())
@@ -208,11 +210,11 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    local_stack: &mut Option<Stack>,
+    local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>, TypeError> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
-            let Some(local_stack) = local_stack.as_mut() else {
+            let Some(local_stack) = local_stack.inner.as_mut() else {
                 return Ok(None);
             };
 
@@ -302,6 +304,10 @@ impl LocalTypes {
 
         type_
     }
+}
+
+struct LocalStack {
+    inner: Option<Stack>,
 }
 
 #[derive(Clone, Debug)]
