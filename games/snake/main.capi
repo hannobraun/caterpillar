@@ -725,10 +725,10 @@ end
 
 vec_copy: fn
     \ vx, vy ->
-        vx
-        vy
-        vx
-        vy
+        vx: -> Number .
+        vy: -> Number .
+        vx: -> Number .
+        vy: -> Number .
 end
 
 vec_drop: fn
