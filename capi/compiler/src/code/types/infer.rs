@@ -132,8 +132,8 @@ fn infer_expression(
         _ => None,
     };
 
-    if let (Some(explicit), Some(inferred)) =
-        (explicit.as_ref(), inferred.as_ref())
+    if let [Some(explicit), Some(inferred)] =
+        [explicit.as_ref(), inferred.as_ref()]
     {
         panic!(
             "Type that could be inferred was also specified explicitly. This \
