@@ -9,7 +9,7 @@ use crate::{
 };
 
 use super::{
-    repr::{Signatures, Stack, Stacks},
+    repr::{Signatures, Stacks},
     ExplicitTypes, Signature, Type,
 };
 
@@ -305,10 +305,10 @@ impl LocalTypes {
 }
 
 struct LocalStack {
-    inner: Option<Stack>,
+    inner: Option<Vec<Type>>,
 }
 impl LocalStack {
-    fn get_mut(&mut self) -> Option<&mut Stack> {
+    fn get_mut(&mut self) -> Option<&mut Vec<Type>> {
         self.inner.as_mut()
     }
 
