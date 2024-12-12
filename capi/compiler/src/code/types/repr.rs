@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use crate::code::{
     syntax::{MemberLocation, SyntaxTree},
-    FunctionCalls,
+    Bindings, FunctionCalls,
 };
 
 use super::{
@@ -54,6 +54,7 @@ impl Types {
     /// of full type inference.
     pub fn infer(
         syntax_tree: &SyntaxTree,
+        _: &Bindings,
         function_calls: &FunctionCalls,
         explicit_types: ExplicitTypes,
     ) -> Self {
