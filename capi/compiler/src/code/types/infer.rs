@@ -82,7 +82,7 @@ fn infer_branch(
         )?;
 
         if let Some(signature) = signature {
-            signatures.insert(location.clone(), signature);
+            signatures.insert(location, signature);
         }
     }
 
