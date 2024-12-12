@@ -150,8 +150,16 @@ fn infer_expression(
         if let Some(local_stack) = local_stack {
             for input in signature.inputs.iter().rev() {
                 match local_stack.pop() {
-                    Some(operand) if operand == *input => {
-                        // Type checks out!
+                    Some(operand) => {
+                        if operand == *input {
+                            // Type checks out!
+                        } else {
+                            return Err(TypeError {
+                                expected: ExpectedType::Specific(input.clone()),
+                                actual: Some(operand),
+                                location: expression.location,
+                            });
+                        }
                     }
                     actual => {
                         return Err(TypeError {
