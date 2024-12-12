@@ -172,8 +172,8 @@ fn infer_expression(
                     }
                 }
             }
-            for output in signature.outputs.iter().cloned() {
-                local_stack.push(output);
+            for output in signature.outputs.iter() {
+                local_stack.push(output.clone());
             }
 
             output
