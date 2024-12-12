@@ -103,7 +103,7 @@ fn infer_branch(
             continue;
         };
 
-        output.stacks.insert(location, local_stack.clone());
+        output.stacks.insert(location, local_stack);
     }
 
     Ok(())
