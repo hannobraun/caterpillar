@@ -211,7 +211,10 @@ fn infer_expression(
                                 InferredType::Unknown,
                                 InferredType::Known(_input),
                             ) => {
-                                // We could infer the type of the operand here.
+                                local_types.inner.insert(
+                                    operand_index,
+                                    InferredType::Known(_input),
+                                );
                             }
                             (InferredType::Unknown, InferredType::Unknown) => {
                                 // We could unify the two types here, to make

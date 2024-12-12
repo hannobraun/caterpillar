@@ -202,3 +202,67 @@ impl fmt::Display for Type {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        code::{
+            syntax::SyntaxTree, Bindings, FunctionCalls, Signature, Tokens,
+            Type,
+        },
+        host::NoHost,
+    };
+
+    use super::{ExplicitTypes, Types};
+
+    #[test]
+    fn infer_type_of_binding() {
+        // The type of a binding can be inferred, if it's used by a function
+        // with a known type.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ value ->
+                        value not
+                end
+            ",
+        );
+
+        let value = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+        let signature = types.signature_of(&value).cloned().unwrap();
+
+        assert_eq!(
+            signature,
+            Signature {
+                inputs: vec![],
+                outputs: vec![Type::Number],
+            },
+        );
+    }
+
+    fn infer_types(input: &str) -> (SyntaxTree, Types) {
+        let tokens = Tokens::tokenize(input);
+        let syntax_tree = SyntaxTree::parse(tokens);
+        let bindings = Bindings::resolve(&syntax_tree);
+        let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
+        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
+        let types = Types::infer(
+            &syntax_tree,
+            &bindings,
+            &function_calls,
+            explicit_types,
+        );
+
+        (syntax_tree, types)
+    }
+}
