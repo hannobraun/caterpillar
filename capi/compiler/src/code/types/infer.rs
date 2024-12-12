@@ -206,7 +206,7 @@ fn infer_expression(
                     None => {
                         let expected = match input {
                             InferredType::Known(input) => {
-                                ExpectedType::Specific(input.clone())
+                                ExpectedType::Specific(input)
                             }
                             InferredType::Unknown => ExpectedType::Unknown,
                         };
