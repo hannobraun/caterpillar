@@ -283,7 +283,13 @@ impl LocalTypes {
     }
 
     fn get(&self, index: &Index<InferredType>) -> Option<&InferredType> {
-        self.inner.get(index)
+        let Some(type_) = self.inner.get(index) else {
+            unreachable!(
+                "We're never removing any local types. Any index must be valid."
+            );
+        };
+
+        Some(type_)
     }
 }
 
