@@ -61,9 +61,7 @@ fn infer_branch(
     output: &mut InferenceOutput,
 ) -> Result<(), TypeError> {
     let mut local_types = LocalTypes::default();
-    let mut local_stack = LocalStack {
-        inner: Some(Vec::new()),
-    };
+    let mut local_stack = LocalStack::default();
 
     for expression in branch.expressions() {
         infer_expression(
@@ -308,6 +306,14 @@ impl LocalTypes {
 
 struct LocalStack {
     inner: Option<Stack>,
+}
+
+impl Default for LocalStack {
+    fn default() -> Self {
+        Self {
+            inner: Some(Vec::new()),
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
