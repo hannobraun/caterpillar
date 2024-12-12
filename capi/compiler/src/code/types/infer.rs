@@ -95,14 +95,15 @@ fn infer_branch(
         }
     }
     for (location, local_stack) in stacks {
-        local_stack
+        let Some(local_stack) = local_stack
             .into_iter()
             .map(|index| local_types.get(&index).clone().into_type())
             .collect::<Option<Vec<_>>>()
-            .into_iter()
-            .for_each(|local_stack| {
-                output.stacks.insert(location.clone(), local_stack.clone());
-            });
+        else {
+            continue;
+        };
+
+        output.stacks.insert(location.clone(), local_stack.clone());
     }
 
     Ok(())
