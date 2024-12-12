@@ -116,9 +116,7 @@ fn infer_expression(
                 }
                 (None, None) => None,
                 _ => {
-                    unreachable!(
-                        "Single identifier resolved to multiple function calls."
-                    );
+                    unreachable!("Single identifier resolved multiple times.");
                 }
             }
         }
