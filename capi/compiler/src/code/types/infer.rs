@@ -166,8 +166,8 @@ fn infer_expression(
                 let input = local_types.get(input_index);
 
                 match local_stack.pop() {
-                    Some(operand) => {
-                        let operand = local_types.get(&operand).clone();
+                    Some(operand_index) => {
+                        let operand = local_types.get(&operand_index).clone();
 
                         match (operand, input) {
                             (
