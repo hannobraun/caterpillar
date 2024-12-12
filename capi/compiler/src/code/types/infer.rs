@@ -191,7 +191,9 @@ fn infer_expression(
         );
     }
 
-    if let Some(signature) = inferred.or(explicit) {
+    let signature = inferred.or(explicit);
+
+    if let Some(signature) = signature {
         if let Some(local_stack) = local_stack.get_mut() {
             for input_index in signature.inputs.iter().rev() {
                 let input = local_types.get(input_index).clone();
