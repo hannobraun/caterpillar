@@ -70,7 +70,11 @@ fn infer_branch(
     for expression in branch.expressions() {
         let location = expression.location.clone();
 
-        let (signature, stack) = infer_expression(
+        if let Some(stack) = local_stack.get_mut().cloned() {
+            stacks.insert(location.clone(), stack);
+        }
+
+        let (signature, _) = infer_expression(
             expression,
             &mut local_types,
             &mut local_stack,
@@ -79,9 +83,6 @@ fn infer_branch(
 
         if let Some(signature) = signature {
             signatures.insert(location.clone(), signature);
-        }
-        if let Some(stack) = stack {
-            stacks.insert(location, stack);
         }
     }
 
