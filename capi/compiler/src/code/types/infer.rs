@@ -255,7 +255,7 @@ fn make_direct(
                 local_types
                     .get(&index)
                     .cloned()
-                    .map(|InferredType::Known(type_)| type_)
+                    .and_then(InferredType::into_type)
             })
             .collect::<Option<_>>()
     };
@@ -290,6 +290,14 @@ impl LocalTypes {
 #[derive(Clone, Debug)]
 enum InferredType {
     Known(Type),
+}
+
+impl InferredType {
+    pub fn into_type(self) -> Option<Type> {
+        match self {
+            InferredType::Known(type_) => Some(type_),
+        }
+    }
 }
 
 enum ExpectedType {
