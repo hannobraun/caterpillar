@@ -241,13 +241,7 @@ fn make_direct(
 ) -> Option<Signature<Type>> {
     let try_map = |from: Vec<Index<InferredType>>| {
         from.into_iter()
-            .map(|index| {
-                local_types
-                    .inner
-                    .get(&index)
-                    .cloned()
-                    .map(|InferredType::Known(type_)| type_)
-            })
+            .map(|index| local_types.get(&index).cloned())
             .collect::<Option<_>>()
     };
 
@@ -271,6 +265,12 @@ struct LocalTypes {
 impl LocalTypes {
     fn push(&mut self, type_: InferredType) -> Index<InferredType> {
         self.inner.push(type_)
+    }
+
+    fn get(&self, index: &Index<InferredType>) -> Option<&Type> {
+        self.inner
+            .get(index)
+            .map(|InferredType::Known(type_)| type_)
     }
 }
 
