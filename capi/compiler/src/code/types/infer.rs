@@ -173,6 +173,9 @@ fn infer_expression(
         _ => None,
     };
 
+    // This is not redundant with the check below, where the two signatures are
+    // merged. That check only looks for conflicting types, while this one
+    // disallows type annotations that can be fully inferred.
     if let [Some(explicit), Some(inferred)] =
         [explicit.as_ref(), inferred.as_ref()].map(|signature| {
             signature.and_then(|signature| make_direct(signature, local_types))
