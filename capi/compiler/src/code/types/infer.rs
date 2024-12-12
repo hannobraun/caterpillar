@@ -199,7 +199,7 @@ fn infer_expression(
             output.signatures.insert(expression.location, signature);
         }
     } else {
-        local_stack.inner = None;
+        local_stack.invalidate();
     }
 
     Ok(())
@@ -310,6 +310,10 @@ struct LocalStack {
 impl LocalStack {
     fn get_mut(&mut self) -> Option<&mut Stack> {
         self.inner.as_mut()
+    }
+
+    fn invalidate(&mut self) {
+        self.inner = None;
     }
 }
 
