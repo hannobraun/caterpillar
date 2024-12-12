@@ -336,7 +336,7 @@ struct TypeError {
     location: MemberLocation,
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 struct LocalTypes {
     inner: IndexMap<InferredType>,
 }
