@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt};
+use std::{collections::BTreeMap, fmt, result};
 
 use crate::{
     code::{
@@ -60,7 +60,7 @@ fn infer_branch(
     branch: Located<&Branch>,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<(), TypeError> {
+) -> Result<()> {
     let mut local_types = LocalTypes::default();
     let mut local_stack = LocalStack::default();
 
@@ -100,7 +100,7 @@ fn infer_expression(
     local_stack: &mut LocalStack,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<Option<Signature<Index<InferredType>>>, TypeError> {
+) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = context
         .explicit_types
         .signature_of(&expression.location)
@@ -269,7 +269,7 @@ fn infer_intrinsic(
     location: &MemberLocation,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
-) -> Result<Option<Signature>, TypeError> {
+) -> Result<Option<Signature>> {
     let signature = match intrinsic {
         IntrinsicFunction::Eval => {
             let Some(local_stack) = local_stack.get_mut() else {
@@ -347,6 +347,8 @@ fn make_direct(
 
     Some(Signature { inputs, outputs })
 }
+
+type Result<T> = result::Result<T, TypeError>;
 
 struct TypeError {
     expected: ExpectedType,
