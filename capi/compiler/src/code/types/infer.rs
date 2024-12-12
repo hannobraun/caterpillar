@@ -75,7 +75,6 @@ fn infer_branch(
             &mut local_types,
             &mut local_stack,
             context,
-            output,
         )?;
 
         if let Some(signature) = signature {
@@ -114,7 +113,6 @@ fn infer_expression(
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
-    _: &mut InferenceOutput,
 ) -> Result<(
     Option<Signature<Index<InferredType>>>,
     Option<Vec<Index<InferredType>>>,
