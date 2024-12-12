@@ -45,8 +45,8 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 #[derive(Clone, Copy)]
 pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
-    pub explicit_types: &'r ExplicitTypes,
     pub function_calls: &'r FunctionCalls,
+    pub explicit_types: &'r ExplicitTypes,
 }
 
 #[derive(Default)]

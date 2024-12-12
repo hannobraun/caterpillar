@@ -59,8 +59,8 @@ impl Types {
     ) -> Self {
         let InferenceOutput { signatures, stacks } = infer_types(Context {
             syntax_tree,
-            explicit_types: &explicit_types,
             function_calls,
+            explicit_types: &explicit_types,
         });
         Self { signatures, stacks }
     }
