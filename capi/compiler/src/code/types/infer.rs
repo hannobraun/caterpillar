@@ -169,7 +169,7 @@ fn infer_expression(
                                         expected: ExpectedType::Specific(
                                             input.clone(),
                                         ),
-                                        actual: Some(operand.clone()),
+                                        actual: Some(operand),
                                         location: expression.location,
                                     });
                                 }
