@@ -161,10 +161,10 @@ fn infer_expression(
                             });
                         }
                     }
-                    actual => {
+                    None => {
                         return Err(TypeError {
                             expected: ExpectedType::Specific(input.clone()),
-                            actual,
+                            actual: None,
                             location: expression.location,
                         });
                     }
