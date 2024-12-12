@@ -86,7 +86,8 @@ fn infer_expression(
     let explicit = context
         .explicit_types
         .signature_of(&expression.location)
-        .cloned();
+        .cloned()
+        .map(|signature| make_indirect(signature, local_types));
 
     let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
@@ -132,9 +133,6 @@ fn infer_expression(
         _ => None,
     };
 
-    let inferred =
-        inferred.and_then(|inferred| make_direct(inferred, local_types));
-
     if let (Some(explicit), Some(inferred)) =
         (explicit.as_ref(), inferred.as_ref())
     {
@@ -153,21 +151,33 @@ fn infer_expression(
 
     if let Some(signature) = inferred.or(explicit) {
         if let Some(local_stack) = local_stack {
-            for input in signature.inputs.iter().rev() {
+            for input_index in signature.inputs.iter().rev() {
+                let input = local_types.get(input_index);
+
                 match local_stack.pop() {
                     Some(operand) => {
-                        if operand == *input {
-                            // Type checks out!
-                        } else {
-                            return Err(TypeError {
-                                expected: ExpectedType::Specific(input.clone()),
-                                actual: Some(operand),
-                                location: expression.location,
-                            });
+                        match input {
+                            InferredType::Known(input) => {
+                                if operand == *input {
+                                    // Type checks out!
+                                } else {
+                                    return Err(TypeError {
+                                        expected: ExpectedType::Specific(
+                                            input.clone(),
+                                        ),
+                                        actual: Some(operand),
+                                        location: expression.location,
+                                    });
+                                }
+                            }
                         }
                     }
                     None => {
-                        let expected = ExpectedType::Specific(input.clone());
+                        let expected = match input {
+                            InferredType::Known(input) => {
+                                ExpectedType::Specific(input.clone())
+                            }
+                        };
 
                         return Err(TypeError {
                             expected,
@@ -178,6 +188,7 @@ fn infer_expression(
                 }
             }
             for output in signature.outputs.iter() {
+                let InferredType::Known(output) = local_types.get(output);
                 local_stack.push(output.clone());
             }
 
@@ -186,7 +197,9 @@ fn infer_expression(
                 .insert(expression.location.clone(), local_stack.clone());
         }
 
-        output.signatures.insert(expression.location, signature);
+        if let Some(signature) = make_direct(signature, local_types) {
+            output.signatures.insert(expression.location, signature);
+        }
     } else {
         *local_stack = None;
     }
