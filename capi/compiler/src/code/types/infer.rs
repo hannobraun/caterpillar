@@ -209,11 +209,11 @@ fn infer_expression(
                             }
                             (
                                 InferredType::Unknown,
-                                InferredType::Known(_input),
+                                InferredType::Known(input),
                             ) => {
                                 local_types.inner.insert(
                                     operand_index,
-                                    InferredType::Known(_input),
+                                    InferredType::Known(input),
                                 );
                             }
                             (InferredType::Unknown, InferredType::Unknown) => {
