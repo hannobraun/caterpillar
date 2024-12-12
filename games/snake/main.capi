@@ -949,7 +949,7 @@ abs: fn
                     neg_s32
 
             \ v, _ ->
-                v
+                v: -> Number .
         end: -> fn Number, Number -> Number end .
             eval
 end
