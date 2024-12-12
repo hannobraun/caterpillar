@@ -148,7 +148,7 @@ fn infer_expression(
     }
 
     if let Some(signature) = inferred.or(explicit) {
-        if let Some(local_stack) = &mut local_stack.inner {
+        if let Some(local_stack) = local_stack.get_mut() {
             for input_index in signature.inputs.iter().rev() {
                 let input = local_types.get(input_index);
 
@@ -306,6 +306,11 @@ impl LocalTypes {
 
 struct LocalStack {
     inner: Option<Stack>,
+}
+impl LocalStack {
+    fn get_mut(&mut self) -> Option<&mut Stack> {
+        self.inner.as_mut()
+    }
 }
 
 impl Default for LocalStack {
