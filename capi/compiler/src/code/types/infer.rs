@@ -312,7 +312,7 @@ enum InferredType {
 impl InferredType {
     pub fn into_type(self) -> Option<Type> {
         match self {
-            InferredType::Known(type_) => Some(type_),
+            Self::Known(type_) => Some(type_),
         }
     }
 }
