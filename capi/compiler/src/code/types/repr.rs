@@ -77,6 +77,9 @@ impl Types {
 
     /// # Access the stack, as of the expression at the given location, if any
     ///
+    /// This reflects what types are on the stack _before_ the expression is
+    /// evaluated.
+    ///
     /// The stack returned here is always local to the function that the
     /// expression is in. Tracking the global stack at compile-time is not
     /// possible, and only the local contents of the stack are relevant to what
