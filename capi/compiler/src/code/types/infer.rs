@@ -403,7 +403,7 @@ impl Default for LocalStack {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 enum InferredType {
     Known(Type),
     Unknown,
