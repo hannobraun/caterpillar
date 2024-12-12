@@ -239,10 +239,9 @@ mod tests {
             .map(|expression| expression.location)
             .next()
             .unwrap();
-        let signature = types.signature_of(&value).cloned().unwrap();
 
         assert_eq!(
-            signature,
+            types.signature_of(&value).cloned().unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Number],
