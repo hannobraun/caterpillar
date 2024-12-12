@@ -130,7 +130,7 @@ fn infer_expression(
     };
 
     let inferred =
-        inferred.and_then(|inferred| make_direct(inferred, &local_types.inner));
+        inferred.and_then(|inferred| make_direct(inferred, local_types));
 
     if let (Some(explicit), Some(inferred)) = (explicit, inferred.as_ref()) {
         panic!(
@@ -237,12 +237,13 @@ fn make_indirect(
 
 fn make_direct(
     signature: Signature<Index<InferredType>>,
-    local_types: &IndexMap<InferredType>,
+    local_types: &LocalTypes,
 ) -> Option<Signature<Type>> {
     let try_map = |from: Vec<Index<InferredType>>| {
         from.into_iter()
             .map(|index| {
                 local_types
+                    .inner
                     .get(&index)
                     .cloned()
                     .map(|InferredType::Known(type_)| type_)
