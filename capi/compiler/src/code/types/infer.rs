@@ -216,7 +216,9 @@ fn infer_intrinsic(
                 return Ok(None);
             };
 
-            match local_stack.last() {
+            let top_operand = local_stack.last();
+
+            match top_operand {
                 Some(Type::Function { signature }) => {
                     let outputs = signature.outputs.clone();
                     let inputs = signature
