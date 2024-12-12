@@ -162,8 +162,10 @@ fn infer_expression(
                         }
                     }
                     None => {
+                        let expected = ExpectedType::Specific(input.clone());
+
                         return Err(TypeError {
-                            expected: ExpectedType::Specific(input.clone()),
+                            expected,
                             actual: None,
                             location: expression.location,
                         });
