@@ -30,10 +30,10 @@ impl Compiler {
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
+        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
-        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let recursion =
             Recursion::find(&syntax_tree, &function_calls, &dependencies);
