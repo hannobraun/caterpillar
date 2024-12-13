@@ -25,7 +25,7 @@ use super::resolve::resolve_dependencies;
 /// recursive".
 ///
 /// All functions are grouped into [`DependencyCluster`]s. Either by themselves,
-/// if they are nor recursive or self-recursive, or together with all the
+/// if they are not recursive or self-recursive, or together with all the
 /// functions in their mutually dependent group.
 ///
 /// Using graph theory jargon, dependency clusters are a "condensation" of the
