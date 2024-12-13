@@ -110,10 +110,10 @@ impl DependencyCluster {
     ///
     /// ## Panics
     ///
-    /// Panics, if the provided [`Functions`] instance does not contain a
-    /// function referenced in this cluster. Unless you're mixing data
-    /// structures from different compiler passes, this should never happen. If
-    /// it still does, that's a bug.
+    /// Panics, if a function tracked in this instance of [`DependencyCluster`]
+    /// can not be found in the provided [`SyntaxTree`]. This should only
+    /// happen, if you pass a different [`SyntaxTree`] to this function than you
+    /// previously passed to [`Dependencies::resolve`].
     pub fn functions<'r>(
         &'r self,
         syntax_tree: &'r SyntaxTree,
