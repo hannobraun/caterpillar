@@ -72,7 +72,7 @@ fn collect_dependency_clusters(
     clustered_and_sorted_graph
         .into_iter()
         .filter_map(move |graph_index| {
-            let function_group =
+            let dependency_cluster =
                 clustered_graph.remove_node(graph_index).expect(
                     "Each entry in the sorted version of the call graph must \
                     correspond to exactly one node in the unsorted version. So \
@@ -82,7 +82,7 @@ fn collect_dependency_clusters(
                 );
 
             let mut named_functions = IndexMap::default();
-            for location in function_group {
+            for location in dependency_cluster {
                 named_functions.push(location);
             }
 
