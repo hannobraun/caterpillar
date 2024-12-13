@@ -113,7 +113,6 @@ impl Recursion {
 
 #[cfg(test)]
 mod tests {
-
     use itertools::Itertools;
 
     use crate::{
