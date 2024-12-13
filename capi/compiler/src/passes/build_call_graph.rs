@@ -23,13 +23,13 @@ fn build_dependency_graph(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> DependencyGraph {
-    let mut call_graph = Graph::new();
+    let mut graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         graph_index_by_function_location
             .entry(function.location.clone())
-            .or_insert_with(|| call_graph.add_node(function.location));
+            .or_insert_with(|| graph.add_node(function.location));
     }
 
     for function in syntax_tree.all_functions() {
@@ -48,13 +48,13 @@ fn build_dependency_graph(
 
                 if let Some(dependee) = dependee {
                     let dependee = graph_index_by_function_location[&dependee];
-                    call_graph.add_edge(depender, dependee, ());
+                    graph.add_edge(depender, dependee, ());
                 }
             }
         }
     }
 
-    call_graph
+    graph
 }
 
 fn collect_functions_into_clusters(
