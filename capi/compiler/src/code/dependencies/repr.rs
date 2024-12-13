@@ -112,7 +112,7 @@ impl DependencyCluster {
     pub fn functions<'r>(
         &'r self,
         syntax_tree: &'r SyntaxTree,
-    ) -> impl Iterator<Item = Located<&'r Function>> + 'r {
+    ) -> impl Iterator<Item = Located<&'r Function>> {
         self.functions.values().map(|location| {
             syntax_tree
                 .function_by_location(location)
