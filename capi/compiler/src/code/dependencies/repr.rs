@@ -34,7 +34,7 @@ use super::resolve::resolve_dependencies;
 /// original dependency graph.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Dependencies {
-    clusters: Vec<Cluster>,
+    clusters: Vec<DependencyCluster>,
 }
 
 impl Dependencies {
@@ -51,7 +51,7 @@ impl Dependencies {
     ///
     /// Any cluster that the iterator yields only has dependencies on functions
     /// in the cluster itself, or functions in clusters that it yielded before.
-    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
+    pub fn clusters(&self) -> impl Iterator<Item = &DependencyCluster> {
         self.clusters.iter().rev()
     }
 
@@ -63,7 +63,7 @@ impl Dependencies {
     /// If recursive dependencies are relevant, use [`Dependencies::clusters`].
     pub fn functions(
         &self,
-    ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
+    ) -> impl Iterator<Item = (&FunctionLocation, &DependencyCluster)> {
         self.clusters().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
@@ -73,7 +73,7 @@ impl Dependencies {
     pub fn find_cluster_by_named_function(
         &self,
         index: &Index<NamedFunction>,
-    ) -> Option<&Cluster> {
+    ) -> Option<&DependencyCluster> {
         self.clusters.iter().find(|cluster| {
             cluster.functions.values().any(|location| {
                 *location == FunctionLocation::NamedFunction { index: *index }
@@ -95,12 +95,12 @@ impl Dependencies {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct Cluster {
+pub struct DependencyCluster {
     /// # The functions in this cluster
     pub functions: IndexMap<FunctionLocation>,
 }
 
-impl Cluster {
+impl DependencyCluster {
     /// # Iterate over the functions in the cluster
     ///
     /// ## Panics

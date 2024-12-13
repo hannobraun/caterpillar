@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use capi_compiler::{
     code::{
         syntax::{Branch, BranchLocation, MemberLocation, Pattern},
-        Cluster, FunctionCalls, Functions, Types,
+        DependencyCluster, FunctionCalls, Functions, Types,
     },
     source_map::SourceMap,
 };
@@ -24,7 +24,7 @@ impl DebugBranch {
         location: BranchLocation,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
-        cluster: &Cluster,
+        cluster: &DependencyCluster,
         functions: &Functions,
         function_calls: &FunctionCalls,
         types: &Types,

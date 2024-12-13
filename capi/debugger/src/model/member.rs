@@ -1,7 +1,7 @@
 use capi_compiler::{
     code::{
         syntax::{Expression, FunctionLocation, Member, MemberLocation},
-        Cluster, FunctionCalls, Functions, Signature, Types,
+        DependencyCluster, FunctionCalls, Functions, Signature, Types,
     },
     source_map::SourceMap,
 };
@@ -22,7 +22,7 @@ impl DebugMember {
         location: MemberLocation,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
-        cluster: &Cluster,
+        cluster: &DependencyCluster,
         functions: &Functions,
         function_calls: &FunctionCalls,
         types: &Types,
@@ -129,7 +129,7 @@ impl DebugMemberKind {
         location: MemberLocation,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
-        cluster: &Cluster,
+        cluster: &DependencyCluster,
         functions: &Functions,
         function_calls: &FunctionCalls,
         types: &Types,

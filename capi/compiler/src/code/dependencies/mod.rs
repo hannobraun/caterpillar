@@ -1,4 +1,4 @@
 mod repr;
 mod resolve;
 
-pub use self::repr::{Cluster, Dependencies};
+pub use self::repr::{Dependencies, DependencyCluster};

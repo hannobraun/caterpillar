@@ -16,7 +16,7 @@ mod index;
 pub use self::{
     bindings::{Binding, Bindings},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
-    dependencies::{Cluster, Dependencies},
+    dependencies::{DependencyCluster, Dependencies},
     function_calls::FunctionCalls,
     functions::Functions,
     hash::Hash,

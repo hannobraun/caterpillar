@@ -7,13 +7,13 @@ use petgraph::{
 
 use crate::code::{
     syntax::{Expression, FunctionLocation, SyntaxTree},
-    Cluster, FunctionCalls, IndexMap,
+    DependencyCluster, FunctionCalls, IndexMap,
 };
 
 pub fn resolve_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> Vec<Cluster> {
+) -> Vec<DependencyCluster> {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     collect_dependency_clusters(dependency_graph)
 }
@@ -59,7 +59,7 @@ fn build_dependency_graph(
 
 fn collect_dependency_clusters(
     dependency_graph: DependencyGraph,
-) -> Vec<Cluster> {
+) -> Vec<DependencyCluster> {
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
@@ -85,7 +85,7 @@ fn collect_dependency_clusters(
                 functions.push(location);
             }
 
-            Cluster { functions }
+            DependencyCluster { functions }
         })
         .collect()
 }
@@ -96,8 +96,8 @@ type DependencyGraph = Graph<FunctionLocation, ()>;
 mod tests {
     use crate::{
         code::{
-            syntax::SyntaxTree, Cluster, Dependencies, FunctionCalls, Index,
-            Tokens,
+            syntax::SyntaxTree, Dependencies, DependencyCluster, FunctionCalls,
+            Index, Tokens,
         },
         host::NoHost,
     };
@@ -125,7 +125,7 @@ mod tests {
             dependencies.clusters().cloned().collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
-                .map(|locations_by_index| Cluster {
+                .map(|locations_by_index| DependencyCluster {
                     functions: [locations_by_index].into_iter().collect(),
                 })
                 .collect::<Vec<_>>(),
@@ -155,7 +155,7 @@ mod tests {
             dependencies.clusters().cloned().collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
-                .map(|locations_by_index| Cluster {
+                .map(|locations_by_index| DependencyCluster {
                     functions: [locations_by_index].into_iter().collect(),
                 })
                 .collect::<Vec<_>>(),
@@ -194,7 +194,7 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|locations_by_index| Cluster {
+            .map(|locations_by_index| DependencyCluster {
                 functions: locations_by_index.iter().cloned().collect(),
             })
             .collect::<Vec<_>>(),
@@ -238,7 +238,7 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|locations_by_index| Cluster {
+            .map(|locations_by_index| DependencyCluster {
                 functions: locations_by_index.iter().cloned().collect(),
             })
             .collect::<Vec<_>>(),
@@ -303,7 +303,7 @@ mod tests {
                 [(Index::from(0), f)].as_slice(),
             ]
             .into_iter()
-            .map(|locations_by_index| Cluster {
+            .map(|locations_by_index| DependencyCluster {
                 functions: locations_by_index.iter().cloned().collect(),
             })
             .collect::<Vec<_>>(),
