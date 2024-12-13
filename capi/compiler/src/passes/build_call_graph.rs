@@ -331,9 +331,9 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let ordered_functions =
+        let dependencies =
             super::resolve_dependencies(&syntax_tree, &function_calls);
 
-        (syntax_tree, ordered_functions)
+        (syntax_tree, dependencies)
     }
 }
