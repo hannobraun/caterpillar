@@ -57,13 +57,13 @@ impl Types {
         bindings: &Bindings,
         function_calls: &FunctionCalls,
         _: &Dependencies,
-        explicit_types: TypeAnnotations,
+        annotations: TypeAnnotations,
     ) -> Self {
         let InferenceOutput { signatures, stacks } = infer_types(Context {
             syntax_tree,
             bindings,
             function_calls,
-            annotations: &explicit_types,
+            annotations: &annotations,
         });
         Self { signatures, stacks }
     }
