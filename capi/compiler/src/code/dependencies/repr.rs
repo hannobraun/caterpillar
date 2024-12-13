@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::code::{
     syntax::{Function, FunctionLocation, Located, NamedFunction, SyntaxTree},
-    FunctionCalls, Functions, Index, IndexMap,
+    FunctionCalls, Index, IndexMap,
 };
 
 use super::resolve::resolve_dependencies;
@@ -111,11 +111,11 @@ impl DependencyCluster {
     /// it still does, that's a bug.
     pub fn functions<'r>(
         &'r self,
-        functions: &'r Functions,
+        functions: &'r SyntaxTree,
     ) -> impl Iterator<Item = Located<&'r Function>> + 'r {
         self.functions.values().map(|location| {
             functions
-                .by_location(location)
+                .function_by_location(location)
                 .expect("Function referred to from cluster must exist.")
         })
     }

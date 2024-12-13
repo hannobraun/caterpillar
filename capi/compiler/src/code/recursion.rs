@@ -41,15 +41,15 @@ pub struct Recursion {
 impl Recursion {
     /// # Find all recursive expressions
     pub fn find(
-        _: &SyntaxTree,
+        syntax_tree: &SyntaxTree,
         function_calls: &FunctionCalls,
-        functions: &Functions,
+        _: &Functions,
         dependencies: &Dependencies,
     ) -> Self {
         let mut recursive_expressions = BTreeMap::new();
 
         for cluster in dependencies.clusters() {
-            for function in cluster.functions(functions) {
+            for function in cluster.functions(syntax_tree) {
                 for branch in function.branches() {
                     for expression in branch.expressions() {
                         match expression.fragment {
