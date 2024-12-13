@@ -10,7 +10,7 @@ use crate::{
     },
     host::Host,
     passes::{
-        detect_changes, generate_instructions, order_functions_by_dependencies,
+        detect_changes, generate_instructions, resolve_dependencies,
     },
     source_map::SourceMap,
     Instructions,
@@ -43,7 +43,7 @@ impl Compiler {
             explicit_types,
         );
         let dependencies =
-            order_functions_by_dependencies(&syntax_tree, &function_calls);
+            resolve_dependencies(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

@@ -119,7 +119,7 @@ mod tests {
     use crate::{
         code::{syntax::SyntaxTree, FunctionCalls, Functions, Tokens},
         host::NoHost,
-        passes::order_functions_by_dependencies,
+        passes::resolve_dependencies,
     };
 
     use super::Recursion;
@@ -401,7 +401,7 @@ mod tests {
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let ordered_functions =
-            order_functions_by_dependencies(&syntax_tree, &function_calls);
+            resolve_dependencies(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

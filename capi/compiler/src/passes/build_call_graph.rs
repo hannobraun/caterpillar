@@ -10,7 +10,7 @@ use crate::code::{
     Cluster, Dependencies, FunctionCalls, IndexMap,
 };
 
-pub fn order_functions_by_dependencies(
+pub fn resolve_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> Dependencies {
@@ -331,10 +331,8 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let ordered_functions = super::order_functions_by_dependencies(
-            &syntax_tree,
-            &function_calls,
-        );
+        let ordered_functions =
+            super::resolve_dependencies(&syntax_tree, &function_calls);
 
         (syntax_tree, ordered_functions)
     }
