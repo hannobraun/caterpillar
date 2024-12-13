@@ -111,10 +111,10 @@ impl DependencyCluster {
     /// it still does, that's a bug.
     pub fn functions<'r>(
         &'r self,
-        functions: &'r SyntaxTree,
+        syntax_tree: &'r SyntaxTree,
     ) -> impl Iterator<Item = Located<&'r Function>> + 'r {
         self.functions.values().map(|location| {
-            functions
+            syntax_tree
                 .function_by_location(location)
                 .expect("Function referred to from cluster must exist.")
         })
