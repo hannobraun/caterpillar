@@ -15,7 +15,7 @@ pub fn order_functions_by_dependencies(
     function_calls: &FunctionCalls,
 ) -> OrderedFunctions {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
-    let dependency_clusters = collect_functions_into_clusters(dependency_graph);
+    let dependency_clusters = collect_dependency_clusters(dependency_graph);
     OrderedFunctions::from_clusters(dependency_clusters)
 }
 
@@ -58,7 +58,7 @@ fn build_dependency_graph(
     graph
 }
 
-fn collect_functions_into_clusters(
+fn collect_dependency_clusters(
     dependency_graph: DependencyGraph,
 ) -> impl Iterator<Item = Cluster> {
     let make_acyclic = true;
