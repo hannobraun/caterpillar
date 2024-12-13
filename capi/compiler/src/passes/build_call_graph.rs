@@ -26,19 +26,19 @@ pub fn order_functions_by_dependencies(
 }
 
 fn build_dependency_graph(
-    functions: &SyntaxTree,
+    syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> DependencyGraph {
     let mut call_graph = Graph::new();
     let mut graph_index_by_function_location = BTreeMap::new();
 
-    for function in functions.all_functions() {
+    for function in syntax_tree.all_functions() {
         graph_index_by_function_location
             .entry(function.location.clone())
             .or_insert_with(|| call_graph.add_node(function.location));
     }
 
-    for function in functions.all_functions() {
+    for function in syntax_tree.all_functions() {
         let depender = graph_index_by_function_location[&function.location];
 
         for branch in function.branches() {
