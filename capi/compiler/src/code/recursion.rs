@@ -43,11 +43,11 @@ impl Recursion {
     pub fn find(
         function_calls: &FunctionCalls,
         functions: &Functions,
-        ordered_functions: &Dependencies,
+        dependencies: &Dependencies,
     ) -> Self {
         let mut recursive_expressions = BTreeMap::new();
 
-        for cluster in ordered_functions.clusters_from_leaves() {
+        for cluster in dependencies.clusters_from_leaves() {
             for function in cluster.functions(functions) {
                 for branch in function.branches() {
                     for expression in branch.expressions() {
