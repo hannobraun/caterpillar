@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -137,7 +137,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -170,7 +170,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -212,7 +212,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -259,7 +259,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (syntax_tree, ordered_functions) = order_functions_by_dependencies(
+        let (syntax_tree, ordered_functions) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -325,9 +325,7 @@ mod tests {
         );
     }
 
-    fn order_functions_by_dependencies(
-        input: &str,
-    ) -> (SyntaxTree, Dependencies) {
+    fn resolve_dependencies(input: &str) -> (SyntaxTree, Dependencies) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
