@@ -30,7 +30,7 @@ impl Compiler {
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
-        let explicit_types = TypeAnnotations::resolve(&syntax_tree);
+        let type_annotations = TypeAnnotations::resolve(&syntax_tree);
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
@@ -42,7 +42,7 @@ impl Compiler {
             &bindings,
             &function_calls,
             &dependencies,
-            explicit_types,
+            type_annotations,
         );
         let functions = Functions {
             inner: syntax_tree
