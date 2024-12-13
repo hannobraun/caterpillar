@@ -260,13 +260,13 @@ mod tests {
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
-        let explicit_types = TypeAnnotations::resolve(&syntax_tree);
+        let type_annotations = TypeAnnotations::resolve(&syntax_tree);
         let types = Types::infer(
             &syntax_tree,
             &bindings,
             &function_calls,
             &dependencies,
-            explicit_types,
+            type_annotations,
         );
 
         (syntax_tree, types)
