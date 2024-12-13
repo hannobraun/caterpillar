@@ -34,21 +34,21 @@ impl Compiler {
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);
         let explicit_types = ExplicitTypes::resolve(&syntax_tree);
+        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
+        let recursion =
+            Recursion::find(&syntax_tree, &function_calls, &dependencies);
         let types = Types::infer(
             &syntax_tree,
             &bindings,
             &function_calls,
             explicit_types,
         );
-        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()
                 .map(|function| (function.location, function.fragment.clone()))
                 .collect(),
         };
-        let recursion =
-            Recursion::find(&syntax_tree, &function_calls, &dependencies);
         let changes = detect_changes(self.old_code.take(), &syntax_tree);
 
         self.old_code = Some(syntax_tree.clone());
