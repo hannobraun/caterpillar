@@ -60,7 +60,7 @@ impl Dependencies {
     ///
     /// Guarantees that any function that is yielded by the iterator only has
     /// dependencies on functions that have already been yielded before.
-    pub fn functions_from_leaves(
+    pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
         self.clusters().flat_map(|cluster| {
