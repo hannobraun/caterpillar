@@ -81,17 +81,15 @@ fn collect_dependency_clusters(
                     work.",
                 );
 
-            let mut named_functions = IndexMap::default();
+            let mut functions = IndexMap::default();
             for location in dependency_cluster {
-                named_functions.push(location);
+                functions.push(location);
             }
 
-            if named_functions.is_empty() {
+            if functions.is_empty() {
                 None
             } else {
-                Some(Cluster {
-                    functions: named_functions,
-                })
+                Some(Cluster { functions })
             }
         })
 }
