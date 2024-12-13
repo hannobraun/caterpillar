@@ -47,7 +47,7 @@ pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
     pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
-    pub explicit_types: &'r TypeAnnotations,
+    pub annotations: &'r TypeAnnotations,
 }
 
 #[derive(Default)]
@@ -116,7 +116,7 @@ fn infer_expression(
     context: Context,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = context
-        .explicit_types
+        .annotations
         .signature_of(&expression.location)
         .cloned()
         .map(|signature| make_indirect(signature, local_types));

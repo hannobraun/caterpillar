@@ -63,7 +63,7 @@ impl Types {
             syntax_tree,
             bindings,
             function_calls,
-            explicit_types: &explicit_types,
+            annotations: &explicit_types,
         });
         Self { signatures, stacks }
     }
