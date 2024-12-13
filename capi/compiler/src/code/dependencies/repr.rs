@@ -1,14 +1,11 @@
 use std::iter;
 
-use crate::{
-    code::{
-        syntax::{
-            Function, FunctionLocation, Located, NamedFunction, SyntaxTree,
-        },
-        FunctionCalls, Functions, Index, IndexMap,
-    },
-    passes::resolve_dependencies,
+use crate::code::{
+    syntax::{Function, FunctionLocation, Located, NamedFunction, SyntaxTree},
+    FunctionCalls, Functions, Index, IndexMap,
 };
+
+use super::resolve::resolve_dependencies;
 
 /// # Tracks the dependencies between functions
 ///
