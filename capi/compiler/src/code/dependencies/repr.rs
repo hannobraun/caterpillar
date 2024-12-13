@@ -1,8 +1,13 @@
 use std::iter;
 
-use crate::code::{
-    syntax::{Function, FunctionLocation, Located, NamedFunction},
-    Functions, Index, IndexMap,
+use crate::{
+    code::{
+        syntax::{
+            Function, FunctionLocation, Located, NamedFunction, SyntaxTree,
+        },
+        FunctionCalls, Functions, Index, IndexMap,
+    },
+    passes::resolve_dependencies,
 };
 
 /// # Tracks the dependencies between functions
@@ -36,12 +41,13 @@ pub struct Dependencies {
 }
 
 impl Dependencies {
-    pub(crate) fn from_clusters(
-        clusters: impl IntoIterator<Item = Cluster>,
+    /// # Resolve the dependencies
+    pub fn resolve(
+        syntax_tree: &SyntaxTree,
+        function_calls: &FunctionCalls,
     ) -> Self {
-        Self {
-            clusters: clusters.into_iter().collect(),
-        }
+        let clusters = resolve_dependencies(syntax_tree, function_calls);
+        Self { clusters }
     }
 
     /// # Iterate over the function clusters, from the leaves up

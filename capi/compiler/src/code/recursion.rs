@@ -117,9 +117,10 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{syntax::SyntaxTree, FunctionCalls, Functions, Tokens},
+        code::{
+            syntax::SyntaxTree, Dependencies, FunctionCalls, Functions, Tokens,
+        },
         host::NoHost,
-        passes::resolve_dependencies,
     };
 
     use super::Recursion;
@@ -400,7 +401,7 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let dependencies = resolve_dependencies(&syntax_tree, &function_calls);
+        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

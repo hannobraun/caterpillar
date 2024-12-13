@@ -9,9 +9,7 @@ use crate::{
         Recursion, TailExpressions, Tokens, Types,
     },
     host::Host,
-    passes::{
-        detect_changes, generate_instructions, resolve_dependencies,
-    },
+    passes::{detect_changes, generate_instructions},
     source_map::SourceMap,
     Instructions,
 };
@@ -42,8 +40,7 @@ impl Compiler {
             &function_calls,
             explicit_types,
         );
-        let dependencies =
-            resolve_dependencies(&syntax_tree, &function_calls);
+        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()

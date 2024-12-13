@@ -7,16 +7,15 @@ use petgraph::{
 
 use crate::code::{
     syntax::{Expression, FunctionLocation, SyntaxTree},
-    Cluster, Dependencies, FunctionCalls, IndexMap,
+    Cluster, FunctionCalls, IndexMap,
 };
 
 pub fn resolve_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> Dependencies {
+) -> Vec<Cluster> {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
-    let dependency_clusters = collect_dependency_clusters(dependency_graph);
-    Dependencies::from_clusters(dependency_clusters)
+    collect_dependency_clusters(dependency_graph)
 }
 
 fn build_dependency_graph(
@@ -330,8 +329,7 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let dependencies =
-            super::resolve_dependencies(&syntax_tree, &function_calls);
+        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
 
         (syntax_tree, dependencies)
     }
