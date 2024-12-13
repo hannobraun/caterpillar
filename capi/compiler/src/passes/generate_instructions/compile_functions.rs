@@ -34,7 +34,7 @@ pub fn compile_functions(
     syntax_tree: &SyntaxTree,
     functions: &Functions,
     changes: &Changes,
-    ordered_functions: &Dependencies,
+    dependencies: &Dependencies,
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
@@ -61,7 +61,7 @@ pub fn compile_functions(
         compiled_functions_by_location,
     };
 
-    for cluster in ordered_functions.clusters_from_leaves() {
+    for cluster in dependencies.clusters_from_leaves() {
         compile_cluster(cluster, changes, &mut context);
     }
 
