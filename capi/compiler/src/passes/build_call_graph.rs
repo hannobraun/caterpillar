@@ -20,13 +20,13 @@ pub fn order_functions_by_dependencies(
             .map(|function| (function.location, function.fragment.clone()))
             .collect(),
     };
-    let dependency_graph = build_dependency_graph(&functions, function_calls);
+    let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     let clusters = collect_functions_into_clusters(dependency_graph);
     (functions, OrderedFunctions::from_clusters(clusters))
 }
 
 fn build_dependency_graph(
-    functions: &Functions,
+    functions: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> DependencyGraph {
     let mut call_graph = Graph::new();
