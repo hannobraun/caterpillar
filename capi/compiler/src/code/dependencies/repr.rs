@@ -24,9 +24,9 @@ use super::resolve::resolve_dependencies;
 /// Groups of mutually dependent functions are designated as "mutually
 /// recursive".
 ///
-/// All functions are grouped into [`Cluster`]s. Either by themselves, if they
-/// are nor recursive or self-recursive, or together with all the functions in
-/// their mutually dependent group.
+/// All functions are grouped into [`DependencyCluster`]s. Either by themselves,
+/// if they are nor recursive or self-recursive, or together with all the
+/// functions in their mutually dependent group.
 ///
 /// Using graph theory jargon, dependency clusters are a "condensation" of the
 /// original dependency graph.
