@@ -1,5 +1,3 @@
-use std::iter;
-
 use crate::code::{
     syntax::{Function, FunctionLocation, Located, NamedFunction, SyntaxTree},
     FunctionCalls, Index, IndexMap,
@@ -61,12 +59,12 @@ impl Dependencies {
     /// dependencies on functions that it yielded before.
     ///
     /// If recursive dependencies are relevant, use [`Dependencies::clusters`].
-    pub fn functions(
-        &self,
-    ) -> impl Iterator<Item = (&FunctionLocation, &DependencyCluster)> {
-        self.clusters().flat_map(|cluster| {
-            cluster.functions.values().zip(iter::repeat(cluster))
-        })
+    pub fn functions<'r>(
+        &'r self,
+        syntax_tree: &'r SyntaxTree,
+    ) -> impl Iterator<Item = Located<&'r Function>> {
+        self.clusters()
+            .flat_map(|cluster| cluster.functions(syntax_tree))
     }
 
     /// # Find the cluster containing a specific named function
