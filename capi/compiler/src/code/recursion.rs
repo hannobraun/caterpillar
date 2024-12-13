@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    syntax::{Expression, FunctionLocation, MemberLocation},
+    syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree},
     Dependencies, FunctionCalls, Functions, Index,
 };
 
@@ -41,6 +41,7 @@ pub struct Recursion {
 impl Recursion {
     /// # Find all recursive expressions
     pub fn find(
+        _: &SyntaxTree,
         function_calls: &FunctionCalls,
         functions: &Functions,
         dependencies: &Dependencies,
@@ -407,8 +408,12 @@ mod tests {
                 .map(|function| (function.location, function.fragment.clone()))
                 .collect(),
         };
-        let recursion =
-            Recursion::find(&function_calls, &functions, &dependencies);
+        let recursion = Recursion::find(
+            &syntax_tree,
+            &function_calls,
+            &functions,
+            &dependencies,
+        );
 
         (syntax_tree, recursion)
     }
