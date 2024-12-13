@@ -5,26 +5,30 @@ use super::{
     Functions, Index, IndexMap,
 };
 
-/// # All functions, ordered by their dependencies
+/// # Tracks the dependencies between functions
 ///
 /// A dependency can take two forms:
 ///
-/// - If a named function `f` calls a named function `g`, then `f` depends on
-///   `g`.
-/// - If an anonymous function `g` is defined within any function (named or
-///   anonymous) `f`, then `f` depends on `g`.
+/// - If any function `f` calls a named function `g`, then `f` depends on `g`.
+/// - If any function `f` has a local function `g`, then `f` depends on `g`.
 ///
-/// Calls between named functions can be recursive, which means dependencies can
-/// be recursive too. To reflect this, all functions are grouped into
-/// [`Cluster`]s, in the following way:
+/// Dependencies form a graph, not a tree, since:
 ///
-/// - Any group of functions in the dependency graph, that mutually depend on
-///   each other (a "strongly connected component" in graph theory jargon) are
-///   grouped into the same cluster, without any other functions.
-/// - Any functions that are not part of a mutually dependent group, are grouped
-///   into a dedicated cluster by themselves.
+/// - Named functions can call themselves.
+/// - Named functions can call each other.
+/// - Local functions can call their top-level parent function (which is always
+///   named), or another named function that (directly or indirectly) calls
+///   their top-level parent function.
 ///
-/// Or using graph theory jargon, the clusters are a "condensation" of the
+/// Named functions that call themselves are designated as "self-recursive".
+/// Groups of mutually dependent functions are designated as "mutually
+/// recursive".
+///
+/// All functions are grouped into [`Cluster`]s. Either by themselves, if they
+/// are nor recursive or self-recursive, or together with all the functions in
+/// their mutually dependent group.
+///
+/// Using graph theory jargon, dependency clusters are a "condensation" of the
 /// original dependency graph.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Dependencies {
