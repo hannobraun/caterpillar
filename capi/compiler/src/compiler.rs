@@ -5,8 +5,8 @@ use capi_runtime::InstructionAddress;
 use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
-        Bindings, Dependencies, ExplicitTypes, FunctionCalls, Functions,
-        Recursion, TailExpressions, Tokens, Types,
+        Bindings, Dependencies, FunctionCalls, Functions, Recursion,
+        TailExpressions, Tokens, TypeAnnotations, Types,
     },
     host::Host,
     passes::{detect_changes, generate_instructions},
@@ -30,7 +30,7 @@ impl Compiler {
     pub fn compile(&mut self, input: &str, host: &impl Host) -> CompilerOutput {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
-        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
+        let explicit_types = TypeAnnotations::resolve(&syntax_tree);
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let tail_expressions = TailExpressions::find(&syntax_tree);

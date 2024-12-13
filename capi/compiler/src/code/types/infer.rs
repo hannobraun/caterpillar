@@ -10,7 +10,7 @@ use crate::{
 
 use super::{
     repr::{Signatures, Stacks},
-    ExplicitTypes, Signature, Type,
+    Signature, Type, TypeAnnotations,
 };
 
 pub fn infer_types(context: Context) -> InferenceOutput {
@@ -47,7 +47,7 @@ pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
     pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
-    pub explicit_types: &'r ExplicitTypes,
+    pub explicit_types: &'r TypeAnnotations,
 }
 
 #[derive(Default)]

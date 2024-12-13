@@ -17,11 +17,11 @@ use super::{
 /// The long-term goal for Caterpillar is to be fully inferred, with no explicit
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
-pub struct ExplicitTypes {
+pub struct TypeAnnotations {
     inner: Signatures,
 }
 
-impl ExplicitTypes {
+impl TypeAnnotations {
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
         let types_ = resolve_type_annotations(syntax_tree);
@@ -57,7 +57,7 @@ impl Types {
         bindings: &Bindings,
         function_calls: &FunctionCalls,
         _: &Dependencies,
-        explicit_types: ExplicitTypes,
+        explicit_types: TypeAnnotations,
     ) -> Self {
         let InferenceOutput { signatures, stacks } = infer_types(Context {
             syntax_tree,
@@ -217,7 +217,7 @@ mod tests {
         host::NoHost,
     };
 
-    use super::{ExplicitTypes, Types};
+    use super::{TypeAnnotations, Types};
 
     #[test]
     fn infer_type_of_binding() {
@@ -260,7 +260,7 @@ mod tests {
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
-        let explicit_types = ExplicitTypes::resolve(&syntax_tree);
+        let explicit_types = TypeAnnotations::resolve(&syntax_tree);
         let types = Types::infer(
             &syntax_tree,
             &bindings,
