@@ -21,6 +21,36 @@ impl SyntaxTree {
         Self { named_functions }
     }
 
+    /// # Find the function at the provided location
+    ///
+    /// Return `None`, if no function at this location can be found.
+    pub fn function_by_location<'r>(
+        &'r self,
+        location: &FunctionLocation,
+    ) -> Option<Located<&'r Function>> {
+        let function = match location {
+            FunctionLocation::NamedFunction { index } => {
+                let named_function = self.named_functions.get(index)?;
+                &named_function.inner
+            }
+            FunctionLocation::AnonymousFunction { location } => {
+                let branch_location = &location.parent;
+                let parent_location = &branch_location.parent;
+
+                let parent = self.function_by_location(parent_location)?;
+                let branch = parent.branches.get(&branch_location.index)?;
+                let member = branch.body.get(&location.index)?;
+
+                member.as_expression()?.as_local_function()?
+            }
+        };
+
+        Some(Located {
+            fragment: function,
+            location: location.clone(),
+        })
+    }
+
     /// # Find the function with the provided name
     ///
     /// Return `None`, if no function with this name can be found.
