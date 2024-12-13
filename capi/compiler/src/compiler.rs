@@ -42,8 +42,14 @@ impl Compiler {
             &function_calls,
             explicit_types,
         );
-        let (functions, ordered_functions) =
+        let ordered_functions =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
         let changes = detect_changes(self.old_code.take(), &syntax_tree);

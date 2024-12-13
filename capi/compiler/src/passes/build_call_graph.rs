@@ -7,22 +7,16 @@ use petgraph::{
 
 use crate::code::{
     syntax::{Expression, FunctionLocation, SyntaxTree},
-    Cluster, FunctionCalls, Functions, IndexMap, OrderedFunctions,
+    Cluster, FunctionCalls, IndexMap, OrderedFunctions,
 };
 
 pub fn order_functions_by_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> (Functions, OrderedFunctions) {
-    let functions = Functions {
-        inner: syntax_tree
-            .all_functions()
-            .map(|function| (function.location, function.fragment.clone()))
-            .collect(),
-    };
+) -> OrderedFunctions {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     let clusters = collect_functions_into_clusters(dependency_graph);
-    (functions, OrderedFunctions::from_clusters(clusters))
+    OrderedFunctions::from_clusters(clusters)
 }
 
 fn build_dependency_graph(
@@ -342,7 +336,7 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let (_, ordered_functions) = super::order_functions_by_dependencies(
+        let ordered_functions = super::order_functions_by_dependencies(
             &syntax_tree,
             &function_calls,
         );

@@ -117,7 +117,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{syntax::SyntaxTree, FunctionCalls, Tokens},
+        code::{syntax::SyntaxTree, FunctionCalls, Functions, Tokens},
         host::NoHost,
         passes::order_functions_by_dependencies,
     };
@@ -400,8 +400,14 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let (functions, ordered_functions) =
+        let ordered_functions =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
+        let functions = Functions {
+            inner: syntax_tree
+                .all_functions()
+                .map(|function| (function.location, function.fragment.clone()))
+                .collect(),
+        };
         let recursion =
             Recursion::find(&function_calls, &functions, &ordered_functions);
 
