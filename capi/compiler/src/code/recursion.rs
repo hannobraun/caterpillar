@@ -400,8 +400,7 @@ mod tests {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let ordered_functions =
-            resolve_dependencies(&syntax_tree, &function_calls);
+        let dependencies = resolve_dependencies(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
                 .all_functions()
@@ -409,7 +408,7 @@ mod tests {
                 .collect(),
         };
         let recursion =
-            Recursion::find(&function_calls, &functions, &ordered_functions);
+            Recursion::find(&function_calls, &functions, &dependencies);
 
         (syntax_tree, recursion)
     }
