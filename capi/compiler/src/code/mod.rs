@@ -1,6 +1,7 @@
 pub mod syntax;
 
 mod bindings;
+mod dependencies;
 mod function_calls;
 mod recursion;
 mod tail_expressions;
@@ -8,7 +9,6 @@ mod tokens;
 mod types;
 
 mod changes;
-mod dependencies;
 mod functions;
 mod hash;
 mod index;
