@@ -24,16 +24,16 @@ fn build_dependency_graph(
     function_calls: &FunctionCalls,
 ) -> DependencyGraph {
     let mut graph = Graph::new();
-    let mut graph_index_by_function_location = BTreeMap::new();
+    let mut graph_indices_by_function_location = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
-        graph_index_by_function_location
+        graph_indices_by_function_location
             .entry(function.location.clone())
             .or_insert_with(|| graph.add_node(function.location));
     }
 
     for function in syntax_tree.all_functions() {
-        let depender = graph_index_by_function_location[&function.location];
+        let depender = graph_indices_by_function_location[&function.location];
 
         for branch in function.branches() {
             for expression in branch.expressions() {
@@ -47,7 +47,8 @@ fn build_dependency_graph(
                 };
 
                 if let Some(dependee) = dependee {
-                    let dependee = graph_index_by_function_location[&dependee];
+                    let dependee =
+                        graph_indices_by_function_location[&dependee];
                     graph.add_edge(depender, dependee, ());
                 }
             }
