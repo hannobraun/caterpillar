@@ -15,8 +15,8 @@ pub fn order_functions_by_dependencies(
     function_calls: &FunctionCalls,
 ) -> OrderedFunctions {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
-    let clusters = collect_functions_into_clusters(dependency_graph);
-    OrderedFunctions::from_clusters(clusters)
+    let dependency_clusters = collect_functions_into_clusters(dependency_graph);
+    OrderedFunctions::from_clusters(dependency_clusters)
 }
 
 fn build_dependency_graph(
