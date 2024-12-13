@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn no_recursion() {
-        let (syntax_tree, ordered_functions) = resolve_dependencies(
+        let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -122,7 +122,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            ordered_functions
+            dependencies
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -137,7 +137,7 @@ mod tests {
 
     #[test]
     fn self_recursion() {
-        let (syntax_tree, ordered_functions) = resolve_dependencies(
+        let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -155,7 +155,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            ordered_functions
+            dependencies
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -170,7 +170,7 @@ mod tests {
 
     #[test]
     fn mutual_recursion() {
-        let (syntax_tree, ordered_functions) = resolve_dependencies(
+        let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -194,7 +194,7 @@ mod tests {
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
-            ordered_functions
+            dependencies
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -212,7 +212,7 @@ mod tests {
 
     #[test]
     fn sort_clusters_by_call_graph() {
-        let (syntax_tree, ordered_functions) = resolve_dependencies(
+        let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -240,7 +240,7 @@ mod tests {
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
-            ordered_functions
+            dependencies
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
@@ -259,7 +259,7 @@ mod tests {
 
     #[test]
     fn consider_anonymous_functions_in_call_graph() {
-        let (syntax_tree, ordered_functions) = resolve_dependencies(
+        let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
                     \ ->
@@ -306,7 +306,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            ordered_functions
+            dependencies
                 .clusters_from_leaves()
                 .cloned()
                 .collect::<Vec<_>>(),
