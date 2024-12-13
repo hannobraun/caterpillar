@@ -42,7 +42,7 @@ impl Compiler {
             &function_calls,
             explicit_types,
         );
-        let ordered_functions =
+        let dependencies =
             order_functions_by_dependencies(&syntax_tree, &function_calls);
         let functions = Functions {
             inner: syntax_tree
@@ -51,7 +51,7 @@ impl Compiler {
                 .collect(),
         };
         let recursion =
-            Recursion::find(&function_calls, &functions, &ordered_functions);
+            Recursion::find(&function_calls, &functions, &dependencies);
         let changes = detect_changes(self.old_code.take(), &syntax_tree);
 
         self.old_code = Some(syntax_tree.clone());
@@ -59,7 +59,7 @@ impl Compiler {
         generate_instructions(
             &syntax_tree,
             &functions,
-            &ordered_functions,
+            &dependencies,
             &bindings,
             &function_calls,
             &tail_expressions,
@@ -76,7 +76,7 @@ impl Compiler {
             syntax_tree,
             functions,
             function_calls,
-            dependencies: ordered_functions,
+            dependencies,
             types,
             instructions: self.instructions.clone(),
             source_map: self.source_map.clone(),
