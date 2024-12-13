@@ -71,7 +71,7 @@ fn collect_dependency_clusters(
 
     clustered_and_sorted_graph
         .into_iter()
-        .filter_map(move |graph_index| {
+        .map(move |graph_index| {
             let dependency_cluster =
                 clustered_graph.remove_node(graph_index).expect(
                     "Each entry in the sorted version of the call graph must \
@@ -86,11 +86,7 @@ fn collect_dependency_clusters(
                 functions.push(location);
             }
 
-            if functions.is_empty() {
-                None
-            } else {
-                Some(Cluster { functions })
-            }
+            Cluster { functions }
         })
 }
 
