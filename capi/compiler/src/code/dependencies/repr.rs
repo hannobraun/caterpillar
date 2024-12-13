@@ -114,9 +114,15 @@ impl DependencyCluster {
         syntax_tree: &'r SyntaxTree,
     ) -> impl Iterator<Item = Located<&'r Function>> {
         self.functions.values().map(|location| {
-            syntax_tree
-                .function_by_location(location)
-                .expect("Function referred to from cluster must exist.")
+            let Some(function) = syntax_tree.function_by_location(location)
+            else {
+                panic!(
+                    "This function expects to find all tracked locations in \
+                    the provided `SyntaxTree`."
+                );
+            };
+
+            function
         })
     }
 
