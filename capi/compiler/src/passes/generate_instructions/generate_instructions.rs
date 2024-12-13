@@ -22,7 +22,7 @@ use super::{
 pub fn generate_instructions(
     syntax_tree: &SyntaxTree,
     functions: &Functions,
-    ordered_functions: &Dependencies,
+    dependencies: &Dependencies,
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
@@ -54,7 +54,7 @@ pub fn generate_instructions(
         syntax_tree,
         functions,
         changes,
-        ordered_functions,
+        dependencies,
         bindings,
         function_calls,
         tail_expressions,
