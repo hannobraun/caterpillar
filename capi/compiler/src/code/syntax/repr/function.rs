@@ -134,3 +134,16 @@ pub enum Member {
         signature: Option<Signature<SyntaxType>>,
     },
 }
+
+impl Member {
+    /// # Convert this instance of [`Member`] into an [`Expression`]
+    ///
+    /// Returns `None`, if the member is not an expression.
+    pub fn as_expression(&self) -> Option<&Expression> {
+        if let Self::Expression { expression, .. } = self {
+            Some(expression)
+        } else {
+            None
+        }
+    }
+}
