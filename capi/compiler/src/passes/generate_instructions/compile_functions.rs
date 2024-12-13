@@ -61,7 +61,7 @@ pub fn compile_functions(
         compiled_functions_by_location,
     };
 
-    for cluster in dependencies.clusters_from_leaves() {
+    for cluster in dependencies.clusters() {
         compile_cluster(cluster, changes, &mut context);
     }
 

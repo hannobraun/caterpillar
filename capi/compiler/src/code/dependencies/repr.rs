@@ -52,7 +52,7 @@ impl Dependencies {
     /// Guarantees that any cluster that is yielded by the iterator only has
     /// dependencies on functions in clusters that have already been yielded
     /// before.
-    pub fn clusters_from_leaves(&self) -> impl Iterator<Item = &Cluster> {
+    pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
 
@@ -73,7 +73,7 @@ impl Dependencies {
     pub fn functions_from_leaves(
         &self,
     ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
-        self.clusters_from_leaves().flat_map(|cluster| {
+        self.clusters().flat_map(|cluster| {
             cluster.functions.values().zip(iter::repeat(cluster))
         })
     }

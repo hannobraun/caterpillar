@@ -122,10 +122,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            dependencies
-                .clusters_from_leaves()
-                .cloned()
-                .collect::<Vec<_>>(),
+            dependencies.clusters().cloned().collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
                 .map(|locations_by_index| Cluster {
@@ -155,10 +152,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            dependencies
-                .clusters_from_leaves()
-                .cloned()
-                .collect::<Vec<_>>(),
+            dependencies.clusters().cloned().collect::<Vec<_>>(),
             [(Index::from(0), g), (Index::from(0), f),]
                 .into_iter()
                 .map(|locations_by_index| Cluster {
@@ -194,10 +188,7 @@ mod tests {
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
-            dependencies
-                .clusters_from_leaves()
-                .cloned()
-                .collect::<Vec<_>>(),
+            dependencies.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(Index::from(0), g), (Index::from(1), h)].as_slice(),
                 [(Index::from(0), f)].as_slice(),
@@ -240,10 +231,7 @@ mod tests {
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
-            dependencies
-                .clusters_from_leaves()
-                .cloned()
-                .collect::<Vec<_>>(),
+            dependencies.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(Index::from(0), g)].as_slice(),
                 [(Index::from(0), h)].as_slice(),
@@ -306,10 +294,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            dependencies
-                .clusters_from_leaves()
-                .cloned()
-                .collect::<Vec<_>>(),
+            dependencies.clusters().cloned().collect::<Vec<_>>(),
             [
                 [(Index::from(0), g)].as_slice(),
                 [(Index::from(0), h_a)].as_slice(),

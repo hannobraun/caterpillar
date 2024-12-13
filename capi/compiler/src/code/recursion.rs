@@ -47,7 +47,7 @@ impl Recursion {
     ) -> Self {
         let mut recursive_expressions = BTreeMap::new();
 
-        for cluster in dependencies.clusters_from_leaves() {
+        for cluster in dependencies.clusters() {
             for function in cluster.functions(functions) {
                 for branch in function.branches() {
                     for expression in branch.expressions() {
