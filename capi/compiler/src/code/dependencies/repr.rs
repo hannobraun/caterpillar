@@ -59,6 +59,13 @@ impl Dependencies {
     /// dependencies on functions that it yielded before.
     ///
     /// If recursive dependencies are relevant, use [`Dependencies::clusters`].
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if a function tracked in this instance of [`Dependencies`] can
+    /// not be found in the provided [`SyntaxTree`]. This should only happen, if
+    /// you pass a different [`SyntaxTree`] to this function than you previously
+    /// passed to [`Dependencies::resolve`].
     pub fn functions<'r>(
         &'r self,
         syntax_tree: &'r SyntaxTree,
