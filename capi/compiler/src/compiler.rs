@@ -41,6 +41,7 @@ impl Compiler {
             &syntax_tree,
             &bindings,
             &function_calls,
+            &dependencies,
             explicit_types,
         );
         let functions = Functions {
