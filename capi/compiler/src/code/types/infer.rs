@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, fmt, result};
 use crate::{
     code::{
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
-        Bindings, FunctionCalls, Index, IndexMap,
+        Bindings, Dependencies, FunctionCalls, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -16,7 +16,7 @@ use super::{
 pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
-    for function in context.syntax_tree.all_functions() {
+    for function in context.dependencies.functions(context.syntax_tree) {
         for branch in function.branches() {
             if let Err(TypeError {
                 expected,
@@ -47,6 +47,7 @@ pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
     pub bindings: &'r Bindings,
     pub function_calls: &'r FunctionCalls,
+    pub dependencies: &'r Dependencies,
     pub annotations: &'r TypeAnnotations,
 }
 
