@@ -47,19 +47,20 @@ impl Dependencies {
         Self { clusters }
     }
 
-    /// # Iterate over the function clusters, from the leaves up
+    /// # Iterate over the dependency clusters
     ///
-    /// Guarantees that any cluster that is yielded by the iterator only has
-    /// dependencies on functions in clusters that have already been yielded
-    /// before.
+    /// Any cluster that the iterator yields only has dependencies on functions
+    /// in the cluster itself, or functions in clusters that it yielded before.
     pub fn clusters(&self) -> impl Iterator<Item = &Cluster> {
         self.clusters.iter().rev()
     }
 
-    /// # Iterate over all functions, from the leaves up
+    /// # Iterate over all functions
     ///
-    /// Guarantees that any function that is yielded by the iterator only has
-    /// dependencies on functions that have already been yielded before.
+    /// Any function that the iterator yields only has non-recursive
+    /// dependencies on functions that it yielded before.
+    ///
+    /// If recursive dependencies are relevant, use [`Dependencies::clusters`].
     pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&FunctionLocation, &Cluster)> {
@@ -68,7 +69,7 @@ impl Dependencies {
         })
     }
 
-    /// # Find the cluster containing a given named function
+    /// # Find the cluster containing a specific named function
     pub fn find_cluster_by_named_function(
         &self,
         index: &Index<NamedFunction>,
