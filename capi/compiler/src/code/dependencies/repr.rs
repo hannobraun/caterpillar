@@ -87,9 +87,9 @@ impl Dependencies {
     }
 }
 
-/// # A cluster of functions
+/// # A cluster of mutually dependent functions, or a single function
 ///
-/// See [`OrderedFunctions`] for more information.
+/// See [`Dependencies`] for more information.
 #[derive(
     Clone,
     Debug,
