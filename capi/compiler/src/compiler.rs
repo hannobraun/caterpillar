@@ -5,7 +5,7 @@ use capi_runtime::InstructionAddress;
 use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
-        Bindings, ExplicitTypes, FunctionCalls, Functions, OrderedFunctions,
+        Bindings, Dependencies, ExplicitTypes, FunctionCalls, Functions,
         Recursion, TailExpressions, Tokens, Types,
     },
     host::Host,
@@ -94,7 +94,7 @@ pub struct CompilerOutput {
     pub syntax_tree: SyntaxTree,
     pub functions: Functions,
     pub function_calls: FunctionCalls,
-    pub ordered_functions: OrderedFunctions,
+    pub ordered_functions: Dependencies,
     pub types: Types,
     pub instructions: Instructions,
     pub source_map: SourceMap,

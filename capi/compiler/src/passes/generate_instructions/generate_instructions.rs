@@ -5,8 +5,8 @@ use capi_runtime::{Effect, Instruction, InstructionAddress};
 use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
-        Bindings, Changes, FunctionCalls, Functions, OrderedFunctions,
-        Recursion, TailExpressions, Types,
+        Bindings, Changes, Dependencies, FunctionCalls, Functions, Recursion,
+        TailExpressions, Types,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -22,7 +22,7 @@ use super::{
 pub fn generate_instructions(
     syntax_tree: &SyntaxTree,
     functions: &Functions,
-    ordered_functions: &OrderedFunctions,
+    ordered_functions: &Dependencies,
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,

@@ -27,11 +27,11 @@ use super::{
 /// Or using graph theory jargon, the clusters are a "condensation" of the
 /// original dependency graph.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct OrderedFunctions {
+pub struct Dependencies {
     clusters: Vec<Cluster>,
 }
 
-impl OrderedFunctions {
+impl Dependencies {
     pub(crate) fn from_clusters(
         clusters: impl IntoIterator<Item = Cluster>,
     ) -> Self {

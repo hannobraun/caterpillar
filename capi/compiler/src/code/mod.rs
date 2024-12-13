@@ -20,7 +20,7 @@ pub use self::{
     functions::Functions,
     hash::Hash,
     index::{Index, IndexMap},
-    ordered_functions::{Cluster, OrderedFunctions},
+    ordered_functions::{Cluster, Dependencies},
     recursion::Recursion,
     tail_expressions::TailExpressions,
     tokens::{Token, Tokens},

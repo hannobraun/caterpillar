@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use super::{
     syntax::{Expression, FunctionLocation, MemberLocation},
-    FunctionCalls, Functions, Index, OrderedFunctions,
+    Dependencies, FunctionCalls, Functions, Index,
 };
 
 /// # Tracks recursive expressions
@@ -43,7 +43,7 @@ impl Recursion {
     pub fn find(
         function_calls: &FunctionCalls,
         functions: &Functions,
-        ordered_functions: &OrderedFunctions,
+        ordered_functions: &Dependencies,
     ) -> Self {
         let mut recursive_expressions = BTreeMap::new();
 

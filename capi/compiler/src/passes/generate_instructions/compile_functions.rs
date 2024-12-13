@@ -5,8 +5,8 @@ use capi_runtime::Instruction;
 use crate::{
     code::{
         syntax::{FunctionLocation, SyntaxTree},
-        Bindings, Changes, FunctionCalls, Functions, OrderedFunctions,
-        Recursion, TailExpressions, Types,
+        Bindings, Changes, Dependencies, FunctionCalls, Functions, Recursion,
+        TailExpressions, Types,
     },
     compiler::CallInstructionsByCallee,
     source_map::SourceMap,
@@ -34,7 +34,7 @@ pub fn compile_functions(
     syntax_tree: &SyntaxTree,
     functions: &Functions,
     changes: &Changes,
-    ordered_functions: &OrderedFunctions,
+    ordered_functions: &Dependencies,
     bindings: &Bindings,
     function_calls: &FunctionCalls,
     tail_expressions: &TailExpressions,
