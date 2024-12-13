@@ -5,13 +5,13 @@ mod function_calls;
 mod recursion;
 mod tail_expressions;
 mod tokens;
+mod types;
 
 mod changes;
 mod functions;
 mod hash;
 mod index;
 mod ordered_functions;
-mod types;
 
 pub use self::{
     bindings::{Binding, Bindings},
