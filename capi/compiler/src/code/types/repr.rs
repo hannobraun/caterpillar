@@ -257,10 +257,10 @@ mod tests {
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
+        let type_annotations = TypeAnnotations::resolve(&syntax_tree);
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
-        let type_annotations = TypeAnnotations::resolve(&syntax_tree);
         let types = Types::infer(
             &syntax_tree,
             &bindings,
