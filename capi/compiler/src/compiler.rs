@@ -47,12 +47,8 @@ impl Compiler {
                 .map(|function| (function.location, function.fragment.clone()))
                 .collect(),
         };
-        let recursion = Recursion::find(
-            &syntax_tree,
-            &function_calls,
-            &functions,
-            &dependencies,
-        );
+        let recursion =
+            Recursion::find(&syntax_tree, &function_calls, &dependencies);
         let changes = detect_changes(self.old_code.take(), &syntax_tree);
 
         self.old_code = Some(syntax_tree.clone());

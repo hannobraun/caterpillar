@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use super::{
     syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree},
-    Dependencies, FunctionCalls, Functions, Index,
+    Dependencies, FunctionCalls, Index,
 };
 
 /// # Tracks recursive expressions
@@ -43,7 +43,6 @@ impl Recursion {
     pub fn find(
         syntax_tree: &SyntaxTree,
         function_calls: &FunctionCalls,
-        _: &Functions,
         dependencies: &Dependencies,
     ) -> Self {
         let mut recursive_expressions = BTreeMap::new();
@@ -117,9 +116,7 @@ mod tests {
     use itertools::Itertools;
 
     use crate::{
-        code::{
-            syntax::SyntaxTree, Dependencies, FunctionCalls, Functions, Tokens,
-        },
+        code::{syntax::SyntaxTree, Dependencies, FunctionCalls, Tokens},
         host::NoHost,
     };
 
@@ -402,18 +399,8 @@ mod tests {
         let syntax_tree = SyntaxTree::parse(tokens);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
-        let functions = Functions {
-            inner: syntax_tree
-                .all_functions()
-                .map(|function| (function.location, function.fragment.clone()))
-                .collect(),
-        };
-        let recursion = Recursion::find(
-            &syntax_tree,
-            &function_calls,
-            &functions,
-            &dependencies,
-        );
+        let recursion =
+            Recursion::find(&syntax_tree, &function_calls, &dependencies);
 
         (syntax_tree, recursion)
     }
