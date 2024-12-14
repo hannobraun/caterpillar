@@ -750,7 +750,7 @@ end
 vec_buf_init: fn
     \ vec_buf ->
         0
-        vec_buf: -> Number . _vec_buf_first: Number -> Number .
+        vec_buf: -> Number . _vec_buf_first
             store
         0
         vec_buf: -> Number . _vec_buf_next: Number -> Number .
@@ -767,7 +767,7 @@ vec_buf_get: fn
         mul_u8_wrap
         fn \ offset ->
             vec_buf: -> Number .
-            _vec_buf_first: Number -> Number .
+            _vec_buf_first
             load
             fn \ base ->
                 vec_buf: -> Number .
@@ -897,7 +897,7 @@ end
 
 _vec_buf_first: fn
     \ vec_buf ->
-        vec_buf: -> Number .
+        vec_buf
         0
             add_s32
 end
