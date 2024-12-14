@@ -102,7 +102,8 @@ fn infer_branch_body(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        if let Some(signature) = make_direct(&signature, local_types) {
+        if let Some(signature) = make_signature_direct(&signature, local_types)
+        {
             output.expressions.insert(location, signature);
         }
     }
@@ -193,7 +194,9 @@ fn infer_expression(
     // disallows type annotations that can be fully inferred.
     if let [Some(explicit), Some(inferred)] =
         [explicit.as_ref(), inferred.as_ref()].map(|signature| {
-            signature.and_then(|signature| make_direct(signature, local_types))
+            signature.and_then(|signature| {
+                make_signature_direct(signature, local_types)
+            })
         })
     {
         panic!(
@@ -397,7 +400,7 @@ fn make_signature_indirect(
     }
 }
 
-fn make_direct(
+fn make_signature_direct(
     signature: &Signature<Index<InferredType>>,
     local_types: &LocalTypes,
 ) -> Option<Signature<Type>> {
