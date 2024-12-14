@@ -70,7 +70,7 @@ fn infer_branch(
         output,
     )?;
 
-    if let Some(local_stack) = local_stack.get_mut() {
+    if let Some(local_stack) = local_stack.get() {
         let local_stack = make_stack_direct(local_stack, &local_types);
         dbg!(local_stack);
     }
@@ -462,6 +462,10 @@ struct LocalStack {
     inner: Option<Vec<Index<InferredType>>>,
 }
 impl LocalStack {
+    fn get(&self) -> Option<&Vec<Index<InferredType>>> {
+        self.inner.as_ref()
+    }
+
     fn get_mut(&mut self) -> Option<&mut Vec<Index<InferredType>>> {
         self.inner.as_mut()
     }
