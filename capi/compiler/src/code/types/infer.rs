@@ -59,18 +59,24 @@ fn infer_branch(
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<()> {
-    let local_types = LocalTypes::default();
-    let local_stack = LocalStack::default();
+    let mut local_types = LocalTypes::default();
+    let mut local_stack = LocalStack::default();
 
-    infer_branch_body(&branch, local_types, local_stack, context, output)?;
+    infer_branch_body(
+        &branch,
+        &mut local_types,
+        &mut local_stack,
+        context,
+        output,
+    )?;
 
     Ok(())
 }
 
 fn infer_branch_body(
     branch: &Located<&Branch>,
-    mut local_types: LocalTypes,
-    mut local_stack: LocalStack,
+    local_types: &mut LocalTypes,
+    local_stack: &mut LocalStack,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<()> {
@@ -84,12 +90,8 @@ fn infer_branch_body(
             stacks.insert(location.clone(), stack);
         }
 
-        let signature = infer_expression(
-            expression,
-            &mut local_types,
-            &mut local_stack,
-            context,
-        )?;
+        let signature =
+            infer_expression(expression, local_types, local_stack, context)?;
 
         if let Some(signature) = signature {
             signatures.insert(location, signature);
@@ -100,7 +102,7 @@ fn infer_branch_body(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        if let Some(signature) = make_direct(&signature, &local_types) {
+        if let Some(signature) = make_direct(&signature, local_types) {
             output.expressions.insert(location, signature);
         }
     }
