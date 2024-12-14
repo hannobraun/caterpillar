@@ -25,7 +25,9 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 
         for branch in function.branches() {
             match infer_branch(branch, environment, context, &mut output) {
-                Ok(_) => {}
+                Ok(signature) => {
+                    dbg!(signature);
+                }
                 Err(TypeError {
                     expected,
                     actual,
