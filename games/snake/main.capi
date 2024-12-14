@@ -753,7 +753,7 @@ vec_buf_init: fn
         vec_buf: -> Number . _vec_buf_first
             store
         0
-        vec_buf: -> Number . _vec_buf_next: Number -> Number .
+        vec_buf: -> Number . _vec_buf_next
             store
         64
         vec_buf: -> Number . _vec_buf_capacity: Number -> Number .
@@ -798,7 +798,7 @@ end
 vec_buf_push: fn
     \ vec_buf, x, y ->
         vec_buf: -> Number .
-        _vec_buf_next: Number -> Number .
+        _vec_buf_next
         fn \ next_addr ->
             vec_buf: -> Number .
             next_addr: -> Number .
@@ -904,7 +904,7 @@ end
 
 _vec_buf_next: fn
     \ vec_buf ->
-        vec_buf: -> Number .
+        vec_buf
         1
             add_s32
 end
