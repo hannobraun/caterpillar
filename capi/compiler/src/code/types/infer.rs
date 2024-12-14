@@ -87,7 +87,8 @@ fn infer_branch(
         .map(|(_, binding)| binding)
         .chain(environment.values().cloned())
         .map(|binding| {
-            let type_ = local_types.push(InferredType::Unknown);
+            let type_ = InferredType::Unknown;
+            let type_ = local_types.push(type_);
             (binding, type_)
         })
         .collect();
