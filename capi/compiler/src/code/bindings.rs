@@ -131,7 +131,7 @@ fn resolve_bindings_in_branch(
     for expression in branch.expressions() {
         match expression.fragment {
             Expression::Identifier { name } => {
-                let binding = scopes.iter().find_map(|scope| {
+                let binding = scopes.iter().rev().find_map(|scope| {
                     scope
                         .iter()
                         .find_map(|(n, binding)| (n == name).then_some(binding))
@@ -272,6 +272,50 @@ mod tests {
         assert!(bindings
             .environment_of(&function.location)
             .contains_key("parameter"));
+    }
+
+    #[test]
+    fn resolve_parameter_that_shadows_parent_parameter() {
+        // If a function parameter has the same name as the parameter of a
+        // parent function, the closer parameter should be resolved.
+
+        let (syntax_tree, bindings) = resolve_bindings(
+            r"
+                f: fn
+                    \ parameter ->
+                        fn
+                            \ parameter ->
+                                parameter
+                        end
+                end
+            ",
+        );
+
+        let function = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .filter_map(|expression| expression.into_local_function())
+            .next()
+            .unwrap()
+            .cloned();
+        let function = function.as_ref();
+        let branch = function.find_single_branch().unwrap();
+        let parameter = branch
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+
+        if let Some(binding) = bindings.is_binding(&parameter) {
+            assert_eq!(binding.branch, branch.location);
+        } else {
+            panic!("Expected identifier to be a binding.");
+        }
+        assert!(bindings.is_binding(&parameter).is_some());
     }
 
     #[test]
