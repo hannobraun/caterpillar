@@ -131,7 +131,7 @@ fn infer_expression(
         .annotations
         .signature_of(&expression.location)
         .cloned()
-        .map(|signature| make_indirect(signature, local_types));
+        .map(|signature| make_signature_indirect(signature, local_types));
 
     let inferred = match expression.fragment {
         Expression::Identifier { .. } => {
@@ -153,8 +153,10 @@ fn infer_expression(
                     Some(signature)
                 }
                 (None, Some(host), None) => {
-                    let signature =
-                        make_indirect(host.signature.clone(), local_types);
+                    let signature = make_signature_indirect(
+                        host.signature.clone(),
+                        local_types,
+                    );
                     Some(signature)
                 }
                 (None, None, Some(intrinsic)) => {
@@ -165,8 +167,9 @@ fn infer_expression(
                         local_stack,
                     )?;
 
-                    signature
-                        .map(|signature| make_indirect(signature, local_types))
+                    signature.map(|signature| {
+                        make_signature_indirect(signature, local_types)
+                    })
                 }
                 (None, None, None) => None,
                 _ => {
@@ -179,7 +182,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature = make_indirect(signature, local_types);
+            let signature = make_signature_indirect(signature, local_types);
             Some(signature)
         }
         _ => None,
@@ -378,7 +381,7 @@ fn infer_intrinsic(
     Ok(signature)
 }
 
-fn make_indirect(
+fn make_signature_indirect(
     signature: Signature,
     local_types: &mut LocalTypes,
 ) -> Signature<Index<InferredType>> {
