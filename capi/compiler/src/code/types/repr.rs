@@ -60,7 +60,7 @@ impl Types {
         annotations: TypeAnnotations,
     ) -> Self {
         let InferenceOutput {
-            expressions: signatures,
+            expressions,
             stacks,
         } = infer_types(Context {
             syntax_tree,
@@ -70,7 +70,7 @@ impl Types {
             annotations: &annotations,
         });
         Self {
-            expressions: signatures,
+            expressions,
             stacks,
         }
     }
