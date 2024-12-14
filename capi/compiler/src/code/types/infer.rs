@@ -68,7 +68,8 @@ fn infer_branch(
 
     let bindings = branch
         .bindings()
-        .map(|(_, binding)| {
+        .map(|(_, binding)| binding)
+        .map(|binding| {
             let type_ = local_types.push(InferredType::Unknown);
             (binding, type_)
         })
