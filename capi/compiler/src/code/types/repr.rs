@@ -315,7 +315,7 @@ mod tests {
             ",
         );
 
-        let value = syntax_tree
+        let g = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -327,13 +327,13 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&value).cloned().unwrap(),
+            types.signature_of(&g).cloned().unwrap(),
             Signature {
                 inputs: vec![Type::Number],
                 outputs: vec![Type::Number],
             },
         );
-        assert_eq!(types.stack_at(&value).unwrap(), &[Type::Number]);
+        assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
     }
 
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
