@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, fmt, result};
 use crate::{
     code::{
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
-        Bindings, Dependencies, FunctionCalls, Index, IndexMap,
+        Binding, Bindings, Dependencies, FunctionCalls, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -62,6 +62,14 @@ fn infer_branch(
     let mut local_types = LocalTypes::default();
     let mut local_stack = LocalStack::default();
 
+    let bindings = branch
+        .bindings()
+        .map(|(_, binding)| {
+            let type_ = local_types.push(InferredType::Unknown);
+            (binding, type_)
+        })
+        .collect();
+
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -74,6 +82,7 @@ fn infer_branch(
 
         let signature = infer_expression(
             expression,
+            &bindings,
             &mut local_types,
             &mut local_stack,
             context,
@@ -109,6 +118,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
+    _: &BTreeMap<Binding, Index<InferredType>>,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
