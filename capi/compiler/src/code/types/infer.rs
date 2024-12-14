@@ -143,7 +143,7 @@ fn infer_branch(
 fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<Binding, Index<InferredType>>,
-    _: &BTreeMap<FunctionLocation, Signature>,
+    functions: &BTreeMap<FunctionLocation, Signature>,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
@@ -163,9 +163,12 @@ fn infer_expression(
             let intrinsic = context
                 .function_calls
                 .is_call_to_intrinsic_function(&expression.location);
+            let user_defined = context
+                .function_calls
+                .is_call_to_user_defined_function(&expression.location);
 
-            match (binding, host, intrinsic) {
-                (Some(binding), None, None) => {
+            match (binding, host, intrinsic, user_defined) {
+                (Some(binding), None, None, None) => {
                     let Some(output) = bindings.get(binding).copied() else {
                         let Binding {
                             identifier_index,
@@ -208,14 +211,14 @@ fn infer_expression(
                     };
                     Some(signature)
                 }
-                (None, Some(host), None) => {
+                (None, Some(host), None, None) => {
                     let signature = make_signature_indirect(
                         host.signature.clone(),
                         local_types,
                     );
                     Some(signature)
                 }
-                (None, None, Some(intrinsic)) => {
+                (None, None, Some(intrinsic), None) => {
                     let signature = infer_intrinsic(
                         intrinsic,
                         &expression.location,
@@ -227,7 +230,12 @@ fn infer_expression(
                         make_signature_indirect(signature, local_types)
                     })
                 }
-                (None, None, None) => None,
+                (None, None, None, Some(user_defined)) => {
+                    functions.get(user_defined).map(|signature| {
+                        make_signature_indirect(signature.clone(), local_types)
+                    })
+                }
+                (None, None, None, None) => None,
                 _ => {
                     unreachable!("Single identifier resolved multiple times.");
                 }

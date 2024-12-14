@@ -296,7 +296,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // missing feature; no issue to track this
     fn infer_type_of_call_to_single_branch_function() {
         // If the single branch of a function provides enough information to
         // infer the types of both its inputs and outputs, then the signature of

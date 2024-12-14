@@ -3,9 +3,9 @@ main: fn
     \ size_x, size_y ->
         size_x: -> Number .
         size_y: -> Number .
-        tile_field_size: -> Number .
+        tile_field_size
         vec_store: Number, Number, Number -> .
-        init_frame_count: -> .
+        init_frame_count
         init
         main_inner
 end
@@ -220,7 +220,7 @@ end
 init_frame_count: fn
     \ ->
         1
-        frame_count: -> Number .
+        frame_count
         store
 end
 
@@ -251,10 +251,10 @@ end
 # Game state
 init: fn
     \ ->
-        init_should_game_run: -> .
-        snake_init: -> .
-        init_velocity: -> .
-        init_next_position: -> .
+        init_should_game_run
+        snake_init
+        init_velocity
+        init_next_position
         food_init
 end
 
@@ -286,7 +286,7 @@ end
 init_should_game_run: fn
     \ ->
         1
-        should_game_run: -> Number .
+        should_game_run
             store
 end
 
@@ -295,17 +295,17 @@ init_velocity: fn
     \ ->
         1
         0
-        velocity: -> Number .
+        velocity
             vec_store: Number, Number, Number -> .
 end
 
 # Game state - next position
 init_next_position: fn
     \ ->
-        positions: -> Number .
+        positions
         0
         vec_buf_get: Number, Number -> Number, Number .
-        next_position: -> Number .
+        next_position
         vec_store: Number, Number, Number -> .
 end
 
@@ -475,13 +475,13 @@ end
 snake_init: fn
     \ ->
          3
-         snake_length: -> Number .
+         snake_length
             store
 
-        positions: -> Number .
+        positions
             vec_buf_init: Number -> .
 
-        positions: -> Number .
+        positions
         15
         15
             vec_buf_push: Number, Number, Number -> .
@@ -934,7 +934,7 @@ _negatable_random_return_or_continue: fn
     \ -2147483648 ->
         # Negating the minimum number would result in an
         # integer overflow.
-        negatable_random: -> Number .
+        negatable_random
 
     \ random ->
         random: -> Number .
