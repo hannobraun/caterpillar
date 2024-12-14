@@ -1,7 +1,7 @@
 use crate::tests::infra::runtime;
 
 #[test]
-fn anonymous_function_eval() {
+fn eval() {
     runtime()
         .update_code(
             r"
@@ -16,7 +16,7 @@ fn anonymous_function_eval() {
 }
 
 #[test]
-fn anonymous_function_parameter() {
+fn parameter() {
     runtime()
         .update_code(
             r"
@@ -33,7 +33,7 @@ fn anonymous_function_parameter() {
 }
 
 #[test]
-fn anonymous_function_parameter_shadowing() {
+fn parameter_shadowing() {
     runtime()
         .update_code(
             r"
@@ -55,7 +55,7 @@ fn anonymous_function_parameter_shadowing() {
 }
 
 #[test]
-fn anonymous_function_captured_binding() {
+fn captured_binding() {
     runtime()
         .update_code(
             r"
