@@ -59,14 +59,20 @@ impl Types {
         dependencies: &Dependencies,
         annotations: TypeAnnotations,
     ) -> Self {
-        let InferenceOutput { signatures, stacks } = infer_types(Context {
+        let InferenceOutput {
+            expressions: signatures,
+            stacks,
+        } = infer_types(Context {
             syntax_tree,
             bindings,
             function_calls,
             dependencies,
             annotations: &annotations,
         });
-        Self { expressions: signatures, stacks }
+        Self {
+            expressions: signatures,
+            stacks,
+        }
     }
 
     /// # Access the signature of the expression at the given location, if any

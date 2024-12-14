@@ -50,7 +50,7 @@ pub struct Context<'r> {
 
 #[derive(Default)]
 pub struct InferenceOutput {
-    pub signatures: BTreeMap<MemberLocation, Signature>,
+    pub expressions: BTreeMap<MemberLocation, Signature>,
     pub stacks: Stacks,
 }
 
@@ -89,7 +89,7 @@ fn infer_branch(
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
         if let Some(signature) = make_direct(&signature, &local_types) {
-            output.signatures.insert(location, signature);
+            output.expressions.insert(location, signature);
         }
     }
     for (location, local_stack) in stacks {
