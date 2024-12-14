@@ -59,7 +59,7 @@ pub struct InferenceOutput {
 
 fn infer_branch(
     branch: Located<&Branch>,
-    _: &Environment,
+    environment: &Environment,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<Option<Signature>> {
@@ -69,6 +69,7 @@ fn infer_branch(
     let bindings = branch
         .bindings()
         .map(|(_, binding)| binding)
+        .chain(environment.values().cloned())
         .map(|binding| {
             let type_ = local_types.push(InferredType::Unknown);
             (binding, type_)
