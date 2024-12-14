@@ -150,12 +150,12 @@ fn infer_expression(
                 .is_call_to_intrinsic_function(&expression.location);
 
             match (binding, host, intrinsic) {
-                (Some(_binding), None, None) => {
-                    let Some(output) = bindings.get(_binding).copied() else {
+                (Some(binding), None, None) => {
+                    let Some(output) = bindings.get(binding).copied() else {
                         let Binding {
                             identifier_index,
                             branch,
-                        } = _binding;
+                        } = binding;
 
                         let mut available_bindings = String::new();
                         for (binding, type_) in bindings {
