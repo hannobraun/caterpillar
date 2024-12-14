@@ -382,11 +382,16 @@ fn infer_intrinsic(
     Ok(signature)
 }
 
-fn infer_branch_signature(local_types: LocalTypes, local_stack: LocalStack) {
+fn infer_branch_signature(
+    local_types: LocalTypes,
+    local_stack: LocalStack,
+) -> Option<Signature> {
     if let Some(local_stack) = local_stack.get() {
         let local_stack = make_stack_direct(local_stack, &local_types);
         dbg!(local_stack);
     }
+
+    None
 }
 
 fn make_signature_indirect(
