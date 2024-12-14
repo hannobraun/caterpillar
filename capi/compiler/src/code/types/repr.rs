@@ -306,7 +306,7 @@ mod tests {
             r"
                 f: fn
                     \ ->
-                        g
+                        0 g
                 end
 
                 g: fn
@@ -324,7 +324,7 @@ mod tests {
             .unwrap()
             .expressions()
             .map(|expression| expression.location)
-            .next()
+            .nth(1)
             .unwrap();
 
         assert_eq!(
