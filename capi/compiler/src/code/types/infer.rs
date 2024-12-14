@@ -249,7 +249,7 @@ fn infer_expression(
             let signature = make_signature_indirect(signature, local_types);
             Some(signature)
         }
-        _ => None,
+        Expression::LocalFunction { .. } => None,
     };
 
     // This is not redundant with the check below, where the two signatures are
