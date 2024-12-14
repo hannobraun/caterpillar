@@ -432,6 +432,29 @@ fn infer_intrinsic(
     local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>> {
     let signature = match intrinsic {
+        IntrinsicFunction::Drop => {
+            let Some(local_stack) = local_stack.get_mut() else {
+                return Ok(None);
+            };
+
+            let top_operand =
+                local_stack.last().map(|index| local_types.get(index));
+
+            match top_operand {
+                Some(InferredType::Known(type_)) => Some(Signature {
+                    inputs: vec![type_.clone()],
+                    outputs: vec![],
+                }),
+                Some(InferredType::Unknown) => None,
+                None => {
+                    return Err(TypeError {
+                        expected: ExpectedType::Unknown,
+                        actual: None,
+                        location: location.clone(),
+                    });
+                }
+            }
+        }
         IntrinsicFunction::Eval => {
             let Some(local_stack) = local_stack.get_mut() else {
                 return Ok(None);
