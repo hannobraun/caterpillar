@@ -58,7 +58,7 @@ fn infer_branch(
     branch: Located<&Branch>,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<()> {
+) -> Result<Option<Signature>> {
     let mut local_types = LocalTypes::default();
     let mut local_stack = LocalStack::default();
 
@@ -71,7 +71,7 @@ fn infer_branch(
     )?;
     infer_branch_signature(local_types, local_stack);
 
-    Ok(())
+    Ok(None)
 }
 
 fn infer_branch_body(
