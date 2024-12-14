@@ -590,10 +590,8 @@ check_body_collision_inner: fn
                         add_s32
                         2
                         eq
-                        copy
                         fn
                             \ 0 ->
-                                drop
                                 x
                                 y
                                 index
@@ -602,6 +600,7 @@ check_body_collision_inner: fn
                                 check_body_collision_inner
 
                             \ _ ->
+                                1
                         end
                             eval
                     end
