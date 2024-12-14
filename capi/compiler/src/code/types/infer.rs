@@ -70,6 +70,11 @@ fn infer_branch(
         output,
     )?;
 
+    if let Some(local_stack) = local_stack.get_mut() {
+        let local_stack = make_stack_direct(local_stack, &local_types);
+        dbg!(local_stack);
+    }
+
     Ok(())
 }
 
