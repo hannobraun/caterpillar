@@ -8,7 +8,8 @@ use crate::{
     code::{
         bindings::Environment,
         syntax::{
-            Branch, Expression, Located, MemberLocation, Pattern, SyntaxTree,
+            Branch, Expression, FunctionLocation, Located, MemberLocation,
+            Pattern, SyntaxTree,
         },
         Binding, Bindings, Dependencies, FunctionCalls, Index, IndexMap,
     },
@@ -26,7 +27,11 @@ pub fn infer_types(context: Context) -> InferenceOutput {
         for branch in function.branches() {
             match infer_branch(branch, environment, context, &mut output) {
                 Ok(signature) => {
-                    dbg!(signature);
+                    if let Some(signature) = signature {
+                        output
+                            .functions
+                            .insert(function.location.clone(), signature);
+                    }
                 }
                 Err(TypeError {
                     expected,
@@ -63,6 +68,7 @@ pub struct Context<'r> {
 
 #[derive(Default)]
 pub struct InferenceOutput {
+    pub functions: BTreeMap<FunctionLocation, Signature>,
     pub expressions: BTreeMap<MemberLocation, Signature>,
     pub stacks: Stacks,
 }

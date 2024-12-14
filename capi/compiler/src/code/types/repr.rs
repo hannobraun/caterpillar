@@ -60,6 +60,7 @@ impl Types {
         annotations: TypeAnnotations,
     ) -> Self {
         let InferenceOutput {
+            functions: _,
             expressions,
             stacks,
         } = infer_types(Context {
