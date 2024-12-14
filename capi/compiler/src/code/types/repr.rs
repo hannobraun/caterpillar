@@ -62,6 +62,7 @@ impl Types {
         let InferenceOutput {
             functions: _,
             expressions,
+            bindings: _,
             stacks,
         } = infer_types(Context {
             syntax_tree,
