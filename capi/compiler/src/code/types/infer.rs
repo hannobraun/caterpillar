@@ -129,6 +129,15 @@ fn infer_branch(
     for (location, signature) in signatures {
         if let Some(signature) = make_signature_direct(&signature, &local_types)
         {
+            if let Some(binding) = context.bindings.is_binding(&location) {
+                assert_eq!(signature.inputs.len(), 0);
+                assert_eq!(signature.outputs.len(), 1);
+
+                let type_ = signature.outputs[0].clone();
+
+                output.bindings.insert(binding.clone(), type_);
+            }
+
             output.expressions.insert(location, signature);
         }
     }

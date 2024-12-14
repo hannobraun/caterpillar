@@ -484,7 +484,7 @@ snake_init: fn
         positions
         15
         15
-            vec_buf_push: Number, Number, Number -> .
+            vec_buf_push
 end
 
 snake_head: fn
@@ -766,7 +766,7 @@ vec_buf_get: fn
         2
         mul_u8_wrap
         fn \ offset ->
-            vec_buf: -> Number .
+            vec_buf
             _vec_buf_first
             load
             fn \ base ->
@@ -777,7 +777,7 @@ vec_buf_get: fn
                 vec_load: Number -> Number, Number .
             end: -> fn Number -> Number, Number end .
                 eval
-        end: -> fn Number -> Number, Number end .
+        end
             eval
 end
 
@@ -797,11 +797,11 @@ end
 
 vec_buf_push: fn
     \ vec_buf, x, y ->
-        vec_buf: -> Number .
+        vec_buf
         _vec_buf_next
         fn \ next_addr ->
             vec_buf: -> Number .
-            next_addr: -> Number .
+            next_addr
             load
             0
             _vec_buf_address: Number, Number, Number -> Number .
@@ -814,7 +814,7 @@ vec_buf_push: fn
                 _vec_buf_inc_index: Number -> .
             end: -> fn Number -> end .
                 eval
-        end: -> fn Number -> end .
+        end
             eval
 end
 

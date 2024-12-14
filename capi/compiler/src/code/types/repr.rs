@@ -263,6 +263,48 @@ mod tests {
     }
 
     #[test]
+    fn infer_type_of_binding_from_use_in_local_function() {
+        // If the type of a binding can be inferred in a local function, that
+        // should carry over to the parent.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                \ value ->
+                        # We should know the type of `value` from its use within
+                        # the local function.
+                        value
+
+                        fn
+                            \ ->
+                                value not # type of `value` can be inferred here
+                        end
+                end
+            ",
+        );
+
+        let value = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+
+        assert_eq!(
+            types.signature_of(&value).cloned().unwrap(),
+            Signature {
+                inputs: vec![],
+                outputs: vec![Type::Number],
+            },
+        );
+        assert_eq!(types.stack_at(&value).unwrap(), &[]);
+    }
+
+    #[test]
     fn infer_type_of_literal() {
         // The type of a literal can be trivially inferred.
 
