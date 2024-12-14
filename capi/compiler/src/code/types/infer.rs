@@ -108,10 +108,7 @@ fn infer_branch_body(
         }
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = local_stack
-            .into_iter()
-            .map(|index| local_types.get(&index).clone().into_type())
-            .collect::<Option<Vec<_>>>()
+        let Some(local_stack) = make_stack_direct(local_stack, local_types)
         else {
             continue;
         };
@@ -414,6 +411,16 @@ fn make_signature_direct(
     let outputs = try_map(&signature.outputs)?;
 
     Some(Signature { inputs, outputs })
+}
+
+fn make_stack_direct(
+    local_stack: Vec<Index<InferredType>>,
+    local_types: &LocalTypes,
+) -> Option<Vec<Type>> {
+    local_stack
+        .into_iter()
+        .map(|index| local_types.get(&index).clone().into_type())
+        .collect::<Option<Vec<_>>>()
 }
 
 type Result<T> = result::Result<T, TypeError>;
