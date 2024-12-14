@@ -62,25 +62,6 @@ fn infer_branch(
     let mut local_types = LocalTypes::default();
     let mut local_stack = LocalStack::default();
 
-    infer_branch_body(
-        &branch,
-        &mut local_types,
-        &mut local_stack,
-        context,
-        output,
-    )?;
-    infer_branch_signature(local_types, local_stack);
-
-    Ok(None)
-}
-
-fn infer_branch_body(
-    branch: &Located<&Branch>,
-    local_types: &mut LocalTypes,
-    local_stack: &mut LocalStack,
-    context: Context,
-    output: &mut InferenceOutput,
-) -> Result<()> {
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -91,8 +72,12 @@ fn infer_branch_body(
             stacks.insert(location.clone(), stack);
         }
 
-        let signature =
-            infer_expression(expression, local_types, local_stack, context)?;
+        let signature = infer_expression(
+            expression,
+            &mut local_types,
+            &mut local_stack,
+            context,
+        )?;
 
         if let Some(signature) = signature {
             signatures.insert(location, signature);
@@ -103,13 +88,13 @@ fn infer_branch_body(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        if let Some(signature) = make_signature_direct(&signature, local_types)
+        if let Some(signature) = make_signature_direct(&signature, &local_types)
         {
             output.expressions.insert(location, signature);
         }
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = make_stack_direct(&local_stack, local_types)
+        let Some(local_stack) = make_stack_direct(&local_stack, &local_types)
         else {
             continue;
         };
@@ -117,7 +102,9 @@ fn infer_branch_body(
         output.stacks.insert(location, local_stack);
     }
 
-    Ok(())
+    infer_branch_signature(local_types, local_stack);
+
+    Ok(None)
 }
 
 fn infer_expression(
