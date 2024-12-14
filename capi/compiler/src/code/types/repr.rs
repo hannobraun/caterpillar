@@ -260,6 +260,40 @@ mod tests {
         assert_eq!(types.stack_at(&value).unwrap(), &[]);
     }
 
+    #[test]
+    fn infer_type_of_literal() {
+        // The type of a literal can be trivially inferred.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ ->
+                        1
+                end
+            ",
+        );
+
+        let value = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+
+        assert_eq!(
+            types.signature_of(&value).cloned().unwrap(),
+            Signature {
+                inputs: vec![],
+                outputs: vec![Type::Number],
+            },
+        );
+        assert_eq!(types.stack_at(&value).unwrap(), &[]);
+    }
+
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
