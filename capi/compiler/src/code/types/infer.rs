@@ -8,10 +8,7 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::{
-    repr::{Signatures, Stacks},
-    Signature, Type, TypeAnnotations,
-};
+use super::{repr::Stacks, Signature, Type, TypeAnnotations};
 
 pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
@@ -53,7 +50,7 @@ pub struct Context<'r> {
 
 #[derive(Default)]
 pub struct InferenceOutput {
-    pub signatures: Signatures,
+    pub signatures: BTreeMap<MemberLocation, Signature>,
     pub stacks: Stacks,
 }
 

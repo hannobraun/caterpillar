@@ -18,7 +18,7 @@ use super::{
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
 pub struct TypeAnnotations {
-    inner: Signatures,
+    inner: BTreeMap<MemberLocation, Signature>,
 }
 
 impl TypeAnnotations {
@@ -40,7 +40,7 @@ impl TypeAnnotations {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
-    signatures: Signatures,
+    signatures: BTreeMap<MemberLocation, Signature>,
     stacks: Stacks,
 }
 
@@ -91,7 +91,6 @@ impl Types {
     }
 }
 
-pub type Signatures = BTreeMap<MemberLocation, Signature>;
 pub type Stacks = BTreeMap<MemberLocation, Stack>;
 pub type Stack = Vec<Type>;
 
