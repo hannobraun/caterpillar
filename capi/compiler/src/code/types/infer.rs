@@ -7,7 +7,9 @@ use std::{
 use crate::{
     code::{
         bindings::Environment,
-        syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
+        syntax::{
+            Branch, Expression, Located, MemberLocation, Pattern, SyntaxTree,
+        },
         Binding, Bindings, Dependencies, FunctionCalls, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
@@ -121,7 +123,7 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
-    infer_branch_signature(local_types, local_stack);
+    infer_branch_signature(branch, bindings, local_types, local_stack);
 
     Ok(None)
 }
@@ -425,13 +427,40 @@ fn infer_intrinsic(
 }
 
 fn infer_branch_signature(
+    branch: Located<&Branch>,
+    bindings: BTreeMap<Binding, Index<InferredType>>,
     local_types: LocalTypes,
     local_stack: LocalStack,
 ) -> Option<Signature> {
-    let outputs = make_stack_direct(local_stack.get()?, &local_types)?;
-    dbg!(outputs);
+    let inputs = branch
+        .parameters
+        .iter()
+        .map(|parameter| match parameter {
+            Pattern::Identifier { name } => {
+                let Some(binding) = branch
+                    .bindings()
+                    .find_map(|(n, binding)| (n == *name).then_some(binding))
+                else {
+                    unreachable!(
+                        "Parameter of branch not recognized as a binding."
+                    );
+                };
 
-    None
+                let Some(type_) = bindings.get(&binding) else {
+                    unreachable!(
+                        "Parameter of branch not tracked in `bindings`."
+                    );
+                };
+
+                local_types.get(type_).clone().into_type()
+            }
+            Pattern::Literal { .. } => Some(Type::Number),
+        })
+        .collect::<Option<Vec<_>>>()?;
+
+    let outputs = make_stack_direct(local_stack.get()?, &local_types)?;
+
+    Some(Signature { inputs, outputs })
 }
 
 fn make_signature_indirect(
