@@ -294,6 +294,48 @@ mod tests {
         assert_eq!(types.stack_at(&value).unwrap(), &[]);
     }
 
+    #[test]
+    #[should_panic] // missing feature; no issue to track this
+    fn infer_type_of_call_to_single_branch_function() {
+        // If the single branch of a function provides enough information to
+        // infer the types of both its inputs and outputs, then the signature of
+        // a call to that function should be inferred.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ ->
+                        g
+                end
+
+                g: fn
+                    \ x ->
+                        x not
+                end
+            ",
+        );
+
+        let value = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+
+        assert_eq!(
+            types.signature_of(&value).cloned().unwrap(),
+            Signature {
+                inputs: vec![Type::Number],
+                outputs: vec![Type::Number],
+            },
+        );
+        assert_eq!(types.stack_at(&value).unwrap(), &[]);
+    }
+
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
