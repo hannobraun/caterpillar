@@ -386,10 +386,9 @@ fn infer_branch_signature(
     local_types: LocalTypes,
     local_stack: LocalStack,
 ) -> Option<Signature> {
-    if let Some(local_stack) = local_stack.get() {
-        let local_stack = make_stack_direct(local_stack, &local_types);
-        dbg!(local_stack);
-    }
+    let local_stack = local_stack.get()?;
+    let local_stack = make_stack_direct(local_stack, &local_types);
+    dbg!(local_stack);
 
     None
 }
