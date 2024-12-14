@@ -334,7 +334,7 @@ mod tests {
                 outputs: vec![Type::Number],
             },
         );
-        assert_eq!(types.stack_at(&value).unwrap(), &[]);
+        assert_eq!(types.stack_at(&value).unwrap(), &[Type::Number]);
     }
 
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
