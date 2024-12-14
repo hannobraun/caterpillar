@@ -2,6 +2,7 @@ use std::{collections::BTreeMap, fmt, result};
 
 use crate::{
     code::{
+        bindings::Environment,
         syntax::{Branch, Expression, Located, MemberLocation, SyntaxTree},
         Binding, Bindings, Dependencies, FunctionCalls, Index, IndexMap,
     },
@@ -14,12 +15,14 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for function in context.dependencies.functions(context.syntax_tree) {
+        let environment = context.bindings.environment_of(&function.location);
+
         for branch in function.branches() {
             if let Err(TypeError {
                 expected,
                 actual,
                 location,
-            }) = infer_branch(branch, context, &mut output)
+            }) = infer_branch(branch, environment, context, &mut output)
             {
                 let actual = actual
                     .map(|type_| format!("`{type_}`"))
@@ -56,6 +59,7 @@ pub struct InferenceOutput {
 
 fn infer_branch(
     branch: Located<&Branch>,
+    _: &Environment,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<Option<Signature>> {
