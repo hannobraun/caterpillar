@@ -574,14 +574,14 @@ check_body_collision_inner: fn
                 positions
                 index
                 vec_buf_get
-                vec_x
+                vec_x: Number, Number -> Number .
                 x
                 eq
                 fn \ x_matches ->
                     positions
                     index
                     vec_buf_get
-                    vec_y
+                    vec_y: Number, Number -> Number .
                     y
                     eq
                     fn \ y_matches ->
