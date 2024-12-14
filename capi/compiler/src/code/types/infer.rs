@@ -270,7 +270,10 @@ fn infer_expression(
             Explicit type: {explicit:?}\n\
             Inferred type: {inferred:?}\n\
             \n\
+            Expression: {:#?}
+            \n\
             At {}\n",
+            expression.fragment,
             expression.location.display(context.syntax_tree),
         );
     }
