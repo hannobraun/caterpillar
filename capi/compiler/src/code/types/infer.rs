@@ -1,4 +1,8 @@
-use std::{collections::BTreeMap, fmt, result};
+use std::{
+    collections::BTreeMap,
+    fmt::{self, Write},
+    result,
+};
 
 use crate::{
     code::{
@@ -124,7 +128,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    _: &BTreeMap<Binding, Index<InferredType>>,
+    bindings: &BTreeMap<Binding, Index<InferredType>>,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
@@ -136,7 +140,7 @@ fn infer_expression(
         .map(|signature| make_signature_indirect(signature, local_types));
 
     let inferred = match expression.fragment {
-        Expression::Identifier { .. } => {
+        Expression::Identifier { name } => {
             let binding = context.bindings.is_binding(&expression.location);
             let host = context
                 .function_calls
@@ -147,7 +151,42 @@ fn infer_expression(
 
             match (binding, host, intrinsic) {
                 (Some(_binding), None, None) => {
-                    let output = local_types.push(InferredType::Unknown);
+                    let Some(output) = bindings.get(_binding).copied() else {
+                        let Binding {
+                            identifier_index,
+                            branch,
+                        } = _binding;
+
+                        let mut available_bindings = String::new();
+                        for (binding, type_) in bindings {
+                            let Binding {
+                                identifier_index,
+                                branch,
+                            } = binding;
+                            let type_ = local_types.get(type_);
+                            write!(
+                                available_bindings,
+                                "- index `{identifier_index}` at {}: {type_:?}",
+                                branch.display(context.syntax_tree),
+                            )
+                            .expect("Writing to `String` can not fail.");
+                        }
+
+                        unreachable!(
+                            "Identifier `{name}` has been resolved as binding, \
+                            but it is not known in the branch.\n\
+                            \n\
+                            at {}\n\
+                            \n\
+                            Binding: identifier index `{identifier_index}` at \
+                            {}\n\
+                            \n\
+                            Available bindings in branch:\n\
+                            {available_bindings}",
+                            expression.location.display(context.syntax_tree),
+                            branch.display(context.syntax_tree),
+                        );
+                    };
                     let signature = Signature {
                         inputs: vec![],
                         outputs: vec![output],
