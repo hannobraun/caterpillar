@@ -62,13 +62,13 @@ fn infer_branch(
     let local_types = LocalTypes::default();
     let local_stack = LocalStack::default();
 
-    infer_branch_body(branch, local_types, local_stack, context, output)?;
+    infer_branch_body(&branch, local_types, local_stack, context, output)?;
 
     Ok(())
 }
 
 fn infer_branch_body(
-    branch: Located<&Branch>,
+    branch: &Located<&Branch>,
     mut local_types: LocalTypes,
     mut local_stack: LocalStack,
     context: Context,
