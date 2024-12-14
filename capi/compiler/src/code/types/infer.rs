@@ -108,7 +108,7 @@ fn infer_branch_body(
         }
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = make_stack_direct(local_stack, local_types)
+        let Some(local_stack) = make_stack_direct(&local_stack, local_types)
         else {
             continue;
         };
@@ -414,7 +414,7 @@ fn make_signature_direct(
 }
 
 fn make_stack_direct(
-    local_stack: Vec<Index<InferredType>>,
+    local_stack: &[Index<InferredType>],
     local_types: &LocalTypes,
 ) -> Option<Vec<Type>> {
     local_stack
