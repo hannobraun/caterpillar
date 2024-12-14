@@ -24,23 +24,25 @@ pub fn infer_types(context: Context) -> InferenceOutput {
         let environment = context.bindings.environment_of(&function.location);
 
         for branch in function.branches() {
-            if let Err(TypeError {
-                expected,
-                actual,
-                location,
-            }) = infer_branch(branch, environment, context, &mut output)
-            {
-                let actual = actual
-                    .map(|type_| format!("`{type_}`"))
-                    .unwrap_or_else(|| "nothing".to_string());
+            match infer_branch(branch, environment, context, &mut output) {
+                Ok(_) => {}
+                Err(TypeError {
+                    expected,
+                    actual,
+                    location,
+                }) => {
+                    let actual = actual
+                        .map(|type_| format!("`{type_}`"))
+                        .unwrap_or_else(|| "nothing".to_string());
 
-                panic!(
-                    "\n\
-                    Type error: expected {expected}, got {actual}\n\
-                    \n\
-                    at {}\n",
-                    location.display(context.syntax_tree),
-                );
+                    panic!(
+                        "\n\
+                        Type error: expected {expected}, got {actual}\n\
+                        \n\
+                        at {}\n",
+                        location.display(context.syntax_tree),
+                    );
+                }
             }
         }
     }
