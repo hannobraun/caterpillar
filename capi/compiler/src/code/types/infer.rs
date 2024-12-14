@@ -460,7 +460,7 @@ fn infer_branch_signature(
             }
             Pattern::Literal { .. } => Some(Type::Number),
         })
-        .collect::<Option<Vec<_>>>()?;
+        .collect::<Option<_>>()?;
 
     let outputs = make_stack_direct(local_stack.get()?, &local_types)?;
 
