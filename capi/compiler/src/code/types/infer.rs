@@ -127,9 +127,10 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
-    infer_branch_signature(branch, bindings, local_types, local_stack);
+    let signature =
+        infer_branch_signature(branch, bindings, local_types, local_stack);
 
-    Ok(None)
+    Ok(signature)
 }
 
 fn infer_expression(
