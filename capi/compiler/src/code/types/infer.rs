@@ -418,8 +418,8 @@ fn make_stack_direct(
     local_types: &LocalTypes,
 ) -> Option<Vec<Type>> {
     local_stack
-        .into_iter()
-        .map(|index| local_types.get(&index).clone().into_type())
+        .iter()
+        .map(|index| local_types.get(index).clone().into_type())
         .collect::<Option<Vec<_>>>()
 }
 
