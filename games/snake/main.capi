@@ -304,7 +304,7 @@ init_next_position: fn
     \ ->
         positions
         0
-        vec_buf_get: Number, Number -> Number, Number .
+        vec_buf_get
         next_position
         vec_store: Number, Number, Number -> .
 end
@@ -762,7 +762,7 @@ end
 
 vec_buf_get: fn
     \ vec_buf, index ->
-        index: -> Number .
+        index
         2
         mul_u8_wrap
         fn \ offset ->
