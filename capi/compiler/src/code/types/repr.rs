@@ -336,6 +336,49 @@ mod tests {
         assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
     }
 
+    #[test]
+    fn infer_type_of_local_function() {
+        // If the signature of a local function can be inferred, that should
+        // transfer to the expression that defines it.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ ->
+                        fn
+                            \ x ->
+                                x not
+                        end
+                end
+            ",
+        );
+
+        let f_local = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .next()
+            .unwrap();
+
+        assert_eq!(
+            types.signature_of(&f_local).cloned().unwrap(),
+            Signature {
+                inputs: vec![],
+                outputs: vec![Type::Function {
+                    signature: Signature {
+                        inputs: vec![Type::Number],
+                        outputs: vec![Type::Number]
+                    },
+                }],
+            },
+        );
+        assert_eq!(types.stack_at(&f_local).unwrap(), &[]);
+    }
+
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);

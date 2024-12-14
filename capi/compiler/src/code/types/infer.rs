@@ -249,7 +249,18 @@ fn infer_expression(
             let signature = make_signature_indirect(signature, local_types);
             Some(signature)
         }
-        Expression::LocalFunction { .. } => None,
+        Expression::LocalFunction { .. } => {
+            let location = FunctionLocation::from(expression.location.clone());
+            functions.get(&location).map(|signature| {
+                let signature = Signature {
+                    inputs: vec![],
+                    outputs: vec![Type::Function {
+                        signature: signature.clone(),
+                    }],
+                };
+                make_signature_indirect(signature, local_types)
+            })
+        }
     };
 
     // This is not redundant with the check below, where the two signatures are

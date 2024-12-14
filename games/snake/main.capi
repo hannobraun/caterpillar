@@ -953,6 +953,6 @@ abs: fn
 
             \ v, _ ->
                 v: -> Number .
-        end: -> fn Number, Number -> Number end .
+        end
             eval
 end
