@@ -105,6 +105,7 @@ fn infer_branch(
         let signature = infer_expression(
             expression,
             &bindings,
+            &output.functions,
             &mut local_types,
             &mut local_stack,
             context,
@@ -142,6 +143,7 @@ fn infer_branch(
 fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<Binding, Index<InferredType>>,
+    _: &BTreeMap<FunctionLocation, Signature>,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
