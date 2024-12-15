@@ -23,9 +23,16 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 
     for function in context.dependencies.functions(context.syntax_tree) {
         let environment = context.bindings.environment_of(&function.location);
+        let mut local_types = LocalTypes::default();
 
         for branch in function.branches() {
-            match infer_branch(branch, environment, context, &mut output) {
+            match infer_branch(
+                branch,
+                environment,
+                &mut local_types,
+                context,
+                &mut output,
+            ) {
                 Ok(signature) => {
                     if let Some(signature) = signature {
                         output
@@ -77,10 +84,10 @@ pub struct InferenceOutput {
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
+    local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<Option<Signature>> {
-    let mut local_types = LocalTypes::default();
     let mut local_stack = LocalStack::default();
 
     let bindings = branch
@@ -113,7 +120,7 @@ fn infer_branch(
             expression,
             &bindings,
             &output.functions,
-            &mut local_types,
+            local_types,
             &mut local_stack,
             context,
         )?;
@@ -127,7 +134,7 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        if let Some(signature) = make_signature_direct(&signature, &local_types)
+        if let Some(signature) = make_signature_direct(&signature, local_types)
         {
             if let Some(binding) = context.bindings.is_binding(&location) {
                 assert_eq!(signature.inputs.len(), 0);
@@ -142,7 +149,7 @@ fn infer_branch(
         }
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = make_stack_direct(&local_stack, &local_types)
+        let Some(local_stack) = make_stack_direct(&local_stack, local_types)
         else {
             continue;
         };
@@ -151,9 +158,9 @@ fn infer_branch(
     }
 
     let signature =
-        infer_branch_signature(branch, bindings, &mut local_types, local_stack)
+        infer_branch_signature(branch, bindings, local_types, local_stack)
             .and_then(|signature| {
-                make_signature_direct(&signature, &local_types)
+                make_signature_direct(&signature, local_types)
             });
 
     Ok(signature)
