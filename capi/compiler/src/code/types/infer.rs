@@ -34,7 +34,9 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 &mut output,
             ) {
                 Ok(signature) => {
-                    if let Some(signature) = signature {
+                    if let Some(signature) = signature.and_then(|signature| {
+                        make_signature_direct(&signature, &local_types)
+                    }) {
                         output
                             .functions
                             .insert(function.location.clone(), signature);
@@ -87,7 +89,7 @@ fn infer_branch(
     local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<Option<Signature>> {
+) -> Result<Option<Signature<Index<InferredType>>>> {
     let mut local_stack = LocalStack::default();
 
     let bindings = branch
@@ -158,10 +160,7 @@ fn infer_branch(
     }
 
     let signature =
-        infer_branch_signature(branch, bindings, local_types, local_stack)
-            .and_then(|signature| {
-                make_signature_direct(&signature, local_types)
-            });
+        infer_branch_signature(branch, bindings, local_types, local_stack);
 
     Ok(signature)
 }
