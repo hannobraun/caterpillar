@@ -380,6 +380,51 @@ mod tests {
     }
 
     #[test]
+    #[should_panic] // missing feature; not tracked in an issue
+    fn infer_type_of_call_to_multi_branch_function_combining_inputs() {
+        // If a function has multiple branches, each of which contributes
+        // knowledge about the inputs of the function, that knowledge should be
+        // combined into a full signature.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ ->
+                        0 0 g
+                end
+
+                g: fn
+                    \ 0, x ->
+                        x
+
+                    \ x, 0 ->
+                        x
+                end
+            ",
+        );
+
+        let g = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .nth(2)
+            .unwrap();
+
+        assert_eq!(
+            types.signature_of(&g).cloned().unwrap(),
+            Signature {
+                inputs: vec![Type::Number, Type::Number],
+                outputs: vec![Type::Number],
+            },
+        );
+        assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number, Type::Number]);
+    }
+
+    #[test]
     fn infer_type_of_local_function() {
         // If the signature of a local function can be inferred, that should
         // transfer to the expression that defines it.
