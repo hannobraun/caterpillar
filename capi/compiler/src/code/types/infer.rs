@@ -151,7 +151,10 @@ fn infer_branch(
     }
 
     let signature =
-        infer_branch_signature(branch, bindings, &mut local_types, local_stack);
+        infer_branch_signature(branch, bindings, &mut local_types, local_stack)
+            .and_then(|signature| {
+                make_signature_direct(&signature, &local_types)
+            });
 
     Ok(signature)
 }
@@ -505,7 +508,7 @@ fn infer_branch_signature(
     bindings: BTreeMap<Binding, Index<InferredType>>,
     local_types: &mut LocalTypes,
     local_stack: LocalStack,
-) -> Option<Signature> {
+) -> Option<Signature<Index<InferredType>>> {
     let inputs = branch
         .parameters
         .iter()
@@ -526,13 +529,15 @@ fn infer_branch_signature(
                     );
                 };
 
-                local_types.get(type_).clone().into_type()
+                *type_
             }
-            Pattern::Literal { .. } => Some(Type::Number),
+            Pattern::Literal { .. } => {
+                local_types.push(InferredType::Known(Type::Number))
+            }
         })
-        .collect::<Option<_>>()?;
+        .collect();
 
-    let outputs = make_stack_direct(local_stack.get()?, local_types)?;
+    let outputs = local_stack.get().cloned()?;
 
     Some(Signature { inputs, outputs })
 }
