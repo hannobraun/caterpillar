@@ -24,6 +24,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     for function in context.dependencies.functions(context.syntax_tree) {
         let environment = context.bindings.environment_of(&function.location);
         let mut local_types = LocalTypes::default();
+        let mut branch_signatures = Vec::new();
 
         for branch in function.branches() {
             match infer_branch(
@@ -37,9 +38,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                     if let Some(signature) = signature.and_then(|signature| {
                         make_signature_direct(&signature, &local_types)
                     }) {
-                        output
-                            .functions
-                            .insert(function.location.clone(), signature);
+                        branch_signatures.push(signature);
                     }
                 }
                 Err(TypeError {
@@ -60,6 +59,12 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                     );
                 }
             }
+        }
+
+        if let Some(signature) = branch_signatures.pop() {
+            output
+                .functions
+                .insert(function.location.clone(), signature);
         }
     }
 
