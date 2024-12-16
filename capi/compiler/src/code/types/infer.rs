@@ -35,9 +35,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 &mut output,
             ) {
                 Ok(signature) => {
-                    if let Some(signature) = signature.and_then(|signature| {
-                        make_signature_direct(&signature, &local_types)
-                    }) {
+                    if let Some(signature) = signature {
                         branch_signatures.push(signature);
                     }
                 }
@@ -61,7 +59,9 @@ pub fn infer_types(context: Context) -> InferenceOutput {
             }
         }
 
-        if let Some(signature) = branch_signatures.pop() {
+        if let Some(signature) = branch_signatures.pop().and_then(|signature| {
+            make_signature_direct(&signature, &local_types)
+        }) {
             output
                 .functions
                 .insert(function.location.clone(), signature);
