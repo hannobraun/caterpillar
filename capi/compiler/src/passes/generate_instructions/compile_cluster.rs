@@ -4,7 +4,7 @@ use capi_runtime::{Instruction, InstructionAddress};
 
 use crate::code::{
     syntax::{FunctionLocation, Located, SyntaxTree},
-    Changes, DependencyCluster,
+    DependencyCluster,
 };
 
 use super::{
@@ -48,7 +48,6 @@ pub struct ClusterContext {
 
 pub fn compile_cluster(
     cluster: &DependencyCluster,
-    _: &Changes,
     functions_context: &mut FunctionsContext,
 ) {
     let mut context = ClusterContext {

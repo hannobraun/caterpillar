@@ -62,7 +62,7 @@ pub fn compile_functions(
     };
 
     for cluster in dependencies.clusters() {
-        compile_cluster(cluster, changes, &mut context);
+        compile_cluster(cluster, &mut context);
     }
 
     for update in &changes.updated {
