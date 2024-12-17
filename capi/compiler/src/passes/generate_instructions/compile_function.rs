@@ -380,7 +380,7 @@ pub fn compile_call_to_function(
     functions: &mut BTreeMap<FunctionLocation, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
-    let function = functions.get(callee).expect(
+    let callee = functions.get(callee).expect(
         "Attempting to compile call to function. Expecting that function to \
         have been compiled already.",
     );
@@ -388,7 +388,7 @@ pub fn compile_call_to_function(
     instructions.replace(
         &call.address,
         Instruction::CallFunction {
-            function: function.clone(),
+            function: callee.clone(),
             is_tail_call: call.is_tail_call,
         },
     );
