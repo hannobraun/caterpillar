@@ -23,6 +23,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 
     for function in context.dependencies.functions(context.syntax_tree) {
         let environment = context.bindings.environment_of(&function.location);
+
         let mut local_types = LocalTypes::default();
         let mut branch_signatures = Vec::new();
 
