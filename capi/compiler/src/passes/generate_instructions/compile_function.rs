@@ -337,21 +337,12 @@ fn compile_expression(
             functions_context.instructions,
             Some(&mut mapping),
         ),
-        Expression::LocalFunction { function } => {
+        Expression::LocalFunction { function: _ } => {
             if functions_context
                 .recursion
                 .is_recursive_expression(&expression.location)
                 .is_some()
             {
-                cluster_context.queue_of_functions_to_compile.push_front(
-                    FunctionToCompile {
-                        function: function.clone(),
-                        location: FunctionLocation::Local {
-                            location: expression.location.clone(),
-                        },
-                    },
-                );
-
                 // For recursive local functions, we can't generally assume that
                 // the local function has been compiled yet.
                 //
