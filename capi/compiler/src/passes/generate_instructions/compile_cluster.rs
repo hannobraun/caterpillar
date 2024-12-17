@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, VecDeque};
 use capi_runtime::InstructionAddress;
 
 use crate::code::{
-    syntax::{FunctionLocation, Located, SyntaxTree},
+    syntax::{FunctionLocation, Located},
     DependencyCluster,
 };
 
@@ -56,10 +56,13 @@ pub fn compile_cluster(
         recursive_local_function_definitions_by_local_function: BTreeMap::new(),
     };
 
-    seed_queue_of_functions_to_compile(
-        &mut context.queue_of_functions_to_compile,
-        cluster,
-        functions_context.syntax_tree,
+    context.queue_of_functions_to_compile.extend(
+        cluster
+            .functions(functions_context.syntax_tree)
+            .map(|function| FunctionToCompile {
+                function: function.fragment.clone(),
+                location: function.location,
+            }),
     );
 
     while let Some(function_to_compile) =
@@ -98,19 +101,4 @@ pub fn compile_cluster(
             functions_context,
         );
     }
-}
-
-fn seed_queue_of_functions_to_compile(
-    queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
-    cluster: &DependencyCluster,
-    syntax_tree: &SyntaxTree,
-) {
-    let functions_in_cluster_to_compile =
-        cluster
-            .functions(syntax_tree)
-            .map(|function| FunctionToCompile {
-                function: function.fragment.clone(),
-                location: function.location,
-            });
-    queue_of_functions_to_compile.extend(functions_in_cluster_to_compile);
 }
