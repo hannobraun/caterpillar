@@ -107,7 +107,7 @@ impl ActiveFunctions {
                 DebugFunction::new(
                     named_function.inner,
                     Some(named_function.name),
-                    FunctionLocation::NamedFunction {
+                    FunctionLocation::Named {
                         index: function_index_in_root_context,
                     },
                     active_expression,
@@ -262,7 +262,7 @@ fn instruction_to_named_function(
 
     loop {
         match current_location {
-            FunctionLocation::NamedFunction { index } => {
+            FunctionLocation::Named { index } => {
                 let function = code
                     .syntax_tree
                     .named_functions

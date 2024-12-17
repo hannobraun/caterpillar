@@ -75,7 +75,7 @@ impl<'r> Located<&'r Function> {
     serde::Serialize,
 )]
 pub enum FunctionLocation {
-    NamedFunction { index: Index<NamedFunction> },
+    Named { index: Index<NamedFunction> },
     AnonymousFunction { location: MemberLocation },
 }
 
@@ -94,7 +94,7 @@ impl FunctionLocation {
 
 impl From<Index<NamedFunction>> for FunctionLocation {
     fn from(index: Index<NamedFunction>) -> Self {
-        Self::NamedFunction { index }
+        Self::Named { index }
     }
 }
 
@@ -115,7 +115,7 @@ pub struct FunctionLocationDisplay<'r> {
 impl fmt::Display for FunctionLocationDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.location {
-            FunctionLocation::NamedFunction { index } => {
+            FunctionLocation::Named { index } => {
                 let name = &self
                     .syntax_tree
                     .named_functions

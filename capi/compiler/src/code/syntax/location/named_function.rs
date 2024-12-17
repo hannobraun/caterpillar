@@ -28,7 +28,7 @@ impl<'r> Located<&'r NamedFunction> {
     pub fn into_located_function(self) -> Located<&'r Function> {
         Located {
             fragment: &self.fragment.inner,
-            location: FunctionLocation::NamedFunction {
+            location: FunctionLocation::Named {
                 index: self.location,
             },
         }
@@ -40,7 +40,7 @@ impl<'r> Located<&'r mut NamedFunction> {
     pub fn into_located_function_mut(self) -> Located<&'r mut Function> {
         Located {
             fragment: &mut self.fragment.inner,
-            location: FunctionLocation::NamedFunction {
+            location: FunctionLocation::Named {
                 index: self.location,
             },
         }

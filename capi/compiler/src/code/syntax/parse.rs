@@ -67,7 +67,7 @@ fn parse_named_function(
 ) -> Result<NamedFunction> {
     let name = parse_function_name(tokens)?;
 
-    let location = FunctionLocation::NamedFunction { index };
+    let location = FunctionLocation::Named { index };
     let function = parse_function(tokens, location)?;
 
     Ok(NamedFunction {

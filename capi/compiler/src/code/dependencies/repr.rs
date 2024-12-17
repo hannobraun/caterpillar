@@ -81,7 +81,7 @@ impl Dependencies {
     ) -> Option<&DependencyCluster> {
         self.clusters.iter().find(|cluster| {
             cluster.functions.values().any(|location| {
-                *location == FunctionLocation::NamedFunction { index: *index }
+                *location == FunctionLocation::Named { index: *index }
             })
         })
     }
