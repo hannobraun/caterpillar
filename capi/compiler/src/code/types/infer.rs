@@ -664,12 +664,14 @@ impl Default for LocalStack {
 #[derive(Clone, Debug, Eq, PartialEq)]
 enum InferredType {
     Known(Type),
-    Unknown,
+    Unknown { equal_to: Vec<Index<InferredType>> },
 }
 
 impl InferredType {
     pub fn unknown() -> Self {
-        Self::Unknown
+        Self::Unknown {
+            equal_to: Vec::new(),
+        }
     }
 
     pub fn into_type(self) -> Option<Type> {
