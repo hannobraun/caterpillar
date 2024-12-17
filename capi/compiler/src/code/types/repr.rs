@@ -380,7 +380,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // missing feature; not tracked in an issue
     fn infer_type_of_call_to_multi_branch_function_combining_inputs() {
         // If a function has multiple branches, each of which contributes
         // knowledge about the inputs of the function, that knowledge should be

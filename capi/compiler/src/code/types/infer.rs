@@ -60,9 +60,10 @@ pub fn infer_types(context: Context) -> InferenceOutput {
             }
         }
 
-        if let Some(signature) = branch_signatures.pop().and_then(|signature| {
-            make_signature_direct(&signature, &local_types)
-        }) {
+        let signature =
+            unify_branch_signatures(branch_signatures, &mut local_types);
+
+        if let Some(signature) = signature {
             output
                 .functions
                 .insert(function.location.clone(), signature);
@@ -565,6 +566,45 @@ fn infer_branch_signature(
     Some(Signature { inputs, outputs })
 }
 
+fn unify_branch_signatures(
+    mut branch_signatures: Vec<Signature<Index<InferredType>>>,
+    local_types: &mut LocalTypes,
+) -> Option<Signature> {
+    let mut inputs_of_each_branch = branch_signatures
+        .iter()
+        .map(|signature| signature.inputs.iter())
+        .collect::<Vec<_>>();
+
+    loop {
+        let mut current_inputs = Vec::new();
+
+        for inputs in &mut inputs_of_each_branch {
+            current_inputs.push(inputs.next().copied());
+        }
+
+        if current_inputs.iter().all(|input| input.is_none()) {
+            break;
+        }
+
+        let Some(current_inputs) =
+            current_inputs.into_iter().collect::<Option<_>>()
+        else {
+            panic!(
+                "Found function with branches that have different number of \
+                inputs."
+            );
+        };
+
+        local_types.unify(current_inputs);
+    }
+
+    // Not unifying branch outputs right now. It's probably necessary, where
+    // outputs are known but inputs aren't, but there's not test for that yet.
+
+    let signature = branch_signatures.pop()?;
+    make_signature_direct(&signature, local_types)
+}
+
 fn make_signature_indirect(
     signature: Signature,
     local_types: &mut LocalTypes,
@@ -633,6 +673,26 @@ impl LocalTypes {
         };
 
         type_
+    }
+
+    fn unify(&mut self, types: BTreeSet<Index<InferredType>>) {
+        let mut known_types = BTreeSet::new();
+
+        for index in &types {
+            if let Some(type_) = self.get(index).clone().into_type() {
+                known_types.insert(type_);
+            }
+        }
+
+        if known_types.len() > 1 {
+            panic!("Conflicting types: {known_types:?}");
+        }
+
+        if let Some(type_) = known_types.into_iter().next() {
+            for index in types {
+                self.inner.insert(index, InferredType::Known(type_.clone()));
+            }
+        }
     }
 }
 
