@@ -24,7 +24,7 @@ struct FunctionContext<'r> {
 
 pub fn compile_function(
     function: Located<&Function>,
-    address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
+    _: Option<InstructionAddress>,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
@@ -52,28 +52,10 @@ pub fn compile_function(
         };
     }
 
-    let environment = functions_context
-        .bindings
-        .environment_of(&function.location)
-        .iter()
-        .map(|(name, _)| name)
-        .cloned()
-        .collect();
-
     if let Some(instruction_range) = instruction_range {
         functions_context
             .source_map
             .map_function_to_instructions(function.location, instruction_range);
-    }
-
-    if let Some(address) = address_of_instruction_to_make_anon_function {
-        functions_context.instructions.replace(
-            &address,
-            Instruction::MakeAnonymousFunction {
-                branches: runtime_function.branches.clone(),
-                environment,
-            },
-        );
     }
 
     runtime_function
