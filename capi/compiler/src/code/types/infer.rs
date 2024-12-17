@@ -36,11 +36,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 &mut output,
             ) {
                 Ok((inputs, outputs)) => {
-                    let signature =
-                        outputs.map(|outputs| Signature { inputs, outputs });
-                    if let Some(signature) = signature {
-                        branch_signatures.push(signature);
-                    }
+                    branch_signatures.push((inputs, outputs));
                 }
                 Err(TypeError {
                     expected,
@@ -569,13 +565,17 @@ fn infer_branch_signature(
     (inputs, outputs)
 }
 
+#[allow(clippy::type_complexity)]
 fn unify_branch_signatures(
-    mut branch_signatures: Vec<Signature<Index<InferredType>>>,
+    mut branch_signatures: Vec<(
+        Vec<Index<InferredType>>,
+        Option<Vec<Index<InferredType>>>,
+    )>,
     local_types: &mut LocalTypes,
 ) -> Option<Signature> {
     let inputs_of_each_branch = branch_signatures
         .iter()
-        .map(|signature| signature.inputs.iter().copied())
+        .map(|(inputs, _)| inputs.iter().copied())
         .collect::<Vec<_>>();
 
     unify_lists_of_types(inputs_of_each_branch, local_types);
@@ -583,7 +583,12 @@ fn unify_branch_signatures(
     // Not unifying branch outputs right now. I haven't found a case where it
     // was actually necessary yet, and lacking that, I can't write a test.
 
-    let signature = branch_signatures.pop()?;
+    let (inputs, outputs) = branch_signatures.pop()?;
+    let signature = Signature {
+        inputs,
+        outputs: outputs?,
+    };
+
     make_signature_direct(&signature, local_types)
 }
 
