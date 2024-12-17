@@ -2,15 +2,12 @@ use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
-use crate::code::{
-    syntax::{FunctionLocation, Located},
-    DependencyCluster,
-};
+use crate::code::{syntax::FunctionLocation, DependencyCluster};
 
 use super::{
     compile_function::{
         compile_call_to_function, compile_definition_of_local_function,
-        compile_function, CallToFunction, FunctionToCompile,
+        compile_function, CallToFunction,
     },
     compile_functions::FunctionsContext,
 };
@@ -48,25 +45,13 @@ pub fn compile_cluster(
         recursive_local_function_definitions_by_local_function: BTreeMap::new(),
     };
 
-    let functions =
-        cluster
-            .functions(functions_context.syntax_tree)
-            .map(|function| FunctionToCompile {
-                function: function.fragment.clone(),
-                location: function.location,
-            });
+    let functions = cluster.functions(functions_context.syntax_tree);
 
-    for function_to_compile in functions {
-        let location = function_to_compile.location.clone();
+    for function in functions {
+        let location = function.location.clone();
 
-        let runtime_function = compile_function(
-            Located {
-                fragment: &function_to_compile.function,
-                location: function_to_compile.location.clone(),
-            },
-            &mut context,
-            functions_context,
-        );
+        let runtime_function =
+            compile_function(function, &mut context, functions_context);
 
         functions_context
             .compiled_functions_by_location

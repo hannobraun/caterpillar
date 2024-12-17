@@ -516,8 +516,3 @@ pub struct CallToFunction {
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
-
-pub struct FunctionToCompile {
-    pub function: Function,
-    pub location: FunctionLocation,
-}
