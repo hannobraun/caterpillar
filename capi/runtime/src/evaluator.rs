@@ -139,7 +139,7 @@ fn evaluate_instruction(
             stack.push_operand(value);
         }
         Instruction::CallFunction {
-            function,
+            callee: function,
             is_tail_call,
         } => {
             for branch in &function.branches {

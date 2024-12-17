@@ -146,7 +146,7 @@ pub enum Instruction {
     /// jumping to another address, but that seems like the right direction to
     /// go in anyway.
     CallFunction {
-        function: Function,
+        callee: Function,
         is_tail_call: bool,
     },
 

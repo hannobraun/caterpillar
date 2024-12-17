@@ -327,7 +327,7 @@ fn compile_expression(
 
                     emit_instruction(
                         Instruction::CallFunction {
-                            function: function.clone(),
+                            callee: function.clone(),
                             is_tail_call: is_tail_expression,
                         },
                         functions_context.instructions,
@@ -388,7 +388,7 @@ pub fn compile_call_to_function(
     instructions.replace(
         &call.address,
         Instruction::CallFunction {
-            function: callee.clone(),
+            callee: callee.clone(),
             is_tail_call: call.is_tail_call,
         },
     );

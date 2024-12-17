@@ -96,7 +96,7 @@ pub fn compile_functions(
             context.instructions.replace(
                 &calling_address,
                 Instruction::CallFunction {
-                    function: function.clone(),
+                    callee: function.clone(),
                     is_tail_call: *is_tail_call,
                 },
             );
