@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, VecDeque};
+use std::collections::BTreeMap;
 
 use capi_runtime::InstructionAddress;
 
@@ -16,13 +16,6 @@ use super::{
 };
 
 pub struct ClusterContext {
-    /// # The queue of functions to compile in the cluster
-    ///
-    /// This is initially seeded by the named functions in the cluster that are
-    /// new or have been updated. But any anonymous functions encountered while
-    /// compiling those, will be added later.
-    pub queue_of_functions_to_compile: VecDeque<FunctionToCompile>,
-
     /// # Recursive calls within the cluster that need to be replaced
     ///
     /// When a recursive call is encountered, not all branches of the callee
@@ -51,23 +44,19 @@ pub fn compile_cluster(
     functions_context: &mut FunctionsContext,
 ) {
     let mut context = ClusterContext {
-        queue_of_functions_to_compile: VecDeque::new(),
         recursive_calls_by_callee: BTreeMap::new(),
         recursive_local_function_definitions_by_local_function: BTreeMap::new(),
     };
 
-    context.queue_of_functions_to_compile.extend(
+    let functions =
         cluster
             .functions(functions_context.syntax_tree)
             .map(|function| FunctionToCompile {
                 function: function.fragment.clone(),
                 location: function.location,
-            }),
-    );
+            });
 
-    while let Some(function_to_compile) =
-        context.queue_of_functions_to_compile.pop_front()
-    {
+    for function_to_compile in functions {
         let runtime_function = compile_function(
             Located {
                 fragment: &function_to_compile.function,
