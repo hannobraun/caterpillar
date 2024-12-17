@@ -48,7 +48,7 @@ pub struct ClusterContext {
 
 pub fn compile_cluster(
     cluster: &DependencyCluster,
-    changes: &Changes,
+    _: &Changes,
     functions_context: &mut FunctionsContext,
 ) {
     let mut context = ClusterContext {
@@ -61,7 +61,6 @@ pub fn compile_cluster(
         &mut context.queue_of_functions_to_compile,
         cluster,
         functions_context.syntax_tree,
-        changes,
     );
 
     while let Some(function_to_compile) =
@@ -128,7 +127,6 @@ fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     cluster: &DependencyCluster,
     syntax_tree: &SyntaxTree,
-    _: &Changes,
 ) {
     let functions_in_cluster_to_compile =
         cluster
