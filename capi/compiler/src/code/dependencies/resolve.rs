@@ -7,18 +7,15 @@ use petgraph::{
 
 use crate::code::{
     syntax::{Expression, FunctionLocation, SyntaxTree},
-    DependencyCluster, FunctionCalls, IndexMap,
+    FunctionCalls, IndexMap,
 };
 
 pub fn resolve_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> Vec<DependencyCluster> {
+) -> Vec<IndexMap<FunctionLocation>> {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     collect_dependency_clusters(dependency_graph)
-        .into_iter()
-        .map(|functions| DependencyCluster { functions })
-        .collect()
 }
 
 fn build_dependency_graph(
