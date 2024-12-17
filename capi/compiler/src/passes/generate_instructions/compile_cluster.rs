@@ -1,5 +1,7 @@
 use std::collections::{BTreeMap, VecDeque};
 
+use capi_runtime::{Instruction, InstructionAddress};
+
 use crate::code::{
     syntax::{FunctionLocation, Located, SyntaxTree},
     Changes, DependencyCluster,
@@ -34,6 +36,14 @@ pub struct ClusterContext {
     /// functions have been compiled.
     pub recursive_calls_by_callee:
         BTreeMap<FunctionLocation, Vec<CallToFunction>>,
+
+    /// # Recursive local functions within the cluster that need to be replaced
+    ///
+    /// When a recursive local function is encountered, it might not have been
+    /// compiled yet. To deal with this, we generate a placeholder that needs to
+    /// be replaced later. This map tracks those necessary replacements.
+    pub recursive_local_function_definitions_by_local_function:
+        BTreeMap<FunctionLocation, InstructionAddress>,
 }
 
 pub fn compile_cluster(
@@ -44,6 +54,7 @@ pub fn compile_cluster(
     let mut context = ClusterContext {
         queue_of_functions_to_compile: VecDeque::new(),
         recursive_calls_by_callee: BTreeMap::new(),
+        recursive_local_function_definitions_by_local_function: BTreeMap::new(),
     };
 
     seed_queue_of_functions_to_compile(
@@ -80,6 +91,36 @@ pub fn compile_cluster(
                 functions_context.instructions,
             );
         }
+    }
+    for (local_function, address) in
+        context.recursive_local_function_definitions_by_local_function
+    {
+        let Some(runtime_function) = functions_context
+            .compiled_functions_by_location
+            .get(&local_function)
+        else {
+            unreachable!(
+                "Replacing instructions that define local functions _after_ \
+                all functions have been compiled. Yet can't find the local \
+                function.",
+            )
+        };
+
+        let environment = functions_context
+            .bindings
+            .environment_of(&local_function)
+            .iter()
+            .map(|(name, _)| name)
+            .cloned()
+            .collect();
+
+        functions_context.instructions.replace(
+            &address,
+            Instruction::MakeAnonymousFunction {
+                branches: runtime_function.branches.clone(),
+                environment,
+            },
+        );
     }
 }
 
