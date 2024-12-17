@@ -21,19 +21,17 @@ use super::{
 
 struct FunctionContext<'r> {
     location: &'r FunctionLocation,
-    cluster: &'r DependencyCluster,
 }
 
 pub fn compile_function(
     function: Located<&Function>,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
-    cluster: &DependencyCluster,
+    _: &DependencyCluster,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
     let mut context = FunctionContext {
         location: &function.location,
-        cluster,
     };
     let mut runtime_function = capi_runtime::Function::default();
     let mut instruction_range = None;
@@ -213,7 +211,7 @@ where
 fn compile_expression(
     expression: Located<&Expression>,
     _: BTreeMap<String, Binding>,
-    function_context: &mut FunctionContext,
+    _: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
@@ -384,25 +382,14 @@ fn compile_expression(
             functions_context.instructions,
             Some(&mut mapping),
         ),
-        Expression::LocalFunction { function: _ } => {
-            if let Some(index) = functions_context
+        Expression::LocalFunction { function } => {
+            if functions_context
                 .recursion
                 .is_recursive_expression(&expression.location)
+                .is_some()
             {
-                let function = {
-                    let location =
-                        function_context.cluster.functions.get(&index).expect(
-                            "Resolved local recursive function must exist in \
-                            cluster.",
-                        );
-                    functions_context
-                        .functions
-                        .by_location(location)
-                        .expect("Function referenced from cluster must exist.")
-                };
-
                 compile_local_function(
-                    &function,
+                    function,
                     expression.location,
                     cluster_context,
                     functions_context.instructions,
