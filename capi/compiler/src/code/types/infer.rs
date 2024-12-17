@@ -577,8 +577,8 @@ fn unify_branch_signatures(
 
     unify_lists_of_types(inputs_of_each_branch, local_types);
 
-    // Not unifying branch outputs right now. It's probably necessary, where
-    // outputs are known but inputs aren't, but there's not test for that yet.
+    // Not unifying branch outputs right now. I haven't found a case where it
+    // was actually necessary yet, and lacking that, I can't write a test.
 
     let signature = branch_signatures.pop()?;
     make_signature_direct(&signature, local_types)
