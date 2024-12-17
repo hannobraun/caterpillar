@@ -270,7 +270,7 @@ fn compile_expression(
                     .by_location(callee_location)
                     .expect("Function referred to from cluster must exist.");
 
-                if functions_context
+                let address = if functions_context
                     .recursion
                     .is_recursive_expression(&expression.location)
                     .is_some()
@@ -297,20 +297,6 @@ fn compile_expression(
                             address,
                             is_tail_call: is_tail_expression,
                         });
-
-                    // For now, we're done with this call. But the function
-                    // we're calling might get updated in the future. When that
-                    // happens, the compiler wants to know about all calls to
-                    // the function, to update them.
-                    //
-                    // Let's make sure that information is going to be
-                    // available.
-                    functions_context
-                        .call_instructions_by_callee
-                        .inner
-                        .entry(callee_location.clone())
-                        .or_default()
-                        .push(address);
 
                     address
                 } else {
@@ -339,31 +325,30 @@ fn compile_expression(
                         )
                     };
 
-                    let address = emit_instruction(
+                    emit_instruction(
                         Instruction::CallFunction {
                             function: function.clone(),
                             is_tail_call: is_tail_expression,
                         },
                         functions_context.instructions,
                         Some(&mut mapping),
-                    );
+                    )
+                };
 
-                    // For now, we're done with this call. But the function
-                    // we're calling might get updated in the future. When that
-                    // happens, the compiler wants to know about all calls to
-                    // the function, to update them.
-                    //
-                    // Let's make sure that information is going to be
-                    // available.
-                    functions_context
-                        .call_instructions_by_callee
-                        .inner
-                        .entry(callee_location.clone())
-                        .or_default()
-                        .push(address);
+                // For now, we're done with this call. But the function we're
+                // calling might get updated in the future. When that happens,
+                // the compiler wants to know about all calls to the function,
+                // to update them.
+                //
+                // Let's make sure that information is going to be available.
+                functions_context
+                    .call_instructions_by_callee
+                    .inner
+                    .entry(callee_location.clone())
+                    .or_default()
+                    .push(address);
 
-                    address
-                }
+                address
             } else {
                 emit_instruction(
                     Instruction::TriggerEffect {
