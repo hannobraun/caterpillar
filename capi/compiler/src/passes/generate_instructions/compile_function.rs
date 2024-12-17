@@ -246,7 +246,6 @@ fn compile_expression(
                 let address = if functions_context
                     .recursion
                     .is_recursive_expression(&expression.location)
-                    .is_some()
                 {
                     // For recursive calls, we can't generally assume that the
                     // called function has been compiled yet. It's a recursive
@@ -341,7 +340,6 @@ fn compile_expression(
             if functions_context
                 .recursion
                 .is_recursive_expression(&expression.location)
-                .is_some()
             {
                 // For recursive local functions, we can't generally assume that
                 // the local function has been compiled yet.

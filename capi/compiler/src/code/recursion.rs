@@ -103,11 +103,8 @@ impl Recursion {
     ///
     /// This index is only valid within the context of the cluster that the
     /// expression is defined in.
-    pub fn is_recursive_expression(
-        &self,
-        location: &MemberLocation,
-    ) -> Option<Index<FunctionLocation>> {
-        self.inner.get(location).copied()
+    pub fn is_recursive_expression(&self, location: &MemberLocation) -> bool {
+        self.inner.contains_key(location)
     }
 }
 
@@ -145,8 +142,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&f).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&f));
     }
 
     #[test]
@@ -181,8 +178,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&f).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&f));
     }
 
     #[test]
@@ -213,8 +210,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&g).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&g));
     }
 
     #[test]
@@ -254,8 +251,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&g).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&g));
     }
 
     #[test]
@@ -284,8 +281,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&function).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&function));
     }
 
     #[test]
@@ -317,8 +314,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&function).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&function));
     }
 
     #[test]
@@ -352,8 +349,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&function).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&function));
     }
 
     #[test]
@@ -390,8 +387,8 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        assert!(recursion.is_recursive_expression(&nop).is_none());
-        assert!(recursion.is_recursive_expression(&function).is_some());
+        assert!(!recursion.is_recursive_expression(&nop));
+        assert!(recursion.is_recursive_expression(&function));
     }
 
     fn find_recursion(input: &str) -> (SyntaxTree, Recursion) {
