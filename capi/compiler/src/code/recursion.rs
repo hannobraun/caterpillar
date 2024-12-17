@@ -1,8 +1,8 @@
-use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 
 use super::{
     syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree},
-    Dependencies, FunctionCalls, Index,
+    Dependencies, FunctionCalls,
 };
 
 /// # Tracks recursive expressions
@@ -35,7 +35,7 @@ use super::{
 /// subject to an ongoing transition.
 #[derive(Debug)]
 pub struct Recursion {
-    inner: BTreeMap<MemberLocation, Index<FunctionLocation>>,
+    inner: BTreeSet<MemberLocation>,
 }
 
 impl Recursion {
@@ -45,7 +45,7 @@ impl Recursion {
         function_calls: &FunctionCalls,
         dependencies: &Dependencies,
     ) -> Self {
-        let mut recursive_expressions = BTreeMap::new();
+        let mut recursive_expressions = BTreeSet::new();
 
         for cluster in dependencies.clusters() {
             for function in cluster.functions(syntax_tree) {
@@ -61,11 +61,12 @@ impl Recursion {
                                     continue;
                                 };
 
-                                if let Some(index) =
-                                    cluster.find_function_by_location(location)
+                                if cluster
+                                    .find_function_by_location(location)
+                                    .is_some()
                                 {
                                     recursive_expressions
-                                        .insert(expression.location, index);
+                                        .insert(expression.location);
                                 }
                             }
                             Expression::LocalFunction { function: _ } => {
@@ -73,11 +74,12 @@ impl Recursion {
                                     expression.location.clone(),
                                 );
 
-                                if let Some(index) =
-                                    cluster.find_function_by_location(&location)
+                                if cluster
+                                    .find_function_by_location(&location)
+                                    .is_some()
                                 {
                                     recursive_expressions
-                                        .insert(expression.location, index);
+                                        .insert(expression.location);
                                 }
                             }
                             _ => {}
@@ -94,7 +96,7 @@ impl Recursion {
 
     /// # Determine, if an expression is recursive
     pub fn is_recursive_expression(&self, location: &MemberLocation) -> bool {
-        self.inner.contains_key(location)
+        self.inner.contains(location)
     }
 }
 
