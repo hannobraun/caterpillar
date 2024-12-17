@@ -1,5 +1,5 @@
 use std::{
-    collections::BTreeMap,
+    collections::{BTreeMap, BTreeSet},
     fmt::{self, Write},
     result,
 };
@@ -665,13 +665,15 @@ impl Default for LocalStack {
 #[derive(Clone, Debug, Eq, PartialEq)]
 enum InferredType {
     Known(Type),
-    Unknown { equal_to: Vec<Index<InferredType>> },
+    Unknown {
+        equal_to: BTreeSet<Index<InferredType>>,
+    },
 }
 
 impl InferredType {
     pub fn unknown() -> Self {
         Self::Unknown {
-            equal_to: Vec::new(),
+            equal_to: BTreeSet::new(),
         }
     }
 
