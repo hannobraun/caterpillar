@@ -139,14 +139,8 @@ impl DependencyCluster {
     pub fn find_function_by_location(
         &self,
         location: &FunctionLocation,
-    ) -> Option<Index<FunctionLocation>> {
-        self.functions.iter().find_map(|(&index, l)| {
-            if location == l {
-                Some(index)
-            } else {
-                None
-            }
-        })
+    ) -> bool {
+        self.functions.iter().any(|(_, l)| location == l)
     }
 }
 
