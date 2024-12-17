@@ -470,9 +470,8 @@ pub fn compile_definition_of_local_function(
         .get(&local_function)
     else {
         unreachable!(
-            "Replacing instructions that define local functions _after_ \
-                all functions have been compiled. Yet can't find the local \
-                function.",
+            "Replacing instructions that define local functions _after_ all \
+            functions have been compiled. Yet can't find the local function.",
         )
     };
 
