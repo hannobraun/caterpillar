@@ -572,7 +572,7 @@ fn unify_branch_signatures(
 ) -> Option<Signature> {
     let inputs_of_each_branch = branch_signatures
         .iter()
-        .map(|signature| signature.inputs.iter())
+        .map(|signature| signature.inputs.iter().copied())
         .collect::<Vec<_>>();
 
     let mut lists_of_types = inputs_of_each_branch;
@@ -581,7 +581,7 @@ fn unify_branch_signatures(
         let mut current_inputs = Vec::new();
 
         for types in &mut lists_of_types {
-            current_inputs.push(types.next().copied());
+            current_inputs.push(types.next());
         }
 
         if current_inputs.iter().all(|input| input.is_none()) {
