@@ -166,8 +166,10 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
-    let signature =
+    let (inputs, outputs) =
         infer_branch_signature(branch, bindings, local_types, local_stack);
+
+    let signature = outputs.map(|outputs| Signature { inputs, outputs });
 
     Ok(signature)
 }
@@ -532,7 +534,7 @@ fn infer_branch_signature(
     bindings: BTreeMap<Binding, Index<InferredType>>,
     local_types: &mut LocalTypes,
     local_stack: LocalStack,
-) -> Option<Signature<Index<InferredType>>> {
+) -> (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>) {
     let inputs = branch
         .parameters
         .iter()
@@ -561,9 +563,9 @@ fn infer_branch_signature(
         })
         .collect();
 
-    let outputs = local_stack.get().cloned()?;
+    let outputs = local_stack.get().cloned();
 
-    Some(Signature { inputs, outputs })
+    (inputs, outputs)
 }
 
 fn unify_branch_signatures(
