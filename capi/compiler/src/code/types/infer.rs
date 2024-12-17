@@ -567,7 +567,7 @@ fn infer_branch_signature(
 
 #[allow(clippy::type_complexity)]
 fn unify_branch_signatures(
-    mut branch_signatures: Vec<(
+    branch_signatures: Vec<(
         Vec<Index<InferredType>>,
         Option<Vec<Index<InferredType>>>,
     )>,
@@ -583,7 +583,9 @@ fn unify_branch_signatures(
     // Not unifying branch outputs right now. I haven't found a case where it
     // was actually necessary yet, and lacking that, I can't write a test.
 
-    let (inputs, outputs) = branch_signatures.pop()?;
+    let (inputs, outputs) = branch_signatures
+        .into_iter()
+        .find(|(_, outputs)| outputs.is_some())?;
     let signature = Signature {
         inputs,
         outputs: outputs?,

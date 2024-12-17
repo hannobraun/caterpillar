@@ -424,6 +424,61 @@ mod tests {
     }
 
     #[test]
+    fn infer_type_of_call_to_self_recursive_function() {
+        // A recursive call in isolation can't be inferred, as there's not
+        // return value. But another branch could provide the necessary
+        // information.
+
+        let branch_recursive = r"
+            \ 0 ->
+                1 g
+        ";
+        let branch_non_recursive = r"
+            \ x ->
+                x
+        ";
+
+        test(branch_recursive, branch_non_recursive);
+        test(branch_non_recursive, branch_recursive);
+
+        fn test(branch_a: &str, branch_b: &str) {
+            let (syntax_tree, types) = infer_types(&format!(
+                r"
+                    f: fn
+                        \ ->
+                            0 g
+                    end
+
+                    g: fn
+                        {branch_a}
+                        {branch_b}
+                    end
+                "
+            ));
+
+            let g = syntax_tree
+                .function_by_name("f")
+                .unwrap()
+                .into_located_function()
+                .find_single_branch()
+                .unwrap()
+                .expressions()
+                .map(|expression| expression.location)
+                .nth(1)
+                .unwrap();
+
+            assert_eq!(
+                types.signature_of(&g).cloned().unwrap(),
+                Signature {
+                    inputs: vec![Type::Number],
+                    outputs: vec![Type::Number],
+                },
+            );
+            assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
+        }
+    }
+
+    #[test]
     fn infer_type_of_local_function() {
         // If the signature of a local function can be inferred, that should
         // transfer to the expression that defines it.
