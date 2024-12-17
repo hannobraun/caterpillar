@@ -61,7 +61,7 @@ impl Recursion {
                                     continue;
                                 };
 
-                                if cluster.find_function_by_location(location) {
+                                if cluster.contains_function(location) {
                                     recursive_expressions
                                         .insert(expression.location);
                                 }
@@ -71,8 +71,7 @@ impl Recursion {
                                     expression.location.clone(),
                                 );
 
-                                if cluster.find_function_by_location(&location)
-                                {
+                                if cluster.contains_function(&location) {
                                     recursive_expressions
                                         .insert(expression.location);
                                 }
