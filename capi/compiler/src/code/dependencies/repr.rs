@@ -104,7 +104,6 @@ impl Dependencies {
     serde::Serialize,
 )]
 pub struct DependencyCluster {
-    /// # The functions in this cluster
     functions: IndexMap<FunctionLocation>,
 }
 
