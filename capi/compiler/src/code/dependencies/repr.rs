@@ -133,9 +133,7 @@ impl DependencyCluster {
         })
     }
 
-    /// # Find the function with the given location in the cluster
-    ///
-    /// Returns `None`, if this function is not available in this cluster.
+    /// # Indicate whether the cluster contains the given function
     pub fn contains_function(&self, location: &FunctionLocation) -> bool {
         self.functions.iter().any(|(_, l)| location == l)
     }
