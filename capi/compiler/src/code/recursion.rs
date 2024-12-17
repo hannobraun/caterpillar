@@ -93,16 +93,6 @@ impl Recursion {
     }
 
     /// # Determine, if an expression is recursive
-    ///
-    /// If so, returns the index of the target function, within its cluster. The
-    /// target function is defined as the following:
-    ///
-    /// - If the expression is a call, the index of the called function.
-    /// - If the expression is a local function, the index of that local
-    ///   function.
-    ///
-    /// This index is only valid within the context of the cluster that the
-    /// expression is defined in.
     pub fn is_recursive_expression(&self, location: &MemberLocation) -> bool {
         self.inner.contains_key(location)
     }
