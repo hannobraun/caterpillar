@@ -3,7 +3,7 @@ use crate::code::{
     FunctionCalls, Index,
 };
 
-use super::functions::resolve_function_dependencies;
+use super::resolve::resolve_function_dependencies;
 
 /// # Tracks the dependencies between functions
 ///
