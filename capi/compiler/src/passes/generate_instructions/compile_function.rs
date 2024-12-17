@@ -8,7 +8,7 @@ use crate::{
             Branch, Expression, Function, FunctionLocation, Located,
             MemberLocation, Pattern,
         },
-        Binding, DependencyCluster,
+        Binding,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,
@@ -26,7 +26,6 @@ struct FunctionContext<'r> {
 pub fn compile_function(
     function: Located<&Function>,
     address_of_instruction_to_make_anon_function: Option<InstructionAddress>,
-    _: &DependencyCluster,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {

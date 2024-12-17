@@ -62,7 +62,6 @@ pub fn compile_cluster(
                 location: function_to_compile.location.clone(),
             },
             function_to_compile.address_of_instruction_to_make_anon_function,
-            cluster,
             &mut context,
             functions_context,
         );
