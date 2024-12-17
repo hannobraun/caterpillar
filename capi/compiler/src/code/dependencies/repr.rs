@@ -380,8 +380,8 @@ mod tests {
                 cluster
                     .functions(syntax_tree)
                     .map(|function| function.location)
-                    .collect::<Vec<_>>()
+                    .collect()
             })
-            .collect::<Vec<_>>()
+            .collect()
     }
 }
