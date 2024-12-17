@@ -107,7 +107,7 @@ fn infer_branch(
                 .get(&binding)
                 .cloned()
                 .map(InferredType::Known)
-                .unwrap_or(InferredType::Unknown);
+                .unwrap_or(InferredType::unknown());
             let type_ = local_types.push(type_);
             (binding, type_)
         })
@@ -668,6 +668,10 @@ enum InferredType {
 }
 
 impl InferredType {
+    pub fn unknown() -> Self {
+        Self::Unknown
+    }
+
     pub fn into_type(self) -> Option<Type> {
         match self {
             Self::Known(type_) => Some(type_),
