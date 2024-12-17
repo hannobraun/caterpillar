@@ -35,7 +35,9 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 context,
                 &mut output,
             ) {
-                Ok(signature) => {
+                Ok((inputs, outputs)) => {
+                    let signature =
+                        outputs.map(|outputs| Signature { inputs, outputs });
                     if let Some(signature) = signature {
                         branch_signatures.push(signature);
                     }
@@ -90,13 +92,14 @@ pub struct InferenceOutput {
     pub stacks: Stacks,
 }
 
+#[allow(clippy::type_complexity)]
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
     local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
-) -> Result<Option<Signature<Index<InferredType>>>> {
+) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
     let mut local_stack = LocalStack::default();
 
     let bindings = branch
@@ -169,9 +172,7 @@ fn infer_branch(
     let (inputs, outputs) =
         infer_branch_signature(branch, bindings, local_types, local_stack);
 
-    let signature = outputs.map(|outputs| Signature { inputs, outputs });
-
-    Ok(signature)
+    Ok((inputs, outputs))
 }
 
 fn infer_expression(
