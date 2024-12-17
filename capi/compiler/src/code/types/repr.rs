@@ -217,10 +217,12 @@ impl fmt::Display for Type {
 
 #[cfg(test)]
 mod tests {
+    use itertools::Itertools;
+
     use crate::{
         code::{
-            syntax::SyntaxTree, Bindings, Dependencies, FunctionCalls,
-            Signature, Tokens, Type,
+            syntax::{Expression, SyntaxTree},
+            Bindings, Dependencies, FunctionCalls, Signature, Tokens, Type,
         },
         host::NoHost,
     };
@@ -476,6 +478,71 @@ mod tests {
             );
             assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
         }
+    }
+
+    #[test]
+    #[should_panic] // missing feature; no issue to track this yet
+    fn infer_type_of_calls_to_non_divergent_mutually_recursive_functions() {
+        // Mutually recursive functions can not be inferred on their own. But if
+        // they're not divergent, that means they have branches that we can
+        // infer a return type from.
+
+        let (syntax_tree, types) = infer_types(
+            r"
+                f: fn
+                    \ ->
+                        0 g
+                        0 h
+                end
+
+                g: fn
+                    \ 0 ->
+                        0 h
+                    
+                    \ _ ->
+                        1 h
+                end
+
+                h: fn
+                    \ 0 ->
+                        1 g
+
+                    \ _ ->
+                        0
+                end
+            ",
+        );
+
+        let (g, h) = syntax_tree
+            .function_by_name("f")
+            .unwrap()
+            .into_located_function()
+            .find_single_branch()
+            .unwrap()
+            .expressions()
+            .filter_map(|expression| {
+                if let Expression::Identifier { .. } = expression.fragment {
+                    Some(expression.location)
+                } else {
+                    None
+                }
+            })
+            .collect_tuple()
+            .unwrap();
+
+        let check = |call| {
+            assert_eq!(
+                types.signature_of(call).cloned().unwrap(),
+                Signature {
+                    inputs: vec![Type::Number],
+                    outputs: vec![Type::Number],
+                },
+            );
+            assert_eq!(types.stack_at(call).unwrap(), &[Type::Number]);
+        };
+
+        check(&g);
+        check(&h);
     }
 
     #[test]
