@@ -135,7 +135,7 @@ impl DependencyCluster {
 
     /// # Indicate whether the cluster contains the given function
     pub fn contains_function(&self, location: &FunctionLocation) -> bool {
-        self.functions.iter().any(|l| location == l)
+        self.functions.iter().any(|l| l == location)
     }
 }
 
