@@ -580,8 +580,8 @@ fn unify_branch_signatures(
     loop {
         let mut current_inputs = Vec::new();
 
-        for inputs in &mut lists_of_types {
-            current_inputs.push(inputs.next().copied());
+        for types in &mut lists_of_types {
+            current_inputs.push(types.next().copied());
         }
 
         if current_inputs.iter().all(|input| input.is_none()) {
