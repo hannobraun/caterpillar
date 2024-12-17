@@ -91,4 +91,3 @@ fn collect_dependency_clusters(
 }
 
 type DependencyGraph = Graph<FunctionLocation, ()>;
-
