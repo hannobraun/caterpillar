@@ -135,7 +135,7 @@ fn seed_queue_of_functions_to_compile(
             .functions(syntax_tree)
             .map(|function| FunctionToCompile {
                 function: function.fragment.clone(),
-                location: function.location.clone(),
+                location: function.location,
                 address_of_instruction_to_make_anon_function: None,
             });
     queue_of_functions_to_compile.extend(functions_in_cluster_to_compile);
