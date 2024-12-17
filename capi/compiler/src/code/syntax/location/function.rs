@@ -76,7 +76,7 @@ impl<'r> Located<&'r Function> {
 )]
 pub enum FunctionLocation {
     Named { index: Index<NamedFunction> },
-    AnonymousFunction { location: MemberLocation },
+    Local { location: MemberLocation },
 }
 
 impl FunctionLocation {
@@ -100,7 +100,7 @@ impl From<Index<NamedFunction>> for FunctionLocation {
 
 impl From<MemberLocation> for FunctionLocation {
     fn from(location: MemberLocation) -> Self {
-        Self::AnonymousFunction { location }
+        Self::Local { location }
     }
 }
 
@@ -125,7 +125,7 @@ impl fmt::Display for FunctionLocationDisplay<'_> {
 
                 write!(f, "named function `{name}`")?;
             }
-            FunctionLocation::AnonymousFunction { location } => {
+            FunctionLocation::Local { location } => {
                 write!(
                     f,
                     "anonymous function at {}",

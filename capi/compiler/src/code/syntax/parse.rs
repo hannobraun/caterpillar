@@ -257,7 +257,7 @@ fn parse_expression(
     location: MemberLocation,
 ) -> Result<(Expression, Option<Signature<SyntaxType>>)> {
     let expression = if let Token::Keyword(Fn) = tokens.peek()? {
-        let location = FunctionLocation::AnonymousFunction { location };
+        let location = FunctionLocation::Local { location };
         parse_function(tokens, location)
             .map(|function| Expression::LocalFunction { function })?
     } else {

@@ -275,7 +275,7 @@ fn instruction_to_named_function(
 
                 return (function, index);
             }
-            FunctionLocation::AnonymousFunction { location } => {
+            FunctionLocation::Local { location } => {
                 current_location = *location.parent.parent;
             }
         }

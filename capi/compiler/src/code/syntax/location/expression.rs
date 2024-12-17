@@ -13,7 +13,7 @@ impl<'r> Located<&'r Expression> {
     pub fn into_local_function(self) -> Option<Located<&'r Function>> {
         self.fragment.as_local_function().map(|function| Located {
             fragment: function,
-            location: FunctionLocation::AnonymousFunction {
+            location: FunctionLocation::Local {
                 location: self.location.clone(),
             },
         })

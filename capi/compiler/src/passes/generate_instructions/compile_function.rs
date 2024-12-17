@@ -542,7 +542,7 @@ fn compile_local_function(
     cluster_context.queue_of_functions_to_compile.push_front(
         FunctionToCompile {
             function: function.clone(),
-            location: FunctionLocation::AnonymousFunction { location },
+            location: FunctionLocation::Local { location },
             address_of_instruction_to_make_anon_function: Some(address),
         },
     );

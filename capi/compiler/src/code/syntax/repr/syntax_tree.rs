@@ -33,7 +33,7 @@ impl SyntaxTree {
                 let named_function = self.named_functions.get(index)?;
                 &named_function.inner
             }
-            FunctionLocation::AnonymousFunction { location } => {
+            FunctionLocation::Local { location } => {
                 let branch_location = &location.parent;
                 let parent_location = &branch_location.parent;
 
@@ -74,7 +74,7 @@ impl SyntaxTree {
     ) -> Option<Located<&NamedFunction>> {
         let index = match location {
             FunctionLocation::Named { index } => index,
-            FunctionLocation::AnonymousFunction { location } => {
+            FunctionLocation::Local { location } => {
                 return self
                     .find_top_level_parent_function(&location.parent.parent);
             }

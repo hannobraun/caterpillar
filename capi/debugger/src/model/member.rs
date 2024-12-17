@@ -150,7 +150,7 @@ impl DebugMemberKind {
                     let function = DebugFunction::new(
                         function,
                         None,
-                        FunctionLocation::AnonymousFunction { location },
+                        FunctionLocation::Local { location },
                         active_expression,
                         is_in_innermost_active_function,
                         cluster,
