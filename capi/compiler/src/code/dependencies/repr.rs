@@ -105,7 +105,7 @@ impl Dependencies {
 )]
 pub struct DependencyCluster {
     /// # The functions in this cluster
-    pub functions: IndexMap<FunctionLocation>,
+    functions: IndexMap<FunctionLocation>,
 }
 
 impl DependencyCluster {
