@@ -570,15 +570,17 @@ fn unify_branch_signatures(
     mut branch_signatures: Vec<Signature<Index<InferredType>>>,
     local_types: &mut LocalTypes,
 ) -> Option<Signature> {
-    let mut inputs_of_each_branch = branch_signatures
+    let inputs_of_each_branch = branch_signatures
         .iter()
         .map(|signature| signature.inputs.iter())
         .collect::<Vec<_>>();
 
+    let mut lists_of_types = inputs_of_each_branch;
+
     loop {
         let mut current_inputs = Vec::new();
 
-        for inputs in &mut inputs_of_each_branch {
+        for inputs in &mut lists_of_types {
             current_inputs.push(inputs.next().copied());
         }
 
