@@ -87,11 +87,12 @@ pub fn compile_cluster(
 fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     cluster: &DependencyCluster,
-    _: &SyntaxTree,
+    syntax_tree: &SyntaxTree,
     changes: &Changes,
 ) {
     let functions_in_cluster_to_compile =
-        cluster.functions.values().filter_map(|location| {
+        cluster.functions(syntax_tree).filter_map(|function| {
+            let location = &function.location;
             let function = changes.new_or_updated_function(location)?;
             Some(FunctionToCompile {
                 function: function.clone(),
