@@ -345,9 +345,15 @@ fn infer_expression(
                                 );
                             }
                         }
-                        [InferredType::Known(_), InferredType::Unknown] => a,
-                        [InferredType::Unknown, InferredType::Known(_)] => b,
-                        [InferredType::Unknown, InferredType::Unknown] => a,
+                        [InferredType::Known(_), InferredType::Unknown { .. }] => {
+                            a
+                        }
+                        [InferredType::Unknown { .. }, InferredType::Known(_)] => {
+                            b
+                        }
+                        [InferredType::Unknown { .. }, InferredType::Unknown { .. }] => {
+                            a
+                        }
                     };
 
                     indices.push(*index);
@@ -390,12 +396,12 @@ fn infer_expression(
                             }
                             (
                                 InferredType::Known(_operand),
-                                InferredType::Unknown,
+                                InferredType::Unknown { .. },
                             ) => {
                                 // We could infer the type of the binding here.
                             }
                             (
-                                InferredType::Unknown,
+                                InferredType::Unknown { .. },
                                 InferredType::Known(input),
                             ) => {
                                 local_types.inner.insert(
@@ -403,7 +409,10 @@ fn infer_expression(
                                     InferredType::Known(input),
                                 );
                             }
-                            (InferredType::Unknown, InferredType::Unknown) => {
+                            (
+                                InferredType::Unknown { .. },
+                                InferredType::Unknown { .. },
+                            ) => {
                                 // We could unify the two types here, to make
                                 // sure that if one gets inferred, the other is
                                 // known too.
@@ -415,7 +424,9 @@ fn infer_expression(
                             InferredType::Known(input) => {
                                 ExpectedType::Specific(input)
                             }
-                            InferredType::Unknown => ExpectedType::Unknown,
+                            InferredType::Unknown { .. } => {
+                                ExpectedType::Unknown
+                            }
                         };
 
                         return Err(TypeError {
@@ -459,7 +470,7 @@ fn infer_intrinsic(
                     inputs: vec![type_.clone()],
                     outputs: vec![],
                 }),
-                Some(InferredType::Unknown) => None,
+                Some(InferredType::Unknown { .. }) => None,
                 None => {
                     return Err(TypeError {
                         expected: ExpectedType::Unknown,
@@ -498,7 +509,7 @@ fn infer_intrinsic(
                         location: location.clone(),
                     });
                 }
-                Some(InferredType::Unknown) => None,
+                Some(InferredType::Unknown { .. }) => None,
                 None => {
                     return Err(TypeError {
                         expected: ExpectedType::Function,
@@ -660,7 +671,7 @@ impl InferredType {
     pub fn into_type(self) -> Option<Type> {
         match self {
             Self::Known(type_) => Some(type_),
-            Self::Unknown => None,
+            Self::Unknown { .. } => None,
         }
     }
 }
