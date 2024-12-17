@@ -1,5 +1,8 @@
 use crate::code::{
-    syntax::{Function, FunctionLocation, Located, NamedFunction, SyntaxTree},
+    syntax::{
+        BranchLocation, Function, FunctionLocation, Located, NamedFunction,
+        SyntaxTree,
+    },
     FunctionCalls, Index,
 };
 
@@ -52,9 +55,11 @@ impl Dependencies {
                         syntax_tree,
                         function_calls,
                     );
-                    dbg!(branches);
 
-                    DependencyCluster { functions }
+                    DependencyCluster {
+                        functions,
+                        branches,
+                    }
                 })
                 .collect();
         Self { clusters }
@@ -117,6 +122,7 @@ impl Dependencies {
 )]
 pub struct DependencyCluster {
     functions: Vec<FunctionLocation>,
+    branches: Vec<Vec<BranchLocation>>,
 }
 
 impl DependencyCluster {
