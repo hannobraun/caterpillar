@@ -23,6 +23,10 @@ address {
 
 /* Mostly Tailwind-compatible utility classes */
 
+.bg-yellow-200 {
+    background-color: rgb(254 240 138);
+}
+
 .col-1 {
     grid-column: 1;
 }
@@ -33,6 +37,10 @@ address {
 
 .font-bold {
     font-weight: 700;
+}
+
+.font-sm {
+    font-size: 0.875rem;
 }
 
 .grid {
@@ -53,6 +61,10 @@ address {
 
 .justify-self-start {
     justify-self: start;
+}
+
+.m-4 {
+    margin: 1rem;
 }
 
 .m-8 {
@@ -89,6 +101,14 @@ address {
 
 .p-2 {
     padding: 0.5rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.rounded {
+    border-radius: 0.25rem;
 }
 
 .text-blue-700 {

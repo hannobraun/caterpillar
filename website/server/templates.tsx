@@ -61,6 +61,7 @@ export const singleDailyThoughtPage = (
                     </span>
                 )}
             </div>
+            {subscribe()}
         </>,
     );
 };
@@ -78,6 +79,25 @@ const dailyThoughtItem = (date: string) => {
 const dailyThoughtLink = (date: string, label: string) => {
     const url = `/daily/${date}`;
     return link(url, label);
+};
+
+const subscribe = () => {
+    return (
+        <div class="m-4 p-4 rounded font-sm bg-yellow-200">
+            <p>
+                <span class="font-bold">Hey, you!</span>{" "}
+                Want to subscribe to my daily thoughts? Just {link(
+                    "mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21&body=Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
+                    "let me know",
+                )}{" "}
+                (maybe include a nice message, if you're up for it!), and I'll
+                send you an email whenever I post a new thought.
+            </p>
+            <p>
+                (Yes, this is an artisanal, handcrafted email newsletter.)
+            </p>
+        </div>
+    );
 };
 
 const link = (url: string, label: string) => {
