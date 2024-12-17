@@ -1,6 +1,6 @@
 use crate::code::{
     syntax::{Function, FunctionLocation, Located, NamedFunction, SyntaxTree},
-    FunctionCalls, Index, IndexMap,
+    FunctionCalls, Index,
 };
 
 use super::resolve::resolve_dependencies;
@@ -83,7 +83,7 @@ impl Dependencies {
         index: &Index<NamedFunction>,
     ) -> Option<&DependencyCluster> {
         self.clusters.iter().find(|cluster| {
-            cluster.functions.values().any(|location| {
+            cluster.functions.iter().any(|location| {
                 *location == FunctionLocation::Named { index: *index }
             })
         })
@@ -104,7 +104,7 @@ impl Dependencies {
     serde::Serialize,
 )]
 pub struct DependencyCluster {
-    functions: IndexMap<FunctionLocation>,
+    functions: Vec<FunctionLocation>,
 }
 
 impl DependencyCluster {
@@ -120,7 +120,7 @@ impl DependencyCluster {
         &'r self,
         syntax_tree: &'r SyntaxTree,
     ) -> impl Iterator<Item = Located<&'r Function>> {
-        self.functions.values().map(|location| {
+        self.functions.iter().map(|location| {
             let Some(function) = syntax_tree.function_by_location(location)
             else {
                 panic!(
@@ -135,7 +135,7 @@ impl DependencyCluster {
 
     /// # Indicate whether the cluster contains the given function
     pub fn contains_function(&self, location: &FunctionLocation) -> bool {
-        self.functions.iter().any(|(_, l)| location == l)
+        self.functions.iter().any(|l| location == l)
     }
 }
 

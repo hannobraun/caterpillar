@@ -7,13 +7,13 @@ use petgraph::{
 
 use crate::code::{
     syntax::{Expression, FunctionLocation, SyntaxTree},
-    FunctionCalls, IndexMap,
+    FunctionCalls,
 };
 
 pub fn resolve_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> Vec<IndexMap<FunctionLocation>> {
+) -> Vec<Vec<FunctionLocation>> {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     collect_dependency_clusters(dependency_graph)
 }
@@ -59,7 +59,7 @@ fn build_dependency_graph(
 
 fn collect_dependency_clusters(
     dependency_graph: DependencyGraph,
-) -> Vec<IndexMap<FunctionLocation>> {
+) -> Vec<Vec<FunctionLocation>> {
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
@@ -80,7 +80,7 @@ fn collect_dependency_clusters(
                     work.",
                 );
 
-            let mut functions = IndexMap::default();
+            let mut functions = Vec::default();
             for location in dependency_cluster {
                 functions.push(location);
             }
