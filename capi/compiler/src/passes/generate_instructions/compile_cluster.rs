@@ -45,9 +45,7 @@ pub fn compile_cluster(
         recursive_local_function_definitions_by_local_function: BTreeMap::new(),
     };
 
-    let functions = cluster.functions(functions_context.syntax_tree);
-
-    for function in functions {
+    for function in cluster.functions(functions_context.syntax_tree) {
         let location = function.location.clone();
 
         let runtime_function =
