@@ -71,21 +71,13 @@ fn collect_dependency_clusters(
     clustered_and_sorted_graph
         .into_iter()
         .map(move |graph_index| {
-            let dependency_cluster =
-                clustered_graph.remove_node(graph_index).expect(
-                    "Each entry in the sorted version of the call graph must \
+            clustered_graph.remove_node(graph_index).expect(
+                "Each entry in the sorted version of the call graph must \
                     correspond to exactly one node in the unsorted version. So \
                     using every node from the sorted version once, to remove \
                     its respective node in the unsorted version, should always \
                     work.",
-                );
-
-            let mut functions = Vec::default();
-            for location in dependency_cluster {
-                functions.push(location);
-            }
-
-            functions
+            )
         })
         .collect()
 }
