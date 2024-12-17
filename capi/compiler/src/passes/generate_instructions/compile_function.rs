@@ -126,7 +126,6 @@ fn compile_branch(
             let addr = compile_expression(
                 expression,
                 bindings,
-                function_context,
                 cluster_context,
                 functions_context,
             );
@@ -211,7 +210,6 @@ where
 fn compile_expression(
     expression: Located<&Expression>,
     _: BTreeMap<String, Binding>,
-    _: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
