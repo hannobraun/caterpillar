@@ -10,7 +10,7 @@ use crate::code::{
     FunctionCalls,
 };
 
-pub fn resolve_dependencies(
+pub fn resolve_function_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> Vec<Vec<FunctionLocation>> {
