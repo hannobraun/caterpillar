@@ -57,9 +57,9 @@ fn build_dependency_graph(
     dependency_graph
 }
 
-fn collect_dependency_clusters(
-    dependency_graph: Graph<FunctionLocation, ()>,
-) -> Vec<Vec<FunctionLocation>> {
+fn collect_dependency_clusters<T>(
+    dependency_graph: Graph<T, ()>,
+) -> Vec<Vec<T>> {
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
