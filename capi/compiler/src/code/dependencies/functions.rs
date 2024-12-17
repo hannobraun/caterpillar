@@ -14,14 +14,6 @@ pub fn resolve_function_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> Vec<Vec<FunctionLocation>> {
-    let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
-    collect_dependency_clusters(dependency_graph)
-}
-
-fn build_dependency_graph(
-    syntax_tree: &SyntaxTree,
-    function_calls: &FunctionCalls,
-) -> Graph<FunctionLocation, ()> {
     let mut dependency_graph = Graph::new();
     let mut graph_indices_by_function_location = BTreeMap::new();
 
@@ -54,7 +46,7 @@ fn build_dependency_graph(
         }
     }
 
-    dependency_graph
+    collect_dependency_clusters(dependency_graph)
 }
 
 fn collect_dependency_clusters<T>(
