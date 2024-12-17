@@ -3,7 +3,9 @@ use crate::code::{
     FunctionCalls, Index,
 };
 
-use super::resolve::resolve_function_dependencies;
+use super::resolve::{
+    resolve_branch_dependencies, resolve_function_dependencies,
+};
 
 /// # Tracks the dependencies between functions
 ///
@@ -44,7 +46,16 @@ impl Dependencies {
         let clusters =
             resolve_function_dependencies(syntax_tree, function_calls)
                 .into_iter()
-                .map(|functions| DependencyCluster { functions })
+                .map(|functions| {
+                    let branches = resolve_branch_dependencies(
+                        &functions,
+                        syntax_tree,
+                        function_calls,
+                    );
+                    dbg!(branches);
+
+                    DependencyCluster { functions }
+                })
                 .collect();
         Self { clusters }
     }
