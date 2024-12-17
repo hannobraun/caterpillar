@@ -128,17 +128,16 @@ fn seed_queue_of_functions_to_compile(
     queue_of_functions_to_compile: &mut VecDeque<FunctionToCompile>,
     cluster: &DependencyCluster,
     syntax_tree: &SyntaxTree,
-    changes: &Changes,
+    _: &Changes,
 ) {
     let functions_in_cluster_to_compile =
-        cluster.functions(syntax_tree).filter_map(|function| {
+        cluster.functions(syntax_tree).map(|function| {
             let location = &function.location;
-            let function = changes.new_or_updated_function(location)?;
-            Some(FunctionToCompile {
-                function: function.clone(),
+            FunctionToCompile {
+                function: function.fragment.clone(),
                 location: location.clone(),
                 address_of_instruction_to_make_anon_function: None,
-            })
+            }
         });
     queue_of_functions_to_compile.extend(functions_in_cluster_to_compile);
 }
