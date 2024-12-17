@@ -375,12 +375,12 @@ fn compile_expression(
 }
 
 pub fn compile_call_to_function(
-    location: &FunctionLocation,
+    callee: &FunctionLocation,
     call: CallToFunction,
     functions: &mut BTreeMap<FunctionLocation, capi_runtime::Function>,
     instructions: &mut Instructions,
 ) {
-    let function = functions.get(location).expect(
+    let function = functions.get(callee).expect(
         "Attempting to compile call to function. Expecting that function to \
         have been compiled already.",
     );
