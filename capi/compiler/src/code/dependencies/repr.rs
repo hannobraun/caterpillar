@@ -155,8 +155,8 @@ impl DependencyCluster {
 mod tests {
     use crate::{
         code::{
-            syntax::SyntaxTree, Dependencies, DependencyCluster, FunctionCalls,
-            Index, Tokens,
+            syntax::{FunctionLocation, SyntaxTree},
+            Dependencies, DependencyCluster, FunctionCalls, Index, Tokens,
         },
         host::NoHost,
     };
@@ -180,18 +180,7 @@ mod tests {
         let f = syntax_tree.function_by_name("f").unwrap().location();
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
-        assert_eq!(
-            dependencies
-                .clusters()
-                .map(|cluster| {
-                    cluster
-                        .functions(&syntax_tree)
-                        .map(|function| function.location)
-                        .collect::<Vec<_>>()
-                })
-                .collect::<Vec<_>>(),
-            [[g], [f]],
-        );
+        assert_eq!(destructure(dependencies, &syntax_tree), [[g], [f]]);
     }
 
     #[test]
@@ -379,5 +368,20 @@ mod tests {
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
 
         (syntax_tree, dependencies)
+    }
+
+    fn destructure(
+        dependencies: Dependencies,
+        syntax_tree: &SyntaxTree,
+    ) -> Vec<Vec<FunctionLocation>> {
+        dependencies
+            .clusters()
+            .map(|cluster| {
+                cluster
+                    .functions(syntax_tree)
+                    .map(|function| function.location)
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>()
     }
 }
