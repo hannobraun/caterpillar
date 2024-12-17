@@ -16,6 +16,9 @@ pub fn resolve_dependencies(
 ) -> Vec<DependencyCluster> {
     let dependency_graph = build_dependency_graph(syntax_tree, function_calls);
     collect_dependency_clusters(dependency_graph)
+        .into_iter()
+        .map(|functions| DependencyCluster { functions })
+        .collect()
 }
 
 fn build_dependency_graph(
@@ -59,7 +62,7 @@ fn build_dependency_graph(
 
 fn collect_dependency_clusters(
     dependency_graph: DependencyGraph,
-) -> Vec<DependencyCluster> {
+) -> Vec<IndexMap<FunctionLocation>> {
     let make_acyclic = true;
     let mut clustered_graph = condensation(dependency_graph, make_acyclic);
 
@@ -85,7 +88,7 @@ fn collect_dependency_clusters(
                 functions.push(location);
             }
 
-            DependencyCluster { functions }
+            functions
         })
         .collect()
 }
