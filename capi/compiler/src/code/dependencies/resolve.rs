@@ -73,10 +73,9 @@ fn collect_dependency_clusters(
         .map(move |graph_index| {
             clustered_graph.remove_node(graph_index).expect(
                 "Each entry in the sorted version of the call graph must \
-                    correspond to exactly one node in the unsorted version. So \
-                    using every node from the sorted version once, to remove \
-                    its respective node in the unsorted version, should always \
-                    work.",
+                correspond to exactly one node in the unsorted version. So \
+                using every node from the sorted version once, to remove its \
+                respective node in the unsorted version, should always work.",
             )
         })
         .collect()
