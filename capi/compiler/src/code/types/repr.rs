@@ -380,7 +380,7 @@ mod tests {
     }
 
     #[test]
-    fn infer_type_of_call_to_multi_branch_function_combining_inputs() {
+    fn infer_type_of_call_to_multi_branch_function_by_combining_inputs() {
         // If a function has multiple branches, each of which contributes
         // knowledge about the inputs of the function, that knowledge should be
         // combined into a full signature.
