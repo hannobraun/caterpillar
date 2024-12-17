@@ -460,6 +460,39 @@ pub fn compile_call_to_function(
     );
 }
 
+pub fn compile_definition_of_local_function(
+    local_function: FunctionLocation,
+    address: InstructionAddress,
+    functions_context: &mut FunctionsContext,
+) {
+    let Some(runtime_function) = functions_context
+        .compiled_functions_by_location
+        .get(&local_function)
+    else {
+        unreachable!(
+            "Replacing instructions that define local functions _after_ \
+                all functions have been compiled. Yet can't find the local \
+                function.",
+        )
+    };
+
+    let environment = functions_context
+        .bindings
+        .environment_of(&local_function)
+        .iter()
+        .map(|(name, _)| name)
+        .cloned()
+        .collect();
+
+    functions_context.instructions.replace(
+        &address,
+        Instruction::MakeAnonymousFunction {
+            branches: runtime_function.branches.clone(),
+            environment,
+        },
+    );
+}
+
 fn compile_intrinsic(
     intrinsic: &IntrinsicFunction,
     is_tail_call: bool,

@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, VecDeque};
 
-use capi_runtime::{Instruction, InstructionAddress};
+use capi_runtime::InstructionAddress;
 
 use crate::code::{
     syntax::{FunctionLocation, Located, SyntaxTree},
@@ -9,8 +9,8 @@ use crate::code::{
 
 use super::{
     compile_function::{
-        compile_call_to_function, compile_function, CallToFunction,
-        FunctionToCompile,
+        compile_call_to_function, compile_definition_of_local_function,
+        compile_function, CallToFunction, FunctionToCompile,
     },
     compile_functions::FunctionsContext,
 };
@@ -93,31 +93,10 @@ pub fn compile_cluster(
     for (local_function, address) in
         context.recursive_local_function_definitions_by_local_function
     {
-        let Some(runtime_function) = functions_context
-            .compiled_functions_by_location
-            .get(&local_function)
-        else {
-            unreachable!(
-                "Replacing instructions that define local functions _after_ \
-                all functions have been compiled. Yet can't find the local \
-                function.",
-            )
-        };
-
-        let environment = functions_context
-            .bindings
-            .environment_of(&local_function)
-            .iter()
-            .map(|(name, _)| name)
-            .cloned()
-            .collect();
-
-        functions_context.instructions.replace(
-            &address,
-            Instruction::MakeAnonymousFunction {
-                branches: runtime_function.branches.clone(),
-                environment,
-            },
+        compile_definition_of_local_function(
+            local_function,
+            address,
+            functions_context,
         );
     }
 }
