@@ -265,19 +265,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
-        assert_eq!(
-            dependencies.clusters().cloned().collect::<Vec<_>>(),
-            [
-                [(Index::from(0), g)].as_slice(),
-                [(Index::from(0), h)].as_slice(),
-                [(Index::from(0), f)].as_slice(),
-            ]
-            .into_iter()
-            .map(|locations_by_index| DependencyCluster {
-                functions: locations_by_index.iter().cloned().collect(),
-            })
-            .collect::<Vec<_>>(),
-        );
+        assert_eq!(destructure(dependencies, &syntax_tree), [[g], [h], [f]]);
     }
 
     #[test]
