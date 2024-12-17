@@ -57,6 +57,8 @@ pub fn compile_cluster(
             });
 
     for function_to_compile in functions {
+        let location = function_to_compile.location.clone();
+
         let runtime_function = compile_function(
             Located {
                 fragment: &function_to_compile.function,
@@ -68,7 +70,7 @@ pub fn compile_cluster(
 
         functions_context
             .compiled_functions_by_location
-            .insert(function_to_compile.location, runtime_function);
+            .insert(location, runtime_function);
     }
 
     for (callee, calls) in context.recursive_calls_by_callee {
