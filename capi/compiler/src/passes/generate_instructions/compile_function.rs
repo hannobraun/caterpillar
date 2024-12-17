@@ -382,40 +382,13 @@ fn compile_expression(
             functions_context.instructions,
             Some(&mut mapping),
         ),
-        Expression::LocalFunction { function } => {
-            if functions_context
-                .recursion
-                .is_recursive_expression(&expression.location)
-                .is_some()
-            {
-                compile_local_function(
-                    function,
-                    expression.location,
-                    cluster_context,
-                    functions_context.instructions,
-                    &mut mapping,
-                )
-            } else {
-                let function_location =
-                    FunctionLocation::from(expression.location.clone());
-
-                let function = functions_context
-                    .functions
-                    .by_location(&function_location)
-                    .expect(
-                        "Anonymous function that has been previously resolved \
-                        must be available.",
-                    );
-
-                compile_local_function(
-                    &function,
-                    expression.location,
-                    cluster_context,
-                    functions_context.instructions,
-                    &mut mapping,
-                )
-            }
-        }
+        Expression::LocalFunction { function } => compile_local_function(
+            function,
+            expression.location,
+            cluster_context,
+            functions_context.instructions,
+            &mut mapping,
+        ),
     }
 }
 
