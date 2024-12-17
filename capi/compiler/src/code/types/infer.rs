@@ -575,8 +575,19 @@ fn unify_branch_signatures(
         .map(|signature| signature.inputs.iter().copied())
         .collect::<Vec<_>>();
 
-    let mut lists_of_types = inputs_of_each_branch;
+    unify_lists_of_types(inputs_of_each_branch, local_types);
 
+    // Not unifying branch outputs right now. It's probably necessary, where
+    // outputs are known but inputs aren't, but there's not test for that yet.
+
+    let signature = branch_signatures.pop()?;
+    make_signature_direct(&signature, local_types)
+}
+
+fn unify_lists_of_types(
+    mut lists_of_types: Vec<impl Iterator<Item = Index<InferredType>>>,
+    local_types: &mut LocalTypes,
+) {
     loop {
         let mut current_inputs = Vec::new();
 
@@ -599,12 +610,6 @@ fn unify_branch_signatures(
 
         local_types.unify(current_inputs);
     }
-
-    // Not unifying branch outputs right now. It's probably necessary, where
-    // outputs are known but inputs aren't, but there's not test for that yet.
-
-    let signature = branch_signatures.pop()?;
-    make_signature_direct(&signature, local_types)
 }
 
 fn make_signature_indirect(
