@@ -24,7 +24,6 @@ struct FunctionContext<'r> {
 
 pub fn compile_function(
     function: Located<&Function>,
-    _: Option<InstructionAddress>,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> capi_runtime::Function {
@@ -350,7 +349,6 @@ fn compile_expression(
                         location: FunctionLocation::Local {
                             location: expression.location.clone(),
                         },
-                        address_of_instruction_to_make_anon_function: None,
                     },
                 );
 
@@ -531,6 +529,4 @@ pub struct CallToFunction {
 pub struct FunctionToCompile {
     pub function: Function,
     pub location: FunctionLocation,
-    pub address_of_instruction_to_make_anon_function:
-        Option<InstructionAddress>,
 }

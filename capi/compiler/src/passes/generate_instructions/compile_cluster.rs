@@ -70,7 +70,6 @@ pub fn compile_cluster(
                 fragment: &function_to_compile.function,
                 location: function_to_compile.location.clone(),
             },
-            function_to_compile.address_of_instruction_to_make_anon_function,
             &mut context,
             functions_context,
         );
@@ -112,7 +111,6 @@ fn seed_queue_of_functions_to_compile(
             .map(|function| FunctionToCompile {
                 function: function.fragment.clone(),
                 location: function.location,
-                address_of_instruction_to_make_anon_function: None,
             });
     queue_of_functions_to_compile.extend(functions_in_cluster_to_compile);
 }
