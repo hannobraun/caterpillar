@@ -181,13 +181,16 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            dependencies.clusters().cloned().collect::<Vec<_>>(),
-            [(Index::from(0), g), (Index::from(0), f),]
-                .into_iter()
-                .map(|locations_by_index| DependencyCluster {
-                    functions: [locations_by_index].into_iter().collect(),
+            dependencies
+                .clusters()
+                .map(|cluster| {
+                    cluster
+                        .functions(&syntax_tree)
+                        .map(|function| function.location)
+                        .collect::<Vec<_>>()
                 })
                 .collect::<Vec<_>>(),
+            [[g], [f]],
         );
     }
 
