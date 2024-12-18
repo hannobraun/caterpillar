@@ -99,7 +99,7 @@ pub struct InferenceOutput {
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
-    local_functions: &mut LocalFunctions,
+    local_functions: &mut ClusterFunctions,
     local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
@@ -186,7 +186,7 @@ fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<Binding, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
-    _: &mut LocalFunctions,
+    _: &mut ClusterFunctions,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
@@ -684,7 +684,7 @@ struct TypeError {
     location: MemberLocation,
 }
 
-type LocalFunctions =
+type ClusterFunctions =
     BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
 
 #[derive(Debug, Default)]
