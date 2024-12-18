@@ -237,12 +237,15 @@ mod tests {
         );
 
         let [f, g, h] = ["f", "g", "h"]
-            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
+            .map(|name| syntax_tree.function_by_name(name).unwrap());
 
-        assert_eq!(
-            by_function(dependencies, &syntax_tree),
-            [vec![g, h], vec![f]],
-        );
+        {
+            let [f, g, h] = [f, g, h].map(|function| function.location());
+            assert_eq!(
+                by_function(dependencies, &syntax_tree),
+                [vec![g, h], vec![f]],
+            );
+        }
     }
 
     #[test]
