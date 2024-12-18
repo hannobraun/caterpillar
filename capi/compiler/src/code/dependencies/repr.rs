@@ -183,8 +183,8 @@ mod tests {
             ",
         );
 
-        let f = syntax_tree.function_by_name("f").unwrap().location();
-        let g = syntax_tree.function_by_name("g").unwrap().location();
+        let [f, g] = ["f", "g"]
+            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
         assert_eq!(by_function(dependencies, &syntax_tree), [[g], [f]]);
     }
@@ -205,8 +205,8 @@ mod tests {
             ",
         );
 
-        let f = syntax_tree.function_by_name("f").unwrap().location();
-        let g = syntax_tree.function_by_name("g").unwrap().location();
+        let [f, g] = ["f", "g"]
+            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
         assert_eq!(by_function(dependencies, &syntax_tree), [[g], [f]]);
     }
@@ -232,9 +232,8 @@ mod tests {
             ",
         );
 
-        let f = syntax_tree.function_by_name("f").unwrap().location();
-        let g = syntax_tree.function_by_name("g").unwrap().location();
-        let h = syntax_tree.function_by_name("h").unwrap().location();
+        let [f, g, h] = ["f", "g", "h"]
+            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
         assert_eq!(
             by_function(dependencies, &syntax_tree),
@@ -267,9 +266,8 @@ mod tests {
             ",
         );
 
-        let f = syntax_tree.function_by_name("f").unwrap().location();
-        let g = syntax_tree.function_by_name("g").unwrap().location();
-        let h = syntax_tree.function_by_name("h").unwrap().location();
+        let [f, g, h] = ["f", "g", "h"]
+            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
         assert_eq!(by_function(dependencies, &syntax_tree), [[g], [h], [f]]);
     }
