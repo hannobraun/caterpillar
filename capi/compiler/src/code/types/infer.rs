@@ -99,10 +99,7 @@ pub struct InferenceOutput {
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
-    _local_functions: &mut BTreeMap<
-        FunctionLocation,
-        Signature<Index<InferredType>>,
-    >,
+    _local_functions: &mut LocalFunctions,
     local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
@@ -684,6 +681,9 @@ struct TypeError {
     actual: Option<Type>,
     location: MemberLocation,
 }
+
+type LocalFunctions =
+    BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
 
 #[derive(Debug, Default)]
 struct LocalTypes {
