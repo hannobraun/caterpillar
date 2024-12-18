@@ -93,9 +93,6 @@ const subscribe = () => {
                 (maybe include a nice message, if you're up for it), and I'll
                 send you an email whenever I post a new one.
             </p>
-            <p>
-                (Yes, this is an artisanal, handcrafted email newsletter.)
-            </p>
         </div>
     );
 };
