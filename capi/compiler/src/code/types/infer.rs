@@ -25,42 +25,40 @@ pub fn infer_types(context: Context) -> InferenceOutput {
         let mut local_types = LocalTypes::default();
         let mut branch_signatures_by_function = BTreeMap::new();
 
-        for function in cluster.functions(context.syntax_tree) {
-            for branch in function.branches() {
-                let function = (*branch.location.parent).clone();
+        for branch in cluster.branches(context.syntax_tree) {
+            let function = (*branch.location.parent).clone();
 
-                let environment = context.bindings.environment_of(&function);
+            let environment = context.bindings.environment_of(&function);
 
-                match infer_branch(
-                    branch,
-                    environment,
-                    &mut local_types,
-                    context,
-                    &mut output,
-                ) {
-                    Ok((inputs, outputs)) => {
-                        branch_signatures_by_function
-                            .entry(function)
-                            .or_insert_with(Vec::new)
-                            .push((inputs, outputs));
-                    }
-                    Err(TypeError {
-                        expected,
-                        actual,
-                        location,
-                    }) => {
-                        let actual = actual
-                            .map(|type_| format!("`{type_}`"))
-                            .unwrap_or_else(|| "nothing".to_string());
+            match infer_branch(
+                branch,
+                environment,
+                &mut local_types,
+                context,
+                &mut output,
+            ) {
+                Ok((inputs, outputs)) => {
+                    branch_signatures_by_function
+                        .entry(function)
+                        .or_insert_with(Vec::new)
+                        .push((inputs, outputs));
+                }
+                Err(TypeError {
+                    expected,
+                    actual,
+                    location,
+                }) => {
+                    let actual = actual
+                        .map(|type_| format!("`{type_}`"))
+                        .unwrap_or_else(|| "nothing".to_string());
 
-                        panic!(
-                            "\n\
-                            Type error: expected {expected}, got {actual}\n\
-                            \n\
-                            at {}\n",
-                            location.display(context.syntax_tree),
-                        );
-                    }
+                    panic!(
+                        "\n\
+                        Type error: expected {expected}, got {actual}\n\
+                        \n\
+                        at {}\n",
+                        location.display(context.syntax_tree),
+                    );
                 }
             }
         }
