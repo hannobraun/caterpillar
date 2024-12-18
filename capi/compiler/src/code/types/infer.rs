@@ -40,6 +40,39 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 &mut output,
             ) {
                 Ok((inputs, outputs)) => {
+                    if let Some(outputs) = outputs.clone() {
+                        let branch_signature = Signature {
+                            inputs: inputs.clone(),
+                            outputs,
+                        };
+
+                        let merged_signature = if let Some(function_signature) =
+                            cluster_functions.get(&function)
+                        {
+                            unify_lists_of_types(
+                                vec![
+                                    function_signature.inputs.iter().copied(),
+                                    branch_signature.inputs.iter().copied(),
+                                ],
+                                &mut local_types,
+                            );
+                            unify_lists_of_types(
+                                vec![
+                                    function_signature.outputs.iter().copied(),
+                                    branch_signature.outputs.iter().copied(),
+                                ],
+                                &mut local_types,
+                            );
+
+                            branch_signature
+                        } else {
+                            branch_signature
+                        };
+
+                        cluster_functions
+                            .insert(function.clone(), merged_signature);
+                    }
+
                     branch_signatures_by_function
                         .entry(function)
                         .or_insert_with(Vec::new)

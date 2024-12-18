@@ -926,7 +926,7 @@ end
 negatable_random: fn
     \ ->
         read_random
-        _negatable_random_return_or_continue: Number -> Number .
+        _negatable_random_return_or_continue
 end
 
 _negatable_random_return_or_continue: fn
