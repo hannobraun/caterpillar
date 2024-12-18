@@ -1,11 +1,11 @@
 use std::iter;
 
 use crate::code::{
-    syntax::{parse::parse, FunctionLocation, Located},
+    syntax::{parse::parse, BranchLocation, FunctionLocation, Located},
     IndexMap, Tokens,
 };
 
-use super::function::{Function, NamedFunction};
+use super::function::{Branch, Function, NamedFunction};
 
 /// # The syntax tree
 ///
@@ -47,6 +47,22 @@ impl SyntaxTree {
 
         Some(Located {
             fragment: function,
+            location: location.clone(),
+        })
+    }
+
+    /// # Find the branch at the provided location
+    ///
+    /// Return `None`, if no branch at this location can be found.
+    pub fn branch_by_location<'r>(
+        &'r self,
+        location: &BranchLocation,
+    ) -> Option<Located<&'r Branch>> {
+        let function = self.function_by_location(&location.parent)?;
+        let branch = function.branches.get(&location.index)?;
+
+        Some(Located {
+            fragment: branch,
             location: location.clone(),
         })
     }
