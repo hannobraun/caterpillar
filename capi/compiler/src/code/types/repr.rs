@@ -481,7 +481,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // missing feature; no issue to track this yet
     fn infer_type_of_calls_to_non_divergent_mutually_recursive_functions() {
         // Mutually recursive functions can not be inferred on their own. But if
         // they're not divergent, that means they have branches that we can
@@ -530,7 +529,7 @@ mod tests {
             .collect_tuple()
             .unwrap();
 
-        let check = |call| {
+        let check = |call, stack: &[Type]| {
             assert_eq!(
                 types.signature_of(call).cloned().unwrap(),
                 Signature {
@@ -538,11 +537,11 @@ mod tests {
                     outputs: vec![Type::Number],
                 },
             );
-            assert_eq!(types.stack_at(call).unwrap(), &[Type::Number]);
+            assert_eq!(types.stack_at(call).unwrap(), stack);
         };
 
-        check(&g);
-        check(&h);
+        check(&g, &[Type::Number]);
+        check(&h, &[Type::Number, Type::Number]);
     }
 
     #[test]
