@@ -186,7 +186,7 @@ fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<Binding, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
-    _: &mut ClusterFunctions,
+    cluster_functions: &mut ClusterFunctions,
     local_types: &mut LocalTypes,
     local_stack: &mut LocalStack,
     context: Context,
@@ -273,11 +273,12 @@ fn infer_expression(
                         make_signature_indirect(signature, local_types)
                     })
                 }
-                (None, None, None, Some(user_defined)) => {
-                    functions.get(user_defined).map(|signature| {
+                (None, None, None, Some(user_defined)) => functions
+                    .get(user_defined)
+                    .map(|signature| {
                         make_signature_indirect(signature.clone(), local_types)
                     })
-                }
+                    .or_else(|| cluster_functions.get(user_defined).cloned()),
                 (None, None, None, None) => None,
                 _ => {
                     unreachable!("Single identifier resolved multiple times.");
