@@ -22,11 +22,12 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
+        let mut local_types = LocalTypes::default();
+
         for function in cluster.functions(context.syntax_tree) {
             let environment =
                 context.bindings.environment_of(&function.location);
 
-            let mut local_types = LocalTypes::default();
             let mut branch_signatures = Vec::new();
 
             for branch in function.branches() {
