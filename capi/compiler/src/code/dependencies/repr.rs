@@ -1,7 +1,7 @@
 use crate::code::{
     syntax::{
-        BranchLocation, Function, FunctionLocation, Located, NamedFunction,
-        SyntaxTree,
+        Branch, BranchLocation, Function, FunctionLocation, Located,
+        NamedFunction, SyntaxTree,
     },
     FunctionCalls, Index,
 };
@@ -148,6 +148,30 @@ impl DependencyCluster {
             };
 
             function
+        })
+    }
+
+    /// # Iterate over the branches in the cluster, sorted by dependencies
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if a branch tracked in this instance of [`DependencyCluster`]
+    /// can not be found in the provided [`SyntaxTree`]. This should only
+    /// happen, if you pass a different [`SyntaxTree`] to this function than you
+    /// previously passed to [`Dependencies::resolve`].
+    pub fn branches<'r>(
+        &'r self,
+        syntax_tree: &'r SyntaxTree,
+    ) -> impl Iterator<Item = Located<&'r Branch>> {
+        self.branches.iter().map(|location| {
+            let Some(branch) = syntax_tree.branch_by_location(location) else {
+                panic!(
+                    "This function expects to find all tracked locations in \
+                    the provided `SyntaxTree`."
+                );
+            };
+
+            branch
         })
     }
 
