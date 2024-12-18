@@ -186,7 +186,7 @@ mod tests {
         let f = syntax_tree.function_by_name("f").unwrap().location();
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
-        assert_eq!(destructure(dependencies, &syntax_tree), [[g], [f]]);
+        assert_eq!(by_function(dependencies, &syntax_tree), [[g], [f]]);
     }
 
     #[test]
@@ -208,7 +208,7 @@ mod tests {
         let f = syntax_tree.function_by_name("f").unwrap().location();
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
-        assert_eq!(destructure(dependencies, &syntax_tree), [[g], [f]]);
+        assert_eq!(by_function(dependencies, &syntax_tree), [[g], [f]]);
     }
 
     #[test]
@@ -237,7 +237,7 @@ mod tests {
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
         assert_eq!(
-            destructure(dependencies, &syntax_tree),
+            by_function(dependencies, &syntax_tree),
             [vec![g, h], vec![f]],
         );
     }
@@ -271,7 +271,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
         let h = syntax_tree.function_by_name("h").unwrap().location();
 
-        assert_eq!(destructure(dependencies, &syntax_tree), [[g], [h], [f]]);
+        assert_eq!(by_function(dependencies, &syntax_tree), [[g], [h], [f]]);
     }
 
     #[test]
@@ -323,7 +323,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            destructure(dependencies, &syntax_tree),
+            by_function(dependencies, &syntax_tree),
             [[g], [h_a], [h], [f_a], [f]],
         );
     }
@@ -337,7 +337,7 @@ mod tests {
         (syntax_tree, dependencies)
     }
 
-    fn destructure(
+    fn by_function(
         dependencies: Dependencies,
         syntax_tree: &SyntaxTree,
     ) -> Vec<Vec<FunctionLocation>> {
