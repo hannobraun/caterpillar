@@ -147,19 +147,21 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        if let Some(signature) = make_signature_direct(&signature, local_types)
-        {
-            if let Some(binding) = context.bindings.is_binding(&location) {
-                assert_eq!(signature.inputs.len(), 0);
-                assert_eq!(signature.outputs.len(), 1);
+        let Some(signature) = make_signature_direct(&signature, local_types)
+        else {
+            continue;
+        };
 
-                let type_ = signature.outputs[0].clone();
+        if let Some(binding) = context.bindings.is_binding(&location) {
+            assert_eq!(signature.inputs.len(), 0);
+            assert_eq!(signature.outputs.len(), 1);
 
-                output.bindings.insert(binding.clone(), type_);
-            }
+            let type_ = signature.outputs[0].clone();
 
-            output.expressions.insert(location, signature);
+            output.bindings.insert(binding.clone(), type_);
         }
+
+        output.expressions.insert(location, signature);
     }
     for (location, local_stack) in stacks {
         let Some(local_stack) = make_stack_direct(&local_stack, local_types)
