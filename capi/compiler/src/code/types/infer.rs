@@ -99,7 +99,7 @@ pub struct InferenceOutput {
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
-    local_functions: &mut ClusterFunctions,
+    cluster_functions: &mut ClusterFunctions,
     local_types: &mut LocalTypes,
     context: Context,
     output: &mut InferenceOutput,
@@ -136,7 +136,7 @@ fn infer_branch(
             expression,
             &bindings,
             &output.functions,
-            local_functions,
+            cluster_functions,
             local_types,
             &mut local_stack,
             context,
