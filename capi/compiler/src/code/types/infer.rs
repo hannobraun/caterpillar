@@ -23,12 +23,11 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 
     for cluster in context.dependencies.clusters() {
         let mut local_types = LocalTypes::default();
+        let mut branch_signatures = BTreeMap::new();
 
         for function in cluster.functions(context.syntax_tree) {
             let environment =
                 context.bindings.environment_of(&function.location);
-
-            let mut branch_signatures = Vec::new();
 
             for branch in function.branches() {
                 match infer_branch(
@@ -39,7 +38,10 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                     &mut output,
                 ) {
                     Ok((inputs, outputs)) => {
-                        branch_signatures.push((inputs, outputs));
+                        branch_signatures
+                            .entry(function.location.clone())
+                            .or_insert_with(Vec::new)
+                            .push((inputs, outputs));
                     }
                     Err(TypeError {
                         expected,
@@ -60,14 +62,14 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                     }
                 }
             }
+        }
 
+        for (function, branch_signatures) in branch_signatures {
             let signature =
                 unify_branch_signatures(branch_signatures, &mut local_types);
 
             if let Some(signature) = signature {
-                output
-                    .functions
-                    .insert(function.location.clone(), signature);
+                output.functions.insert(function, signature);
             }
         }
     }
