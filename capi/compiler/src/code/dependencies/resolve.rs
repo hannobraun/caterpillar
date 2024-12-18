@@ -53,7 +53,7 @@ pub fn resolve_branch_dependencies(
     functions: &[FunctionLocation],
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
-) -> Vec<Vec<BranchLocation>> {
+) -> Vec<BranchLocation> {
     let functions = functions
         .iter()
         .map(|location| {
@@ -116,6 +116,9 @@ pub fn resolve_branch_dependencies(
     }
 
     collect_dependency_clusters(dependency_graph)
+        .into_iter()
+        .flatten()
+        .collect()
 }
 
 fn collect_dependency_clusters<T>(

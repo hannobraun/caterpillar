@@ -54,10 +54,7 @@ impl Dependencies {
                         &functions,
                         syntax_tree,
                         function_calls,
-                    )
-                    .into_iter()
-                    .flatten()
-                    .collect();
+                    );
 
                     DependencyCluster {
                         functions,
