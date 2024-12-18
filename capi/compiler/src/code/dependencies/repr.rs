@@ -217,17 +217,21 @@ mod tests {
             r"
                 f: fn
                     \ ->
-                        g
+                        0 g
                 end
 
                 g: fn
-                    \ ->
-                        h
+                    \ 0 ->
+                        0 h
+                    \ n ->
+                        0
                 end
 
                 h: fn
-                    \ ->
-                        g
+                    \ 0 ->
+                        1 h
+                    \ n ->
+                        n g
                 end
             ",
         );
