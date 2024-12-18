@@ -341,7 +341,7 @@ fn infer_expression(
                 for (a, b) in a.iter().zip(b) {
                     let index = match [a, b].map(|index| local_types.get(index))
                     {
-                        [InferredType::Known(_), InferredType::Known(_)] => {
+                        [InferredType::Known(inferred), InferredType::Known(explicit)] => {
                             if a == b {
                                 a
                             } else {
