@@ -21,50 +21,53 @@ use super::{repr::Stacks, Signature, Type, TypeAnnotations};
 pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
-    for function in context.dependencies.functions(context.syntax_tree) {
-        let environment = context.bindings.environment_of(&function.location);
+    for cluster in context.dependencies.clusters() {
+        for function in cluster.functions(context.syntax_tree) {
+            let environment =
+                context.bindings.environment_of(&function.location);
 
-        let mut local_types = LocalTypes::default();
-        let mut branch_signatures = Vec::new();
+            let mut local_types = LocalTypes::default();
+            let mut branch_signatures = Vec::new();
 
-        for branch in function.branches() {
-            match infer_branch(
-                branch,
-                environment,
-                &mut local_types,
-                context,
-                &mut output,
-            ) {
-                Ok((inputs, outputs)) => {
-                    branch_signatures.push((inputs, outputs));
-                }
-                Err(TypeError {
-                    expected,
-                    actual,
-                    location,
-                }) => {
-                    let actual = actual
-                        .map(|type_| format!("`{type_}`"))
-                        .unwrap_or_else(|| "nothing".to_string());
+            for branch in function.branches() {
+                match infer_branch(
+                    branch,
+                    environment,
+                    &mut local_types,
+                    context,
+                    &mut output,
+                ) {
+                    Ok((inputs, outputs)) => {
+                        branch_signatures.push((inputs, outputs));
+                    }
+                    Err(TypeError {
+                        expected,
+                        actual,
+                        location,
+                    }) => {
+                        let actual = actual
+                            .map(|type_| format!("`{type_}`"))
+                            .unwrap_or_else(|| "nothing".to_string());
 
-                    panic!(
-                        "\n\
-                        Type error: expected {expected}, got {actual}\n\
-                        \n\
-                        at {}\n",
-                        location.display(context.syntax_tree),
-                    );
+                        panic!(
+                            "\n\
+                            Type error: expected {expected}, got {actual}\n\
+                            \n\
+                            at {}\n",
+                            location.display(context.syntax_tree),
+                        );
+                    }
                 }
             }
-        }
 
-        let signature =
-            unify_branch_signatures(branch_signatures, &mut local_types);
+            let signature =
+                unify_branch_signatures(branch_signatures, &mut local_types);
 
-        if let Some(signature) = signature {
-            output
-                .functions
-                .insert(function.location.clone(), signature);
+            if let Some(signature) = signature {
+                output
+                    .functions
+                    .insert(function.location.clone(), signature);
+            }
         }
     }
 
