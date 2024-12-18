@@ -54,7 +54,10 @@ impl Dependencies {
                         &functions,
                         syntax_tree,
                         function_calls,
-                    );
+                    )
+                    .into_iter()
+                    .flatten()
+                    .collect();
 
                     DependencyCluster {
                         functions,
@@ -122,7 +125,7 @@ impl Dependencies {
 )]
 pub struct DependencyCluster {
     functions: Vec<FunctionLocation>,
-    branches: Vec<Vec<BranchLocation>>,
+    branches: Vec<BranchLocation>,
 }
 
 impl DependencyCluster {
