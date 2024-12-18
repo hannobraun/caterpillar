@@ -22,7 +22,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
-        let mut local_functions = BTreeMap::new();
+        let mut cluster_functions = BTreeMap::new();
         let mut local_types = LocalTypes::default();
         let mut branch_signatures_by_function = BTreeMap::new();
 
@@ -34,7 +34,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
             match infer_branch(
                 branch,
                 environment,
-                &mut local_functions,
+                &mut cluster_functions,
                 &mut local_types,
                 context,
                 &mut output,
