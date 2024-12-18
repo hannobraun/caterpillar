@@ -26,10 +26,10 @@ pub fn infer_types(context: Context) -> InferenceOutput {
         let mut branch_signatures_by_function = BTreeMap::new();
 
         for function in cluster.functions(context.syntax_tree) {
-            let environment =
-                context.bindings.environment_of(&function.location);
-
             for branch in function.branches() {
+                let environment =
+                    context.bindings.environment_of(&function.location);
+
                 match infer_branch(
                     branch,
                     environment,
