@@ -341,23 +341,20 @@ fn infer_expression(
                 for (a, b) in a.iter().zip(b) {
                     let index = match [a, b].map(|index| local_types.get(index))
                     {
-                        [InferredType::Known(inferred), InferredType::Known(explicit)] => {
-                            if a == b {
-                                a
-                            } else {
-                                panic!(
-                                    "Explicit type annotation conflicts with \
-                                    inferred type.\n\
-                                    \n\
-                                    Explicit type: {explicit:?}\n\
-                                    Inferred type: {inferred:?}\n\
-                                    \n\
-                                    At {}\n",
-                                    expression
-                                        .location
-                                        .display(context.syntax_tree),
-                                );
-                            }
+                        [InferredType::Known(inferred), InferredType::Known(explicit)] =>
+                        {
+                            panic!(
+                                "Explicit type annotation conflicts with \
+                                inferred type.\n\
+                                \n\
+                                Explicit type: {explicit:?}\n\
+                                Inferred type: {inferred:?}\n\
+                                \n\
+                                At {}\n",
+                                expression
+                                    .location
+                                    .display(context.syntax_tree),
+                            );
                         }
                         [InferredType::Known(_), InferredType::Unknown { .. }] => {
                             a
