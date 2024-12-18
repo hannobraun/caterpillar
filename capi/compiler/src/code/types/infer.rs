@@ -27,8 +27,9 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 
         for function in cluster.functions(context.syntax_tree) {
             for branch in function.branches() {
-                let environment =
-                    context.bindings.environment_of(&function.location);
+                let function = (*branch.location.parent).clone();
+
+                let environment = context.bindings.environment_of(&function);
 
                 match infer_branch(
                     branch,
@@ -39,7 +40,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                 ) {
                     Ok((inputs, outputs)) => {
                         branch_signatures_by_function
-                            .entry(function.location.clone())
+                            .entry(function)
                             .or_insert_with(Vec::new)
                             .push((inputs, outputs));
                     }
