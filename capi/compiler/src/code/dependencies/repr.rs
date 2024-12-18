@@ -306,9 +306,11 @@ mod tests {
         );
 
         let [(f, f_a), (h, h_a)] = ["f", "h"].map(|name| {
-            let named = syntax_tree.function_by_name(name).unwrap();
+            let named = syntax_tree
+                .function_by_name(name)
+                .unwrap()
+                .into_located_function();
             let local = named
-                .into_located_function()
                 .find_single_branch()
                 .unwrap()
                 .expressions()
@@ -318,7 +320,7 @@ mod tests {
                 .map(|function| function.location)
                 .unwrap();
 
-            (named.location(), local)
+            (named.location, local)
         });
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
