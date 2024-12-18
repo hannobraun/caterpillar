@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use petgraph::{
     algo::{condensation, toposort},
@@ -54,9 +54,11 @@ pub fn resolve_branch_dependencies(
     syntax_tree: &SyntaxTree,
     function_calls: &FunctionCalls,
 ) -> Vec<BranchLocation> {
-    let functions = functions
+    let functions = functions.iter().collect::<BTreeSet<_>>();
+
+    let mut unsorted_branches = functions
         .iter()
-        .map(|location| {
+        .flat_map(|location| {
             let Some(function) = syntax_tree.function_by_location(location)
             else {
                 unreachable!(
@@ -65,60 +67,59 @@ pub fn resolve_branch_dependencies(
                 );
             };
 
-            function
+            function.branches()
         })
         .collect::<Vec<_>>();
 
-    let mut dependency_graph = Graph::new();
+    let mut sorted_branches = Vec::new();
+    let mut functions_resolved_by_sorted_branches = BTreeSet::new();
 
-    let mut graph_indices_by_function_location = BTreeMap::<_, Vec<_>>::new();
-    let mut graph_indices_by_branch_location = BTreeMap::new();
+    loop {
+        let num_unsorted_branches_before = unsorted_branches.len();
 
-    for function in &functions {
-        for branch in function.branches() {
-            let node_index = dependency_graph.add_node(branch.location.clone());
-
-            graph_indices_by_function_location
-                .entry(function.location.clone())
-                .or_default()
-                .push(node_index);
-            graph_indices_by_branch_location
-                .entry(branch.location)
-                .or_insert_with(|| node_index);
-        }
-    }
-
-    for function in functions {
-        for branch in function.branches() {
-            let depender = graph_indices_by_branch_location[&branch.location];
-
-            for expression in branch.expressions() {
-                let dependee = match expression.fragment {
-                    Expression::Identifier { .. } => function_calls
+        let mut i = 0;
+        while let Some(branch) = unsorted_branches.get(i) {
+            let branch_has_no_unresolved_dependencies =
+                branch.expressions().all(|expression| {
+                    let Some(callee) = function_calls
                         .is_call_to_user_defined_function(&expression.location)
-                        .cloned(),
-                    _ => expression
-                        .into_local_function()
-                        .map(|function| function.location),
-                };
+                    else {
+                        // If the expression is not a call to a function, it's
+                        // not relevant to determining the dependencies of the
+                        // branch.
+                        return true;
+                    };
 
-                if let Some(dependee) = dependee {
-                    for &dependee in graph_indices_by_function_location
-                        .get(&dependee)
-                        .into_iter()
-                        .flatten()
-                    {
-                        dependency_graph.add_edge(depender, dependee, ());
-                    }
-                }
+                    let dependency_is_outside_of_cluster =
+                        !functions.contains(callee);
+                    let dependency_is_already_resolved =
+                        functions_resolved_by_sorted_branches.contains(callee);
+
+                    dependency_is_outside_of_cluster
+                        || dependency_is_already_resolved
+                });
+
+            if branch_has_no_unresolved_dependencies {
+                functions_resolved_by_sorted_branches
+                    .insert(branch.location.parent.clone());
+
+                let branch = unsorted_branches.swap_remove(i);
+                sorted_branches.push(branch.location);
+            } else {
+                i += 1;
             }
         }
+
+        if num_unsorted_branches_before == unsorted_branches.len() {
+            // The rest of the branches are mutually dependent. We're done.
+            sorted_branches.extend(
+                unsorted_branches.into_iter().map(|branch| branch.location),
+            );
+            break;
+        }
     }
 
-    collect_dependency_clusters(dependency_graph)
-        .into_iter()
-        .flatten()
-        .collect()
+    sorted_branches
 }
 
 fn collect_dependency_clusters<T>(

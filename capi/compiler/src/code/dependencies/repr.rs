@@ -183,6 +183,10 @@ impl DependencyCluster {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeSet;
+
+    use itertools::Itertools;
+
     use crate::{
         code::{
             syntax::{FunctionLocation, SyntaxTree},
@@ -270,6 +274,34 @@ mod tests {
                 [vec![g, h], vec![f]],
             );
         }
+
+        let (g_a, g_b, h_a, h_b) = [g, h]
+            .into_iter()
+            .flat_map(|function| {
+                function
+                    .into_located_function()
+                    .branches()
+                    .map(|branch| branch.location)
+            })
+            .collect_tuple()
+            .unwrap();
+
+        let mut branches = dependencies
+            .clusters()
+            .next()
+            .unwrap()
+            .branches(&syntax_tree)
+            .map(|branch| branch.location);
+        let (first, second) =
+            branches.by_ref().take(2).collect_tuple().unwrap();
+
+        assert_eq!(first, g_b);
+        assert_eq!(second, h_b);
+
+        // The other two are mutually dependent, so there is no clear order.
+        let rest = branches.collect::<BTreeSet<_>>();
+        assert!(rest.contains(&g_a));
+        assert!(rest.contains(&h_a));
     }
 
     #[test]
