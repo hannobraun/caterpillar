@@ -10,8 +10,8 @@ use crate::{
             Branch, Expression, FunctionLocation, Located, MemberLocation,
             Pattern, SyntaxTree,
         },
-        Binding, Bindings, Dependencies, Environment, FunctionCalls, Index,
-        IndexMap,
+        Binding, Bindings, Dependencies, Environment, IdentifierTarget,
+        Identifiers, Index, IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -115,7 +115,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
 pub struct Context<'r> {
     pub syntax_tree: &'r SyntaxTree,
     pub bindings: &'r Bindings,
-    pub function_calls: &'r FunctionCalls,
+    pub identifiers: &'r Identifiers,
     pub dependencies: &'r Dependencies,
     pub annotations: &'r TypeAnnotations,
 }
@@ -232,90 +232,88 @@ fn infer_expression(
 
     let inferred = match expression.fragment {
         Expression::Identifier { name } => {
-            let binding = context.bindings.is_binding(&expression.location);
-            let host = context
-                .function_calls
-                .is_call_to_host_function(&expression.location);
-            let intrinsic = context
-                .function_calls
-                .is_call_to_intrinsic_function(&expression.location);
-            let user_defined = context
-                .function_calls
-                .is_call_to_user_defined_function(&expression.location);
-
-            match (binding, host, intrinsic, user_defined) {
-                (Some(binding), None, None, None) => {
-                    let Some(output) = bindings.get(binding).copied() else {
-                        let Binding {
-                            identifier_index,
-                            branch,
-                        } = binding;
-
-                        let mut available_bindings = String::new();
-                        for (binding, type_) in bindings {
+            match context.identifiers.is_resolved(&expression.location) {
+                Some(target) => match target {
+                    IdentifierTarget::Binding(binding) => {
+                        let Some(output) = bindings.get(binding).copied()
+                        else {
                             let Binding {
                                 identifier_index,
                                 branch,
                             } = binding;
-                            let type_ = local_types.get(type_);
-                            write!(
+
+                            let mut available_bindings = String::new();
+                            for (binding, type_) in bindings {
+                                let Binding {
+                                    identifier_index,
+                                    branch,
+                                } = binding;
+                                let type_ = local_types.get(type_);
+                                write!(
                                 available_bindings,
                                 "- index `{identifier_index}` at {}: {type_:?}",
                                 branch.display(context.syntax_tree),
                             )
-                            .expect("Writing to `String` can not fail.");
-                        }
+                                .expect("Writing to `String` can not fail.");
+                            }
 
-                        unreachable!(
-                            "Identifier `{name}` has been resolved as binding, \
-                            but it is not known in the branch.\n\
-                            \n\
-                            at {}\n\
-                            \n\
-                            Binding: identifier index `{identifier_index}` at \
-                            {}\n\
-                            \n\
-                            Available bindings in branch:\n\
-                            {available_bindings}",
-                            expression.location.display(context.syntax_tree),
-                            branch.display(context.syntax_tree),
+                            unreachable!(
+                                "Identifier `{name}` has been resolved as \
+                                binding, but it is not known in the branch.\n\
+                                \n\
+                                at {}\n\
+                                \n\
+                                Binding: identifier index `{identifier_index}` \
+                                at {}\n\
+                                \n\
+                                Available bindings in branch:\n\
+                                {available_bindings}",
+                                expression
+                                    .location
+                                    .display(context.syntax_tree),
+                                branch.display(context.syntax_tree),
+                            );
+                        };
+                        let signature = Signature {
+                            inputs: vec![],
+                            outputs: vec![output],
+                        };
+                        Some(signature)
+                    }
+                    IdentifierTarget::HostFunction(host) => {
+                        let signature = make_signature_indirect(
+                            host.signature.clone(),
+                            local_types,
                         );
-                    };
-                    let signature = Signature {
-                        inputs: vec![],
-                        outputs: vec![output],
-                    };
-                    Some(signature)
-                }
-                (None, Some(host), None, None) => {
-                    let signature = make_signature_indirect(
-                        host.signature.clone(),
-                        local_types,
-                    );
-                    Some(signature)
-                }
-                (None, None, Some(intrinsic), None) => {
-                    let signature = infer_intrinsic(
-                        intrinsic,
-                        &expression.location,
-                        local_types,
-                        local_stack,
-                    )?;
+                        Some(signature)
+                    }
+                    IdentifierTarget::IntrinsicFunction(intrinsic) => {
+                        let signature = infer_intrinsic(
+                            intrinsic,
+                            &expression.location,
+                            local_types,
+                            local_stack,
+                        )?;
 
-                    signature.map(|signature| {
-                        make_signature_indirect(signature, local_types)
-                    })
-                }
-                (None, None, None, Some(user_defined)) => functions
-                    .get(user_defined)
-                    .map(|signature| {
-                        make_signature_indirect(signature.clone(), local_types)
-                    })
-                    .or_else(|| cluster_functions.get(user_defined).cloned()),
-                (None, None, None, None) => None,
-                _ => {
-                    unreachable!("Single identifier resolved multiple times.");
-                }
+                        signature.map(|signature| {
+                            make_signature_indirect(signature, local_types)
+                        })
+                    }
+                    IdentifierTarget::UserDefinedFunction(user_defined) => {
+                        functions
+                            .get(user_defined)
+                            .map(|signature| {
+                                make_signature_indirect(
+                                    signature.clone(),
+                                    local_types,
+                                )
+                            })
+                            .or_else(|| {
+                                cluster_functions.get(user_defined).cloned()
+                            })
+                    }
+                },
+                None => None,
             }
         }
         Expression::LiteralNumber { .. } => {

@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use crate::code::{
     syntax::{MemberLocation, SyntaxTree},
-    Bindings, Dependencies, FunctionCalls,
+    Bindings, Dependencies, Identifiers,
 };
 
 use super::{
@@ -55,7 +55,7 @@ impl Types {
     pub fn infer(
         syntax_tree: &SyntaxTree,
         bindings: &Bindings,
-        function_calls: &FunctionCalls,
+        identifiers: &Identifiers,
         dependencies: &Dependencies,
         annotations: TypeAnnotations,
     ) -> Self {
@@ -67,7 +67,7 @@ impl Types {
         } = infer_types(Context {
             syntax_tree,
             bindings,
-            function_calls,
+            identifiers,
             dependencies,
             annotations: &annotations,
         });
@@ -222,7 +222,8 @@ mod tests {
     use crate::{
         code::{
             syntax::{Expression, SyntaxTree},
-            Bindings, Dependencies, FunctionCalls, Signature, Tokens, Type,
+            Bindings, Dependencies, FunctionCalls, Identifiers, Signature,
+            Tokens, Type,
         },
         host::NoHost,
     };
@@ -593,11 +594,13 @@ mod tests {
         let type_annotations = TypeAnnotations::resolve(&syntax_tree);
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
+        let identifiers =
+            Identifiers::resolve(&syntax_tree, &bindings, &function_calls);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let types = Types::infer(
             &syntax_tree,
             &bindings,
-            &function_calls,
+            &identifiers,
             &dependencies,
             type_annotations,
         );

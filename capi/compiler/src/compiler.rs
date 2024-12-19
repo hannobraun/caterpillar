@@ -35,7 +35,6 @@ impl Compiler {
         let function_calls = FunctionCalls::resolve(&syntax_tree, host);
         let identifiers =
             Identifiers::resolve(&syntax_tree, &bindings, &function_calls);
-        dbg!(identifiers);
         let tail_expressions = TailExpressions::find(&syntax_tree);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
         let recursion =
@@ -43,7 +42,7 @@ impl Compiler {
         let types = Types::infer(
             &syntax_tree,
             &bindings,
-            &function_calls,
+            &identifiers,
             &dependencies,
             type_annotations,
         );
