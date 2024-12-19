@@ -512,7 +512,7 @@ fn infer_intrinsic(
 
             match top_operand {
                 Some(InferredType::Known(type_)) => Some(Signature {
-                    inputs: vec![type_.clone()],
+                    inputs: vec![type_],
                     outputs: vec![],
                 }),
                 Some(InferredType::Unknown { .. }) => None,
