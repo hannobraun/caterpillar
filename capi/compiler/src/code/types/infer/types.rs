@@ -13,6 +13,10 @@ impl InferredTypes {
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
+        self.get(index)
+    }
+
+    fn get(&self, index: &Index<InferredType>) -> InferredType {
         let Some(type_) = self.inner.get(index).cloned() else {
             unreachable!(
                 "We are never removing any inferred types. Thus, an index can \
