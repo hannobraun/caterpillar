@@ -13,7 +13,7 @@ impl InferredTypes {
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
-        let Some(type_) = self.inner.get(index) else {
+        let Some(type_) = self.inner.get(index).cloned() else {
             unreachable!(
                 "We are never removing any inferred types. Thus, an index can \
                 only be invalid, if the caller is mixing indices between \
@@ -23,7 +23,7 @@ impl InferredTypes {
             );
         };
 
-        type_.clone()
+        type_
     }
 
     pub fn unify2(&mut self, types: BTreeSet<Index<InferredType>>) {
