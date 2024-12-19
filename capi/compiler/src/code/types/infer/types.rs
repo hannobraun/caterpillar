@@ -8,7 +8,7 @@ use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 #[derive(Debug, Default)]
 pub struct InferredTypes {
     pub inner: IndexMap<InferredType>,
-    unification: BTreeMap<Index<InferredType>, Vec<Index<InferredType>>>,
+    unification: BTreeMap<Index<InferredType>, BTreeSet<Index<InferredType>>>,
 }
 
 impl InferredTypes {
@@ -18,8 +18,8 @@ impl InferredTypes {
 
     #[cfg(test)]
     pub fn unify(&mut self, [a, b]: [Index<InferredType>; 2]) {
-        self.unification.entry(a).or_default().push(b);
-        self.unification.entry(b).or_default().push(a);
+        self.unification.entry(a).or_default().insert(b);
+        self.unification.entry(b).or_default().insert(a);
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> Result<InferredType> {
