@@ -12,6 +12,21 @@ impl InferredTypes {
         self.inner.push(type_)
     }
 
+    #[cfg(test)]
+    pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
+        let Some(type_) = self.inner.get(index) else {
+            unreachable!(
+                "We are never removing any inferred types. Thus, an index can \
+                only be invalid, if the caller is mixing indices between \
+                multiple instances of this struct.\n\
+                \n\
+                Since this is a private type, that is always going to be a bug."
+            );
+        };
+
+        type_.clone()
+    }
+
     pub fn get(&self, index: &Index<InferredType>) -> &InferredType {
         let Some(type_) = self.inner.get(index) else {
             unreachable!(
@@ -55,5 +70,32 @@ impl InferredType {
             Self::Known(type_) => Some(type_),
             Self::Unknown { .. } => None,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::code::{types::infer::types::InferredType, Type};
+
+    use super::InferredTypes;
+
+    #[test]
+    fn resolve_unknown() {
+        let mut types = InferredTypes::default();
+
+        let type_ = InferredType::Unknown;
+        let index = types.push(type_.clone());
+
+        assert_eq!(types.resolve(&index), type_);
+    }
+
+    #[test]
+    fn resolve_known() {
+        let mut types = InferredTypes::default();
+
+        let type_ = InferredType::Known(Type::Number);
+        let index = types.push(type_.clone());
+
+        assert_eq!(types.resolve(&index), type_);
     }
 }
