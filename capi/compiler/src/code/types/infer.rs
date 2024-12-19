@@ -6,12 +6,12 @@ use std::{
 
 use crate::{
     code::{
-        bindings::Environment,
         syntax::{
             Branch, Expression, FunctionLocation, Located, MemberLocation,
             Pattern, SyntaxTree,
         },
-        Binding, Bindings, Dependencies, FunctionCalls, Index, IndexMap,
+        Binding, Bindings, Dependencies, Environment, FunctionCalls, Index,
+        IndexMap,
     },
     intrinsics::IntrinsicFunction,
 };
