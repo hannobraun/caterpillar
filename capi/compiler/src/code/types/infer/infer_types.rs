@@ -370,9 +370,10 @@ fn infer_expression(
                 let mut indices = Vec::new();
 
                 for (index_a, index_b) in a.iter().zip(b) {
-                    let index = match [index_a, index_b]
-                        .map(|index| local_types.resolve(index))
-                    {
+                    let [a, b] = [index_a, index_b]
+                        .map(|index| local_types.resolve(index));
+
+                    let index = match [a, b] {
                         [InferredType::Known(inferred), InferredType::Known(explicit)] =>
                         {
                             panic!(
