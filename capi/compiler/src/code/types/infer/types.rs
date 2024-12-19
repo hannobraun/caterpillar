@@ -147,7 +147,7 @@ mod tests {
 
         types.unify([a, b]);
 
-        assert_eq!(types.resolve(&a), Ok(type_.clone()));
+        assert_eq!(types.resolve(&a).as_ref(), Ok(&type_));
         assert_eq!(types.resolve(&b), Ok(type_));
     }
 }
