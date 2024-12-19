@@ -40,8 +40,25 @@ impl InferredTypes {
 
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
-            if let InferredType::Known(_) = other {
-                resolved = other.clone();
+
+            match (&resolved, other) {
+                (InferredType::Known(a), InferredType::Known(b)) => {
+                    if a == b {
+                        // Types check out. All good!
+                    } else {
+                        return Err(TypeError {
+                            expected: resolved.into_expected_type(),
+                            actual: Some(b.clone()),
+                            location: None,
+                        });
+                    }
+                }
+                (InferredType::Unknown, InferredType::Known(_)) => {
+                    resolved = other.clone();
+                }
+                (_, InferredType::Unknown) => {
+                    // Other type doesn't add any new information.
+                }
             }
         }
 
@@ -133,7 +150,10 @@ impl fmt::Display for ExpectedType {
 
 #[cfg(test)]
 mod tests {
-    use crate::code::{types::infer::types::InferredType, Type};
+    use crate::code::{
+        types::infer::types::{ExpectedType, InferredType, TypeError},
+        Signature, Type,
+    };
 
     use super::InferredTypes;
 
@@ -186,5 +206,40 @@ mod tests {
         types.unify([&b, &c]);
 
         assert_eq!(types.resolve(&c), Ok(type_));
+    }
+
+    #[test]
+    fn resolve_conflicting_unified() {
+        let mut types = InferredTypes::default();
+
+        let a = Type::Number;
+        let b = Type::Function {
+            signature: Signature {
+                inputs: vec![],
+                outputs: vec![Type::Number],
+            },
+        };
+
+        let index_a = types.push(InferredType::Known(a.clone()));
+        let index_b = types.push(InferredType::Known(b.clone()));
+
+        types.unify([&index_a, &index_b]);
+
+        assert_eq!(
+            types.resolve(&index_a),
+            Err(TypeError {
+                expected: ExpectedType::Specific(a.clone()),
+                actual: Some(b.clone()),
+                location: None,
+            })
+        );
+        assert_eq!(
+            types.resolve(&index_b),
+            Err(TypeError {
+                expected: ExpectedType::Specific(b),
+                actual: Some(a),
+                location: None,
+            })
+        );
     }
 }
