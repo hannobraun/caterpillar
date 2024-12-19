@@ -694,10 +694,12 @@ fn make_signature_direct(
             .collect::<Option<_>>()
     };
 
-    let inputs = try_map(&signature.inputs)?;
-    let outputs = try_map(&signature.outputs)?;
+    let inputs = try_map(&signature.inputs);
+    let outputs = try_map(&signature.outputs);
 
-    Some(Signature { inputs, outputs })
+    inputs
+        .zip(outputs)
+        .map(|(inputs, outputs)| Signature { inputs, outputs })
 }
 
 fn make_stack_direct(
