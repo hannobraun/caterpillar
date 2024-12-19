@@ -1,14 +1,11 @@
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    fmt, result,
-};
+use std::{collections::BTreeSet, fmt, result};
 
 use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 
 #[derive(Debug, Default)]
 pub struct InferredTypes {
     pub inner: IndexMap<InferredType>,
-    unification: BTreeMap<Index<InferredType>, BTreeSet<Index<InferredType>>>,
+    unification: BTreeSet<BTreeSet<Index<InferredType>>>,
 }
 
 impl InferredTypes {
@@ -18,14 +15,30 @@ impl InferredTypes {
 
     #[cfg(test)]
     pub fn unify(&mut self, [a, b]: [Index<InferredType>; 2]) {
-        self.unification.entry(a).or_default().insert(b);
-        self.unification.entry(b).or_default().insert(a);
+        let relevant_sets = self
+            .unification
+            .iter()
+            .filter(|set| set.contains(&a) || set.contains(&b))
+            .cloned()
+            .collect::<Vec<_>>();
+
+        let mut unified_set = BTreeSet::new();
+        unified_set.extend([a, b]);
+
+        for set in relevant_sets {
+            self.unification.remove(&set);
+            unified_set = unified_set.union(&set).cloned().collect();
+        }
+
+        self.unification.insert(unified_set);
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> Result<InferredType> {
         let mut resolved = self.get(index).clone();
+        let equivalence_set =
+            self.unification.iter().find(|set| set.contains(index));
 
-        for other in self.unification.get(index).into_iter().flatten() {
+        for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
             if let InferredType::Known(_) = other {
                 resolved = other.clone();
@@ -150,5 +163,21 @@ mod tests {
 
         assert_eq!(types.resolve(&a).as_ref(), Ok(&type_));
         assert_eq!(types.resolve(&b), Ok(type_));
+    }
+
+    #[test]
+    fn resolve_unified_with_type_known_only_indirectly() {
+        let mut types = InferredTypes::default();
+
+        let type_ = InferredType::Known(Type::Number);
+
+        let a = types.push(type_.clone());
+        let b = types.push(InferredType::Unknown);
+        let c = types.push(InferredType::Unknown);
+
+        types.unify([a, b]);
+        types.unify([b, c]);
+
+        assert_eq!(types.resolve(&c), Ok(type_));
     }
 }
