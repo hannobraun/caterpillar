@@ -96,6 +96,13 @@ impl InferredType {
             Self::Unknown { .. } => None,
         }
     }
+
+    pub fn into_expected_type(self) -> ExpectedType {
+        match self {
+            InferredType::Known(type_) => ExpectedType::Specific(type_),
+            InferredType::Unknown => ExpectedType::Unknown,
+        }
+    }
 }
 
 pub type Result<T> = result::Result<T, TypeError>;

@@ -481,12 +481,7 @@ fn infer_expression(
                         }
                     }
                     None => {
-                        let expected = match input {
-                            InferredType::Known(input) => {
-                                ExpectedType::Specific(input)
-                            }
-                            InferredType::Unknown => ExpectedType::Unknown,
-                        };
+                        let expected = input.into_expected_type();
 
                         return Err(TypeError {
                             expected,
