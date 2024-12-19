@@ -17,14 +17,14 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::types::{InferredType, LocalTypes};
+use super::types::{InferredType, InferredTypes};
 
 pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
         let mut cluster_functions = BTreeMap::new();
-        let mut local_types = LocalTypes::default();
+        let mut local_types = InferredTypes::default();
         let mut branch_signatures_by_function = BTreeMap::new();
 
         for branch in cluster.branches(context.syntax_tree) {
@@ -134,7 +134,7 @@ fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
     cluster_functions: &mut ClusterFunctions,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
     context: Context,
     output: &mut InferenceOutput,
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
@@ -221,7 +221,7 @@ fn infer_expression(
     bindings: &BTreeMap<Binding, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
     cluster_functions: &mut ClusterFunctions,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
     context: Context,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
@@ -496,7 +496,7 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>> {
     let signature = match intrinsic {
@@ -571,7 +571,7 @@ fn infer_intrinsic(
 fn infer_branch_signature(
     branch: Located<&Branch>,
     bindings: BTreeMap<Binding, Index<InferredType>>,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
     local_stack: LocalStack,
 ) -> (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>) {
     let inputs = branch
@@ -613,7 +613,7 @@ fn unify_branch_signatures(
         Vec<Index<InferredType>>,
         Option<Vec<Index<InferredType>>>,
     )>,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
 ) -> Option<Signature> {
     let inputs_of_each_branch = branch_signatures
         .iter()
@@ -638,7 +638,7 @@ fn unify_branch_signatures(
 
 fn unify_lists_of_types(
     mut lists_of_types: Vec<impl Iterator<Item = Index<InferredType>>>,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
 ) {
     loop {
         let mut current_inputs = Vec::new();
@@ -666,7 +666,7 @@ fn unify_lists_of_types(
 
 fn make_signature_indirect(
     signature: Signature,
-    local_types: &mut LocalTypes,
+    local_types: &mut InferredTypes,
 ) -> Signature<Index<InferredType>> {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
@@ -682,7 +682,7 @@ fn make_signature_indirect(
 
 fn make_signature_direct(
     signature: &Signature<Index<InferredType>>,
-    local_types: &LocalTypes,
+    local_types: &InferredTypes,
 ) -> Option<Signature<Type>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
         from.iter()
@@ -698,7 +698,7 @@ fn make_signature_direct(
 
 fn make_stack_direct(
     local_stack: &[Index<InferredType>],
-    local_types: &LocalTypes,
+    local_types: &InferredTypes,
 ) -> Option<Vec<Type>> {
     local_stack
         .iter()

@@ -3,11 +3,11 @@ use std::collections::BTreeSet;
 use crate::code::{Index, IndexMap, Type};
 
 #[derive(Debug, Default)]
-pub struct LocalTypes {
+pub struct InferredTypes {
     pub inner: IndexMap<InferredType>,
 }
 
-impl LocalTypes {
+impl InferredTypes {
     pub fn push(&mut self, type_: InferredType) -> Index<InferredType> {
         self.inner.push(type_)
     }
