@@ -370,8 +370,8 @@ fn infer_expression(
                 let mut indices = Vec::new();
 
                 for (index_a, index_b) in a.iter().zip(b) {
-                    let [a, b] = [index_a, index_b]
-                        .map(|index| local_types.resolve(index));
+                    let a = local_types.resolve(index_a);
+                    let b = local_types.resolve(index_b);
 
                     let index = match (a, b) {
                         (
