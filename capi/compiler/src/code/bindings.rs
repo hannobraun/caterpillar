@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::syntax::{
+use crate::code::syntax::{
     Branch, BranchLocation, Expression, Function, FunctionLocation, Located,
     MemberLocation, SyntaxTree,
 };
