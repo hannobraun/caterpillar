@@ -369,8 +369,8 @@ fn infer_expression(
             let merge = |a: &Vec<Index<InferredType>>, b| {
                 let mut indices = Vec::new();
 
-                for (index_a, b) in a.iter().zip(b) {
-                    let index = match [index_a, b]
+                for (index_a, index_b) in a.iter().zip(b) {
+                    let index = match [index_a, index_b]
                         .map(|index| local_types.resolve(index))
                     {
                         [InferredType::Known(inferred), InferredType::Known(explicit)] =>
@@ -392,7 +392,7 @@ fn infer_expression(
                             index_a
                         }
                         [InferredType::Unknown { .. }, InferredType::Known(_)] => {
-                            b
+                            index_b
                         }
                         [InferredType::Unknown { .. }, InferredType::Unknown { .. }] => {
                             index_a
