@@ -540,9 +540,7 @@ fn infer_intrinsic(
                         .inputs
                         .clone()
                         .into_iter()
-                        .chain([Type::Function {
-                            signature: signature.clone(),
-                        }])
+                        .chain([Type::Function { signature }])
                         .collect();
 
                     Some(Signature { inputs, outputs })
