@@ -4,6 +4,7 @@ edition = "2021"
 
 
 [dependencies]
+array-util = "*"
 petgraph = "*"
 
 [dependencies.blake3]
