@@ -53,7 +53,7 @@ impl InferredTypes {
         let mut known_types = BTreeSet::new();
 
         for index in &types {
-            if let Some(type_) = self.resolve(index).into_type() {
+            if let Some(type_) = self.get(index).clone().into_type() {
                 known_types.insert(type_);
             }
         }
