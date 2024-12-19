@@ -4,7 +4,7 @@ use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 
 #[derive(Debug, Default)]
 pub struct InferredTypes {
-    pub inner: IndexMap<InferredType>,
+    inner: IndexMap<InferredType>,
     equivalence_sets: BTreeSet<BTreeSet<Index<InferredType>>>,
 }
 
