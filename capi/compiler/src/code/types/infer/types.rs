@@ -12,7 +12,6 @@ impl InferredTypes {
         self.inner.push(type_)
     }
 
-    #[cfg(test)]
     pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
         let Some(type_) = self.inner.get(index) else {
             unreachable!(
@@ -27,21 +26,11 @@ impl InferredTypes {
         type_.clone()
     }
 
-    pub fn get(&self, index: &Index<InferredType>) -> &InferredType {
-        let Some(type_) = self.inner.get(index) else {
-            unreachable!(
-                "We're never removing any local types. Any index must be valid."
-            );
-        };
-
-        type_
-    }
-
     pub fn unify(&mut self, types: BTreeSet<Index<InferredType>>) {
         let mut known_types = BTreeSet::new();
 
         for index in &types {
-            if let Some(type_) = self.get(index).clone().into_type() {
+            if let Some(type_) = self.resolve(index).into_type() {
                 known_types.insert(type_);
             }
         }

@@ -249,7 +249,7 @@ fn infer_expression(
                                     identifier_index,
                                     branch,
                                 } = binding;
-                                let type_ = local_types.get(type_);
+                                let type_ = local_types.resolve(type_);
                                 write!(
                                 available_bindings,
                                 "- index `{identifier_index}` at {}: {type_:?}",
@@ -371,7 +371,8 @@ fn infer_expression(
                 let mut indices = Vec::new();
 
                 for (a, b) in a.iter().zip(b) {
-                    let index = match [a, b].map(|index| local_types.get(index))
+                    let index = match [a, b]
+                        .map(|index| local_types.resolve(index))
                     {
                         [InferredType::Known(inferred), InferredType::Known(explicit)] =>
                         {
@@ -416,11 +417,11 @@ fn infer_expression(
     if let Some(signature) = signature {
         if let Some(local_stack) = local_stack.get_mut() {
             for input_index in signature.inputs.iter().rev() {
-                let input = local_types.get(input_index).clone();
+                let input = local_types.resolve(input_index);
 
                 match local_stack.pop() {
                     Some(operand_index) => {
-                        let operand = local_types.get(&operand_index).clone();
+                        let operand = local_types.resolve(&operand_index);
 
                         match (operand, input) {
                             (
@@ -506,7 +507,7 @@ fn infer_intrinsic(
             };
 
             let top_operand =
-                local_stack.last().map(|index| local_types.get(index));
+                local_stack.last().map(|index| local_types.resolve(index));
 
             match top_operand {
                 Some(InferredType::Known(type_)) => Some(Signature {
@@ -529,7 +530,7 @@ fn infer_intrinsic(
             };
 
             let top_operand =
-                local_stack.last().map(|index| local_types.get(index));
+                local_stack.last().map(|index| local_types.resolve(index));
 
             match top_operand {
                 Some(InferredType::Known(Type::Function { signature })) => {
@@ -686,7 +687,7 @@ fn make_signature_direct(
 ) -> Option<Signature<Type>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
         from.iter()
-            .map(|index| local_types.get(index).clone().into_type())
+            .map(|index| local_types.resolve(index).into_type())
             .collect::<Option<_>>()
     };
 
@@ -702,7 +703,7 @@ fn make_stack_direct(
 ) -> Option<Vec<Type>> {
     local_stack
         .iter()
-        .map(|index| local_types.get(index).clone().into_type())
+        .map(|index| local_types.resolve(index).into_type())
         .collect::<Option<Vec<_>>>()
 }
 
