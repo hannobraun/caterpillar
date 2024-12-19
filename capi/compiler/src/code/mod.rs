@@ -17,7 +17,10 @@ pub use self::{
     dependencies::{Dependencies, DependencyCluster},
     functions::Functions,
     hash::Hash,
-    identifiers::{Binding, Bindings, Environment, FunctionCalls},
+    identifiers::{
+        Binding, Bindings, Environment, FunctionCalls, IdentifierTarget,
+        Identifiers,
+    },
     index::{Index, IndexMap},
     recursion::Recursion,
     tail_expressions::TailExpressions,
