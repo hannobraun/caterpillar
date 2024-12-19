@@ -437,8 +437,8 @@ fn infer_expression(
                 let input = local_types.resolve(input_index)?;
 
                 match local_stack.pop() {
-                    Some(operand_index) => {
-                        local_types.unify([&operand_index, input_index]);
+                    Some(operand) => {
+                        local_types.unify([&operand, input_index]);
                     }
                     None => {
                         return Err(TypeError {
