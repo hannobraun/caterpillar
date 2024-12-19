@@ -1,8 +1,7 @@
 pub mod syntax;
 
-mod bindings;
 mod dependencies;
-mod function_calls;
+mod identifiers;
 mod recursion;
 mod tail_expressions;
 mod tokens;
@@ -14,12 +13,11 @@ mod hash;
 mod index;
 
 pub use self::{
-    bindings::{Binding, Bindings, Environment},
     changes::{Changes, FunctionInUpdate, FunctionUpdate},
     dependencies::{Dependencies, DependencyCluster},
-    function_calls::FunctionCalls,
     functions::Functions,
     hash::Hash,
+    identifiers::{Binding, Bindings, Environment, FunctionCalls},
     index::{Index, IndexMap},
     recursion::Recursion,
     tail_expressions::TailExpressions,
