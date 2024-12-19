@@ -660,7 +660,7 @@ fn unify_lists_of_types(
             );
         };
 
-        local_types.unify(current_inputs);
+        local_types.unify2(current_inputs);
     }
 }
 

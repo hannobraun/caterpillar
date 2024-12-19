@@ -26,7 +26,7 @@ impl InferredTypes {
         type_.clone()
     }
 
-    pub fn unify(&mut self, types: BTreeSet<Index<InferredType>>) {
+    pub fn unify2(&mut self, types: BTreeSet<Index<InferredType>>) {
         let mut known_types = BTreeSet::new();
 
         for index in &types {
