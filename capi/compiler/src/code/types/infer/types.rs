@@ -87,12 +87,14 @@ impl InferredType {
 
 pub type Result<T> = result::Result<T, TypeError>;
 
+#[derive(Debug)]
 pub struct TypeError {
     pub expected: ExpectedType,
     pub actual: Option<Type>,
     pub location: MemberLocation,
 }
 
+#[derive(Debug)]
 pub enum ExpectedType {
     Function,
     Specific(Type),
