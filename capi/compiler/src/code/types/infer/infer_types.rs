@@ -373,9 +373,11 @@ fn infer_expression(
                     let [a, b] = [index_a, index_b]
                         .map(|index| local_types.resolve(index));
 
-                    let index = match [a, b] {
-                        [InferredType::Known(inferred), InferredType::Known(explicit)] =>
-                        {
+                    let index = match (a, b) {
+                        (
+                            InferredType::Known(inferred),
+                            InferredType::Known(explicit),
+                        ) => {
                             panic!(
                                 "Explicit type annotation conflicts with \
                                 inferred type.\n\
@@ -389,15 +391,18 @@ fn infer_expression(
                                     .display(context.syntax_tree),
                             );
                         }
-                        [InferredType::Known(_), InferredType::Unknown { .. }] => {
-                            index_a
-                        }
-                        [InferredType::Unknown { .. }, InferredType::Known(_)] => {
-                            index_b
-                        }
-                        [InferredType::Unknown { .. }, InferredType::Unknown { .. }] => {
-                            index_a
-                        }
+                        (
+                            InferredType::Known(_),
+                            InferredType::Unknown { .. },
+                        ) => index_a,
+                        (
+                            InferredType::Unknown { .. },
+                            InferredType::Known(_),
+                        ) => index_b,
+                        (
+                            InferredType::Unknown { .. },
+                            InferredType::Unknown { .. },
+                        ) => index_a,
                     };
 
                     indices.push(*index);
