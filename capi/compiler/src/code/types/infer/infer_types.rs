@@ -433,13 +433,13 @@ fn infer_expression(
 
     if let Some(signature) = signature {
         if let Some(local_stack) = local_stack.get_mut() {
-            for input_index in signature.inputs.iter().rev() {
+            for input in signature.inputs.iter().rev() {
                 match local_stack.pop() {
                     Some(operand) => {
-                        local_types.unify([&operand, input_index]);
+                        local_types.unify([&operand, input]);
                     }
                     None => {
-                        let input = local_types.resolve(input_index)?;
+                        let input = local_types.resolve(input)?;
 
                         return Err(TypeError {
                             expected: input.into_expected_type(),
