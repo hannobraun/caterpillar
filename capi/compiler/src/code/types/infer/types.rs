@@ -1,6 +1,9 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    fmt, result,
+};
 
-use crate::code::{Index, IndexMap, Type};
+use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 
 #[derive(Debug, Default)]
 pub struct InferredTypes {
@@ -78,6 +81,30 @@ impl InferredType {
         match self {
             Self::Known(type_) => Some(type_),
             Self::Unknown { .. } => None,
+        }
+    }
+}
+
+pub type Result<T> = result::Result<T, TypeError>;
+
+pub struct TypeError {
+    pub expected: ExpectedType,
+    pub actual: Option<Type>,
+    pub location: MemberLocation,
+}
+
+pub enum ExpectedType {
+    Function,
+    Specific(Type),
+    Unknown,
+}
+
+impl fmt::Display for ExpectedType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Function => write!(f, "function"),
+            Self::Specific(type_) => write!(f, "`{type_}`"),
+            Self::Unknown => write!(f, "unknown type"),
         }
     }
 }

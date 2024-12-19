@@ -1,8 +1,4 @@
-use std::{
-    collections::BTreeMap,
-    fmt::{self, Write},
-    result,
-};
+use std::{collections::BTreeMap, fmt::Write};
 
 use crate::{
     code::{
@@ -17,7 +13,9 @@ use crate::{
     intrinsics::IntrinsicFunction,
 };
 
-use super::types::{InferredType, InferredTypes};
+use super::types::{
+    ExpectedType, InferredType, InferredTypes, Result, TypeError,
+};
 
 pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
@@ -706,14 +704,6 @@ fn make_stack_direct(
         .collect::<Option<Vec<_>>>()
 }
 
-type Result<T> = result::Result<T, TypeError>;
-
-struct TypeError {
-    expected: ExpectedType,
-    actual: Option<Type>,
-    location: MemberLocation,
-}
-
 type ClusterFunctions =
     BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
 
@@ -739,22 +729,6 @@ impl Default for LocalStack {
     fn default() -> Self {
         Self {
             inner: Some(Vec::new()),
-        }
-    }
-}
-
-enum ExpectedType {
-    Function,
-    Specific(Type),
-    Unknown,
-}
-
-impl fmt::Display for ExpectedType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::Function => write!(f, "function"),
-            Self::Specific(type_) => write!(f, "`{type_}`"),
-            Self::Unknown => write!(f, "unknown type"),
         }
     }
 }
