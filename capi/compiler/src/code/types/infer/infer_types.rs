@@ -485,9 +485,7 @@ fn infer_expression(
                             InferredType::Known(input) => {
                                 ExpectedType::Specific(input)
                             }
-                            InferredType::Unknown { .. } => {
-                                ExpectedType::Unknown
-                            }
+                            InferredType::Unknown => ExpectedType::Unknown,
                         };
 
                         return Err(TypeError {
