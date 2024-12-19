@@ -13,11 +13,11 @@ impl InferredTypes {
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
-        self.get(index)
+        self.get(index).clone()
     }
 
-    fn get(&self, index: &Index<InferredType>) -> InferredType {
-        let Some(type_) = self.inner.get(index).cloned() else {
+    fn get(&self, index: &Index<InferredType>) -> &InferredType {
+        let Some(type_) = self.inner.get(index) else {
             unreachable!(
                 "We are never removing any inferred types. Thus, an index can \
                 only be invalid, if the caller is mixing indices between \
