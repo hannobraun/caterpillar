@@ -1,5 +1,7 @@
 use std::{collections::BTreeMap, fmt::Write};
 
+use array_util::ArrayExt;
+
 use crate::{
     code::{
         syntax::{
@@ -183,7 +185,7 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        let Some(signature) = make_signature_direct(&signature, local_types)
+        let Some(signature) = make_signature_direct(&signature, local_types)?
         else {
             continue;
         };
@@ -342,11 +344,13 @@ fn infer_expression(
     // merged. That check only looks for conflicting types, while this one
     // disallows type annotations that can be fully inferred.
     if let [Some(explicit), Some(inferred)] =
-        [explicit.as_ref(), inferred.as_ref()].map(|signature| {
-            signature.and_then(|signature| {
-                make_signature_direct(signature, local_types)
-            })
-        })
+        [explicit.as_ref(), inferred.as_ref()].try_map_ext(|signature| {
+            signature
+                .and_then(|signature| {
+                    make_signature_direct(signature, local_types).transpose()
+                })
+                .transpose()
+        })?
     {
         panic!(
             "Type that could be inferred was also specified explicitly. This \
@@ -637,7 +641,7 @@ fn unify_branch_signatures(
         outputs: outputs?,
     };
 
-    make_signature_direct(&signature, local_types)
+    make_signature_direct(&signature, local_types).unwrap()
 }
 
 fn unify_lists_of_types(
@@ -687,7 +691,7 @@ fn make_signature_indirect(
 fn make_signature_direct(
     signature: &Signature<Index<InferredType>>,
     local_types: &InferredTypes,
-) -> Option<Signature<Type>> {
+) -> Result<Option<Signature<Type>>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
         from.iter()
             .map(|index| local_types.resolve(index).into_type())
@@ -697,9 +701,11 @@ fn make_signature_direct(
     let inputs = try_map(&signature.inputs);
     let outputs = try_map(&signature.outputs);
 
-    inputs
+    let signature = inputs
         .zip(outputs)
-        .map(|(inputs, outputs)| Signature { inputs, outputs })
+        .map(|(inputs, outputs)| Signature { inputs, outputs });
+
+    Ok(signature)
 }
 
 fn make_stack_direct(
