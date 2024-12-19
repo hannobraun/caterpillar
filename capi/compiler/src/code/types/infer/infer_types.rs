@@ -438,47 +438,7 @@ fn infer_expression(
 
                 match local_stack.pop() {
                     Some(operand_index) => {
-                        let operand = local_types.resolve(&operand_index)?;
-
-                        match (operand, input) {
-                            (
-                                InferredType::Known(operand),
-                                InferredType::Known(input),
-                            ) => {
-                                if operand == input {
-                                    // Type checks out!
-                                } else {
-                                    return Err(TypeError {
-                                        expected: ExpectedType::Specific(input),
-                                        actual: Some(operand),
-                                        location: Some(expression.location),
-                                    });
-                                }
-                            }
-                            (
-                                InferredType::Known(_operand),
-                                InferredType::Unknown { .. },
-                            ) => {
-                                // We could infer the type of the binding here.
-                            }
-                            (
-                                InferredType::Unknown { .. },
-                                InferredType::Known(input),
-                            ) => {
-                                local_types.inner.insert(
-                                    operand_index,
-                                    InferredType::Known(input),
-                                );
-                            }
-                            (
-                                InferredType::Unknown { .. },
-                                InferredType::Unknown { .. },
-                            ) => {
-                                // We could unify the two types here, to make
-                                // sure that if one gets inferred, the other is
-                                // known too.
-                            }
-                        }
+                        local_types.unify([&operand_index, input_index]);
                     }
                     None => {
                         return Err(TypeError {

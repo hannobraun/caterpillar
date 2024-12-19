@@ -13,7 +13,6 @@ impl InferredTypes {
         self.inner.push(type_)
     }
 
-    #[cfg(test)]
     pub fn unify(&mut self, [a, b]: [&Index<InferredType>; 2]) {
         let relevant_sets = self
             .equivalence_sets
