@@ -14,11 +14,11 @@ impl InferredTypes {
     }
 
     #[cfg(test)]
-    pub fn unify(&mut self, [a, b]: [Index<InferredType>; 2]) {
+    pub fn unify(&mut self, [a, b]: [&Index<InferredType>; 2]) {
         let relevant_sets = self
             .unification
             .iter()
-            .filter(|set| set.contains(&a) || set.contains(&b))
+            .filter(|set| set.contains(a) || set.contains(b))
             .cloned()
             .collect::<Vec<_>>();
 
@@ -159,7 +159,7 @@ mod tests {
         let a = types.push(type_.clone());
         let b = types.push(InferredType::Unknown);
 
-        types.unify([a, b]);
+        types.unify([&a, &b]);
 
         assert_eq!(types.resolve(&a).as_ref(), Ok(&type_));
         assert_eq!(types.resolve(&b), Ok(type_));
@@ -175,8 +175,8 @@ mod tests {
         let b = types.push(InferredType::Unknown);
         let c = types.push(InferredType::Unknown);
 
-        types.unify([a, b]);
-        types.unify([b, c]);
+        types.unify([&a, &b]);
+        types.unify([&b, &c]);
 
         assert_eq!(types.resolve(&c), Ok(type_));
     }
