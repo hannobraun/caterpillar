@@ -5,7 +5,7 @@ use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 #[derive(Debug, Default)]
 pub struct InferredTypes {
     pub inner: IndexMap<InferredType>,
-    unification: BTreeSet<BTreeSet<Index<InferredType>>>,
+    equivalence_sets: BTreeSet<BTreeSet<Index<InferredType>>>,
 }
 
 impl InferredTypes {
@@ -16,7 +16,7 @@ impl InferredTypes {
     #[cfg(test)]
     pub fn unify(&mut self, [a, b]: [&Index<InferredType>; 2]) {
         let relevant_sets = self
-            .unification
+            .equivalence_sets
             .iter()
             .filter(|set| set.contains(a) || set.contains(b))
             .cloned()
@@ -26,17 +26,17 @@ impl InferredTypes {
         unified_set.extend([a, b]);
 
         for set in relevant_sets {
-            self.unification.remove(&set);
+            self.equivalence_sets.remove(&set);
             unified_set = unified_set.union(&set).cloned().collect();
         }
 
-        self.unification.insert(unified_set);
+        self.equivalence_sets.insert(unified_set);
     }
 
     pub fn resolve(&self, index: &Index<InferredType>) -> Result<InferredType> {
         let mut resolved = self.get(index).clone();
         let equivalence_set =
-            self.unification.iter().find(|set| set.contains(index));
+            self.equivalence_sets.iter().find(|set| set.contains(index));
 
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
