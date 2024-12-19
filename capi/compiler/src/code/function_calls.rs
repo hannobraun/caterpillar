@@ -1,11 +1,10 @@
 use std::collections::BTreeMap;
 
 use crate::{
+    code::syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree},
     host::{Host, HostFunction},
     intrinsics::IntrinsicFunction,
 };
-
-use super::syntax::{Expression, FunctionLocation, MemberLocation, SyntaxTree};
 
 /// # Tracks function calls
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
