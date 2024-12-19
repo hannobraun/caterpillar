@@ -142,6 +142,7 @@ mod tests {
         let mut types = InferredTypes::default();
 
         let type_ = InferredType::Known(Type::Number);
+
         let a = types.push(type_.clone());
         let b = types.push(InferredType::Unknown);
 
