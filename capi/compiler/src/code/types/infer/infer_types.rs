@@ -715,7 +715,7 @@ fn make_stack_direct(
     local_stack
         .iter()
         .map(|index| local_types.resolve(index).into_type())
-        .collect::<Option<Vec<_>>>()
+        .collect()
 }
 
 type ClusterFunctions =
