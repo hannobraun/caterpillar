@@ -251,10 +251,11 @@ fn infer_expression(
                                 } = binding;
                                 let type_ = local_types.resolve(type_);
                                 write!(
-                                available_bindings,
-                                "- index `{identifier_index}` at {}: {type_:?}",
-                                branch.display(context.syntax_tree),
-                            )
+                                    available_bindings,
+                                    "- index `{identifier_index}` at {}: \
+                                    {type_:?}",
+                                    branch.display(context.syntax_tree),
+                                )
                                 .expect("Writing to `String` can not fail.");
                             }
 
