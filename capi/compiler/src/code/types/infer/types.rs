@@ -1,20 +1,14 @@
-use std::collections::BTreeSet;
-
-use crate::code::{Index, Type};
+use crate::code::Type;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum InferredType {
     Known(Type),
-    Unknown {
-        equal_to: BTreeSet<Index<InferredType>>,
-    },
+    Unknown,
 }
 
 impl InferredType {
     pub fn unknown() -> Self {
-        Self::Unknown {
-            equal_to: BTreeSet::new(),
-        }
+        Self::Unknown
     }
 
     pub fn into_type(self) -> Option<Type> {
