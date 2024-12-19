@@ -22,7 +22,7 @@ impl InferredTypes {
         self.unification.entry(b).or_default().push(a);
     }
 
-    pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
+    pub fn resolve(&self, index: &Index<InferredType>) -> Result<InferredType> {
         let mut resolved = self.get(index).clone();
 
         for other in self.unification.get(index).into_iter().flatten() {
@@ -32,7 +32,7 @@ impl InferredTypes {
             }
         }
 
-        resolved
+        Ok(resolved)
     }
 
     fn get(&self, index: &Index<InferredType>) -> &InferredType {
@@ -124,7 +124,7 @@ mod tests {
         let type_ = InferredType::Known(Type::Number);
         let index = types.push(type_.clone());
 
-        assert_eq!(types.resolve(&index), type_);
+        assert_eq!(types.resolve(&index), Ok(type_));
     }
 
     #[test]
@@ -134,7 +134,7 @@ mod tests {
         let type_ = InferredType::Unknown;
         let index = types.push(type_.clone());
 
-        assert_eq!(types.resolve(&index), type_);
+        assert_eq!(types.resolve(&index), Ok(type_));
     }
 
     #[test]
@@ -147,7 +147,7 @@ mod tests {
 
         types.unify([a, b]);
 
-        assert_eq!(types.resolve(&a), type_);
-        assert_eq!(types.resolve(&b), type_);
+        assert_eq!(types.resolve(&a), Ok(type_.clone()));
+        assert_eq!(types.resolve(&b), Ok(type_));
     }
 }
