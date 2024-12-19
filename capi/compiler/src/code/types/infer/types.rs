@@ -104,7 +104,7 @@ pub type Result<T> = result::Result<T, TypeError>;
 pub struct TypeError {
     pub expected: ExpectedType,
     pub actual: Option<Type>,
-    pub location: MemberLocation,
+    pub location: Option<MemberLocation>,
 }
 
 #[derive(Debug, Eq, PartialEq)]

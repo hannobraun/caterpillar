@@ -88,12 +88,20 @@ pub fn infer_types(context: Context) -> InferenceOutput {
                         .map(|type_| format!("`{type_}`"))
                         .unwrap_or_else(|| "nothing".to_string());
 
+                    let location = location
+                        .map(|location| {
+                            format!(
+                                "at {}\n",
+                                location.display(context.syntax_tree)
+                            )
+                        })
+                        .unwrap_or(String::new());
+
                     panic!(
                         "\n\
                         Type error: expected {expected}, got {actual}\n\
                         \n\
-                        at {}\n",
-                        location.display(context.syntax_tree),
+                        {location}",
                     );
                 }
             }
@@ -443,7 +451,7 @@ fn infer_expression(
                                     return Err(TypeError {
                                         expected: ExpectedType::Specific(input),
                                         actual: Some(operand),
-                                        location: expression.location,
+                                        location: Some(expression.location),
                                     });
                                 }
                             }
@@ -485,7 +493,7 @@ fn infer_expression(
                         return Err(TypeError {
                             expected,
                             actual: None,
-                            location: expression.location,
+                            location: Some(expression.location),
                         });
                     }
                 }
@@ -530,7 +538,7 @@ fn infer_intrinsic(
                     return Err(TypeError {
                         expected: ExpectedType::Unknown,
                         actual: None,
-                        location: location.clone(),
+                        location: Some(location.clone()),
                     });
                 }
             }
@@ -561,7 +569,7 @@ fn infer_intrinsic(
                     return Err(TypeError {
                         expected: ExpectedType::Function,
                         actual: Some(actual.clone()),
-                        location: location.clone(),
+                        location: Some(location.clone()),
                     });
                 }
                 Some(InferredType::Unknown { .. }) => None,
@@ -569,7 +577,7 @@ fn infer_intrinsic(
                     return Err(TypeError {
                         expected: ExpectedType::Function,
                         actual: None,
-                        location: location.clone(),
+                        location: Some(location.clone()),
                     });
                 }
             }
