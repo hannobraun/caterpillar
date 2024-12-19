@@ -150,7 +150,7 @@ fn infer_branch(
                 .get(&binding)
                 .cloned()
                 .map(InferredType::Known)
-                .unwrap_or(InferredType::unknown());
+                .unwrap_or(InferredType::Unknown);
             let type_ = local_types.push(type_);
             (binding, type_)
         })
