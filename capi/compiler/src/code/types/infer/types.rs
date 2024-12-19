@@ -69,20 +69,20 @@ mod tests {
     use super::InferredTypes;
 
     #[test]
-    fn resolve_unknown() {
+    fn resolve_known() {
         let mut types = InferredTypes::default();
 
-        let type_ = InferredType::Unknown;
+        let type_ = InferredType::Known(Type::Number);
         let index = types.push(type_.clone());
 
         assert_eq!(types.resolve(&index), type_);
     }
 
     #[test]
-    fn resolve_known() {
+    fn resolve_unknown() {
         let mut types = InferredTypes::default();
 
-        let type_ = InferredType::Known(Type::Number);
+        let type_ = InferredType::Unknown;
         let index = types.push(type_.clone());
 
         assert_eq!(types.resolve(&index), type_);
