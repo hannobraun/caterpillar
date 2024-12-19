@@ -9,6 +9,7 @@ use crate::{
 use super::{Binding, Bindings, FunctionCalls};
 
 /// # Tracks which targets identifiers have been resolved to
+#[derive(Debug)]
 pub struct Identifiers {
     targets: BTreeMap<MemberLocation, IdentifierTarget>,
 }
@@ -94,6 +95,7 @@ impl Identifiers {
 }
 
 /// # The target that an identifier resolves to
+#[derive(Debug)]
 pub enum IdentifierTarget {
     /// # The identifier resolves to a binding
     Binding(Binding),
