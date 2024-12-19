@@ -481,10 +481,8 @@ fn infer_expression(
                         }
                     }
                     None => {
-                        let expected = input.into_expected_type();
-
                         return Err(TypeError {
-                            expected,
+                            expected: input.into_expected_type(),
                             actual: None,
                             location: Some(expression.location),
                         });
