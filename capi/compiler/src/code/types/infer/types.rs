@@ -1,10 +1,11 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::code::{Index, IndexMap, Type};
 
 #[derive(Debug, Default)]
 pub struct InferredTypes {
     pub inner: IndexMap<InferredType>,
+    unification: BTreeMap<Index<InferredType>, Vec<Index<InferredType>>>,
 }
 
 impl InferredTypes {
@@ -12,8 +13,23 @@ impl InferredTypes {
         self.inner.push(type_)
     }
 
+    #[cfg(test)]
+    pub fn unify(&mut self, [a, b]: [Index<InferredType>; 2]) {
+        self.unification.entry(a).or_default().push(b);
+        self.unification.entry(b).or_default().push(a);
+    }
+
     pub fn resolve(&self, index: &Index<InferredType>) -> InferredType {
-        self.get(index).clone()
+        let mut resolved = self.get(index).clone();
+
+        for other in self.unification.get(index).into_iter().flatten() {
+            let other = self.get(other);
+            if let InferredType::Known(_) = other {
+                resolved = other.clone();
+            }
+        }
+
+        resolved
     }
 
     fn get(&self, index: &Index<InferredType>) -> &InferredType {
@@ -90,5 +106,19 @@ mod tests {
         let index = types.push(type_.clone());
 
         assert_eq!(types.resolve(&index), type_);
+    }
+
+    #[test]
+    fn resolve_unified() {
+        let mut types = InferredTypes::default();
+
+        let type_ = InferredType::Known(Type::Number);
+        let a = types.push(type_.clone());
+        let b = types.push(InferredType::Unknown);
+
+        types.unify([a, b]);
+
+        assert_eq!(types.resolve(&a), type_);
+        assert_eq!(types.resolve(&b), type_);
     }
 }
