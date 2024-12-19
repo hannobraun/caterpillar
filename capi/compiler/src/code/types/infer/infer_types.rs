@@ -202,7 +202,7 @@ fn infer_branch(
         output.expressions.insert(location, signature);
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = make_stack_direct(&local_stack, local_types)
+        let Some(local_stack) = make_stack_direct(&local_stack, local_types)?
         else {
             continue;
         };
@@ -711,11 +711,11 @@ fn make_signature_direct(
 fn make_stack_direct(
     local_stack: &[Index<InferredType>],
     local_types: &InferredTypes,
-) -> Option<Vec<Type>> {
-    local_stack
+) -> Result<Option<Vec<Type>>> {
+    Ok(local_stack
         .iter()
         .map(|index| local_types.resolve(index).into_type())
-        .collect()
+        .collect())
 }
 
 type ClusterFunctions =
