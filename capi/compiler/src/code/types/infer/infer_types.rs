@@ -222,7 +222,8 @@ fn infer_expression(
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = bindings.get(binding).copied()
                         else {
-                            let Binding { name: _, branch } = &binding.fragment;
+                            let Binding { name: _, branch: _ } =
+                                &binding.fragment;
 
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
@@ -252,7 +253,7 @@ fn infer_expression(
                                 expression
                                     .location
                                     .display(context.syntax_tree),
-                                branch.display(context.syntax_tree),
+                                binding.location.display(context.syntax_tree),
                             );
                         };
                         let signature = Signature {
