@@ -377,7 +377,7 @@ fn compile_expression(
                     .bindings
                     .environment_of(&location)
                     .iter()
-                    .map(|(name, _)| name.clone())
+                    .map(|(_, binding)| binding.name.clone())
                     .collect();
 
                 emit_instruction(
