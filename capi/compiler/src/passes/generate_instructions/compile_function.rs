@@ -91,7 +91,9 @@ fn compile_branch(
                     functions_context
                         .bindings
                         .environment_of(function_context.location)
-                        .clone(),
+                        .clone()
+                        .into_iter()
+                        .map(|binding| (binding.name.clone(), binding)),
                 )
                 .collect();
 
@@ -377,7 +379,7 @@ fn compile_expression(
                     .bindings
                     .environment_of(&location)
                     .iter()
-                    .map(|(_, binding)| binding.name.clone())
+                    .map(|binding| binding.name.clone())
                     .collect();
 
                 emit_instruction(
@@ -432,7 +434,7 @@ pub fn compile_definition_of_local_function(
         .bindings
         .environment_of(&local_function)
         .iter()
-        .map(|(_, binding)| binding.name.clone())
+        .map(|binding| binding.name.clone())
         .collect();
 
     functions_context.instructions.replace(

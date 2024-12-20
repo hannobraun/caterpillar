@@ -128,7 +128,7 @@ fn infer_branch(
     let bindings = branch
         .bindings()
         .map(|(_, binding)| binding)
-        .chain(environment.values().cloned())
+        .chain(environment.iter().cloned())
         .map(|binding| {
             let type_ = output
                 .bindings
