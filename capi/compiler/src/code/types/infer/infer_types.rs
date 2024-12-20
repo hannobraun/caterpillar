@@ -222,9 +222,6 @@ fn infer_expression(
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = bindings.get(binding).copied()
                         else {
-                            let Binding { name: _, branch: _ } =
-                                &binding.fragment;
-
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
                                 let Binding { name, branch } =
