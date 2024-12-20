@@ -108,11 +108,10 @@ pub fn infer_types(context: Context) -> InferenceOutput {
             }
         }
 
-        for (function, branch_signatures) in branch_signatures_by_function {
-            let signature =
-                unify_branch_signatures(branch_signatures, &mut local_types);
-
-            if let Some(signature) = signature {
+        for (function, signature) in cluster_functions {
+            if let Some(signature) =
+                make_signature_direct(&signature, &local_types).unwrap()
+            {
                 output.functions.insert(function, signature);
             }
         }
@@ -577,35 +576,6 @@ fn infer_branch_signature(
     let outputs = local_stack.get().cloned();
 
     (inputs, outputs)
-}
-
-#[allow(clippy::type_complexity)]
-fn unify_branch_signatures(
-    branch_signatures: Vec<(
-        Vec<Index<InferredType>>,
-        Option<Vec<Index<InferredType>>>,
-    )>,
-    local_types: &mut InferredTypes,
-) -> Option<Signature> {
-    let inputs_of_each_branch = branch_signatures
-        .iter()
-        .map(|(inputs, _)| inputs.iter().copied())
-        .collect::<Vec<_>>();
-
-    unify_lists_of_types(inputs_of_each_branch, local_types);
-
-    // Not unifying branch outputs right now. I haven't found a case where it
-    // was actually necessary yet, and lacking that, I can't write a test.
-
-    let (inputs, outputs) = branch_signatures
-        .into_iter()
-        .find(|(_, outputs)| outputs.is_some())?;
-    let signature = Signature {
-        inputs,
-        outputs: outputs?,
-    };
-
-    make_signature_direct(&signature, local_types).unwrap()
 }
 
 fn unify_lists_of_types(
