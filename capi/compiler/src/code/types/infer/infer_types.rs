@@ -223,8 +223,8 @@ fn infer_expression(
                         let Some(output) = bindings.get(binding).copied()
                         else {
                             let Binding {
-                                name: _,
-                                identifier_index,
+                                name: binding,
+                                identifier_index: _,
                                 branch,
                             } = binding;
 
@@ -252,8 +252,7 @@ fn infer_expression(
                                 \n\
                                 at {}\n\
                                 \n\
-                                Binding: identifier index `{identifier_index}` \
-                                at {}\n\
+                                Binding: `{binding}` at {}\n\
                                 \n\
                                 Available bindings in branch:\n\
                                 {available_bindings}",
