@@ -222,10 +222,7 @@ fn infer_expression(
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = bindings.get(binding).copied()
                         else {
-                            let Binding {
-                                name: binding,
-                                branch,
-                            } = &binding.fragment;
+                            let Binding { name: _, branch } = &binding.fragment;
 
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
@@ -248,7 +245,7 @@ fn infer_expression(
                                 \n\
                                 at {}\n\
                                 \n\
-                                Binding: `{binding}` at {}\n\
+                                binding at {}\n\
                                 \n\
                                 Available bindings in branch:\n\
                                 {available_bindings}",
