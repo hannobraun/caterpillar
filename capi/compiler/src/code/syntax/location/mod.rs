@@ -1,5 +1,6 @@
 mod located;
 
+mod binding;
 mod branch;
 mod expression;
 mod function;
