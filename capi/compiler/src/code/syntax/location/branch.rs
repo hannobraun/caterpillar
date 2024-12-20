@@ -40,7 +40,7 @@ impl<'r> Located<&'r Branch> {
         self.fragment
             .parameters
             .values()
-            .filter_map(|parameter| {
+            .filter_map(move |parameter| {
                 if let Parameter::Identifier { name } = parameter {
                     Some(name)
                 } else {
