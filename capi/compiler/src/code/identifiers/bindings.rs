@@ -140,9 +140,7 @@ fn resolve_bindings_in_branch(
         match expression.fragment {
             Expression::Identifier { name } => {
                 let binding = scopes.iter().rev().find_map(|scope| {
-                    scope.iter().find_map(|(_, binding)| {
-                        (binding.name == *name).then_some(binding)
-                    })
+                    scope.values().find(|binding| binding.name == *name)
                 });
 
                 if let Some(binding) = binding {
