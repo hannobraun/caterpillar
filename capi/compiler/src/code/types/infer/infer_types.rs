@@ -92,10 +92,7 @@ fn infer_cluster(
         )?;
 
         if let Some(outputs) = outputs {
-            let branch_signature = Signature {
-                inputs: inputs.clone(),
-                outputs,
-            };
+            let branch_signature = Signature { inputs, outputs };
 
             if let Some(function_signature) = cluster_functions.get(&function) {
                 signature::unify(
