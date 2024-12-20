@@ -224,17 +224,12 @@ fn infer_expression(
                         else {
                             let Binding {
                                 name: binding,
-                                identifier_index: _,
                                 branch,
                             } = binding;
 
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
-                                let Binding {
-                                    name,
-                                    identifier_index: _,
-                                    branch,
-                                } = binding;
+                                let Binding { name, branch } = binding;
                                 let type_ = local_types.resolve(type_)?;
                                 write!(
                                     available_bindings,

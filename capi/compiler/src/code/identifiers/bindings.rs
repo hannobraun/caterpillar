@@ -52,21 +52,6 @@ pub struct Binding {
     /// # The name of the binding
     pub name: String,
 
-    /// # The index of the identifier parameter that defines the binding
-    ///
-    /// An identifier index is the 0-based index of a parameter within a
-    /// branch's list of parameters, only counting parameters that bind to an
-    /// identifier within the branch.
-    ///
-    /// Parameters are patterns that could bind a value to an identifier that is
-    /// then available within the branch, or they could just match an argument,
-    /// but not make any value available in the branch.
-    ///
-    /// This index is required to keep track of bindings on the stack.
-    /// Parameters that do not bind to an identifier are not relevant for that,
-    /// since they do not create bindings.
-    pub identifier_index: u32,
-
     /// # The branch in which the binding is defined
     pub branch: BranchLocation,
 }
