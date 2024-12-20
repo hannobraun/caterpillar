@@ -63,9 +63,9 @@ impl MemberLocation {
     }
 }
 
-/// # Helper struct to display [`ExpressionLocation`]
+/// # Helper struct to display [`MemberLocation`]
 ///
-/// Implements [`fmt::Display`], which [`ExpressionLocation`] itself doesn't.
+/// Implements [`fmt::Display`], which [`MemberLocation`] itself doesn't.
 pub struct MemberLocationDisplay<'r> {
     location: &'r MemberLocation,
     syntax_tree: &'r SyntaxTree,
