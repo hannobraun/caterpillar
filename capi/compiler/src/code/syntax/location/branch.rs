@@ -17,19 +17,16 @@ impl<'r> Located<&'r Branch> {
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let identifiers =
-            self.fragment
-                .parameters
-                .iter()
-                .filter_map(|(index, pattern)| {
-                    if let Pattern::Identifier { name } = pattern {
-                        Some((index, name))
-                    } else {
-                        None
-                    }
-                });
+            self.fragment.parameters.iter().filter_map(|(_, pattern)| {
+                if let Pattern::Identifier { name } = pattern {
+                    Some(name)
+                } else {
+                    None
+                }
+            });
         let location = self.location.clone();
 
-        identifiers.map(move |(_, identifier)| Binding {
+        identifiers.map(move |identifier| Binding {
             name: identifier.clone(),
             branch: location.clone(),
         })
