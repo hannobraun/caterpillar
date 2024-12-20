@@ -142,7 +142,7 @@ fn compile_branch(
             .parameters
             .values()
             .cloned()
-            .map(|pattern| match pattern {
+            .map(|parameter| match parameter {
                 Parameter::Identifier { name } => {
                     capi_runtime::Pattern::Identifier { name }
                 }
