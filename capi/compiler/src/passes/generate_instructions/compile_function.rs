@@ -66,7 +66,7 @@ fn compile_branch(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
-    let parameters = branch.parameters.iter().filter_map(|pattern| {
+    let parameters = branch.parameters.values().filter_map(|pattern| {
         match pattern {
             Pattern::Identifier { name } => Some(name),
             Pattern::Literal { .. } => {
@@ -140,7 +140,7 @@ fn compile_branch(
     let branch = capi_runtime::Branch {
         parameters: branch
             .parameters
-            .iter()
+            .values()
             .cloned()
             .map(|pattern| match pattern {
                 Pattern::Identifier { name } => {

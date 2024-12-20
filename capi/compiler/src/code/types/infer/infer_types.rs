@@ -486,7 +486,7 @@ fn infer_branch_signature(
 ) -> (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>) {
     let inputs = branch
         .parameters
-        .iter()
+        .values()
         .map(|parameter| match parameter {
             Pattern::Identifier { name } => {
                 let Some(binding) =

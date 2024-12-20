@@ -57,7 +57,7 @@ impl DebugBranch {
             .collect::<Vec<_>>();
         let parameters = branch
             .parameters
-            .into_iter()
+            .into_values()
             .map(|pattern| match pattern {
                 Pattern::Identifier { name } => name,
                 Pattern::Literal { value } => format!("{value:?}"),

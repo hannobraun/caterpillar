@@ -167,7 +167,7 @@ fn parse_branch(
 
 fn parse_branch_parameters(
     tokens: &mut Tokens,
-    parameters: &mut Vec<Pattern>,
+    parameters: &mut IndexMap<Pattern>,
 ) -> Result<()> {
     while let Some(pattern) = parse_branch_parameter(tokens)? {
         parameters.push(pattern);

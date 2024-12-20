@@ -64,7 +64,7 @@ pub struct Branch {
     ///
     /// Each parameter is a pattern that can be matched against the arguments of
     /// a call.
-    pub parameters: Vec<Pattern>,
+    pub parameters: IndexMap<Pattern>,
 
     /// # The body of the branch
     pub body: IndexMap<Member>,

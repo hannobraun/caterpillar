@@ -18,7 +18,7 @@ impl<'r> Located<&'r Branch> {
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
-            self.fragment.parameters.iter().filter_map(|pattern| {
+            self.fragment.parameters.values().filter_map(|pattern| {
                 if let Pattern::Identifier { name } = pattern {
                     Some(name)
                 } else {
