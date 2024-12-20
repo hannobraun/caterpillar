@@ -47,8 +47,8 @@ impl<'r> Located<&'r Branch> {
                     None
                 }
             })
-            .map(move |identifier| Binding {
-                name: identifier.clone(),
+            .map(move |name| Binding {
+                name: name.clone(),
                 branch: location.clone(),
             })
     }
