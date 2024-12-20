@@ -490,10 +490,10 @@ fn infer_branch_signature(
         .iter()
         .map(|parameter| match parameter {
             Pattern::Identifier { name } => {
-                let Some(binding) =
-                    branch.bindings().find_map(|(_, binding)| {
-                        (binding.name == *name).then_some(binding)
-                    })
+                let Some(binding) = branch
+                    .bindings()
+                    .map(|(_, binding)| binding)
+                    .find(|binding| binding.name == *name)
                 else {
                     unreachable!(
                         "Parameter of branch not recognized as a binding."
