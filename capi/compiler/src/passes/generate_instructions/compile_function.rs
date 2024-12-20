@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
 
@@ -87,13 +87,12 @@ fn compile_branch(
         for expression in branch.expressions() {
             let bindings = branch
                 .bindings()
+                .map(|(_, binding)| binding)
                 .chain(
                     functions_context
                         .bindings
                         .environment_of(function_context.location)
-                        .clone()
-                        .into_iter()
-                        .map(|binding| (binding.name.clone(), binding)),
+                        .clone(),
                 )
                 .collect();
 
@@ -183,7 +182,7 @@ where
 
 fn compile_expression(
     expression: Located<&Expression>,
-    _: BTreeMap<String, Binding>,
+    _: BTreeSet<Binding>,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> InstructionAddress {
