@@ -1,6 +1,7 @@
 use std::{collections::BTreeMap, fmt::Write};
 
 use array_util::ArrayExt;
+use itertools::Itertools;
 
 use crate::{
     code::{
@@ -622,16 +623,23 @@ fn unify_lists_of_types(
             break;
         }
 
-        let Some(current_inputs) =
-            current_types.into_iter().collect::<Option<_>>()
-        else {
-            panic!(
-                "Found function with branches that have different number of \
-                inputs."
-            );
-        };
+        let pairs = current_types
+            .into_iter()
+            .map(|type_| {
+                let Some(type_) = type_ else {
+                    panic!(
+                        "Found function with branches that have different \
+                        number of inputs."
+                    );
+                };
 
-        local_types.unify2(current_inputs);
+                type_
+            })
+            .tuple_windows();
+
+        for (a, b) in pairs {
+            local_types.unify([&a, &b]);
+        }
     }
 }
 

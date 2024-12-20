@@ -77,26 +77,6 @@ impl InferredTypes {
 
         type_
     }
-
-    pub fn unify2(&mut self, types: BTreeSet<Index<InferredType>>) {
-        let mut known_types = BTreeSet::new();
-
-        for index in &types {
-            if let Some(type_) = self.get(index).clone().into_type() {
-                known_types.insert(type_);
-            }
-        }
-
-        if known_types.len() > 1 {
-            panic!("Conflicting types: {known_types:?}");
-        }
-
-        if let Some(type_) = known_types.into_iter().next() {
-            for index in types {
-                self.inner.insert(index, InferredType::Known(type_.clone()));
-            }
-        }
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
