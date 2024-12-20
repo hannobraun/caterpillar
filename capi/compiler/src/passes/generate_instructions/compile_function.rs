@@ -66,8 +66,8 @@ fn compile_branch(
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
-    let parameters = branch.parameters.values().filter_map(|pattern| {
-        match pattern {
+    let parameters = branch.parameters.values().filter_map(|parameter| {
+        match parameter {
             Parameter::Identifier { name } => Some(name),
             Parameter::Literal { .. } => {
                 // Literal patterns are only relevant when
