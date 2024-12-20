@@ -127,8 +127,7 @@ fn infer_branch(
 
     let bindings = branch
         .bindings()
-        .map(|binding| binding.fragment)
-        .chain(environment.iter().cloned().map(|binding| binding.fragment))
+        .chain(environment.iter().cloned())
         .map(|binding| {
             let type_ = output
                 .bindings
@@ -203,7 +202,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    bindings: &BTreeMap<Binding, Index<InferredType>>,
+    bindings: &BTreeMap<Located<Binding>, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
@@ -230,7 +229,8 @@ fn infer_expression(
 
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
-                                let Binding { name, branch } = binding;
+                                let Binding { name, branch } =
+                                    &binding.fragment;
                                 let type_ = local_types.resolve(type_)?;
                                 write!(
                                     available_bindings,
@@ -476,7 +476,7 @@ fn infer_intrinsic(
 
 fn infer_branch_signature(
     branch: Located<&Branch>,
-    bindings: BTreeMap<Binding, Index<InferredType>>,
+    bindings: BTreeMap<Located<Binding>, Index<InferredType>>,
     local_types: &mut InferredTypes,
     local_stack: LocalStack,
 ) -> (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>) {
