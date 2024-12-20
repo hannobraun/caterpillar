@@ -31,8 +31,9 @@ impl<'r> Located<&'r Branch> {
 
         indices.zip(identifiers).map(move |(i, identifier)| {
             (
-                identifier,
+                identifier.clone(),
                 Binding {
+                    name: identifier,
                     identifier_index: i,
                     branch: location.clone(),
                 },

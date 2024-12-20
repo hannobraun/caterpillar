@@ -224,6 +224,7 @@ fn infer_expression(
                         let Some(output) = bindings.get(binding).copied()
                         else {
                             let Binding {
+                                name: _,
                                 identifier_index,
                                 branch,
                             } = binding;
@@ -231,6 +232,7 @@ fn infer_expression(
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
                                 let Binding {
+                                    name: _,
                                     identifier_index,
                                     branch,
                                 } = binding;
