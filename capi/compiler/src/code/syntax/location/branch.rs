@@ -37,19 +37,20 @@ impl<'r> Located<&'r Branch> {
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let location = self.location.clone();
 
-        let identifiers =
-            self.fragment.parameters.values().filter_map(|parameter| {
+        self.fragment
+            .parameters
+            .values()
+            .filter_map(|parameter| {
                 if let Parameter::Identifier { name } = parameter {
                     Some(name)
                 } else {
                     None
                 }
-            });
-
-        identifiers.map(move |identifier| Binding {
-            name: identifier.clone(),
-            branch: location.clone(),
-        })
+            })
+            .map(move |identifier| Binding {
+                name: identifier.clone(),
+                branch: location.clone(),
+            })
     }
 
     /// # Iterate over the members of the branch's body
