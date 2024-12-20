@@ -20,11 +20,11 @@ pub fn make_indirect(
 
 pub fn make_direct(
     signature: &Signature<Index<InferredType>>,
-    local_types: &InferredTypes,
+    types: &InferredTypes,
 ) -> Result<Option<Signature<Type>>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
         from.iter()
-            .map(|index| Ok(local_types.resolve(index)?.into_type()))
+            .map(|index| Ok(types.resolve(index)?.into_type()))
             .collect::<Result<Option<_>>>()
     };
 
