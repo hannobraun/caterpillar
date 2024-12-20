@@ -117,7 +117,7 @@ fn resolve_bindings_in_branch(
     scopes.push(
         branch
             .bindings()
-            .map(|binding| (binding.name.clone(), binding))
+            .map(|binding| (binding.name.clone(), binding.fragment))
             .collect(),
     );
 
