@@ -432,8 +432,7 @@ pub fn compile_definition_of_local_function(
         .bindings
         .environment_of(&local_function)
         .iter()
-        .map(|(name, _)| name)
-        .cloned()
+        .map(|(name, _)| name.clone())
         .collect();
 
     functions_context.instructions.replace(
