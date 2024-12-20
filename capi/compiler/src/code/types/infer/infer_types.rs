@@ -127,7 +127,6 @@ fn infer_branch(
 
     let bindings = branch
         .bindings()
-        .map(|(_, binding)| binding)
         .chain(environment.iter().cloned())
         .map(|binding| {
             let type_ = output
@@ -490,10 +489,8 @@ fn infer_branch_signature(
         .iter()
         .map(|parameter| match parameter {
             Pattern::Identifier { name } => {
-                let Some(binding) = branch
-                    .bindings()
-                    .map(|(_, binding)| binding)
-                    .find(|binding| binding.name == *name)
+                let Some(binding) =
+                    branch.bindings().find(|binding| binding.name == *name)
                 else {
                     unreachable!(
                         "Parameter of branch not recognized as a binding."

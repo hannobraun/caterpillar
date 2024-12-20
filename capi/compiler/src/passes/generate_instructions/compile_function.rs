@@ -87,7 +87,6 @@ fn compile_branch(
         for expression in branch.expressions() {
             let bindings = branch
                 .bindings()
-                .map(|(_, binding)| binding)
                 .chain(
                     functions_context
                         .bindings

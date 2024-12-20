@@ -129,7 +129,12 @@ fn resolve_bindings_in_branch(
     environment: &mut Environment,
     environments: &mut EnvironmentsMap,
 ) {
-    scopes.push(branch.bindings().collect());
+    scopes.push(
+        branch
+            .bindings()
+            .map(|binding| (binding.name.clone(), binding))
+            .collect(),
+    );
 
     for expression in branch.expressions() {
         match expression.fragment {
