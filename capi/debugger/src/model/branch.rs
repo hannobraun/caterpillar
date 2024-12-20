@@ -58,7 +58,7 @@ impl DebugBranch {
         let parameters = branch
             .parameters
             .into_values()
-            .map(|pattern| match pattern {
+            .map(|parameter| match parameter {
                 Parameter::Identifier { name } => name,
                 Parameter::Literal { value } => format!("{value:?}"),
             })
