@@ -18,18 +18,21 @@ impl<'r> Located<&'r Branch> {
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
-            self.fragment.parameters.iter().filter_map(|(_, pattern)| {
-                if let Pattern::Identifier { name } = pattern {
-                    Some(name)
-                } else {
-                    None
-                }
-            });
+            self.fragment
+                .parameters
+                .iter()
+                .filter_map(|(index, pattern)| {
+                    if let Pattern::Identifier { name } = pattern {
+                        Some((index, name))
+                    } else {
+                        None
+                    }
+                });
         let location = self.location.clone();
 
         indices
             .zip(identifiers)
-            .map(move |(i, identifier)| Binding {
+            .map(move |(i, (_, identifier))| Binding {
                 name: identifier.clone(),
                 identifier_index: i,
                 branch: location.clone(),
