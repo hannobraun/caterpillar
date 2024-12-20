@@ -132,7 +132,7 @@ fn infer_cluster(
 
     for (function, signature) in cluster_functions {
         if let Some(signature) =
-            make_signature_direct(&signature, &local_types).unwrap()
+            make_signature_direct(&signature, &local_types)?
         {
             output.functions.insert(function, signature);
         }
