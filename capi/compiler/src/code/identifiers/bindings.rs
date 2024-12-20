@@ -306,7 +306,7 @@ mod tests {
             .unwrap();
 
         if let Some(binding) = bindings.is_binding(&parameter) {
-            assert_eq!(binding.branch, branch.location);
+            assert_eq!(*binding.location.parent, branch.location);
         } else {
             panic!("Expected identifier to be a binding.");
         }
