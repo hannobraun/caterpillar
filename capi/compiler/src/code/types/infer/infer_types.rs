@@ -231,14 +231,14 @@ fn infer_expression(
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
                                 let Binding {
-                                    name: _,
-                                    identifier_index,
+                                    name,
+                                    identifier_index: _,
                                     branch,
                                 } = binding;
                                 let type_ = local_types.resolve(type_)?;
                                 write!(
                                     available_bindings,
-                                    "- index `{identifier_index}` at {}: \
+                                    "- `{name}` at {}: \
                                     {type_:?}",
                                     branch.display(context.syntax_tree),
                                 )
