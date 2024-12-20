@@ -242,9 +242,7 @@ fn infer_expression(
         .annotations
         .signature_of(&expression.location)
         .cloned()
-        .map(|signature| {
-            signature::make_signature_indirect(signature, local_types)
-        });
+        .map(|signature| signature::make_indirect(signature, local_types));
 
     let inferred = match expression.fragment {
         Expression::Identifier { name } => {
@@ -298,7 +296,7 @@ fn infer_expression(
                         Some(signature)
                     }
                     IdentifierTarget::HostFunction(host) => {
-                        let signature = signature::make_signature_indirect(
+                        let signature = signature::make_indirect(
                             host.signature.clone(),
                             local_types,
                         );
@@ -313,17 +311,14 @@ fn infer_expression(
                         )?;
 
                         signature.map(|signature| {
-                            signature::make_signature_indirect(
-                                signature,
-                                local_types,
-                            )
+                            signature::make_indirect(signature, local_types)
                         })
                     }
                     IdentifierTarget::UserDefinedFunction(user_defined) => {
                         functions
                             .get(user_defined)
                             .map(|signature| {
-                                signature::make_signature_indirect(
+                                signature::make_indirect(
                                     signature.clone(),
                                     local_types,
                                 )
@@ -341,8 +336,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature =
-                signature::make_signature_indirect(signature, local_types);
+            let signature = signature::make_indirect(signature, local_types);
             Some(signature)
         }
         Expression::LocalFunction { .. } => {
@@ -354,7 +348,7 @@ fn infer_expression(
                         signature: signature.clone(),
                     }],
                 };
-                signature::make_signature_indirect(signature, local_types)
+                signature::make_indirect(signature, local_types)
             })
         }
     };

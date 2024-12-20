@@ -2,7 +2,7 @@ use crate::code::{Index, Signature, Type};
 
 use super::types::{InferredType, InferredTypes, Result};
 
-pub fn make_signature_indirect(
+pub fn make_indirect(
     signature: Signature,
     local_types: &mut InferredTypes,
 ) -> Signature<Index<InferredType>> {
