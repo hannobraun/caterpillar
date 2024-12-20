@@ -1,7 +1,7 @@
 use std::ops::{Deref, DerefMut};
 
 /// # A fragment of code, with its location attached
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Located<T: HasLocation> {
     /// # The code fragment
     pub fragment: T,
