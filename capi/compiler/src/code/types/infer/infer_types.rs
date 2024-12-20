@@ -578,7 +578,7 @@ fn unify_lists_of_types(
     }
 }
 
-fn make_signature_indirect(
+pub fn make_signature_indirect(
     signature: Signature,
     local_types: &mut InferredTypes,
 ) -> Signature<Index<InferredType>> {
@@ -594,7 +594,7 @@ fn make_signature_indirect(
     }
 }
 
-fn make_signature_direct(
+pub fn make_signature_direct(
     signature: &Signature<Index<InferredType>>,
     local_types: &InferredTypes,
 ) -> Result<Option<Signature<Type>>> {
