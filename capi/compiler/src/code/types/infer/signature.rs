@@ -24,7 +24,10 @@ pub fn make_direct(
 ) -> Result<Option<Signature<Type>>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
         from.iter()
-            .map(|index| Ok(types.resolve(index)?.into_type()))
+            .map(|index| {
+                let type_ = types.resolve(index)?;
+                Ok(type_.into_type())
+            })
             .collect::<Result<Option<_>>>()
     };
 
