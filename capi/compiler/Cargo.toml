@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 array-util = "*"
+itertools = "*"
 petgraph = "*"
 
 [dependencies.blake3]
@@ -25,7 +26,3 @@ default-features = false
 [dependencies.udigest]
 version = "*"
 features = ["derive"]
-
-
-[dev-dependencies]
-itertools = "*"
