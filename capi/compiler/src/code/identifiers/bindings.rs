@@ -31,7 +31,7 @@ impl Bindings {
 
     /// # Determine, if the expression at the given location is a binding
     pub fn is_binding(&self, location: &MemberLocation) -> Option<&Binding> {
-        self.bindings.get(location)
+        self.bindings.get(location).map(|binding| &binding.fragment)
     }
 
     /// # Access the environment of the function at the provided location
@@ -41,7 +41,7 @@ impl Bindings {
     }
 }
 
-type BindingsMap = BTreeMap<MemberLocation, Binding>;
+type BindingsMap = BTreeMap<MemberLocation, Located<Binding>>;
 type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 
 /// # A binding
@@ -129,8 +129,7 @@ fn resolve_bindings_in_branch(
                 });
 
                 if let Some(binding) = binding {
-                    bindings
-                        .insert(expression.location, binding.fragment.clone());
+                    bindings.insert(expression.location, binding.clone());
 
                     if let Some(scope) = scopes.last() {
                         if !scope.contains_key(name) {
