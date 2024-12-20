@@ -18,7 +18,7 @@ pub fn make_indirect(
     }
 }
 
-pub fn make_signature_direct(
+pub fn make_direct(
     signature: &Signature<Index<InferredType>>,
     local_types: &InferredTypes,
 ) -> Result<Option<Signature<Type>>> {

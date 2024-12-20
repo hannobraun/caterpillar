@@ -133,7 +133,7 @@ fn infer_cluster(
 
     for (function, signature) in cluster_functions {
         if let Some(signature) =
-            signature::make_signature_direct(&signature, &local_types)?
+            signature::make_direct(&signature, &local_types)?
         {
             output.functions.insert(function, signature);
         }
@@ -198,8 +198,7 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        let Some(signature) =
-            signature::make_signature_direct(&signature, local_types)?
+        let Some(signature) = signature::make_direct(&signature, local_types)?
         else {
             continue;
         };
@@ -361,8 +360,7 @@ fn infer_expression(
         [explicit.as_ref(), inferred.as_ref()].try_map_ext(|signature| {
             signature
                 .and_then(|signature| {
-                    signature::make_signature_direct(signature, local_types)
-                        .transpose()
+                    signature::make_direct(signature, local_types).transpose()
                 })
                 .transpose()
         })?
