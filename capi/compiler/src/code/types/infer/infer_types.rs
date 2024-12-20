@@ -24,7 +24,29 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
-        infer_cluster(cluster, context, &mut output);
+        if let Err(TypeError {
+            expected,
+            actual,
+            location,
+        }) = infer_cluster(cluster, context, &mut output)
+        {
+            let actual = actual
+                .map(|type_| format!("`{type_}`"))
+                .unwrap_or_else(|| "nothing".to_string());
+
+            let location = location
+                .map(|location| {
+                    format!("at {}\n", location.display(context.syntax_tree))
+                })
+                .unwrap_or(String::new());
+
+            panic!(
+                "\n\
+                Type error: expected {expected}, got {actual}\n\
+                \n\
+                {location}",
+            );
+        }
     }
 
     output
@@ -51,7 +73,7 @@ fn infer_cluster(
     cluster: &DependencyCluster,
     context: Context,
     output: &mut InferenceOutput,
-) {
+) -> Result<()> {
     let mut cluster_functions = BTreeMap::new();
     let mut local_types = InferredTypes::default();
     let mut branch_signatures_by_function = BTreeMap::new();
@@ -113,25 +135,11 @@ fn infer_cluster(
                 actual,
                 location,
             }) => {
-                let actual = actual
-                    .map(|type_| format!("`{type_}`"))
-                    .unwrap_or_else(|| "nothing".to_string());
-
-                let location = location
-                    .map(|location| {
-                        format!(
-                            "at {}\n",
-                            location.display(context.syntax_tree)
-                        )
-                    })
-                    .unwrap_or(String::new());
-
-                panic!(
-                    "\n\
-                    Type error: expected {expected}, got {actual}\n\
-                    \n\
-                    {location}",
-                );
+                return Err(TypeError {
+                    expected,
+                    actual,
+                    location,
+                });
             }
         }
     }
@@ -143,6 +151,8 @@ fn infer_cluster(
             output.functions.insert(function, signature);
         }
     }
+
+    Ok(())
 }
 
 #[allow(clippy::type_complexity)]
