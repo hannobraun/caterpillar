@@ -63,7 +63,7 @@ pub struct Binding {
 ///
 /// The environment of a function is the set of bindings it accesses, that are
 /// not its own parameters.
-pub type Environment = BTreeSet<Binding>;
+pub type Environment = BTreeSet<Located<Binding>>;
 
 fn resolve_bindings(
     syntax_tree: &SyntaxTree,
@@ -138,7 +138,7 @@ fn resolve_bindings_in_branch(
                         if !scope.contains_key(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-                            environment.insert(binding.fragment.clone());
+                            environment.insert(binding.clone());
                         }
                     }
                 }
