@@ -16,7 +16,6 @@ impl HasLocation for Branch {
 impl<'r> Located<&'r Branch> {
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
-        let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
             self.fragment
                 .parameters
@@ -30,12 +29,10 @@ impl<'r> Located<&'r Branch> {
                 });
         let location = self.location.clone();
 
-        indices
-            .zip(identifiers)
-            .map(move |(_, (_, identifier))| Binding {
-                name: identifier.clone(),
-                branch: location.clone(),
-            })
+        identifiers.map(move |(_, identifier)| Binding {
+            name: identifier.clone(),
+            branch: location.clone(),
+        })
     }
 
     /// # Iterate over the members of the branch's body
