@@ -181,7 +181,7 @@ fn infer_branch(
 
             let type_ = signature.outputs[0].clone();
 
-            output.bindings.insert(binding.clone(), type_);
+            output.bindings.insert(binding.fragment.clone(), type_);
         }
 
         output.expressions.insert(location, signature);

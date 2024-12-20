@@ -40,13 +40,15 @@ impl Identifiers {
                             );
 
                         let target = match (
-                            binding,
+                            binding.as_ref(),
                             host_function,
                             intrinsic_function,
                             user_defined_function,
                         ) {
                             (Some(binding), None, None, None) => {
-                                IdentifierTarget::Binding(binding.clone())
+                                IdentifierTarget::Binding(
+                                    binding.fragment.clone(),
+                                )
                             }
                             (None, Some(host_function), None, None) => {
                                 IdentifierTarget::HostFunction(

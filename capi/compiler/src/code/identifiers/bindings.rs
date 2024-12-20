@@ -30,8 +30,11 @@ impl Bindings {
     }
 
     /// # Determine, if the expression at the given location is a binding
-    pub fn is_binding(&self, location: &MemberLocation) -> Option<&Binding> {
-        self.bindings.get(location).map(|binding| &binding.fragment)
+    pub fn is_binding(
+        &self,
+        location: &MemberLocation,
+    ) -> Option<Located<&Binding>> {
+        self.bindings.get(location).map(|binding| binding.as_ref())
     }
 
     /// # Access the environment of the function at the provided location
