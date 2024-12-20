@@ -35,6 +35,8 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
+        let location = self.location.clone();
+
         let identifiers =
             self.fragment.parameters.values().filter_map(|parameter| {
                 if let Parameter::Identifier { name } = parameter {
@@ -43,7 +45,6 @@ impl<'r> Located<&'r Branch> {
                     None
                 }
             });
-        let location = self.location.clone();
 
         identifiers.map(move |identifier| Binding {
             name: identifier.clone(),
