@@ -474,9 +474,9 @@ end
 # Game state - snake
 snake_init: fn
     \ ->
-         3
-         snake_length
-            store
+        3
+        snake_length
+           store
 
         positions
             vec_buf_init
