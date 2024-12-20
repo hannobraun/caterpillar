@@ -427,10 +427,10 @@ fn infer_expression(
                 Ok(indices)
             };
 
-            Some(Signature {
-                inputs: merge(&inferred.inputs, &explicit.inputs)?,
-                outputs: merge(&inferred.outputs, &explicit.outputs)?,
-            })
+            let inputs = merge(&inferred.inputs, &explicit.inputs)?;
+            let outputs = merge(&inferred.outputs, &explicit.outputs)?;
+
+            Some(Signature { inputs, outputs })
         }
         (inferred, explicit) => inferred.or(explicit),
     };
