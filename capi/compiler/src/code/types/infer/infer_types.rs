@@ -224,14 +224,16 @@ fn infer_expression(
                         else {
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
-                                let Binding { name, branch } =
+                                let Binding { name, branch: _ } =
                                     &binding.fragment;
                                 let type_ = local_types.resolve(type_)?;
                                 write!(
                                     available_bindings,
                                     "- `{name}` at {}: \
                                     {type_:?}",
-                                    branch.display(context.syntax_tree),
+                                    binding
+                                        .location
+                                        .display(context.syntax_tree),
                                 )
                                 .expect("Writing to `String` can not fail.");
                             }
