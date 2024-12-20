@@ -216,7 +216,7 @@ fn infer_expression(
         .map(|signature| signature::make_indirect(signature, local_types));
 
     let inferred = match expression.fragment {
-        Expression::Identifier { name } => {
+        Expression::Identifier { name: identifier } => {
             match context.identifiers.is_resolved(&expression.location) {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
@@ -246,8 +246,9 @@ fn infer_expression(
                             }
 
                             unreachable!(
-                                "Identifier `{name}` has been resolved as \
-                                binding, but it is not known in the branch.\n\
+                                "Identifier `{identifier}` has been resolved \
+                                as binding, but it is not known in the branch. \
+                                \n\
                                 \n\
                                 at {}\n\
                                 \n\
