@@ -70,10 +70,9 @@ pub struct Branch {
     pub body: IndexMap<Member>,
 }
 
-/// # A pattern
+/// # A parameter
 ///
-/// Patterns represent branch parameters. A pattern can be matched against a
-/// value.
+/// Parameters match against the arguments of a function.
 #[derive(
     Clone,
     Debug,
@@ -88,18 +87,18 @@ pub struct Branch {
 pub enum Parameter {
     /// # An identifier
     ///
-    /// Identifier patterns match against any value. They are used to assign a
-    /// local name to a value.
+    /// Identifiers match against any value. They are used to assign a local
+    /// name to a value.
     Identifier {
         /// # The name that is assigned to the value, once matched
         name: String,
     },
 
-    /// # A literal pattern
+    /// # A literal
     ///
-    /// Literal patterns only match against values that are equal to their
-    /// `value` field. They are used to select which branch is executed, based
-    /// on the arguments of the function call.
+    /// Literals only match against values that are equal to their `value`
+    /// field. They are used to select which branch is executed, based on the
+    /// arguments of the function call.
     Literal {
         /// # The value that an argument is matched against
         value: Value,
