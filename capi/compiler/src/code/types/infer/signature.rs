@@ -45,6 +45,17 @@ pub fn unify(
     [a, b]: [&Signature<Index<InferredType>>; 2],
     types: &mut InferredTypes,
 ) {
+    assert_eq!(
+        a.inputs.len(),
+        b.inputs.len(),
+        "Expecting signatures to have same number of inputs.",
+    );
+    assert_eq!(
+        a.outputs.len(),
+        b.outputs.len(),
+        "Expecting signatures to have same number of outputs.",
+    );
+
     let mut unify = |[a, b]: [&Vec<Index<InferredType>>; 2]| {
         for (a, b) in a.iter().zip(b.iter()) {
             types.unify([a, b]);
