@@ -61,9 +61,6 @@ pub struct Function {
 )]
 pub struct Branch {
     /// # The parameters of the branch
-    ///
-    /// Each parameter is a pattern that can be matched against the arguments of
-    /// a call.
     pub parameters: IndexMap<Parameter>,
 
     /// # The body of the branch
