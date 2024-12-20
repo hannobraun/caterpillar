@@ -165,9 +165,9 @@ fn resolve_bindings_in_branch(
                     environments,
                 );
 
-                for (name, binding) in child_environment {
+                for (_, binding) in child_environment {
                     if let Some(bindings) = scopes.last() {
-                        if !bindings.contains_key(&name) {
+                        if !bindings.contains_key(&binding.name) {
                             // The child function that we just resolved bindings
                             // in has a function in its environment that is not
                             // known in the current scope.
@@ -175,7 +175,7 @@ fn resolve_bindings_in_branch(
                             // This means it must come from this function's
                             // parent scopes, and must be added to this
                             // environment too.
-                            environment.insert(name.clone(), binding);
+                            environment.insert(binding.name.clone(), binding);
                         }
                     }
                 }
