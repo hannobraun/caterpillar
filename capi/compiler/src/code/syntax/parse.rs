@@ -169,8 +169,8 @@ fn parse_branch_parameters(
     tokens: &mut Tokens,
     parameters: &mut IndexMap<Parameter>,
 ) -> Result<()> {
-    while let Some(pattern) = parse_branch_parameter(tokens)? {
-        parameters.push(pattern);
+    while let Some(parameter) = parse_branch_parameter(tokens)? {
+        parameters.push(parameter);
 
         match tokens.take()? {
             Token::Punctuator(Delimiter) => {
