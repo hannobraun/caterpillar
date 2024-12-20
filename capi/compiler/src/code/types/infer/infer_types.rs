@@ -226,7 +226,7 @@ fn infer_expression(
                             let Binding {
                                 name: binding,
                                 branch,
-                            } = binding;
+                            } = &binding.fragment;
 
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
