@@ -1,7 +1,6 @@
 use std::{collections::BTreeMap, fmt::Write};
 
 use array_util::ArrayExt;
-use itertools::Itertools;
 
 use crate::{
     code::{
@@ -100,18 +99,8 @@ fn infer_cluster(
             };
 
             if let Some(function_signature) = cluster_functions.get(&function) {
-                unify_lists_of_types(
-                    vec![
-                        function_signature.inputs.iter().copied(),
-                        branch_signature.inputs.iter().copied(),
-                    ],
-                    &mut local_types,
-                );
-                unify_lists_of_types(
-                    vec![
-                        function_signature.outputs.iter().copied(),
-                        branch_signature.outputs.iter().copied(),
-                    ],
+                signature::unify(
+                    [&branch_signature, function_signature],
                     &mut local_types,
                 );
             }
@@ -536,41 +525,6 @@ fn infer_branch_signature(
     let outputs = local_stack.get().cloned();
 
     (inputs, outputs)
-}
-
-fn unify_lists_of_types(
-    mut lists_of_types: Vec<impl Iterator<Item = Index<InferredType>>>,
-    local_types: &mut InferredTypes,
-) {
-    loop {
-        let mut current_types = Vec::new();
-
-        for types in &mut lists_of_types {
-            current_types.push(types.next());
-        }
-
-        if current_types.iter().all(|input| input.is_none()) {
-            break;
-        }
-
-        let pairs = current_types
-            .into_iter()
-            .map(|type_| {
-                let Some(type_) = type_ else {
-                    panic!(
-                        "Found function with branches that have different \
-                        number of inputs."
-                    );
-                };
-
-                type_
-            })
-            .tuple_windows();
-
-        for (a, b) in pairs {
-            local_types.unify([&a, &b]);
-        }
-    }
 }
 
 fn make_stack_direct(

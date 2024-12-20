@@ -40,3 +40,17 @@ pub fn make_direct(
 
     Ok(signature)
 }
+
+pub fn unify(
+    [a, b]: [&Signature<Index<InferredType>>; 2],
+    types: &mut InferredTypes,
+) {
+    let mut unify = |[a, b]: [&Vec<Index<InferredType>>; 2]| {
+        for (a, b) in a.iter().zip(b.iter()) {
+            types.unify([a, b]);
+        }
+    };
+
+    unify([&a.inputs, &b.inputs]);
+    unify([&a.outputs, &b.outputs]);
+}
