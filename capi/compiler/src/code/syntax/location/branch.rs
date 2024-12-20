@@ -14,7 +14,7 @@ impl HasLocation for Branch {
 }
 
 impl<'r> Located<&'r Branch> {
-    /// # Iterate over the parameters of the function that bind a value
+    /// # Iterate over the parameters of the branch that bind a value
     pub fn bindings(&self) -> impl Iterator<Item = (String, Binding)> + 'r {
         let indices = iter::successors(Some(0), |i| Some(i + 1));
         let identifiers =
