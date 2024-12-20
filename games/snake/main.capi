@@ -702,7 +702,7 @@ end
 
 vec_load: fn
     \ address ->
-        address: -> Number .
+        address
         load
         address
         1
@@ -749,7 +749,7 @@ end
 vec_buf_init: fn
     \ vec_buf ->
         0
-        vec_buf: -> Number . _vec_buf_first
+        vec_buf _vec_buf_first
             store
         0
         vec_buf _vec_buf_next
@@ -769,9 +769,9 @@ vec_buf_get: fn
             _vec_buf_first
             load
             fn \ base ->
-                vec_buf: -> Number .
-                base: -> Number .
-                offset: -> Number .
+                vec_buf
+                base
+                offset
                 _vec_buf_address
                 vec_load
             end
@@ -787,7 +787,7 @@ vec_buf_last: fn
         1
         sub_u8
         fn \ index ->
-            vec_buf: -> Number .
+            vec_buf
             index
             vec_buf_get
         end
@@ -799,15 +799,15 @@ vec_buf_push: fn
         vec_buf
         _vec_buf_next
         fn \ next_addr ->
-            vec_buf: -> Number .
+            vec_buf
             next_addr
             load
             0
             _vec_buf_address
             fn \ address ->
-                x: -> Number .
-                y: -> Number .
-                address: -> Number .
+                x
+                y
+                address
                 vec_store
                 next_addr: -> Number .
                 _vec_buf_inc_index
@@ -870,7 +870,7 @@ _vec_buf_address: fn
         offset: -> Number .
             add_u8_wrap
 
-        vec_buf: -> Number.
+        vec_buf
             _vec_buf_capacity
             load
 
@@ -910,7 +910,7 @@ end
 
 _vec_buf_capacity: fn
     \ vec_buf ->
-        vec_buf: -> Number .
+        vec_buf
         2
             add_s32
 end
@@ -941,7 +941,7 @@ end
 
 abs: fn
     \ v ->
-        v: -> Number .
+        v
         v
         -1
         greater_s32
@@ -951,7 +951,7 @@ abs: fn
                     neg_s32
 
             \ v, _ ->
-                v: -> Number .
+                v
         end
             eval
 end

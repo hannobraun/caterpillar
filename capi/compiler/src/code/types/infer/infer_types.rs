@@ -224,8 +224,7 @@ fn infer_expression(
                         else {
                             let mut available_bindings = String::new();
                             for (binding, type_) in bindings {
-                                let Binding { name, branch: _ } =
-                                    &binding.fragment;
+                                let Binding { name } = &binding.fragment;
                                 let type_ = local_types.resolve(type_)?;
                                 write!(
                                     available_bindings,

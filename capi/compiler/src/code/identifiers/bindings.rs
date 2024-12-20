@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::code::syntax::{
-    Branch, BranchLocation, Expression, Function, FunctionLocation, Located,
-    MemberLocation, SyntaxTree,
+    Branch, Expression, Function, FunctionLocation, Located, MemberLocation,
+    SyntaxTree,
 };
 
 /// # Tracks bindings
@@ -54,9 +54,6 @@ type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 pub struct Binding {
     /// # The name of the binding
     pub name: String,
-
-    /// # The branch in which the binding is defined
-    pub branch: BranchLocation,
 }
 
 /// # The environment of a function
