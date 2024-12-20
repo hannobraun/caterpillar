@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{Branch, BranchLocation, MemberLocation, Pattern},
+        syntax::{Branch, BranchLocation, MemberLocation, Parameter},
         DependencyCluster, FunctionCalls, Functions, Types,
     },
     source_map::SourceMap,
@@ -59,8 +59,8 @@ impl DebugBranch {
             .parameters
             .into_values()
             .map(|pattern| match pattern {
-                Pattern::Identifier { name } => name,
-                Pattern::Literal { value } => format!("{value:?}"),
+                Parameter::Identifier { name } => name,
+                Parameter::Literal { value } => format!("{value:?}"),
             })
             .collect();
 

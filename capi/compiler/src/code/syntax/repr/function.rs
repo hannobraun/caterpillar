@@ -64,7 +64,7 @@ pub struct Branch {
     ///
     /// Each parameter is a pattern that can be matched against the arguments of
     /// a call.
-    pub parameters: IndexMap<Pattern>,
+    pub parameters: IndexMap<Parameter>,
 
     /// # The body of the branch
     pub body: IndexMap<Member>,
@@ -85,7 +85,7 @@ pub struct Branch {
     serde::Serialize,
     udigest::Digestable,
 )]
-pub enum Pattern {
+pub enum Parameter {
     /// # An identifier
     ///
     /// Identifier patterns match against any value. They are used to assign a

@@ -5,7 +5,7 @@ use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
 use crate::{
     code::{
         syntax::{
-            Branch, Expression, Function, FunctionLocation, Located, Pattern,
+            Branch, Expression, Function, FunctionLocation, Located, Parameter,
         },
         Binding,
     },
@@ -68,8 +68,8 @@ fn compile_branch(
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.values().filter_map(|pattern| {
         match pattern {
-            Pattern::Identifier { name } => Some(name),
-            Pattern::Literal { .. } => {
+            Parameter::Identifier { name } => Some(name),
+            Parameter::Literal { .. } => {
                 // Literal patterns are only relevant when
                 // selecting the branch to execute. They no
                 // longer have meaning once the function
@@ -143,10 +143,10 @@ fn compile_branch(
             .values()
             .cloned()
             .map(|pattern| match pattern {
-                Pattern::Identifier { name } => {
+                Parameter::Identifier { name } => {
                     capi_runtime::Pattern::Identifier { name }
                 }
-                Pattern::Literal { value } => {
+                Parameter::Literal { value } => {
                     capi_runtime::Pattern::Literal { value }
                 }
             })

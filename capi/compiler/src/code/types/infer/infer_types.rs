@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{
             Branch, Expression, FunctionLocation, Located, MemberLocation,
-            Pattern, SyntaxTree,
+            Parameter, SyntaxTree,
         },
         types::repr::Stacks,
         Binding, Bindings, Dependencies, DependencyCluster, Environment,
@@ -483,7 +483,7 @@ fn infer_branch_signature(
         .parameters
         .values()
         .map(|parameter| match parameter {
-            Pattern::Identifier { name } => {
+            Parameter::Identifier { name } => {
                 let Some(binding) =
                     branch.bindings().find(|binding| binding.name == *name)
                 else {
@@ -500,7 +500,7 @@ fn infer_branch_signature(
 
                 *type_
             }
-            Pattern::Literal { .. } => {
+            Parameter::Literal { .. } => {
                 local_types.push(InferredType::Known(Type::Number))
             }
         })

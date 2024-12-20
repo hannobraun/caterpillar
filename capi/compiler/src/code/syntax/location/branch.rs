@@ -2,7 +2,7 @@ use std::{fmt, iter};
 
 use crate::code::{
     syntax::{
-        Branch, Expression, Function, Member, Pattern, SyntaxTree, SyntaxType,
+        Branch, Expression, Function, Member, Parameter, SyntaxTree, SyntaxType,
     },
     Binding, Index, Signature,
 };
@@ -18,7 +18,7 @@ impl<'r> Located<&'r Branch> {
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let identifiers =
             self.fragment.parameters.values().filter_map(|pattern| {
-                if let Pattern::Identifier { name } = pattern {
+                if let Parameter::Identifier { name } = pattern {
                     Some(name)
                 } else {
                     None

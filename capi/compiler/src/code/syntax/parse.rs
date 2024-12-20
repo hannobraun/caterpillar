@@ -7,7 +7,7 @@ use crate::code::{
 
 use super::{
     repr::types::SyntaxType, Branch, BranchLocation, Expression, Function,
-    FunctionLocation, Member, MemberLocation, NamedFunction, Pattern,
+    FunctionLocation, Member, MemberLocation, NamedFunction, Parameter,
 };
 
 /// # Parse the provided tokens
@@ -167,7 +167,7 @@ fn parse_branch(
 
 fn parse_branch_parameters(
     tokens: &mut Tokens,
-    parameters: &mut IndexMap<Pattern>,
+    parameters: &mut IndexMap<Parameter>,
 ) -> Result<()> {
     while let Some(pattern) = parse_branch_parameter(tokens)? {
         parameters.push(pattern);
@@ -193,10 +193,10 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Pattern>> {
+fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Parameter>> {
     let pattern = match tokens.take()? {
-        Token::Identifier { name } => Some(Pattern::Identifier { name }),
-        Token::IntegerLiteral { value } => Some(Pattern::Literal {
+        Token::Identifier { name } => Some(Parameter::Identifier { name }),
+        Token::IntegerLiteral { value } => Some(Parameter::Literal {
             value: value.into(),
         }),
         Token::Punctuator(Transformer) => None,

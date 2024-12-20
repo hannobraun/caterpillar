@@ -24,7 +24,7 @@ pub use self::{
     location::{BranchLocation, FunctionLocation, Located, MemberLocation},
     repr::{
         expression::Expression,
-        function::{Branch, Function, Member, NamedFunction, Pattern},
+        function::{Branch, Function, Member, NamedFunction, Parameter},
         syntax_tree::SyntaxTree,
         types::SyntaxType,
     },
