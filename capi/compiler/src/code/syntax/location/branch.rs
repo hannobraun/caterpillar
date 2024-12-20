@@ -7,13 +7,32 @@ use crate::code::{
     Binding, Index, Signature,
 };
 
-use super::{located::HasLocation, FunctionLocation, Located, MemberLocation};
+use super::{
+    located::HasLocation, FunctionLocation, Located, MemberLocation,
+    ParameterLocation,
+};
 
 impl HasLocation for Branch {
     type Location = BranchLocation;
 }
 
 impl<'r> Located<&'r Branch> {
+    /// # Iterate over the parameters of the branch
+    pub fn parameters(&self) -> impl Iterator<Item = Located<&Parameter>> {
+        let location = self.location.clone();
+
+        self.fragment
+            .parameters
+            .iter()
+            .map(move |(&index, parameter)| Located {
+                fragment: parameter,
+                location: ParameterLocation {
+                    parent: Box::new(location.clone()),
+                    index,
+                },
+            })
+    }
+
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let identifiers =
