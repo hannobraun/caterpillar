@@ -17,7 +17,7 @@ impl<'r> Located<&'r Branch> {
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Binding> + 'r {
         let identifiers =
-            self.fragment.parameters.iter().filter_map(|(_, pattern)| {
+            self.fragment.parameters.values().filter_map(|pattern| {
                 if let Pattern::Identifier { name } = pattern {
                     Some(name)
                 } else {
