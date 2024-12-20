@@ -83,65 +83,51 @@ fn infer_cluster(
 
         let environment = context.bindings.environment_of(&function);
 
-        match infer_branch(
+        let (inputs, outputs) = infer_branch(
             branch,
             environment,
             &mut cluster_functions,
             &mut local_types,
             context,
             output,
-        ) {
-            Ok((inputs, outputs)) => {
-                if let Some(outputs) = outputs.clone() {
-                    let branch_signature = Signature {
-                        inputs: inputs.clone(),
-                        outputs,
-                    };
+        )?;
 
-                    let merged_signature = if let Some(function_signature) =
-                        cluster_functions.get(&function)
-                    {
-                        unify_lists_of_types(
-                            vec![
-                                function_signature.inputs.iter().copied(),
-                                branch_signature.inputs.iter().copied(),
-                            ],
-                            &mut local_types,
-                        );
-                        unify_lists_of_types(
-                            vec![
-                                function_signature.outputs.iter().copied(),
-                                branch_signature.outputs.iter().copied(),
-                            ],
-                            &mut local_types,
-                        );
+        if let Some(outputs) = outputs.clone() {
+            let branch_signature = Signature {
+                inputs: inputs.clone(),
+                outputs,
+            };
 
-                        branch_signature
-                    } else {
-                        branch_signature
-                    };
+            let merged_signature = if let Some(function_signature) =
+                cluster_functions.get(&function)
+            {
+                unify_lists_of_types(
+                    vec![
+                        function_signature.inputs.iter().copied(),
+                        branch_signature.inputs.iter().copied(),
+                    ],
+                    &mut local_types,
+                );
+                unify_lists_of_types(
+                    vec![
+                        function_signature.outputs.iter().copied(),
+                        branch_signature.outputs.iter().copied(),
+                    ],
+                    &mut local_types,
+                );
 
-                    cluster_functions
-                        .insert(function.clone(), merged_signature);
-                }
+                branch_signature
+            } else {
+                branch_signature
+            };
 
-                branch_signatures_by_function
-                    .entry(function)
-                    .or_insert_with(Vec::new)
-                    .push((inputs, outputs));
-            }
-            Err(TypeError {
-                expected,
-                actual,
-                location,
-            }) => {
-                return Err(TypeError {
-                    expected,
-                    actual,
-                    location,
-                });
-            }
+            cluster_functions.insert(function.clone(), merged_signature);
         }
+
+        branch_signatures_by_function
+            .entry(function)
+            .or_insert_with(Vec::new)
+            .push((inputs, outputs));
     }
 
     for (function, signature) in cluster_functions {
