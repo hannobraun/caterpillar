@@ -117,7 +117,7 @@ fn resolve_bindings_in_branch(
     scopes.push(
         branch
             .bindings()
-            .map(|binding| (binding.name.clone(), binding.fragment))
+            .map(|binding| (binding.name.clone(), binding))
             .collect(),
     );
 
@@ -129,13 +129,14 @@ fn resolve_bindings_in_branch(
                 });
 
                 if let Some(binding) = binding {
-                    bindings.insert(expression.location, binding.clone());
+                    bindings
+                        .insert(expression.location, binding.fragment.clone());
 
                     if let Some(scope) = scopes.last() {
                         if !scope.contains_key(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-                            environment.insert(binding.clone());
+                            environment.insert(binding.fragment.clone());
                         }
                     }
                 }
@@ -176,7 +177,7 @@ fn resolve_bindings_in_branch(
 }
 
 type Scopes = Vec<BindingsInScope>;
-type BindingsInScope = BTreeMap<String, Binding>;
+type BindingsInScope = BTreeMap<String, Located<Binding>>;
 
 #[cfg(test)]
 mod tests {
