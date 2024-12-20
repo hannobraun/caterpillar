@@ -10,8 +10,8 @@ use crate::{
             Pattern, SyntaxTree,
         },
         types::repr::Stacks,
-        Binding, Bindings, Dependencies, Environment, IdentifierTarget,
-        Identifiers, Index, Signature, Type, TypeAnnotations,
+        Binding, Bindings, Dependencies, DependencyCluster, Environment,
+        IdentifierTarget, Identifiers, Index, Signature, Type, TypeAnnotations,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -24,97 +24,7 @@ pub fn infer_types(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
-        let mut cluster_functions = BTreeMap::new();
-        let mut local_types = InferredTypes::default();
-        let mut branch_signatures_by_function = BTreeMap::new();
-
-        for branch in cluster.branches(context.syntax_tree) {
-            let function = (*branch.location.parent).clone();
-
-            let environment = context.bindings.environment_of(&function);
-
-            match infer_branch(
-                branch,
-                environment,
-                &mut cluster_functions,
-                &mut local_types,
-                context,
-                &mut output,
-            ) {
-                Ok((inputs, outputs)) => {
-                    if let Some(outputs) = outputs.clone() {
-                        let branch_signature = Signature {
-                            inputs: inputs.clone(),
-                            outputs,
-                        };
-
-                        let merged_signature = if let Some(function_signature) =
-                            cluster_functions.get(&function)
-                        {
-                            unify_lists_of_types(
-                                vec![
-                                    function_signature.inputs.iter().copied(),
-                                    branch_signature.inputs.iter().copied(),
-                                ],
-                                &mut local_types,
-                            );
-                            unify_lists_of_types(
-                                vec![
-                                    function_signature.outputs.iter().copied(),
-                                    branch_signature.outputs.iter().copied(),
-                                ],
-                                &mut local_types,
-                            );
-
-                            branch_signature
-                        } else {
-                            branch_signature
-                        };
-
-                        cluster_functions
-                            .insert(function.clone(), merged_signature);
-                    }
-
-                    branch_signatures_by_function
-                        .entry(function)
-                        .or_insert_with(Vec::new)
-                        .push((inputs, outputs));
-                }
-                Err(TypeError {
-                    expected,
-                    actual,
-                    location,
-                }) => {
-                    let actual = actual
-                        .map(|type_| format!("`{type_}`"))
-                        .unwrap_or_else(|| "nothing".to_string());
-
-                    let location = location
-                        .map(|location| {
-                            format!(
-                                "at {}\n",
-                                location.display(context.syntax_tree)
-                            )
-                        })
-                        .unwrap_or(String::new());
-
-                    panic!(
-                        "\n\
-                        Type error: expected {expected}, got {actual}\n\
-                        \n\
-                        {location}",
-                    );
-                }
-            }
-        }
-
-        for (function, signature) in cluster_functions {
-            if let Some(signature) =
-                make_signature_direct(&signature, &local_types).unwrap()
-            {
-                output.functions.insert(function, signature);
-            }
-        }
+        infer_cluster(cluster, context, &mut output);
     }
 
     output
@@ -135,6 +45,104 @@ pub struct InferenceOutput {
     pub expressions: BTreeMap<MemberLocation, Signature>,
     pub bindings: BTreeMap<Binding, Type>,
     pub stacks: Stacks,
+}
+
+fn infer_cluster(
+    cluster: &DependencyCluster,
+    context: Context,
+    output: &mut InferenceOutput,
+) {
+    let mut cluster_functions = BTreeMap::new();
+    let mut local_types = InferredTypes::default();
+    let mut branch_signatures_by_function = BTreeMap::new();
+
+    for branch in cluster.branches(context.syntax_tree) {
+        let function = (*branch.location.parent).clone();
+
+        let environment = context.bindings.environment_of(&function);
+
+        match infer_branch(
+            branch,
+            environment,
+            &mut cluster_functions,
+            &mut local_types,
+            context,
+            output,
+        ) {
+            Ok((inputs, outputs)) => {
+                if let Some(outputs) = outputs.clone() {
+                    let branch_signature = Signature {
+                        inputs: inputs.clone(),
+                        outputs,
+                    };
+
+                    let merged_signature = if let Some(function_signature) =
+                        cluster_functions.get(&function)
+                    {
+                        unify_lists_of_types(
+                            vec![
+                                function_signature.inputs.iter().copied(),
+                                branch_signature.inputs.iter().copied(),
+                            ],
+                            &mut local_types,
+                        );
+                        unify_lists_of_types(
+                            vec![
+                                function_signature.outputs.iter().copied(),
+                                branch_signature.outputs.iter().copied(),
+                            ],
+                            &mut local_types,
+                        );
+
+                        branch_signature
+                    } else {
+                        branch_signature
+                    };
+
+                    cluster_functions
+                        .insert(function.clone(), merged_signature);
+                }
+
+                branch_signatures_by_function
+                    .entry(function)
+                    .or_insert_with(Vec::new)
+                    .push((inputs, outputs));
+            }
+            Err(TypeError {
+                expected,
+                actual,
+                location,
+            }) => {
+                let actual = actual
+                    .map(|type_| format!("`{type_}`"))
+                    .unwrap_or_else(|| "nothing".to_string());
+
+                let location = location
+                    .map(|location| {
+                        format!(
+                            "at {}\n",
+                            location.display(context.syntax_tree)
+                        )
+                    })
+                    .unwrap_or(String::new());
+
+                panic!(
+                    "\n\
+                    Type error: expected {expected}, got {actual}\n\
+                    \n\
+                    {location}",
+                );
+            }
+        }
+    }
+
+    for (function, signature) in cluster_functions {
+        if let Some(signature) =
+            make_signature_direct(&signature, &local_types).unwrap()
+        {
+            output.functions.insert(function, signature);
+        }
+    }
 }
 
 #[allow(clippy::type_complexity)]
