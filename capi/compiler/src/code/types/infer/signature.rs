@@ -4,11 +4,11 @@ use super::types::{InferredType, InferredTypes, Result};
 
 pub fn make_indirect(
     signature: Signature,
-    local_types: &mut InferredTypes,
+    types: &mut InferredTypes,
 ) -> Signature<Index<InferredType>> {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
-            .map(|type_| local_types.push(InferredType::Known(type_)))
+            .map(|type_| types.push(InferredType::Known(type_)))
             .collect()
     };
 
