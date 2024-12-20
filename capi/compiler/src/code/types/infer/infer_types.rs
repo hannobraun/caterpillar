@@ -382,55 +382,16 @@ fn infer_expression(
 
     let signature = match (inferred, explicit) {
         (Some(inferred), Some(explicit)) => {
-            let merge = |a: &Vec<Index<InferredType>>, b| {
-                let mut indices = Vec::new();
-
+            let mut merge = |a: &Vec<Index<InferredType>>, b| {
                 for (index_a, index_b) in a.iter().zip(b) {
-                    let a = local_types.resolve(index_a)?;
-                    let b = local_types.resolve(index_b)?;
-
-                    let index = match (a, b) {
-                        (
-                            InferredType::Known(inferred),
-                            InferredType::Known(explicit),
-                        ) => {
-                            panic!(
-                                "Explicit type annotation conflicts with \
-                                inferred type.\n\
-                                \n\
-                                Explicit type: {explicit:?}\n\
-                                Inferred type: {inferred:?}\n\
-                                \n\
-                                At {}\n",
-                                expression
-                                    .location
-                                    .display(context.syntax_tree),
-                            );
-                        }
-                        (
-                            InferredType::Known(_),
-                            InferredType::Unknown { .. },
-                        ) => index_a,
-                        (
-                            InferredType::Unknown { .. },
-                            InferredType::Known(_),
-                        ) => index_b,
-                        (
-                            InferredType::Unknown { .. },
-                            InferredType::Unknown { .. },
-                        ) => index_a,
-                    };
-
-                    indices.push(*index);
+                    local_types.unify([index_a, index_b]);
                 }
-
-                Ok(indices)
             };
 
-            let inputs = merge(&inferred.inputs, &explicit.inputs)?;
-            let outputs = merge(&inferred.outputs, &explicit.outputs)?;
+            merge(&inferred.inputs, &explicit.inputs);
+            merge(&inferred.outputs, &explicit.outputs);
 
-            Some(Signature { inputs, outputs })
+            Some(inferred)
         }
         (inferred, explicit) => inferred.or(explicit),
     };
