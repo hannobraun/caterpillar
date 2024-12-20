@@ -91,7 +91,7 @@ fn infer_cluster(
             output,
         )?;
 
-        if let Some(outputs) = outputs.clone() {
+        if let Some(outputs) = outputs {
             let branch_signature = Signature {
                 inputs: inputs.clone(),
                 outputs,
