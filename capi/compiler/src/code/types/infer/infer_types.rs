@@ -612,18 +612,18 @@ fn unify_lists_of_types(
     local_types: &mut InferredTypes,
 ) {
     loop {
-        let mut current_inputs = Vec::new();
+        let mut current_types = Vec::new();
 
         for types in &mut lists_of_types {
-            current_inputs.push(types.next());
+            current_types.push(types.next());
         }
 
-        if current_inputs.iter().all(|input| input.is_none()) {
+        if current_types.iter().all(|input| input.is_none()) {
             break;
         }
 
         let Some(current_inputs) =
-            current_inputs.into_iter().collect::<Option<_>>()
+            current_types.into_iter().collect::<Option<_>>()
         else {
             panic!(
                 "Found function with branches that have different number of \
