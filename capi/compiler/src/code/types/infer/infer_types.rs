@@ -76,7 +76,6 @@ fn infer_cluster(
 ) -> Result<()> {
     let mut cluster_functions = BTreeMap::new();
     let mut local_types = InferredTypes::default();
-    let mut branch_signatures_by_function = BTreeMap::new();
 
     for branch in cluster.branches(context.syntax_tree) {
         let function = (*branch.location.parent).clone();
@@ -107,11 +106,6 @@ fn infer_cluster(
 
             cluster_functions.insert(function.clone(), branch_signature);
         }
-
-        branch_signatures_by_function
-            .entry(function)
-            .or_insert_with(Vec::new)
-            .push((inputs, outputs));
     }
 
     for (function, signature) in cluster_functions {
