@@ -42,14 +42,13 @@ impl<'r> Located<&'r Branch> {
             .values()
             .filter_map(move |parameter| {
                 if let Parameter::Identifier { name } = parameter {
-                    Some(name)
+                    Some(Binding {
+                        name: name.clone(),
+                        branch: location.clone(),
+                    })
                 } else {
                     None
                 }
-            })
-            .map(move |name| Binding {
-                name: name.clone(),
-                branch: location.clone(),
             })
     }
 
