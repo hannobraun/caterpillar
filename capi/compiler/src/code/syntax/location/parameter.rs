@@ -1,0 +1,60 @@
+use std::fmt;
+
+use crate::code::{
+    syntax::{Parameter, SyntaxTree},
+    Index,
+};
+
+use super::{located::HasLocation, BranchLocation};
+
+impl HasLocation for Parameter {
+    type Location = ParameterLocation;
+}
+
+/// # The location of a branch's parameter
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
+pub struct ParameterLocation {
+    pub parent: Box<BranchLocation>,
+    pub index: Index<Parameter>,
+}
+
+impl ParameterLocation {
+    /// # Create a helper that implements [`fmt::Display`]
+    pub fn display<'r>(
+        &'r self,
+        syntax_tree: &'r SyntaxTree,
+    ) -> ParameterLocationDisplay<'r> {
+        ParameterLocationDisplay {
+            location: self,
+            syntax_tree,
+        }
+    }
+}
+
+/// # Helper struct to display [`ParameterLocation`]
+///
+/// Implements [`fmt::Display`], which [`ParameterLocation`] itself doesn't.
+pub struct ParameterLocationDisplay<'r> {
+    location: &'r ParameterLocation,
+    syntax_tree: &'r SyntaxTree,
+}
+
+impl fmt::Display for ParameterLocationDisplay<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "parameter {}\n    in {}",
+            self.location.index,
+            self.location.parent.display(self.syntax_tree)
+        )
+    }
+}

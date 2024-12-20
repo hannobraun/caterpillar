@@ -21,7 +21,10 @@ mod parse;
 mod repr;
 
 pub use self::{
-    location::{BranchLocation, FunctionLocation, Located, MemberLocation},
+    location::{
+        BranchLocation, FunctionLocation, Located, MemberLocation,
+        ParameterLocation,
+    },
     repr::{
         expression::Expression,
         function::{Branch, Function, Member, NamedFunction, Parameter},
