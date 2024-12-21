@@ -63,6 +63,11 @@ impl Environment {
             inner: BTreeSet::new(),
         }
     }
+
+    /// # Iterate over the bindings in the environment
+    pub fn bindings(&self) -> impl Iterator<Item = &Located<Binding>> {
+        self.inner.iter()
+    }
 }
 
 impl Default for Environment {

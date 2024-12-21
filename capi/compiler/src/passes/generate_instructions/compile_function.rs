@@ -90,8 +90,7 @@ fn compile_branch(
                     functions_context
                         .bindings
                         .environment_of(function_context.location)
-                        .inner
-                        .iter()
+                        .bindings()
                         .cloned()
                         .map(|binding| binding.fragment),
                 )
@@ -378,8 +377,7 @@ fn compile_expression(
                 let environment = functions_context
                     .bindings
                     .environment_of(&location)
-                    .inner
-                    .iter()
+                    .bindings()
                     .map(|binding| binding.name.clone())
                     .collect();
 
@@ -434,8 +432,7 @@ pub fn compile_definition_of_local_function(
     let environment = functions_context
         .bindings
         .environment_of(&local_function)
-        .inner
-        .iter()
+        .bindings()
         .map(|binding| binding.name.clone())
         .collect();
 
