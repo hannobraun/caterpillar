@@ -78,7 +78,7 @@ fn infer_cluster(
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<()> {
-    let mut cluster_functions = InferenceContext {
+    let mut inference_context = InferenceContext {
         functions: BTreeMap::new(),
     };
     let mut types = InferredTypes::default();
@@ -91,7 +91,7 @@ fn infer_cluster(
         let (inputs, outputs) = infer_branch(
             branch,
             environment,
-            &mut cluster_functions,
+            &mut inference_context,
             &mut types,
             compiler_context,
             output,
@@ -101,7 +101,7 @@ fn infer_cluster(
             let branch_signature = Signature { inputs, outputs };
 
             if let Some(function_signature) =
-                cluster_functions.functions.get(&function)
+                inference_context.functions.get(&function)
             {
                 signature::unify(
                     [&branch_signature, function_signature],
@@ -109,13 +109,13 @@ fn infer_cluster(
                 );
             }
 
-            cluster_functions
+            inference_context
                 .functions
                 .insert(function.clone(), branch_signature);
         }
     }
 
-    for (function, signature) in cluster_functions.functions {
+    for (function, signature) in inference_context.functions {
         if let Some(signature) = signature::make_direct(&signature, &types)? {
             output.functions.insert(function, signature);
         }
