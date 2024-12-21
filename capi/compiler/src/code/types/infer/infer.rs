@@ -16,7 +16,7 @@ use crate::{
 };
 
 use super::{
-    context::ClusterFunctions,
+    context::InferenceContext,
     signature,
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
@@ -78,7 +78,9 @@ fn infer_cluster(
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<()> {
-    let mut cluster_functions = BTreeMap::new();
+    let mut cluster_functions = InferenceContext {
+        functions: BTreeMap::new(),
+    };
     let mut types = InferredTypes::default();
 
     for branch in cluster.branches(compiler_context.syntax_tree) {
@@ -98,18 +100,22 @@ fn infer_cluster(
         if let Some(outputs) = outputs {
             let branch_signature = Signature { inputs, outputs };
 
-            if let Some(function_signature) = cluster_functions.get(&function) {
+            if let Some(function_signature) =
+                cluster_functions.functions.get(&function)
+            {
                 signature::unify(
                     [&branch_signature, function_signature],
                     &mut types,
                 );
             }
 
-            cluster_functions.insert(function.clone(), branch_signature);
+            cluster_functions
+                .functions
+                .insert(function.clone(), branch_signature);
         }
     }
 
-    for (function, signature) in cluster_functions {
+    for (function, signature) in cluster_functions.functions {
         if let Some(signature) = signature::make_direct(&signature, &types)? {
             output.functions.insert(function, signature);
         }
@@ -122,7 +128,7 @@ fn infer_cluster(
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
-    cluster_functions: &mut ClusterFunctions,
+    cluster_functions: &mut InferenceContext,
     local_types: &mut InferredTypes,
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
@@ -224,7 +230,7 @@ fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<ParameterLocation, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
-    cluster_functions: &mut ClusterFunctions,
+    cluster_functions: &mut InferenceContext,
     local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
     compiler_context: CompilerContext,
@@ -294,7 +300,10 @@ fn infer_expression(
                                 )
                             })
                             .or_else(|| {
-                                cluster_functions.get(user_defined).cloned()
+                                cluster_functions
+                                    .functions
+                                    .get(user_defined)
+                                    .cloned()
                             })
                     }
                 },
