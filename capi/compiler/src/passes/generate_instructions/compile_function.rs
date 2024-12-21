@@ -90,9 +90,9 @@ fn compile_branch(
                     functions_context
                         .bindings
                         .environment_of(function_context.location)
-                        .clone()
                         .inner
-                        .into_iter()
+                        .iter()
+                        .cloned()
                         .map(|binding| binding.fragment),
                 )
                 .collect();
