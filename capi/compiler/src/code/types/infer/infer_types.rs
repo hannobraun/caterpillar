@@ -140,7 +140,7 @@ fn infer_branch(
         .bindings()
         .chain(environment.bindings(context.syntax_tree))
         .map(register_binding)
-        .collect();
+        .collect::<BTreeMap<_, _>>();
 
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
