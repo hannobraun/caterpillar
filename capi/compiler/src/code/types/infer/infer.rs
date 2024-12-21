@@ -165,8 +165,7 @@ fn infer_branch(
         .map(|binding| {
             register_binding(binding.location, &mut inference_context.types)
         })
-        .chain(parameters.clone())
-        .collect::<BTreeMap<_, _>>();
+        .chain(parameters.clone());
 
     for (location, type_) in bindings {
         inference_context.bindings.insert(location, type_);
