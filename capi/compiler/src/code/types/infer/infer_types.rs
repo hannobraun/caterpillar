@@ -142,6 +142,33 @@ fn infer_branch(
         .map(register_binding)
         .collect::<BTreeMap<_, _>>();
 
+    let inputs = branch
+        .parameters
+        .values()
+        .map(|parameter| match parameter {
+            Parameter::Binding(Binding { name }) => {
+                let Some(binding) =
+                    branch.bindings().find(|binding| binding.name == *name)
+                else {
+                    unreachable!(
+                        "Parameter of branch not recognized as a binding."
+                    );
+                };
+
+                let Some(type_) = bindings.get(&binding.location) else {
+                    unreachable!(
+                        "Parameter of branch not tracked in `bindings`."
+                    );
+                };
+
+                *type_
+            }
+            Parameter::Literal { .. } => {
+                local_types.push(InferredType::Known(Type::Number))
+            }
+        })
+        .collect();
+
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -196,32 +223,6 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
-    let inputs = branch
-        .parameters
-        .values()
-        .map(|parameter| match parameter {
-            Parameter::Binding(Binding { name }) => {
-                let Some(binding) =
-                    branch.bindings().find(|binding| binding.name == *name)
-                else {
-                    unreachable!(
-                        "Parameter of branch not recognized as a binding."
-                    );
-                };
-
-                let Some(type_) = bindings.get(&binding.location) else {
-                    unreachable!(
-                        "Parameter of branch not tracked in `bindings`."
-                    );
-                };
-
-                *type_
-            }
-            Parameter::Literal { .. } => {
-                local_types.push(InferredType::Known(Type::Number))
-            }
-        })
-        .collect();
     let outputs = local_stack.get().cloned();
 
     Ok((inputs, outputs))
