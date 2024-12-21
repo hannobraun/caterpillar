@@ -1,5 +1,5 @@
-mod infer_types;
+mod infer;
 mod signature;
 mod types;
 
-pub use self::infer_types::{infer, Context, InferenceOutput};
+pub use self::infer::{infer, Context, InferenceOutput};
