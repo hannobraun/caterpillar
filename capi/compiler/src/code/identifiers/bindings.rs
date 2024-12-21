@@ -402,7 +402,7 @@ mod tests {
             .unwrap()
             .into_located_function();
         let branch = f.find_single_branch().unwrap();
-        let function = branch
+        let f_local = branch
             .expressions()
             .filter_map(|expression| {
                 if let Expression::LocalFunction { function: _ } =
@@ -418,7 +418,7 @@ mod tests {
             .unwrap();
 
         assert!(bindings
-            .environment_of(&function)
+            .environment_of(&f_local)
             .inner
             .iter()
             .any(|binding| binding.name == "binding"));
