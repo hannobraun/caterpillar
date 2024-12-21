@@ -154,12 +154,11 @@ fn infer_branch(
                 InferredType::Unknown,
                 &mut inference_context.types,
             ),
-            Parameter::Literal { .. } => {
-                let type_ = inference_context
-                    .types
-                    .push(InferredType::Known(Type::Number));
-                (parameter.location, type_)
-            }
+            Parameter::Literal { .. } => register_binding(
+                parameter.location,
+                InferredType::Known(Type::Number),
+                &mut inference_context.types,
+            ),
         })
         .collect::<BTreeMap<_, _>>();
 
