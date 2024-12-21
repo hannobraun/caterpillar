@@ -27,7 +27,9 @@ pub use self::{
     },
     repr::{
         expression::Expression,
-        function::{Branch, Function, Member, NamedFunction, Parameter},
+        function::{
+            Binding, Branch, Function, Member, NamedFunction, Parameter,
+        },
         syntax_tree::SyntaxTree,
         types::SyntaxType,
     },

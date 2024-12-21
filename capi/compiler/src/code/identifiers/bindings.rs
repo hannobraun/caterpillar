@@ -5,6 +5,8 @@ use crate::code::syntax::{
     SyntaxTree,
 };
 
+use super::Binding;
+
 /// # Tracks bindings
 ///
 /// A binding is an identifier that refers to a value that was previously bound
@@ -46,15 +48,6 @@ impl Bindings {
 
 type BindingsMap = BTreeMap<MemberLocation, Located<Binding>>;
 type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
-
-/// # A binding
-///
-/// A binding is a value that has been bound to a name, locally within a branch.
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct Binding {
-    /// # The name of the binding
-    pub name: String,
-}
 
 /// # The environment of a function
 ///
