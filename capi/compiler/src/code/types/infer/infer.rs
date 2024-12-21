@@ -21,15 +21,15 @@ use super::{
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
-pub fn infer(context: CompilerContext) -> InferenceOutput {
+pub fn infer(compiler_context: CompilerContext) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
-    for cluster in context.dependencies.clusters() {
+    for cluster in compiler_context.dependencies.clusters() {
         if let Err(TypeError {
             expected,
             actual,
             location,
-        }) = infer_cluster(cluster, context, &mut output)
+        }) = infer_cluster(cluster, compiler_context, &mut output)
         {
             let actual = actual
                 .map(|type_| format!("`{type_}`"))
@@ -37,7 +37,10 @@ pub fn infer(context: CompilerContext) -> InferenceOutput {
 
             let location = location
                 .map(|location| {
-                    format!("at {}\n", location.display(context.syntax_tree))
+                    format!(
+                        "at {}\n",
+                        location.display(compiler_context.syntax_tree)
+                    )
                 })
                 .unwrap_or(String::new());
 
