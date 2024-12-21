@@ -220,8 +220,7 @@ fn infer_expression(
             match context.identifiers.is_resolved(&expression.location) {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
-                        let Some(output) =
-                            bindings.get(&binding.location).copied()
+                        let Some(output) = bindings.get(binding).copied()
                         else {
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \
@@ -234,7 +233,7 @@ fn infer_expression(
                                 expression
                                     .location
                                     .display(context.syntax_tree),
-                                binding.location.display(context.syntax_tree),
+                                binding.display(context.syntax_tree),
                             );
                         };
                         let signature = Signature {

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     code::syntax::{
-        Binding, Expression, FunctionLocation, Located, MemberLocation,
+        Expression, FunctionLocation, MemberLocation, ParameterLocation,
         SyntaxTree,
     },
     host::HostFunction,
@@ -50,7 +50,7 @@ impl Identifiers {
                         ) {
                             (Some(binding), None, None, None) => {
                                 IdentifierTarget::Binding(
-                                    binding.clone().cloned(),
+                                    binding.location.clone(),
                                 )
                             }
                             (None, Some(host_function), None, None) => {
@@ -103,7 +103,7 @@ impl Identifiers {
 #[derive(Debug)]
 pub enum IdentifierTarget {
     /// # The identifier resolves to a binding
-    Binding(Located<Binding>),
+    Binding(ParameterLocation),
 
     /// # The identifier resolves to a host function
     HostFunction(HostFunction),
