@@ -33,8 +33,8 @@ impl Bindings {
     pub fn is_binding(
         &self,
         location: &MemberLocation,
-    ) -> Option<Located<&Binding>> {
-        self.bindings.get(location).map(|binding| binding.as_ref())
+    ) -> Option<&ParameterLocation> {
+        self.bindings.get(location).map(|binding| &binding.location)
     }
 
     /// # Access the environment of the function at the provided location
@@ -335,7 +335,7 @@ mod tests {
             .unwrap();
 
         if let Some(binding) = bindings.is_binding(&parameter) {
-            assert_eq!(*binding.location.parent, branch.location);
+            assert_eq!(*binding.parent, branch.location);
         } else {
             panic!("Expected identifier to be a binding.");
         }

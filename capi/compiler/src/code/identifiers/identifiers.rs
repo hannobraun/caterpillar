@@ -43,15 +43,13 @@ impl Identifiers {
                             );
 
                         let target = match (
-                            binding.as_ref(),
+                            binding,
                             host_function,
                             intrinsic_function,
                             user_defined_function,
                         ) {
                             (Some(binding), None, None, None) => {
-                                IdentifierTarget::Binding(
-                                    binding.location.clone(),
-                                )
+                                IdentifierTarget::Binding(binding.clone())
                             }
                             (None, Some(host_function), None, None) => {
                                 IdentifierTarget::HostFunction(
