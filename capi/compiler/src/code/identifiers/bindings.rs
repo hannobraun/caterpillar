@@ -421,7 +421,7 @@ mod tests {
             .environment_of(&f_local)
             .inner
             .iter()
-            .any(|binding| binding.name == "binding"));
+            .any(|b| b.name == "binding"));
     }
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
