@@ -156,8 +156,6 @@ fn infer_branch(
         .chain(parameters.clone())
         .collect::<BTreeMap<_, _>>();
 
-    let inputs = parameters.into_values().collect();
-
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -212,6 +210,7 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
+    let inputs = parameters.into_values().collect();
     let outputs = local_stack.get().cloned();
 
     Ok((inputs, outputs))
