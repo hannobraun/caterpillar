@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt::Write};
+use std::collections::BTreeMap;
 
 use array_util::ArrayExt;
 
@@ -226,21 +226,6 @@ fn infer_expression(
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = bindings.get(binding).copied()
                         else {
-                            let mut available_bindings = String::new();
-                            for (binding, type_) in bindings {
-                                let Binding { name } = &binding.fragment;
-                                let type_ = local_types.resolve(type_)?;
-                                write!(
-                                    available_bindings,
-                                    "- `{name}` at {}: \
-                                    {type_:?}",
-                                    binding
-                                        .location
-                                        .display(context.syntax_tree),
-                                )
-                                .expect("Writing to `String` can not fail.");
-                            }
-
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \
                                 as binding, but it is not known in the branch. \
@@ -248,10 +233,7 @@ fn infer_expression(
                                 \n\
                                 at {}\n\
                                 \n\
-                                binding at {}\n\
-                                \n\
-                                Available bindings in branch:\n\
-                                {available_bindings}",
+                                binding at {}\n",
                                 expression
                                     .location
                                     .display(context.syntax_tree),
