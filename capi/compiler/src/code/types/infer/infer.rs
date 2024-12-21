@@ -79,7 +79,6 @@ fn infer_cluster(
     output: &mut InferenceOutput,
 ) -> Result<()> {
     let mut inference_context = InferenceContext::default();
-    let mut types = InferredTypes::default();
 
     for branch in cluster.branches(compiler_context.syntax_tree) {
         let function = (*branch.location.parent).clone();
@@ -90,7 +89,6 @@ fn infer_cluster(
             branch,
             environment,
             &mut inference_context,
-            &mut types,
             compiler_context,
             output,
         )?;
@@ -103,7 +101,7 @@ fn infer_cluster(
             {
                 signature::unify(
                     [&branch_signature, function_signature],
-                    &mut types,
+                    &mut inference_context.types,
                 );
             }
 
@@ -114,7 +112,9 @@ fn infer_cluster(
     }
 
     for (function, signature) in inference_context.functions {
-        if let Some(signature) = signature::make_direct(&signature, &types)? {
+        if let Some(signature) =
+            signature::make_direct(&signature, &inference_context.types)?
+        {
             output.functions.insert(function, signature);
         }
     }
@@ -127,7 +127,6 @@ fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
     inference_context: &mut InferenceContext,
-    local_types: &mut InferredTypes,
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
@@ -148,11 +147,14 @@ fn infer_branch(
     let parameters = branch
         .parameters()
         .map(|parameter| match parameter.fragment {
-            Parameter::Binding(_) => {
-                register_binding(parameter.location, local_types)
-            }
+            Parameter::Binding(_) => register_binding(
+                parameter.location,
+                &mut inference_context.types,
+            ),
             Parameter::Literal { .. } => {
-                let type_ = local_types.push(InferredType::Known(Type::Number));
+                let type_ = inference_context
+                    .types
+                    .push(InferredType::Known(Type::Number));
                 (parameter.location, type_)
             }
         })
@@ -160,7 +162,9 @@ fn infer_branch(
 
     let bindings = environment
         .bindings(compiler_context.syntax_tree)
-        .map(|binding| register_binding(binding.location, local_types))
+        .map(|binding| {
+            register_binding(binding.location, &mut inference_context.types)
+        })
         .chain(parameters.clone())
         .collect::<BTreeMap<_, _>>();
 
@@ -179,7 +183,6 @@ fn infer_branch(
             &bindings,
             &output.functions,
             inference_context,
-            local_types,
             &mut local_stack,
             compiler_context,
         )?;
@@ -193,7 +196,8 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        let Some(signature) = signature::make_direct(&signature, local_types)?
+        let Some(signature) =
+            signature::make_direct(&signature, &inference_context.types)?
         else {
             continue;
         };
@@ -210,7 +214,8 @@ fn infer_branch(
         output.expressions.insert(location, signature);
     }
     for (location, local_stack) in stacks {
-        let Some(local_stack) = make_stack_direct(&local_stack, local_types)?
+        let Some(local_stack) =
+            make_stack_direct(&local_stack, &inference_context.types)?
         else {
             continue;
         };
@@ -229,7 +234,6 @@ fn infer_expression(
     bindings: &BTreeMap<ParameterLocation, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
     inference_context: &mut InferenceContext,
-    local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
     compiler_context: CompilerContext,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
@@ -237,7 +241,9 @@ fn infer_expression(
         .annotations
         .signature_of(&expression.location)
         .cloned()
-        .map(|signature| signature::make_indirect(signature, local_types));
+        .map(|signature| {
+            signature::make_indirect(signature, &mut inference_context.types)
+        });
 
     let inferred = match expression.fragment {
         Expression::Identifier { name: identifier } => {
@@ -272,7 +278,7 @@ fn infer_expression(
                     IdentifierTarget::HostFunction(host) => {
                         let signature = signature::make_indirect(
                             host.signature.clone(),
-                            local_types,
+                            &mut inference_context.types,
                         );
                         Some(signature)
                     }
@@ -280,12 +286,15 @@ fn infer_expression(
                         let signature = infer_intrinsic(
                             intrinsic,
                             &expression.location,
-                            local_types,
+                            &mut inference_context.types,
                             local_stack,
                         )?;
 
                         signature.map(|signature| {
-                            signature::make_indirect(signature, local_types)
+                            signature::make_indirect(
+                                signature,
+                                &mut inference_context.types,
+                            )
                         })
                     }
                     IdentifierTarget::UserDefinedFunction(user_defined) => {
@@ -294,7 +303,7 @@ fn infer_expression(
                             .map(|signature| {
                                 signature::make_indirect(
                                     signature.clone(),
-                                    local_types,
+                                    &mut inference_context.types,
                                 )
                             })
                             .or_else(|| {
@@ -313,7 +322,10 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature = signature::make_indirect(signature, local_types);
+            let signature = signature::make_indirect(
+                signature,
+                &mut inference_context.types,
+            );
             Some(signature)
         }
         Expression::LocalFunction { .. } => {
@@ -325,7 +337,10 @@ fn infer_expression(
                         signature: signature.clone(),
                     }],
                 };
-                signature::make_indirect(signature, local_types)
+                signature::make_indirect(
+                    signature,
+                    &mut inference_context.types,
+                )
             })
         }
     };
@@ -337,7 +352,8 @@ fn infer_expression(
         [explicit.as_ref(), inferred.as_ref()].try_map_ext(|signature| {
             signature
                 .and_then(|signature| {
-                    signature::make_direct(signature, local_types).transpose()
+                    signature::make_direct(signature, &inference_context.types)
+                        .transpose()
                 })
                 .transpose()
         })?
@@ -362,7 +378,7 @@ fn infer_expression(
         (Some(inferred), Some(explicit)) => {
             let mut merge = |a: &Vec<Index<InferredType>>, b| {
                 for (index_a, index_b) in a.iter().zip(b) {
-                    local_types.unify([index_a, index_b]);
+                    inference_context.types.unify([index_a, index_b]);
                 }
             };
 
@@ -379,10 +395,10 @@ fn infer_expression(
             for input in signature.inputs.iter().rev() {
                 match local_stack.pop() {
                     Some(operand) => {
-                        local_types.unify([&operand, input]);
+                        inference_context.types.unify([&operand, input]);
                     }
                     None => {
-                        let input = local_types.resolve(input)?;
+                        let input = inference_context.types.resolve(input)?;
 
                         return Err(TypeError {
                             expected: input.into_expected_type(),
