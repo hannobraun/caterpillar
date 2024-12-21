@@ -65,7 +65,10 @@ impl Environment {
     }
 
     /// # Iterate over the bindings in the environment
-    pub fn bindings(&self) -> impl Iterator<Item = &Located<Binding>> {
+    pub fn bindings(
+        &self,
+        _: &SyntaxTree,
+    ) -> impl Iterator<Item = &Located<Binding>> {
         self.inner.iter()
     }
 }
