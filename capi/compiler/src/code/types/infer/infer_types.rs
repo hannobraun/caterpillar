@@ -5,8 +5,8 @@ use array_util::ArrayExt;
 use crate::{
     code::{
         syntax::{
-            Binding, Branch, Expression, FunctionLocation, Located,
-            MemberLocation, Parameter, ParameterLocation, SyntaxTree,
+            Branch, Expression, FunctionLocation, Located, MemberLocation,
+            Parameter, ParameterLocation, SyntaxTree,
         },
         types::repr::Stacks,
         Bindings, Dependencies, DependencyCluster, Environment,
@@ -137,38 +137,26 @@ fn infer_branch(
             (location, type_)
         };
 
-    let bindings = branch
-        .bindings()
-        .chain(environment.bindings(context.syntax_tree))
-        .map(|binding| register_binding(binding.location, local_types))
-        .collect::<BTreeMap<_, _>>();
-
-    let inputs = branch
-        .parameters
-        .values()
-        .map(|parameter| match parameter {
-            Parameter::Binding(Binding { name }) => {
-                let Some(binding) =
-                    branch.bindings().find(|binding| binding.name == *name)
-                else {
-                    unreachable!(
-                        "Parameter of branch not recognized as a binding."
-                    );
-                };
-
-                let Some(type_) = bindings.get(&binding.location) else {
-                    unreachable!(
-                        "Parameter of branch not tracked in `bindings`."
-                    );
-                };
-
-                *type_
+    let parameters = branch
+        .parameters()
+        .map(|parameter| match parameter.fragment {
+            Parameter::Binding(_) => {
+                register_binding(parameter.location, local_types)
             }
             Parameter::Literal { .. } => {
-                local_types.push(InferredType::Known(Type::Number))
+                let type_ = local_types.push(InferredType::Known(Type::Number));
+                (parameter.location, type_)
             }
         })
-        .collect();
+        .collect::<BTreeMap<_, _>>();
+
+    let bindings = environment
+        .bindings(context.syntax_tree)
+        .map(|binding| register_binding(binding.location, local_types))
+        .chain(parameters.clone())
+        .collect::<BTreeMap<_, _>>();
+
+    let inputs = parameters.into_values().collect();
 
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
