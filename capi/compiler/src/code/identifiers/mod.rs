@@ -7,5 +7,3 @@ pub use self::{
     function_calls::FunctionCalls,
     identifiers::{IdentifierTarget, Identifiers},
 };
-
-pub use super::syntax::Binding;

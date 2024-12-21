@@ -18,8 +18,7 @@ pub use self::{
     functions::Functions,
     hash::Hash,
     identifiers::{
-        Binding, Bindings, Environment, FunctionCalls, IdentifierTarget,
-        Identifiers,
+        Bindings, Environment, FunctionCalls, IdentifierTarget, Identifiers,
     },
     index::{Index, IndexMap},
     recursion::Recursion,
@@ -27,3 +26,5 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{Signature, Type, TypeAnnotations, Types},
 };
+
+pub use self::syntax::Binding;
