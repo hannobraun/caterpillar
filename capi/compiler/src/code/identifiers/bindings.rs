@@ -34,7 +34,7 @@ impl Bindings {
         &self,
         location: &MemberLocation,
     ) -> Option<&ParameterLocation> {
-        self.bindings.get(location).map(|binding| &binding.location)
+        self.bindings.get(location)
     }
 
     /// # Access the environment of the function at the provided location
@@ -44,7 +44,7 @@ impl Bindings {
     }
 }
 
-type BindingsMap = BTreeMap<MemberLocation, Located<Binding>>;
+type BindingsMap = BTreeMap<MemberLocation, ParameterLocation>;
 type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 
 /// # The environment of a function
@@ -161,7 +161,8 @@ fn resolve_bindings_in_branch(
                 });
 
                 if let Some(binding) = binding {
-                    bindings.insert(expression.location, binding.clone());
+                    bindings
+                        .insert(expression.location, binding.location.clone());
 
                     if let Some(scope) = scopes.last() {
                         if !scope.contains_key(&binding.location) {
