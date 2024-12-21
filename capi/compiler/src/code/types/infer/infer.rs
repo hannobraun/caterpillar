@@ -21,7 +21,7 @@ use super::{
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
-pub fn infer(context: Context) -> InferenceOutput {
+pub fn infer(context: CompilerContext) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {
@@ -54,7 +54,7 @@ pub fn infer(context: Context) -> InferenceOutput {
 }
 
 #[derive(Clone, Copy)]
-pub struct Context<'r> {
+pub struct CompilerContext<'r> {
     pub syntax_tree: &'r SyntaxTree,
     pub bindings: &'r Bindings,
     pub identifiers: &'r Identifiers,
@@ -72,7 +72,7 @@ pub struct InferenceOutput {
 
 fn infer_cluster(
     cluster: &DependencyCluster,
-    context: Context,
+    context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<()> {
     let mut cluster_functions = BTreeMap::new();
@@ -121,7 +121,7 @@ fn infer_branch(
     environment: &Environment,
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
-    context: Context,
+    context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
     let mut local_stack = LocalStack::default();
@@ -224,7 +224,7 @@ fn infer_expression(
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
-    context: Context,
+    context: CompilerContext,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = context
         .annotations
