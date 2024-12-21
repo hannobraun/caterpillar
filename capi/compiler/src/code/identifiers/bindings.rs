@@ -65,6 +65,11 @@ impl Environment {
     }
 
     /// # Iterate over the bindings in the environment
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if a binding tracked in this [`Environment`] can not be found in
+    /// the provided [`SyntaxTree`].
     pub fn bindings<'r>(
         &'r self,
         syntax_tree: &'r SyntaxTree,
