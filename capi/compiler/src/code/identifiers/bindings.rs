@@ -401,9 +401,8 @@ mod tests {
             .function_by_name("f")
             .unwrap()
             .into_located_function();
-        let function = f
-            .find_single_branch()
-            .unwrap()
+        let branch = f.find_single_branch().unwrap();
+        let function = branch
             .expressions()
             .filter_map(|expression| {
                 if let Expression::LocalFunction { function: _ } =
