@@ -125,15 +125,15 @@ fn infer_branch(
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
     let mut local_stack = LocalStack::default();
 
-    let mut register_binding = |binding: ParameterLocation| {
+    let mut register_binding = |location: ParameterLocation| {
         let type_ = output
             .bindings
-            .get(&binding)
+            .get(&location)
             .cloned()
             .map(InferredType::Known)
             .unwrap_or(InferredType::Unknown);
         let type_ = local_types.push(type_);
-        (binding, type_)
+        (location, type_)
     };
 
     let bindings = branch
