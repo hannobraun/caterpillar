@@ -273,9 +273,8 @@ mod tests {
             .function_by_name("f")
             .unwrap()
             .into_located_function();
-        let f_local = f
-            .find_single_branch()
-            .unwrap()
+        let f_branch = f.find_single_branch().unwrap();
+        let f_local = f_branch
             .expressions()
             .filter_map(|expression| expression.into_local_function())
             .next()
