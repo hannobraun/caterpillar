@@ -1,11 +1,14 @@
 use std::iter;
 
 use crate::code::{
-    syntax::{parse::parse, BranchLocation, FunctionLocation, Located},
+    syntax::{
+        parse::parse, BranchLocation, FunctionLocation, Located,
+        ParameterLocation,
+    },
     IndexMap, Tokens,
 };
 
-use super::function::{Branch, Function, NamedFunction};
+use super::function::{Binding, Branch, Function, NamedFunction, Parameter};
 
 /// # The syntax tree
 ///
@@ -63,6 +66,26 @@ impl SyntaxTree {
 
         Some(Located {
             fragment: branch,
+            location: location.clone(),
+        })
+    }
+
+    /// # Find the binding at the provided location
+    ///
+    /// Returns `None`, if no binding can be found at this location.
+    pub fn binding_by_location<'r>(
+        &'r self,
+        location: &ParameterLocation,
+    ) -> Option<Located<&'r Binding>> {
+        let branch = self.branch_by_location(&location.parent)?;
+        let parameter = branch.parameters.get(&location.index)?;
+
+        let Parameter::Binding(binding) = parameter else {
+            return None;
+        };
+
+        Some(Located {
+            fragment: binding,
             location: location.clone(),
         })
     }
