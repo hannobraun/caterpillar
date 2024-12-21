@@ -227,9 +227,9 @@ fn infer_expression(
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
-    context: CompilerContext,
+    compiler_context: CompilerContext,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
-    let explicit = context
+    let explicit = compiler_context
         .annotations
         .signature_of(&expression.location)
         .cloned()
@@ -237,7 +237,10 @@ fn infer_expression(
 
     let inferred = match expression.fragment {
         Expression::Identifier { name: identifier } => {
-            match context.identifiers.is_resolved(&expression.location) {
+            match compiler_context
+                .identifiers
+                .is_resolved(&expression.location)
+            {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = bindings.get(binding).copied()
@@ -252,8 +255,8 @@ fn infer_expression(
                                 binding at {}\n",
                                 expression
                                     .location
-                                    .display(context.syntax_tree),
-                                binding.display(context.syntax_tree),
+                                    .display(compiler_context.syntax_tree),
+                                binding.display(compiler_context.syntax_tree),
                             );
                         };
                         let signature = Signature {
@@ -344,7 +347,7 @@ fn infer_expression(
             \n\
             At {}\n",
             expression.fragment,
-            expression.location.display(context.syntax_tree),
+            expression.location.display(compiler_context.syntax_tree),
         );
     }
 
