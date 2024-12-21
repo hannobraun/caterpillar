@@ -231,7 +231,7 @@ mod tests {
     use super::{TypeAnnotations, Types};
 
     #[test]
-    fn infer_type_of_binding() {
+    fn infer_type_of_binding_from_use() {
         // The type of a binding can be inferred, if it's used by a function
         // with a known type.
 
