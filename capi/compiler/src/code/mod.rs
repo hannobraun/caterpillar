@@ -26,5 +26,3 @@ pub use self::{
     tokens::{Token, Tokens},
     types::{Signature, Type, TypeAnnotations, Types},
 };
-
-pub use self::syntax::Binding;
