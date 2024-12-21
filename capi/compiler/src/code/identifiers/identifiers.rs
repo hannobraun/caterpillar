@@ -2,13 +2,14 @@ use std::collections::BTreeMap;
 
 use crate::{
     code::syntax::{
-        Expression, FunctionLocation, Located, MemberLocation, SyntaxTree,
+        Binding, Expression, FunctionLocation, Located, MemberLocation,
+        SyntaxTree,
     },
     host::HostFunction,
     intrinsics::IntrinsicFunction,
 };
 
-use super::{Binding, Bindings, FunctionCalls};
+use super::{Bindings, FunctionCalls};
 
 /// # Tracks which targets identifiers have been resolved to
 #[derive(Debug)]

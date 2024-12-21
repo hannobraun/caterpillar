@@ -1,11 +1,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::code::syntax::{
-    Branch, Expression, Function, FunctionLocation, Located, MemberLocation,
-    SyntaxTree,
+    Binding, Branch, Expression, Function, FunctionLocation, Located,
+    MemberLocation, SyntaxTree,
 };
-
-use super::Binding;
 
 /// # Tracks bindings
 ///
