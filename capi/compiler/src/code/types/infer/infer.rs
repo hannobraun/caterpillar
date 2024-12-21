@@ -124,7 +124,7 @@ fn infer_branch(
     environment: &Environment,
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
-    context: CompilerContext,
+    compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
     let mut local_stack = LocalStack::default();
@@ -155,7 +155,7 @@ fn infer_branch(
         .collect::<BTreeMap<_, _>>();
 
     let bindings = environment
-        .bindings(context.syntax_tree)
+        .bindings(compiler_context.syntax_tree)
         .map(|binding| register_binding(binding.location, local_types))
         .chain(parameters.clone())
         .collect::<BTreeMap<_, _>>();
@@ -177,7 +177,7 @@ fn infer_branch(
             cluster_functions,
             local_types,
             &mut local_stack,
-            context,
+            compiler_context,
         )?;
 
         if let Some(signature) = signature {
@@ -194,7 +194,7 @@ fn infer_branch(
             continue;
         };
 
-        if let Some(binding) = context.bindings.is_binding(&location) {
+        if let Some(binding) = compiler_context.bindings.is_binding(&location) {
             assert_eq!(signature.inputs.len(), 0);
             assert_eq!(signature.outputs.len(), 1);
 
