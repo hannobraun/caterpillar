@@ -53,7 +53,7 @@ type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 /// not its own parameters.
 #[derive(Clone, Debug)]
 pub struct Environment {
-    pub inner: BTreeSet<Located<Binding>>,
+    inner: BTreeSet<Located<Binding>>,
 }
 
 impl Environment {
