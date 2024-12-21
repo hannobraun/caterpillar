@@ -99,6 +99,19 @@ pub enum Parameter {
     },
 }
 
+impl Parameter {
+    /// # Convert this parameter into a binding
+    ///
+    /// Returns `None`, if the parameter is not a binding.
+    pub fn as_binding(&self) -> Option<&Binding> {
+        let Self::Binding(binding) = self else {
+            return None;
+        };
+
+        Some(binding)
+    }
+}
+
 /// # A binding
 ///
 /// A binding is a value that has been bound to a name, locally within a branch.
