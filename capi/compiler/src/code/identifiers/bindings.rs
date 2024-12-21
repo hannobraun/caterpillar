@@ -295,9 +295,8 @@ mod tests {
 
         assert!(bindings
             .environment_of(&f_local.location)
-            .inner
-            .iter()
-            .any(|b| b.as_ref() == binding.as_ref()));
+            .bindings(&syntax_tree)
+            .any(|b| b == binding.as_ref()));
     }
 
     #[test]
@@ -421,9 +420,8 @@ mod tests {
 
         assert!(bindings
             .environment_of(&f_local)
-            .inner
-            .iter()
-            .any(|b| b.as_ref() == binding.as_ref()));
+            .bindings(&syntax_tree)
+            .any(|b| b == binding.as_ref()));
     }
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
