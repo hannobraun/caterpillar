@@ -260,8 +260,8 @@ fn infer_expression(
             {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
-                        let Some(output) =
-                            inference_context.bindings.get(binding).copied()
+                        let Some(output) = inference_context
+                            .binding(binding, &output.bindings)
                         else {
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \

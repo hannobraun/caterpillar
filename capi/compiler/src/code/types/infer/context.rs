@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::code::{
     syntax::{FunctionLocation, ParameterLocation},
-    Index, Signature,
+    Index, Signature, Type,
 };
 
 use super::{
@@ -29,5 +29,16 @@ impl InferenceContext {
                 signature::make_indirect(signature.clone(), &mut self.types)
             })
             .or_else(|| self.functions.get(location).cloned())
+    }
+
+    pub fn binding(
+        &mut self,
+        location: &ParameterLocation,
+        bindings: &BTreeMap<ParameterLocation, Type>,
+    ) -> Option<Index<InferredType>> {
+        bindings
+            .get(location)
+            .map(|type_| self.types.push(InferredType::Known(type_.clone())))
+            .or_else(|| self.bindings.get(location).cloned())
     }
 }
