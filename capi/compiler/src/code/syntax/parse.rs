@@ -195,7 +195,7 @@ fn parse_branch_parameters(
 
 fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Parameter>> {
     let parameter = match tokens.take()? {
-        Token::Identifier { name } => Some(Parameter::Identifier { name }),
+        Token::Identifier { name } => Some(Parameter::Binding { name }),
         Token::IntegerLiteral { value } => Some(Parameter::Literal {
             value: value.into(),
         }),

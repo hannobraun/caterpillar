@@ -86,7 +86,7 @@ pub enum Parameter {
     ///
     /// Identifiers match against any value. They are used to assign a local
     /// name to a value.
-    Identifier {
+    Binding {
         /// # The name that is assigned to the value, once matched
         name: String,
     },

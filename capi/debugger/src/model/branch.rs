@@ -59,7 +59,7 @@ impl DebugBranch {
             .parameters
             .into_values()
             .map(|parameter| match parameter {
-                Parameter::Identifier { name } => name,
+                Parameter::Binding { name } => name,
                 Parameter::Literal { value } => format!("{value:?}"),
             })
             .collect();
