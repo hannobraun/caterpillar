@@ -168,6 +168,10 @@ fn infer_branch(
         .chain(parameters.clone())
         .collect::<BTreeMap<_, _>>();
 
+    for (location, type_) in bindings {
+        inference_context.bindings.insert(location, type_);
+    }
+
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
 
@@ -180,7 +184,6 @@ fn infer_branch(
 
         let signature = infer_expression(
             expression,
-            &bindings,
             &output.functions,
             inference_context,
             &mut local_stack,
@@ -231,7 +234,6 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    bindings: &BTreeMap<ParameterLocation, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
     inference_context: &mut InferenceContext,
     local_stack: &mut LocalStack,
@@ -253,7 +255,8 @@ fn infer_expression(
             {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
-                        let Some(output) = bindings.get(binding).copied()
+                        let Some(output) =
+                            inference_context.bindings.get(binding).copied()
                         else {
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \
