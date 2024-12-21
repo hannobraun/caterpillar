@@ -208,8 +208,7 @@ fn resolve_bindings_in_branch(
     scopes.pop();
 }
 
-type Scopes = Vec<BindingsInScope>;
-type BindingsInScope = BTreeMap<String, Located<Binding>>;
+type Scopes = Vec<BTreeMap<String, Located<Binding>>>;
 
 #[cfg(test)]
 mod tests {
