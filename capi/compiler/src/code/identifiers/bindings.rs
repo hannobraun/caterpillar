@@ -269,10 +269,11 @@ mod tests {
             ",
         );
 
-        let f_local = syntax_tree
+        let f = syntax_tree
             .function_by_name("f")
             .unwrap()
-            .into_located_function()
+            .into_located_function();
+        let f_local = f
             .find_single_branch()
             .unwrap()
             .expressions()
