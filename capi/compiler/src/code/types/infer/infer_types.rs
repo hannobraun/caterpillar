@@ -6,7 +6,7 @@ use crate::{
     code::{
         syntax::{
             Binding, Branch, Expression, FunctionLocation, Located,
-            MemberLocation, Parameter, SyntaxTree,
+            MemberLocation, Parameter, ParameterLocation, SyntaxTree,
         },
         types::repr::Stacks,
         Bindings, Dependencies, DependencyCluster, Environment,
@@ -140,7 +140,7 @@ fn infer_branch(
                 .map(InferredType::Known)
                 .unwrap_or(InferredType::Unknown);
             let type_ = local_types.push(type_);
-            (binding, type_)
+            (binding.location, type_)
         })
         .collect();
 
@@ -206,7 +206,7 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    bindings: &BTreeMap<Located<Binding>, Index<InferredType>>,
+    bindings: &BTreeMap<ParameterLocation, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
     cluster_functions: &mut ClusterFunctions,
     local_types: &mut InferredTypes,
@@ -224,7 +224,8 @@ fn infer_expression(
             match context.identifiers.is_resolved(&expression.location) {
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
-                        let Some(output) = bindings.get(binding).copied()
+                        let Some(output) =
+                            bindings.get(&binding.location).copied()
                         else {
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \
@@ -458,7 +459,7 @@ fn infer_intrinsic(
 
 fn infer_branch_signature(
     branch: Located<&Branch>,
-    bindings: BTreeMap<Located<Binding>, Index<InferredType>>,
+    bindings: BTreeMap<ParameterLocation, Index<InferredType>>,
     local_types: &mut InferredTypes,
     local_stack: LocalStack,
 ) -> (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>) {
@@ -475,7 +476,7 @@ fn infer_branch_signature(
                     );
                 };
 
-                let Some(type_) = bindings.get(&binding) else {
+                let Some(type_) = bindings.get(&binding.location) else {
                     unreachable!(
                         "Parameter of branch not tracked in `bindings`."
                     );
