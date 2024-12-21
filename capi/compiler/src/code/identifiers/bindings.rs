@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::code::syntax::{
     Binding, Branch, Expression, Function, FunctionLocation, Located,
-    MemberLocation, SyntaxTree,
+    MemberLocation, ParameterLocation, SyntaxTree,
 };
 
 /// # Tracks bindings
@@ -150,7 +150,7 @@ fn resolve_bindings_in_branch(
     scopes.push(
         branch
             .bindings()
-            .map(|binding| (binding.name.clone(), binding))
+            .map(|binding| (binding.location.clone(), binding))
             .collect(),
     );
 
@@ -165,7 +165,7 @@ fn resolve_bindings_in_branch(
                     bindings.insert(expression.location, binding.clone());
 
                     if let Some(scope) = scopes.last() {
-                        if !scope.contains_key(name) {
+                        if !scope.contains_key(&binding.location) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
                             environment.inner.insert(binding.clone());
@@ -188,7 +188,7 @@ fn resolve_bindings_in_branch(
 
                 for binding in child_environment.inner {
                     if let Some(bindings) = scopes.last() {
-                        if !bindings.contains_key(&binding.name) {
+                        if !bindings.contains_key(&binding.location) {
                             // The child function that we just resolved bindings
                             // in has a function in its environment that is not
                             // known in the current scope.
@@ -208,7 +208,7 @@ fn resolve_bindings_in_branch(
     scopes.pop();
 }
 
-type Scopes = Vec<BTreeMap<String, Located<Binding>>>;
+type Scopes = Vec<BTreeMap<ParameterLocation, Located<Binding>>>;
 
 #[cfg(test)]
 mod tests {
