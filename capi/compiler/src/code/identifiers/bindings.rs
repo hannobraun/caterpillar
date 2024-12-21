@@ -149,7 +149,7 @@ fn resolve_bindings_in_branch(
     scopes.push(
         branch
             .bindings()
-            .map(|binding| (binding.location.clone(), binding))
+            .map(|binding| (binding.location.clone(), binding.cloned()))
             .collect(),
     );
 
@@ -295,7 +295,7 @@ mod tests {
         assert!(bindings
             .environment_of(&f_local.location)
             .bindings(&syntax_tree)
-            .any(|b| b == binding.as_ref()));
+            .any(|b| b == binding));
     }
 
     #[test]
@@ -420,7 +420,7 @@ mod tests {
         assert!(bindings
             .environment_of(&f_local)
             .bindings(&syntax_tree)
-            .any(|b| b == binding.as_ref()));
+            .any(|b| b == binding));
     }
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {

@@ -85,7 +85,7 @@ fn compile_branch(
         for expression in branch.expressions() {
             let bindings = branch
                 .bindings()
-                .map(|binding| binding.fragment)
+                .map(|binding| binding.fragment.clone())
                 .chain(
                     functions_context
                         .bindings
