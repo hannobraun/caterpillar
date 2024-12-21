@@ -125,19 +125,21 @@ fn infer_branch(
 ) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
     let mut local_stack = LocalStack::default();
 
+    let register_binding = |binding: Located<&Binding>| {
+        let type_ = output
+            .bindings
+            .get(&binding.location)
+            .cloned()
+            .map(InferredType::Known)
+            .unwrap_or(InferredType::Unknown);
+        let type_ = local_types.push(type_);
+        (binding.location, type_)
+    };
+
     let bindings = branch
         .bindings()
         .chain(environment.bindings(context.syntax_tree))
-        .map(|binding| {
-            let type_ = output
-                .bindings
-                .get(&binding.location)
-                .cloned()
-                .map(InferredType::Known)
-                .unwrap_or(InferredType::Unknown);
-            let type_ = local_types.push(type_);
-            (binding.location, type_)
-        })
+        .map(register_binding)
         .collect();
 
     let mut signatures = BTreeMap::new();
