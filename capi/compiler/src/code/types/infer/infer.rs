@@ -297,9 +297,9 @@ fn infer_expression(
                             )
                         })
                     }
-                    IdentifierTarget::UserDefinedFunction(user_defined) => {
+                    IdentifierTarget::UserDefinedFunction(location) => {
                         functions
-                            .get(user_defined)
+                            .get(location)
                             .map(|signature| {
                                 signature::make_indirect(
                                     signature.clone(),
@@ -309,7 +309,7 @@ fn infer_expression(
                             .or_else(|| {
                                 inference_context
                                     .functions
-                                    .get(user_defined)
+                                    .get(location)
                                     .cloned()
                             })
                     }
