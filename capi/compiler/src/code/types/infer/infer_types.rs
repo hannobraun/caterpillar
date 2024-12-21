@@ -20,7 +20,7 @@ use super::{
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
-pub fn infer_types(context: Context) -> InferenceOutput {
+pub fn infer(context: Context) -> InferenceOutput {
     let mut output = InferenceOutput::default();
 
     for cluster in context.dependencies.clusters() {

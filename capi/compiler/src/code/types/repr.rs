@@ -6,7 +6,7 @@ use crate::code::{
 };
 
 use super::{
-    infer::{infer_types, Context, InferenceOutput},
+    infer::{infer, Context, InferenceOutput},
     resolve::resolve_type_annotations,
 };
 
@@ -64,7 +64,7 @@ impl Types {
             expressions,
             bindings: _,
             stacks,
-        } = infer_types(Context {
+        } = infer(Context {
             syntax_tree,
             bindings,
             identifiers,
