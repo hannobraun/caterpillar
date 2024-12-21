@@ -5,11 +5,11 @@ use array_util::ArrayExt;
 use crate::{
     code::{
         syntax::{
-            Branch, Expression, FunctionLocation, Located, MemberLocation,
-            Parameter, SyntaxTree,
+            Binding, Branch, Expression, FunctionLocation, Located,
+            MemberLocation, Parameter, SyntaxTree,
         },
         types::repr::Stacks,
-        Binding, Bindings, Dependencies, DependencyCluster, Environment,
+        Bindings, Dependencies, DependencyCluster, Environment,
         IdentifierTarget, Identifiers, Index, Signature, Type, TypeAnnotations,
     },
     intrinsics::IntrinsicFunction,

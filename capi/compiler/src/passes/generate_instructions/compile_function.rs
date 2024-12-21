@@ -3,11 +3,9 @@ use std::collections::{BTreeMap, BTreeSet};
 use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
 
 use crate::{
-    code::{
-        syntax::{
-            Branch, Expression, Function, FunctionLocation, Located, Parameter,
-        },
-        Binding,
+    code::syntax::{
+        Binding, Branch, Expression, Function, FunctionLocation, Located,
+        Parameter,
     },
     intrinsics::IntrinsicFunction,
     source_map::Mapping,

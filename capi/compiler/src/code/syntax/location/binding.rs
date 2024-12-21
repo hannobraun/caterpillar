@@ -1,4 +1,4 @@
-use crate::code::Binding;
+use crate::code::syntax::Binding;
 
 use super::{located::HasLocation, ParameterLocation};
 

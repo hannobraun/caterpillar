@@ -2,9 +2,10 @@ use std::{fmt, iter};
 
 use crate::code::{
     syntax::{
-        Branch, Expression, Function, Member, Parameter, SyntaxTree, SyntaxType,
+        Binding, Branch, Expression, Function, Member, Parameter, SyntaxTree,
+        SyntaxType,
     },
-    Binding, Index, Signature,
+    Index, Signature,
 };
 
 use super::{
