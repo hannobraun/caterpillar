@@ -105,7 +105,17 @@ pub enum Parameter {
 /// # A binding
 ///
 /// A binding is a value that has been bound to a name, locally within a branch.
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
 pub struct Binding {
     /// # The name of the binding
     pub name: String,
