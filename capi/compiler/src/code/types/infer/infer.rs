@@ -75,23 +75,23 @@ pub struct InferenceOutput {
 
 fn infer_cluster(
     cluster: &DependencyCluster,
-    context: CompilerContext,
+    compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<()> {
     let mut cluster_functions = BTreeMap::new();
     let mut types = InferredTypes::default();
 
-    for branch in cluster.branches(context.syntax_tree) {
+    for branch in cluster.branches(compiler_context.syntax_tree) {
         let function = (*branch.location.parent).clone();
 
-        let environment = context.bindings.environment_of(&function);
+        let environment = compiler_context.bindings.environment_of(&function);
 
         let (inputs, outputs) = infer_branch(
             branch,
             environment,
             &mut cluster_functions,
             &mut types,
-            context,
+            compiler_context,
             output,
         )?;
 
