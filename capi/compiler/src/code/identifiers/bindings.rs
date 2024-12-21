@@ -296,7 +296,7 @@ mod tests {
             .environment_of(&f_local.location)
             .inner
             .iter()
-            .any(|binding| binding.name == "parameter"));
+            .any(|b| b.name == "parameter"));
     }
 
     #[test]
