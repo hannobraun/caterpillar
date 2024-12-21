@@ -16,6 +16,7 @@ use crate::{
 };
 
 use super::{
+    context::ClusterFunctions,
     signature,
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
@@ -477,9 +478,6 @@ fn make_stack_direct(
         .map(|index| Ok(local_types.resolve(index)?.into_type()))
         .collect()
 }
-
-type ClusterFunctions =
-    BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
 
 #[derive(Debug)]
 struct LocalStack {
