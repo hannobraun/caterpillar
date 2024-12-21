@@ -51,7 +51,25 @@ type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 ///
 /// The environment of a function is the set of bindings it accesses, that are
 /// not its own parameters.
-pub type Environment = BTreeSet<Located<Binding>>;
+#[derive(Clone, Debug)]
+pub struct Environment {
+    pub inner: BTreeSet<Located<Binding>>,
+}
+
+impl Environment {
+    /// # Create a new instance of [`Environment`]
+    pub const fn new() -> Self {
+        Self {
+            inner: BTreeSet::new(),
+        }
+    }
+}
+
+impl Default for Environment {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 fn resolve_bindings(
     syntax_tree: &SyntaxTree,
@@ -126,7 +144,7 @@ fn resolve_bindings_in_branch(
                         if !scope.contains_key(name) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-                            environment.insert(binding.clone());
+                            environment.inner.insert(binding.clone());
                         }
                     }
                 }
@@ -144,7 +162,7 @@ fn resolve_bindings_in_branch(
                     environments,
                 );
 
-                for binding in child_environment {
+                for binding in child_environment.inner {
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains_key(&binding.name) {
                             // The child function that we just resolved bindings
@@ -154,7 +172,7 @@ fn resolve_bindings_in_branch(
                             // This means it must come from this function's
                             // parent scopes, and must be added to this
                             // environment too.
-                            environment.insert(binding);
+                            environment.inner.insert(binding);
                         }
                     }
                 }
@@ -253,6 +271,7 @@ mod tests {
 
         assert!(bindings
             .environment_of(&function.location)
+            .inner
             .iter()
             .any(|binding| binding.name == "parameter"));
     }
@@ -377,6 +396,7 @@ mod tests {
 
         assert!(bindings
             .environment_of(&function)
+            .inner
             .iter()
             .any(|binding| binding.name == "binding"));
     }
