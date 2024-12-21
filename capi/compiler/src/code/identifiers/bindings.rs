@@ -397,10 +397,11 @@ mod tests {
             ",
         );
 
-        let function = syntax_tree
+        let f = syntax_tree
             .function_by_name("f")
             .unwrap()
-            .into_located_function()
+            .into_located_function();
+        let function = f
             .find_single_branch()
             .unwrap()
             .expressions()
