@@ -269,7 +269,7 @@ mod tests {
             ",
         );
 
-        let function = syntax_tree
+        let f_local = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -280,7 +280,7 @@ mod tests {
             .next()
             .unwrap()
             .cloned();
-        let (parameter, no_parameter) = function
+        let (parameter, no_parameter) = f_local
             .as_ref()
             .find_single_branch()
             .unwrap()
@@ -293,7 +293,7 @@ mod tests {
         assert!(bindings.is_binding(&no_parameter).is_none());
 
         assert!(bindings
-            .environment_of(&function.location)
+            .environment_of(&f_local.location)
             .inner
             .iter()
             .any(|binding| binding.name == "parameter"));
