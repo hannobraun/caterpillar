@@ -65,11 +65,22 @@ impl Environment {
     }
 
     /// # Iterate over the bindings in the environment
-    pub fn bindings(
-        &self,
-        _: &SyntaxTree,
-    ) -> impl Iterator<Item = &Located<Binding>> {
-        self.inner.iter()
+    pub fn bindings<'r>(
+        &'r self,
+        syntax_tree: &'r SyntaxTree,
+    ) -> impl Iterator<Item = Located<&'r Binding>> {
+        self.inner.iter().map(|binding| {
+            let Some(binding) =
+                syntax_tree.binding_by_location(&binding.location)
+            else {
+                panic!(
+                    "This function expects to find all tracked bindings in the \
+                    provided `SyntaxTree`."
+                );
+            };
+
+            binding
+        })
     }
 }
 
