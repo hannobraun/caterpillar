@@ -274,6 +274,7 @@ mod tests {
             .unwrap()
             .into_located_function();
         let f_branch = f.find_single_branch().unwrap();
+        let binding = f_branch.bindings().next().unwrap();
         let f_local = f_branch
             .expressions()
             .filter_map(|expression| expression.into_local_function())
@@ -296,7 +297,7 @@ mod tests {
             .environment_of(&f_local.location)
             .inner
             .iter()
-            .any(|b| b.name == "parameter"));
+            .any(|b| b.as_ref() == binding.as_ref()));
     }
 
     #[test]
