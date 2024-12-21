@@ -266,6 +266,58 @@ mod tests {
     }
 
     #[test]
+    fn infer_type_of_binding_from_other_branch() {
+        // The type of a binding can be inferred, if its type is specified in
+        // the parameter list of another branch.
+
+        let branch_with_known_type = r"
+            \ 0 ->
+                0
+        ";
+        let branch_with_unknown_type = r"
+            \ x ->
+                x
+        ";
+
+        test(branch_with_known_type, branch_with_unknown_type);
+        test(branch_with_unknown_type, branch_with_known_type);
+
+        fn test(branch_a: &str, branch_b: &str) {
+            let (syntax_tree, types) = infer_types(&format!(
+                r"
+                    f: fn
+                        {branch_a}
+                        {branch_b}
+                    end
+                "
+            ));
+
+            let (a, b) = syntax_tree
+                .function_by_name("f")
+                .unwrap()
+                .into_located_function()
+                .branches()
+                .map(|branch| branch.expressions().next().unwrap().location)
+                .collect_tuple()
+                .unwrap();
+
+            let check = |location| {
+                assert_eq!(
+                    types.signature_of(&location).cloned().unwrap(),
+                    Signature {
+                        inputs: vec![],
+                        outputs: vec![Type::Number],
+                    },
+                );
+                assert_eq!(types.stack_at(&location).unwrap(), &[]);
+            };
+
+            check(a);
+            check(b);
+        }
+    }
+
+    #[test]
     fn infer_type_of_binding_from_use_in_local_function() {
         // If the type of a binding can be inferred in a local function, that
         // should carry over to the parent.

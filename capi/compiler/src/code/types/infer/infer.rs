@@ -124,6 +124,15 @@ fn infer_cluster(
             output.bindings.insert(location, type_);
         }
     }
+    for (location, signature) in inference_context.expressions {
+        let Some(signature) =
+            signature::make_direct(&signature, &inference_context.types)?
+        else {
+            continue;
+        };
+
+        output.expressions.insert(location, signature);
+    }
 
     Ok(())
 }
@@ -210,13 +219,7 @@ fn infer_branch(
     // type of an earlier one. So let's handle the signatures we collected
     // _after_ we look at all of the expressions.
     for (location, signature) in signatures {
-        let Some(signature) =
-            signature::make_direct(&signature, &inference_context.types)?
-        else {
-            continue;
-        };
-
-        output.expressions.insert(location, signature);
+        inference_context.expressions.insert(location, signature);
     }
     for (location, local_stack) in stacks {
         let Some(local_stack) =

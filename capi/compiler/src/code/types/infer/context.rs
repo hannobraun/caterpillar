@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::code::{
-    syntax::{FunctionLocation, ParameterLocation},
+    syntax::{FunctionLocation, MemberLocation, ParameterLocation},
     Index, Signature, Type,
 };
 
@@ -15,6 +15,7 @@ pub struct InferenceContext {
     pub types: InferredTypes,
     pub functions: BTreeMap<FunctionLocation, Signature<Index<InferredType>>>,
     pub bindings: BTreeMap<ParameterLocation, Index<InferredType>>,
+    pub expressions: BTreeMap<MemberLocation, Signature<Index<InferredType>>>,
 }
 
 impl InferenceContext {
