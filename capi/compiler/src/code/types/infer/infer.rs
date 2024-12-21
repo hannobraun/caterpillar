@@ -230,7 +230,7 @@ fn infer_expression(
     expression: Located<&Expression>,
     bindings: &BTreeMap<ParameterLocation, Index<InferredType>>,
     functions: &BTreeMap<FunctionLocation, Signature>,
-    cluster_functions: &mut InferenceContext,
+    inference_context: &mut InferenceContext,
     local_types: &mut InferredTypes,
     local_stack: &mut LocalStack,
     compiler_context: CompilerContext,
@@ -300,7 +300,7 @@ fn infer_expression(
                                 )
                             })
                             .or_else(|| {
-                                cluster_functions
+                                inference_context
                                     .functions
                                     .get(user_defined)
                                     .cloned()
