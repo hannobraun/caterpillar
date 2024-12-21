@@ -189,10 +189,10 @@ fn infer_branch(
 
         let signature = infer_expression(
             expression,
-            &output.functions,
             inference_context,
             &mut local_stack,
             compiler_context,
+            output,
         )?;
 
         if let Some(signature) = signature {
@@ -239,10 +239,10 @@ fn infer_branch(
 
 fn infer_expression(
     expression: Located<&Expression>,
-    functions: &BTreeMap<FunctionLocation, Signature>,
     inference_context: &mut InferenceContext,
     local_stack: &mut LocalStack,
     compiler_context: CompilerContext,
+    output: &InferenceOutput,
 ) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = compiler_context
         .annotations
@@ -306,7 +306,7 @@ fn infer_expression(
                         })
                     }
                     IdentifierTarget::UserDefinedFunction(location) => {
-                        inference_context.function(location, functions)
+                        inference_context.function(location, &output.functions)
                     }
                 },
                 None => None,
@@ -325,7 +325,7 @@ fn infer_expression(
         }
         Expression::LocalFunction { .. } => {
             let location = FunctionLocation::from(expression.location.clone());
-            functions.get(&location).map(|signature| {
+            output.functions.get(&location).map(|signature| {
                 let signature = Signature {
                     inputs: vec![],
                     outputs: vec![Type::Function {
