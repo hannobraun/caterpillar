@@ -480,7 +480,7 @@ fn infer_branch_signature(
         .parameters
         .values()
         .map(|parameter| match parameter {
-            Parameter::Binding { name } => {
+            Parameter::Binding(Binding { name }) => {
                 let Some(binding) =
                     branch.bindings().find(|binding| binding.name == *name)
                 else {

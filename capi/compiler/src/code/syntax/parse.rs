@@ -6,8 +6,7 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::SyntaxType, Branch, BranchLocation, Expression, Function,
-    FunctionLocation, Member, MemberLocation, NamedFunction, Parameter,
+    repr::types::SyntaxType, Binding, Branch, BranchLocation, Expression, Function, FunctionLocation, Member, MemberLocation, NamedFunction, Parameter
 };
 
 /// # Parse the provided tokens
@@ -195,7 +194,9 @@ fn parse_branch_parameters(
 
 fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Parameter>> {
     let parameter = match tokens.take()? {
-        Token::Identifier { name } => Some(Parameter::Binding { name }),
+        Token::Identifier { name } => {
+            Some(Parameter::Binding(Binding { name }))
+        }
         Token::IntegerLiteral { value } => Some(Parameter::Literal {
             value: value.into(),
         }),

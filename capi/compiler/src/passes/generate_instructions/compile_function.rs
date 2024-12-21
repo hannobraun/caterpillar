@@ -66,7 +66,7 @@ fn compile_branch(
 ) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.values().filter_map(|parameter| {
         match parameter {
-            Parameter::Binding { name } => Some(name),
+            Parameter::Binding(Binding { name }) => Some(name),
             Parameter::Literal { .. } => {
                 // Literal patterns are only relevant when
                 // selecting the branch to execute. They no
@@ -144,7 +144,7 @@ fn compile_branch(
             .values()
             .cloned()
             .map(|parameter| match parameter {
-                Parameter::Binding { name } => {
+                Parameter::Binding(Binding { name }) => {
                     capi_runtime::Pattern::Identifier { name }
                 }
                 Parameter::Literal { value } => {
