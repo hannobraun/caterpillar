@@ -148,17 +148,17 @@ fn infer_branch(
 
     let parameters = branch
         .parameters()
-        .map(|parameter| match parameter.fragment {
-            Parameter::Binding(_) => register_binding(
+        .map(|parameter| {
+            let type_ = match parameter.fragment {
+                Parameter::Binding(_) => InferredType::Unknown,
+                Parameter::Literal { .. } => InferredType::Known(Type::Number),
+            };
+
+            register_binding(
                 parameter.location,
-                InferredType::Unknown,
+                type_,
                 &mut inference_context.types,
-            ),
-            Parameter::Literal { .. } => register_binding(
-                parameter.location,
-                InferredType::Known(Type::Number),
-                &mut inference_context.types,
-            ),
+            )
         })
         .collect::<BTreeMap<_, _>>();
 
