@@ -53,7 +53,7 @@ type EnvironmentsMap = BTreeMap<FunctionLocation, Environment>;
 /// not its own parameters.
 #[derive(Clone, Debug)]
 pub struct Environment {
-    inner: BTreeSet<Located<Binding>>,
+    inner: BTreeSet<ParameterLocation>,
 }
 
 impl Environment {
@@ -74,9 +74,8 @@ impl Environment {
         &'r self,
         syntax_tree: &'r SyntaxTree,
     ) -> impl Iterator<Item = Located<&'r Binding>> {
-        self.inner.iter().map(|binding| {
-            let Some(binding) =
-                syntax_tree.binding_by_location(&binding.location)
+        self.inner.iter().map(|location| {
+            let Some(binding) = syntax_tree.binding_by_location(location)
             else {
                 panic!(
                     "This function expects to find all tracked bindings in the \
@@ -168,7 +167,7 @@ fn resolve_bindings_in_branch(
                         if !scope.contains_key(&binding.location) {
                             // The binding is not known in the current scope,
                             // which means it comes from a parent scope.
-                            environment.inner.insert(binding.clone());
+                            environment.inner.insert(binding.location.clone());
                         }
                     }
                 }
@@ -188,7 +187,7 @@ fn resolve_bindings_in_branch(
 
                 for binding in child_environment.inner {
                     if let Some(bindings) = scopes.last() {
-                        if !bindings.contains_key(&binding.location) {
+                        if !bindings.contains_key(&binding) {
                             // The child function that we just resolved bindings
                             // in has a function in its environment that is not
                             // known in the current scope.
