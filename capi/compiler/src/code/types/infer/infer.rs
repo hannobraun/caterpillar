@@ -298,20 +298,7 @@ fn infer_expression(
                         })
                     }
                     IdentifierTarget::UserDefinedFunction(location) => {
-                        functions
-                            .get(location)
-                            .map(|signature| {
-                                signature::make_indirect(
-                                    signature.clone(),
-                                    &mut inference_context.types,
-                                )
-                            })
-                            .or_else(|| {
-                                inference_context
-                                    .functions
-                                    .get(location)
-                                    .cloned()
-                            })
+                        inference_context.function(location, functions)
                     }
                 },
                 None => None,
