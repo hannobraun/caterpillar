@@ -65,7 +65,7 @@ pub struct Context<'r> {
 pub struct InferenceOutput {
     pub functions: BTreeMap<FunctionLocation, Signature>,
     pub expressions: BTreeMap<MemberLocation, Signature>,
-    pub bindings: BTreeMap<Binding, Type>,
+    pub bindings: BTreeMap<ParameterLocation, Type>,
     pub stacks: Stacks,
 }
 
@@ -131,7 +131,7 @@ fn infer_branch(
         .map(|binding| {
             let type_ = output
                 .bindings
-                .get(&binding)
+                .get(&binding.location)
                 .cloned()
                 .map(InferredType::Known)
                 .unwrap_or(InferredType::Unknown);
@@ -180,7 +180,7 @@ fn infer_branch(
 
             let type_ = signature.outputs[0].clone();
 
-            output.bindings.insert(binding.fragment.clone(), type_);
+            output.bindings.insert(binding.location.clone(), type_);
         }
 
         output.expressions.insert(location, signature);
