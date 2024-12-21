@@ -118,6 +118,12 @@ fn infer_cluster(
             output.functions.insert(function, signature);
         }
     }
+    for (location, index) in inference_context.bindings {
+        let type_ = inference_context.types.resolve(&index)?;
+        if let InferredType::Known(type_) = type_ {
+            output.bindings.insert(location, type_);
+        }
+    }
 
     Ok(())
 }
@@ -209,15 +215,6 @@ fn infer_branch(
         else {
             continue;
         };
-
-        if let Some(binding) = compiler_context.bindings.is_binding(&location) {
-            assert_eq!(signature.inputs.len(), 0);
-            assert_eq!(signature.outputs.len(), 1);
-
-            let type_ = signature.outputs[0].clone();
-
-            output.bindings.insert(binding.clone(), type_);
-        }
 
         output.expressions.insert(location, signature);
     }
