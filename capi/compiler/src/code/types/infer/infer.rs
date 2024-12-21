@@ -78,9 +78,7 @@ fn infer_cluster(
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<()> {
-    let mut inference_context = InferenceContext {
-        functions: BTreeMap::new(),
-    };
+    let mut inference_context = InferenceContext::default();
     let mut types = InferredTypes::default();
 
     for branch in cluster.branches(compiler_context.syntax_tree) {
