@@ -23,7 +23,7 @@ impl SyntaxTree {
 
     /// # Find the function at the provided location
     ///
-    /// Returns `None`, if no function at this location can be found.
+    /// Returns `None`, if no function can be found at this location.
     pub fn function_by_location<'r>(
         &'r self,
         location: &FunctionLocation,
@@ -53,7 +53,7 @@ impl SyntaxTree {
 
     /// # Find the branch at the provided location
     ///
-    /// Returns `None`, if no branch at this location can be found.
+    /// Returns `None`, if no branch can be found at this location.
     pub fn branch_by_location<'r>(
         &'r self,
         location: &BranchLocation,
