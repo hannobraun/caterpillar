@@ -36,16 +36,8 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Located<&Binding>> + '_ {
-        self.parameters().filter_map(move |parameter| {
-            if let Parameter::Binding(binding) = parameter.fragment {
-                Some(Located {
-                    fragment: binding,
-                    location: parameter.location,
-                })
-            } else {
-                None
-            }
-        })
+        self.parameters()
+            .filter_map(|parameter| parameter.into_binding())
     }
 
     /// # Iterate over the members of the branch's body

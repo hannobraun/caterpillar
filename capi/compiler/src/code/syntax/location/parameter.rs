@@ -1,14 +1,23 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Parameter, SyntaxTree},
+    syntax::{Binding, Parameter, SyntaxTree},
     Index,
 };
 
-use super::{located::HasLocation, BranchLocation};
+use super::{located::HasLocation, BranchLocation, Located};
 
 impl HasLocation for Parameter {
     type Location = ParameterLocation;
+}
+
+impl<'r> Located<&'r Parameter> {
+    pub fn into_binding(self) -> Option<Located<&'r Binding>> {
+        self.fragment.as_binding().map(|binding| Located {
+            fragment: binding,
+            location: self.location,
+        })
+    }
 }
 
 /// # The location of a branch's parameter
