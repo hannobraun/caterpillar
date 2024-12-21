@@ -402,6 +402,7 @@ mod tests {
             .unwrap()
             .into_located_function();
         let branch = f.find_single_branch().unwrap();
+        let binding = branch.bindings().next().unwrap();
         let f_local = branch
             .expressions()
             .filter_map(|expression| {
@@ -421,7 +422,7 @@ mod tests {
             .environment_of(&f_local)
             .inner
             .iter()
-            .any(|b| b.name == "binding"));
+            .any(|b| b.as_ref() == binding.as_ref()));
     }
 
     fn resolve_bindings(input: &str) -> (SyntaxTree, Bindings) {
