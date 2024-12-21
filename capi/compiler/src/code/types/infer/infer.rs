@@ -133,13 +133,15 @@ fn infer_branch(
     let mut local_stack = LocalStack::default();
 
     let register_binding =
-        |location: ParameterLocation, local_types: &mut InferredTypes| {
+        |location: ParameterLocation,
+         type_: InferredType,
+         local_types: &mut InferredTypes| {
             let type_ = output
                 .bindings
                 .get(&location)
                 .cloned()
                 .map(InferredType::Known)
-                .unwrap_or(InferredType::Unknown);
+                .unwrap_or(type_);
             let type_ = local_types.push(type_);
             (location, type_)
         };
@@ -149,6 +151,7 @@ fn infer_branch(
         .map(|parameter| match parameter.fragment {
             Parameter::Binding(_) => register_binding(
                 parameter.location,
+                InferredType::Unknown,
                 &mut inference_context.types,
             ),
             Parameter::Literal { .. } => {
@@ -163,7 +166,11 @@ fn infer_branch(
     let bindings = environment
         .bindings(compiler_context.syntax_tree)
         .map(|binding| {
-            register_binding(binding.location, &mut inference_context.types)
+            register_binding(
+                binding.location,
+                InferredType::Unknown,
+                &mut inference_context.types,
+            )
         })
         .chain(parameters.clone());
 
