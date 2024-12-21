@@ -128,7 +128,7 @@ fn infer_cluster(
 fn infer_branch(
     branch: Located<&Branch>,
     environment: &Environment,
-    cluster_functions: &mut InferenceContext,
+    inference_context: &mut InferenceContext,
     local_types: &mut InferredTypes,
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
@@ -180,7 +180,7 @@ fn infer_branch(
             expression,
             &bindings,
             &output.functions,
-            cluster_functions,
+            inference_context,
             local_types,
             &mut local_stack,
             compiler_context,
