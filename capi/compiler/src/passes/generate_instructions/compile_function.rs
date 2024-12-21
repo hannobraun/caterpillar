@@ -91,8 +91,7 @@ fn compile_branch(
                         .bindings
                         .environment_of(function_context.location)
                         .bindings(functions_context.syntax_tree)
-                        .map(|binding| binding.cloned())
-                        .map(|binding| binding.fragment),
+                        .map(|binding| binding.fragment.clone()),
                 )
                 .collect();
 
