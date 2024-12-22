@@ -31,9 +31,9 @@ pub fn NamedFunction(
 ) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
-            <div class="font-bold">
+            <span class="mr-2 font-bold">
                 {name}:
-            </div>
+            </span>
             <Function
                 branches=branches
                 actions=actions />
@@ -56,13 +56,13 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
         .collect::<Vec<_>>();
 
     view! {
-        <div>
+        <span>
             "fn"
             <ol>
                 {branches}
             </ol>
             "end"
-        </div>
+        </span>
     }
 }
 
