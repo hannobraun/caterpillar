@@ -72,7 +72,7 @@ fn Branch(
     body: Vec<DebugMember>,
     actions: ActionsTx,
 ) -> impl IntoView {
-    let parameters = parameters.join(" ");
+    let parameters = parameters.join(", ");
     let members = body
         .into_iter()
         .map(|member| {
