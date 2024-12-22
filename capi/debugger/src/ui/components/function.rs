@@ -57,11 +57,11 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
 
     view! {
         <div>
-            "{"
+            "fn"
             <ol>
                 {branches}
             </ol>
-            "}"
+            "end"
         </div>
     }
 }
