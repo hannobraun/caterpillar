@@ -88,7 +88,7 @@ fn Branch(
 
     view! {
         <div class="pl-8">
-            |{parameters}|
+            "|" {parameters} "|"
             <ol>
                 {members}
             </ol>
