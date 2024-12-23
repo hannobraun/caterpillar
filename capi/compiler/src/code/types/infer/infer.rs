@@ -150,12 +150,14 @@ fn infer_branch(
     let mut register_binding =
         |location: ParameterLocation,
          parameters: &BTreeMap<ParameterLocation, Type>| {
-            let type_ = parameters
-                .get(&location)
-                .cloned()
-                .map(InferredType::Known)
-                .unwrap_or(InferredType::Unknown);
-            let type_ = inference_context.types.push(type_);
+            let type_ = inference_context
+                .binding(&location, parameters)
+                .unwrap_or_else(|| {
+                    let type_ =
+                        inference_context.types.push(InferredType::Unknown);
+                    inference_context.bindings.insert(location.clone(), type_);
+                    type_
+                });
             (location, type_)
         };
 
@@ -183,9 +185,7 @@ fn infer_branch(
         .map(|binding| register_binding(binding.location, &output.parameters))
         .chain(parameters.clone());
 
-    for (location, type_) in bindings {
-        inference_context.bindings.insert(location, type_);
-    }
+    for _ in bindings {}
 
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
