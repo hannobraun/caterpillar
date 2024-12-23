@@ -67,7 +67,7 @@ impl DebugMember {
             effect,
         );
         let data = DebugMemberData {
-            signature: types.signature_of(&location).cloned(),
+            signature: types.signature_of_expression(&location).cloned(),
             location,
             state,
             has_durable_breakpoint,

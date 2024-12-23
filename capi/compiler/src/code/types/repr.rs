@@ -93,7 +93,7 @@ impl Types {
     }
 
     /// # Access the signature of the expression at the given location, if any
-    pub fn signature_of(
+    pub fn signature_of_expression(
         &self,
         location: &MemberLocation,
     ) -> Option<&Signature> {
@@ -271,7 +271,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&value).cloned().unwrap(),
+            types.signature_of_expression(&value).cloned().unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Number],
@@ -318,7 +318,7 @@ mod tests {
 
             let check = |location| {
                 assert_eq!(
-                    types.signature_of(&location).cloned().unwrap(),
+                    types.signature_of_expression(&location).cloned().unwrap(),
                     Signature {
                         inputs: vec![],
                         outputs: vec![Type::Number],
@@ -365,7 +365,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&value).cloned().unwrap(),
+            types.signature_of_expression(&value).cloned().unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Number],
@@ -399,7 +399,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&value).cloned().unwrap(),
+            types.signature_of_expression(&value).cloned().unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Number],
@@ -440,7 +440,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&g).cloned().unwrap(),
+            types.signature_of_expression(&g).cloned().unwrap(),
             Signature {
                 inputs: vec![Type::Number],
                 outputs: vec![Type::Number],
@@ -484,7 +484,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&g).cloned().unwrap(),
+            types.signature_of_expression(&g).cloned().unwrap(),
             Signature {
                 inputs: vec![Type::Number, Type::Number],
                 outputs: vec![Type::Number],
@@ -538,7 +538,7 @@ mod tests {
                 .unwrap();
 
             assert_eq!(
-                types.signature_of(&g).cloned().unwrap(),
+                types.signature_of_expression(&g).cloned().unwrap(),
                 Signature {
                     inputs: vec![Type::Number],
                     outputs: vec![Type::Number],
@@ -599,7 +599,7 @@ mod tests {
 
         let check = |call, stack: &[Type]| {
             assert_eq!(
-                types.signature_of(call).cloned().unwrap(),
+                types.signature_of_expression(call).cloned().unwrap(),
                 Signature {
                     inputs: vec![Type::Number],
                     outputs: vec![Type::Number],
@@ -641,7 +641,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of(&f_local).cloned().unwrap(),
+            types.signature_of_expression(&f_local).cloned().unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Function {
