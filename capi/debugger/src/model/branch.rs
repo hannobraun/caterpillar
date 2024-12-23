@@ -51,9 +51,9 @@ impl DebugBranch {
             })
             .collect::<Vec<_>>();
         let parameters = branch
-            .parameters
-            .values()
-            .map(|parameter| match parameter {
+            .as_ref()
+            .parameters()
+            .map(|parameter| match parameter.fragment {
                 Parameter::Binding {
                     binding: Binding { name },
                     // We're ignoring this, because it's only the type that the
