@@ -7,10 +7,21 @@ use super::{Signature, Type};
 pub fn resolve_type_annotations(
     syntax_tree: &SyntaxTree,
 ) -> BTreeMap<MemberLocation, Signature> {
+    let mut bindings = BTreeMap::new();
     let mut expressions = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
+            for (binding, type_) in branch.annotated_bindings() {
+                let Some(type_) = type_ else {
+                    continue;
+                };
+
+                let type_ = resolve_type(type_);
+
+                bindings.insert(binding.location, type_);
+            }
+
             for (expression, signature) in branch.annotated_expressions() {
                 let Some(signature) = signature else {
                     continue;
@@ -23,6 +34,7 @@ pub fn resolve_type_annotations(
         }
     }
 
+    dbg!(bindings);
     expressions
 }
 
