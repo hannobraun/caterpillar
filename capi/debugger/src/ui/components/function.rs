@@ -75,7 +75,12 @@ fn Branch(
 ) -> impl IntoView {
     let parameters = parameters
         .into_iter()
-        .map(|DebugParameter { name, type_: _ }| name)
+        .map(|DebugParameter { name, type_ }| {
+            let type_ = type_
+                .map(|type_| format!(": {type_}"))
+                .unwrap_or(String::new());
+            format!("{name}{type_}")
+        })
         .collect::<Vec<_>>()
         .join(", ");
     let members = body
