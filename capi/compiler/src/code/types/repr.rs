@@ -93,7 +93,7 @@ impl Types {
     }
 
     /// # Access the type of the binding at the given location, if any
-    pub fn type_of_binding(
+    pub fn type_of_parameter(
         &self,
         location: &ParameterLocation,
     ) -> Option<&Type> {
@@ -333,7 +333,7 @@ mod tests {
 
             for location in [parameter_a, parameter_b] {
                 assert_eq!(
-                    types.type_of_binding(&location).cloned().unwrap(),
+                    types.type_of_parameter(&location).cloned().unwrap(),
                     Type::Number,
                 );
             }
