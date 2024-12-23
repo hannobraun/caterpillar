@@ -63,7 +63,8 @@ impl DebugBranch {
                     // empty, while the compiler figured out something useful.)
                     type_: _,
                 } => {
-                    let type_ = None;
+                    let type_ =
+                        types.type_of_binding(&parameter.location).cloned();
                     DebugParameter {
                         name: name.clone(),
                         type_,
