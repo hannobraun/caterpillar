@@ -53,6 +53,7 @@ impl TypeAnnotations {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
+    bindings: BTreeMap<ParameterLocation, Type>,
     expressions: BTreeMap<MemberLocation, Signature>,
     stacks: Stacks,
 }
@@ -75,7 +76,7 @@ impl Types {
         let InferenceOutput {
             functions: _,
             expressions,
-            bindings: _,
+            bindings,
             stacks,
         } = infer(CompilerContext {
             syntax_tree,
@@ -85,6 +86,7 @@ impl Types {
             annotations: &annotations,
         });
         Self {
+            bindings,
             expressions,
             stacks,
         }
