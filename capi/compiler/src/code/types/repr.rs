@@ -324,7 +324,7 @@ mod tests {
                 .collect_tuple()
                 .unwrap();
 
-            let check = |location| {
+            for location in [expression_a, expression_b] {
                 assert_eq!(
                     types.signature_of_expression(&location).cloned().unwrap(),
                     Signature {
@@ -333,10 +333,7 @@ mod tests {
                     },
                 );
                 assert_eq!(types.stack_at(&location).unwrap(), &[]);
-            };
-
-            check(expression_a);
-            check(expression_b);
+            }
         }
     }
 
