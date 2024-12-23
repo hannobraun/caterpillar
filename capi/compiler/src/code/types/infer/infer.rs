@@ -149,14 +149,13 @@ fn infer_branch(
 
     let register_binding =
         |location: ParameterLocation,
-         type_: InferredType,
          bindings: &BTreeMap<ParameterLocation, Type>,
          types: &mut InferredTypes| {
             let type_ = bindings
                 .get(&location)
                 .cloned()
                 .map(InferredType::Known)
-                .unwrap_or(type_);
+                .unwrap_or(InferredType::Unknown);
             let type_ = types.push(type_);
             (location, type_)
         };
@@ -174,9 +173,12 @@ fn infer_branch(
                 Parameter::Literal { .. } => InferredType::Known(Type::Number),
             };
 
+            if let InferredType::Known(type_) = type_ {
+                output.bindings.insert(parameter.location.clone(), type_);
+            }
+
             register_binding(
                 parameter.location,
-                type_,
                 &output.bindings,
                 &mut inference_context.types,
             )
@@ -188,7 +190,6 @@ fn infer_branch(
         .map(|binding| {
             register_binding(
                 binding.location,
-                InferredType::Unknown,
                 &output.bindings,
                 &mut inference_context.types,
             )
