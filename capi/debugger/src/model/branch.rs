@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use capi_compiler::{
     code::{
         syntax::{Binding, Branch, BranchLocation, MemberLocation, Parameter},
-        DependencyCluster, FunctionCalls, Functions, Types,
+        DependencyCluster, FunctionCalls, Functions, Type, Types,
     },
     source_map::SourceMap,
 };
@@ -67,9 +67,10 @@ impl DebugBranch {
                     // could be identical to this one, or this one could be
                     // empty, while the compiler figured out something useful.)
                     type_: _,
-                } => DebugParameter { name },
+                } => DebugParameter { name, type_: None },
                 Parameter::Literal { value } => DebugParameter {
                     name: format!("{value:?}"),
+                    type_: None,
                 },
             })
             .collect();
@@ -135,4 +136,5 @@ impl DebugBranch {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugParameter {
     pub name: String,
+    pub type_: Option<Type>,
 }
