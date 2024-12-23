@@ -106,7 +106,7 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
                 .into_iter()
                 .map(|line| {
                     view! {
-                        <span>{line}</span>
+                        <span># {line}</span>
                     }
                 })
                 .collect::<Vec<_>>();
