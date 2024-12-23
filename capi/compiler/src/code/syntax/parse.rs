@@ -239,11 +239,15 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
-    if let Token::CommentLine { line } = tokens.peek()? {
-        let mut text = String::new();
-        text.push_str(line);
-        tokens.take()?;
-        return Ok(Member::Comment { lines: vec![text] });
+    if let Token::CommentLine { .. } = tokens.peek()? {
+        let mut lines = Vec::new();
+
+        while let Token::CommentLine { line } = tokens.peek()? {
+            lines.push(line.clone());
+            tokens.take()?;
+        }
+
+        return Ok(Member::Comment { lines });
     }
 
     let (expression, signature) = parse_expression(tokens, location)?;
