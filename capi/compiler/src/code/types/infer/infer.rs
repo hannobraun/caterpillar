@@ -182,8 +182,7 @@ fn infer_branch(
 
     let bindings = environment
         .bindings(compiler_context.syntax_tree)
-        .map(|binding| register_binding(binding.location, &output.parameters))
-        .chain(parameters.clone());
+        .map(|binding| register_binding(binding.location, &output.parameters));
 
     for _ in bindings {}
 
