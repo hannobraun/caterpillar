@@ -47,15 +47,9 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
     let branches = branches
         .into_iter()
         .map(|branch| {
-            let parameters = branch
-                .parameters
-                .into_iter()
-                .map(|DebugParameter { name }| name)
-                .collect();
-
             view! {
                 <Branch
-                    parameters=parameters
+                    parameters=branch.parameters
                     body=branch.body
                     actions=actions.clone() />
             }
@@ -75,11 +69,15 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
 
 #[component]
 fn Branch(
-    parameters: Vec<String>,
+    parameters: Vec<DebugParameter>,
     body: Vec<DebugMember>,
     actions: ActionsTx,
 ) -> impl IntoView {
-    let parameters = parameters.join(", ");
+    let parameters = parameters
+        .into_iter()
+        .map(|DebugParameter { name }| name)
+        .collect::<Vec<_>>()
+        .join(", ");
     let members = body
         .into_iter()
         .map(|member| {
