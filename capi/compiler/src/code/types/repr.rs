@@ -390,12 +390,21 @@ mod tests {
             .into_located_function();
         let f_branch = f.find_single_branch().unwrap();
 
+        let value_parameter = f_branch
+            .parameters()
+            .map(|parameter| parameter.location)
+            .next()
+            .unwrap();
         let value_expression = f_branch
             .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();
 
+        assert_eq!(
+            types.type_of_parameter(&value_parameter).cloned().unwrap(),
+            Type::Number,
+        );
         assert_eq!(
             types
                 .signature_of_expression(&value_expression)
