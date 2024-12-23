@@ -61,6 +61,11 @@ impl DebugBranch {
             .map(|parameter| match parameter {
                 Parameter::Binding {
                     binding: Binding { name },
+                    // We're ignoring this, because it's only the type that the
+                    // developer specified explicitly. But what we're interested
+                    // in is the type that was inferred by the compiler. (Which
+                    // could be identical to this one, or this one could be
+                    // empty, while the compiler figured out something useful.)
                     type_: _,
                 } => DebugParameter { name },
                 Parameter::Literal { value } => DebugParameter {
