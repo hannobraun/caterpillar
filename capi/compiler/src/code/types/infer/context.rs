@@ -35,9 +35,9 @@ impl InferenceContext {
     pub fn binding(
         &mut self,
         location: &ParameterLocation,
-        bindings: &BTreeMap<ParameterLocation, Type>,
+        parameters: &BTreeMap<ParameterLocation, Type>,
     ) -> Option<Index<InferredType>> {
-        bindings
+        parameters
             .get(location)
             .map(|type_| self.types.push(InferredType::Known(type_.clone())))
             .or_else(|| self.bindings.get(location).cloned())
