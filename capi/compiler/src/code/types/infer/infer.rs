@@ -246,7 +246,7 @@ fn infer_expression(
 ) -> Result<Option<Signature<Index<InferredType>>>> {
     let explicit = compiler_context
         .annotations
-        .signature_of(&expression.location)
+        .signature_of_expression(&expression.location)
         .cloned()
         .map(|signature| {
             signature::make_indirect(signature, &mut inference_context.types)

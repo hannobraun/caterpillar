@@ -29,7 +29,7 @@ impl TypeAnnotations {
     }
 
     /// # Access the signature of the expression at the given location, if any
-    pub fn signature_of(
+    pub fn signature_of_expression(
         &self,
         location: &MemberLocation,
     ) -> Option<&Signature> {
