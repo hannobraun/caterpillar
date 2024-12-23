@@ -150,15 +150,14 @@ fn infer_branch(
     let mut register_binding =
         |location: ParameterLocation,
          parameters: &BTreeMap<ParameterLocation, Type>| {
-            let type_ = inference_context
+            inference_context
                 .binding(&location, parameters)
                 .unwrap_or_else(|| {
                     let type_ =
                         inference_context.types.push(InferredType::Unknown);
                     inference_context.bindings.insert(location.clone(), type_);
                     type_
-                });
-            (location, type_)
+                })
         };
 
     let parameters = branch
@@ -176,9 +175,7 @@ fn infer_branch(
                 output.parameters.insert(parameter.location.clone(), type_);
             }
 
-            let (_, type_) =
-                register_binding(parameter.location, &output.parameters);
-            type_
+            register_binding(parameter.location, &output.parameters)
         })
         .collect::<Vec<_>>();
 
