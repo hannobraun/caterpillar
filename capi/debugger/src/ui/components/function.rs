@@ -105,9 +105,9 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
             let class_inner = String::from("italic text-gray-500");
             (
                 view! {
-                    <span class=class_inner>
+                    <div class=class_inner>
                         {lines}
-                    </span>
+                    </div>
                 }
                 .into_any(),
                 None,
