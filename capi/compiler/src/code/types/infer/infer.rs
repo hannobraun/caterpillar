@@ -155,7 +155,7 @@ fn infer_branch(
                 .unwrap_or_else(|| {
                     let type_ =
                         inference_context.types.push(InferredType::Unknown);
-                    inference_context.bindings.insert(location.clone(), type_);
+                    inference_context.bindings.insert(location, type_);
                     type_
                 })
         };
