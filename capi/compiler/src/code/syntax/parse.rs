@@ -239,7 +239,7 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
-    if let Token::CommentLine { text: line } = tokens.peek()? {
+    if let Token::CommentLine { line } = tokens.peek()? {
         let mut text = String::new();
         text.push_str(line);
         tokens.take()?;

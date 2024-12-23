@@ -44,7 +44,7 @@ pub fn tokenize(input: &str) -> Vec<Token> {
             State::Comment => match ch {
                 '\n' => {
                     tokens.push(Token::CommentLine {
-                        text: buffer.take(),
+                        line: buffer.take(),
                     });
                     state = State::Initial;
                 }
