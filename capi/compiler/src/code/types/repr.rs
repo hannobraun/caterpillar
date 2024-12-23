@@ -92,7 +92,7 @@ impl Types {
         }
     }
 
-    /// # Access the type of the binding at the given location, if any
+    /// # Access the type of the parameter at the given location, if any
     pub fn type_of_parameter(
         &self,
         location: &ParameterLocation,
