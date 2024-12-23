@@ -53,7 +53,7 @@ impl TypeAnnotations {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
-    bindings: BTreeMap<ParameterLocation, Type>,
+    parameters: BTreeMap<ParameterLocation, Type>,
     expressions: BTreeMap<MemberLocation, Signature>,
     stacks: Stacks,
 }
@@ -86,7 +86,7 @@ impl Types {
             annotations: &annotations,
         });
         Self {
-            bindings,
+            parameters: bindings,
             expressions,
             stacks,
         }
@@ -97,7 +97,7 @@ impl Types {
         &self,
         location: &ParameterLocation,
     ) -> Option<&Type> {
-        self.bindings.get(location)
+        self.parameters.get(location)
     }
 
     /// # Access the signature of the expression at the given location, if any
