@@ -320,12 +320,23 @@ mod tests {
                 .unwrap()
                 .into_located_function();
 
+            let (parameter_a, parameter_b) = f
+                .branches()
+                .map(|branch| branch.parameters().next().unwrap().location)
+                .collect_tuple()
+                .unwrap();
             let (expression_a, expression_b) = f
                 .branches()
                 .map(|branch| branch.expressions().next().unwrap().location)
                 .collect_tuple()
                 .unwrap();
 
+            for location in [parameter_a, parameter_b] {
+                assert_eq!(
+                    types.type_of_binding(&location).cloned().unwrap(),
+                    Type::Number,
+                );
+            }
             for location in [expression_a, expression_b] {
                 assert_eq!(
                     types.signature_of_expression(&location).cloned().unwrap(),
