@@ -146,7 +146,7 @@ pub struct Binding {
 pub enum Member {
     /// # A code comment
     Comment {
-        /// # The text of the comment
+        /// # The lines of the comment
         lines: Vec<String>,
     },
 
