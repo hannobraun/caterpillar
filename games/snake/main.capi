@@ -574,7 +574,7 @@ check_body_collision_inner: fn
                 positions
                 index
                 vec_buf_get
-                vec_x: Number, Number -> Number .
+                vec_x
                 x
                 eq
                 fn \ x_matches ->
@@ -691,7 +691,7 @@ end
 
 # Utilities - Vector
 vec_x: fn
-    \ x, _ ->
+    \ x: Number, _: Number ->
         x
 end
 
