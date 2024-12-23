@@ -7,7 +7,7 @@ pub enum Token {
     ///
     /// Each line starting with `#` is turned into a separate token.
     CommentLine {
-        /// # The contents of the comment
+        /// # The contents of the comment line
         line: String,
     },
 
