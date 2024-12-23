@@ -13,7 +13,7 @@ impl HasLocation for Parameter {
 
 impl<'r> Located<&'r Parameter> {
     pub fn into_binding(self) -> Option<Located<&'r Binding>> {
-        self.fragment.as_binding().map(|binding| Located {
+        self.fragment.as_binding().map(|(binding, _)| Located {
             fragment: binding,
             location: self.location,
         })

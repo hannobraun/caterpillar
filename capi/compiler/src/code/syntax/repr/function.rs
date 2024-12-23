@@ -109,12 +109,12 @@ impl Parameter {
     /// # Convert this parameter into a binding
     ///
     /// Returns `None`, if the parameter is not a binding.
-    pub fn as_binding(&self) -> Option<&Binding> {
-        let Self::Binding { binding, type_: _ } = self else {
+    pub fn as_binding(&self) -> Option<(&Binding, Option<&SyntaxType>)> {
+        let Self::Binding { binding, type_ } = self else {
             return None;
         };
 
-        Some(binding)
+        Some((binding, type_.as_ref()))
     }
 }
 
