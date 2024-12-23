@@ -36,7 +36,7 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the type-annotated bindings in the branch's parameters
     pub fn annotated_bindings(
-        &'r self,
+        &self,
     ) -> impl Iterator<Item = (Located<&'r Binding>, Option<&'r SyntaxType>)>
     {
         self.parameters()
