@@ -1,12 +1,17 @@
 use std::collections::BTreeMap;
 
-use crate::code::syntax::{MemberLocation, SyntaxTree, SyntaxType};
+use crate::code::syntax::{
+    MemberLocation, ParameterLocation, SyntaxTree, SyntaxType,
+};
 
 use super::{Signature, Type};
 
 pub fn resolve_type_annotations(
     syntax_tree: &SyntaxTree,
-) -> BTreeMap<MemberLocation, Signature> {
+) -> (
+    BTreeMap<ParameterLocation, Type>,
+    BTreeMap<MemberLocation, Signature>,
+) {
     let mut bindings = BTreeMap::new();
     let mut expressions = BTreeMap::new();
 
@@ -34,8 +39,7 @@ pub fn resolve_type_annotations(
         }
     }
 
-    dbg!(bindings);
-    expressions
+    (bindings, expressions)
 }
 
 fn resolve_signature(signature: &Signature<SyntaxType>) -> Signature {

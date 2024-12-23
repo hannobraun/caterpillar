@@ -24,7 +24,7 @@ pub struct TypeAnnotations {
 impl TypeAnnotations {
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
-        let expressions = resolve_type_annotations(syntax_tree);
+        let (_, expressions) = resolve_type_annotations(syntax_tree);
         Self { expressions }
     }
 
