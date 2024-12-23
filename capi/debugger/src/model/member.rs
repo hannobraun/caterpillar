@@ -138,7 +138,7 @@ impl DebugMemberKind {
         effect: Option<&Effect>,
     ) -> Self {
         match member {
-            Member::Comment { text } => Self::Comment { lines: vec![text] },
+            Member::Comment { text } => Self::Comment { lines: text },
             Member::Expression { expression, .. } => match expression {
                 Expression::Identifier { name } => Self::Identifier { name },
                 Expression::LiteralNumber { value } => Self::Value {
