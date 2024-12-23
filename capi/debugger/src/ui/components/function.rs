@@ -16,7 +16,8 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugMember, DebugMemberData, DebugMemberKind, UserAction,
+        DebugBranch, DebugMember, DebugMemberData, DebugMemberKind,
+        DebugParameter, UserAction,
     },
     ui::{actions::send_action, ActionsTx},
 };
@@ -46,9 +47,15 @@ fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
     let branches = branches
         .into_iter()
         .map(|branch| {
+            let parameters = branch
+                .parameters
+                .into_iter()
+                .map(|DebugParameter { name }| name)
+                .collect();
+
             view! {
                 <Branch
-                    parameters=branch.parameters
+                    parameters=parameters
                     body=branch.body
                     actions=actions.clone() />
             }

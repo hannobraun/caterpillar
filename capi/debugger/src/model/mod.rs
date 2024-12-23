@@ -12,7 +12,7 @@ mod tests;
 
 pub use self::{
     active_functions::{ActiveFunctions, ActiveFunctionsEntry},
-    branch::DebugBranch,
+    branch::{DebugBranch, DebugParameter},
     breakpoints::Breakpoints,
     code::DebugCode,
     function::DebugFunction,

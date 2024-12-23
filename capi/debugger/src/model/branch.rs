@@ -12,7 +12,7 @@ use super::{Breakpoints, DebugMember};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugBranch {
-    pub parameters: Vec<String>,
+    pub parameters: Vec<DebugParameter>,
     pub body: Vec<DebugMember>,
     pub is_active: bool,
 }
@@ -58,12 +58,16 @@ impl DebugBranch {
         let parameters = branch
             .parameters
             .into_values()
-            .map(|parameter| match parameter {
-                Parameter::Binding {
-                    binding: Binding { name },
-                    type_: _,
-                } => name,
-                Parameter::Literal { value } => format!("{value:?}"),
+            .map(|parameter| {
+                let name = match parameter {
+                    Parameter::Binding {
+                        binding: Binding { name },
+                        type_: _,
+                    } => name,
+                    Parameter::Literal { value } => format!("{value:?}"),
+                };
+
+                DebugParameter { name }
             })
             .collect();
 
@@ -123,4 +127,9 @@ impl DebugBranch {
 
         Ok(expressions.next())
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DebugParameter {
+    pub name: String,
 }
