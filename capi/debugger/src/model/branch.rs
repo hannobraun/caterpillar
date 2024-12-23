@@ -67,7 +67,10 @@ impl DebugBranch {
                     // could be identical to this one, or this one could be
                     // empty, while the compiler figured out something useful.)
                     type_: _,
-                } => DebugParameter { name, type_: None },
+                } => {
+                    let type_ = None;
+                    DebugParameter { name, type_ }
+                }
                 Parameter::Literal { value } => DebugParameter {
                     name: format!("{value:?}"),
                     type_: None,
