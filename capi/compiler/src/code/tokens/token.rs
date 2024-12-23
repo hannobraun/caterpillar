@@ -14,7 +14,7 @@ pub enum Token {
     /// end up as a single unit at some point, as that would provide flexibility
     /// in displaying them. I'm not sure though, if that should already happen
     /// in the tokenizer, of if that's a task for parsing.
-    Comment {
+    CommentLine {
         /// # The contents of the comment
         text: String,
     },
