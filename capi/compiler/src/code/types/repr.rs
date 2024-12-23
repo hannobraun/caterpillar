@@ -271,10 +271,9 @@ mod tests {
             .function_by_name("f")
             .unwrap()
             .into_located_function();
+        let f_branch = f.find_single_branch().unwrap();
 
-        let value_expression = f
-            .find_single_branch()
-            .unwrap()
+        let value_expression = f_branch
             .expressions()
             .map(|expression| expression.location)
             .next()
