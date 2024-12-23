@@ -267,10 +267,12 @@ mod tests {
             ",
         );
 
-        let value_expression = syntax_tree
+        let f = syntax_tree
             .function_by_name("f")
             .unwrap()
-            .into_located_function()
+            .into_located_function();
+
+        let value_expression = f
             .find_single_branch()
             .unwrap()
             .expressions()
