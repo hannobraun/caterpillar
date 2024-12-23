@@ -76,7 +76,7 @@ impl Types {
         let InferenceOutput {
             functions: _,
             expressions,
-            bindings,
+            bindings: parameters,
             stacks,
         } = infer(CompilerContext {
             syntax_tree,
@@ -86,7 +86,7 @@ impl Types {
             annotations: &annotations,
         });
         Self {
-            parameters: bindings,
+            parameters,
             expressions,
             stacks,
         }
