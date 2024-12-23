@@ -69,7 +69,7 @@ pub struct CompilerContext<'r> {
 pub struct InferenceOutput {
     pub functions: BTreeMap<FunctionLocation, Signature>,
     pub expressions: BTreeMap<MemberLocation, Signature>,
-    pub bindings: BTreeMap<ParameterLocation, Type>,
+    pub parameters: BTreeMap<ParameterLocation, Type>,
     pub stacks: Stacks,
 }
 
@@ -121,7 +121,7 @@ fn infer_cluster(
     for (location, index) in inference_context.bindings {
         let type_ = inference_context.types.resolve(&index)?;
         if let InferredType::Known(type_) = type_ {
-            output.bindings.insert(location, type_);
+            output.parameters.insert(location, type_);
         }
     }
     for (location, signature) in inference_context.expressions {
@@ -172,12 +172,12 @@ fn infer_branch(
             };
 
             if let Some(type_) = type_ {
-                output.bindings.insert(parameter.location.clone(), type_);
+                output.parameters.insert(parameter.location.clone(), type_);
             }
 
             register_binding(
                 parameter.location,
-                &output.bindings,
+                &output.parameters,
                 &mut inference_context.types,
             )
         })
@@ -188,7 +188,7 @@ fn infer_branch(
         .map(|binding| {
             register_binding(
                 binding.location,
-                &output.bindings,
+                &output.parameters,
                 &mut inference_context.types,
             )
         })
@@ -267,7 +267,7 @@ fn infer_expression(
                 Some(target) => match target {
                     IdentifierTarget::Binding(binding) => {
                         let Some(output) = inference_context
-                            .binding(binding, &output.bindings)
+                            .binding(binding, &output.parameters)
                         else {
                             unreachable!(
                                 "Identifier `{identifier}` has been resolved \
