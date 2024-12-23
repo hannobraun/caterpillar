@@ -150,9 +150,9 @@ fn infer_branch(
     let register_binding =
         |location: ParameterLocation,
          type_: InferredType,
+         bindings: &BTreeMap<ParameterLocation, Type>,
          types: &mut InferredTypes| {
-            let type_ = output
-                .bindings
+            let type_ = bindings
                 .get(&location)
                 .cloned()
                 .map(InferredType::Known)
@@ -177,6 +177,7 @@ fn infer_branch(
             register_binding(
                 parameter.location,
                 type_,
+                &output.bindings,
                 &mut inference_context.types,
             )
         })
@@ -188,6 +189,7 @@ fn infer_branch(
             register_binding(
                 binding.location,
                 InferredType::Unknown,
+                &output.bindings,
                 &mut inference_context.types,
             )
         })
