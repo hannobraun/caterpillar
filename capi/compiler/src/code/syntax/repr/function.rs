@@ -107,7 +107,7 @@ impl Parameter {
     ///
     /// Returns `None`, if the parameter is not a binding.
     pub fn as_binding(&self) -> Option<&Binding> {
-        let Self::Binding { binding } = self else {
+        let Self::Binding { binding, .. } = self else {
             return None;
         };
 
