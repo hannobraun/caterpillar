@@ -7,7 +7,7 @@ use super::{Signature, Type};
 pub fn resolve_type_annotations(
     syntax_tree: &SyntaxTree,
 ) -> BTreeMap<MemberLocation, Signature> {
-    let mut types_ = BTreeMap::new();
+    let mut expressions = BTreeMap::new();
 
     for function in syntax_tree.all_functions() {
         for branch in function.branches() {
@@ -18,12 +18,12 @@ pub fn resolve_type_annotations(
 
                 let signature = resolve_signature(signature);
 
-                types_.insert(expression.location, signature);
+                expressions.insert(expression.location, signature);
             }
         }
     }
 
-    types_
+    expressions
 }
 
 fn resolve_signature(signature: &Signature<SyntaxType>) -> Signature {
