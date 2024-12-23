@@ -176,7 +176,7 @@ fn parse_branch_parameters(
             break;
         }
 
-        let (parameter, _) = parse_parameter(tokens)?;
+        let parameter = parse_parameter(tokens)?;
         parameters.push(parameter);
 
         match tokens.take()? {
@@ -200,30 +200,25 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_parameter(
-    tokens: &mut Tokens,
-) -> Result<(Parameter, Option<SyntaxType>)> {
-    let (parameter, type_) = match tokens.take()? {
+fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
+    let parameter = match tokens.take()? {
         Token::Identifier { name } => {
             let parameter = Parameter::Binding {
                 binding: Binding { name },
             };
-            let type_ = parse_type_annotation(tokens)?;
+            let _ = parse_type_annotation(tokens)?;
 
-            (parameter, type_)
+            parameter
         }
-        Token::IntegerLiteral { value } => (
-            Parameter::Literal {
-                value: value.into(),
-            },
-            None,
-        ),
+        Token::IntegerLiteral { value } => Parameter::Literal {
+            value: value.into(),
+        },
         token => {
             return Err(Error::UnexpectedToken { actual: token });
         }
     };
 
-    Ok((parameter, type_))
+    Ok(parameter)
 }
 
 fn parse_branch_body(
