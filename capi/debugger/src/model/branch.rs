@@ -59,7 +59,9 @@ impl DebugBranch {
             .parameters
             .into_values()
             .map(|parameter| match parameter {
-                Parameter::Binding(Binding { name }) => name,
+                Parameter::Binding {
+                    binding: Binding { name },
+                } => name,
                 Parameter::Literal { value } => format!("{value:?}"),
             })
             .collect();

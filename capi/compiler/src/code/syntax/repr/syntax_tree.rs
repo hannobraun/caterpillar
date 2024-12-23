@@ -80,7 +80,7 @@ impl SyntaxTree {
         let branch = self.branch_by_location(&location.parent)?;
         let parameter = branch.parameters.get(&location.index)?;
 
-        let Parameter::Binding(binding) = parameter else {
+        let Parameter::Binding { binding } = parameter else {
             return None;
         };
 

@@ -86,7 +86,7 @@ pub enum Parameter {
     ///
     /// Identifiers match against any value. They are used to assign a local
     /// name to a value.
-    Binding(Binding),
+    Binding { binding: Binding },
 
     /// # A literal
     ///
@@ -104,7 +104,7 @@ impl Parameter {
     ///
     /// Returns `None`, if the parameter is not a binding.
     pub fn as_binding(&self) -> Option<&Binding> {
-        let Self::Binding(binding) = self else {
+        let Self::Binding { binding } = self else {
             return None;
         };
 

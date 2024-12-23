@@ -205,7 +205,9 @@ fn parse_parameter(
 ) -> Result<(Parameter, Option<SyntaxType>)> {
     let (parameter, type_) = match tokens.take()? {
         Token::Identifier { name } => {
-            let parameter = Parameter::Binding(Binding { name });
+            let parameter = Parameter::Binding {
+                binding: Binding { name },
+            };
             let type_ = parse_type_annotation(tokens)?;
 
             (parameter, type_)
