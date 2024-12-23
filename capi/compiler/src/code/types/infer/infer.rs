@@ -167,13 +167,11 @@ fn infer_branch(
                 Parameter::Binding { .. } => compiler_context
                     .annotations
                     .type_of_binding(&parameter.location)
-                    .cloned()
-                    .map(InferredType::Known)
-                    .unwrap_or(InferredType::Unknown),
-                Parameter::Literal { .. } => InferredType::Known(Type::Number),
+                    .cloned(),
+                Parameter::Literal { .. } => Some(Type::Number),
             };
 
-            if let InferredType::Known(type_) = type_ {
+            if let Some(type_) = type_ {
                 output.bindings.insert(parameter.location.clone(), type_);
             }
 
