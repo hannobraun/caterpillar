@@ -145,17 +145,25 @@ fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
 ) -> Result<Option<Branch>> {
-    match tokens.peek()? {
-        Token::Punctuator(BranchStart) => {
-            tokens.take()?;
+    loop {
+        match tokens.peek()? {
+            Token::CommentLine { .. } => {
+                tokens.take()?;
+                continue;
+            }
+            Token::Punctuator(BranchStart) => {
+                tokens.take()?;
+            }
+            Token::Keyword(End) => {
+                return Ok(None);
+            }
+            _ => {
+                let token = tokens.take()?;
+                return Err(Error::UnexpectedToken { actual: token });
+            }
         }
-        Token::Keyword(End) => {
-            return Ok(None);
-        }
-        _ => {
-            let token = tokens.take()?;
-            return Err(Error::UnexpectedToken { actual: token });
-        }
+
+        break;
     }
 
     let mut branch = Branch::default();
