@@ -315,7 +315,7 @@ mod tests {
                 "
             ));
 
-            let (a, b) = syntax_tree
+            let (expression_a, expression_b) = syntax_tree
                 .function_by_name("f")
                 .unwrap()
                 .into_located_function()
@@ -335,8 +335,8 @@ mod tests {
                 assert_eq!(types.stack_at(&location).unwrap(), &[]);
             };
 
-            check(a);
-            check(b);
+            check(expression_a);
+            check(expression_b);
         }
     }
 
