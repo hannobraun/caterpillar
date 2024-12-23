@@ -165,7 +165,12 @@ fn infer_branch(
         .parameters()
         .map(|parameter| {
             let type_ = match parameter.fragment {
-                Parameter::Binding { .. } => InferredType::Unknown,
+                Parameter::Binding { .. } => compiler_context
+                    .annotations
+                    .type_of_binding(&parameter.location)
+                    .cloned()
+                    .map(InferredType::Known)
+                    .unwrap_or(InferredType::Unknown),
                 Parameter::Literal { .. } => InferredType::Known(Type::Number),
             };
 

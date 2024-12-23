@@ -1,8 +1,8 @@
 # Main loop
 main: fn
     \ size_x: Number, size_y: Number ->
-        size_x: -> Number .
-        size_y: -> Number .
+        size_x
+        size_y
         tile_field_size
         vec_store
         init_frame_count
