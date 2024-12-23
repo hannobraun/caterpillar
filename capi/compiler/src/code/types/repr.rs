@@ -315,10 +315,12 @@ mod tests {
                 "
             ));
 
-            let (expression_a, expression_b) = syntax_tree
+            let f = syntax_tree
                 .function_by_name("f")
                 .unwrap()
-                .into_located_function()
+                .into_located_function();
+
+            let (expression_a, expression_b) = f
                 .branches()
                 .map(|branch| branch.expressions().next().unwrap().location)
                 .collect_tuple()
