@@ -150,14 +150,14 @@ fn infer_branch(
     let register_binding =
         |location: ParameterLocation,
          type_: InferredType,
-         local_types: &mut InferredTypes| {
+         types: &mut InferredTypes| {
             let type_ = output
                 .bindings
                 .get(&location)
                 .cloned()
                 .map(InferredType::Known)
                 .unwrap_or(type_);
-            let type_ = local_types.push(type_);
+            let type_ = types.push(type_);
             (location, type_)
         };
 
