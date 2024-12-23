@@ -1,7 +1,9 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{self, BranchLocation, FunctionLocation, MemberLocation},
+        syntax::{
+            self, BranchLocation, FunctionLocation, Located, MemberLocation,
+        },
         DependencyCluster, FunctionCalls, Functions, Types,
     },
     source_map::SourceMap,
@@ -37,10 +39,12 @@ impl DebugFunction {
             .into_iter()
             .map(|(index, branch)| {
                 DebugBranch::new(
-                    branch,
-                    BranchLocation {
-                        parent: Box::new(location.clone()),
-                        index,
+                    Located {
+                        fragment: branch,
+                        location: BranchLocation {
+                            parent: Box::new(location.clone()),
+                            index,
+                        },
                     },
                     active_expression,
                     is_innermost_active_function,

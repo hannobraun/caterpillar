@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use capi_compiler::{
     code::{
-        syntax::{Binding, Branch, BranchLocation, MemberLocation, Parameter},
+        syntax::{Binding, Branch, Located, MemberLocation, Parameter},
         DependencyCluster, FunctionCalls, Functions, Type, Types,
     },
     source_map::SourceMap,
@@ -20,8 +20,7 @@ pub struct DebugBranch {
 impl DebugBranch {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        branch: Branch,
-        location: BranchLocation,
+        branch: Located<Branch>,
         active_expression: Option<&MemberLocation>,
         is_in_innermost_active_function: bool,
         cluster: &DependencyCluster,
@@ -37,7 +36,7 @@ impl DebugBranch {
             .iter()
             .map(|(&index, member)| {
                 let location = MemberLocation {
-                    parent: Box::new(location.clone()),
+                    parent: Box::new(branch.location.clone()),
                     index,
                 };
                 DebugMember::new(
