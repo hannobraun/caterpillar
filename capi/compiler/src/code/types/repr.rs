@@ -267,7 +267,7 @@ mod tests {
             ",
         );
 
-        let value = syntax_tree
+        let value_expression = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -279,13 +279,16 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            types.signature_of_expression(&value).cloned().unwrap(),
+            types
+                .signature_of_expression(&value_expression)
+                .cloned()
+                .unwrap(),
             Signature {
                 inputs: vec![],
                 outputs: vec![Type::Number],
             },
         );
-        assert_eq!(types.stack_at(&value).unwrap(), &[]);
+        assert_eq!(types.stack_at(&value_expression).unwrap(), &[]);
     }
 
     #[test]
