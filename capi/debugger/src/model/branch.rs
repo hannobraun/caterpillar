@@ -32,15 +32,12 @@ impl DebugBranch {
         effect: Option<&Effect>,
     ) -> Self {
         let body = branch
-            .body
-            .iter()
-            .map(|(&index, member)| {
-                let location = MemberLocation {
-                    parent: Box::new(branch.location.clone()),
-                    index,
-                };
+            .as_ref()
+            .body()
+            .map(|member| {
+                let location = member.location;
                 DebugMember::new(
-                    member.clone(),
+                    member.fragment.clone(),
                     location,
                     active_expression,
                     is_in_innermost_active_function,
