@@ -35,10 +35,9 @@ impl DebugBranch {
             .as_ref()
             .body()
             .map(|member| {
-                let location = member.location;
                 DebugMember::new(
                     member.fragment.clone(),
-                    location,
+                    member.location,
                     active_expression,
                     is_in_innermost_active_function,
                     cluster,
