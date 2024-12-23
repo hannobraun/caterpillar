@@ -58,16 +58,14 @@ impl DebugBranch {
         let parameters = branch
             .parameters
             .into_values()
-            .map(|parameter| {
-                let name = match parameter {
-                    Parameter::Binding {
-                        binding: Binding { name },
-                        type_: _,
-                    } => name,
-                    Parameter::Literal { value } => format!("{value:?}"),
-                };
-
-                DebugParameter { name }
+            .map(|parameter| match parameter {
+                Parameter::Binding {
+                    binding: Binding { name },
+                    type_: _,
+                } => DebugParameter { name },
+                Parameter::Literal { value } => DebugParameter {
+                    name: format!("{value:?}"),
+                },
             })
             .collect();
 
