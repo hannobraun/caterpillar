@@ -102,6 +102,15 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
 
     let (expression, actions, error) = match member.kind {
         DebugMemberKind::Comment { lines } => {
+            let lines = lines
+                .into_iter()
+                .map(|line| {
+                    view! {
+                        <span>{line}</span>
+                    }
+                })
+                .collect::<Vec<_>>();
+
             let class_inner = String::from("italic text-gray-500");
             (
                 view! {
