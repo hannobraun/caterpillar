@@ -240,7 +240,8 @@ fn parse_member(
     location: MemberLocation,
 ) -> Result<Member> {
     if let Token::CommentLine { text: line } = tokens.peek()? {
-        let text = line.clone();
+        let mut text = String::new();
+        text.push_str(line);
         tokens.take()?;
         return Ok(Member::Comment { text });
     }
