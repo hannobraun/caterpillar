@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::code::{
-    syntax::{MemberLocation, SyntaxTree},
+    syntax::{MemberLocation, ParameterLocation, SyntaxTree},
     Bindings, Dependencies, Identifiers,
 };
 
@@ -18,14 +18,27 @@ use super::{
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
 pub struct TypeAnnotations {
+    bindings: BTreeMap<ParameterLocation, Type>,
     expressions: BTreeMap<MemberLocation, Signature>,
 }
 
 impl TypeAnnotations {
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
-        let (_, expressions) = resolve_type_annotations(syntax_tree);
-        Self { expressions }
+        let (bindings, expressions) = resolve_type_annotations(syntax_tree);
+
+        Self {
+            bindings,
+            expressions,
+        }
+    }
+
+    /// # Access the type of the binding at the given location, if any
+    pub fn type_of_binding(
+        &self,
+        location: &ParameterLocation,
+    ) -> Option<&Type> {
+        self.bindings.get(location)
     }
 
     /// # Access the signature of the expression at the given location, if any
