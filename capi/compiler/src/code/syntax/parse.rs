@@ -176,11 +176,8 @@ fn parse_branch_parameters(
             break;
         }
 
-        if let Some(parameter) = parse_branch_parameter(tokens)? {
-            parameters.push(parameter);
-        } else {
-            break;
-        }
+        let parameter = parse_branch_parameter(tokens)?;
+        parameters.push(parameter);
 
         match tokens.take()? {
             Token::Punctuator(Delimiter) => {
@@ -203,15 +200,12 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Option<Parameter>> {
+fn parse_branch_parameter(tokens: &mut Tokens) -> Result<Parameter> {
     let parameter = match tokens.take()? {
-        Token::Identifier { name } => {
-            Some(Parameter::Binding(Binding { name }))
-        }
-        Token::IntegerLiteral { value } => Some(Parameter::Literal {
+        Token::Identifier { name } => Parameter::Binding(Binding { name }),
+        Token::IntegerLiteral { value } => Parameter::Literal {
             value: value.into(),
-        }),
-        Token::Punctuator(Transformer) => None,
+        },
         token => {
             return Err(Error::UnexpectedToken { actual: token });
         }
