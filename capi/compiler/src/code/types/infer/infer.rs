@@ -180,11 +180,9 @@ fn infer_branch(
         })
         .collect::<BTreeMap<_, _>>();
 
-    let bindings = environment
-        .bindings(compiler_context.syntax_tree)
-        .map(|binding| register_binding(binding.location, &output.parameters));
-
-    for _ in bindings {}
+    for binding in environment.bindings(compiler_context.syntax_tree) {
+        register_binding(binding.location, &output.parameters);
+    }
 
     let mut signatures = BTreeMap::new();
     let mut stacks = BTreeMap::new();
