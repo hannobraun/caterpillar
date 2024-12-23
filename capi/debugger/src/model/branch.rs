@@ -57,7 +57,7 @@ impl DebugBranch {
             .collect::<Vec<_>>();
         let parameters = branch
             .parameters
-            .into_values()
+            .values()
             .map(|parameter| match parameter {
                 Parameter::Binding {
                     binding: Binding { name },
@@ -69,7 +69,10 @@ impl DebugBranch {
                     type_: _,
                 } => {
                     let type_ = None;
-                    DebugParameter { name, type_ }
+                    DebugParameter {
+                        name: name.clone(),
+                        type_,
+                    }
                 }
                 Parameter::Literal { value } => DebugParameter {
                     name: format!("{value:?}"),
