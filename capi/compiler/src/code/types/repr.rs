@@ -92,6 +92,14 @@ impl Types {
         }
     }
 
+    /// # Access the type of the binding at the given location, if any
+    pub fn type_of_binding(
+        &self,
+        location: &ParameterLocation,
+    ) -> Option<&Type> {
+        self.bindings.get(location)
+    }
+
     /// # Access the signature of the expression at the given location, if any
     pub fn signature_of_expression(
         &self,
