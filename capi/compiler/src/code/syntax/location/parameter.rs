@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::code::{
-    syntax::{Binding, Parameter, SyntaxTree},
+    syntax::{Binding, Parameter, SyntaxTree, SyntaxType},
     Index,
 };
 
@@ -12,10 +12,17 @@ impl HasLocation for Parameter {
 }
 
 impl<'r> Located<&'r Parameter> {
-    pub fn into_binding(self) -> Option<Located<&'r Binding>> {
-        self.fragment.as_binding().map(|(binding, _)| Located {
-            fragment: binding,
-            location: self.location,
+    pub fn into_binding(
+        self,
+    ) -> Option<(Located<&'r Binding>, Option<&'r SyntaxType>)> {
+        self.fragment.as_binding().map(|(binding, type_)| {
+            (
+                Located {
+                    fragment: binding,
+                    location: self.location,
+                },
+                type_,
+            )
         })
     }
 }
