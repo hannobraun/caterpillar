@@ -45,10 +45,7 @@ impl<'r> Located<&'r Branch> {
 
     /// # Iterate over the parameters of the branch that bind a value to a name
     pub fn bindings(&self) -> impl Iterator<Item = Located<&'r Binding>> {
-        self.parameters().filter_map(|parameter| {
-            let (binding, _) = parameter.into_binding()?;
-            Some(binding)
-        })
+        self.annotated_bindings().map(|(parameter, _)| parameter)
     }
 
     /// # Iterate over the members of the branch's body
