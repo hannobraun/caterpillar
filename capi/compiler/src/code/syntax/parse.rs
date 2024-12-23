@@ -170,8 +170,17 @@ fn parse_branch_parameters(
     tokens: &mut Tokens,
     parameters: &mut IndexMap<Parameter>,
 ) -> Result<()> {
-    while let Some(parameter) = parse_branch_parameter(tokens)? {
-        parameters.push(parameter);
+    loop {
+        if let Token::Punctuator(Transformer) = tokens.peek()? {
+            tokens.take()?;
+            break;
+        }
+
+        if let Some(parameter) = parse_branch_parameter(tokens)? {
+            parameters.push(parameter);
+        } else {
+            break;
+        }
 
         match tokens.take()? {
             Token::Punctuator(Delimiter) => {
