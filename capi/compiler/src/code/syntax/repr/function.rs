@@ -147,7 +147,7 @@ pub enum Member {
     /// # A code comment
     Comment {
         /// # The text of the comment
-        text: Vec<String>,
+        lines: Vec<String>,
     },
 
     /// # The syntax node is an expression

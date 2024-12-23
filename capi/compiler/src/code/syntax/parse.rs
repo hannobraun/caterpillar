@@ -243,7 +243,7 @@ fn parse_member(
         let mut text = String::new();
         text.push_str(line);
         tokens.take()?;
-        return Ok(Member::Comment { text: vec![text] });
+        return Ok(Member::Comment { lines: vec![text] });
     }
 
     let (expression, signature) = parse_expression(tokens, location)?;
