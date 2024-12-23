@@ -18,14 +18,16 @@ use super::{
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
 pub struct TypeAnnotations {
-    inner: BTreeMap<MemberLocation, Signature>,
+    expressions: BTreeMap<MemberLocation, Signature>,
 }
 
 impl TypeAnnotations {
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
         let types_ = resolve_type_annotations(syntax_tree);
-        Self { inner: types_ }
+        Self {
+            expressions: types_,
+        }
     }
 
     /// # Access the signature of the expression at the given location, if any
@@ -33,7 +35,7 @@ impl TypeAnnotations {
         &self,
         location: &MemberLocation,
     ) -> Option<&Signature> {
-        self.inner.get(location)
+        self.expressions.get(location)
     }
 }
 
