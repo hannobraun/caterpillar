@@ -68,6 +68,7 @@ fn compile_branch(
         match parameter {
             Parameter::Binding {
                 binding: Binding { name },
+                type_: _,
             } => Some(name),
             Parameter::Literal { .. } => {
                 // Literal patterns are only relevant when
@@ -147,6 +148,7 @@ fn compile_branch(
             .map(|parameter| match parameter {
                 Parameter::Binding {
                     binding: Binding { name },
+                    type_: _,
                 } => capi_runtime::Pattern::Identifier { name },
                 Parameter::Literal { value } => {
                     capi_runtime::Pattern::Literal { value }

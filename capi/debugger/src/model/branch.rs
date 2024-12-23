@@ -61,6 +61,7 @@ impl DebugBranch {
             .map(|parameter| match parameter {
                 Parameter::Binding {
                     binding: Binding { name },
+                    type_: _,
                 } => name,
                 Parameter::Literal { value } => format!("{value:?}"),
             })

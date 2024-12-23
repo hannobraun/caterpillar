@@ -89,6 +89,9 @@ pub enum Parameter {
     Binding {
         /// # The binding
         binding: Binding,
+
+        /// # The optional type annotation that applies to the binding
+        type_: Option<SyntaxType>,
     },
 
     /// # The parameter is a literal

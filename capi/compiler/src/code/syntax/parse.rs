@@ -203,10 +203,11 @@ fn parse_branch_parameters(
 fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
     let parameter = match tokens.take()? {
         Token::Identifier { name } => {
-            let _ = parse_type_annotation(tokens)?;
+            let type_ = parse_type_annotation(tokens)?;
 
             Parameter::Binding {
                 binding: Binding { name },
+                type_,
             }
         }
         Token::IntegerLiteral { value } => Parameter::Literal {
