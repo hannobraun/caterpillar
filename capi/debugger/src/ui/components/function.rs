@@ -101,12 +101,12 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
     let (expression, actions, error) = match member.kind {
-        DebugMemberKind::Comment { text } => {
+        DebugMemberKind::Comment { lines } => {
             let class_inner = String::from("italic text-gray-500");
             (
                 view! {
                     <span class=class_inner>
-                        {text}
+                        {lines}
                     </span>
                 }
                 .into_any(),

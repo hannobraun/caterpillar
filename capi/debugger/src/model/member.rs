@@ -116,7 +116,7 @@ impl DebugMemberState {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DebugMemberKind {
-    Comment { text: Vec<String> },
+    Comment { lines: Vec<String> },
     Function { function: DebugFunction },
     Identifier { name: String },
     Value { as_string: String },
@@ -139,7 +139,7 @@ impl DebugMemberKind {
     ) -> Self {
         match member {
             Member::Comment { text } => Self::Comment {
-                text: vec![format!("# {text}")],
+                lines: vec![format!("# {text}")],
             },
             Member::Expression { expression, .. } => match expression {
                 Expression::Identifier { name } => Self::Identifier { name },
