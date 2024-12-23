@@ -285,12 +285,12 @@ fn parse_expression(
         }
     };
 
-    let signature = parse_type_annotation(tokens)?;
+    let signature = parse_signature_annotation(tokens)?;
 
     Ok((expression, signature))
 }
 
-fn parse_type_annotation(
+fn parse_signature_annotation(
     tokens: &mut Tokens,
 ) -> Result<Option<Signature<SyntaxType>>> {
     let Token::Punctuator(Introducer) = tokens.peek()? else {
