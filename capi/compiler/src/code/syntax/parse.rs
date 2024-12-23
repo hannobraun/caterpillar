@@ -239,8 +239,8 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
-    if let Token::CommentLine { text } = tokens.peek()? {
-        let text = text.clone();
+    if let Token::CommentLine { text: line } = tokens.peek()? {
+        let text = line.clone();
         tokens.take()?;
         return Ok(Member::Comment { text });
     }
