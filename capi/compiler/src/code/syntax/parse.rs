@@ -176,7 +176,7 @@ fn parse_branch_parameters(
             break;
         }
 
-        let parameter = parse_parameter(tokens)?;
+        let (parameter, _) = parse_parameter(tokens)?;
         parameters.push(parameter);
 
         match tokens.take()? {
@@ -200,7 +200,9 @@ fn parse_branch_parameters(
     Ok(())
 }
 
-fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
+fn parse_parameter(
+    tokens: &mut Tokens,
+) -> Result<(Parameter, Option<SyntaxType>)> {
     let parameter = match tokens.take()? {
         Token::Identifier { name } => Parameter::Binding(Binding { name }),
         Token::IntegerLiteral { value } => Parameter::Literal {
@@ -211,7 +213,9 @@ fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
         }
     };
 
-    Ok(parameter)
+    let type_ = parse_type_annotation(tokens)?;
+
+    Ok((parameter, type_))
 }
 
 fn parse_branch_body(
@@ -291,6 +295,17 @@ fn parse_expression(
     let signature = parse_signature_annotation(tokens)?;
 
     Ok((expression, signature))
+}
+
+fn parse_type_annotation(tokens: &mut Tokens) -> Result<Option<SyntaxType>> {
+    let Token::Punctuator(Introducer) = tokens.peek()? else {
+        return Ok(None);
+    };
+    tokens.take()?;
+
+    let type_ = parse_type(tokens)?;
+
+    Ok(Some(type_))
 }
 
 fn parse_signature_annotation(
