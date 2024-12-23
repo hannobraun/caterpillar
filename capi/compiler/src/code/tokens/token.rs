@@ -3,17 +3,9 @@
 /// See [parent module](super).
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Token {
-    /// # A comment
+    /// # A line of a comment
     ///
-    /// ## Implementation Note
-    ///
-    /// This is actually _one line_ of a comment. Multi-line comments are thus
-    /// represented by multiple tokens.
-    ///
-    /// I don't know if that's good. It seems that multi-line comments should
-    /// end up as a single unit at some point, as that would provide flexibility
-    /// in displaying them. I'm not sure though, if that should already happen
-    /// in the tokenizer, of if that's a task for parsing.
+    /// Each line starting with `#` is turned into a separate token.
     CommentLine {
         /// # The contents of the comment
         text: String,
