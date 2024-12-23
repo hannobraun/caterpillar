@@ -176,9 +176,11 @@ fn infer_branch(
                 output.parameters.insert(parameter.location.clone(), type_);
             }
 
-            register_binding(parameter.location, &output.parameters)
+            let (_, type_) =
+                register_binding(parameter.location, &output.parameters);
+            type_
         })
-        .collect::<BTreeMap<_, _>>();
+        .collect::<Vec<_>>();
 
     for binding in environment.bindings(compiler_context.syntax_tree) {
         register_binding(binding.location, &output.parameters);
@@ -223,7 +225,7 @@ fn infer_branch(
         output.stacks.insert(location, local_stack);
     }
 
-    let inputs = parameters.into_values().collect();
+    let inputs = parameters;
     let outputs = local_stack.get().cloned();
 
     Ok((inputs, outputs))
