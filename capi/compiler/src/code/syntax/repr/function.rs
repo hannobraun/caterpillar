@@ -82,17 +82,20 @@ pub struct Branch {
     udigest::Digestable,
 )]
 pub enum Parameter {
-    /// # An identifier
+    /// # The parameter is a binding
     ///
-    /// Identifiers match against any value. They are used to assign a local
-    /// name to a value.
-    Binding { binding: Binding },
+    /// Binding parameters match against any value, assigning a name to it. That
+    /// name is available locally in the branch.
+    Binding {
+        /// # The binding
+        binding: Binding,
+    },
 
-    /// # A literal
+    /// # The parameter is a literal
     ///
-    /// Literals only match against values that are equal to their `value`
-    /// field. They are used to select which branch is executed, based on the
-    /// arguments of the function call.
+    /// Literals parameters only match against values that are equal to their
+    /// `value` field. They are used to select which branch is executed, based
+    /// on the arguments of the function call.
     Literal {
         /// # The value that an argument is matched against
         value: Value,
