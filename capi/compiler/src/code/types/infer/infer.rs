@@ -149,9 +149,9 @@ fn infer_branch(
 
     let register_binding =
         |location: ParameterLocation,
-         bindings: &BTreeMap<ParameterLocation, Type>,
+         parameters: &BTreeMap<ParameterLocation, Type>,
          types: &mut InferredTypes| {
-            let type_ = bindings
+            let type_ = parameters
                 .get(&location)
                 .cloned()
                 .map(InferredType::Known)
