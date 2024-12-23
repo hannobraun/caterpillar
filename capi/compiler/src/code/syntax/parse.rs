@@ -6,7 +6,9 @@ use crate::code::{
 };
 
 use super::{
-    repr::types::SyntaxType, Binding, Branch, BranchLocation, Expression, Function, FunctionLocation, Member, MemberLocation, NamedFunction, Parameter
+    repr::types::SyntaxType, Binding, Branch, BranchLocation, Expression,
+    Function, FunctionLocation, Member, MemberLocation, NamedFunction,
+    Parameter,
 };
 
 /// # Parse the provided tokens
