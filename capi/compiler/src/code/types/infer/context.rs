@@ -13,7 +13,7 @@ use super::{
 #[derive(Default)]
 pub struct InferenceContext {
     pub types: InferredTypes,
-    pub functions: BTreeMap<FunctionLocation, Signature<Index<InferredType>>>,
+    pub functions: InferredFunctions,
     pub bindings: BTreeMap<ParameterLocation, Index<InferredType>>,
     pub expressions: BTreeMap<MemberLocation, Signature<Index<InferredType>>>,
 }
@@ -43,3 +43,6 @@ impl InferenceContext {
             .or_else(|| self.bindings.get(location).cloned())
     }
 }
+
+pub type InferredFunctions =
+    BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
