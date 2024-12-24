@@ -94,25 +94,22 @@ fn infer_cluster(
         )?;
 
         if let Some(outputs) = outputs {
-            let branch_signature = Signature { inputs, outputs };
-
             if let Some(function_signature) =
                 inference_context.function(&function, &output.functions)
             {
                 unify_type_list(
-                    [&branch_signature.inputs, &function_signature.inputs],
+                    [&inputs, &function_signature.inputs],
                     &mut inference_context.types,
                 );
                 unify_type_list(
-                    [&branch_signature.outputs, &function_signature.outputs],
+                    [&outputs, &function_signature.outputs],
                     &mut inference_context.types,
                 );
             }
 
-            inference_context.functions.insert(
-                function.clone(),
-                (branch_signature.inputs, Some(branch_signature.outputs)),
-            );
+            inference_context
+                .functions
+                .insert(function.clone(), (inputs, Some(outputs)));
         }
     }
 
