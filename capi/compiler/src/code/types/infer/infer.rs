@@ -94,7 +94,7 @@ fn infer_cluster(
             output,
         )?;
 
-        if let Some(function) = inference_context.functions.get(&function) {
+        if let Some(function) = inference_context.functions.get_mut(&function) {
             function.unify_with(&branch, &mut inference_context.types);
         } else {
             inference_context.functions.insert(function.clone(), branch);
