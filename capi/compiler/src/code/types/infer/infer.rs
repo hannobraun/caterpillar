@@ -93,16 +93,18 @@ fn infer_cluster(
             output,
         )?;
 
-        if let Some(function_signature) =
-            inference_context.function(&function, &output.functions)
+        if let Some((function_inputs, function_outputs)) =
+            inference_context.functions.get(&function)
         {
             unify_type_list(
-                [&branch_inputs, &function_signature.inputs],
+                [&branch_inputs, function_inputs],
                 &mut inference_context.types,
             );
-            if let Some(branch_outputs) = &branch_outputs {
+            if let (Some(branch_outputs), Some(function_outputs)) =
+                (&branch_outputs, function_outputs)
+            {
                 unify_type_list(
-                    [branch_outputs, &function_signature.outputs],
+                    [branch_outputs, function_outputs],
                     &mut inference_context.types,
                 );
             }
