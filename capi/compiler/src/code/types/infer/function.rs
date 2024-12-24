@@ -25,10 +25,17 @@ impl InferredFunction {
     pub fn unify_with(&mut self, other: &mut Self, types: &mut InferredTypes) {
         unify_type_list([&self.inputs, &other.inputs], types);
 
-        if let (Some(self_outputs), Some(other_outputs)) =
-            (&self.outputs, &other.outputs)
-        {
-            unify_type_list([self_outputs, other_outputs], types);
+        match (&self.outputs, &other.outputs) {
+            (Some(self_outputs), Some(other_outputs)) => {
+                unify_type_list([self_outputs, other_outputs], types);
+            }
+            (Some(_), None) => {
+                other.outputs = self.outputs.clone();
+            }
+            (None, Some(_)) => {
+                self.outputs = other.outputs.clone();
+            }
+            (None, None) => {}
         }
     }
 
@@ -90,6 +97,38 @@ mod tests {
                     Signature {
                         inputs: vec![Type::Number, Type::Number],
                         outputs: vec![Type::Number, Type::Number]
+                    },
+                )
+            }
+        }
+    }
+
+    #[test]
+    fn unify_available_and_unavailable_outputs() {
+        let mut types = InferredTypes::default();
+
+        let a = InferredFunction {
+            inputs: vec![],
+            outputs: Some(vec![types.push(InferredType::Known(Type::Number))]),
+        };
+        let b = InferredFunction {
+            inputs: vec![],
+            outputs: None,
+        };
+
+        for [mut a, mut b] in [[a.clone(), b.clone()], [b, a]] {
+            a.unify_with(&mut b, &mut types);
+
+            for function in [a, b] {
+                let signature = function.to_signature().unwrap();
+                let signature =
+                    make_direct(&signature, &types).unwrap().unwrap();
+
+                assert_eq!(
+                    signature,
+                    Signature {
+                        inputs: vec![],
+                        outputs: vec![Type::Number]
                     },
                 )
             }
