@@ -13,7 +13,7 @@ use super::{
 #[derive(Default)]
 pub struct InferenceContext {
     pub types: InferredTypes,
-    pub functions: InferredFunctions,
+    pub functions: BTreeMap<FunctionLocation, InferredFunction>,
     pub bindings: BTreeMap<ParameterLocation, Index<InferredType>>,
     pub expressions: BTreeMap<MemberLocation, Signature<Index<InferredType>>>,
 }
@@ -49,6 +49,5 @@ impl InferenceContext {
     }
 }
 
-pub type InferredFunctions = BTreeMap<FunctionLocation, InferredFunction>;
 pub type InferredFunction =
     (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>);
