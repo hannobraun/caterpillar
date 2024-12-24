@@ -93,24 +93,24 @@ fn infer_cluster(
             output,
         )?;
 
-        if let Some(outputs) = outputs {
-            if let Some(function_signature) =
-                inference_context.function(&function, &output.functions)
-            {
+        if let Some(function_signature) =
+            inference_context.function(&function, &output.functions)
+        {
+            unify_type_list(
+                [&inputs, &function_signature.inputs],
+                &mut inference_context.types,
+            );
+            if let Some(outputs) = &outputs {
                 unify_type_list(
-                    [&inputs, &function_signature.inputs],
-                    &mut inference_context.types,
-                );
-                unify_type_list(
-                    [&outputs, &function_signature.outputs],
+                    [outputs, &function_signature.outputs],
                     &mut inference_context.types,
                 );
             }
-
-            inference_context
-                .functions
-                .insert(function.clone(), (inputs, Some(outputs)));
         }
+
+        inference_context
+            .functions
+            .insert(function.clone(), (inputs, outputs));
     }
 
     for (function, (inputs, outputs)) in inference_context.functions {
