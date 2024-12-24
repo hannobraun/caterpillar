@@ -31,11 +31,7 @@ impl InferenceContext {
             })
             .or_else(|| {
                 let function = self.functions.get(location).cloned()?;
-
-                let inputs = function.inputs;
-                let outputs = function.outputs?;
-
-                Some(Signature { inputs, outputs })
+                function.to_signature()
             })
     }
 
@@ -55,4 +51,13 @@ impl InferenceContext {
 pub struct InferredFunction {
     pub inputs: Vec<Index<InferredType>>,
     pub outputs: Option<Vec<Index<InferredType>>>,
+}
+
+impl InferredFunction {
+    pub fn to_signature(&self) -> Option<Signature<Index<InferredType>>> {
+        let inputs = self.inputs.clone();
+        let outputs = self.outputs.clone()?;
+
+        Some(Signature { inputs, outputs })
+    }
 }

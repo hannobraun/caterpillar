@@ -122,12 +122,8 @@ fn infer_cluster(
     }
 
     for (location, function) in inference_context.functions {
-        let Some(outputs) = function.outputs else {
+        let Some(signature) = function.to_signature() else {
             continue;
-        };
-        let signature = Signature {
-            inputs: function.inputs,
-            outputs,
         };
 
         if let Some(signature) =
