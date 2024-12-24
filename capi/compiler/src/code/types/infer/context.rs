@@ -49,7 +49,6 @@ impl InferenceContext {
     }
 }
 
-pub type InferredFunctions = BTreeMap<
-    FunctionLocation,
-    (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>),
->;
+pub type InferredFunctions = BTreeMap<FunctionLocation, InferredFunction>;
+pub type InferredFunction =
+    (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>);
