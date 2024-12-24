@@ -100,9 +100,9 @@ fn infer_cluster(
                 [&branch_inputs, &function_signature.inputs],
                 &mut inference_context.types,
             );
-            if let Some(outputs) = &branch_outputs {
+            if let Some(branch_outputs) = &branch_outputs {
                 unify_type_list(
-                    [outputs, &function_signature.outputs],
+                    [branch_outputs, &function_signature.outputs],
                     &mut inference_context.types,
                 );
             }
