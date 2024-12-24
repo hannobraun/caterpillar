@@ -30,7 +30,7 @@ impl InferenceContext {
                 signature::make_indirect(signature.clone(), &mut self.types)
             })
             .or_else(|| {
-                let (inputs, outputs) =
+                let InferredFunction { inputs, outputs } =
                     self.functions.get(location).cloned()?;
                 let outputs = outputs?;
                 Some(Signature { inputs, outputs })
@@ -49,5 +49,8 @@ impl InferenceContext {
     }
 }
 
-pub type InferredFunction =
-    (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>);
+#[derive(Clone)]
+pub struct InferredFunction {
+    pub inputs: Vec<Index<InferredType>>,
+    pub outputs: Option<Vec<Index<InferredType>>>,
+}
