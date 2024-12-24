@@ -30,9 +30,11 @@ impl InferenceContext {
                 signature::make_indirect(signature.clone(), &mut self.types)
             })
             .or_else(|| {
-                let InferredFunction { inputs, outputs } =
-                    self.functions.get(location).cloned()?;
-                let outputs = outputs?;
+                let function = self.functions.get(location).cloned()?;
+
+                let inputs = function.inputs;
+                let outputs = function.outputs?;
+
                 Some(Signature { inputs, outputs })
             })
     }
