@@ -97,7 +97,7 @@ fn infer_cluster(
             let branch_signature = Signature { inputs, outputs };
 
             if let Some(function_signature) =
-                inference_context.functions.get(&function)
+                inference_context.function(&function, &output.functions)
             {
                 unify_type_list(
                     [&branch_signature.inputs, &function_signature.inputs],
