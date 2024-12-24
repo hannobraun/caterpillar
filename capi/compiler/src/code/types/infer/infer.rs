@@ -85,10 +85,7 @@ fn infer_cluster(
 
         let environment = compiler_context.bindings.environment_of(&function);
 
-        let InferredFunction {
-            inputs: branch_inputs,
-            outputs: branch_outputs,
-        } = infer_branch(
+        let branch = infer_branch(
             branch,
             environment,
             &mut inference_context,
@@ -102,11 +99,11 @@ fn infer_cluster(
         }) = inference_context.functions.get(&function)
         {
             unify_type_list(
-                [&branch_inputs, function_inputs],
+                [&branch.inputs, function_inputs],
                 &mut inference_context.types,
             );
             if let (Some(branch_outputs), Some(function_outputs)) =
-                (&branch_outputs, function_outputs)
+                (&branch.outputs, function_outputs)
             {
                 unify_type_list(
                     [branch_outputs, function_outputs],
@@ -118,8 +115,8 @@ fn infer_cluster(
         inference_context.functions.insert(
             function.clone(),
             InferredFunction {
-                inputs: branch_inputs,
-                outputs: branch_outputs,
+                inputs: branch.inputs,
+                outputs: branch.outputs,
             },
         );
     }
