@@ -39,3 +39,60 @@ impl InferredFunction {
         Some(Signature { inputs, outputs })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::code::{
+        types::infer::{
+            signature::make_direct,
+            types::{InferredType, InferredTypes},
+        },
+        Signature, Type,
+    };
+
+    use super::InferredFunction;
+
+    #[test]
+    fn unify_known_and_unknown_types() {
+        let mut types = InferredTypes::default();
+
+        let a = InferredFunction {
+            inputs: vec![
+                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Unknown),
+            ],
+            outputs: Some(vec![
+                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Unknown),
+            ]),
+        };
+        let b = InferredFunction {
+            inputs: vec![
+                types.push(InferredType::Unknown),
+                types.push(InferredType::Known(Type::Number)),
+            ],
+            outputs: Some(vec![
+                types.push(InferredType::Unknown),
+                types.push(InferredType::Known(Type::Number)),
+            ]),
+        };
+
+        for [a, b] in [[&a, &b], [&b, &a]] {
+            a.unify_with(b, &mut types);
+
+            for function in [a, b] {
+                let signature = function.to_signature().unwrap();
+                let signature =
+                    make_direct(&signature, &types).unwrap().unwrap();
+
+                assert_eq!(
+                    signature,
+                    Signature {
+                        inputs: vec![Type::Number, Type::Number],
+                        outputs: vec![Type::Number, Type::Number]
+                    },
+                )
+            }
+        }
+    }
+}
