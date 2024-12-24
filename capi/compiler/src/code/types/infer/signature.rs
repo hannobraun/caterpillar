@@ -56,12 +56,13 @@ pub fn unify(
         "Expecting signatures to have same number of outputs.",
     );
 
-    let mut unify = |[a, b]: [&Vec<Index<InferredType>>; 2]| {
+    let unify = |[a, b]: [&Vec<Index<InferredType>>; 2],
+                 types: &mut InferredTypes| {
         for (a, b) in a.iter().zip(b.iter()) {
             types.unify([a, b]);
         }
     };
 
-    unify([&a.inputs, &b.inputs]);
-    unify([&a.outputs, &b.outputs]);
+    unify([&a.inputs, &b.inputs], types);
+    unify([&a.outputs, &b.outputs], types);
 }
