@@ -77,8 +77,8 @@ mod tests {
             ]),
         };
 
-        for [a, b] in [[&a, &b], [&b, &a]] {
-            a.unify_with(b, &mut types);
+        for [a, b] in [[a.clone(), b.clone()], [b, a]] {
+            a.unify_with(&b, &mut types);
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();
