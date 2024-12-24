@@ -49,7 +49,17 @@ impl InferenceContext {
 
 #[derive(Clone)]
 pub struct InferredFunction {
+    /// # The inferred inputs of the function
+    ///
+    /// Since function parameters are defined as part of each of its branches,
+    /// we always know at least the number of parameters. Even if we don't know
+    /// their types.
     pub inputs: Vec<Index<InferredType>>,
+
+    /// # The inferred outputs of the function
+    ///
+    /// Can be `None`, if inference fails partway through a function, as we
+    /// might not know anything about the output in this case.
     pub outputs: Option<Vec<Index<InferredType>>>,
 }
 
