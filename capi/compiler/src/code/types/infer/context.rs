@@ -6,7 +6,7 @@ use crate::code::{
 };
 
 use super::{
-    signature,
+    signature::{self, unify_type_list},
     types::{InferredType, InferredTypes},
 };
 
@@ -64,6 +64,16 @@ pub struct InferredFunction {
 }
 
 impl InferredFunction {
+    pub fn unify_with(&self, other: &Self, types: &mut InferredTypes) {
+        unify_type_list([&self.inputs, &other.inputs], types);
+
+        if let (Some(self_outputs), Some(other_outputs)) =
+            (&self.outputs, &other.outputs)
+        {
+            unify_type_list([self_outputs, other_outputs], types);
+        }
+    }
+
     pub fn to_signature(&self) -> Option<Signature<Index<InferredType>>> {
         let inputs = self.inputs.clone();
         let outputs = self.outputs.clone()?;

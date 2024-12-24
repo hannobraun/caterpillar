@@ -17,7 +17,7 @@ use crate::{
 
 use super::{
     context::{InferenceContext, InferredFunction},
-    signature::{self, unify_type_list},
+    signature,
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -94,18 +94,7 @@ fn infer_cluster(
         )?;
 
         if let Some(function) = inference_context.functions.get(&function) {
-            unify_type_list(
-                [&branch.inputs, &function.inputs],
-                &mut inference_context.types,
-            );
-            if let (Some(branch_outputs), Some(function_outputs)) =
-                (&branch.outputs, &function.outputs)
-            {
-                unify_type_list(
-                    [branch_outputs, function_outputs],
-                    &mut inference_context.types,
-                );
-            }
+            function.unify_with(&branch, &mut inference_context.types);
         } else {
             inference_context.functions.insert(function.clone(), branch);
         }
