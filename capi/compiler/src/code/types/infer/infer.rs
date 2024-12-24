@@ -106,9 +106,9 @@ fn infer_cluster(
                     &mut inference_context.types,
                 );
             }
+        } else {
+            inference_context.functions.insert(function.clone(), branch);
         }
-
-        inference_context.functions.insert(function.clone(), branch);
     }
 
     for (location, function) in inference_context.functions {
