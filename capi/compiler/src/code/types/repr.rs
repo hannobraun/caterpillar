@@ -691,7 +691,7 @@ mod tests {
                 outputs: vec![Type::Function {
                     signature: Signature {
                         inputs: vec![Type::Number],
-                        outputs: vec![Type::Number]
+                        outputs: vec![Type::Number],
                     },
                 }],
             },
