@@ -17,7 +17,7 @@ use crate::{
 
 use super::{
     context::InferenceContext,
-    signature,
+    signature::{self, unify_type_list},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -99,8 +99,12 @@ fn infer_cluster(
             if let Some(function_signature) =
                 inference_context.functions.get(&function)
             {
-                signature::unify(
-                    [&branch_signature, function_signature],
+                unify_type_list(
+                    [&branch_signature.inputs, &function_signature.inputs],
+                    &mut inference_context.types,
+                );
+                unify_type_list(
+                    [&branch_signature.outputs, &function_signature.outputs],
                     &mut inference_context.types,
                 );
             }
