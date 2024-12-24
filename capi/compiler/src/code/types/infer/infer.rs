@@ -359,14 +359,10 @@ fn infer_expression(
 
     let signature = match (inferred, explicit) {
         (Some(inferred), Some(explicit)) => {
-            let mut merge = |a: &Vec<Index<InferredType>>, b| {
-                for (index_a, index_b) in a.iter().zip(b) {
-                    inference_context.types.unify([index_a, index_b]);
-                }
-            };
-
-            merge(&inferred.inputs, &explicit.inputs);
-            merge(&inferred.outputs, &explicit.outputs);
+            signature::unify(
+                [&inferred, &explicit],
+                &mut inference_context.types,
+            );
 
             Some(inferred)
         }
