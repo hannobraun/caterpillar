@@ -121,13 +121,14 @@ fn infer_cluster(
         );
     }
 
-    for (location, InferredFunction { inputs, outputs }) in
-        inference_context.functions
-    {
-        let Some(outputs) = outputs else {
+    for (location, function) in inference_context.functions {
+        let Some(outputs) = function.outputs else {
             continue;
         };
-        let signature = Signature { inputs, outputs };
+        let signature = Signature {
+            inputs: function.inputs,
+            outputs,
+        };
 
         if let Some(signature) =
             signature::make_direct(&signature, &inference_context.types)?
