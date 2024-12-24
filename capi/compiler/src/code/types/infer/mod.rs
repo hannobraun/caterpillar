@@ -1,4 +1,5 @@
 mod context;
+mod function;
 mod infer;
 mod signature;
 mod types;

@@ -16,7 +16,8 @@ use crate::{
 };
 
 use super::{
-    context::{InferenceContext, InferredFunction},
+    context::InferenceContext,
+    function::InferredFunction,
     signature,
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
