@@ -22,7 +22,7 @@ pub struct InferredFunction {
 }
 
 impl InferredFunction {
-    pub fn unify_with(&mut self, other: &Self, types: &mut InferredTypes) {
+    pub fn unify_with(&mut self, other: &mut Self, types: &mut InferredTypes) {
         unify_type_list([&self.inputs, &other.inputs], types);
 
         if let (Some(self_outputs), Some(other_outputs)) =
@@ -77,8 +77,8 @@ mod tests {
             ]),
         };
 
-        for [mut a, b] in [[a.clone(), b.clone()], [b, a]] {
-            a.unify_with(&b, &mut types);
+        for [mut a, mut b] in [[a.clone(), b.clone()], [b, a]] {
+            a.unify_with(&mut b, &mut types);
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();

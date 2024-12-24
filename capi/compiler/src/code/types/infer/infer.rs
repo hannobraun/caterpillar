@@ -86,7 +86,7 @@ fn infer_cluster(
 
         let environment = compiler_context.bindings.environment_of(&function);
 
-        let branch = infer_branch(
+        let mut branch = infer_branch(
             branch,
             environment,
             &mut inference_context,
@@ -95,7 +95,7 @@ fn infer_cluster(
         )?;
 
         if let Some(function) = inference_context.functions.get_mut(&function) {
-            function.unify_with(&branch, &mut inference_context.types);
+            function.unify_with(&mut branch, &mut inference_context.types);
         } else {
             inference_context.functions.insert(function.clone(), branch);
         }
