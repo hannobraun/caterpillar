@@ -85,7 +85,10 @@ fn infer_cluster(
 
         let environment = compiler_context.bindings.environment_of(&function);
 
-        let (branch_inputs, branch_outputs) = infer_branch(
+        let InferredFunction {
+            inputs: branch_inputs,
+            outputs: branch_outputs,
+        } = infer_branch(
             branch,
             environment,
             &mut inference_context,
@@ -158,7 +161,7 @@ fn infer_branch(
     inference_context: &mut InferenceContext,
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
-) -> Result<(Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>)> {
+) -> Result<InferredFunction> {
     let mut local_stack = LocalStack::default();
 
     let mut register_binding =
@@ -239,7 +242,7 @@ fn infer_branch(
     let inputs = parameters;
     let outputs = local_stack.get().cloned();
 
-    Ok((inputs, outputs))
+    Ok(InferredFunction { inputs, outputs })
 }
 
 fn infer_expression(
