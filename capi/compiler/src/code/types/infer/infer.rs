@@ -111,12 +111,15 @@ fn infer_cluster(
 
             inference_context.functions.insert(
                 function.clone(),
-                (branch_signature.inputs, branch_signature.outputs),
+                (branch_signature.inputs, Some(branch_signature.outputs)),
             );
         }
     }
 
     for (function, (inputs, outputs)) in inference_context.functions {
+        let Some(outputs) = outputs else {
+            continue;
+        };
         let signature = Signature { inputs, outputs };
 
         if let Some(signature) =

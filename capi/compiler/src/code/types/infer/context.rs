@@ -32,6 +32,7 @@ impl InferenceContext {
             .or_else(|| {
                 let (inputs, outputs) =
                     self.functions.get(location).cloned()?;
+                let outputs = outputs?;
                 Some(Signature { inputs, outputs })
             })
     }
@@ -50,5 +51,5 @@ impl InferenceContext {
 
 pub type InferredFunctions = BTreeMap<
     FunctionLocation,
-    (Vec<Index<InferredType>>, Vec<Index<InferredType>>),
+    (Vec<Index<InferredType>>, Option<Vec<Index<InferredType>>>),
 >;
