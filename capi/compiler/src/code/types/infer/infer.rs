@@ -112,13 +112,7 @@ fn infer_cluster(
             }
         }
 
-        inference_context.functions.insert(
-            function.clone(),
-            InferredFunction {
-                inputs: branch.inputs,
-                outputs: branch.outputs,
-            },
-        );
+        inference_context.functions.insert(function.clone(), branch);
     }
 
     for (location, function) in inference_context.functions {
