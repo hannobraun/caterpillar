@@ -109,13 +109,16 @@ fn infer_cluster(
                 );
             }
 
-            inference_context
-                .functions
-                .insert(function.clone(), branch_signature);
+            inference_context.functions.insert(
+                function.clone(),
+                (branch_signature.inputs, branch_signature.outputs),
+            );
         }
     }
 
-    for (function, signature) in inference_context.functions {
+    for (function, (inputs, outputs)) in inference_context.functions {
+        let signature = Signature { inputs, outputs };
+
         if let Some(signature) =
             signature::make_direct(&signature, &inference_context.types)?
         {

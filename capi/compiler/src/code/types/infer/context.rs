@@ -29,7 +29,11 @@ impl InferenceContext {
             .map(|signature| {
                 signature::make_indirect(signature.clone(), &mut self.types)
             })
-            .or_else(|| self.functions.get(location).cloned())
+            .or_else(|| {
+                let (inputs, outputs) =
+                    self.functions.get(location).cloned()?;
+                Some(Signature { inputs, outputs })
+            })
     }
 
     pub fn binding(
@@ -44,5 +48,7 @@ impl InferenceContext {
     }
 }
 
-pub type InferredFunctions =
-    BTreeMap<FunctionLocation, Signature<Index<InferredType>>>;
+pub type InferredFunctions = BTreeMap<
+    FunctionLocation,
+    (Vec<Index<InferredType>>, Vec<Index<InferredType>>),
+>;
