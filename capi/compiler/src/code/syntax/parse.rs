@@ -169,15 +169,10 @@ fn parse_branch(
         }
     }
 
-    let mut branch = Branch::default();
-
     let parameters = parse_branch_parameters(tokens)?;
     let body = parse_branch_body(tokens, location)?;
 
-    branch.parameters = parameters;
-    branch.body = body;
-
-    Ok(Some(branch))
+    Ok(Some(Branch { parameters, body }))
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens) -> Result<IndexMap<Parameter>> {
