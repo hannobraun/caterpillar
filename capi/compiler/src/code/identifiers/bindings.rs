@@ -356,7 +356,7 @@ mod tests {
                             \ child_parameter ->
                         end
                     
-                    child_parameter
+                        child_parameter
                 end
             ",
         );
