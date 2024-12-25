@@ -66,6 +66,11 @@ fn parse_named_function(
     tokens: &mut Tokens,
     index: Index<NamedFunction>,
 ) -> Result<NamedFunction> {
+    while let Token::CommentLine { .. } = tokens.peek()? {
+        // Comments in the top-level context are currently ignored.
+        tokens.take()?;
+    }
+
     let name = parse_function_name(tokens)?;
 
     let location = FunctionLocation::Named { index };
@@ -78,20 +83,10 @@ fn parse_named_function(
 }
 
 fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
-    let name = loop {
-        if let Token::CommentLine { .. } = tokens.peek()? {
-            // Comments in the top-level context are currently ignored.
-            tokens.take()?;
-            continue;
-        }
-
-        match tokens.take()? {
-            Token::Identifier { name } => {
-                break name;
-            }
-            token => {
-                return Err(Error::UnexpectedToken { actual: token });
-            }
+    let name = match tokens.take()? {
+        Token::Identifier { name } => name,
+        token => {
+            return Err(Error::UnexpectedToken { actual: token });
         }
     };
 
