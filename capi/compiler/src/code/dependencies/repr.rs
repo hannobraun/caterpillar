@@ -265,28 +265,36 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let (syntax_tree, dependencies) = resolve_dependencies(
+        let f = r"
+            f: fn
+                \ ->
+                    0 g
+            end
+        ";
+        let g = r"
+            g: fn
+                \ 0 ->
+                    0 h
+                \ n ->
+                    0
+            end
+        ";
+        let h = r"
+            h: fn
+                \ 0 ->
+                    1 h
+                \ n ->
+                    n g
+            end
+        ";
+
+        let (syntax_tree, dependencies) = resolve_dependencies(&format!(
             r"
-                f: fn
-                    \ ->
-                        0 g
-                end
-
-                g: fn
-                    \ 0 ->
-                        0 h
-                    \ n ->
-                        0
-                end
-
-                h: fn
-                    \ 0 ->
-                        1 h
-                    \ n ->
-                        n g
-                end
+                {f}
+                {g}
+                {h}
             ",
-        );
+        ));
 
         let [f, g, h] = ["f", "g", "h"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
