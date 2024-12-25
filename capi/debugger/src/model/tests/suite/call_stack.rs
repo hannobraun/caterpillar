@@ -22,16 +22,19 @@ fn basic_call_stack() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    f
-                    nop # make sure the previous call is not a tail call
+                main: fn
+                    \ size_x, size_y ->
+                        f
+                        nop # make sure the previous call is not a tail call
                 end
-                f: fn \ ->
-                    g
-                    nop # make sure the previous call is not a tail call
+                f: fn
+                    \ ->
+                        g
+                        nop # make sure the previous call is not a tail call
                 end
-                g: fn \ ->
-                    brk
+                g: fn
+                    \ ->
+                        brk
                 end
             ",
         )
@@ -51,8 +54,9 @@ fn stopped_at_host_function() {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    halt
+                main: fn
+                    \ size_x, size_y ->
+                        halt
                 end
             ",
         )
@@ -87,8 +91,13 @@ fn stopped_in_anonymous_function() {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    fn \ -> brk end eval
+                main: fn
+                    \ size_x, size_y ->
+                        fn
+                            \ ->
+                                brk
+                        end
+                        eval
                 end
             ",
         )
@@ -128,12 +137,14 @@ fn call_stack_reconstruction_missing_main() {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    f
+                main: fn
+                    \ size_x, size_y ->
+                        f
                 end
 
-                f: fn \ ->
-                    brk
+                f: fn
+                    \ ->
+                        brk
                 end
             ",
         )
@@ -179,17 +190,20 @@ fn call_stack_reconstruction_missing_single_branch_function() {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    f
-                    nop # make sure the previous call is not a tail call
+                main: fn
+                    \ size_x, size_y ->
+                        f
+                        nop # make sure the previous call is not a tail call
                 end
 
-                f: fn \ ->
-                    g
+                f: fn
+                    \ ->
+                        g
                 end
 
-                g: fn \ ->
-                    brk
+                g: fn
+                    \ ->
+                        brk
                 end
             ",
         )
@@ -242,12 +256,14 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
                         f
                 end
 
-                f: fn \ ->
-                    g
+                f: fn
+                    \ ->
+                        g
                 end
 
-                g: fn \ ->
-                    brk
+                g: fn
+                    \ ->
+                        brk
                 end
             ",
         )
@@ -275,8 +291,9 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     let transient = debugger()
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    0 f
+                main: fn
+                    \ size_x, size_y ->
+                        0 f
                 end
 
                 f: fn
@@ -287,12 +304,14 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
                         g
                 end
 
-                g: fn \ ->
-                    h
+                g: fn
+                    \ ->
+                        h
                 end
 
-                h: fn \ ->
-                    brk
+                h: fn
+                    \ ->
+                        brk
                 end
             ",
         )
@@ -329,13 +348,15 @@ fn instruction_on_call_stack_with_no_associated_expression() {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    submit
-                    main
+                main: fn
+                    \ size_x, size_y ->
+                        submit
+                        main
                 end
 
-                submit: fn \ ->
-                    submit_frame # this is the call to the host function
+                submit: fn
+                    \ ->
+                        submit_frame # this is the call to the host function
                 end
             ",
         )
