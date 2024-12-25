@@ -624,7 +624,7 @@ mod tests {
             ",
         );
 
-        let (g, h) = syntax_tree
+        let (call_to_g_in_f, h) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -652,7 +652,7 @@ mod tests {
             assert_eq!(types.stack_at(call).unwrap(), stack);
         };
 
-        check(&g, &[Type::Number]);
+        check(&call_to_g_in_f, &[Type::Number]);
         check(&h, &[Type::Number, Type::Number]);
     }
 
