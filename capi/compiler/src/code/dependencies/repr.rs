@@ -265,30 +265,30 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let f = r"
-            f: fn
-                \ ->
-                    0 g
-            end
-        ";
-        let g = r"
-            g: fn
-                \ 0 ->
-                    0 h
-                \ n ->
-                    0
-            end
-        ";
-        let h = r"
-            h: fn
-                \ 0 ->
-                    1 h
-                \ n ->
-                    n g
-            end
-        ";
-
-        let functions = [f, g, h];
+        let functions = [
+            r"
+                f: fn
+                    \ ->
+                        0 g
+                end
+            ",
+            r"
+                g: fn
+                    \ 0 ->
+                        0 h
+                    \ n ->
+                        0
+                end
+            ",
+            r"
+                h: fn
+                    \ 0 ->
+                        1 h
+                    \ n ->
+                        n g
+                end
+            ",
+        ];
 
         for permutation in functions.into_iter().permutations(functions.len()) {
             let [a, b, c] = permutation.as_slice() else {
