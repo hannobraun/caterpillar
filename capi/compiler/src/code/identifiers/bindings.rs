@@ -232,6 +232,7 @@ mod tests {
                     \ parameter ->
                         parameter
                         no_parameter
+                    end
                 end
             ",
         );
@@ -264,7 +265,9 @@ mod tests {
                             \ ->
                                 parameter
                                 no_parameter
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -311,7 +314,9 @@ mod tests {
                         fn
                             \ parameter ->
                                 parameter
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -354,9 +359,11 @@ mod tests {
                     \ ->
                         fn
                             \ child_parameter ->
+                            end
                         end
                     
                         child_parameter
+                    end
                 end
             ",
         );
@@ -390,9 +397,11 @@ mod tests {
                                 fn
                                     \ ->
                                         binding
+                                    end
                                 end
+                            end
                         end
-                        
+                    end
                 end
             ",
         );

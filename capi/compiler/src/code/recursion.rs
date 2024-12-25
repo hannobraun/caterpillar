@@ -113,6 +113,7 @@ mod tests {
                     \ ->
                         nop
                         f
+                    end
                 end
             ",
         );
@@ -142,7 +143,9 @@ mod tests {
                             \ ->
                                 nop
                                 f
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -176,11 +179,13 @@ mod tests {
                     \ ->
                         nop
                         g
+                    end
                 end
 
                 g: fn
                     \ ->
                         f
+                    end
                 end
             ",
         );
@@ -210,12 +215,15 @@ mod tests {
                             \ ->
                                 nop
                                 g
+                            end
                         end
+                    end
                 end
 
                 g: fn
                     \ ->
                         f
+                    end
                 end
             ",
         );
@@ -251,7 +259,9 @@ mod tests {
                         fn
                             \ ->
                                 f
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -283,8 +293,11 @@ mod tests {
                                 fn
                                     \ ->
                                         f
+                                    end
                                 end
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -314,12 +327,15 @@ mod tests {
                         fn
                             \ ->
                                 g
+                            end
                         end
+                    end
                 end
 
                 g: fn
                     \ ->
                         f
+                    end
                 end
             ",
         );
@@ -351,13 +367,17 @@ mod tests {
                                 fn
                                     \ ->
                                         g
+                                    end
                                 end
+                            end
                         end
+                    end
                 end
 
                 g: fn
                     \ ->
                         f
+                    end
                 end
             ",
         );

@@ -241,7 +241,8 @@ fn parse_branch_body(
 
     loop {
         match tokens.peek()? {
-            Token::Punctuator(BranchStart) | Token::Keyword(End) => {
+            Token::Keyword(End) => {
+                tokens.take()?;
                 break;
             }
             _ => {

@@ -109,6 +109,7 @@ mod tests {
                 f: fn
                     \ ->
                         host_fn
+                    end
                 end
             ",
         );
@@ -143,6 +144,7 @@ mod tests {
                 f: fn
                     \ ->
                         nop
+                    end
                 end
             ",
         );
@@ -174,10 +176,12 @@ mod tests {
                 f: fn
                     \ ->
                         user_fn
+                    end
                 end
 
                 user_fn: fn
                     \ ->
+                    end
                 end
             ",
         );

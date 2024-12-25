@@ -263,6 +263,7 @@ mod tests {
                 f: fn
                     \ value ->
                         value not
+                    end
                 end
             ",
         );
@@ -309,10 +310,12 @@ mod tests {
         let branch_with_known_type = r"
             \ 0 ->
                 0
+            end
         ";
         let branch_with_unknown_type = r"
             \ x ->
                 x
+            end
         ";
 
         test(branch_with_known_type, branch_with_unknown_type);
@@ -379,7 +382,9 @@ mod tests {
                         fn
                             \ ->
                                 value not # type of `value` can be inferred here
+                            end
                         end
+                    end
                 end
             ",
         );
@@ -427,6 +432,7 @@ mod tests {
                 f: fn
                     \ ->
                         1
+                    end
                 end
             ",
         );
@@ -463,11 +469,13 @@ mod tests {
                 f: fn
                     \ ->
                         0 g
+                    end
                 end
 
                 g: fn
                     \ x ->
                         x not
+                    end
                 end
             ",
         );
@@ -504,14 +512,17 @@ mod tests {
                 f: fn
                     \ ->
                         0 0 g
+                    end
                 end
 
                 g: fn
                     \ 0, x ->
                         x
+                    end
 
                     \ x, 0 ->
                         x
+                    end
                 end
             ",
         );
@@ -546,10 +557,12 @@ mod tests {
         let branch_recursive = r"
             \ 0 ->
                 1 g
+            end
         ";
         let branch_non_recursive = r"
             \ x ->
                 x
+            end
         ";
 
         test(branch_recursive, branch_non_recursive);
@@ -561,6 +574,7 @@ mod tests {
                     f: fn
                         \ ->
                             0 g
+                        end
                     end
 
                     g: fn
@@ -604,22 +618,27 @@ mod tests {
                     \ ->
                         0 g
                         0 h
+                    end
                 end
 
                 g: fn
                     \ 0 ->
                         0 h
+                    end
                     
                     \ _ ->
                         1 h
+                    end
                 end
 
                 h: fn
                     \ 0 ->
                         1 g
+                    end
 
                     \ _ ->
                         0
+                    end
                 end
             ",
         );
@@ -680,7 +699,9 @@ mod tests {
                         fn
                             \ x ->
                                 x not
+                            end
                         end
+                    end
                 end
             ",
         );

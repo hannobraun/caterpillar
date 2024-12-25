@@ -16,6 +16,7 @@ fn use_updated_code_on_next_recursive_function_call() {
                     \ ->
                         0 send
                         main
+                    end
                 end
             ",
         )
@@ -28,6 +29,7 @@ fn use_updated_code_on_next_recursive_function_call() {
                     \ ->
                         1 send
                         main
+                    end
                 end
             ",
         )
@@ -51,11 +53,13 @@ fn use_updated_code_on_next_non_recursive_function_call() {
                         0 send
                         notify
                         main
+                    end
                 end
 
                 notify: fn
                     \ ->
                         1 send
+                    end
                 end
             ",
         )
@@ -69,11 +73,13 @@ fn use_updated_code_on_next_non_recursive_function_call() {
                         0 send
                         notify
                         main
+                    end
                 end
 
                 notify: fn
                     \ ->
                         2 send
+                    end
                 end
             ",
         )
@@ -99,6 +105,7 @@ fn use_old_code_before_next_function_call() {
                         0 send
                         1 send
                         main
+                    end
                 end
             ",
         )
@@ -112,6 +119,7 @@ fn use_old_code_before_next_function_call() {
                         0 send
                         2 send
                         main
+                    end
                 end
             ",
         )
@@ -132,6 +140,7 @@ fn handle_update_that_makes_function_larger() {
                     \ ->
                         0 send
                         main
+                    end
                 end
             ",
         )
@@ -145,6 +154,7 @@ fn handle_update_that_makes_function_larger() {
                         1 send
                         2 send
                         main
+                    end
                 end
             ",
         )
@@ -167,6 +177,7 @@ fn handle_update_that_makes_function_smaller() {
                         0 send
                         1 send
                         main
+                    end
                 end
             ",
         )
@@ -179,6 +190,7 @@ fn handle_update_that_makes_function_smaller() {
                     \ ->
                         2 send
                         main
+                    end
                 end
             ",
         )
@@ -205,10 +217,12 @@ fn compile_call_to_function_that_has_not_been_updated() {
                         f
                         0 send
                         main
+                    end
                 end
 
                 f: fn
                     \ ->
+                    end
                 end
             ",
         )
@@ -222,10 +236,12 @@ fn compile_call_to_function_that_has_not_been_updated() {
                         f
                         1 send
                         main
+                    end
                 end
 
                 f: fn
                     \ ->
+                    end
                 end
             ",
         )

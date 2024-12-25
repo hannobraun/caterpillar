@@ -10,8 +10,10 @@ fn eval() {
                         fn
                             \ ->
                                 0 send
+                            end
                         end
                         eval
+                    end
                 end
             ",
         )
@@ -29,9 +31,11 @@ fn parameter() {
                         fn
                             \ channel ->
                                 channel
+                            end
                         end
                         eval
                         send
+                    end
                 end
             ",
         )
@@ -52,11 +56,14 @@ fn parameter_shadowing() {
                                 fn
                                     \ channel ->
                                         channel
+                                    end
                                 end
                                 eval
+                            end
                         end
                         eval
                         send
+                    end
                 end
             ",
         )
@@ -82,12 +89,16 @@ fn captured_binding() {
                                         fn
                                             \ ->
                                                 channel send
+                                            end
                                         end
                                         eval
+                                    end
                                 end
                                 eval
+                            end
                         end
                         eval
+                    end
                 end
             ",
         )

@@ -201,12 +201,14 @@ mod tests {
             f: fn
                 \ ->
                     g
+                end
             end
         ";
         let g = r"
             g: fn
                 \ ->
                     nop
+                end
             end
         ";
 
@@ -235,12 +237,14 @@ mod tests {
             f: fn
                 \ ->
                     g
+                end
             end
         ";
         let g = r"
             g: fn
                 \ ->
                     g
+                end
             end
         ";
 
@@ -272,6 +276,7 @@ mod tests {
                     r"
                         \ ->
                             0 g
+                        end
                     ",
                 ],
             ),
@@ -281,10 +286,12 @@ mod tests {
                     r"
                         \ 0 ->
                             0 h
+                        end
                     ",
                     r"
                         \ n ->
                             0
+                        end
                     ",
                 ],
             ),
@@ -294,10 +301,12 @@ mod tests {
                     r"
                         \ 0 ->
                             1 h
+                        end
                     ",
                     r"
                         \ n ->
                             n g
+                        end
                     ",
                 ],
             ),
@@ -343,10 +352,12 @@ mod tests {
                     # a
                     \ 0 ->
                         0 g
+                    end
 
                     # b
                     \ n ->
                         0
+                    end
                 end
             ",
             r"
@@ -354,10 +365,12 @@ mod tests {
                     # c
                     \ 0 ->
                         1 g
+                    end
 
                     # d
                     \ n ->
                         n f
+                    end
                 end
             ",
         ];
@@ -410,11 +423,13 @@ mod tests {
                         # Call a function that comes is placed after this one in
                         # the source code.
                         h
+                    end
                 end
 
                 g: fn
                     \ ->
                         nop
+                    end
                 end
 
                 h: fn
@@ -422,6 +437,7 @@ mod tests {
                         # And for some variety, call a function that is placed
                         # before.
                         g
+                    end
                 end
             ",
         );
@@ -446,12 +462,15 @@ mod tests {
                                 # Call a function that is placed after this one
                                 # in the source code.
                                 h
+                            end
                         end
+                    end
                 end
 
                 g: fn
                     \ ->
                         nop
+                    end
                 end
 
                 h: fn
@@ -461,7 +480,9 @@ mod tests {
                                 # And for some variety, call a function that is
                                 # placed before.
                                 g
+                            end
                         end
+                    end
                 end
             ",
         );

@@ -62,6 +62,7 @@ mod tests {
                     \ ->
                         not_tail
                         tail
+                    end
                 end
             ",
         );
@@ -93,6 +94,7 @@ mod tests {
                         not_tail
                         tail
                         # This is a comment.
+                    end
                 end
             ",
         );
