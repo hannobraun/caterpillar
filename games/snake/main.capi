@@ -853,12 +853,13 @@ vec_buf_len: fn
             vec_buf
             _vec_buf_next
             load
-            fn \ next ->
-                next
-                first
-                sub_u8_wrap
-                2
-                div_u8
+            fn
+                \ next ->
+                    next
+                    first
+                    sub_u8_wrap
+                    2
+                    div_u8
             end
                 eval
         end
