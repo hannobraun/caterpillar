@@ -80,6 +80,23 @@ fn parse_named_function(
     })
 }
 
+fn parse_comment(tokens: &mut Tokens) -> Result<Option<Comment>> {
+    let mut lines = Vec::new();
+
+    while let Token::CommentLine { line } = tokens.peek()? {
+        lines.push(line.clone());
+        tokens.take()?;
+    }
+
+    let comment = if lines.is_empty() {
+        None
+    } else {
+        Some(Comment { lines })
+    };
+
+    Ok(comment)
+}
+
 fn parse_function_name(tokens: &mut Tokens) -> Result<String> {
     let name = match tokens.take()? {
         Token::Identifier { name } => name,
@@ -262,23 +279,6 @@ fn parse_member(
     };
 
     Ok(member)
-}
-
-fn parse_comment(tokens: &mut Tokens) -> Result<Option<Comment>> {
-    let mut lines = Vec::new();
-
-    while let Token::CommentLine { line } = tokens.peek()? {
-        lines.push(line.clone());
-        tokens.take()?;
-    }
-
-    let comment = if lines.is_empty() {
-        None
-    } else {
-        Some(Comment { lines })
-    };
-
-    Ok(comment)
 }
 
 fn parse_expression(
