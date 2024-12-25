@@ -264,7 +264,7 @@ mod tests {
     }
 
     #[test]
-    fn mutual_recursion() {
+    fn function_dependencies_in_the_presence_of_mutual_recursion() {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
@@ -298,6 +298,35 @@ mod tests {
                 [vec![g, h], vec![f]],
             );
         }
+    }
+
+    #[test]
+    fn branch_dependencies_in_the_presence_of_mutual_recursion() {
+        let (syntax_tree, dependencies) = resolve_dependencies(
+            r"
+                f: fn
+                    \ ->
+                        0 g
+                end
+
+                g: fn
+                    \ 0 ->
+                        0 h
+                    \ n ->
+                        0
+                end
+
+                h: fn
+                    \ 0 ->
+                        1 h
+                    \ n ->
+                        n g
+                end
+            ",
+        );
+
+        let [g, h] =
+            ["g", "h"].map(|name| syntax_tree.function_by_name(name).unwrap());
 
         let (g_a, g_b, h_a, h_b) = [g, h]
             .into_iter()
