@@ -494,6 +494,20 @@ mod tests {
         (syntax_tree, dependencies)
     }
 
+    /// # Given a set of functions, iterate over all permutations
+    ///
+    /// The functions are represented as tuples of a name and a list of
+    /// branches.
+    ///
+    /// Creates all permutations of each provided function (i.e. all possible
+    /// orders of branches), computes the cartesian product of all those
+    /// functions (i.e. creates all possible combinations of them), and finally,
+    /// creates all permutations for each set of functions (again, all possible
+    /// orders of those functions).
+    ///
+    /// Or in other words, it's possible to create each function with any order
+    /// of their branches, and to define those functions in any order. Given
+    /// those possibilities, this function creates all potential combinations.
     fn all_permutations<'r>(
         functions: impl IntoIterator<Item = (&'r str, Vec<&'r str>)>,
     ) -> impl Iterator<Item = Vec<String>> {
