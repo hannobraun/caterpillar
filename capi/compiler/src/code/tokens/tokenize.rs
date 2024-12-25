@@ -93,7 +93,7 @@ impl Buffer {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
             } else if token == "br" {
-                Token::Keyword(Branch)
+                Token::Keyword(Br)
             } else if token == "end" {
                 Token::Keyword(End)
             } else if token == "fn" {
