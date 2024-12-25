@@ -61,9 +61,6 @@ pub enum Punctuator {
     /// previous one, that it relates to.
     Introducer,
 
-    /// # The start of a branch, rendered as `\`
-    BranchStart,
-
     /// # An indication that a thing is transformed to another, rendered as `->`
     ///
     /// Shows up in the form of `a -> b`, where `a` could be the parameter list

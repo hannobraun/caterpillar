@@ -8,7 +8,6 @@ pub fn tokenize(input: &str) -> Vec<Token> {
     let eager_tokens = vec![
         (r",", Token::Punctuator(Delimiter)),
         (r":", Token::Punctuator(Introducer)),
-        (r"\", Token::Punctuator(BranchStart)),
         (r"->", Token::Punctuator(Transformer)),
         (r".", Token::Punctuator(Terminator)),
     ];
