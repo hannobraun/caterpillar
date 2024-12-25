@@ -371,7 +371,7 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                \ value ->
+                    \ value ->
                         # We should know the type of `value` from its use within
                         # the local function.
                         value
