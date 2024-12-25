@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let permutated_functions = [
+        let permutated_functions = all_permutations([
             (
                 "f",
                 vec![
@@ -301,26 +301,7 @@ mod tests {
                     ",
                 ],
             ),
-        ]
-        .into_iter()
-        .map(|(name, branches)| {
-            let mut permutations = Vec::new();
-
-            for permutation in branches.iter().permutations(branches.len()) {
-                let mut function = format!("{name}: fn\n");
-
-                for branch in permutation {
-                    writeln!(function, "{branch}").unwrap();
-                }
-
-                writeln!(function, "end").unwrap();
-
-                permutations.push(function);
-            }
-
-            permutations
-        })
-        .multi_cartesian_product();
+        ]);
 
         for functions in permutated_functions {
             for permutation in functions.iter().permutations(functions.len()) {
@@ -511,6 +492,32 @@ mod tests {
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
 
         (syntax_tree, dependencies)
+    }
+
+    fn all_permutations<'r>(
+        functions: impl IntoIterator<Item = (&'r str, Vec<&'r str>)>,
+    ) -> impl Iterator<Item = Vec<String>> {
+        functions
+            .into_iter()
+            .map(|(name, branches)| {
+                let mut permutations = Vec::new();
+
+                for permutation in branches.iter().permutations(branches.len())
+                {
+                    let mut function = format!("{name}: fn\n");
+
+                    for branch in permutation {
+                        writeln!(function, "{branch}").unwrap();
+                    }
+
+                    writeln!(function, "end").unwrap();
+
+                    permutations.push(function);
+                }
+
+                permutations
+            })
+            .multi_cartesian_product()
     }
 
     fn dependencies_by_function(
