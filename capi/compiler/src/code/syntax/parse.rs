@@ -82,8 +82,22 @@ fn parse_named_function(
 fn parse_comment(tokens: &mut Tokens) -> Result<Option<Comment>> {
     let mut lines = Vec::new();
 
+    let mut indentation = None;
+
     while let Token::CommentLine { line } = tokens.peek()? {
-        lines.push(line.clone());
+        let offset = indentation.or_else(|| {
+            let first_after_whitespace = line.split_whitespace().next()?;
+            let whitespace = line.split(first_after_whitespace).next()?;
+            let indentation = whitespace.chars().count();
+            Some(indentation)
+        });
+        indentation = offset;
+
+        let offset = offset.unwrap_or(0);
+
+        let line = line.chars().skip(offset);
+        lines.push(line.collect());
+
         tokens.take()?;
     }
 
