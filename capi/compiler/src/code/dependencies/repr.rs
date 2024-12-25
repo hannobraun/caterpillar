@@ -304,37 +304,35 @@ mod tests {
         ];
 
         for functions in all_permutations(functions) {
-            for permutation in functions.iter().permutations(functions.len()) {
-                let [a, b, c] = permutation.as_slice() else {
-                    unreachable!();
-                };
+            let permutation = functions;
+            let [a, b, c] = permutation.as_slice() else {
+                unreachable!();
+            };
 
-                let (syntax_tree, dependencies) =
-                    resolve_dependencies(&format!(
-                        "
-                            {a}
-                            {b}
-                            {c}
-                        ",
-                    ));
+            let (syntax_tree, dependencies) = resolve_dependencies(&format!(
+                "
+                    {a}
+                    {b}
+                    {c}
+                ",
+            ));
 
-                let [f, g, h] = ["f", "g", "h"]
-                    .map(|name| syntax_tree.function_by_name(name).unwrap())
-                    .map(|function| function.location());
+            let [f, g, h] = ["f", "g", "h"]
+                .map(|name| syntax_tree.function_by_name(name).unwrap())
+                .map(|function| function.location());
 
-                let clusters =
-                    dependencies_by_function(&dependencies, &syntax_tree);
-                let [cluster_a, cluster_b] = clusters.as_slice() else {
-                    panic!("Expected two clusters.");
-                };
+            let clusters =
+                dependencies_by_function(&dependencies, &syntax_tree);
+            let [cluster_a, cluster_b] = clusters.as_slice() else {
+                panic!("Expected two clusters.");
+            };
 
-                // `g` and `h` are mutually recursive, so their order is not
-                // defined.
-                assert!(cluster_a.contains(&g));
-                assert!(cluster_a.contains(&h));
+            // `g` and `h` are mutually recursive, so their order is not
+            // defined.
+            assert!(cluster_a.contains(&g));
+            assert!(cluster_a.contains(&h));
 
-                assert_eq!(cluster_b, &vec![f]);
-            }
+            assert_eq!(cluster_b, &vec![f]);
         }
     }
 
@@ -511,7 +509,7 @@ mod tests {
     fn all_permutations<'r>(
         functions: impl IntoIterator<Item = (&'r str, Vec<&'r str>)>,
     ) -> impl Iterator<Item = Vec<String>> {
-        functions
+        let permutations_based_on_branch_ordering = functions
             .into_iter()
             .map(|(name, branches)| {
                 let mut permutations = Vec::new();
@@ -532,6 +530,15 @@ mod tests {
                 permutations
             })
             .multi_cartesian_product()
+            .collect::<Vec<_>>();
+
+        permutations_based_on_branch_ordering
+            .iter()
+            .cloned()
+            .permutations(permutations_based_on_branch_ordering.len())
+            .flatten()
+            .collect::<Vec<_>>()
+            .into_iter()
     }
 
     fn dependencies_by_function(
