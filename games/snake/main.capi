@@ -388,16 +388,17 @@ handle_coordinate_smaller_than_zero: fn
         0
         coord
         greater_s8
-        fn \ coord_smaller_than_zero ->
-            coord_smaller_than_zero
-            fn
-                \ 1 ->
-                    coord limit add_s8
+        fn
+            \ coord_smaller_than_zero ->
+                coord_smaller_than_zero
+                fn
+                    \ 1 ->
+                        coord limit add_s8
 
-                \ _ ->
-                    coord
-            end
-                eval
+                    \ _ ->
+                        coord
+                end
+                    eval
         end
             eval
 end
