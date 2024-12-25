@@ -590,34 +590,35 @@ check_body_collision_inner: fn
                 vec_x
                 x
                 eq
-                fn \ x_matches ->
-                    positions
-                    index
-                    vec_buf_get
-                    vec_y
-                    y
-                    eq
-                    fn \ y_matches ->
-                        x_matches
-                        y_matches
-                        add_s32
-                        2
+                fn
+                    \ x_matches ->
+                        positions
+                        index
+                        vec_buf_get
+                        vec_y
+                        y
                         eq
-                        fn
-                            \ 0 ->
-                                x
-                                y
-                                index
-                                1
-                                add_s32
-                                check_body_collision_inner
+                        fn \ y_matches ->
+                            x_matches
+                            y_matches
+                            add_s32
+                            2
+                            eq
+                            fn
+                                \ 0 ->
+                                    x
+                                    y
+                                    index
+                                    1
+                                    add_s32
+                                    check_body_collision_inner
 
-                            \ _ ->
-                                1
+                                \ _ ->
+                                    1
+                            end
+                                eval
                         end
                             eval
-                    end
-                        eval
                 end
                     eval
 
