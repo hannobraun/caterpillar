@@ -355,7 +355,7 @@ mod tests {
             ",
         );
 
-        let (f_a, f_b, g_a, h_b) = ["f", "g"]
+        let (f_a, f_b, g_a, g_b) = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
@@ -377,7 +377,7 @@ mod tests {
             branches.by_ref().take(2).collect_tuple().unwrap();
 
         assert_eq!(first, f_b);
-        assert_eq!(second, h_b);
+        assert_eq!(second, g_b);
 
         // The other two are mutually dependent, so there is no clear order.
         let rest = branches.collect::<BTreeSet<_>>();
