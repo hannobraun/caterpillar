@@ -171,16 +171,17 @@ fn parse_branch(
 
     let mut branch = Branch::default();
 
-    parse_branch_parameters(tokens, &mut branch.parameters)?;
+    let parameters = parse_branch_parameters(tokens)?;
     parse_branch_body(tokens, &mut branch.body, location)?;
+
+    branch.parameters = parameters;
 
     Ok(Some(branch))
 }
 
-fn parse_branch_parameters(
-    tokens: &mut Tokens,
-    parameters: &mut IndexMap<Parameter>,
-) -> Result<()> {
+fn parse_branch_parameters(tokens: &mut Tokens) -> Result<IndexMap<Parameter>> {
+    let mut parameters = IndexMap::default();
+
     loop {
         if let Token::Punctuator(Transformer) = tokens.peek()? {
             tokens.take()?;
@@ -208,7 +209,7 @@ fn parse_branch_parameters(
         }
     }
 
-    Ok(())
+    Ok(parameters)
 }
 
 fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
