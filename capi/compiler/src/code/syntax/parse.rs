@@ -252,10 +252,8 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
-    if let Token::CommentLine { .. } = tokens.peek()? {
-        if let Some(comment) = parse_comment(tokens)? {
-            return Ok(Member::Comment(comment));
-        }
+    if let Some(comment) = parse_comment(tokens)? {
+        return Ok(Member::Comment(comment));
     }
 
     let (expression, signature) = parse_expression(tokens, location)?;
