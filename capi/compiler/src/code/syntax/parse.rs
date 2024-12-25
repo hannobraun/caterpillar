@@ -66,10 +66,8 @@ fn parse_named_function(
     tokens: &mut Tokens,
     index: Index<NamedFunction>,
 ) -> Result<NamedFunction> {
-    while let Token::CommentLine { .. } = tokens.peek()? {
-        // Comments in the top-level context are currently ignored.
-        tokens.take()?;
-    }
+    // Comments in the top-level context are currently ignored.
+    let _ = parse_comment(tokens);
 
     let name = parse_function_name(tokens)?;
 
