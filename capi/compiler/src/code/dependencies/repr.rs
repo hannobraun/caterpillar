@@ -289,7 +289,7 @@ mod tests {
         ";
 
         let (syntax_tree, dependencies) = resolve_dependencies(&format!(
-            r"
+            "
                 {f}
                 {g}
                 {h}
