@@ -360,10 +360,8 @@ mod tests {
             ",
         );
 
-        let [g, h] =
-            ["g", "h"].map(|name| syntax_tree.function_by_name(name).unwrap());
-
-        let (g_a, g_b, h_a, h_b) = [g, h]
+        let (g_a, g_b, h_a, h_b) = ["g", "h"]
+            .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
                 function
