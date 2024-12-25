@@ -816,22 +816,23 @@ vec_buf_push: fn
     \ vec_buf, x, y ->
         vec_buf
         _vec_buf_next
-        fn \ next_addr ->
-            vec_buf
-            next_addr
-            load
-            0
-            _vec_buf_address
-            fn
-                \ address ->
-                    x
-                    y
-                    address
-                    vec_store
-                    next_addr: -> Number .
-                    _vec_buf_inc_index
-            end
-                eval
+        fn
+            \ next_addr ->
+                vec_buf
+                next_addr
+                load
+                0
+                _vec_buf_address
+                fn
+                    \ address ->
+                        x
+                        y
+                        address
+                        vec_store
+                        next_addr: -> Number .
+                        _vec_buf_inc_index
+                end
+                    eval
         end
             eval
 end
