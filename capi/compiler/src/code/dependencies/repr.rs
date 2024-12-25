@@ -290,7 +290,7 @@ mod tests {
             ",
         ];
 
-        for permutation in functions.into_iter().permutations(functions.len()) {
+        for permutation in functions.iter().permutations(functions.len()) {
             let [a, b, c] = permutation.as_slice() else {
                 unreachable!();
             };
