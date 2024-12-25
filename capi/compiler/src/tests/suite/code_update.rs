@@ -12,9 +12,10 @@ fn use_updated_code_on_next_recursive_function_call() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    0 send
-                    main
+                main: fn
+                    \ ->
+                        0 send
+                        main
                 end
             ",
         )
@@ -23,9 +24,10 @@ fn use_updated_code_on_next_recursive_function_call() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    1 send
-                    main
+                main: fn
+                    \ ->
+                        1 send
+                        main
                 end
             ",
         )
@@ -92,10 +94,11 @@ fn use_old_code_before_next_function_call() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    0 send
-                    1 send
-                    main
+                main: fn
+                    \ ->
+                        0 send
+                        1 send
+                        main
                 end
             ",
         )
@@ -104,10 +107,11 @@ fn use_old_code_before_next_function_call() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    0 send
-                    2 send
-                    main
+                main: fn
+                    \ ->
+                        0 send
+                        2 send
+                        main
                 end
             ",
         )
@@ -124,9 +128,10 @@ fn handle_update_that_makes_function_larger() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    0 send
-                    main
+                main: fn
+                    \ ->
+                        0 send
+                        main
                 end
             ",
         )
@@ -135,10 +140,11 @@ fn handle_update_that_makes_function_larger() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    1 send
-                    2 send
-                    main
+                main: fn
+                    \ ->
+                        1 send
+                        2 send
+                        main
                 end
             ",
         )
@@ -156,10 +162,11 @@ fn handle_update_that_makes_function_smaller() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    0 send
-                    1 send
-                    main
+                main: fn
+                    \ ->
+                        0 send
+                        1 send
+                        main
                 end
             ",
         )
@@ -168,9 +175,10 @@ fn handle_update_that_makes_function_smaller() {
     runtime
         .update_code(
             r"
-                main: fn \ ->
-                    2 send
-                    main
+                main: fn
+                    \ ->
+                        2 send
+                        main
                 end
             ",
         )
@@ -199,7 +207,9 @@ fn compile_call_to_function_that_has_not_been_updated() {
                         main
                 end
 
-                f: fn \ -> end
+                f: fn
+                    \ ->
+                end
             ",
         )
         .run_until_receiving(0);
@@ -214,7 +224,9 @@ fn compile_call_to_function_that_has_not_been_updated() {
                         main
                 end
 
-                f: fn \ -> end
+                f: fn
+                    \ ->
+                end
             ",
         )
         .run_until_receiving(1);
