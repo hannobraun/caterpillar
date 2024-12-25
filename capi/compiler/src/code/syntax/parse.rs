@@ -67,7 +67,7 @@ fn parse_named_function(
     index: Index<NamedFunction>,
 ) -> Result<NamedFunction> {
     // Comments in the top-level context are currently ignored.
-    let _ = parse_comment(tokens);
+    let _ = parse_comment(tokens)?;
 
     let name = parse_function_name(tokens)?;
 
