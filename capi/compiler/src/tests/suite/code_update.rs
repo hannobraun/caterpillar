@@ -13,7 +13,7 @@ fn use_updated_code_on_next_recursive_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         main
                     end
@@ -26,7 +26,7 @@ fn use_updated_code_on_next_recursive_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         1 send
                         main
                     end
@@ -49,7 +49,7 @@ fn use_updated_code_on_next_non_recursive_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         notify
                         main
@@ -57,7 +57,7 @@ fn use_updated_code_on_next_non_recursive_function_call() {
                 end
 
                 notify: fn
-                    \ ->
+                    br ->
                         1 send
                     end
                 end
@@ -69,7 +69,7 @@ fn use_updated_code_on_next_non_recursive_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         notify
                         main
@@ -77,7 +77,7 @@ fn use_updated_code_on_next_non_recursive_function_call() {
                 end
 
                 notify: fn
-                    \ ->
+                    br ->
                         2 send
                     end
                 end
@@ -101,7 +101,7 @@ fn use_old_code_before_next_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         1 send
                         main
@@ -115,7 +115,7 @@ fn use_old_code_before_next_function_call() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         2 send
                         main
@@ -137,7 +137,7 @@ fn handle_update_that_makes_function_larger() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         main
                     end
@@ -150,7 +150,7 @@ fn handle_update_that_makes_function_larger() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         1 send
                         2 send
                         main
@@ -173,7 +173,7 @@ fn handle_update_that_makes_function_smaller() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0 send
                         1 send
                         main
@@ -187,7 +187,7 @@ fn handle_update_that_makes_function_smaller() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         2 send
                         main
                     end
@@ -213,7 +213,7 @@ fn compile_call_to_function_that_has_not_been_updated() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         f
                         0 send
                         main
@@ -221,7 +221,7 @@ fn compile_call_to_function_that_has_not_been_updated() {
                 end
 
                 f: fn
-                    \ ->
+                    br ->
                     end
                 end
             ",
@@ -232,7 +232,7 @@ fn compile_call_to_function_that_has_not_been_updated() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         f
                         1 send
                         main
@@ -240,7 +240,7 @@ fn compile_call_to_function_that_has_not_been_updated() {
                 end
 
                 f: fn
-                    \ ->
+                    br ->
                     end
                 end
             ",

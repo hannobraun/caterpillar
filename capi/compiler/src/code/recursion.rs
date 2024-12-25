@@ -110,7 +110,7 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         f
                     end
@@ -138,9 +138,9 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         fn
-                            \ ->
+                            br ->
                                 nop
                                 f
                             end
@@ -176,14 +176,14 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         g
                     end
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         f
                     end
                 end
@@ -210,9 +210,9 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         fn
-                            \ ->
+                            br ->
                                 nop
                                 g
                             end
@@ -221,7 +221,7 @@ mod tests {
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         f
                     end
                 end
@@ -254,10 +254,10 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         fn
-                            \ ->
+                            br ->
                                 f
                             end
                         end
@@ -286,12 +286,12 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         fn
-                            \ ->
+                            br ->
                                 fn
-                                    \ ->
+                                    br ->
                                         f
                                     end
                                 end
@@ -322,10 +322,10 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         fn
-                            \ ->
+                            br ->
                                 g
                             end
                         end
@@ -333,7 +333,7 @@ mod tests {
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         f
                     end
                 end
@@ -360,12 +360,12 @@ mod tests {
         let (syntax_tree, recursion) = find_recursion(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                         fn
-                            \ ->
+                            br ->
                                 fn
-                                    \ ->
+                                    br ->
                                         g
                                     end
                                 end
@@ -375,7 +375,7 @@ mod tests {
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         f
                     end
                 end

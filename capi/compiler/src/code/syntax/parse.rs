@@ -157,7 +157,7 @@ fn parse_branch(
     let comment = parse_comment(tokens)?;
 
     match tokens.peek()? {
-        Token::Punctuator(BranchStart) => {
+        Token::Keyword(Br) => {
             tokens.take()?;
         }
         Token::Keyword(End) => {

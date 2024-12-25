@@ -107,7 +107,7 @@ mod tests {
         let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         host_fn
                     end
                 end
@@ -142,7 +142,7 @@ mod tests {
         let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         nop
                     end
                 end
@@ -174,13 +174,13 @@ mod tests {
         let (syntax_tree, function_calls) = resolve_function_calls(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         user_fn
                     end
                 end
 
                 user_fn: fn
-                    \ ->
+                    br ->
                     end
                 end
             ",

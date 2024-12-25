@@ -199,14 +199,14 @@ mod tests {
     fn function_dependencies_without_recursion() {
         let f = r"
             f: fn
-                \ ->
+                br ->
                     g
                 end
             end
         ";
         let g = r"
             g: fn
-                \ ->
+                br ->
                     nop
                 end
             end
@@ -235,14 +235,14 @@ mod tests {
     fn function_dependencies_in_the_presence_of_self_recursion() {
         let f = r"
             f: fn
-                \ ->
+                br ->
                     g
                 end
             end
         ";
         let g = r"
             g: fn
-                \ ->
+                br ->
                     g
                 end
             end
@@ -274,7 +274,7 @@ mod tests {
                 "f",
                 vec![
                     r"
-                        \ ->
+                        br ->
                             0 g
                         end
                     ",
@@ -284,12 +284,12 @@ mod tests {
                 "g",
                 vec![
                     r"
-                        \ 0 ->
+                        br 0 ->
                             0 h
                         end
                     ",
                     r"
-                        \ n ->
+                        br n ->
                             0
                         end
                     ",
@@ -299,12 +299,12 @@ mod tests {
                 "h",
                 vec![
                     r"
-                        \ 0 ->
+                        br 0 ->
                             1 h
                         end
                     ",
                     r"
-                        \ n ->
+                        br n ->
                             n g
                         end
                     ",
@@ -350,12 +350,12 @@ mod tests {
             r"
                 f: fn
                     # a
-                    \ 0 ->
+                    br 0 ->
                         0 g
                     end
 
                     # b
-                    \ n ->
+                    br n ->
                         0
                     end
                 end
@@ -363,12 +363,12 @@ mod tests {
             r"
                 g: fn
                     # c
-                    \ 0 ->
+                    br 0 ->
                         1 g
                     end
 
                     # d
-                    \ n ->
+                    br n ->
                         n f
                     end
                 end
@@ -419,7 +419,7 @@ mod tests {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         # Call a function that comes is placed after this one in
                         # the source code.
                         h
@@ -427,13 +427,13 @@ mod tests {
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         nop
                     end
                 end
 
                 h: fn
-                    \ ->
+                    br ->
                         # And for some variety, call a function that is placed
                         # before.
                         g
@@ -456,9 +456,9 @@ mod tests {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         fn
-                            \ ->
+                            br ->
                                 # Call a function that is placed after this one
                                 # in the source code.
                                 h
@@ -468,15 +468,15 @@ mod tests {
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         nop
                     end
                 end
 
                 h: fn
-                    \ ->
+                    br ->
                         fn
-                            \ ->
+                            br ->
                                 # And for some variety, call a function that is
                                 # placed before.
                                 g

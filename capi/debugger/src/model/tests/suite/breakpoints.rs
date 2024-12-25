@@ -18,7 +18,7 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         nop # this is where the breakpoint will be set
                         brk # prevent process from ending before we set
                             # breakpoint
@@ -59,7 +59,7 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     nop
                 end
             end
@@ -108,7 +108,7 @@ fn step_over_brk() -> anyhow::Result<()> {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         brk
                         nop
                     end
@@ -168,7 +168,7 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     nop # a
                     nop # b
                     nop # c
@@ -265,7 +265,7 @@ fn step_into_function() {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     1 2 f
                 end
             end
@@ -273,11 +273,11 @@ fn step_into_function() {
             # Add some arguments. In case the compiler decides to generate code
             # to handle those, this makes sure we step over that generated code.
             f: fn
-                \ 1, a ->
+                br 1, a ->
                     nop # a
                 end
 
-                \ 2, b ->
+                br 2, b ->
                     nop # b
                 end
             end
@@ -342,14 +342,14 @@ fn step_out_of_function_if_at_last_expression() {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     f
                     nop
                 end
             end
 
             f: fn
-                \ ->
+                br ->
                     nop
                     # There's a return instruction at the end of the function,
                     # which we expect to step over.
@@ -417,7 +417,7 @@ fn step_out_of_main_function() {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     nop
                 end
             end
@@ -463,14 +463,14 @@ fn step_over_function_call() {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     f
                     nop
                 end
             end
 
             f: fn
-                \ ->
+                br ->
                     nop
                 end
             end
@@ -517,14 +517,14 @@ fn step_out_of_function() {
     debugger.provide_source_code(
         r"
             main: fn
-                \ size_x, size_y ->
+                br size_x, size_y ->
                     f
                     nop # b
                 end
             end
 
             f: fn
-                \ ->
+                br ->
                     nop # a
                     nop
                 end

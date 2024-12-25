@@ -261,7 +261,7 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ value ->
+                    br value ->
                         value not
                     end
                 end
@@ -308,12 +308,12 @@ mod tests {
         // the parameter list of another branch.
 
         let branch_with_known_type = r"
-            \ 0 ->
+            br 0 ->
                 0
             end
         ";
         let branch_with_unknown_type = r"
-            \ x ->
+            br x ->
                 x
             end
         ";
@@ -374,13 +374,13 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ value ->
+                    br value ->
                         # We should know the type of `value` from its use within
                         # the local function.
                         value
 
                         fn
-                            \ ->
+                            br ->
                                 value not # type of `value` can be inferred here
                             end
                         end
@@ -430,7 +430,7 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         1
                     end
                 end
@@ -467,13 +467,13 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         0 g
                     end
                 end
 
                 g: fn
-                    \ x ->
+                    br x ->
                         x not
                     end
                 end
@@ -510,17 +510,17 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         0 0 g
                     end
                 end
 
                 g: fn
-                    \ 0, x ->
+                    br 0, x ->
                         x
                     end
 
-                    \ x, 0 ->
+                    br x, 0 ->
                         x
                     end
                 end
@@ -555,12 +555,12 @@ mod tests {
         // information.
 
         let branch_recursive = r"
-            \ 0 ->
+            br 0 ->
                 1 g
             end
         ";
         let branch_non_recursive = r"
-            \ x ->
+            br x ->
                 x
             end
         ";
@@ -572,7 +572,7 @@ mod tests {
             let (syntax_tree, types) = infer_types(&format!(
                 r"
                     f: fn
-                        \ ->
+                        br ->
                             0 g
                         end
                     end
@@ -615,28 +615,28 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         0 g
                         0 h
                     end
                 end
 
                 g: fn
-                    \ 0 ->
+                    br 0 ->
                         0 h
                     end
                     
-                    \ _ ->
+                    br _ ->
                         1 h
                     end
                 end
 
                 h: fn
-                    \ 0 ->
+                    br 0 ->
                         1 g
                     end
 
-                    \ _ ->
+                    br _ ->
                         0
                     end
                 end
@@ -695,9 +695,9 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         fn
-                            \ x ->
+                            br x ->
                                 x not
                             end
                         end

@@ -59,7 +59,7 @@ mod tests {
         let (syntax_tree, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         not_tail
                         tail
                     end
@@ -90,7 +90,7 @@ mod tests {
         let (syntax_tree, tail_expressions) = find_tail_expressions(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         not_tail
                         tail
                         # This is a comment.

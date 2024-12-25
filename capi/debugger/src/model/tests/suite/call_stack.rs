@@ -23,19 +23,19 @@ fn basic_call_stack() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         f
                         nop # make sure the previous call is not a tail call
                     end
                 end
                 f: fn
-                    \ ->
+                    br ->
                         g
                         nop # make sure the previous call is not a tail call
                     end
                 end
                 g: fn
-                    \ ->
+                    br ->
                         brk
                     end
                 end
@@ -58,7 +58,7 @@ fn stopped_at_host_function() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         halt
                     end
                 end
@@ -96,9 +96,9 @@ fn stopped_in_anonymous_function() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         fn
-                            \ ->
+                            br ->
                                 brk
                             end
                         end
@@ -144,13 +144,13 @@ fn call_stack_reconstruction_missing_main() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         f
                     end
                 end
 
                 f: fn
-                    \ ->
+                    br ->
                         brk
                     end
                 end
@@ -199,20 +199,20 @@ fn call_stack_reconstruction_missing_single_branch_function() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         f
                         nop # make sure the previous call is not a tail call
                     end
                 end
 
                 f: fn
-                    \ ->
+                    br ->
                         g
                     end
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         brk
                     end
                 end
@@ -260,23 +260,23 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
         .provide_source_code(
             r"
                 main: fn
-                    \ 0, 0 ->
+                    br 0, 0 ->
                         f
                     end
 
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         f
                     end
                 end
 
                 f: fn
-                    \ ->
+                    br ->
                         g
                     end
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         brk
                     end
                 end
@@ -307,29 +307,29 @@ fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         0 f
                     end
                 end
 
                 f: fn
-                    \ 0 ->
+                    br 0 ->
                         g
                     end
 
-                    \ n ->
+                    br n ->
                         g
                     end
                 end
 
                 g: fn
-                    \ ->
+                    br ->
                         h
                     end
                 end
 
                 h: fn
-                    \ ->
+                    br ->
                         brk
                     end
                 end
@@ -369,14 +369,14 @@ fn instruction_on_call_stack_with_no_associated_expression() {
         .provide_source_code(
             r"
                 main: fn
-                    \ size_x, size_y ->
+                    br size_x, size_y ->
                         submit
                         main
                     end
                 end
 
                 submit: fn
-                    \ ->
+                    br ->
                         submit_frame # this is the call to the host function
                     end
                 end

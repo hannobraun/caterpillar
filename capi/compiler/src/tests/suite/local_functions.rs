@@ -6,9 +6,9 @@ fn eval() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         fn
-                            \ ->
+                            br ->
                                 0 send
                             end
                         end
@@ -26,10 +26,10 @@ fn parameter() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0
                         fn
-                            \ channel ->
+                            br channel ->
                                 channel
                             end
                         end
@@ -48,13 +48,13 @@ fn parameter_shadowing() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0
                         fn
-                            \ channel ->
+                            br channel ->
                                 channel
                                 fn
-                                    \ channel ->
+                                    br channel ->
                                         channel
                                     end
                                 end
@@ -76,18 +76,18 @@ fn captured_binding() {
         .update_code(
             r"
                 main: fn
-                    \ ->
+                    br ->
                         0
                         fn
-                            \ channel ->
+                            br channel ->
                                 fn
-                                    \ ->
+                                    br ->
                                         # We are not using `channel` here, to
                                         # make sure that capturing works even
                                         # from a grandparent scope.
 
                                         fn
-                                            \ ->
+                                            br ->
                                                 channel send
                                             end
                                         end

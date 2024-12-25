@@ -229,7 +229,7 @@ mod tests {
         let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
-                    \ parameter ->
+                    br parameter ->
                         parameter
                         no_parameter
                     end
@@ -260,9 +260,9 @@ mod tests {
         let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
-                    \ parameter ->
+                    br parameter ->
                         fn
-                            \ ->
+                            br ->
                                 parameter
                                 no_parameter
                             end
@@ -310,9 +310,9 @@ mod tests {
         let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
-                    \ parameter ->
+                    br parameter ->
                         fn
-                            \ parameter ->
+                            br parameter ->
                                 parameter
                             end
                         end
@@ -356,9 +356,9 @@ mod tests {
         let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
-                    \ ->
+                    br ->
                         fn
-                            \ child_parameter ->
+                            br child_parameter ->
                             end
                         end
                     
@@ -391,11 +391,11 @@ mod tests {
         let (syntax_tree, bindings) = resolve_bindings(
             r"
                 f: fn
-                    \ binding ->
+                    br binding ->
                         fn
-                            \ ->
+                            br ->
                                 fn
-                                    \ ->
+                                    br ->
                                         binding
                                     end
                                 end
