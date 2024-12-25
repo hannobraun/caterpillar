@@ -307,7 +307,11 @@ mod tests {
             panic!("Expected two clusters.");
         };
 
-        assert_eq!([cluster_a, cluster_b], [&vec![g, h], &vec![f]],);
+        // `g` and `h` are mutually recursive, so their order is not defined.
+        assert!(cluster_a.contains(&g));
+        assert!(cluster_a.contains(&h));
+
+        assert_eq!(cluster_b, &vec![f]);
     }
 
     #[test]
