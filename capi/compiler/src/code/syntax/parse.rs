@@ -258,12 +258,12 @@ fn parse_member(
 
     let (expression, signature) = parse_expression(tokens, location)?;
 
-    let syntax_node = Member::Expression {
+    let member = Member::Expression {
         expression,
         signature,
     };
 
-    Ok(syntax_node)
+    Ok(member)
 }
 
 fn parse_comment(tokens: &mut Tokens) -> Result<Option<Comment>> {
