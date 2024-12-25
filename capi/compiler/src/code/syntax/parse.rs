@@ -172,9 +172,10 @@ fn parse_branch(
     let mut branch = Branch::default();
 
     let parameters = parse_branch_parameters(tokens)?;
-    parse_branch_body(tokens, &mut branch.body, location)?;
+    let body = parse_branch_body(tokens, location)?;
 
     branch.parameters = parameters;
+    branch.body = body;
 
     Ok(Some(branch))
 }
@@ -235,9 +236,10 @@ fn parse_parameter(tokens: &mut Tokens) -> Result<Parameter> {
 
 fn parse_branch_body(
     tokens: &mut Tokens,
-    body: &mut IndexMap<Member>,
     location: BranchLocation,
-) -> Result<()> {
+) -> Result<IndexMap<Member>> {
+    let mut body = IndexMap::default();
+
     loop {
         match tokens.peek()? {
             Token::Punctuator(BranchStart) | Token::Keyword(End) => {
@@ -254,7 +256,7 @@ fn parse_branch_body(
         }
     }
 
-    Ok(())
+    Ok(body)
 }
 
 fn parse_member(
