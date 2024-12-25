@@ -348,23 +348,24 @@ update_next_position: fn
                                         next_y
                                         limit_y
                                         handle_coordinate_smaller_than_zero
-                                        fn \ next_y ->
-                                            next_x
-                                            limit_x
-                                            handle_coordinate_larger_than_limit
-                                            fn \ next_x ->
-                                                next_y
-                                                limit_y
+                                        fn
+                                            \ next_y ->
+                                                next_x
+                                                limit_x
                                                 handle_coordinate_larger_than_limit
-                                                fn \ next_y ->
-                                                    next_x
+                                                fn \ next_x ->
                                                     next_y
-                                                    next_position
-                                                    vec_store
+                                                    limit_y
+                                                    handle_coordinate_larger_than_limit
+                                                    fn \ next_y ->
+                                                        next_x
+                                                        next_y
+                                                        next_position
+                                                        vec_store
+                                                    end
+                                                        eval
                                                 end
                                                     eval
-                                            end
-                                                eval
                                         end
                                             eval
                                 end
