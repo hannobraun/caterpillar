@@ -183,7 +183,10 @@ impl DependencyCluster {
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::BTreeSet, fmt::Write};
+    use std::{
+        collections::{BTreeMap, BTreeSet},
+        fmt::Write,
+    };
 
     use itertools::Itertools;
 
@@ -384,17 +387,27 @@ mod tests {
             ",
         ));
 
-        let (a, b, c, d) = ["f", "g"]
-            .map(|name| syntax_tree.function_by_name(name).unwrap())
-            .into_iter()
-            .flat_map(|function| {
-                function
-                    .into_located_function()
-                    .branches()
-                    .map(|branch| branch.location)
-            })
-            .collect_tuple()
-            .unwrap();
+        let [a, b, c, d] = {
+            let mut branches = ["f", "g"]
+                .map(|name| syntax_tree.function_by_name(name).unwrap())
+                .into_iter()
+                .flat_map(|function| {
+                    function.into_located_function().branches().map(|branch| {
+                        let name = branch
+                            .comment
+                            .clone()
+                            .unwrap()
+                            .lines
+                            .into_iter()
+                            .next()
+                            .unwrap();
+                        (name, branch.location)
+                    })
+                })
+                .collect::<BTreeMap<_, _>>();
+
+            ["a", "b", "c", "d"].map(|name| branches.remove(name).unwrap())
+        };
 
         let mut branches = dependencies
             .clusters()
