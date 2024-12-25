@@ -624,7 +624,7 @@ mod tests {
             ",
         );
 
-        let (call_to_g_in_f, h) = syntax_tree
+        let (call_to_g_in_f, call_to_h_in_f) = syntax_tree
             .function_by_name("f")
             .unwrap()
             .into_located_function()
@@ -653,7 +653,7 @@ mod tests {
         };
 
         check(&call_to_g_in_f, &[Type::Number]);
-        check(&h, &[Type::Number, Type::Number]);
+        check(&call_to_h_in_f, &[Type::Number, Type::Number]);
     }
 
     #[test]
