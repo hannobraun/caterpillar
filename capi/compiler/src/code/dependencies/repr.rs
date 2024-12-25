@@ -341,21 +341,21 @@ mod tests {
             r"
                 f: fn
                     \ 0 ->
-                        0 h
+                        0 g
                     \ n ->
                         0
                 end
 
-                h: fn
+                g: fn
                     \ 0 ->
-                        1 h
+                        1 g
                     \ n ->
                         n f
                 end
             ",
         );
 
-        let (g_a, g_b, h_a, h_b) = ["f", "h"]
+        let (g_a, g_b, h_a, h_b) = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
