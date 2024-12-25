@@ -8,7 +8,7 @@ use super::{expression::Expression, types::SyntaxType};
 ///
 /// Named functions are defined in the top-level context. Functions that are
 /// defined locally within other functions do not have a name.
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunction {
     /// # The comment about the named function, if any
     pub comment: Option<Comment>,
