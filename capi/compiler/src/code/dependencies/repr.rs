@@ -303,8 +303,11 @@ mod tests {
             .map(|function| function.location());
 
         let clusters = dependencies_by_function(&dependencies, &syntax_tree);
+        let [cluster_a, cluster_b] = clusters.as_slice() else {
+            panic!("Expected two clusters.");
+        };
 
-        assert_eq!(clusters, [vec![g, h], vec![f]],);
+        assert_eq!([cluster_a, cluster_b], [&vec![g, h], &vec![f]],);
     }
 
     #[test]
