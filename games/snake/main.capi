@@ -803,10 +803,11 @@ vec_buf_last: fn
         vec_buf_len
         1
         sub_u8
-        fn \ index ->
-            vec_buf
-            index
-            vec_buf_get
+        fn
+            \ index ->
+                vec_buf
+                index
+                vec_buf_get
         end
             eval
 end
