@@ -364,8 +364,8 @@ update_next_position: fn
                                                                 next_y
                                                                 next_position
                                                                 vec_store
-                                                            end
-                                                                eval
+                                                        end
+                                                            eval
                                                 end
                                                     eval
                                         end
