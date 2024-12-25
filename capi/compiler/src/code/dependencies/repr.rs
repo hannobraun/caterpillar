@@ -337,7 +337,7 @@ mod tests {
 
     #[test]
     fn branch_dependencies_in_the_presence_of_mutual_recursion() {
-        let [f, g] = [
+        let functions = [
             r"
                 f: fn
                     \ 0 ->
@@ -356,7 +356,7 @@ mod tests {
             ",
         ];
 
-        let [a, b] = [f, g];
+        let [a, b] = functions;
 
         let (syntax_tree, dependencies) = resolve_dependencies(&format!(
             r"
