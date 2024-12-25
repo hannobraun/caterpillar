@@ -61,6 +61,9 @@ pub struct Function {
     udigest::Digestable,
 )]
 pub struct Branch {
+    /// # The comment about the branch, if any
+    pub comment: Option<Comment>,
+
     /// # The parameters of the branch
     pub parameters: IndexMap<Parameter>,
 

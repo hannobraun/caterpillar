@@ -154,7 +154,7 @@ fn parse_branch(
     tokens: &mut Tokens,
     location: BranchLocation,
 ) -> Result<Option<Branch>> {
-    let _ = parse_comment(tokens)?;
+    let comment = parse_comment(tokens)?;
 
     match tokens.peek()? {
         Token::Punctuator(BranchStart) => {
@@ -172,7 +172,11 @@ fn parse_branch(
     let parameters = parse_branch_parameters(tokens)?;
     let body = parse_branch_body(tokens, location)?;
 
-    Ok(Some(Branch { parameters, body }))
+    Ok(Some(Branch {
+        comment,
+        parameters,
+        body,
+    }))
 }
 
 fn parse_branch_parameters(tokens: &mut Tokens) -> Result<IndexMap<Parameter>> {
