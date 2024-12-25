@@ -640,6 +640,17 @@ mod tests {
             })
             .collect_tuple()
             .unwrap();
+        let call_to_g_in_h = syntax_tree
+            .function_by_name("h")
+            .unwrap()
+            .into_located_function()
+            .branches()
+            .next()
+            .unwrap()
+            .expressions()
+            .map(|expression| expression.location)
+            .nth(1)
+            .unwrap();
 
         let check = |call, stack: &[Type]| {
             assert_eq!(
@@ -654,6 +665,7 @@ mod tests {
 
         check(&call_to_g_in_f, &[Type::Number]);
         check(&call_to_h_in_f, &[Type::Number, Type::Number]);
+        check(&call_to_g_in_h, &[Type::Number]);
     }
 
     #[test]
