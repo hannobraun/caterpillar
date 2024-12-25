@@ -196,7 +196,7 @@ mod tests {
     };
 
     #[test]
-    fn no_recursion() {
+    fn function_dependencies_without_recursion() {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
