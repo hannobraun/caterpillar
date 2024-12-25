@@ -7,8 +7,11 @@ fn eval() {
             r"
                 main: fn
                     \ ->
-                        fn \ -> 0 send end
-                            eval
+                        fn
+                            \ ->
+                                0 send
+                        end
+                        eval
                 end
             ",
         )
@@ -23,9 +26,12 @@ fn parameter() {
                 main: fn
                     \ ->
                         0
-                        fn \ channel -> channel end
-                            eval
-                            send
+                        fn
+                            \ channel ->
+                                channel
+                        end
+                        eval
+                        send
                 end
             ",
         )
@@ -43,11 +49,14 @@ fn parameter_shadowing() {
                         fn
                             \ channel ->
                                 channel
-                                fn \ channel -> channel end
-                                    eval
+                                fn
+                                    \ channel ->
+                                        channel
+                                end
+                                eval
                         end
-                            eval
-                            send
+                        eval
+                        send
                 end
             ",
         )
@@ -64,17 +73,21 @@ fn captured_binding() {
                         0
                         fn
                             \ channel ->
-                                fn \ ->
-                                    # We are not using `channel` here, to make
-                                    # sure that capturing works even from a
-                                    # grandparent scope.
+                                fn
+                                    \ ->
+                                        # We are not using `channel` here, to
+                                        # make sure that capturing works even
+                                        # from a grandparent scope.
 
-                                    fn \ -> channel send end
+                                        fn
+                                            \ ->
+                                                channel send
+                                        end
                                         eval
                                 end
-                                    eval
+                                eval
                         end
-                            eval
+                        eval
                 end
             ",
         )
