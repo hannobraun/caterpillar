@@ -161,6 +161,8 @@ fn parse_branch(
             tokens.take()?;
         }
         Token::Keyword(End) => {
+            // This would be the `end` of the function, not the branch, and
+            // hence our sign that no more branches can be parsed here.
             return Ok(None);
         }
         _ => {
