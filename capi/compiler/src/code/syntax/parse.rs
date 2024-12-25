@@ -276,7 +276,13 @@ fn parse_comment(tokens: &mut Tokens) -> Result<Option<Comment>> {
         tokens.take()?;
     }
 
-    Ok(Some(Comment { lines }))
+    let comment = if lines.is_empty() {
+        None
+    } else {
+        Some(Comment { lines })
+    };
+
+    Ok(comment)
 }
 
 fn parse_expression(
