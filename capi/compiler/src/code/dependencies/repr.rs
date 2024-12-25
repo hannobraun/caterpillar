@@ -371,7 +371,7 @@ mod tests {
             ",
         ));
 
-        let (f_a, f_b, g_a, g_b) = ["f", "g"]
+        let (a, f_b, g_a, g_b) = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
@@ -397,7 +397,7 @@ mod tests {
 
         // The other two are mutually dependent, so there is no clear order.
         let rest = branches.collect::<BTreeSet<_>>();
-        assert!(rest.contains(&f_a));
+        assert!(rest.contains(&a));
         assert!(rest.contains(&g_a));
     }
 
