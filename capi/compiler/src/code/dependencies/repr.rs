@@ -355,7 +355,7 @@ mod tests {
             ",
         );
 
-        let (f_a, g_b, h_a, h_b) = ["f", "g"]
+        let (f_a, f_b, h_a, h_b) = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
@@ -376,7 +376,7 @@ mod tests {
         let (first, second) =
             branches.by_ref().take(2).collect_tuple().unwrap();
 
-        assert_eq!(first, g_b);
+        assert_eq!(first, f_b);
         assert_eq!(second, h_b);
 
         // The other two are mutually dependent, so there is no clear order.
