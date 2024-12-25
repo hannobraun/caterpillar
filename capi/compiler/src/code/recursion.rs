@@ -208,8 +208,8 @@ mod tests {
                     \ ->
                         fn
                             \ ->
-                            nop
-                            g
+                                nop
+                                g
                         end
                 end
 
