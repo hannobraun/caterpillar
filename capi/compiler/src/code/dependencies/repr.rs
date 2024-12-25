@@ -532,10 +532,11 @@ mod tests {
             .multi_cartesian_product()
             .collect::<Vec<_>>();
 
+        let k = permutations_based_on_branch_ordering.len();
         permutations_based_on_branch_ordering
             .iter()
             .cloned()
-            .permutations(permutations_based_on_branch_ordering.len())
+            .permutations(k)
             .flatten()
             .collect::<Vec<_>>()
             .into_iter()
