@@ -779,19 +779,20 @@ vec_buf_get: fn
         index
         2
         mul_u8_wrap
-        fn \ offset ->
-            vec_buf
-            _vec_buf_first
-            load
-            fn
-                \ base ->
-                    vec_buf
-                    base
-                    offset
-                    _vec_buf_address
-                    vec_load
-            end
-                eval
+        fn
+            \ offset ->
+                vec_buf
+                _vec_buf_first
+                load
+                fn
+                    \ base ->
+                        vec_buf
+                        base
+                        offset
+                        _vec_buf_address
+                        vec_load
+                end
+                    eval
         end
             eval
 end
