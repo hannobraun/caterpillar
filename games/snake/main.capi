@@ -162,9 +162,10 @@ _increment_tile_index_is_tile_x_within_limit: fn
         vec_x
         tile_x
         greater_u8
-        fn \ tile_x_within_limit ->
-            tile_x
-            tile_x_within_limit
+        fn
+            \ tile_x_within_limit ->
+                tile_x
+                tile_x_within_limit
         end
             eval
 end
