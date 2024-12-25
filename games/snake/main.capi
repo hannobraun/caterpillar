@@ -470,12 +470,13 @@ _food_collides_with_snake: fn
                 food_position
                 vec_load
                 check_body_collision
-                fn \ body_collides ->
-                    head_collides
-                    body_collides
-                    add_s32
-                    0
-                    greater_s32
+                fn
+                    \ body_collides ->
+                        head_collides
+                        body_collides
+                        add_s32
+                        0
+                        greater_s32
                 end
                     eval
         end
