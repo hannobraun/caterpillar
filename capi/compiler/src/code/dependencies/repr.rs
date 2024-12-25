@@ -222,7 +222,10 @@ mod tests {
                 syntax_tree.function_by_name(name).unwrap().location()
             });
 
-            assert_eq!(by_function(&dependencies, &syntax_tree), [[g], [f]]);
+            assert_eq!(
+                dependencies_by_function(&dependencies, &syntax_tree),
+                [[g], [f]]
+            );
         }
     }
 
@@ -245,7 +248,10 @@ mod tests {
         let [f, g] = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
-        assert_eq!(by_function(&dependencies, &syntax_tree), [[g], [f]]);
+        assert_eq!(
+            dependencies_by_function(&dependencies, &syntax_tree),
+            [[g], [f]]
+        );
     }
 
     #[test]
@@ -279,7 +285,7 @@ mod tests {
         {
             let [f, g, h] = [f, g, h].map(|function| function.location());
             assert_eq!(
-                by_function(&dependencies, &syntax_tree),
+                dependencies_by_function(&dependencies, &syntax_tree),
                 [vec![g, h], vec![f]],
             );
         }
@@ -341,7 +347,10 @@ mod tests {
         let [f, g, h] = ["f", "g", "h"]
             .map(|name| syntax_tree.function_by_name(name).unwrap().location());
 
-        assert_eq!(by_function(&dependencies, &syntax_tree), [[g], [h], [f]]);
+        assert_eq!(
+            dependencies_by_function(&dependencies, &syntax_tree),
+            [[g], [h], [f]]
+        );
     }
 
     #[test]
@@ -395,7 +404,7 @@ mod tests {
         let g = syntax_tree.function_by_name("g").unwrap().location();
 
         assert_eq!(
-            by_function(&dependencies, &syntax_tree),
+            dependencies_by_function(&dependencies, &syntax_tree),
             [[g], [h_a], [h], [f_a], [f]],
         );
     }
@@ -409,7 +418,7 @@ mod tests {
         (syntax_tree, dependencies)
     }
 
-    fn by_function(
+    fn dependencies_by_function(
         dependencies: &Dependencies,
         syntax_tree: &SyntaxTree,
     ) -> Vec<Vec<FunctionLocation>> {
