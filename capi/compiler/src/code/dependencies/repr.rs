@@ -304,8 +304,7 @@ mod tests {
         ];
 
         for functions in all_permutations(functions) {
-            let permutation = functions;
-            let [a, b, c] = permutation.as_slice() else {
+            let [a, b, c] = functions.as_slice() else {
                 unreachable!();
             };
 
