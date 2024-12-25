@@ -339,11 +339,6 @@ mod tests {
     fn branch_dependencies_in_the_presence_of_mutual_recursion() {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
-                f: fn
-                    \ ->
-                        0 g
-                end
-
                 g: fn
                     \ 0 ->
                         0 h
