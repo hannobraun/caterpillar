@@ -151,10 +151,7 @@ pub struct Binding {
 )]
 pub enum Member {
     /// # A code comment
-    Comment {
-        /// # The lines of the comment
-        lines: Vec<String>,
-    },
+    Comment(Comment),
 
     /// # The syntax node is an expression
     Expression {
@@ -177,4 +174,21 @@ impl Member {
             None
         }
     }
+}
+
+/// # A code comment
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+    udigest::Digestable,
+)]
+pub struct Comment {
+    /// # The lines of the comment
+    pub lines: Vec<String>,
 }

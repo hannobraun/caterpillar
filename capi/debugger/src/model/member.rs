@@ -1,6 +1,8 @@
 use capi_compiler::{
     code::{
-        syntax::{Expression, FunctionLocation, Member, MemberLocation},
+        syntax::{
+            Comment, Expression, FunctionLocation, Member, MemberLocation,
+        },
         DependencyCluster, FunctionCalls, Functions, Signature, Types,
     },
     source_map::SourceMap,
@@ -138,7 +140,7 @@ impl DebugMemberKind {
         effect: Option<&Effect>,
     ) -> Self {
         match member {
-            Member::Comment { lines } => Self::Comment { lines },
+            Member::Comment(Comment { lines }) => Self::Comment { lines },
             Member::Expression { expression, .. } => match expression {
                 Expression::Identifier { name } => Self::Identifier { name },
                 Expression::LiteralNumber { value } => Self::Value {
