@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let permutated_functions = all_permutations([
+        let functions = [
             (
                 "f",
                 vec![
@@ -301,9 +301,9 @@ mod tests {
                     ",
                 ],
             ),
-        ]);
+        ];
 
-        for functions in permutated_functions {
+        for functions in all_permutations(functions) {
             for permutation in functions.iter().permutations(functions.len()) {
                 let [a, b, c] = permutation.as_slice() else {
                     unreachable!();
