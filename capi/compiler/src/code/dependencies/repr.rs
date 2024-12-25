@@ -231,19 +231,25 @@ mod tests {
 
     #[test]
     fn function_dependencies_with_self_recursion() {
-        let (syntax_tree, dependencies) = resolve_dependencies(
-            r"
-                f: fn
-                    \ ->
-                        g
-                end
+        let f = r"
+            f: fn
+                \ ->
+                    g
+            end
+        ";
+        let g = r"
+            g: fn
+                \ ->
+                    g
+            end
+        ";
 
-                g: fn
-                    \ ->
-                        g
-                end
+        let (syntax_tree, dependencies) = resolve_dependencies(&format!(
+            r"
+                {f}
+                {g}
             ",
-        );
+        ));
 
         let [f, g] = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap().location());
