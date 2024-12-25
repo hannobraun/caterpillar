@@ -92,6 +92,8 @@ impl Buffer {
         tokens.extend(self.take_if_not_empty().map(|token| {
             if let Ok(value) = token.parse() {
                 Token::IntegerLiteral { value }
+            } else if token == "branch" {
+                Token::Keyword(Branch)
             } else if token == "end" {
                 Token::Keyword(End)
             } else if token == "fn" {

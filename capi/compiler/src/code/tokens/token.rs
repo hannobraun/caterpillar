@@ -36,6 +36,9 @@ pub enum Token {
 /// delimited by whitespace.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Keyword {
+    /// # The `branch` keyword
+    Branch,
+
     /// # The `end` keyword
     End,
 
