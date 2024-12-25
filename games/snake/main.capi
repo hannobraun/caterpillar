@@ -408,18 +408,19 @@ handle_coordinate_larger_than_limit: fn
         limit
         coord
         greater_u8
-        fn \ limit_greater_than_coord ->
-            limit_greater_than_coord
-            fn
-                \ 0 ->
-                    coord
-                    limit
-                    sub_s32
+        fn
+            \ limit_greater_than_coord ->
+                limit_greater_than_coord
+                fn
+                    \ 0 ->
+                        coord
+                        limit
+                        sub_s32
 
-                \ 1 ->
-                    coord
-            end
-                eval
+                    \ 1 ->
+                        coord
+                end
+                    eval
         end
             eval
 end
