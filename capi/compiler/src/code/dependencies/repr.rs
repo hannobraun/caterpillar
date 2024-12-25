@@ -339,7 +339,7 @@ mod tests {
     fn branch_dependencies_in_the_presence_of_mutual_recursion() {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
-                g: fn
+                f: fn
                     \ 0 ->
                         0 h
                     \ n ->
@@ -350,12 +350,12 @@ mod tests {
                     \ 0 ->
                         1 h
                     \ n ->
-                        n g
+                        n f
                 end
             ",
         );
 
-        let (g_a, g_b, h_a, h_b) = ["g", "h"]
+        let (g_a, g_b, h_a, h_b) = ["f", "h"]
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .into_iter()
             .flat_map(|function| {
