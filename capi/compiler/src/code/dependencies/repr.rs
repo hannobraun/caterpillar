@@ -288,30 +288,38 @@ mod tests {
             end
         ";
 
-        let [a, b, c] = [f, g, h];
+        let functions = [f, g, h];
 
-        let (syntax_tree, dependencies) = resolve_dependencies(&format!(
-            "
-                {a}
-                {b}
-                {c}
-            ",
-        ));
+        for permutation in functions.into_iter().permutations(functions.len()) {
+            let [a, b, c] = permutation.as_slice() else {
+                unreachable!();
+            };
 
-        let [f, g, h] = ["f", "g", "h"]
-            .map(|name| syntax_tree.function_by_name(name).unwrap())
-            .map(|function| function.location());
+            let (syntax_tree, dependencies) = resolve_dependencies(&format!(
+                "
+                    {a}
+                    {b}
+                    {c}
+                ",
+            ));
 
-        let clusters = dependencies_by_function(&dependencies, &syntax_tree);
-        let [cluster_a, cluster_b] = clusters.as_slice() else {
-            panic!("Expected two clusters.");
-        };
+            let [f, g, h] = ["f", "g", "h"]
+                .map(|name| syntax_tree.function_by_name(name).unwrap())
+                .map(|function| function.location());
 
-        // `g` and `h` are mutually recursive, so their order is not defined.
-        assert!(cluster_a.contains(&g));
-        assert!(cluster_a.contains(&h));
+            let clusters =
+                dependencies_by_function(&dependencies, &syntax_tree);
+            let [cluster_a, cluster_b] = clusters.as_slice() else {
+                panic!("Expected two clusters.");
+            };
 
-        assert_eq!(cluster_b, &vec![f]);
+            // `g` and `h` are mutually recursive, so their order is not
+            // defined.
+            assert!(cluster_a.contains(&g));
+            assert!(cluster_a.contains(&h));
+
+            assert_eq!(cluster_b, &vec![f]);
+        }
     }
 
     #[test]
