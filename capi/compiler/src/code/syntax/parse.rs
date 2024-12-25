@@ -66,15 +66,14 @@ fn parse_named_function(
     tokens: &mut Tokens,
     index: Index<NamedFunction>,
 ) -> Result<NamedFunction> {
-    // Comments in the top-level context are currently ignored.
-    let _ = parse_comment(tokens)?;
-
+    let comment = parse_comment(tokens)?;
     let name = parse_function_name(tokens)?;
 
     let location = FunctionLocation::Named { index };
     let function = parse_function(tokens, location)?;
 
     Ok(NamedFunction {
+        comment,
         name,
         inner: function,
     })

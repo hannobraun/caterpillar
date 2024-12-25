@@ -10,6 +10,9 @@ use super::{expression::Expression, types::SyntaxType};
 /// defined locally within other functions do not have a name.
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct NamedFunction {
+    /// # The comment about the named function, if any
+    pub comment: Option<Comment>,
+
     /// # The name of the function
     pub name: String,
 
