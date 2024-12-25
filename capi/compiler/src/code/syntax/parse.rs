@@ -240,20 +240,17 @@ fn parse_branch_body(
     let mut body = IndexMap::default();
 
     loop {
-        match tokens.peek()? {
-            Token::Keyword(End) => {
-                tokens.take()?;
-                break;
-            }
-            _ => {
-                let location = MemberLocation {
-                    parent: Box::new(location.clone()),
-                    index: body.next_index(),
-                };
-                let member = parse_member(tokens, location)?;
-                body.push(member);
-            }
+        if let Token::Keyword(End) = tokens.peek()? {
+            tokens.take()?;
+            break;
         }
+
+        let location = MemberLocation {
+            parent: Box::new(location.clone()),
+            index: body.next_index(),
+        };
+        let member = parse_member(tokens, location)?;
+        body.push(member);
     }
 
     Ok(body)
