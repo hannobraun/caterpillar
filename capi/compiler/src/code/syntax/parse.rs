@@ -252,15 +252,15 @@ fn parse_member(
     tokens: &mut Tokens,
     location: MemberLocation,
 ) -> Result<Member> {
-    if let Some(comment) = parse_comment(tokens)? {
-        return Ok(Member::Comment(comment));
-    }
+    let member = if let Some(comment) = parse_comment(tokens)? {
+        Member::Comment(comment)
+    } else {
+        let (expression, signature) = parse_expression(tokens, location)?;
 
-    let (expression, signature) = parse_expression(tokens, location)?;
-
-    let member = Member::Expression {
-        expression,
-        signature,
+        Member::Expression {
+            expression,
+            signature,
+        }
     };
 
     Ok(member)
