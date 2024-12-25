@@ -118,7 +118,7 @@ fn parse_function(
     tokens: &mut Tokens,
     location: FunctionLocation,
 ) -> Result<Function> {
-    let mut function = Function::default();
+    let mut branches = IndexMap::default();
 
     match tokens.take()? {
         Token::Keyword(Fn) => {}
@@ -130,14 +130,14 @@ fn parse_function(
     loop {
         let location = BranchLocation {
             parent: Box::new(location.clone()),
-            index: function.branches.next_index(),
+            index: branches.next_index(),
         };
 
         let Some(branch) = parse_branch(tokens, location)? else {
             break;
         };
 
-        function.branches.push(branch);
+        branches.push(branch);
     }
 
     match tokens.take()? {
@@ -147,7 +147,7 @@ fn parse_function(
         }
     }
 
-    Ok(function)
+    Ok(Function { branches })
 }
 
 fn parse_branch(
