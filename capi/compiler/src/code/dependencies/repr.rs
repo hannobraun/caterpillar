@@ -302,10 +302,9 @@ mod tests {
             .map(|name| syntax_tree.function_by_name(name).unwrap())
             .map(|function| function.location());
 
-        assert_eq!(
-            dependencies_by_function(&dependencies, &syntax_tree),
-            [vec![g, h], vec![f]],
-        );
+        let clusters = dependencies_by_function(&dependencies, &syntax_tree);
+
+        assert_eq!(clusters, [vec![g, h], vec![f]],);
     }
 
     #[test]
