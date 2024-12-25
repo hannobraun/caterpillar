@@ -822,13 +822,14 @@ vec_buf_push: fn
             load
             0
             _vec_buf_address
-            fn \ address ->
-                x
-                y
-                address
-                vec_store
-                next_addr: -> Number .
-                _vec_buf_inc_index
+            fn
+                \ address ->
+                    x
+                    y
+                    address
+                    vec_store
+                    next_addr: -> Number .
+                    _vec_buf_inc_index
             end
                 eval
         end
