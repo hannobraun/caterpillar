@@ -547,20 +547,21 @@ grow_snake: fn
         load
         1
         add_s32
-        fn \ snake_length_plus_growth ->
-            snake_length_plus_growth
-            positions
-            vec_buf_capacity
-            greater_s32
-            fn
-                \ 0 ->
-                    snake_length_plus_growth
-                    snake_length
-                    store
+        fn
+            \ snake_length_plus_growth ->
+                snake_length_plus_growth
+                positions
+                vec_buf_capacity
+                greater_s32
+                fn
+                    \ 0 ->
+                        snake_length_plus_growth
+                        snake_length
+                        store
 
-                \ _ ->
-            end
-                eval
+                    \ _ ->
+                end
+                    eval
         end
             eval
 end
