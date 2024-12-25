@@ -336,7 +336,7 @@ mod tests {
     }
 
     #[test]
-    fn consider_anonymous_functions_in_call_graph() {
+    fn consider_local_functions_in_call_graph() {
         let (syntax_tree, dependencies) = resolve_dependencies(
             r"
                 f: fn
