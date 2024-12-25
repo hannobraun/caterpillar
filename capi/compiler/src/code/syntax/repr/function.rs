@@ -27,7 +27,6 @@ pub struct NamedFunction {
 #[derive(
     Clone,
     Debug,
-    Default,
     Eq,
     Ord,
     PartialEq,
