@@ -17,9 +17,11 @@ fn display_breakpoint_that_was_set() -> anyhow::Result<()> {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    nop # this is where the breakpoint will be set
-                    brk # prevent process from ending before we set breakpoint
+                main: fn
+                    \ size_x, size_y ->
+                        nop # this is where the breakpoint will be set
+                        brk # prevent process from ending before we set
+                            # breakpoint
                 end
             ",
         )
@@ -55,8 +57,9 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                nop
+            main: fn
+                \ size_x, size_y ->
+                    nop
             end
         ",
     );
@@ -102,9 +105,10 @@ fn step_over_brk() -> anyhow::Result<()> {
     debugger
         .provide_source_code(
             r"
-                main: fn \ size_x, size_y ->
-                    brk
-                    nop
+                main: fn
+                    \ size_x, size_y ->
+                        brk
+                        nop
                 end
             ",
         )
@@ -160,10 +164,11 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                nop # a
-                nop # b
-                nop # c
+            main: fn
+                \ size_x, size_y ->
+                    nop # a
+                    nop # b
+                    nop # c
             end
         ",
     );
@@ -255,8 +260,9 @@ fn step_into_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                1 2 f
+            main: fn
+                \ size_x, size_y ->
+                    1 2 f
             end
 
             # Add some arguments. In case the compiler decides to generate code
@@ -328,15 +334,17 @@ fn step_out_of_function_if_at_last_expression() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                f
-                nop
+            main: fn
+                \ size_x, size_y ->
+                    f
+                    nop
             end
 
-            f: fn \ ->
-                nop
-                # There's a return instruction at the end of the function, which
-                # we expect to step over.
+            f: fn
+                \ ->
+                    nop
+                    # There's a return instruction at the end of the function,
+                    # which we expect to step over.
             end
         ",
     );
@@ -399,8 +407,9 @@ fn step_out_of_main_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                nop
+            main: fn
+                \ size_x, size_y ->
+                    nop
             end
         ",
     );
@@ -443,13 +452,15 @@ fn step_over_function_call() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                f
-                nop
+            main: fn
+                \ size_x, size_y ->
+                    f
+                    nop
             end
 
-            f: fn \ ->
-                nop
+            f: fn
+                \ ->
+                    nop
             end
         ",
     );
@@ -493,14 +504,16 @@ fn step_out_of_function() {
     let mut debugger = debugger();
     debugger.provide_source_code(
         r"
-            main: fn \ size_x, size_y ->
-                f
-                nop # b
+            main: fn
+                \ size_x, size_y ->
+                    f
+                    nop # b
             end
 
-            f: fn \ ->
-                nop # a
-                nop
+            f: fn
+                \ ->
+                    nop # a
+                    nop
             end
         ",
     );
