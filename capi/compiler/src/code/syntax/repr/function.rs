@@ -52,7 +52,6 @@ pub struct Function {
 #[derive(
     Clone,
     Debug,
-    Default,
     Eq,
     Ord,
     PartialEq,
