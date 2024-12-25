@@ -230,7 +230,7 @@ mod tests {
     }
 
     #[test]
-    fn function_dependencies_with_self_recursion() {
+    fn function_dependencies_in_the_presence_of_self_recursion() {
         let f = r"
             f: fn
                 \ ->
