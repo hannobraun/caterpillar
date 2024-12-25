@@ -183,7 +183,7 @@ impl DependencyCluster {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeSet;
+    use std::{collections::BTreeSet, fmt::Write};
 
     use itertools::Itertools;
 
@@ -265,60 +265,95 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let functions = [
-            r"
-                f: fn
-                    \ ->
-                        0 g
-                end
-            ",
-            r"
-                g: fn
-                    \ 0 ->
-                        0 h
-                    \ n ->
-                        0
-                end
-            ",
-            r"
-                h: fn
-                    \ 0 ->
-                        1 h
-                    \ n ->
-                        n g
-                end
-            ",
-        ];
+        let permutated_functions = [
+            (
+                "f",
+                vec![
+                    r"
+                        \ ->
+                            0 g
+                    ",
+                ],
+            ),
+            (
+                "g",
+                vec![
+                    r"
+                        \ 0 ->
+                            0 h
+                    ",
+                    r"
+                        \ n ->
+                            0
+                    ",
+                ],
+            ),
+            (
+                "h",
+                vec![
+                    r"
+                        \ 0 ->
+                            1 h
+                    ",
+                    r"
+                        \ n ->
+                            n g
+                    ",
+                ],
+            ),
+        ]
+        .into_iter()
+        .map(|(name, branches)| {
+            let mut permutations = Vec::new();
 
-        for permutation in functions.iter().permutations(functions.len()) {
-            let [a, b, c] = permutation.as_slice() else {
-                unreachable!();
-            };
+            for permutation in branches.iter().permutations(branches.len()) {
+                let mut function = format!("{name}: fn\n");
 
-            let (syntax_tree, dependencies) = resolve_dependencies(&format!(
-                "
-                    {a}
-                    {b}
-                    {c}
-                ",
-            ));
+                for branch in permutation {
+                    writeln!(function, "{branch}").unwrap();
+                }
 
-            let [f, g, h] = ["f", "g", "h"]
-                .map(|name| syntax_tree.function_by_name(name).unwrap())
-                .map(|function| function.location());
+                writeln!(function, "end").unwrap();
 
-            let clusters =
-                dependencies_by_function(&dependencies, &syntax_tree);
-            let [cluster_a, cluster_b] = clusters.as_slice() else {
-                panic!("Expected two clusters.");
-            };
+                permutations.push(function);
+            }
 
-            // `g` and `h` are mutually recursive, so their order is not
-            // defined.
-            assert!(cluster_a.contains(&g));
-            assert!(cluster_a.contains(&h));
+            permutations
+        })
+        .multi_cartesian_product();
 
-            assert_eq!(cluster_b, &vec![f]);
+        for functions in permutated_functions {
+            for permutation in functions.iter().permutations(functions.len()) {
+                let [a, b, c] = permutation.as_slice() else {
+                    unreachable!();
+                };
+
+                let (syntax_tree, dependencies) =
+                    resolve_dependencies(&format!(
+                        "
+                            {a}
+                            {b}
+                            {c}
+                        ",
+                    ));
+
+                let [f, g, h] = ["f", "g", "h"]
+                    .map(|name| syntax_tree.function_by_name(name).unwrap())
+                    .map(|function| function.location());
+
+                let clusters =
+                    dependencies_by_function(&dependencies, &syntax_tree);
+                let [cluster_a, cluster_b] = clusters.as_slice() else {
+                    panic!("Expected two clusters.");
+                };
+
+                // `g` and `h` are mutually recursive, so their order is not
+                // defined.
+                assert!(cluster_a.contains(&g));
+                assert!(cluster_a.contains(&h));
+
+                assert_eq!(cluster_b, &vec![f]);
+            }
         }
     }
 
