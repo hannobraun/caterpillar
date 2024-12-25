@@ -356,10 +356,12 @@ mod tests {
             ",
         ];
 
+        let [a, b] = [f, g];
+
         let (syntax_tree, dependencies) = resolve_dependencies(&format!(
             r"
-                {f}
-                {g}
+                {a}
+                {b}
             ",
         ));
 
