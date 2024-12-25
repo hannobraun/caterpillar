@@ -246,7 +246,7 @@ mod tests {
 
         for [a, b] in [[f, g], [g, f]] {
             let (syntax_tree, dependencies) = resolve_dependencies(&format!(
-                r"
+                "
                     {a}
                     {b}
                 ",
