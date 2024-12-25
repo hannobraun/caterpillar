@@ -534,8 +534,7 @@ mod tests {
 
         let k = permutations_based_on_branch_ordering.len();
         permutations_based_on_branch_ordering
-            .iter()
-            .cloned()
+            .into_iter()
             .permutations(k)
             .flatten()
             .collect::<Vec<_>>()
