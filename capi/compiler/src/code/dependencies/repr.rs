@@ -210,17 +210,20 @@ mod tests {
             end
         ";
 
-        let (syntax_tree, dependencies) = resolve_dependencies(&format!(
-            "
-                {f}
-                {g}
-            "
-        ));
+        for [a, b] in [[f, g], [g, f]] {
+            let (syntax_tree, dependencies) = resolve_dependencies(&format!(
+                "
+                    {a}
+                    {b}
+                "
+            ));
 
-        let [f, g] = ["f", "g"]
-            .map(|name| syntax_tree.function_by_name(name).unwrap().location());
+            let [f, g] = ["f", "g"].map(|name| {
+                syntax_tree.function_by_name(name).unwrap().location()
+            });
 
-        assert_eq!(by_function(&dependencies, &syntax_tree), [[g], [f]]);
+            assert_eq!(by_function(&dependencies, &syntax_tree), [[g], [f]]);
+        }
     }
 
     #[test]
