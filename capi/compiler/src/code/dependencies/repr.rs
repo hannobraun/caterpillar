@@ -197,19 +197,25 @@ mod tests {
 
     #[test]
     fn function_dependencies_without_recursion() {
-        let (syntax_tree, dependencies) = resolve_dependencies(
-            r"
-                f: fn
-                    \ ->
-                        g
-                end
+        let f = r"
+            f: fn
+                \ ->
+                    g
+            end
+        ";
+        let g = r"
+            g: fn
+                \ ->
+                    nop
+            end
+        ";
 
-                g: fn
-                    \ ->
-                        nop
-                end
-            ",
-        );
+        let (syntax_tree, dependencies) = resolve_dependencies(&format!(
+            "
+                {f}
+                {g}
+            "
+        ));
 
         let [f, g] = ["f", "g"]
             .map(|name| syntax_tree.function_by_name(name).unwrap().location());
