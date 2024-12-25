@@ -340,16 +340,22 @@ mod tests {
         let functions = [
             r"
                 f: fn
+                    # a
                     \ 0 ->
                         0 g
+
+                    # b
                     \ n ->
                         0
                 end
             ",
             r"
                 g: fn
+                    # c
                     \ 0 ->
                         1 g
+
+                    # d
                     \ n ->
                         n f
                 end
