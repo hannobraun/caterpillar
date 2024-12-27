@@ -3,7 +3,7 @@ use capi_runtime::{Effect, PopOperandError};
 use crate::tests::infra::runtime;
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/57
+#[should_panic] // https://github.com/hannobraun/crosscut/issues/57
 fn access_operand_from_parent_scope() {
     // Operands defined in a parent scope should be inaccessible.
 

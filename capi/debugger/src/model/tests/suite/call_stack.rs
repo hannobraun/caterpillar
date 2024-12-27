@@ -297,7 +297,7 @@ fn display_gap_where_missing_function_is_called_from_multi_branch_function() {
 }
 
 #[test]
-#[should_panic] // https://github.com/hannobraun/caterpillar/issues/47
+#[should_panic] // https://github.com/hannobraun/crosscut/issues/47
 fn display_gap_where_missing_fn_is_called_from_reconstructed_multi_branch_fn() {
     // Tail call elimination can leave gaps in the call stack. Some simpler
     // cases are already getting reconstructed, but right now, we're not doing
@@ -393,5 +393,5 @@ fn instruction_on_call_stack_with_no_associated_expression() {
     // Nothing else to do. We're not currently handling this case well[1], so
     // unless we panicked, everything's good, as far as this test is concerned.
     //
-    // [1] https://github.com/hannobraun/caterpillar/issues/53
+    // [1] https://github.com/hannobraun/crosscut/issues/53
 }

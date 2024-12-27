@@ -138,7 +138,7 @@ pub enum GameEngineFunction {
     /// The possibility of the game engine freezing is undesirable. At some
     /// future point, there will likely be an enforced timeout. This is tracked
     /// in the following issue:
-    /// <https://github.com/hannobraun/caterpillar/issues/42>
+    /// <https://github.com/hannobraun/crosscut/issues/42>
     SubmitFrame,
 }
 

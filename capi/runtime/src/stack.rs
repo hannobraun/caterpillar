@@ -30,7 +30,7 @@ impl Stack {
     ///
     /// But right now, this method checks whether the stack is completely empty.
     /// This is a bug, which is tracked here:
-    /// <https://github.com/hannobraun/caterpillar/issues/44>
+    /// <https://github.com/hannobraun/crosscut/issues/44>
     pub fn no_frames_left(&self) -> bool {
         self.inner.is_empty()
     }
