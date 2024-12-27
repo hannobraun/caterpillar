@@ -12,7 +12,7 @@ program, instead of going through an extended loop of re-compiling, re-starting,
 then navigating to where you can test your change.
 
 The core premise of the project is the hypothesis, that interactive programming
-is underutilized. That using it as the central element the language and its
+is underutilized. That using it as the central element that the language and its
 tooling are built around, can make development more fun, productive, and
 intuitive.
 
