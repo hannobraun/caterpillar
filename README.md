@@ -57,7 +57,7 @@ You can modify the [code of the game][Snake] or any of the
 change, and the web page should reload, if necessary.
 
 Please note that there currently is a
-[substantial number of bugs and other basic problems](https://github.com/hannobraun/caterpillar/issues).
+[substantial number of bugs and other basic problems](https://github.com/hannobraun/crosscut/issues).
 
 ## Inspiration
 
