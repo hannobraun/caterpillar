@@ -13,7 +13,7 @@ export const dailyThoughtsPage = (dates: string[]) => {
             <h2>Daily Thoughts</h2>
             <p class="prose">
                 Hey, I'm Hanno! These are my daily thoughts on{" "}
-                <a href="https://github.com/hannobraun/caterpillar">
+                <a href="https://github.com/hannobraun/crosscut">
                     Caterpillar
                 </a>, the programming language I'm creating. If you have any
                 questions, comments, or feedback, please{" "}
