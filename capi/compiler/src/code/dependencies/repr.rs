@@ -558,10 +558,21 @@ mod tests {
     ) -> impl Iterator<Item = (SyntaxTree, Dependencies)> {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
-        let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
-        let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
 
-        [(syntax_tree, dependencies)].into_iter()
+        permutate_syntax_tree(syntax_tree).map(|syntax_tree| {
+            let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
+            let dependencies =
+                Dependencies::resolve(&syntax_tree, &function_calls);
+
+            (syntax_tree, dependencies)
+        })
+    }
+
+    fn permutate_syntax_tree(
+        original: SyntaxTree,
+    ) -> impl Iterator<Item = SyntaxTree> {
+        // This is just a placeholder, while permutation is being implemented.
+        [original.clone()].into_iter()
     }
 
     /// # Given a set of functions, iterate over all permutations
