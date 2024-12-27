@@ -303,11 +303,6 @@ The following daily thoughts provide more context:
 [2024-09-05](https://capi.hannobraun.com/daily/2024-09-05) and
 [2024-09-06](https://capi.hannobraun.com/daily/2024-09-06).
 
-## Acknowledgements
-
-I'd like to thank [Martin Dederer](https://github.com/martindederer) for
-suggesting the name!
-
 ## License
 
 This project is open source, licensed under the terms of the
