@@ -571,8 +571,24 @@ mod tests {
     fn permutate_syntax_tree(
         original: SyntaxTree,
     ) -> impl Iterator<Item = SyntaxTree> {
-        // This is just a placeholder, while permutation is being implemented.
-        [original.clone()].into_iter()
+        let k = original.named_functions.len();
+        let permutations = original.named_functions.values().permutations(k);
+
+        let mut syntax_trees = Vec::new();
+
+        // This permutates only the order of named functions. Eventually, I'd
+        // like to permutate the order of branches in each function too.
+        for permutation in permutations {
+            let mut syntax_tree = SyntaxTree::default();
+
+            for named_function in permutation {
+                syntax_tree.named_functions.push(named_function.clone());
+            }
+
+            syntax_trees.push(syntax_tree);
+        }
+
+        syntax_trees.into_iter()
     }
 
     /// # Given a set of functions, iterate over all permutations
