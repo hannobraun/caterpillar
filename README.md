@@ -1,6 +1,7 @@
-# Caterpillar
+# Crosscut
 
-Caterpillar is a **programming language** with a dual goal:
+Crosscut (formerly known as Caterpillar) is a **programming language** with a
+dual goal:
 
 - Create an **immediate connection** between you and the code you're working on,
   using **interactive programming**.
@@ -19,7 +20,7 @@ intuitive.
 ## Status
 
 There's a very basic language, and a [very basic game][Snake] implemented in it.
-So far, not much thought has been given to using Caterpillar outside of this
+So far, not much thought has been given to using Crosscut outside of this
 specific scenario. If you want to experiment with it, your best bet is to clone
 this repository and play around with what's already here (see _Usage_ below).
 
@@ -38,9 +39,9 @@ development updates.
 
 ## Usage
 
-As per _Status_ above, not much thought has been given to using Caterpillar
-outside of this repository. If you want to play around with it, playing around
-with this repository is the way to do it:
+As per _Status_ above, not much thought has been given to using Crosscut outside
+of this repository. If you want to play around with it, playing around with this
+repository is the way to do it:
 
 1. Clone this repository.
 2. Run `cargo run` (requires [Rust](https://rust-lang.org/) to be installed).
@@ -49,19 +50,19 @@ That second step will start a build tool that should compile everything in here,
 start a development server, and eventually output a link.
 
 Open that link in your browser. You should see the Snake game running, alongside
-the Caterpillar debugger.
+the Crosscut debugger.
 
 You can modify the [code of the game][Snake] or any of the
-[Caterpillar code](capi/) itself. The builder should automatically re-compile
-every change, and the web page should reload, if necessary.
+[Crosscut code](capi/) itself. The builder should automatically re-compile every
+change, and the web page should reload, if necessary.
 
 Please note that there currently is a
 [substantial number of bugs and other basic problems](https://github.com/hannobraun/caterpillar/issues).
 
 ## Inspiration
 
-Caterpillar draws inspiration from many sources. The following is an
-**incomplete** list:
+Crosscut draws inspiration from many sources. The following is an **incomplete**
+list:
 
 - [Inventing on Principle](https://vimeo.com/906418692)
 - [Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)
@@ -78,7 +79,7 @@ For more information on future design directions, please follow my
 
 ### Developer experience is the priority, but not an absolute one
 
-Caterpillar's core premise is to improve developer experience using interactive
+Crosscut's core premise is to improve developer experience using interactive
 programming. But this does not make developer experience an absolute priority.
 It must always be weighed against other factors.
 
@@ -99,9 +100,9 @@ The following daily thoughts provide more context:
 
 ### Experimentation first; conservative decisions later, as necessary
 
-I want Caterpillar to be adopted. That could mean that I need to focus
-innovation where that provides the most benefit, and keep other aspects of the
-language conservative and familiar.
+I want Crosscut to be adopted. That could mean that I need to focus innovation
+where that provides the most benefit, and keep other aspects of the language
+conservative and familiar.
 
 Before that becomes necessary, I want to experiment though. At least give the
 language to chance to be more than an incremental improvement over the status
@@ -121,7 +122,7 @@ will be prioritized instead.
 
 As the language matures, there will be a growing focus on making any given
 upgrade easy. But each release might introduce changes that require updates to
-Caterpillar code. Where possible, users will be given ample time to make those
+Crosscut code. Where possible, users will be given ample time to make those
 changes, or they will be automated outright.
 
 The following daily thoughts provide more context:
@@ -135,16 +136,16 @@ The following daily thoughts provide more context:
 
 ### Simplicity over familiarity and short-term convenience
 
-Caterpillar strives to be simple, even where that is unfamiliar to most
-developers (because it's different to other languages), and even where that
-might be inconvenient in some situations.
+Crosscut strives to be simple, even where that is unfamiliar to most developers
+(because it's different to other languages), and even where that might be
+inconvenient in some situations.
 
 Simplicity makes the language easier to understand. For the developer, but also
 for tooling, which can then provide a better experience to the developer. Unless
 this advantage is clearly outweighed by other factors, the simple design should
 be chosen.
 
-An example of this is not supporting early returns. Functions in Caterpillar (or
+An example of this is not supporting early returns. Functions in Crosscut (or
 rather their branches, to be precise) have a single exit point, which can make
 code easier to follow for the developer, but specifically allows the debugger to
 do call stack reconstruction.
@@ -188,7 +189,7 @@ The following daily thoughts provide more context:
 
 ### Untyped now, statically typed later
 
-Caterpillar is currently untyped. This means there is only a single data type,
+Crosscut is currently untyped. This means there is only a single data type,
 32-bit words, and all values are represented using those. The developer often
 has to choose a specific operation, depending on what specific type they expect
 (`add_s8` vs `add_s32`, for example).
@@ -204,17 +205,17 @@ The following daily thoughts provide more context:
 [2024-07-17](https://capi.hannobraun.com/daily/2024-07-17), and
 [2024-08-23](https://capi.hannobraun.com/daily/2024-08-23).
 
-### Caterpillar code is embedded into a host
+### Crosscut code is embedded into a host
 
-Caterpillar code does not execute I/O operations directly. Whenever it needs to
-do something that affects the outside world, it triggers an effect. That effect
-is executed by a platform-specific piece of code called the "host", which then
-passes the result back to Caterpillar.
+Crosscut code does not execute I/O operations directly. Whenever it needs to do
+something that affects the outside world, it triggers an effect. That effect is
+executed by a platform-specific piece of code called the "host", which then
+passes the result back to Crosscut.
 
 At this point, this is just an implementation detail, but I hope to use this
 concept to realize a number of benefits in the future: Mainly to represent all
-I/O resources as values provided by the host, making Caterpillar code sandboxed
-by default, and allowing side effects to be tracked through those values, making
+I/O resources as values provided by the host, making Crosscut code sandboxed by
+default, and allowing side effects to be tracked through those values, making
 all functions pure.
 
 A lot of this is inspired by the "platform" concept in [Roc].
@@ -253,13 +254,12 @@ The following daily thoughts provide more context:
 
 ### Stack-based evaluation, but not a stack-based language
 
-Caterpillar, featuring postfix operators, has a stack-based evaluation model.
-But it is not a stack-based language. There is no single data stack that is used
-to pass arguments and return values between functions.
+Crosscut, featuring postfix operators, has a stack-based evaluation model. But
+it is not a stack-based language. There is no single data stack that is used to
+pass arguments and return values between functions.
 
-Instead, Caterpillar uses a much more conventional model, with a regular stack
-and explicit function arguments. Each operand stack is local to a (function)
-scope.
+Instead, Crosscut uses a much more conventional model, with a regular stack and
+explicit function arguments. Each operand stack is local to a (function) scope.
 
 This approach is less error-prone, but also less flexible and more verbose. It
 seems to make sense right now, but as the language grows other features that
@@ -278,7 +278,7 @@ The following daily thoughts provide more context:
 
 ### Designed to be used with tooling
 
-Caterpillar is designed to be used with tooling and makes various trade-off that
+Crosscut is designed to be used with tooling and makes various trade-off that
 benefit this intended use case, at the cost of other cases where tooling is not
 available.
 
