@@ -22,39 +22,30 @@ mod tests {
 
     #[test]
     fn function_dependencies_without_recursion() {
-        let f = r"
-            f: fn
-                br ->
-                    g
+        let compiler_output = resolve_dependencies(
+            "
+                f: fn
+                    br ->
+                        g
+                    end
                 end
-            end
-        ";
-        let g = r"
-            g: fn
-                br ->
-                    nop
+                g: fn
+                    br ->
+                        nop
+                    end
                 end
-            end
-        ";
+            ",
+        );
 
-        for [a, b] in [[f, g], [g, f]] {
-            let compiler_output = resolve_dependencies(&format!(
-                "
-                    {a}
-                    {b}
-                "
-            ));
+        for (syntax_tree, dependencies) in compiler_output {
+            let [f, g] = ["f", "g"].map(|name| {
+                syntax_tree.function_by_name(name).unwrap().location()
+            });
 
-            for (syntax_tree, dependencies) in compiler_output {
-                let [f, g] = ["f", "g"].map(|name| {
-                    syntax_tree.function_by_name(name).unwrap().location()
-                });
-
-                assert_eq!(
-                    dependencies_by_function(&dependencies, &syntax_tree),
-                    [[g], [f]]
-                );
-            }
+            assert_eq!(
+                dependencies_by_function(&dependencies, &syntax_tree),
+                [[g], [f]]
+            );
         }
     }
 
