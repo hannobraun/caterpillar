@@ -420,9 +420,6 @@ mod tests {
     }
 
     fn permutate_branch(branch: Branch) -> impl Iterator<Item = Branch> {
-        // This doesn't do any permutation yet, while branch permutation is
-        // being implemented.
-
         let mut branches = Vec::new();
 
         permutate_rest_of_branch(
@@ -443,6 +440,9 @@ mod tests {
         mut body: impl Iterator<Item = Member>,
         branches: &mut Vec<Branch>,
     ) {
+        // This doesn't do any permutation yet, while branch permutation is
+        // being implemented.
+
         match body.next() {
             Some(member) => {
                 branch.body.push(member);
