@@ -385,7 +385,7 @@ mod tests {
         // like to permutate the order of branches in each function too.
         for named_functions in permutations {
             permutate_rest_of_named_functions(
-                named_functions,
+                named_functions.into_iter(),
                 &mut syntax_trees,
             );
         }
@@ -394,7 +394,7 @@ mod tests {
     }
 
     fn permutate_rest_of_named_functions(
-        named_functions: impl IntoIterator<Item = NamedFunction>,
+        named_functions: impl Iterator<Item = NamedFunction>,
         syntax_trees: &mut Vec<SyntaxTree>,
     ) {
         let mut syntax_tree = SyntaxTree::default();
