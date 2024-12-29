@@ -377,14 +377,16 @@ mod tests {
         function: Function,
     ) -> impl Iterator<Item = Function> {
         let k = function.branches.len();
-        function
-            .branches
-            .into_values()
-            .permutations(k)
-            .map(|branches| {
-                let branches = branches.into_iter().collect();
-                Function { branches }
-            })
+        let permutations = function.branches.into_values().permutations(k);
+
+        let mut functions = Vec::new();
+
+        for branches in permutations {
+            let branches = branches.into_iter().collect();
+            functions.push(Function { branches });
+        }
+
+        functions.into_iter()
     }
 
     fn dependencies_by_function(
