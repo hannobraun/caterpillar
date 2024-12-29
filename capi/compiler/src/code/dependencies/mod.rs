@@ -376,7 +376,8 @@ mod tests {
         original: SyntaxTree,
     ) -> impl Iterator<Item = SyntaxTree> {
         let k = original.named_functions.len();
-        let permutations = original.named_functions.values().permutations(k);
+        let permutations =
+            original.named_functions.values().cloned().permutations(k);
 
         let mut syntax_trees = Vec::new();
 
