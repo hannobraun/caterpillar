@@ -381,8 +381,9 @@ mod tests {
             .branches
             .into_values()
             .permutations(k)
-            .map(|branches| Function {
-                branches: branches.into_iter().collect(),
+            .map(|branches| {
+                let branches = branches.into_iter().collect();
+                Function { branches }
             })
     }
 
