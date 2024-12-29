@@ -88,7 +88,7 @@ pub fn resolve_branch_dependencies(
                                     &expression.location,
                                 )
                             else {
-                                // If the expression is not a call to a
+                                // If the identifier is not a call to a
                                 // function, it's not relevant to determining
                                 // the dependencies of the branch.
                                 return true;
