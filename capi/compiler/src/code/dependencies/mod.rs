@@ -396,14 +396,22 @@ mod tests {
 
     fn permutate_rest_of_named_functions(
         mut syntax_tree: SyntaxTree,
-        named_functions: impl Iterator<Item = NamedFunction>,
+        mut named_functions: impl Iterator<Item = NamedFunction>,
         syntax_trees: &mut Vec<SyntaxTree>,
     ) {
-        for named_function in named_functions {
-            syntax_tree.named_functions.push(named_function);
+        match named_functions.next() {
+            Some(named_function) => {
+                syntax_tree.named_functions.push(named_function);
+                permutate_rest_of_named_functions(
+                    syntax_tree,
+                    named_functions,
+                    syntax_trees,
+                );
+            }
+            None => {
+                syntax_trees.push(syntax_tree);
+            }
         }
-
-        syntax_trees.push(syntax_tree);
     }
 
     /// # Given a set of functions, iterate over all permutations
