@@ -14,7 +14,7 @@ mod tests {
 
     use crate::{
         code::{
-            syntax::{FunctionLocation, SyntaxTree},
+            syntax::{FunctionLocation, NamedFunction, SyntaxTree},
             Dependencies, FunctionCalls, Tokens,
         },
         host::NoHost,
@@ -384,16 +384,26 @@ mod tests {
         // This permutates only the order of named functions. Eventually, I'd
         // like to permutate the order of branches in each function too.
         for named_functions in permutations {
-            let mut syntax_tree = SyntaxTree::default();
-
-            for named_function in named_functions {
-                syntax_tree.named_functions.push(named_function);
-            }
-
-            syntax_trees.push(syntax_tree);
+            permutate_rest_of_named_functions(
+                named_functions,
+                &mut syntax_trees,
+            );
         }
 
         syntax_trees.into_iter()
+    }
+
+    fn permutate_rest_of_named_functions(
+        named_functions: impl IntoIterator<Item = NamedFunction>,
+        syntax_trees: &mut Vec<SyntaxTree>,
+    ) {
+        let mut syntax_tree = SyntaxTree::default();
+
+        for named_function in named_functions {
+            syntax_tree.named_functions.push(named_function);
+        }
+
+        syntax_trees.push(syntax_tree);
     }
 
     /// # Given a set of functions, iterate over all permutations
