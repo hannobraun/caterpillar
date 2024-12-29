@@ -81,13 +81,33 @@ pub fn resolve_branch_dependencies(
         while let Some(branch) = unsorted_branches.get(i) {
             let branch_has_no_unresolved_dependencies =
                 branch.expressions().all(|expression| {
-                    let Some(dependee) = function_calls
-                        .is_call_to_user_defined_function(&expression.location)
-                    else {
-                        // If the expression is not a call to a function, it's
-                        // not relevant to determining the dependencies of the
-                        // branch.
-                        return true;
+                    let dependee = match expression.fragment {
+                        Expression::Identifier { .. } => {
+                            let Some(dependee) = function_calls
+                                .is_call_to_user_defined_function(
+                                    &expression.location,
+                                )
+                            else {
+                                // If the expression is not a call to a
+                                // function, it's not relevant to determining
+                                // the dependencies of the branch.
+                                return true;
+                            };
+
+                            dependee
+                        }
+                        Expression::LocalFunction { .. } => {
+                            // Local functions _are_ relevant to the
+                            // dependencies of the branch, but that's currently
+                            // ignored, which is a bug.
+                            return true;
+                        }
+                        Expression::LiteralNumber { .. } => {
+                            // Literals don't refer to functions, which makes
+                            // them irrelevant to determining the dependencies
+                            // of the branch.
+                            return true;
+                        }
                     };
 
                     let dependency_is_outside_of_cluster =
