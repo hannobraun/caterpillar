@@ -450,12 +450,13 @@ mod tests {
                     signature,
                 }) => {
                     for function in permutate_function(function) {
+                        let mut branch = branch.clone();
                         branch.body.push(Member::Expression {
                             expression: Expression::LocalFunction { function },
                             signature: signature.clone(),
                         });
                         permutate_rest_of_branch(
-                            branch.clone(),
+                            branch,
                             body.clone(),
                             branches,
                         );
