@@ -77,14 +77,6 @@ impl<T> DerefMut for IndexMap<T> {
     }
 }
 
-impl<T> FromIterator<(Index<T>, T)> for IndexMap<T> {
-    fn from_iter<I: IntoIterator<Item = (Index<T>, T)>>(iter: I) -> Self {
-        Self {
-            inner: iter.into_iter().collect(),
-        }
-    }
-}
-
 impl<T> IntoIterator for IndexMap<T> {
     type Item = <IndexMapInner<T> as IntoIterator>::Item;
     type IntoIter = <IndexMapInner<T> as IntoIterator>::IntoIter;
