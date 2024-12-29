@@ -210,6 +210,81 @@ mod tests {
     }
 
     #[test]
+    fn branch_dependencies_in_the_presence_of_local_functions() {
+        let compiler_output = resolve_dependencies(
+            "
+                f: fn
+                    # a
+                    br ->
+                        fn
+                            # b
+                            br 0 ->
+                                0
+                            end
+
+                            # c
+                            br n ->
+                                f
+                            end
+                        end
+                    end
+                end
+            ",
+        );
+
+        for (syntax_tree, dependencies) in compiler_output {
+            for function in syntax_tree.all_functions() {
+                println!(
+                    "{}: {}",
+                    function.location.display(&syntax_tree),
+                    function.branches.len()
+                );
+            }
+
+            let [a, b, c] = {
+                let mut branches = syntax_tree
+                    .all_functions()
+                    .flat_map(|function| function.branches())
+                    .map(|branch| {
+                        let name = branch
+                            .comment
+                            .clone()
+                            .unwrap()
+                            .lines
+                            .into_iter()
+                            .next()
+                            .unwrap();
+                        (name, branch.location)
+                    })
+                    .collect::<BTreeMap<_, _>>();
+
+                let a_b_c =
+                    ["a", "b", "c"].map(|name| branches.remove(name).unwrap());
+
+                assert!(branches.is_empty());
+
+                a_b_c
+            };
+
+            let mut branches = dependencies
+                .clusters()
+                .next()
+                .unwrap()
+                .branches(&syntax_tree)
+                .map(|branch| branch.location);
+
+            let first = branches.next().unwrap();
+
+            assert_eq!(first, b);
+
+            // The other two are mutually dependent, so there is no clear order.
+            let rest = branches.collect::<BTreeSet<_>>();
+            assert!(rest.contains(&a));
+            assert!(rest.contains(&c));
+        }
+    }
+
+    #[test]
     fn sort_clusters_by_call_graph() {
         let compiler_output = resolve_dependencies(
             "

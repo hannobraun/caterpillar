@@ -97,10 +97,11 @@ pub fn resolve_branch_dependencies(
                             dependee.clone()
                         }
                         Expression::LocalFunction { .. } => {
-                            // Local functions _are_ relevant to the
-                            // dependencies of the branch, but that's currently
-                            // ignored, which is a bug.
-                            return true;
+                            // A branch depends on any function defined within
+                            // it.
+                            FunctionLocation::Local {
+                                location: expression.location,
+                            }
                         }
                         Expression::LiteralNumber { .. } => {
                             // Literals don't refer to functions, which makes
