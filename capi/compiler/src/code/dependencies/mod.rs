@@ -398,7 +398,7 @@ mod tests {
 
     fn permutate_rest_of_function(
         mut function: Function,
-        mut branches: impl Iterator<Item = Branch>,
+        mut branches: impl Iterator<Item = Branch> + Clone,
         functions: &mut Vec<Function>,
     ) {
         match branches.next() {
