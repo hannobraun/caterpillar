@@ -84,7 +84,7 @@ mod tests {
             (
                 "f",
                 vec![
-                    r"
+                    "
                         br ->
                             0 g
                         end
@@ -94,12 +94,12 @@ mod tests {
             (
                 "g",
                 vec![
-                    r"
+                    "
                         br 0 ->
                             0 h
                         end
                     ",
-                    r"
+                    "
                         br n ->
                             0
                         end
@@ -109,12 +109,12 @@ mod tests {
             (
                 "h",
                 vec![
-                    r"
+                    "
                         br 0 ->
                             1 h
                         end
                     ",
-                    r"
+                    "
                         br n ->
                             n g
                         end
@@ -163,13 +163,13 @@ mod tests {
             (
                 "f",
                 vec![
-                    r"
+                    "
                         # a
                         br 0 ->
                             0 g
                         end
                     ",
-                    r"
+                    "
                         # b
                         br n ->
                             0
@@ -180,13 +180,13 @@ mod tests {
             (
                 "g",
                 vec![
-                    r"
+                    "
                         # c
                         br 0 ->
                             1 g
                         end
                     ",
-                    r"
+                    "
                         # d
                         br n ->
                             n f
@@ -202,7 +202,7 @@ mod tests {
             };
 
             let compiler_output = resolve_dependencies(&format!(
-                r"
+                "
                     {a}
                     {b}
                 ",
@@ -257,7 +257,7 @@ mod tests {
     #[test]
     fn sort_clusters_by_call_graph() {
         let compiler_output = resolve_dependencies(
-            r"
+            "
                 f: fn
                     br ->
                         # Call a function that comes is placed after this one in
@@ -297,7 +297,7 @@ mod tests {
     #[test]
     fn consider_local_functions_in_call_graph() {
         let compiler_output = resolve_dependencies(
-            r"
+            "
                 f: fn
                     br ->
                         fn
