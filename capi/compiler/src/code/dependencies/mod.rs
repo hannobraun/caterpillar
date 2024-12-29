@@ -428,7 +428,9 @@ mod tests {
                 parameters: branch.parameters,
                 body: IndexMap::default(),
             },
-            branch.body.into_values(),
+            // `btree_map::IntoValues` does not implement `Clone`. This
+            // workaround exchanges it for an iterator that does.
+            branch.body.into_values().collect::<Vec<_>>().into_iter(),
             &mut branches,
         );
 
