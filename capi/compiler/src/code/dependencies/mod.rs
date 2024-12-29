@@ -159,98 +159,75 @@ mod tests {
 
     #[test]
     fn branch_dependencies_in_the_presence_of_mutual_recursion() {
-        let functions = [
-            (
-                "f",
-                vec![
-                    "
-                        # a
-                        br 0 ->
-                            0 g
-                        end
-                    ",
-                    "
-                        # b
-                        br n ->
-                            0
-                        end
-                    ",
-                ],
-            ),
-            (
-                "g",
-                vec![
-                    "
-                        # c
-                        br 0 ->
-                            1 g
-                        end
-                    ",
-                    "
-                        # d
-                        br n ->
-                            n f
-                        end
-                    ",
-                ],
-            ),
-        ];
+        let compiler_output = resolve_dependencies(
+            "
+                f: fn
+                    # a
+                    br 0 ->
+                        0 g
+                    end
 
-        for functions in all_permutations(functions) {
-            let [a, b] = functions.as_slice() else {
-                unreachable!();
+                    # b
+                    br n ->
+                        0
+                    end
+                end
+
+                g: fn
+                    # c
+                    br 0 ->
+                        1 g
+                    end
+
+                    # d
+                    br n ->
+                        n f
+                    end
+                end
+            ",
+        );
+
+        for (syntax_tree, dependencies) in compiler_output {
+            let [a, b, c, d] = {
+                let mut branches = ["f", "g"]
+                    .map(|name| syntax_tree.function_by_name(name).unwrap())
+                    .into_iter()
+                    .flat_map(|function| {
+                        function.into_located_function().branches().map(
+                            |branch| {
+                                let name = branch
+                                    .comment
+                                    .clone()
+                                    .unwrap()
+                                    .lines
+                                    .into_iter()
+                                    .next()
+                                    .unwrap();
+                                (name, branch.location)
+                            },
+                        )
+                    })
+                    .collect::<BTreeMap<_, _>>();
+
+                ["a", "b", "c", "d"].map(|name| branches.remove(name).unwrap())
             };
 
-            let compiler_output = resolve_dependencies(&format!(
-                "
-                    {a}
-                    {b}
-                ",
-            ));
+            let mut branches = dependencies
+                .clusters()
+                .next()
+                .unwrap()
+                .branches(&syntax_tree)
+                .map(|branch| branch.location);
+            let (first, second) =
+                branches.by_ref().take(2).collect_tuple().unwrap();
 
-            for (syntax_tree, dependencies) in compiler_output {
-                let [a, b, c, d] = {
-                    let mut branches = ["f", "g"]
-                        .map(|name| syntax_tree.function_by_name(name).unwrap())
-                        .into_iter()
-                        .flat_map(|function| {
-                            function.into_located_function().branches().map(
-                                |branch| {
-                                    let name = branch
-                                        .comment
-                                        .clone()
-                                        .unwrap()
-                                        .lines
-                                        .into_iter()
-                                        .next()
-                                        .unwrap();
-                                    (name, branch.location)
-                                },
-                            )
-                        })
-                        .collect::<BTreeMap<_, _>>();
+            assert_eq!(first, b);
+            assert_eq!(second, d);
 
-                    ["a", "b", "c", "d"]
-                        .map(|name| branches.remove(name).unwrap())
-                };
-
-                let mut branches = dependencies
-                    .clusters()
-                    .next()
-                    .unwrap()
-                    .branches(&syntax_tree)
-                    .map(|branch| branch.location);
-                let (first, second) =
-                    branches.by_ref().take(2).collect_tuple().unwrap();
-
-                assert_eq!(first, b);
-                assert_eq!(second, d);
-
-                // The other two are mutually dependent, so there is no clear order.
-                let rest = branches.collect::<BTreeSet<_>>();
-                assert!(rest.contains(&a));
-                assert!(rest.contains(&c));
-            }
+            // The other two are mutually dependent, so there is no clear order.
+            let rest = branches.collect::<BTreeSet<_>>();
+            assert!(rest.contains(&a));
+            assert!(rest.contains(&c));
         }
     }
 
