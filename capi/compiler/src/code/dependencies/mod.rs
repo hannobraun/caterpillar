@@ -442,9 +442,6 @@ mod tests {
         mut body: impl Iterator<Item = Member> + Clone,
         branches: &mut Vec<Branch>,
     ) {
-        // This doesn't do any permutation yet, while branch permutation is
-        // being implemented.
-
         loop {
             match body.next() {
                 Some(Member::Expression {
