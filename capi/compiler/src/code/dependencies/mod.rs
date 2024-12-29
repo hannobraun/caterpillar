@@ -381,8 +381,6 @@ mod tests {
 
         let mut syntax_trees = Vec::new();
 
-        // This permutates only the order of named functions. Eventually, I'd
-        // like to permutate the order of branches in each function too.
         for named_functions in permutations {
             permutate_rest_of_named_functions(
                 SyntaxTree::default(),
