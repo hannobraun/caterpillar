@@ -13,9 +13,8 @@ export const dailyThoughtsPage = (dates: string[]) => {
             <h2>Daily Thoughts</h2>
             <p class="prose">
                 Hey, I'm Hanno! These are my daily thoughts on{" "}
-                <a href="https://github.com/hannobraun/crosscut">
-                    Caterpillar
-                </a>, the programming language I'm creating. If you have any
+                <a href="https://github.com/hannobraun/crosscut">Crosscut</a>,
+                the programming language I'm creating. If you have any
                 questions, comments, or feedback, please{" "}
                 <a href="mailto:hello@hannobraun.com">
                     get in touch
@@ -111,7 +110,7 @@ const page = (title: string, content: JSX.Element) => {
             {"<!doctype html>"}
             <html lang="en">
                 <head>
-                    <title>{title} - Caterpillar</title>
+                    <title>{title} - Crosscut</title>
 
                     <meta charSet="UTF-8" />
                     <meta
@@ -124,7 +123,7 @@ const page = (title: string, content: JSX.Element) => {
                 <body class="max-w-xl mx-auto p-2">
                     <header>
                         <a href="/">
-                            <h1>Caterpillar</h1>
+                            <h1>Crosscut</h1>
                         </a>
                     </header>
                     <main>
