@@ -11,8 +11,10 @@ mod tests {
 
     use crate::{
         code::{
-            syntax::{Function, FunctionLocation, NamedFunction, SyntaxTree},
-            Dependencies, FunctionCalls, Tokens,
+            syntax::{
+                Branch, Function, FunctionLocation, NamedFunction, SyntaxTree,
+            },
+            Dependencies, FunctionCalls, IndexMap, Tokens,
         },
         host::NoHost,
     };
@@ -382,11 +384,32 @@ mod tests {
         let mut functions = Vec::new();
 
         for branches in permutations {
-            let branches = branches.into_iter().collect();
-            functions.push(Function { branches });
+            permutate_rest_of_function(
+                Function {
+                    branches: IndexMap::default(),
+                },
+                branches.into_iter(),
+                &mut functions,
+            );
         }
 
         functions.into_iter()
+    }
+
+    fn permutate_rest_of_function(
+        mut function: Function,
+        mut branches: impl Iterator<Item = Branch>,
+        functions: &mut Vec<Function>,
+    ) {
+        match branches.next() {
+            Some(branch) => {
+                function.branches.push(branch);
+                permutate_rest_of_function(function, branches, functions);
+            }
+            None => {
+                functions.push(function);
+            }
+        }
     }
 
     fn dependencies_by_function(
