@@ -383,10 +383,10 @@ mod tests {
 
         // This permutates only the order of named functions. Eventually, I'd
         // like to permutate the order of branches in each function too.
-        for permutation in permutations {
+        for named_functions in permutations {
             let mut syntax_tree = SyntaxTree::default();
 
-            for named_function in permutation {
+            for named_function in named_functions {
                 syntax_tree.named_functions.push(named_function);
             }
 
