@@ -28,7 +28,7 @@ async fn watch_and_build(
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
     println!();
-    println!("⏳ Starting initial build of Caterpillar...");
+    println!("⏳ Starting initial build of Crosscut...");
     println!();
 
     // We're not really doing anything with this variable, but it needs to
@@ -42,7 +42,7 @@ async fn watch_and_build(
     while changes.wait_for_change().await {
         println!();
         println!("🔄 Change detected.");
-        println!("⏳ Rebuilding Caterpillar...");
+        println!("⏳ Rebuilding Crosscut...");
         println!();
 
         build_once_and_send_update(&updates, &mut _output_dir).await?;
@@ -156,7 +156,7 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
                     WARNING `wasm-opt` (part of Binaryen, available at\n\
                     WARNING https://github.com/WebAssembly/binaryen) is not\n\
                     WARNING installed. I would have used that to optimize\n\
-                    WARNING Caterpillar. The export is still going to work,\n\
+                    WARNING Crosscut. The export is still going to work,\n\
                     WARNING probably. I'm just not doing the optimization.\n\
                     WARNING\n\
                     WARNING If you intend to upload your game to the\n\
@@ -166,8 +166,8 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
                     WARNING The optimization is going to make a big\n\
                     WARNING difference, making the resulting web page MUCH\n\
                     WARNING smaller. It's probably going to reduce the size\n\
-                    WARNING of Caterpillar's WebAssembly module by an order\n\
-                    WARNING of magnitude, saving megabytes of data.\n\
+                    WARNING of Crosscut's WebAssembly module by an order of\n\
+                    WARNING magnitude, saving megabytes of data.\n\
                     \n"
                 );
 

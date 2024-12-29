@@ -85,7 +85,7 @@ fn check_files() -> anyhow::Result<()> {
 
     write!(
         err,
-        "Can't start the Caterpillar tool because the following files are not \
+        "Can't start the Crosscut tool because the following files are not \
         available:\n\
         \n",
     )?;
@@ -103,7 +103,7 @@ fn check_files() -> anyhow::Result<()> {
         correctly.\n\
         \n\
         Are you trying to run the server from\n\
-        within the Caterpillar repository?\n\
+        within the Crosscut repository?\n\
         \n\
         \tThen do so through the build tool!\n\
         \tJust execute `cargo run` from the\n\

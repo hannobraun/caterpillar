@@ -10,7 +10,7 @@ pub async fn send_action(action: UserAction, actions: ActionsTx) {
             "Sending a UI action failed, as the receive is no longer \
             available: {err:#?}\n\
             \n\
-            This is most likely a bug in the Caterpillar debugger."
+            This is most likely a bug in the Crosscut debugger."
         );
     }
 }

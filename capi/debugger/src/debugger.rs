@@ -113,7 +113,7 @@ fn on_ui_action(
 ) {
     let commands = persistent.on_user_action(action, transient).expect(
         "Failed to handle UI action. This is most likely a bug in the \
-        Caterpillar debugger:",
+        Crosscut debugger:",
     );
 
     for command in commands {

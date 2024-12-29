@@ -68,7 +68,7 @@ pub enum Effect {
     Breakpoint,
 
     #[error(
-        "Hit instruction that was generated from invalid Caterpillar code"
+        "Hit instruction that was generated from invalid Crosscut code"
     )]
     BuildError,
 

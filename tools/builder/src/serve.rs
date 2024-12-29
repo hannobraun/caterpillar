@@ -36,11 +36,11 @@ pub async fn start() -> anyhow::Result<()> {
         println!();
 
         if let Some(mut server) = current_server.take() {
-            println!("⏳ Killing previous instance of Caterpillar server...");
+            println!("⏳ Killing previous instance of Crosscut server...");
             server.kill().await?;
         }
 
-        println!("⏳ Starting Caterpillar server...");
+        println!("⏳ Starting Crosscut server...");
         println!();
 
         let mut new_server = Command::new("cargo")
