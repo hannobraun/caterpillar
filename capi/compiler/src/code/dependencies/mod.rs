@@ -398,16 +398,17 @@ mod tests {
     }
 
     fn permutate_rest_of_function(
-        mut function: Function,
+        function: Function,
         mut branches: impl Iterator<Item = Branch> + Clone,
         functions: &mut Vec<Function>,
     ) {
         match branches.next() {
             Some(branch) => {
                 for branch in permutate_branch(branch) {
+                    let mut function = function.clone();
                     function.branches.push(branch);
                     permutate_rest_of_function(
-                        function.clone(),
+                        function,
                         branches.clone(),
                         functions,
                     );
