@@ -12,8 +12,8 @@ mod tests {
     use crate::{
         code::{
             syntax::{
-                Branch, Function, FunctionLocation, Member, NamedFunction,
-                SyntaxTree,
+                Branch, Expression, Function, FunctionLocation, Member,
+                NamedFunction, SyntaxTree,
             },
             Dependencies, FunctionCalls, IndexMap, Tokens,
         },
@@ -445,13 +445,33 @@ mod tests {
         // This doesn't do any permutation yet, while branch permutation is
         // being implemented.
 
-        match body.next() {
-            Some(member) => {
-                branch.body.push(member);
-                permutate_rest_of_branch(branch, body, branches);
-            }
-            None => {
-                branches.push(branch);
+        loop {
+            match body.next() {
+                Some(Member::Expression {
+                    expression: Expression::LocalFunction { function },
+                    signature,
+                }) => {
+                    for function in permutate_function(function) {
+                        branch.body.push(Member::Expression {
+                            expression: Expression::LocalFunction { function },
+                            signature: signature.clone(),
+                        });
+                        permutate_rest_of_branch(
+                            branch.clone(),
+                            body.clone(),
+                            branches,
+                        );
+                    }
+
+                    break;
+                }
+                Some(member) => {
+                    branch.body.push(member);
+                }
+                None => {
+                    branches.push(branch);
+                    break;
+                }
             }
         }
     }
