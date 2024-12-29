@@ -351,21 +351,11 @@ mod tests {
     ) {
         match named_functions.next() {
             Some(named_function) => {
-                let k = named_function.inner.branches.len();
-                let permutations = named_function
-                    .inner
-                    .branches
-                    .values()
-                    .cloned()
-                    .permutations(k);
-
-                for branches in permutations {
+                for function in permutate_function(named_function.inner) {
                     let named_function = NamedFunction {
                         comment: named_function.comment.clone(),
                         name: named_function.name.clone(),
-                        inner: Function {
-                            branches: branches.into_iter().collect(),
-                        },
+                        inner: function,
                     };
                     let mut syntax_tree = syntax_tree.clone();
 
@@ -381,6 +371,23 @@ mod tests {
                 syntax_trees.push(syntax_tree);
             }
         }
+    }
+
+    fn permutate_function(
+        function: Function,
+    ) -> impl Iterator<Item = Function> {
+        let mut functions = Vec::new();
+
+        let k = function.branches.len();
+        let permutations = function.branches.values().cloned().permutations(k);
+
+        for branches in permutations {
+            functions.push(Function {
+                branches: branches.into_iter().collect(),
+            });
+        }
+
+        functions.into_iter()
     }
 
     fn dependencies_by_function(
