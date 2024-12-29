@@ -396,7 +396,7 @@ mod tests {
 
     fn permutate_rest_of_named_functions(
         mut syntax_tree: SyntaxTree,
-        mut named_functions: impl Iterator<Item = NamedFunction>,
+        mut named_functions: impl Iterator<Item = NamedFunction> + Clone,
         syntax_trees: &mut Vec<SyntaxTree>,
     ) {
         match named_functions.next() {
