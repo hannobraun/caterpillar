@@ -3,17 +3,6 @@ use capi_runtime::Value;
 use super::function::Function;
 
 /// # An expression within a function
-///
-/// ## Error Handling
-///
-/// An important feature of Caterpillar's code representation is, that it can be
-/// the result of a failed compilation process. If, for example, an identifier
-/// can't be resolved, this is still encoded as a valid [`Expression`].
-///
-/// As a result, other code that is not affected can still be executed (as part
-/// of automated testing, for example). But also, the rich representation
-/// produced by the compilation process is still available for display by
-/// tooling, regardless of any isolated errors.
 #[derive(
     Clone,
     Debug,
