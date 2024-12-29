@@ -1,6 +1,6 @@
 use crate::code::Signature;
 
-/// # A host into which a Caterpillar application is embedded
+/// # A host into which a Crosscut application is embedded
 pub trait Host {
     /// # Iterate over all of the host's functions
     ///

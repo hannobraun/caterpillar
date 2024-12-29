@@ -120,8 +120,8 @@ impl GameEngine {
     /// constructor, and have a PRNG to get more randomness as needed.
     ///
     /// But this works too, and it's fine for now. Ideally, I would like to
-    /// write the PRNG in Caterpillar, and it's a bit too early for that. I'm
-    /// not in hurry to replace this with a Rust-based solution right now.
+    /// write the PRNG in Crosscut, and it's a bit too early for that. I'm not
+    /// in hurry to replace this with a Rust-based solution right now.
     pub fn push_random(&mut self, value: i32) -> bool {
         // If games grow complex enough to need more than this many random
         // numbers per frame, we can increase this limit. But hopefully, we'll

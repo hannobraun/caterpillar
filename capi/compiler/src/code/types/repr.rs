@@ -14,7 +14,7 @@ use super::{
 ///
 /// ## Implementation Note
 ///
-/// The long-term goal for Caterpillar is to be fully inferred, with no explicit
+/// The long-term goal for Crosscut is to be fully inferred, with no explicit
 /// types annotations being necessary at all. Then this type can be removed.
 #[derive(Debug)]
 pub struct TypeAnnotations {
