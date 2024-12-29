@@ -379,7 +379,7 @@ mod tests {
         let mut functions = Vec::new();
 
         let k = function.branches.len();
-        let permutations = function.branches.values().cloned().permutations(k);
+        let permutations = function.branches.into_values().permutations(k);
 
         for branches in permutations {
             functions.push(Function {
