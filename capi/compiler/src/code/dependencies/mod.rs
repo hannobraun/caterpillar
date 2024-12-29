@@ -5,10 +5,7 @@ pub use self::repr::{Dependencies, DependencyCluster};
 
 #[cfg(test)]
 mod tests {
-    use std::{
-        collections::{BTreeMap, BTreeSet},
-        fmt::Write,
-    };
+    use std::collections::{BTreeMap, BTreeSet};
 
     use itertools::Itertools;
 
@@ -80,80 +77,51 @@ mod tests {
 
     #[test]
     fn function_dependencies_in_the_presence_of_mutual_recursion() {
-        let functions = [
-            (
-                "f",
-                vec![
-                    "
-                        br ->
-                            0 g
-                        end
-                    ",
-                ],
-            ),
-            (
-                "g",
-                vec![
-                    "
-                        br 0 ->
-                            0 h
-                        end
-                    ",
-                    "
-                        br n ->
-                            0
-                        end
-                    ",
-                ],
-            ),
-            (
-                "h",
-                vec![
-                    "
-                        br 0 ->
-                            1 h
-                        end
-                    ",
-                    "
-                        br n ->
-                            n g
-                        end
-                    ",
-                ],
-            ),
-        ];
+        let compiler_output = resolve_dependencies(
+            "
+                f: fn
+                    br ->
+                        0 g
+                    end
+                end
 
-        for functions in all_permutations(functions) {
-            let [a, b, c] = functions.as_slice() else {
-                unreachable!();
+                g: fn
+                    br 0 ->
+                        0 h
+                    end
+                    br n ->
+                        0
+                    end
+                end
+
+                h: fn
+                    br 0 ->
+                        1 h
+                    end
+                    br n ->
+                        n g
+                    end
+                end
+            ",
+        );
+
+        for (syntax_tree, dependencies) in compiler_output {
+            let [f, g, h] = ["f", "g", "h"]
+                .map(|name| syntax_tree.function_by_name(name).unwrap())
+                .map(|function| function.location());
+
+            let clusters =
+                dependencies_by_function(&dependencies, &syntax_tree);
+            let [cluster_a, cluster_b] = clusters.as_slice() else {
+                panic!("Expected two clusters.");
             };
 
-            let compiler_output = resolve_dependencies(&format!(
-                "
-                    {a}
-                    {b}
-                    {c}
-                ",
-            ));
+            // `g` and `h` are mutually recursive, so their order is not
+            // defined.
+            assert!(cluster_a.contains(&g));
+            assert!(cluster_a.contains(&h));
 
-            for (syntax_tree, dependencies) in compiler_output {
-                let [f, g, h] = ["f", "g", "h"]
-                    .map(|name| syntax_tree.function_by_name(name).unwrap())
-                    .map(|function| function.location());
-
-                let clusters =
-                    dependencies_by_function(&dependencies, &syntax_tree);
-                let [cluster_a, cluster_b] = clusters.as_slice() else {
-                    panic!("Expected two clusters.");
-                };
-
-                // `g` and `h` are mutually recursive, so their order is not
-                // defined.
-                assert!(cluster_a.contains(&g));
-                assert!(cluster_a.contains(&h));
-
-                assert_eq!(cluster_b, &vec![f]);
-            }
+            assert_eq!(cluster_b, &vec![f]);
         }
     }
 
@@ -406,55 +374,6 @@ mod tests {
                 syntax_trees.push(syntax_tree);
             }
         }
-    }
-
-    /// # Given a set of functions, iterate over all permutations
-    ///
-    /// The functions are represented as tuples of a name and a list of
-    /// branches.
-    ///
-    /// Creates all permutations of each provided function (i.e. all possible
-    /// orders of branches), computes the cartesian product of all those
-    /// functions (i.e. creates all possible combinations of them), and finally,
-    /// creates all permutations for each set of functions (again, all possible
-    /// orders of those functions).
-    ///
-    /// Or in other words, it's possible to create each function with any order
-    /// of their branches, and to define those functions in any order. Given
-    /// those possibilities, this function creates all potential combinations.
-    fn all_permutations<'r>(
-        functions: impl IntoIterator<Item = (&'r str, Vec<&'r str>)>,
-    ) -> impl Iterator<Item = Vec<String>> {
-        let permutations_based_on_branch_ordering = functions
-            .into_iter()
-            .map(|(name, branches)| {
-                let mut permutations = Vec::new();
-
-                for permutation in branches.iter().permutations(branches.len())
-                {
-                    let mut function = format!("{name}: fn\n");
-
-                    for branch in permutation {
-                        writeln!(function, "{branch}").unwrap();
-                    }
-
-                    writeln!(function, "end").unwrap();
-
-                    permutations.push(function);
-                }
-
-                permutations
-            })
-            .multi_cartesian_product()
-            .collect::<Vec<_>>();
-
-        let k = permutations_based_on_branch_ordering.len();
-        permutations_based_on_branch_ordering
-            .into_iter()
-            .permutations(k)
-            .flatten()
-            .collect::<Vec<_>>()
-            .into_iter()
     }
 
     fn dependencies_by_function(
