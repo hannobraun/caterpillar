@@ -1,5 +1,5 @@
 use std::{
-    collections::BTreeMap,
+    collections::{btree_map, BTreeMap},
     fmt,
     marker::PhantomData,
     ops::{Deref, DerefMut},
@@ -50,7 +50,7 @@ impl<T> IndexMap<T> {
     }
 
     /// # Consume the map and return an iterator over its values
-    pub fn into_values(self) -> impl Iterator<Item = T> {
+    pub fn into_values(self) -> btree_map::IntoValues<Index<T>, T> {
         self.inner.into_values()
     }
 }
