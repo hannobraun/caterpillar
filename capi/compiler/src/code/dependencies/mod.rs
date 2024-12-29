@@ -12,7 +12,8 @@ mod tests {
     use crate::{
         code::{
             syntax::{
-                Branch, Function, FunctionLocation, NamedFunction, SyntaxTree,
+                Branch, Function, FunctionLocation, Member, NamedFunction,
+                SyntaxTree,
             },
             Dependencies, FunctionCalls, IndexMap, Tokens,
         },
@@ -421,7 +422,36 @@ mod tests {
     fn permutate_branch(branch: Branch) -> impl Iterator<Item = Branch> {
         // This doesn't do any permutation yet, while branch permutation is
         // being implemented.
-        [branch].into_iter()
+
+        let mut branches = Vec::new();
+
+        permutate_rest_of_branch(
+            Branch {
+                comment: branch.comment,
+                parameters: branch.parameters,
+                body: IndexMap::default(),
+            },
+            branch.body.into_values(),
+            &mut branches,
+        );
+
+        branches.into_iter()
+    }
+
+    fn permutate_rest_of_branch(
+        mut branch: Branch,
+        mut body: impl Iterator<Item = Member>,
+        branches: &mut Vec<Branch>,
+    ) {
+        match body.next() {
+            Some(member) => {
+                branch.body.push(member);
+                permutate_rest_of_branch(branch, body, branches);
+            }
+            None => {
+                branches.push(branch);
+            }
+        }
     }
 
     fn dependencies_by_function(
