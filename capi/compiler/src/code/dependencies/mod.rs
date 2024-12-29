@@ -387,7 +387,7 @@ mod tests {
             let mut syntax_tree = SyntaxTree::default();
 
             for named_function in permutation {
-                syntax_tree.named_functions.push(named_function.clone());
+                syntax_tree.named_functions.push(named_function);
             }
 
             syntax_trees.push(syntax_tree);
