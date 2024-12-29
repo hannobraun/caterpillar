@@ -94,7 +94,7 @@ pub fn resolve_branch_dependencies(
                                 return true;
                             };
 
-                            dependee
+                            dependee.clone()
                         }
                         Expression::LocalFunction { .. } => {
                             // Local functions _are_ relevant to the
@@ -111,10 +111,10 @@ pub fn resolve_branch_dependencies(
                     };
 
                     let dependency_is_outside_of_cluster =
-                        !functions.contains(dependee);
+                        !functions.contains(&dependee);
                     let dependency_is_already_resolved =
                         functions_resolved_by_sorted_branches
-                            .contains(dependee);
+                            .contains(&dependee);
 
                     dependency_is_outside_of_cluster
                         || dependency_is_already_resolved
