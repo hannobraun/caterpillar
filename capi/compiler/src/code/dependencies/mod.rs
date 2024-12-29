@@ -14,7 +14,7 @@ mod tests {
 
     use crate::{
         code::{
-            syntax::{FunctionLocation, NamedFunction, SyntaxTree},
+            syntax::{Function, FunctionLocation, NamedFunction, SyntaxTree},
             Dependencies, FunctionCalls, Tokens,
         },
         host::NoHost,
@@ -395,18 +395,37 @@ mod tests {
     }
 
     fn permutate_rest_of_named_functions(
-        mut syntax_tree: SyntaxTree,
+        syntax_tree: SyntaxTree,
         mut named_functions: impl Iterator<Item = NamedFunction> + Clone,
         syntax_trees: &mut Vec<SyntaxTree>,
     ) {
         match named_functions.next() {
             Some(named_function) => {
-                syntax_tree.named_functions.push(named_function);
-                permutate_rest_of_named_functions(
-                    syntax_tree,
-                    named_functions,
-                    syntax_trees,
-                );
+                let k = named_function.inner.branches.len();
+                let permutations = named_function
+                    .inner
+                    .branches
+                    .values()
+                    .cloned()
+                    .permutations(k);
+
+                for branches in permutations {
+                    let named_function = NamedFunction {
+                        comment: named_function.comment.clone(),
+                        name: named_function.name.clone(),
+                        inner: Function {
+                            branches: branches.into_iter().collect(),
+                        },
+                    };
+                    let mut syntax_tree = syntax_tree.clone();
+
+                    syntax_tree.named_functions.push(named_function);
+                    permutate_rest_of_named_functions(
+                        syntax_tree,
+                        named_functions.clone(),
+                        syntax_trees,
+                    );
+                }
             }
             None => {
                 syntax_trees.push(syntax_tree);
