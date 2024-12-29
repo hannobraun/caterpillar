@@ -403,13 +403,25 @@ mod tests {
     ) {
         match branches.next() {
             Some(branch) => {
-                function.branches.push(branch);
-                permutate_rest_of_function(function, branches, functions);
+                for branch in permutate_branch(branch) {
+                    function.branches.push(branch);
+                    permutate_rest_of_function(
+                        function.clone(),
+                        branches.clone(),
+                        functions,
+                    );
+                }
             }
             None => {
                 functions.push(function);
             }
         }
+    }
+
+    fn permutate_branch(branch: Branch) -> impl Iterator<Item = Branch> {
+        // This doesn't do any permutation yet, while branch permutation is
+        // being implemented.
+        [branch].into_iter()
     }
 
     fn dependencies_by_function(
