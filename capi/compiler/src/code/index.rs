@@ -77,6 +77,18 @@ impl<T> DerefMut for IndexMap<T> {
     }
 }
 
+impl<T> FromIterator<T> for IndexMap<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut index_map = Self::default();
+
+        for item in iter {
+            index_map.push(item);
+        }
+
+        index_map
+    }
+}
+
 impl<T> IntoIterator for IndexMap<T> {
     type Item = <IndexMapInner<T> as IntoIterator>::Item;
     type IntoIter = <IndexMapInner<T> as IntoIterator>::IntoIter;
