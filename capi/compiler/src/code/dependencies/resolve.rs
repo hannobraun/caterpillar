@@ -81,7 +81,7 @@ pub fn resolve_branch_dependencies(
         while let Some(branch) = unsorted_branches.get(i) {
             let branch_has_no_unresolved_dependencies =
                 branch.expressions().all(|expression| {
-                    let Some(callee) = function_calls
+                    let Some(dependee) = function_calls
                         .is_call_to_user_defined_function(&expression.location)
                     else {
                         // If the expression is not a call to a function, it's
@@ -91,9 +91,10 @@ pub fn resolve_branch_dependencies(
                     };
 
                     let dependency_is_outside_of_cluster =
-                        !functions.contains(callee);
+                        !functions.contains(dependee);
                     let dependency_is_already_resolved =
-                        functions_resolved_by_sorted_branches.contains(callee);
+                        functions_resolved_by_sorted_branches
+                            .contains(dependee);
 
                     dependency_is_outside_of_cluster
                         || dependency_is_already_resolved
