@@ -439,7 +439,7 @@ mod tests {
 
     fn permutate_rest_of_branch(
         mut branch: Branch,
-        mut body: impl Iterator<Item = Member>,
+        mut body: impl Iterator<Item = Member> + Clone,
         branches: &mut Vec<Branch>,
     ) {
         // This doesn't do any permutation yet, while branch permutation is
