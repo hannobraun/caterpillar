@@ -17,6 +17,13 @@ mod tests {
         host::NoHost,
     };
 
+    // This test suite uses a custom compiler pipeline that creates all possible
+    // permutations of the code, to make sure these tests don't accidentally
+    // rely on a specific order of definitions in the code.
+    //
+    // As a consequence, these tests must not query compiler output by position,
+    // as other test suites are generally free to do.
+
     #[test]
     fn function_dependencies_without_recursion() {
         let compiler_output = resolve_dependencies(
