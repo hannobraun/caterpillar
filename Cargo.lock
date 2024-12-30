@@ -401,18 +401,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "capi-host"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "crosscut-ffi",
- "crosscut-game-engine",
- "crosscut-protocol",
- "crosscut-runtime",
- "ron",
-]
-
-[[package]]
 name = "capi-watch"
 version = "0.0.0"
 dependencies = [
@@ -664,6 +652,18 @@ dependencies = [
  "num_enum",
  "serde",
  "serde-big-array",
+]
+
+[[package]]
+name = "crosscut-host"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "crosscut-ffi",
+ "crosscut-game-engine",
+ "crosscut-protocol",
+ "crosscut-runtime",
+ "ron",
 ]
 
 [[package]]

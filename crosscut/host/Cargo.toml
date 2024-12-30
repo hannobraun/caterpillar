@@ -1,5 +1,5 @@
 [package]
-name = "capi-host"
+name = "crosscut-host"
 edition = "2021"
 
 [dependencies]

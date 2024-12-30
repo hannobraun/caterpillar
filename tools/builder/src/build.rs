@@ -79,7 +79,7 @@ async fn build_once_and_send_update(
 }
 
 pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
-    let packages = [("capi-host", Some("cdylib")), ("capi-debugger", None)];
+    let packages = [("crosscut-host", Some("cdylib")), ("capi-debugger", None)];
 
     for (package, crate_type) in packages {
         let mut command = Command::new("cargo");
