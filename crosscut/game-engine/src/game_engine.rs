@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_compiler::Instructions;
+use crosscut_compiler::Instructions;
 use crosscut_runtime::{Effect, Heap, Runtime, Value};
 
 use crate::{

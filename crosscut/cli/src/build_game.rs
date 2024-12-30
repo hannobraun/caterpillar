@@ -5,10 +5,10 @@ use std::{
 };
 
 use anyhow::anyhow;
-use capi_compiler::{Compiler, CompilerOutput};
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::Versioned;
 use capi_watch::DebouncedChanges;
+use crosscut_compiler::{Compiler, CompilerOutput};
 use tokio::{fs, sync::mpsc, task};
 
 pub async fn build_game_once(

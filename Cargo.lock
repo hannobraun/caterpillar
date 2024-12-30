@@ -367,11 +367,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
- "capi-compiler",
  "capi-game-engine",
  "capi-protocol",
  "capi-watch",
  "clap",
+ "crosscut-compiler",
  "rand",
  "reqwest",
  "thiserror 2.0.9",
@@ -381,30 +381,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "capi-compiler"
-version = "0.0.0"
-dependencies = [
- "array-util",
- "blake3",
- "crosscut-runtime",
- "itertools",
- "petgraph",
- "serde",
- "thiserror 2.0.9",
- "udigest",
-]
-
-[[package]]
 name = "capi-debugger"
 version = "0.0.0"
 dependencies = [
  "anyhow",
- "capi-compiler",
  "capi-ffi",
  "capi-game-engine",
  "capi-protocol",
  "console_error_panic_hook",
  "console_log",
+ "crosscut-compiler",
  "crosscut-runtime",
  "gloo-net",
  "itertools",
@@ -422,7 +408,7 @@ version = "0.0.0"
 name = "capi-game-engine"
 version = "0.0.0"
 dependencies = [
- "capi-compiler",
+ "crosscut-compiler",
  "crosscut-runtime",
  "num_enum",
  "serde",
@@ -445,8 +431,8 @@ dependencies = [
 name = "capi-protocol"
 version = "0.0.0"
 dependencies = [
- "capi-compiler",
  "capi-game-engine",
+ "crosscut-compiler",
  "crosscut-runtime",
  "ron",
  "serde",
@@ -676,6 +662,20 @@ name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
+
+[[package]]
+name = "crosscut-compiler"
+version = "0.0.0"
+dependencies = [
+ "array-util",
+ "blake3",
+ "crosscut-runtime",
+ "itertools",
+ "petgraph",
+ "serde",
+ "thiserror 2.0.9",
+ "udigest",
+]
 
 [[package]]
 name = "crosscut-runtime"

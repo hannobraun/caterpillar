@@ -11,7 +11,7 @@ gloo-net = "*"
 log = "*"
 ron = "*"
 
-[dependencies.capi-compiler]
+[dependencies.crosscut-compiler]
 path = "../compiler"
 
 [dependencies.capi-game-engine]

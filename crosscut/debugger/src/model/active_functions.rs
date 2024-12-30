@@ -1,14 +1,14 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_compiler::{
+use capi_protocol::host_state::HostState;
+use crosscut_compiler::{
     code::{
         syntax::{FunctionLocation, MemberLocation, NamedFunction},
         Index,
     },
     CompilerOutput,
 };
-use capi_protocol::host_state::HostState;
 use crosscut_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFunction, DebugMember};

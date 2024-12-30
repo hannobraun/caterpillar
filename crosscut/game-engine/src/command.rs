@@ -1,4 +1,4 @@
-use capi_compiler::Instructions;
+use crosscut_compiler::Instructions;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {

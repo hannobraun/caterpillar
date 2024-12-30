@@ -1,4 +1,4 @@
-use capi_compiler::code::syntax::MemberLocation;
+use crosscut_compiler::code::syntax::MemberLocation;
 
 #[derive(Clone)]
 pub enum UserAction {

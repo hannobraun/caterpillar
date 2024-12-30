@@ -1,4 +1,4 @@
-use capi_compiler::host::{Host, HostFunction};
+use crosscut_compiler::host::{Host, HostFunction};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
@@ -144,7 +144,7 @@ pub enum GameEngineFunction {
 
 impl GameEngineFunction {
     fn function(&self) -> HostFunction {
-        use capi_compiler::code::Type::*;
+        use crosscut_compiler::code::Type::*;
 
         let name = match self {
             Self::Halt => "halt",

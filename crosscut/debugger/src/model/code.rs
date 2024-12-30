@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{code::syntax::MemberLocation, CompilerOutput};
+use crosscut_compiler::{code::syntax::MemberLocation, CompilerOutput};
 use crosscut_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]

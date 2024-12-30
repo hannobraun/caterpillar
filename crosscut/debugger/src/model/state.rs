@@ -1,8 +1,8 @@
-use capi_compiler::{
-    code::syntax::MemberLocation, CompilerOutput, Instructions,
-};
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
+use crosscut_compiler::{
+    code::syntax::MemberLocation, CompilerOutput, Instructions,
+};
 use crosscut_runtime::{Effect, Instruction, Value};
 
 use super::{

@@ -1,4 +1,4 @@
-use capi_compiler::{
+use crosscut_compiler::{
     code::{
         syntax::{
             Comment, Expression, FunctionLocation, Member, MemberLocation,

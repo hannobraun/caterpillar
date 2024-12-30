@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use capi_compiler::{
+use crosscut_compiler::{
     code::{
         syntax::{Binding, Branch, Located, MemberLocation, Parameter},
         DependencyCluster, FunctionCalls, Functions, Type, Types,

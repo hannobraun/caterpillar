@@ -7,7 +7,7 @@ num_enum = "*"
 serde = "*"
 serde-big-array = "*"
 
-[dependencies.capi-compiler]
+[dependencies.crosscut-compiler]
 path = "../compiler"
 
 [dependencies.crosscut-runtime]
