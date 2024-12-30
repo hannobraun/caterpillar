@@ -79,7 +79,10 @@ async fn build_once_and_send_update(
 }
 
 pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
-    let packages = [("crosscut-host", Some("cdylib")), ("capi-debugger", None)];
+    let packages = [
+        ("crosscut-host", Some("cdylib")),
+        ("crosscut-debugger", None),
+    ];
 
     for (package, crate_type) in packages {
         let mut command = Command::new("cargo");
@@ -181,7 +184,7 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
         copy(&target, new_output_dir.path(), crosscut_host).await?;
     }
 
-    let wasm_module = format!("{target}/capi-debugger.wasm");
+    let wasm_module = format!("{target}/crosscut-debugger.wasm");
 
     let mut bindgen = Bindgen::new();
     bindgen

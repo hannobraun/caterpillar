@@ -30,8 +30,8 @@ fn create_dummy_files() -> anyhow::Result<()> {
     fs::create_dir_all(&files_path)?;
 
     let files = [
-        "capi-debugger_bg.wasm",
-        "capi-debugger.js",
+        "crosscut-debugger_bg.wasm",
+        "crosscut-debugger.js",
         "crosscut_host.wasm",
         "index.html",
         "index-debugger.html",

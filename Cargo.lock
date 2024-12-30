@@ -381,26 +381,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "capi-debugger"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "console_error_panic_hook",
- "console_log",
- "crosscut-compiler",
- "crosscut-ffi",
- "crosscut-game-engine",
- "crosscut-protocol",
- "crosscut-runtime",
- "gloo-net",
- "itertools",
- "leptos",
- "log",
- "ron",
- "tokio",
-]
-
-[[package]]
 name = "capi-watch"
 version = "0.0.0"
 dependencies = [
@@ -637,6 +617,26 @@ dependencies = [
  "serde",
  "thiserror 2.0.9",
  "udigest",
+]
+
+[[package]]
+name = "crosscut-debugger"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "console_error_panic_hook",
+ "console_log",
+ "crosscut-compiler",
+ "crosscut-ffi",
+ "crosscut-game-engine",
+ "crosscut-protocol",
+ "crosscut-runtime",
+ "gloo-net",
+ "itertools",
+ "leptos",
+ "log",
+ "ron",
+ "tokio",
 ]
 
 [[package]]

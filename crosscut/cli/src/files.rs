@@ -55,8 +55,8 @@ macro_rules! files {
 }
 
 files!(
-    a, "capi-debugger_bg.wasm";
-    b, "capi-debugger.js";
+    a, "crosscut-debugger_bg.wasm";
+    b, "crosscut-debugger.js";
     c, "crosscut_host.wasm";
     d, "index.html";
     e, "index-debugger.html";

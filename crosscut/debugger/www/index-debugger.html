@@ -57,9 +57,9 @@
                 });
             const runtime = instance.exports;
 
-            import initDebugger from "/capi-debugger.js";
+            import initDebugger from "/crosscut-debugger.js";
             const debugger_ = await initDebugger(
-                { module_or_path: "capi-debugger_bg.wasm" },
+                { module_or_path: "crosscut-debugger_bg.wasm" },
             );
 
             window.addEventListener("keydown", (event) => {
