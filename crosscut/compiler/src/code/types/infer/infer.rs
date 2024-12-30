@@ -109,7 +109,11 @@ fn infer_cluster(
         if let Some(signature) =
             signature::make_direct(&signature, &inference_context.types)?
         {
-            output.functions.insert(location, signature);
+            let existing = output.functions.insert(location, signature);
+            assert!(
+                existing.is_none(),
+                "Did not expect to overwrite an existing function signature."
+            );
         }
     }
     for (location, index) in inference_context.bindings {
