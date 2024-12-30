@@ -11,7 +11,7 @@
         <canvas
             width="256"
             height="256"
-            style="display: block; margin-left: auto; margin-right: auto;"
+            style="display: block; margin-left: auto; margin-right: auto"
         >
             Display for a game written in Crosscut.
         </canvas>
@@ -20,50 +20,64 @@
             let panicHappened = false;
 
             const module = fetch("capi_host.wasm");
-            const { instance } = await WebAssembly.instantiateStreaming(module, {
-                env: {
-                    on_panic: (ptr, len) => {
-                        panicHappened = true;
+            const { instance } = await WebAssembly
+                .instantiateStreaming(module, {
+                    env: {
+                        on_panic: (ptr, len) => {
+                            panicHappened = true;
 
-                        const array = new Uint8Array(
-                            instance.exports.memory.buffer,
-                            ptr,
-                            len,
-                        );
-                        const message = new TextDecoder().decode(array);
+                            const array = new Uint8Array(
+                                instance.exports.memory.buffer,
+                                ptr,
+                                len,
+                            );
+                            const message = new TextDecoder()
+                                .decode(array);
 
-                        const error = new Error();
+                            const error = new Error();
 
-                        console.error(`${message}\n\n${error.stack}`);
+                            console.error(
+                                `${message}\n\n${error.stack}`,
+                            );
+                        },
+
+                        print: (ptr, len) => {
+                            const array = new Uint8Array(
+                                instance.exports.memory.buffer,
+                                ptr,
+                                len,
+                            );
+                            const message = new TextDecoder()
+                                .decode(array);
+
+                            console.log(message);
+                        },
                     },
-
-                    print: (ptr, len) => {
-                        const array = new Uint8Array(
-                            instance.exports.memory.buffer,
-                            ptr,
-                            len,
-                        );
-                        const message = new TextDecoder().decode(array);
-
-                        console.log(message);
-                    },
-                },
-            });
+                });
             const runtime = instance.exports;
 
             window.addEventListener("keydown", (event) => {
                 let keyCode = null;
 
-                if (event.key == "ArrowUp" || event.key == "w") {
+                if (
+                    event.key == "ArrowUp" || event.key == "w"
+                ) {
                     keyCode = 1;
                 }
-                if (event.key == "ArrowLeft" || event.key == "a") {
+                if (
+                    event.key == "ArrowLeft" || event.key == "a"
+                ) {
                     keyCode = 2;
                 }
-                if (event.key == "ArrowDown" || event.key == "s") {
+                if (
+                    event.key == "ArrowDown" || event.key == "s"
+                ) {
                     keyCode = 3;
                 }
-                if (event.key == "ArrowRight" || event.key == "d") {
+                if (
+                    event.key == "ArrowRight" ||
+                    event.key == "d"
+                ) {
                     keyCode = 4;
                 }
 
@@ -73,19 +87,21 @@
                 }
             });
 
-
             const canvas = document.querySelector("canvas");
             const context = canvas.getContext("2d");
-
 
             await loadCode();
             window.requestAnimationFrame(mainLoop);
 
             async function loadCode() {
                 const commandWithInstructions =
-                    await (await fetch("command-with-instructions")).bytes();
+                    await (await fetch(
+                        "command-with-instructions",
+                    )).bytes();
 
-                runtime.commands_write(commandWithInstructions.byteLength);
+                runtime.commands_write(
+                    commandWithInstructions.byteLength,
+                );
                 const command_tx = new Uint8Array(
                     runtime.memory.buffer,
                     runtime.commands_write_ptr(),
