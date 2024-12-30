@@ -19,7 +19,7 @@
         <script type="module">
             let panicHappened = false;
 
-            const module = fetch("capi_host.wasm");
+            const module = fetch("crosscut_host.wasm");
             const { instance } = await WebAssembly
                 .instantiateStreaming(module, {
                     env: {

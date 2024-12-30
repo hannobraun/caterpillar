@@ -42,7 +42,7 @@ async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
 }
 
 async fn export_static_files(path: &Path) -> anyhow::Result<()> {
-    let static_files = ["index.html", "capi_host.wasm"];
+    let static_files = ["index.html", "crosscut_host.wasm"];
 
     for name in static_files {
         let file_path = PathBuf::from(name);

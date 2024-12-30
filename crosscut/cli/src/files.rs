@@ -57,7 +57,7 @@ macro_rules! files {
 files!(
     a, "capi-debugger_bg.wasm";
     b, "capi-debugger.js";
-    c, "capi_host.wasm";
+    c, "crosscut_host.wasm";
     d, "index.html";
     e, "index-debugger.html";
     f, "tailwind.js";
