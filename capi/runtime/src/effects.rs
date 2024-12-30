@@ -67,9 +67,7 @@ pub enum Effect {
     #[error("Breakpoint")]
     Breakpoint,
 
-    #[error(
-        "Hit instruction that was generated from invalid Crosscut code"
-    )]
+    #[error("Hit instruction that was generated from invalid Crosscut code")]
     BuildError,
 
     #[error("Mis-compilation due to a compiler bug")]
