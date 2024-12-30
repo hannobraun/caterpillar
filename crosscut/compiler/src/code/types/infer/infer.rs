@@ -105,16 +105,17 @@ fn infer_cluster(
         let Some(signature) = function.to_signature() else {
             continue;
         };
-
-        if let Some(signature) =
+        let Some(signature) =
             signature::make_direct(&signature, &inference_context.types)?
-        {
-            let existing = output.functions.insert(location, signature);
-            assert!(
-                existing.is_none(),
-                "Did not expect to overwrite an existing function signature.",
-            );
-        }
+        else {
+            continue;
+        };
+
+        let existing = output.functions.insert(location, signature);
+        assert!(
+            existing.is_none(),
+            "Did not expect to overwrite an existing function signature.",
+        );
     }
     for (location, index) in inference_context.bindings {
         let type_ = inference_context.types.resolve(&index)?;
