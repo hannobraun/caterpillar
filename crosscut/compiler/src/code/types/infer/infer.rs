@@ -217,8 +217,8 @@ fn infer_branch(
     }
 
     // Information from a later expression could have allowed us to infer the
-    // type of an earlier one. So let's handle the signatures we collected
-    // _after_ we look at all of the expressions.
+    // type of an earlier one. So let's handle the stacks we collected _after_
+    // we look at all of the expressions.
     for (location, local_stack) in stacks {
         let Some(local_stack) =
             make_stack_direct(&local_stack, &inference_context.types)?
