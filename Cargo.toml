@@ -22,6 +22,6 @@ default-members = ["tools/builder"]
 opt-level = 3 # otherwise interpreted code becomes unbearably slow
 
 [profile.release]
-opt-level = "s"   # results in the smallest code size for `capi-host.wasm`
+opt-level = "s"   # results in the smallest code size for `crosscut-host.wasm`
 strip = "symbols"
 lto = "fat"
