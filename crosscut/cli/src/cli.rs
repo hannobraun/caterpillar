@@ -44,7 +44,7 @@ pub async fn run() -> anyhow::Result<()> {
                 }
             }
 
-            tracing::info!("`capi-server` shutting down.");
+            tracing::info!("Crosscut server shutting down.");
         }
     }
 
