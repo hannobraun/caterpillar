@@ -32,8 +32,8 @@ pub struct Branch {
 ///
 /// ## Implementation Note
 ///
-/// This duplicates the type of the same name in `capi-compiler`. This is
-/// deliberate, as a shared type would have to live here (as `capi-compiler`
+/// This duplicates the type of the same name in `crosscut-compiler`. This is
+/// deliberate, as a shared type would have to live here (as `crosscut-compiler`
 /// depends on this crate), but it doesn't belong here. The need for this type
 /// here is temporary, while so much of pattern matching is still figured out at
 /// runtime.
