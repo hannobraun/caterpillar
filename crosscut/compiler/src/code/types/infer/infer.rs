@@ -112,7 +112,7 @@ fn infer_cluster(
             let existing = output.functions.insert(location, signature);
             assert!(
                 existing.is_none(),
-                "Did not expect to overwrite an existing function signature."
+                "Did not expect to overwrite an existing function signature.",
             );
         }
     }
@@ -122,7 +122,7 @@ fn infer_cluster(
             let existing = output.parameters.insert(location, type_);
             assert!(
                 existing.is_none(),
-                "Did not expect to overwrite an existing binding type."
+                "Did not expect to overwrite an existing binding type.",
             );
         }
     }
