@@ -1,15 +1,15 @@
 [workspace]
 resolver = "2"
 members = [
-    "capi/cli",
-    "capi/compiler",
-    "capi/debugger",
-    "capi/ffi",
-    "capi/game-engine",
-    "capi/host",
-    "capi/protocol",
-    "capi/runtime",
-    "capi/watch",
+    "crosscut/cli",
+    "crosscut/compiler",
+    "crosscut/debugger",
+    "crosscut/ffi",
+    "crosscut/game-engine",
+    "crosscut/host",
+    "crosscut/protocol",
+    "crosscut/runtime",
+    "crosscut/watch",
 
     "tools/builder",
     "tools/daily",

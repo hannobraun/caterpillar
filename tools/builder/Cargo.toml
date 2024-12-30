@@ -11,7 +11,7 @@ walkdir = "*"
 wasm-bindgen-cli-support = "*"
 
 [dependencies.capi-watch]
-path = "../../capi/watch"
+path = "../../crosscut/watch"
 
 [dependencies.clap]
 version = "*"
