@@ -118,10 +118,10 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
 
     let new_output_dir = tempdir()?;
 
-    let capi_host = "crosscut_host.wasm";
+    let crosscut_host = "crosscut_host.wasm";
     if optimize {
-        let input = Path::new(&target).join(capi_host);
-        let output = new_output_dir.path().join(capi_host);
+        let input = Path::new(&target).join(crosscut_host);
+        let output = new_output_dir.path().join(crosscut_host);
 
         let result = Command::new("wasm-opt")
             .arg(input)
@@ -171,14 +171,14 @@ pub async fn build_once(optimize: bool) -> anyhow::Result<Option<TempDir>> {
                     \n"
                 );
 
-                copy(&target, new_output_dir.path(), capi_host).await?;
+                copy(&target, new_output_dir.path(), crosscut_host).await?;
             }
             Err(err) => {
                 return Err(err.into());
             }
         }
     } else {
-        copy(&target, new_output_dir.path(), capi_host).await?;
+        copy(&target, new_output_dir.path(), crosscut_host).await?;
     }
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
