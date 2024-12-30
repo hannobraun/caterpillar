@@ -5,7 +5,7 @@ use std::{
 };
 
 use anyhow::{anyhow, Context};
-use capi_watch::DebouncedChanges;
+use crosscut_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::mpsc, task};
 use tracing::error;

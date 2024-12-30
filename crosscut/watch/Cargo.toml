@@ -1,5 +1,5 @@
 [package]
-name = "capi-watch"
+name = "crosscut-watch"
 edition = "2021"
 
 [dependencies]

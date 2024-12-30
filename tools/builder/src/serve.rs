@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process::Stdio};
 
 use anyhow::Context;
-use capi_watch::Watcher;
+use crosscut_watch::Watcher;
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
     process::{Child, Command},

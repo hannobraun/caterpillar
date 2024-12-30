@@ -23,7 +23,7 @@ path = "../game-engine"
 [dependencies.crosscut-protocol]
 path = "../protocol"
 
-[dependencies.capi-watch]
+[dependencies.crosscut-watch]
 path = "../watch"
 
 [dependencies.clap]

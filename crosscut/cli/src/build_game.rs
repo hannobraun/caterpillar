@@ -5,10 +5,10 @@ use std::{
 };
 
 use anyhow::anyhow;
-use capi_watch::DebouncedChanges;
 use crosscut_compiler::{Compiler, CompilerOutput};
 use crosscut_game_engine::host::GameEngineHost;
 use crosscut_protocol::Versioned;
+use crosscut_watch::DebouncedChanges;
 use tokio::{fs, sync::mpsc, task};
 
 pub async fn build_game_once(

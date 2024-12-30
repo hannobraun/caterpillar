@@ -1,7 +1,7 @@
 use std::{net::SocketAddr, path::PathBuf};
 
 use anyhow::Context;
-use capi_watch::Watcher;
+use crosscut_watch::Watcher;
 use tokio::{sync::mpsc, task};
 use tracing::error;
 

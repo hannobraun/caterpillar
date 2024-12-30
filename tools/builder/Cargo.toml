@@ -10,7 +10,7 @@ tracing = "*"
 walkdir = "*"
 wasm-bindgen-cli-support = "*"
 
-[dependencies.capi-watch]
+[dependencies.crosscut-watch]
 path = "../../crosscut/watch"
 
 [dependencies.clap]
