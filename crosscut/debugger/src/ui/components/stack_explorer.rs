@@ -1,4 +1,4 @@
-use capi_runtime::Value;
+use crosscut_runtime::Value;
 use leptos::{
     component,
     prelude::{ClassAttribute, CollectView, ElementChild},

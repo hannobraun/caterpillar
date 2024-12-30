@@ -1,4 +1,4 @@
-use capi_runtime::Effect;
+use crosscut_runtime::Effect;
 
 use crate::model::{
     tests::infra::{

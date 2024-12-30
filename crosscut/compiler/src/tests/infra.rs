@@ -1,4 +1,4 @@
-use capi_runtime::{Effect, Heap, Runtime};
+use crosscut_runtime::{Effect, Heap, Runtime};
 
 use crate::{
     code::Type,

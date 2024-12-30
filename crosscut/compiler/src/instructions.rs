@@ -1,4 +1,4 @@
-use capi_runtime::{Instruction, InstructionAddress};
+use crosscut_runtime::{Instruction, InstructionAddress};
 
 /// # Compiled instructions for the runtime to execute
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -33,7 +33,7 @@ impl Instructions {
         *stored_instruction = instruction;
     }
 
-    pub fn to_runtime_instructions(&self) -> capi_runtime::Instructions {
-        capi_runtime::Instructions { inner: &self.inner }
+    pub fn to_runtime_instructions(&self) -> crosscut_runtime::Instructions {
+        crosscut_runtime::Instructions { inner: &self.inner }
     }
 }

@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use capi_compiler::Instructions;
-use capi_runtime::{Effect, Heap, Runtime, Value};
+use crosscut_runtime::{Effect, Heap, Runtime, Value};
 
 use crate::{
     command::Command,

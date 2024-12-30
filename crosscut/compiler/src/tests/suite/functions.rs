@@ -1,4 +1,4 @@
-use capi_runtime::{Effect, PopOperandError};
+use crosscut_runtime::{Effect, PopOperandError};
 
 use crate::tests::infra::runtime;
 

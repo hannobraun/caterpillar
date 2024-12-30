@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use capi_runtime::{Effect, Instruction, InstructionAddress, Value};
+use crosscut_runtime::{Effect, Instruction, InstructionAddress, Value};
 
 use crate::{
     code::syntax::{
@@ -24,11 +24,11 @@ pub fn compile_function(
     function: Located<&Function>,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
-) -> capi_runtime::Function {
+) -> crosscut_runtime::Function {
     let mut context = FunctionContext {
         location: &function.location,
     };
-    let mut runtime_function = capi_runtime::Function::default();
+    let mut runtime_function = crosscut_runtime::Function::default();
     let mut instruction_range = None;
 
     for branch in function.branches() {
@@ -63,7 +63,7 @@ fn compile_branch(
     function_context: &mut FunctionContext,
     cluster_context: &mut ClusterContext,
     functions_context: &mut FunctionsContext,
-) -> (capi_runtime::Branch, [InstructionAddress; 2]) {
+) -> (crosscut_runtime::Branch, [InstructionAddress; 2]) {
     let parameters = branch.parameters.values().filter_map(|parameter| {
         match parameter {
             Parameter::Binding {
@@ -140,7 +140,7 @@ fn compile_branch(
 
     let first_address = bindings_address.unwrap_or(body_address);
 
-    let branch = capi_runtime::Branch {
+    let branch = crosscut_runtime::Branch {
         parameters: branch
             .parameters
             .values()
@@ -149,9 +149,9 @@ fn compile_branch(
                 Parameter::Binding {
                     binding: Binding { name },
                     type_: _,
-                } => capi_runtime::Pattern::Identifier { name },
+                } => crosscut_runtime::Pattern::Identifier { name },
                 Parameter::Literal { value } => {
-                    capi_runtime::Pattern::Literal { value }
+                    crosscut_runtime::Pattern::Literal { value }
                 }
             })
             .collect(),
@@ -400,7 +400,7 @@ fn compile_expression(
 pub fn compile_call_to_function(
     callee: &FunctionLocation,
     call: CallToFunction,
-    functions: &mut BTreeMap<FunctionLocation, capi_runtime::Function>,
+    functions: &mut BTreeMap<FunctionLocation, crosscut_runtime::Function>,
     instructions: &mut Instructions,
 ) {
     let callee = functions.get(callee).expect(

@@ -1,6 +1,6 @@
 use std::fmt::Write;
 
-use capi_runtime::Effect;
+use crosscut_runtime::Effect;
 use leptos::{
     component,
     ev::MouseEvent,

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::InstructionAddress;
+use crosscut_runtime::InstructionAddress;
 
 use crate::code::syntax::{FunctionLocation, MemberLocation};
 

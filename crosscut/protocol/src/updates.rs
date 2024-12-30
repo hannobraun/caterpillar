@@ -1,5 +1,5 @@
 use capi_game_engine::memory::Memory;
-use capi_runtime::{Runtime, RuntimeState};
+use crosscut_runtime::{Runtime, RuntimeState};
 
 use crate::host_state::HostState;
 

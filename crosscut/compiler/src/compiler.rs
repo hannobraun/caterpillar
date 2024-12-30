@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::InstructionAddress;
+use crosscut_runtime::InstructionAddress;
 
 use crate::{
     code::{
@@ -21,7 +21,7 @@ pub struct Compiler {
     instructions: Instructions,
     call_instructions_by_callee: CallInstructionsByCallee,
     compiled_functions_by_location:
-        BTreeMap<FunctionLocation, capi_runtime::Function>,
+        BTreeMap<FunctionLocation, crosscut_runtime::Function>,
     source_map: SourceMap,
 }
 

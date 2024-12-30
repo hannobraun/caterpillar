@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::Instruction;
+use crosscut_runtime::Instruction;
 
 use crate::{
     code::{
@@ -26,7 +26,7 @@ pub struct FunctionsContext<'r> {
     pub source_map: &'r mut SourceMap,
     pub call_instructions_by_callee: &'r mut CallInstructionsByCallee,
     pub compiled_functions_by_location:
-        &'r mut BTreeMap<FunctionLocation, capi_runtime::Function>,
+        &'r mut BTreeMap<FunctionLocation, crosscut_runtime::Function>,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -45,7 +45,7 @@ pub fn compile_functions(
     call_instructions_by_callee: &mut CallInstructionsByCallee,
     compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
-        capi_runtime::Function,
+        crosscut_runtime::Function,
     >,
 ) {
     let mut context = FunctionsContext {

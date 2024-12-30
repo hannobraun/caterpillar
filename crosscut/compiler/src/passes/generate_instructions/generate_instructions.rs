@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_runtime::{Effect, Instruction, InstructionAddress};
+use crosscut_runtime::{Effect, Instruction, InstructionAddress};
 
 use crate::{
     code::{
@@ -33,7 +33,7 @@ pub fn generate_instructions(
     call_instructions_by_callee: &mut CallInstructionsByCallee,
     compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
-        capi_runtime::Function,
+        crosscut_runtime::Function,
     >,
     source_map: &mut SourceMap,
 ) {
@@ -91,7 +91,7 @@ fn compile_call_to_main(
     instructions: &mut Instructions,
     compiled_functions_by_location: &mut BTreeMap<
         FunctionLocation,
-        capi_runtime::Function,
+        crosscut_runtime::Function,
     >,
 ) {
     let Some(main) = syntax_tree.function_by_name("main") else {

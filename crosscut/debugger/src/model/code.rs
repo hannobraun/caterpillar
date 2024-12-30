@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use capi_compiler::{code::syntax::MemberLocation, CompilerOutput};
-use capi_runtime::{Instruction, InstructionAddress};
+use crosscut_runtime::{Instruction, InstructionAddress};
 
 #[derive(Clone, Debug, Default)]
 pub struct DebugCode {

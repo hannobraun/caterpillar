@@ -386,7 +386,7 @@ version = "0.0.0"
 dependencies = [
  "array-util",
  "blake3",
- "capi-runtime",
+ "crosscut-runtime",
  "itertools",
  "petgraph",
  "serde",
@@ -403,9 +403,9 @@ dependencies = [
  "capi-ffi",
  "capi-game-engine",
  "capi-protocol",
- "capi-runtime",
  "console_error_panic_hook",
  "console_log",
+ "crosscut-runtime",
  "gloo-net",
  "itertools",
  "leptos",
@@ -423,7 +423,7 @@ name = "capi-game-engine"
 version = "0.0.0"
 dependencies = [
  "capi-compiler",
- "capi-runtime",
+ "crosscut-runtime",
  "num_enum",
  "serde",
  "serde-big-array",
@@ -437,7 +437,7 @@ dependencies = [
  "capi-ffi",
  "capi-game-engine",
  "capi-protocol",
- "capi-runtime",
+ "crosscut-runtime",
  "ron",
 ]
 
@@ -447,18 +447,9 @@ version = "0.0.0"
 dependencies = [
  "capi-compiler",
  "capi-game-engine",
- "capi-runtime",
+ "crosscut-runtime",
  "ron",
  "serde",
-]
-
-[[package]]
-name = "capi-runtime"
-version = "0.0.0"
-dependencies = [
- "serde",
- "thiserror 2.0.9",
- "udigest",
 ]
 
 [[package]]
@@ -685,6 +676,15 @@ name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
+
+[[package]]
+name = "crosscut-runtime"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "thiserror 2.0.9",
+ "udigest",
+]
 
 [[package]]
 name = "crypto-common"

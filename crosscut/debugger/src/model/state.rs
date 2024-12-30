@@ -3,7 +3,7 @@ use capi_compiler::{
 };
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{host_state::HostState, updates::UpdateFromHost};
-use capi_runtime::{Effect, Instruction, Value};
+use crosscut_runtime::{Effect, Instruction, Value};
 
 use super::{
     ActiveFunctions, Breakpoints, DebugCode, DebugMemberKind, UserAction,

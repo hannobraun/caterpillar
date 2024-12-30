@@ -7,7 +7,7 @@ use capi_compiler::{
     },
     source_map::SourceMap,
 };
-use capi_runtime::Effect;
+use crosscut_runtime::Effect;
 
 use super::{Breakpoints, DebugFunction};
 

@@ -1,5 +1,5 @@
 [package]
-name = "capi-runtime"
+name = "crosscut-runtime"
 edition = "2021"
 
 [dependencies.serde]

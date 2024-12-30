@@ -1,4 +1,4 @@
-use capi_runtime::{Effect, InstructionAddress, Value};
+use crosscut_runtime::{Effect, InstructionAddress, Value};
 
 /// # The current state of the runtime
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]

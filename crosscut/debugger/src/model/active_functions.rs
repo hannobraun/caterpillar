@@ -9,7 +9,7 @@ use capi_compiler::{
     CompilerOutput,
 };
 use capi_protocol::host_state::HostState;
-use capi_runtime::{Effect, InstructionAddress};
+use crosscut_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFunction, DebugMember};
 

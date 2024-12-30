@@ -10,5 +10,5 @@ serde-big-array = "*"
 [dependencies.capi-compiler]
 path = "../compiler"
 
-[dependencies.capi-runtime]
+[dependencies.crosscut-runtime]
 path = "../runtime"

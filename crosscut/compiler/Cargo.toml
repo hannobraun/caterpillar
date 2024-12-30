@@ -12,7 +12,7 @@ petgraph = "*"
 version = "*"
 features = ["serde", "traits-preview"]
 
-[dependencies.capi-runtime]
+[dependencies.crosscut-runtime]
 path = "../runtime"
 
 [dependencies.serde]

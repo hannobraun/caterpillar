@@ -15,5 +15,5 @@ path = "../ffi"
 [dependencies.capi-protocol]
 path = "../protocol"
 
-[dependencies.capi-runtime]
+[dependencies.crosscut-runtime]
 path = "../runtime"
