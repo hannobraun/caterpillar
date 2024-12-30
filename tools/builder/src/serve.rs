@@ -11,7 +11,7 @@ use tokio::{
 use crate::build;
 
 pub async fn start() -> anyhow::Result<()> {
-    let crates_dir_relative = "capi";
+    let crates_dir_relative = "crosscut";
     let crates_dir = PathBuf::from(crates_dir_relative)
         .canonicalize()
         .with_context(|| {
