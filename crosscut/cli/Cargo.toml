@@ -1,5 +1,5 @@
 [package]
-name = "capi-cli"
+name = "crosscut-cli"
 edition = "2021"
 
 

@@ -9,7 +9,7 @@ pub async fn run() -> anyhow::Result<()> {
     if let Some(files) = files {
         Command::new("cargo")
             .arg("run")
-            .args(["--package", "capi-cli"])
+            .args(["--package", "crosscut-cli"])
             .arg("--")
             .arg("export")
             .args(["--path", "export"])

@@ -362,25 +362,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b96ec4966b5813e2c0507c1f86115c8c5abaadc3980879c3424042a02fd1ad3"
 
 [[package]]
-name = "capi-cli"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "axum",
- "clap",
- "crosscut-compiler",
- "crosscut-game-engine",
- "crosscut-protocol",
- "crosscut-watch",
- "rand",
- "reqwest",
- "thiserror 2.0.9",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "cc"
 version = "1.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -594,6 +575,25 @@ name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
+
+[[package]]
+name = "crosscut-cli"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "clap",
+ "crosscut-compiler",
+ "crosscut-game-engine",
+ "crosscut-protocol",
+ "crosscut-watch",
+ "rand",
+ "reqwest",
+ "thiserror 2.0.9",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
 
 [[package]]
 name = "crosscut-compiler"

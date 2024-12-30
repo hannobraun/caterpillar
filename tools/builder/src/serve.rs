@@ -45,7 +45,7 @@ pub async fn start() -> anyhow::Result<()> {
 
         let mut new_server = Command::new("cargo")
             .arg("run")
-            .args(["--package", "capi-cli"])
+            .args(["--package", "crosscut-cli"])
             .arg("--")
             .arg("serve")
             .env("FILES", files.display().to_string())
