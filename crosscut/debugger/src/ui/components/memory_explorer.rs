@@ -1,4 +1,4 @@
-use capi_game_engine::memory::Memory;
+use crosscut_game_engine::memory::Memory;
 use leptos::{
     component,
     prelude::{ClassAttribute, CollectView, ElementChild},

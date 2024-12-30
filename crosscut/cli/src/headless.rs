@@ -1,6 +1,6 @@
 use std::{path::PathBuf, time::Instant};
 
-use capi_game_engine::{
+use crosscut_game_engine::{
     command::Command, display::NUM_PIXEL_BYTES, game_engine::GameEngine,
 };
 use rand::random;

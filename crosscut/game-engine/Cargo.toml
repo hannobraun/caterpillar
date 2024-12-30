@@ -1,5 +1,5 @@
 [package]
-name = "capi-game-engine"
+name = "crosscut-game-engine"
 edition = "2021"
 
 [dependencies]

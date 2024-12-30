@@ -1,7 +1,3 @@
-use capi_game_engine::{
-    command::Command, game_engine::GameEngine, host::GameEngineHost,
-    memory::Memory,
-};
 use capi_protocol::updates::Updates;
 use crosscut_compiler::{
     code::{
@@ -9,6 +5,10 @@ use crosscut_compiler::{
         FunctionCalls,
     },
     Compiler,
+};
+use crosscut_game_engine::{
+    command::Command, game_engine::GameEngine, host::GameEngineHost,
+    memory::Memory,
 };
 
 use crate::model::{

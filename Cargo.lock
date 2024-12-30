@@ -367,11 +367,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
- "capi-game-engine",
  "capi-protocol",
  "capi-watch",
  "clap",
  "crosscut-compiler",
+ "crosscut-game-engine",
  "rand",
  "reqwest",
  "thiserror 2.0.9",
@@ -386,11 +386,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
- "capi-game-engine",
  "capi-protocol",
  "console_error_panic_hook",
  "console_log",
  "crosscut-compiler",
+ "crosscut-game-engine",
  "crosscut-runtime",
  "gloo-net",
  "itertools",
@@ -405,24 +405,13 @@ name = "capi-ffi"
 version = "0.0.0"
 
 [[package]]
-name = "capi-game-engine"
-version = "0.0.0"
-dependencies = [
- "crosscut-compiler",
- "crosscut-runtime",
- "num_enum",
- "serde",
- "serde-big-array",
-]
-
-[[package]]
 name = "capi-host"
 version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
- "capi-game-engine",
  "capi-protocol",
+ "crosscut-game-engine",
  "crosscut-runtime",
  "ron",
 ]
@@ -431,8 +420,8 @@ dependencies = [
 name = "capi-protocol"
 version = "0.0.0"
 dependencies = [
- "capi-game-engine",
  "crosscut-compiler",
+ "crosscut-game-engine",
  "crosscut-runtime",
  "ron",
  "serde",
@@ -675,6 +664,17 @@ dependencies = [
  "serde",
  "thiserror 2.0.9",
  "udigest",
+]
+
+[[package]]
+name = "crosscut-game-engine"
+version = "0.0.0"
+dependencies = [
+ "crosscut-compiler",
+ "crosscut-runtime",
+ "num_enum",
+ "serde",
+ "serde-big-array",
 ]
 
 [[package]]

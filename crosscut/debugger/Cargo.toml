@@ -14,7 +14,7 @@ ron = "*"
 [dependencies.crosscut-compiler]
 path = "../compiler"
 
-[dependencies.capi-game-engine]
+[dependencies.crosscut-game-engine]
 path = "../game-engine"
 
 [dependencies.capi-ffi]

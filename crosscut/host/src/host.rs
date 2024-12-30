@@ -1,10 +1,10 @@
 use std::panic;
 
-use capi_game_engine::{command::Command, game_engine::GameEngine};
 use capi_protocol::{
     command::{CommandExt, SerializedCommandToRuntime},
     updates::Updates,
 };
+use crosscut_game_engine::{command::Command, game_engine::GameEngine};
 
 use crate::ffi_out::on_panic;
 

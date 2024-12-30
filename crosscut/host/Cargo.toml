@@ -6,7 +6,7 @@ edition = "2021"
 anyhow = "*"
 ron = "*"
 
-[dependencies.capi-game-engine]
+[dependencies.crosscut-game-engine]
 path = "../game-engine"
 
 [dependencies.capi-ffi]

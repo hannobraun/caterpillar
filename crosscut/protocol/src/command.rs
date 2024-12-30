@@ -1,4 +1,4 @@
-use capi_game_engine::command::Command;
+use crosscut_game_engine::command::Command;
 
 pub trait CommandExt {
     fn deserialize(bytes: SerializedCommandToRuntime) -> Self;
