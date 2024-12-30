@@ -118,14 +118,17 @@ fn infer_cluster(
         );
     }
     for (location, index) in inference_context.bindings {
-        let type_ = inference_context.types.resolve(&index)?;
-        if let InferredType::Known(type_) = type_ {
-            let existing = output.parameters.insert(location, type_);
-            assert!(
-                existing.is_none(),
-                "Did not expect to overwrite an existing binding type.",
-            );
-        }
+        let InferredType::Known(type_) =
+            inference_context.types.resolve(&index)?
+        else {
+            continue;
+        };
+
+        let existing = output.parameters.insert(location, type_);
+        assert!(
+            existing.is_none(),
+            "Did not expect to overwrite an existing binding type.",
+        );
     }
     for (location, signature) in inference_context.expressions {
         let Some(signature) =
