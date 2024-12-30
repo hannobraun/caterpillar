@@ -101,6 +101,10 @@ fn infer_cluster(
         }
     }
 
+    // We have gone through all the branches in this branches, learning
+    // everything about them there is to learn. Now we can go through the
+    // inferred types and convert them into concrete types where possible.
+
     for (location, function) in inference_context.functions {
         let Some(signature) = function.to_signature() else {
             continue;
