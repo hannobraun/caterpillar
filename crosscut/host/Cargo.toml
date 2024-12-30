@@ -9,7 +9,7 @@ ron = "*"
 [dependencies.crosscut-game-engine]
 path = "../game-engine"
 
-[dependencies.capi-ffi]
+[dependencies.crosscut-ffi]
 path = "../ffi"
 
 [dependencies.crosscut-protocol]

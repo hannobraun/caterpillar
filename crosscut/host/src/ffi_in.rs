@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
+use crosscut_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use crosscut_game_engine::display::NUM_PIXEL_BYTES;
 use crosscut_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 

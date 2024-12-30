@@ -385,10 +385,10 @@ name = "capi-debugger"
 version = "0.0.0"
 dependencies = [
  "anyhow",
- "capi-ffi",
  "console_error_panic_hook",
  "console_log",
  "crosscut-compiler",
+ "crosscut-ffi",
  "crosscut-game-engine",
  "crosscut-protocol",
  "crosscut-runtime",
@@ -401,15 +401,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "capi-ffi"
-version = "0.0.0"
-
-[[package]]
 name = "capi-host"
 version = "0.0.0"
 dependencies = [
  "anyhow",
- "capi-ffi",
+ "crosscut-ffi",
  "crosscut-game-engine",
  "crosscut-protocol",
  "crosscut-runtime",
@@ -654,6 +650,10 @@ dependencies = [
  "thiserror 2.0.9",
  "udigest",
 ]
+
+[[package]]
+name = "crosscut-ffi"
+version = "0.0.0"
 
 [[package]]
 name = "crosscut-game-engine"

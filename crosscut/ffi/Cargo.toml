@@ -1,3 +1,3 @@
 [package]
-name = "capi-ffi"
+name = "crosscut-ffi"
 edition = "2021"
