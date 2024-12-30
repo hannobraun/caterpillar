@@ -1,4 +1,4 @@
-use capi_protocol::{
+use crosscut_protocol::{
     command::CommandExt,
     updates::{SerializedUpdate, UpdateFromHost},
 };

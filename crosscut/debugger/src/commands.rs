@@ -1,4 +1,4 @@
-use capi_protocol::command::SerializedCommandToRuntime;
+use crosscut_protocol::command::SerializedCommandToRuntime;
 use tokio::sync::mpsc;
 
 pub type CommandsToRuntimeRx =

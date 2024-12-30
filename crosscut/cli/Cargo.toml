@@ -20,7 +20,7 @@ path = "../compiler"
 [dependencies.crosscut-game-engine]
 path = "../game-engine"
 
-[dependencies.capi-protocol]
+[dependencies.crosscut-protocol]
 path = "../protocol"
 
 [dependencies.capi-watch]

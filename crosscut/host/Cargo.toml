@@ -12,7 +12,7 @@ path = "../game-engine"
 [dependencies.capi-ffi]
 path = "../ffi"
 
-[dependencies.capi-protocol]
+[dependencies.crosscut-protocol]
 path = "../protocol"
 
 [dependencies.crosscut-runtime]

@@ -367,11 +367,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
- "capi-protocol",
  "capi-watch",
  "clap",
  "crosscut-compiler",
  "crosscut-game-engine",
+ "crosscut-protocol",
  "rand",
  "reqwest",
  "thiserror 2.0.9",
@@ -386,11 +386,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
- "capi-protocol",
  "console_error_panic_hook",
  "console_log",
  "crosscut-compiler",
  "crosscut-game-engine",
+ "crosscut-protocol",
  "crosscut-runtime",
  "gloo-net",
  "itertools",
@@ -410,21 +410,10 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
- "capi-protocol",
  "crosscut-game-engine",
+ "crosscut-protocol",
  "crosscut-runtime",
  "ron",
-]
-
-[[package]]
-name = "capi-protocol"
-version = "0.0.0"
-dependencies = [
- "crosscut-compiler",
- "crosscut-game-engine",
- "crosscut-runtime",
- "ron",
- "serde",
 ]
 
 [[package]]
@@ -675,6 +664,17 @@ dependencies = [
  "num_enum",
  "serde",
  "serde-big-array",
+]
+
+[[package]]
+name = "crosscut-protocol"
+version = "0.0.0"
+dependencies = [
+ "crosscut-compiler",
+ "crosscut-game-engine",
+ "crosscut-runtime",
+ "ron",
+ "serde",
 ]
 
 [[package]]

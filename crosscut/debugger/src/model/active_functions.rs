@@ -1,7 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
-use capi_protocol::host_state::HostState;
 use crosscut_compiler::{
     code::{
         syntax::{FunctionLocation, MemberLocation, NamedFunction},
@@ -9,6 +8,7 @@ use crosscut_compiler::{
     },
     CompilerOutput,
 };
+use crosscut_protocol::host_state::HostState;
 use crosscut_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFunction, DebugMember};

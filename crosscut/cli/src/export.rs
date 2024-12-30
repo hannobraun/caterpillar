@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
-use capi_protocol::command::CommandExt;
 use crosscut_game_engine::command::Command;
+use crosscut_protocol::command::CommandExt;
 use tokio::{
     fs::{self, File},
     io::AsyncWriteExt,

@@ -1,5 +1,5 @@
-use capi_protocol::{command::CommandExt, ron_options, Versioned};
 use crosscut_compiler::CompilerOutput;
+use crosscut_protocol::{command::CommandExt, ron_options, Versioned};
 use gloo_net::http::{Request, Response};
 
 use crate::{commands::CommandsToRuntimeTx, model::PersistentState};

@@ -1,4 +1,3 @@
-use capi_protocol::updates::Updates;
 use crosscut_compiler::{
     code::{
         syntax::{MemberLocation, SyntaxTree},
@@ -10,6 +9,7 @@ use crosscut_game_engine::{
     command::Command, game_engine::GameEngine, host::GameEngineHost,
     memory::Memory,
 };
+use crosscut_protocol::updates::Updates;
 
 use crate::model::{
     ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFunction,

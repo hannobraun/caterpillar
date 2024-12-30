@@ -1,5 +1,5 @@
 [package]
-name = "capi-protocol"
+name = "crosscut-protocol"
 edition = "2021"
 
 [dependencies]
