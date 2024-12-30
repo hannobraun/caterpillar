@@ -13,7 +13,7 @@ static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
 static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
-/// See comment on `capi_host::ffi::LAST_UPDATE_READ`
+/// See comment on `crosscut_host::ffi::LAST_UPDATE_READ`
 static LAST_UPDATE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 
 #[no_mangle]
