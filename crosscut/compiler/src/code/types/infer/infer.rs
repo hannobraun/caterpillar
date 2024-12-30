@@ -206,15 +206,13 @@ fn infer_branch(
             stacks.insert(location.clone(), stack);
         }
 
-        let signature = infer_expression(
+        if let Some(signature) = infer_expression(
             expression,
             inference_context,
             &mut local_stack,
             compiler_context,
             output,
-        )?;
-
-        if let Some(signature) = signature {
+        )? {
             signatures.insert(location, signature);
         }
     }
