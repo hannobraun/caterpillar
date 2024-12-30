@@ -195,9 +195,9 @@ fn infer_branch(
         register_binding(binding.location, &output.parameters);
     }
 
-    let mut signatures = BTreeMap::new();
     let mut local_stack = LocalStack::default();
     let mut stacks = BTreeMap::new();
+    let mut signatures = BTreeMap::new();
 
     for expression in branch.expressions() {
         let location = expression.location.clone();
