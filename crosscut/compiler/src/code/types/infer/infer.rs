@@ -159,8 +159,6 @@ fn infer_branch(
     compiler_context: CompilerContext,
     output: &mut InferenceOutput,
 ) -> Result<InferredFunction> {
-    let mut local_stack = LocalStack::default();
-
     let mut register_binding =
         |location: ParameterLocation,
          parameters: &BTreeMap<ParameterLocation, Type>| {
@@ -198,6 +196,7 @@ fn infer_branch(
     }
 
     let mut signatures = BTreeMap::new();
+    let mut local_stack = LocalStack::default();
     let mut stacks = BTreeMap::new();
 
     for expression in branch.expressions() {
