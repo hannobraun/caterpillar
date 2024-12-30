@@ -21,35 +21,40 @@
             let panicHappened = false;
 
             const module = fetch("/capi_host.wasm");
-            const { instance } = await WebAssembly.instantiateStreaming(module, {
-                env: {
-                    on_panic: (ptr, len) => {
-                        panicHappened = true;
+            const { instance } = await WebAssembly
+                .instantiateStreaming(module, {
+                    env: {
+                        on_panic: (ptr, len) => {
+                            panicHappened = true;
 
-                        const array = new Uint8Array(
-                            instance.exports.memory.buffer,
-                            ptr,
-                            len,
-                        );
-                        const message = new TextDecoder().decode(array);
+                            const array = new Uint8Array(
+                                instance.exports.memory.buffer,
+                                ptr,
+                                len,
+                            );
+                            const message = new TextDecoder()
+                                .decode(array);
 
-                        const error = new Error();
+                            const error = new Error();
 
-                        console.error(`${message}\n\n${error.stack}`);
+                            console.error(
+                                `${message}\n\n${error.stack}`,
+                            );
+                        },
+
+                        print: (ptr, len) => {
+                            const array = new Uint8Array(
+                                instance.exports.memory.buffer,
+                                ptr,
+                                len,
+                            );
+                            const message = new TextDecoder()
+                                .decode(array);
+
+                            console.log(message);
+                        },
                     },
-
-                    print: (ptr, len) => {
-                        const array = new Uint8Array(
-                            instance.exports.memory.buffer,
-                            ptr,
-                            len,
-                        );
-                        const message = new TextDecoder().decode(array);
-
-                        console.log(message);
-                    },
-                },
-            });
+                });
             const runtime = instance.exports;
 
             import initDebugger from "/capi-debugger.js";
@@ -60,16 +65,25 @@
             window.addEventListener("keydown", (event) => {
                 let keyCode = null;
 
-                if (event.key == "ArrowUp" || event.key == "w") {
+                if (
+                    event.key == "ArrowUp" || event.key == "w"
+                ) {
                     keyCode = 1;
                 }
-                if (event.key == "ArrowLeft" || event.key == "a") {
+                if (
+                    event.key == "ArrowLeft" || event.key == "a"
+                ) {
                     keyCode = 2;
                 }
-                if (event.key == "ArrowDown" || event.key == "s") {
+                if (
+                    event.key == "ArrowDown" || event.key == "s"
+                ) {
                     keyCode = 3;
                 }
-                if (event.key == "ArrowRight" || event.key == "d") {
+                if (
+                    event.key == "ArrowRight" ||
+                    event.key == "d"
+                ) {
                     keyCode = 4;
                 }
 
@@ -96,7 +110,9 @@
                     );
 
                     if (command_rx.byteLength > 0) {
-                        runtime.commands_write(command_rx.byteLength);
+                        runtime.commands_write(
+                            command_rx.byteLength,
+                        );
                         const command_tx = new Uint8Array(
                             runtime.memory.buffer,
                             runtime.commands_write_ptr(),
@@ -135,7 +151,9 @@
                     );
 
                     if (update_rx.byteLength > 0) {
-                        debugger_.updates_write(update_rx.byteLength);
+                        debugger_.updates_write(
+                            update_rx.byteLength,
+                        );
                         const update_tx = new Uint8Array(
                             debugger_.memory.buffer,
                             debugger_.updates_write_ptr(),
@@ -188,7 +206,10 @@
                         window.location.reload();
                     })
                     .catch(() => {
-                        setTimeout(reloadOnceServerIsReady, delayMs);
+                        setTimeout(
+                            reloadOnceServerIsReady,
+                            delayMs,
+                        );
                     });
             }
         </script>
