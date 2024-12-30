@@ -133,7 +133,11 @@ fn infer_cluster(
             continue;
         };
 
-        output.expressions.insert(location, signature);
+        let existing = output.expressions.insert(location, signature);
+        assert!(
+            existing.is_none(),
+            "Did not expect to overwrite and existing expression signature.",
+        );
     }
 
     Ok(())
