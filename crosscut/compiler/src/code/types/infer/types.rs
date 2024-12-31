@@ -77,7 +77,6 @@ fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
 
 fn merge_direct_types([a, b]: [Type; 2]) -> Result<InferredType> {
     if a == b {
-        // Types check out. All good!
         Ok(InferredType::Direct(a))
     } else {
         Err(TypeError {
