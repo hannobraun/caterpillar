@@ -21,7 +21,7 @@ impl IndirectSignature {
         }
     }
 
-    pub fn make_direct(
+    pub fn to_direct(
         &self,
         types: &InferredTypes,
     ) -> Result<Option<Signature<Type>>> {
