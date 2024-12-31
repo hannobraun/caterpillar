@@ -11,13 +11,7 @@ export const dailyThoughtsPage = (dates: string[]) => {
         "Daily Thoughts",
         <>
             <h2>Daily Thoughts</h2>
-            <p class="prose">
-                Hey, I'm Hanno! These are my daily thoughts on{" "}
-                {link("https://github.com/hannobraun/crosscut", "Crosscut")},
-                the programming language I'm creating. If you have any
-                questions, comments, or feedback, please{" "}
-                {email_link("get in touch")}!
-            </p>
+            {dailyThoughtsExplainer()}
             <ol class="m-8">{entries}</ol>
         </>,
     );
@@ -76,6 +70,17 @@ const dailyThoughtItem = (date: string) => {
 const dailyThoughtLink = (date: string, label: string) => {
     const url = `/daily/${date}`;
     return link(url, label);
+};
+
+const dailyThoughtsExplainer = () => {
+    return (
+        <p class="prose">
+            Hey, I'm Hanno! These are my daily thoughts on{" "}
+            {link("https://github.com/hannobraun/crosscut", "Crosscut")}, the
+            programming language I'm creating. If you have any questions,
+            comments, or feedback, please {email_link("get in touch")}!
+        </p>
+    );
 };
 
 const subscribe = () => {
