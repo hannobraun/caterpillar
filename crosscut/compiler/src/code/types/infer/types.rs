@@ -86,7 +86,7 @@ pub enum InferredType {
 }
 
 impl InferredType {
-    pub fn into_type(self) -> Option<Type> {
+    pub fn into_type(self, _: &InferredTypes) -> Option<Type> {
         match self {
             Self::Direct(type_) => Some(type_),
             Self::Unknown { .. } => None,
