@@ -41,14 +41,17 @@ impl InferredTypes {
             let other = self.get(other);
 
             resolved = match (&resolved, other) {
-                (InferredType::Direct(direct_a), InferredType::Direct(b)) => {
-                    if direct_a == b {
+                (
+                    InferredType::Direct(direct_a),
+                    InferredType::Direct(direct_b),
+                ) => {
+                    if direct_a == direct_b {
                         // Types check out. All good!
                         resolved
                     } else {
                         return Err(TypeError {
                             expected: resolved.into_expected_type(),
-                            actual: Some(b.clone()),
+                            actual: Some(direct_b.clone()),
                             location: None,
                         });
                     }
