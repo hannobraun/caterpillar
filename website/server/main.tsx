@@ -9,7 +9,19 @@ Deno.serve(async (request) => {
 
     if (url.hostname == "crosscut.deno.dev") {
         return Response.redirect(
-            "https://capi.hannobraun.com/",
+            "https://www.crosscut.cc/",
+            308,
+        );
+    }
+    if (url.hostname == "capi.hannobraun.com") {
+        return Response.redirect(
+            "https://www.crosscut.cc/",
+            308,
+        );
+    }
+    if (url.hostname == "crosscut.cc") {
+        return Response.redirect(
+            "https://www.crosscut.cc/",
             308,
         );
     }
