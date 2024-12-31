@@ -84,22 +84,20 @@ const dailyThoughtsExplainer = () => {
 };
 
 const subscribe = () => {
-    return (
-        box(
-            <p>
-                <span class="font-bold">Hey, you!</span>{" "}
-                Want to subscribe to my daily thoughts? Just{" "}
-                {email_link("let me know", {
-                    subject:
-                        "I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21",
-                    body:
-                        "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
-                })}{" "}
-                (maybe include a nice message, if you're up for it), and I'll
-                send you an email whenever I post a new one.
-            </p>,
-            { highlight: true },
-        )
+    return box(
+        <p>
+            <span class="font-bold">Hey, you!</span>{" "}
+            Want to subscribe to my daily thoughts? Just{" "}
+            {email_link("let me know", {
+                subject:
+                    "I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21",
+                body:
+                    "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
+            })}{" "}
+            (maybe include a nice message, if you're up for it), and I'll send
+            you an email whenever I post a new one.
+        </p>,
+        { highlight: true },
     );
 };
 
