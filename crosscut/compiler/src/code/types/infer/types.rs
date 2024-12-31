@@ -61,7 +61,7 @@ impl InferredTypes {
 }
 
 fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
-    let type_ = match (a.clone(), b) {
+    let type_ = match (a, b) {
         (InferredType::Direct(a), InferredType::Direct(b)) => {
             if a == b {
                 // Types check out. All good!
@@ -75,7 +75,7 @@ fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
             }
         }
         (InferredType::Unknown, b) => b,
-        (_, InferredType::Unknown) => {
+        (a, InferredType::Unknown) => {
             // Other type doesn't add any new information.
             a
         }
