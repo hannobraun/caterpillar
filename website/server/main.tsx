@@ -7,7 +7,7 @@ import { dailyThoughtsPage, singleDailyThoughtPage } from "./templates.tsx";
 Deno.serve(async (request) => {
     const url = new URL(request.url);
 
-    if (url.hostname == "caterpillar.deno.dev") {
+    if (url.hostname == "crosscut.deno.dev") {
         return Response.redirect(
             "https://capi.hannobraun.com/",
             308,

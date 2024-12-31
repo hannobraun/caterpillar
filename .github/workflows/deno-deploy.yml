@@ -29,6 +29,6 @@ jobs:
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: caterpillar
+          project: crosscut
           entrypoint: server/main.tsx
           root: website-output
