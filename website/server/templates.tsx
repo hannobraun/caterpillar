@@ -85,7 +85,7 @@ const dailyThoughtsExplainer = () => {
 
 const subscribe = () => {
     return (
-        <div class="m-4 p-4 rounded font-sm bg-yellow-200">
+        box(
             <p>
                 <span class="font-bold">Hey, you!</span>{" "}
                 Want to subscribe to my daily thoughts? Just{" "}
@@ -97,9 +97,13 @@ const subscribe = () => {
                 })}{" "}
                 (maybe include a nice message, if you're up for it), and I'll
                 send you an email whenever I post a new one.
-            </p>
-        </div>
+            </p>,
+        )
     );
+};
+
+const box = (content: JSX.Element) => {
+    return <div class="m-4 p-4 rounded font-sm bg-yellow-200">{content}</div>;
 };
 
 const email_link = (
