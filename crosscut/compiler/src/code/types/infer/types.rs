@@ -41,7 +41,7 @@ impl InferredTypes {
             let other = self.get(other);
 
             match (&resolved, other) {
-                (InferredType::Known(a), InferredType::Known(b)) => {
+                (InferredType::Direct(a), InferredType::Direct(b)) => {
                     if a == b {
                         // Types check out. All good!
                     } else {
@@ -52,7 +52,7 @@ impl InferredTypes {
                         });
                     }
                 }
-                (InferredType::Unknown, InferredType::Known(_)) => {
+                (InferredType::Unknown, InferredType::Direct(_)) => {
                     resolved = other.clone();
                 }
                 (_, InferredType::Unknown) => {
@@ -81,21 +81,21 @@ impl InferredTypes {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum InferredType {
-    Known(Type),
+    Direct(Type),
     Unknown,
 }
 
 impl InferredType {
     pub fn into_type(self) -> Option<Type> {
         match self {
-            Self::Known(type_) => Some(type_),
+            Self::Direct(type_) => Some(type_),
             Self::Unknown { .. } => None,
         }
     }
 
     pub fn into_expected_type(self) -> ExpectedType {
         match self {
-            InferredType::Known(type_) => ExpectedType::Specific(type_),
+            InferredType::Direct(type_) => ExpectedType::Specific(type_),
             InferredType::Unknown => ExpectedType::Unknown,
         }
     }
@@ -140,7 +140,7 @@ mod tests {
     fn resolve_known() {
         let mut types = InferredTypes::default();
 
-        let type_ = InferredType::Known(Type::Number);
+        let type_ = InferredType::Direct(Type::Number);
         let index = types.push(type_.clone());
 
         assert_eq!(types.resolve(&index), Ok(type_));
@@ -160,7 +160,7 @@ mod tests {
     fn resolve_unified() {
         let mut types = InferredTypes::default();
 
-        let type_ = InferredType::Known(Type::Number);
+        let type_ = InferredType::Direct(Type::Number);
 
         let a = types.push(type_.clone());
         let b = types.push(InferredType::Unknown);
@@ -175,7 +175,7 @@ mod tests {
     fn resolve_unified_with_type_known_only_indirectly() {
         let mut types = InferredTypes::default();
 
-        let type_ = InferredType::Known(Type::Number);
+        let type_ = InferredType::Direct(Type::Number);
 
         let a = types.push(type_.clone());
         let b = types.push(InferredType::Unknown);
@@ -199,8 +199,8 @@ mod tests {
             },
         };
 
-        let index_a = types.push(InferredType::Known(a.clone()));
-        let index_b = types.push(InferredType::Known(b.clone()));
+        let index_a = types.push(InferredType::Direct(a.clone()));
+        let index_b = types.push(InferredType::Direct(b.clone()));
 
         types.unify([&index_a, &index_b]);
 

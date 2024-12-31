@@ -43,7 +43,7 @@ impl InferenceContext {
     ) -> Option<Index<InferredType>> {
         parameters
             .get(location)
-            .map(|type_| self.types.push(InferredType::Known(type_.clone())))
+            .map(|type_| self.types.push(InferredType::Direct(type_.clone())))
             .or_else(|| self.bindings.get(location).cloned())
     }
 }

@@ -65,22 +65,22 @@ mod tests {
 
         let a = InferredFunction {
             inputs: vec![
-                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Direct(Type::Number)),
                 types.push(InferredType::Unknown),
             ],
             outputs: Some(vec![
-                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Direct(Type::Number)),
                 types.push(InferredType::Unknown),
             ]),
         };
         let b = InferredFunction {
             inputs: vec![
                 types.push(InferredType::Unknown),
-                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Direct(Type::Number)),
             ],
             outputs: Some(vec![
                 types.push(InferredType::Unknown),
-                types.push(InferredType::Known(Type::Number)),
+                types.push(InferredType::Direct(Type::Number)),
             ]),
         };
 
@@ -109,7 +109,7 @@ mod tests {
 
         let a = InferredFunction {
             inputs: vec![],
-            outputs: Some(vec![types.push(InferredType::Known(Type::Number))]),
+            outputs: Some(vec![types.push(InferredType::Direct(Type::Number))]),
         };
         let b = InferredFunction {
             inputs: vec![],

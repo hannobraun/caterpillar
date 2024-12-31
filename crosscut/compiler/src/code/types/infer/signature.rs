@@ -8,7 +8,7 @@ pub fn make_indirect(
 ) -> Signature<Index<InferredType>> {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
-            .map(|type_| types.push(InferredType::Known(type_)))
+            .map(|type_| types.push(InferredType::Direct(type_)))
             .collect()
     };
 

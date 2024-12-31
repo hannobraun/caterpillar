@@ -122,7 +122,7 @@ fn infer_cluster(
         );
     }
     for (location, index) in inference_context.bindings {
-        let InferredType::Known(type_) =
+        let InferredType::Direct(type_) =
             inference_context.types.resolve(&index)?
         else {
             continue;
@@ -425,7 +425,7 @@ fn infer_intrinsic(
                 .transpose()?;
 
             match top_operand {
-                Some(InferredType::Known(type_)) => Some(Signature {
+                Some(InferredType::Direct(type_)) => Some(Signature {
                     inputs: vec![type_],
                     outputs: vec![],
                 }),
@@ -450,7 +450,7 @@ fn infer_intrinsic(
                 .transpose()?;
 
             match top_operand {
-                Some(InferredType::Known(Type::Function { signature })) => {
+                Some(InferredType::Direct(Type::Function { signature })) => {
                     let outputs = signature.outputs.clone();
                     let inputs = signature
                         .inputs
@@ -461,7 +461,7 @@ fn infer_intrinsic(
 
                     Some(Signature { inputs, outputs })
                 }
-                Some(InferredType::Known(actual)) => {
+                Some(InferredType::Direct(actual)) => {
                     return Err(TypeError {
                         expected: ExpectedType::Function,
                         actual: Some(actual.clone()),
