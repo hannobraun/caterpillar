@@ -40,7 +40,7 @@ impl InferredTypes {
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
 
-            resolved = match (&resolved, other) {
+            resolved = match (resolved.clone(), other.clone()) {
                 (
                     InferredType::Direct(direct_a),
                     InferredType::Direct(direct_b),
