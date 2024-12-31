@@ -39,29 +39,7 @@ impl InferredTypes {
 
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
-
-            resolved = match (resolved.clone(), other.clone()) {
-                (
-                    InferredType::Direct(direct_a),
-                    InferredType::Direct(direct_b),
-                ) => {
-                    if direct_a == direct_b {
-                        // Types check out. All good!
-                        resolved
-                    } else {
-                        return Err(TypeError {
-                            expected: resolved.into_expected_type(),
-                            actual: Some(direct_b),
-                            location: None,
-                        });
-                    }
-                }
-                (InferredType::Unknown, other) => other,
-                (_, InferredType::Unknown) => {
-                    // Other type doesn't add any new information.
-                    resolved
-                }
-            };
+            resolved = merge_inferred_types([resolved, other.clone()])?;
         }
 
         Ok(resolved)
@@ -80,6 +58,30 @@ impl InferredTypes {
 
         type_
     }
+}
+
+fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
+    let type_ = match (a.clone(), b) {
+        (InferredType::Direct(direct_a), InferredType::Direct(direct_b)) => {
+            if direct_a == direct_b {
+                // Types check out. All good!
+                a
+            } else {
+                return Err(TypeError {
+                    expected: a.into_expected_type(),
+                    actual: Some(direct_b),
+                    location: None,
+                });
+            }
+        }
+        (InferredType::Unknown, other) => other,
+        (_, InferredType::Unknown) => {
+            // Other type doesn't add any new information.
+            a
+        }
+    };
+
+    Ok(type_)
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
