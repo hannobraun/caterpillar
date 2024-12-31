@@ -56,7 +56,7 @@ impl InferredTypes {
                         });
                     }
                 }
-                (InferredType::Unknown, _) => other.clone(),
+                (InferredType::Unknown, other) => other,
                 (_, InferredType::Unknown) => {
                     // Other type doesn't add any new information.
                     resolved
