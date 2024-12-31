@@ -486,11 +486,11 @@ fn infer_intrinsic(
 
 fn make_stack_direct(
     local_stack: &[Index<InferredType>],
-    local_types: &InferredTypes,
+    types: &InferredTypes,
 ) -> Result<Option<Vec<Type>>> {
     local_stack
         .iter()
-        .map(|index| Ok(local_types.resolve(index)?.into_type()))
+        .map(|index| Ok(types.resolve(index)?.into_type()))
         .collect()
 }
 
