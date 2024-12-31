@@ -8,7 +8,7 @@ impl IndirectSignature {
     pub fn make_indirect(
         signature: Signature,
         types: &mut InferredTypes,
-    ) -> IndirectSignature {
+    ) -> Self {
         let mut map = |from: Vec<Type>| {
             from.into_iter()
                 .map(|type_| types.push(InferredType::Direct(type_)))
