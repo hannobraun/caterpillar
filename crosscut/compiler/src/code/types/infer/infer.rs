@@ -247,7 +247,7 @@ fn infer_expression(
         .signature_of_expression(&expression.location)
         .cloned()
         .map(|signature| {
-            IndirectSignature::make_indirect(
+            IndirectSignature::from_direct(
                 signature,
                 &mut inference_context.types,
             )
@@ -285,7 +285,7 @@ fn infer_expression(
                         Some(signature)
                     }
                     IdentifierTarget::HostFunction(host) => {
-                        let signature = IndirectSignature::make_indirect(
+                        let signature = IndirectSignature::from_direct(
                             host.signature.clone(),
                             &mut inference_context.types,
                         );
@@ -300,7 +300,7 @@ fn infer_expression(
                         )?;
 
                         signature.map(|signature| {
-                            IndirectSignature::make_indirect(
+                            IndirectSignature::from_direct(
                                 signature,
                                 &mut inference_context.types,
                             )
@@ -318,7 +318,7 @@ fn infer_expression(
                 inputs: vec![],
                 outputs: vec![Type::Number],
             };
-            let signature = IndirectSignature::make_indirect(
+            let signature = IndirectSignature::from_direct(
                 signature,
                 &mut inference_context.types,
             );
@@ -333,7 +333,7 @@ fn infer_expression(
                         signature: signature.clone(),
                     }],
                 };
-                IndirectSignature::make_indirect(
+                IndirectSignature::from_direct(
                     signature,
                     &mut inference_context.types,
                 )

@@ -28,7 +28,7 @@ impl InferenceContext {
         functions
             .get(location)
             .map(|signature| {
-                IndirectSignature::make_indirect(
+                IndirectSignature::from_direct(
                     signature.clone(),
                     &mut self.types,
                 )

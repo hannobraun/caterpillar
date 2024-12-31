@@ -5,7 +5,7 @@ use super::types::{InferredType, InferredTypes, Result};
 pub type IndirectSignature = Signature<Index<InferredType>>;
 
 impl IndirectSignature {
-    pub fn make_indirect(
+    pub fn from_direct(
         signature: Signature,
         types: &mut InferredTypes,
     ) -> Self {
