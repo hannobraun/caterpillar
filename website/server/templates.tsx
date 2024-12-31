@@ -36,6 +36,7 @@ export const singleDailyThoughtPage = (
         `Daily Thought - ${date}`,
         <>
             <h2>Daily Thought - {date}</h2>
+            {dailyThoughtsExplainer()}
             {link("/daily", "< back to list")}
             <main class="prose">
                 {html}
