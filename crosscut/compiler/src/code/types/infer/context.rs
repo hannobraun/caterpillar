@@ -7,7 +7,7 @@ use crate::code::{
 
 use super::{
     function::InferredFunction,
-    signature,
+    signature::{self, IndirectSignature},
     types::{InferredType, InferredTypes},
 };
 
@@ -16,7 +16,7 @@ pub struct InferenceContext {
     pub types: InferredTypes,
     pub functions: BTreeMap<FunctionLocation, InferredFunction>,
     pub bindings: BTreeMap<ParameterLocation, Index<InferredType>>,
-    pub expressions: BTreeMap<MemberLocation, Signature<Index<InferredType>>>,
+    pub expressions: BTreeMap<MemberLocation, IndirectSignature>,
 }
 
 impl InferenceContext {
@@ -24,7 +24,7 @@ impl InferenceContext {
         &mut self,
         location: &FunctionLocation,
         functions: &BTreeMap<FunctionLocation, Signature>,
-    ) -> Option<Signature<Index<InferredType>>> {
+    ) -> Option<IndirectSignature> {
         functions
             .get(location)
             .map(|signature| {

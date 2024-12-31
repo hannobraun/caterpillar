@@ -1,7 +1,7 @@
 use crate::code::{Index, Signature};
 
 use super::{
-    signature::unify_type_list,
+    signature::{unify_type_list, IndirectSignature},
     types::{InferredType, InferredTypes},
 };
 
@@ -39,7 +39,7 @@ impl InferredFunction {
         }
     }
 
-    pub fn to_signature(&self) -> Option<Signature<Index<InferredType>>> {
+    pub fn to_signature(&self) -> Option<IndirectSignature> {
         let inputs = self.inputs.clone();
         let outputs = self.outputs.clone()?;
 

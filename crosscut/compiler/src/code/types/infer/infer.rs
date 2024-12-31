@@ -18,7 +18,7 @@ use crate::{
 use super::{
     context::InferenceContext,
     function::InferredFunction,
-    signature,
+    signature::{self, IndirectSignature},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -241,7 +241,7 @@ fn infer_expression(
     local_stack: &mut LocalStack,
     compiler_context: CompilerContext,
     output: &InferenceOutput,
-) -> Result<Option<Signature<Index<InferredType>>>> {
+) -> Result<Option<IndirectSignature>> {
     let explicit = compiler_context
         .annotations
         .signature_of_expression(&expression.location)

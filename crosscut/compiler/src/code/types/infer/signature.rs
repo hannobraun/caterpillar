@@ -2,10 +2,12 @@ use crate::code::{Index, Signature, Type};
 
 use super::types::{InferredType, InferredTypes, Result};
 
+pub type IndirectSignature = Signature<Index<InferredType>>;
+
 pub fn make_indirect(
     signature: Signature,
     types: &mut InferredTypes,
-) -> Signature<Index<InferredType>> {
+) -> IndirectSignature {
     let mut map = |from: Vec<Type>| {
         from.into_iter()
             .map(|type_| types.push(InferredType::Direct(type_)))
@@ -19,7 +21,7 @@ pub fn make_indirect(
 }
 
 pub fn make_direct(
-    signature: &Signature<Index<InferredType>>,
+    signature: &IndirectSignature,
     types: &InferredTypes,
 ) -> Result<Option<Signature<Type>>> {
     let try_map = |from: &Vec<Index<InferredType>>| {
@@ -41,10 +43,7 @@ pub fn make_direct(
     Ok(signature)
 }
 
-pub fn unify(
-    [a, b]: [&Signature<Index<InferredType>>; 2],
-    types: &mut InferredTypes,
-) {
+pub fn unify([a, b]: [&IndirectSignature; 2], types: &mut InferredTypes) {
     unify_type_list([&a.inputs, &b.inputs], types);
     unify_type_list([&a.outputs, &b.outputs], types);
 }
