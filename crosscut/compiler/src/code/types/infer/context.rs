@@ -7,7 +7,7 @@ use crate::code::{
 
 use super::{
     function::InferredFunction,
-    signature::{self, IndirectSignature},
+    signature::IndirectSignature,
     types::{InferredType, InferredTypes},
 };
 
@@ -28,7 +28,10 @@ impl InferenceContext {
         functions
             .get(location)
             .map(|signature| {
-                signature::make_indirect(signature.clone(), &mut self.types)
+                IndirectSignature::make_indirect(
+                    signature.clone(),
+                    &mut self.types,
+                )
             })
             .or_else(|| {
                 let function = self.functions.get(location).cloned()?;

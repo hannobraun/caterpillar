@@ -4,19 +4,21 @@ use super::types::{InferredType, InferredTypes, Result};
 
 pub type IndirectSignature = Signature<Index<InferredType>>;
 
-pub fn make_indirect(
-    signature: Signature,
-    types: &mut InferredTypes,
-) -> IndirectSignature {
-    let mut map = |from: Vec<Type>| {
-        from.into_iter()
-            .map(|type_| types.push(InferredType::Direct(type_)))
-            .collect()
-    };
+impl IndirectSignature {
+    pub fn make_indirect(
+        signature: Signature,
+        types: &mut InferredTypes,
+    ) -> IndirectSignature {
+        let mut map = |from: Vec<Type>| {
+            from.into_iter()
+                .map(|type_| types.push(InferredType::Direct(type_)))
+                .collect()
+        };
 
-    Signature {
-        inputs: map(signature.inputs),
-        outputs: map(signature.outputs),
+        Signature {
+            inputs: map(signature.inputs),
+            outputs: map(signature.outputs),
+        }
     }
 }
 
