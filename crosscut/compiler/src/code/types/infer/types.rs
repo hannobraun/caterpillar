@@ -74,7 +74,7 @@ fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
                 });
             }
         }
-        (InferredType::Unknown, other) => other,
+        (InferredType::Unknown, b) => b,
         (_, InferredType::Unknown) => {
             // Other type doesn't add any new information.
             a
