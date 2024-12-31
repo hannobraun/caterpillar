@@ -40,10 +40,11 @@ impl InferredTypes {
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(other);
 
-            match (&resolved, other) {
+            resolved = match (&resolved, other) {
                 (InferredType::Direct(a), InferredType::Direct(b)) => {
                     if a == b {
                         // Types check out. All good!
+                        resolved
                     } else {
                         return Err(TypeError {
                             expected: resolved.into_expected_type(),
@@ -52,13 +53,12 @@ impl InferredTypes {
                         });
                     }
                 }
-                (InferredType::Unknown, _) => {
-                    resolved = other.clone();
-                }
+                (InferredType::Unknown, _) => other.clone(),
                 (_, InferredType::Unknown) => {
                     // Other type doesn't add any new information.
+                    resolved
                 }
-            }
+            };
         }
 
         Ok(resolved)
