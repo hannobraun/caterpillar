@@ -65,7 +65,7 @@ fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
         (InferredType::Direct(direct_a), InferredType::Direct(direct_b)) => {
             if direct_a == direct_b {
                 // Types check out. All good!
-                a
+                InferredType::Direct(direct_a)
             } else {
                 return Err(TypeError {
                     expected: a.into_expected_type(),
