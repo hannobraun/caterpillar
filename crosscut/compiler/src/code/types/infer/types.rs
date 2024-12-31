@@ -41,8 +41,8 @@ impl InferredTypes {
             let other = self.get(other);
 
             resolved = match (&resolved, other) {
-                (InferredType::Direct(a), InferredType::Direct(b)) => {
-                    if a == b {
+                (InferredType::Direct(direct_a), InferredType::Direct(b)) => {
+                    if direct_a == b {
                         // Types check out. All good!
                         resolved
                     } else {
