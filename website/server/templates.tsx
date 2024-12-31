@@ -96,7 +96,7 @@ const subscribe = () => {
 
 const email_link = (text: string) => {
     const url =
-        "mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21&body=Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.";
+        `mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21&body=Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.`;
 
     return link(
         url,
