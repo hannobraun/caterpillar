@@ -29,7 +29,7 @@ impl IndirectSignature {
             from.iter()
                 .map(|index| {
                     let type_ = types.resolve(index)?;
-                    Ok(type_.into_type(types))
+                    type_.into_type(types)
                 })
                 .collect::<Result<Option<_>>>()
         };

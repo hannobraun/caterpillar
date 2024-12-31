@@ -490,7 +490,7 @@ fn make_stack_direct(
 ) -> Result<Option<Vec<Type>>> {
     local_stack
         .iter()
-        .map(|index| Ok(types.resolve(index)?.into_type(types)))
+        .map(|index| types.resolve(index)?.into_type(types))
         .collect()
 }
 
