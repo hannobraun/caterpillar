@@ -16,9 +16,7 @@ export const dailyThoughtsPage = (dates: string[]) => {
                 <a href="https://github.com/hannobraun/crosscut">Crosscut</a>,
                 the programming language I'm creating. If you have any
                 questions, comments, or feedback, please{" "}
-                <a href="mailto:hello@hannobraun.com">
-                    get in touch
-                </a>!
+                {email_link("get in touch")}!
             </p>
             <ol class="m-8">{entries}</ol>
         </>,
