@@ -52,7 +52,7 @@ impl InferredTypes {
                         });
                     }
                 }
-                (InferredType::Unknown, InferredType::Direct(_)) => {
+                (InferredType::Unknown, _) => {
                     resolved = other.clone();
                 }
                 (_, InferredType::Unknown) => {
