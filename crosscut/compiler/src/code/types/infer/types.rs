@@ -63,16 +63,7 @@ impl InferredTypes {
 fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
     let type_ = match (a, b) {
         (InferredType::Direct(a), InferredType::Direct(b)) => {
-            if a == b {
-                // Types check out. All good!
-                InferredType::Direct(a)
-            } else {
-                return Err(TypeError {
-                    expected: ExpectedType::Specific(a),
-                    actual: Some(b),
-                    location: None,
-                });
-            }
+            merge_direct_types([a, b])?
         }
         (InferredType::Unknown, b) => b,
         (a, InferredType::Unknown) => {
@@ -82,6 +73,19 @@ fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
     };
 
     Ok(type_)
+}
+
+fn merge_direct_types([a, b]: [Type; 2]) -> Result<InferredType> {
+    if a == b {
+        // Types check out. All good!
+        Ok(InferredType::Direct(a))
+    } else {
+        Err(TypeError {
+            expected: ExpectedType::Specific(a),
+            actual: Some(b),
+            location: None,
+        })
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
