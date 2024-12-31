@@ -103,7 +103,7 @@ const subscribe = () => {
 };
 
 const box = (content: JSX.Element) => {
-    const boxClass = "m-4 p-4 rounded font-sm bg-yellow-200";
+    const boxClass = `m-4 p-4 rounded font-sm bg-yellow-200`;
     return <div class={boxClass}>{content}</div>;
 };
 
