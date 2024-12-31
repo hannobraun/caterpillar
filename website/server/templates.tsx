@@ -99,9 +99,12 @@ const subscribe = () => {
     );
 };
 
-const email_link = (text: string, extra: { subject: string; body: string }) => {
-    const subject = extra.subject || "";
-    const body = extra.body || "";
+const email_link = (
+    text: string,
+    extra?: { subject: string; body: string },
+) => {
+    const subject = extra && extra.subject || "";
+    const body = extra && extra.body || "";
 
     const url =
         `mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=${subject}&body=${body}`;
