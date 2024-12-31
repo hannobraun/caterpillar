@@ -110,7 +110,7 @@ fn infer_cluster(
             continue;
         };
         let Some(signature) =
-            signature::make_direct(&signature, &inference_context.types)?
+            signature.make_direct(&inference_context.types)?
         else {
             continue;
         };
@@ -136,7 +136,7 @@ fn infer_cluster(
     }
     for (location, signature) in inference_context.expressions {
         let Some(signature) =
-            signature::make_direct(&signature, &inference_context.types)?
+            signature.make_direct(&inference_context.types)?
         else {
             continue;
         };
@@ -345,8 +345,7 @@ fn infer_expression(
         [explicit.as_ref(), inferred.as_ref()].try_map_ext(|signature| {
             signature
                 .and_then(|signature| {
-                    signature::make_direct(signature, &inference_context.types)
-                        .transpose()
+                    signature.make_direct(&inference_context.types).transpose()
                 })
                 .transpose()
         })?

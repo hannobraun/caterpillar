@@ -50,10 +50,7 @@ impl InferredFunction {
 #[cfg(test)]
 mod tests {
     use crate::code::{
-        types::infer::{
-            signature::make_direct,
-            types::{InferredType, InferredTypes},
-        },
+        types::infer::types::{InferredType, InferredTypes},
         Signature, Type,
     };
 
@@ -89,8 +86,7 @@ mod tests {
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();
-                let signature =
-                    make_direct(&signature, &types).unwrap().unwrap();
+                let signature = signature.make_direct(&types).unwrap().unwrap();
 
                 assert_eq!(
                     signature,
@@ -121,8 +117,7 @@ mod tests {
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();
-                let signature =
-                    make_direct(&signature, &types).unwrap().unwrap();
+                let signature = signature.make_direct(&types).unwrap().unwrap();
 
                 assert_eq!(
                     signature,

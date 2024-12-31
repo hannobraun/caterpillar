@@ -20,29 +20,29 @@ impl IndirectSignature {
             outputs: map(signature.outputs),
         }
     }
-}
 
-pub fn make_direct(
-    signature: &IndirectSignature,
-    types: &InferredTypes,
-) -> Result<Option<Signature<Type>>> {
-    let try_map = |from: &Vec<Index<InferredType>>| {
-        from.iter()
-            .map(|index| {
-                let type_ = types.resolve(index)?;
-                Ok(type_.into_type())
-            })
-            .collect::<Result<Option<_>>>()
-    };
+    pub fn make_direct(
+        &self,
+        types: &InferredTypes,
+    ) -> Result<Option<Signature<Type>>> {
+        let try_map = |from: &Vec<Index<InferredType>>| {
+            from.iter()
+                .map(|index| {
+                    let type_ = types.resolve(index)?;
+                    Ok(type_.into_type())
+                })
+                .collect::<Result<Option<_>>>()
+        };
 
-    let inputs = try_map(&signature.inputs)?;
-    let outputs = try_map(&signature.outputs)?;
+        let inputs = try_map(&self.inputs)?;
+        let outputs = try_map(&self.outputs)?;
 
-    let signature = inputs
-        .zip(outputs)
-        .map(|(inputs, outputs)| Signature { inputs, outputs });
+        let signature = inputs
+            .zip(outputs)
+            .map(|(inputs, outputs)| Signature { inputs, outputs });
 
-    Ok(signature)
+        Ok(signature)
+    }
 }
 
 pub fn unify([a, b]: [&IndirectSignature; 2], types: &mut InferredTypes) {
