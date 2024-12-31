@@ -86,7 +86,10 @@ const subscribe = () => {
             <p>
                 <span class="font-bold">Hey, you!</span>{" "}
                 Want to subscribe to my daily thoughts? Just{" "}
-                {email_link("let me know")}{" "}
+                {email_link("let me know", {
+                    body:
+                        "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
+                })}{" "}
                 (maybe include a nice message, if you're up for it), and I'll
                 send you an email whenever I post a new one.
             </p>
@@ -94,9 +97,11 @@ const subscribe = () => {
     );
 };
 
-const email_link = (text: string) => {
+const email_link = (text: string, extra: { body: string }) => {
+    const body = extra.body || "";
+
     const url =
-        `mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21&body=Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.`;
+        `mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21&body=${body}`;
 
     return link(
         url,
