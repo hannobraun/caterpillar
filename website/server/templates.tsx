@@ -98,12 +98,19 @@ const subscribe = () => {
                 (maybe include a nice message, if you're up for it), and I'll
                 send you an email whenever I post a new one.
             </p>,
+            { highlight: true },
         )
     );
 };
 
-const box = (content: JSX.Element) => {
-    const bgColor = "bg-yellow-200";
+const box = (content: JSX.Element, options?: { highlight: boolean }) => {
+    let bgColor;
+    if (options && options.highlight) {
+        bgColor = "bg-yellow-200";
+    } else {
+        bgColor = "bg-slate-200";
+    }
+
     const boxClass = `m-4 p-4 rounded font-sm ${bgColor}`;
 
     return <div class={boxClass}>{content}</div>;

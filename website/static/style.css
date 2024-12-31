@@ -23,6 +23,10 @@ address {
 
 /* Mostly Tailwind-compatible utility classes */
 
+.bg-slate-200 {
+    background-color: rgb(226 232 240);
+}
+
 .bg-yellow-200 {
     background-color: rgb(254 240 138);
 }
