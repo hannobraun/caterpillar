@@ -51,7 +51,7 @@ impl InferredTypes {
                     } else {
                         return Err(TypeError {
                             expected: resolved.into_expected_type(),
-                            actual: Some(direct_b.clone()),
+                            actual: Some(direct_b),
                             location: None,
                         });
                     }
