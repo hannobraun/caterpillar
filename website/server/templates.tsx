@@ -73,13 +73,13 @@ const dailyThoughtLink = (date: string, label: string) => {
 };
 
 const dailyThoughtsExplainer = () => {
-    return (
+    return box(
         <p class="prose">
             Hey, I'm Hanno! These are my daily thoughts on{" "}
             {link("https://github.com/hannobraun/crosscut", "Crosscut")}, the
             programming language I'm creating. If you have any questions,
             comments, or feedback, please {email_link("get in touch")}!
-        </p>
+        </p>,
     );
 };
 
