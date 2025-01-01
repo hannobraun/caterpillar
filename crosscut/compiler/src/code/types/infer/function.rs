@@ -5,7 +5,7 @@ use super::{
     types::{InferredType, InferredTypes},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct InferredFunction {
     /// # The inferred inputs of the function
     ///
