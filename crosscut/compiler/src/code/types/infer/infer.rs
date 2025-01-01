@@ -381,7 +381,7 @@ fn infer_expression(
 
                         return Err(TypeError {
                             expected: input
-                                .into_expected_type(&inference_context.types),
+                                .into_expected_type(&inference_context.types)?,
                             actual: None,
                             location: Some(expression.location),
                         });
