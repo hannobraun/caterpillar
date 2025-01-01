@@ -410,7 +410,7 @@ fn infer_expression(
 fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
-    local_types: &mut InferredTypes,
+    types: &mut InferredTypes,
     local_stack: &mut LocalStack,
 ) -> Result<Option<Signature>> {
     let signature = match intrinsic {
@@ -421,7 +421,7 @@ fn infer_intrinsic(
 
             let top_operand = local_stack
                 .last()
-                .map(|index| local_types.resolve(index))
+                .map(|index| types.resolve(index))
                 .transpose()?;
 
             match top_operand {
@@ -446,7 +446,7 @@ fn infer_intrinsic(
 
             let top_operand = local_stack
                 .last()
-                .map(|index| local_types.resolve(index))
+                .map(|index| types.resolve(index))
                 .transpose()?;
 
             match top_operand {
