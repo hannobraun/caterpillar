@@ -45,7 +45,7 @@ impl InferredTypes {
 
         for other in equivalence_set.into_iter().flatten() {
             let other = self.get(&other);
-            resolved = merge_inferred_types([resolved, other.clone()])?;
+            resolved = merge_inferred_types([resolved, other.clone()], self)?;
         }
 
         Ok(resolved)
@@ -66,7 +66,10 @@ impl InferredTypes {
     }
 }
 
-fn merge_inferred_types([a, b]: [InferredType; 2]) -> Result<InferredType> {
+fn merge_inferred_types(
+    [a, b]: [InferredType; 2],
+    _: &mut InferredTypes,
+) -> Result<InferredType> {
     let type_ = match (a, b) {
         (InferredType::Direct(a), InferredType::Direct(b)) => {
             merge_direct_types([a, b])?
