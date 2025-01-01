@@ -602,7 +602,7 @@ dependencies = [
  "array-util",
  "blake3",
  "crosscut-runtime",
- "itertools",
+ "itertools 0.14.0",
  "petgraph",
  "serde",
  "thiserror 2.0.9",
@@ -622,7 +622,7 @@ dependencies = [
  "crosscut-protocol",
  "crosscut-runtime",
  "gloo-net",
- "itertools",
+ "itertools 0.14.0",
  "leptos",
  "log",
  "ron",
@@ -1419,6 +1419,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1557,7 +1566,7 @@ dependencies = [
  "cfg-if",
  "convert_case",
  "html-escape",
- "itertools",
+ "itertools 0.13.0",
  "leptos_hot_reload",
  "prettyplease",
  "proc-macro-error2",
@@ -2151,7 +2160,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8285bcb6b1520dfc67a253ed6ca02dd9b9e3f8e98072e217585c8abfc6252050"
 dependencies = [
  "guardian",
- "itertools",
+ "itertools 0.13.0",
  "or_poisoned",
  "paste",
  "reactive_graph",
@@ -2227,9 +2236,9 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
 name = "reqwest"
-version = "0.12.11"
+version = "0.12.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fe060fe50f524be480214aba758c71f99f90ee8c83c5a36b5e9e1d568eb4eb3"
+checksum = "43e734407157c3c2034e0258f5e4473ddb361b1e85f95a66690d67264d7cd1da"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -2635,7 +2644,7 @@ dependencies = [
  "futures",
  "html-escape",
  "indexmap 2.7.0",
- "itertools",
+ "itertools 0.13.0",
  "js-sys",
  "linear-map",
  "next_tuple",
@@ -3476,9 +3485,9 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "winnow"
-version = "0.6.20"
+version = "0.6.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36c1fec1a2bb5866f07c25f68c26e565c4c200aebb96d7e55710c19d3e8ac49b"
+checksum = "e6f5bb5257f2407a5425c6e749bfd9692192a73e70a6060516ac04f889087d68"
 dependencies = [
  "memchr",
 ]
