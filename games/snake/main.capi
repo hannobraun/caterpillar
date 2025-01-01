@@ -827,10 +827,10 @@ end
 
 vec_store: fn
     br x, y, address ->
-        x: -> Number .
-        address: -> Number .
+        x
+        address
         store
-        y: -> Number .
+        y
         address
         1
         add_s32
