@@ -452,7 +452,9 @@ fn infer_intrinsic(
                         .chain([Type::Function { signature }])
                         .collect();
 
-                    Some(Signature { inputs, outputs })
+                    let signature = Signature { inputs, outputs };
+
+                    Some(signature)
                 }
                 Some(InferredType::Direct(actual)) => {
                     return Err(TypeError {
