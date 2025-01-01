@@ -7,13 +7,10 @@ import { dailyThoughtsPage, singleDailyThoughtPage } from "./templates.tsx";
 Deno.serve(async (request) => {
     const url = new URL(request.url);
 
-    if (url.hostname == "crosscut.deno.dev") {
-        return redirectToCanonicalDomain();
-    }
-    if (url.hostname == "capi.hannobraun.com") {
-        return redirectToCanonicalDomain();
-    }
-    if (url.hostname == "crosscut.cc") {
+    if (
+        url.hostname == "crosscut.deno.dev" ||
+        url.hostname == "capi.hannobraun.com" || url.hostname == "crosscut.cc"
+    ) {
         return redirectToCanonicalDomain();
     }
 
