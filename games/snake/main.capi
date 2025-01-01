@@ -939,7 +939,7 @@ vec_buf_push: fn
                         y
                         address
                         vec_store
-                        next_addr: -> Number .
+                        next_addr
                         _vec_buf_inc_index
                     end
                 end
