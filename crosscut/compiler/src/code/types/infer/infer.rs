@@ -380,7 +380,8 @@ fn infer_expression(
                         let input = inference_context.types.resolve(input)?;
 
                         return Err(TypeError {
-                            expected: input.into_expected_type(),
+                            expected: input
+                                .into_expected_type(&inference_context.types),
                             actual: None,
                             location: Some(expression.location),
                         });

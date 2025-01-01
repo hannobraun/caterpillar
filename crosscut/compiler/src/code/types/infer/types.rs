@@ -103,7 +103,7 @@ impl InferredType {
         Ok(type_)
     }
 
-    pub fn into_expected_type(self) -> ExpectedType {
+    pub fn into_expected_type(self, _: &InferredTypes) -> ExpectedType {
         match self {
             InferredType::Direct(type_) => ExpectedType::Specific(type_),
             InferredType::Unknown => ExpectedType::Unknown,
