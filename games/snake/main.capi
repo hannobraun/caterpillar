@@ -1062,7 +1062,7 @@ end
 
 _vec_buf_buffer: fn
     br vec_buf ->
-        vec_buf: -> Number .
+        vec_buf
         3
             add_s32
     end
