@@ -11,8 +11,9 @@ Deno.serve(async (request) => {
         url.hostname == "crosscut.deno.dev" ||
         url.hostname == "capi.hannobraun.com" || url.hostname == "crosscut.cc"
     ) {
+        const pathname = new URL(request.url).pathname;
         return Response.redirect(
-            `https://www.crosscut.cc/`,
+            `https://www.crosscut.cc/${pathname}`,
             308,
         );
     }
