@@ -419,7 +419,7 @@ fn infer_intrinsic(
 
             match top_operand {
                 Some(InferredType::Direct(type_)) => Some(Signature {
-                    inputs: vec![type_],
+                    inputs: vec![types.push(InferredType::Direct(type_))],
                     outputs: vec![],
                 }),
                 Some(InferredType::Unknown { .. }) => None,
@@ -452,7 +452,10 @@ fn infer_intrinsic(
                         .chain([Type::Function { signature }])
                         .collect();
 
-                    let signature = Signature { inputs, outputs };
+                    let signature = IndirectSignature::from_direct(
+                        Signature { inputs, outputs },
+                        types,
+                    );
 
                     Some(signature)
                 }
@@ -473,11 +476,10 @@ fn infer_intrinsic(
                 }
             }
         }
-        intrinsic => intrinsic.signature(),
+        intrinsic => intrinsic
+            .signature()
+            .map(|signature| IndirectSignature::from_direct(signature, types)),
     };
-
-    let signature = signature
-        .map(|signature| IndirectSignature::from_direct(signature, types));
 
     Ok(signature)
 }
