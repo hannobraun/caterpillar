@@ -8,22 +8,13 @@ Deno.serve(async (request) => {
     const url = new URL(request.url);
 
     if (url.hostname == "crosscut.deno.dev") {
-        return Response.redirect(
-            "https://www.crosscut.cc/",
-            308,
-        );
+        return redirectToCanonicalDomain();
     }
     if (url.hostname == "capi.hannobraun.com") {
-        return Response.redirect(
-            "https://www.crosscut.cc/",
-            308,
-        );
+        return redirectToCanonicalDomain();
     }
     if (url.hostname == "crosscut.cc") {
-        return Response.redirect(
-            "https://www.crosscut.cc/",
-            308,
-        );
+        return redirectToCanonicalDomain();
     }
 
     if (url.pathname == "/") {
@@ -74,3 +65,10 @@ Deno.serve(async (request) => {
         fsRoot: "static",
     });
 });
+
+const redirectToCanonicalDomain = () => {
+    return Response.redirect(
+        "https://www.crosscut.cc/",
+        308,
+    );
+};
