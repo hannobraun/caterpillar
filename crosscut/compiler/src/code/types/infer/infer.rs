@@ -290,19 +290,12 @@ fn infer_expression(
                         Some(signature)
                     }
                     IdentifierTarget::IntrinsicFunction(intrinsic) => {
-                        let signature = infer_intrinsic(
+                        infer_intrinsic(
                             intrinsic,
                             &expression.location,
                             &mut inference_context.types,
                             local_stack,
-                        )?;
-
-                        signature.map(|signature| {
-                            IndirectSignature::from_direct(
-                                signature,
-                                &mut inference_context.types,
-                            )
-                        })
+                        )?
                     }
                     IdentifierTarget::UserDefinedFunction(location) => {
                         inference_context.function(location, &output.functions)
@@ -412,7 +405,7 @@ fn infer_intrinsic(
     location: &MemberLocation,
     types: &mut InferredTypes,
     local_stack: &mut LocalStack,
-) -> Result<Option<Signature>> {
+) -> Result<Option<IndirectSignature>> {
     let signature = match intrinsic {
         IntrinsicFunction::Drop => {
             let Some(local_stack) = local_stack.get_mut() else {
@@ -480,6 +473,9 @@ fn infer_intrinsic(
         }
         intrinsic => intrinsic.signature(),
     };
+
+    let signature = signature
+        .map(|signature| IndirectSignature::from_direct(signature, types));
 
     Ok(signature)
 }
