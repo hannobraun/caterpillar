@@ -1006,8 +1006,8 @@ _vec_buf_address: fn
         #   actual address within the buffer.
         # - `offset`, which is the offset of the desired address
         #   `from base`.
-        base: -> Number .
-        offset: -> Number .
+        base
+        offset
             add_u8_wrap
 
         vec_buf
