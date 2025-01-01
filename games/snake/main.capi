@@ -1084,7 +1084,7 @@ _negatable_random_return_or_continue: fn
     end
 
     br random ->
-        random: -> Number .
+        random
     end
 end
 
