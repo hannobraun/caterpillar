@@ -319,19 +319,20 @@ fn infer_expression(
         }
         Expression::LocalFunction { .. } => {
             let location = FunctionLocation::from(expression.location.clone());
-            output.functions.get(&location).map(|signature| {
-                let function = Type::Function {
-                    signature: signature.clone(),
-                };
-                let signature = Signature {
-                    inputs: vec![],
-                    outputs: vec![function],
-                };
-                IndirectSignature::from_direct(
-                    signature,
-                    &mut inference_context.types,
-                )
-            })
+            inference_context
+                .function(&location, &output.functions)
+                .map(|signature| {
+                    let function = inference_context.types.push(
+                        InferredType::IndirectFunction {
+                            signature: signature.clone(),
+                        },
+                    );
+
+                    Signature {
+                        inputs: vec![],
+                        outputs: vec![function],
+                    }
+                })
         }
     };
 

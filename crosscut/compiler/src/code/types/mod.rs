@@ -467,6 +467,14 @@ mod tests {
                             br 0 ->
                                 0
                             end
+
+                            # Add this branch to make sure that `f` and the
+                            # local function are in the same cluster. This more
+                            # complicated to handle, resulting in this test
+                            # covering a bit more ground.
+                            br _ ->
+                                f
+                            end
                         end
                         eval
                     end
