@@ -418,8 +418,8 @@ fn infer_intrinsic(
                 .transpose()?;
 
             match top_operand {
-                Some(InferredType::Direct(type_)) => Some(Signature {
-                    inputs: vec![types.push(InferredType::Direct(type_))],
+                Some(type_ @ InferredType::Direct(_)) => Some(Signature {
+                    inputs: vec![types.push(type_)],
                     outputs: vec![],
                 }),
                 Some(InferredType::Unknown { .. }) => None,
