@@ -23,7 +23,7 @@ impl IndirectSignature {
 
     pub fn to_direct(
         &self,
-        types: &InferredTypes,
+        types: &mut InferredTypes,
     ) -> Result<Option<Signature<Type>>> {
         let try_map = |from: &Vec<Index<InferredType>>| {
             from.iter()

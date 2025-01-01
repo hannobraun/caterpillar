@@ -86,7 +86,8 @@ mod tests {
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();
-                let signature = signature.to_direct(&types).unwrap().unwrap();
+                let signature =
+                    signature.to_direct(&mut types).unwrap().unwrap();
 
                 assert_eq!(
                     signature,
@@ -117,7 +118,8 @@ mod tests {
 
             for function in [a, b] {
                 let signature = function.to_signature().unwrap();
-                let signature = signature.to_direct(&types).unwrap().unwrap();
+                let signature =
+                    signature.to_direct(&mut types).unwrap().unwrap();
 
                 assert_eq!(
                     signature,
