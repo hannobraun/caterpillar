@@ -219,7 +219,7 @@ fn infer_branch(
     // we look at all of the expressions.
     for (location, local_stack) in stacks {
         let Some(local_stack) =
-            make_stack_direct(&local_stack, &inference_context.types)?
+            make_stack_direct(&local_stack, &mut inference_context.types)?
         else {
             continue;
         };
@@ -489,7 +489,7 @@ fn infer_intrinsic(
 
 fn make_stack_direct(
     local_stack: &[Index<InferredType>],
-    types: &InferredTypes,
+    types: &mut InferredTypes,
 ) -> Result<Option<Vec<Type>>> {
     local_stack
         .iter()
