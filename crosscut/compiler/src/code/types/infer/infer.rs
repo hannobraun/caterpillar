@@ -442,21 +442,8 @@ fn infer_intrinsic(
                 .map(|index| types.resolve(index))
                 .transpose()?;
 
-            match top_operand {
+            let signature = match top_operand {
                 Some(InferredType::Direct(Type::Function { signature })) => {
-                    let outputs = signature.outputs.clone();
-                    let inputs = signature
-                        .inputs
-                        .clone()
-                        .into_iter()
-                        .chain([Type::Function { signature }])
-                        .collect();
-
-                    let signature = IndirectSignature::from_direct(
-                        Signature { inputs, outputs },
-                        types,
-                    );
-
                     Some(signature)
                 }
                 Some(InferredType::Direct(actual)) => {
@@ -474,7 +461,22 @@ fn infer_intrinsic(
                         location: Some(location.clone()),
                     });
                 }
-            }
+            };
+
+            signature.map(|signature| {
+                let outputs = signature.outputs.clone();
+                let inputs = signature
+                    .inputs
+                    .clone()
+                    .into_iter()
+                    .chain([Type::Function { signature }])
+                    .collect();
+
+                IndirectSignature::from_direct(
+                    Signature { inputs, outputs },
+                    types,
+                )
+            })
         }
         intrinsic => intrinsic
             .signature()
