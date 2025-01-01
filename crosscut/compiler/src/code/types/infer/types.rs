@@ -103,7 +103,7 @@ pub enum InferredType {
 }
 
 impl InferredType {
-    pub fn into_type(self, _: &InferredTypes) -> Result<Option<Type>> {
+    pub fn into_type(self, _: &mut InferredTypes) -> Result<Option<Type>> {
         let type_ = match self {
             Self::Direct(type_) => Some(type_),
             Self::Unknown { .. } => None,
