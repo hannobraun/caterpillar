@@ -462,11 +462,13 @@ mod tests {
             r"
                 f: fn
                     br ->
+                        0
                         fn
                             br 0 ->
                                 0
                             end
                         end
+                        eval
                     end
                 end
             ",
@@ -480,7 +482,7 @@ mod tests {
             .unwrap()
             .expressions()
             .map(|expression| expression.location)
-            .next()
+            .nth(1)
             .unwrap();
 
         assert_eq!(
@@ -495,7 +497,7 @@ mod tests {
                 }],
             },
         );
-        assert_eq!(types.stack_at(&f_local).unwrap(), &[]);
+        assert_eq!(types.stack_at(&f_local).unwrap(), &[Type::Number]);
     }
 
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
