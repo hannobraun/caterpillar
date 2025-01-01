@@ -37,11 +37,14 @@ impl InferredTypes {
         index: &Index<InferredType>,
     ) -> Result<InferredType> {
         let mut resolved = self.get(index).clone();
-        let equivalence_set =
-            self.equivalence_sets.iter().find(|set| set.contains(index));
+        let equivalence_set = self
+            .equivalence_sets
+            .clone()
+            .into_iter()
+            .find(|set| set.contains(index));
 
         for other in equivalence_set.into_iter().flatten() {
-            let other = self.get(other);
+            let other = self.get(&other);
             resolved = merge_inferred_types([resolved, other.clone()])?;
         }
 
