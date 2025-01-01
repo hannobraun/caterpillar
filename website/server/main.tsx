@@ -12,7 +12,7 @@ Deno.serve(async (request) => {
         url.hostname == "capi.hannobraun.com" || url.hostname == "crosscut.cc"
     ) {
         return Response.redirect(
-            "https://www.crosscut.cc/",
+            `https://www.crosscut.cc/`,
             308,
         );
     }
