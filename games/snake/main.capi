@@ -839,9 +839,9 @@ vec_store: fn
 end
 
 vec_copy: fn
-    br vx, vy ->
-        vx: -> Number .
-        vy: -> Number .
+    br vx: Number, vy: Number ->
+        vx
+        vy
         vx
         vy
     end
