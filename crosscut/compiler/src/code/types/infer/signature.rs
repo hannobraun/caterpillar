@@ -25,7 +25,7 @@ impl IndirectSignature {
         &self,
         types: &mut InferredTypes,
     ) -> Result<Option<Signature<Type>>> {
-        let try_map = |from: &Vec<Index<InferredType>>| {
+        let mut try_map = |from: &Vec<Index<InferredType>>| {
             from.iter()
                 .map(|index| {
                     let type_ = types.resolve(index)?;

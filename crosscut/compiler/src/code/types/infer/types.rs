@@ -32,7 +32,10 @@ impl InferredTypes {
         self.equivalence_sets.insert(unified_set);
     }
 
-    pub fn resolve(&self, index: &Index<InferredType>) -> Result<InferredType> {
+    pub fn resolve(
+        &mut self,
+        index: &Index<InferredType>,
+    ) -> Result<InferredType> {
         let mut resolved = self.get(index).clone();
         let equivalence_set =
             self.equivalence_sets.iter().find(|set| set.contains(index));
