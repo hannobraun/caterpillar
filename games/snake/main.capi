@@ -1025,7 +1025,7 @@ end
 
 _vec_buf_inc_index: fn
     br index_addr ->
-        index_addr: -> Number .
+        index_addr
             load
         2
             add_u8_wrap
