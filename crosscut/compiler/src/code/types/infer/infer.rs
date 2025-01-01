@@ -424,7 +424,10 @@ fn infer_intrinsic(
                 .transpose()?;
 
             match top_operand {
-                Some(type_ @ InferredType::Direct(_)) => Some(Signature {
+                Some(
+                    type_ @ InferredType::IndirectFunction { .. }
+                    | type_ @ InferredType::Direct(_),
+                ) => Some(Signature {
                     inputs: vec![types.push(type_)],
                     outputs: vec![],
                 }),
@@ -449,8 +452,11 @@ fn infer_intrinsic(
                 .transpose()?;
 
             let signature = match top_operand {
-                Some(InferredType::Direct(Type::Function { signature })) => {
+                Some(InferredType::IndirectFunction { signature }) => {
                     Some(signature)
+                }
+                Some(InferredType::Direct(Type::Function { signature })) => {
+                    Some(IndirectSignature::from_direct(signature, types))
                 }
                 Some(InferredType::Direct(actual)) => {
                     return Err(TypeError {
@@ -475,13 +481,11 @@ fn infer_intrinsic(
                     .inputs
                     .clone()
                     .into_iter()
-                    .chain([Type::Function { signature }])
+                    .chain([types
+                        .push(InferredType::IndirectFunction { signature })])
                     .collect();
 
-                IndirectSignature::from_direct(
-                    Signature { inputs, outputs },
-                    types,
-                )
+                IndirectSignature { inputs, outputs }
             })
         }
         intrinsic => intrinsic

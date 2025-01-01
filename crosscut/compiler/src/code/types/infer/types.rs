@@ -2,6 +2,8 @@ use std::{collections::BTreeSet, fmt, result};
 
 use crate::code::{syntax::MemberLocation, Index, IndexMap, Type};
 
+use super::signature::IndirectSignature;
+
 #[derive(Debug, Default)]
 pub struct InferredTypes {
     inner: IndexMap<InferredType>,
@@ -68,9 +70,37 @@ impl InferredTypes {
 
 fn merge_inferred_types(
     [a, b]: [InferredType; 2],
-    _: &mut InferredTypes,
+    types: &mut InferredTypes,
 ) -> Result<InferredType> {
     let type_ = match (a, b) {
+        (
+            InferredType::IndirectFunction { signature: a },
+            InferredType::IndirectFunction { signature: b },
+        ) => {
+            let signature = merge_signatures([a, b], types)?;
+            InferredType::IndirectFunction { signature }
+        }
+        (
+            InferredType::IndirectFunction { signature: a },
+            InferredType::Direct(b),
+        )
+        | (
+            InferredType::Direct(b),
+            InferredType::IndirectFunction { signature: a },
+        ) => {
+            let Type::Function { signature: b } = b else {
+                return Err(TypeError {
+                    expected: ExpectedType::Function,
+                    actual: Some(b),
+                    location: None,
+                });
+            };
+
+            let b = IndirectSignature::from_direct(b, types);
+
+            let signature = merge_signatures([a, b], types)?;
+            InferredType::IndirectFunction { signature }
+        }
         (InferredType::Direct(a), InferredType::Direct(b)) => {
             merge_direct_types([a, b])?
         }
@@ -82,6 +112,36 @@ fn merge_inferred_types(
     };
 
     Ok(type_)
+}
+
+fn merge_signatures(
+    [a, b]: [IndirectSignature; 2],
+    types: &mut InferredTypes,
+) -> Result<IndirectSignature> {
+    let signature = IndirectSignature {
+        inputs: merge_type_list([a.inputs, b.inputs], types)?,
+        outputs: merge_type_list([a.outputs, b.outputs], types)?,
+    };
+
+    Ok(signature)
+}
+
+fn merge_type_list(
+    [a, b]: [Vec<Index<InferredType>>; 2],
+    types: &mut InferredTypes,
+) -> Result<Vec<Index<InferredType>>> {
+    assert_eq!(a.len(), b.len());
+
+    let mut merged = Vec::new();
+
+    for (a, b) in a.into_iter().zip(b) {
+        let [a, b] = [a, b].map(|index| types.get(&index).clone());
+        let type_ = merge_inferred_types([a, b], types)?;
+        let type_ = types.push(type_);
+        merged.push(type_);
+    }
+
+    Ok(merged)
 }
 
 fn merge_direct_types([a, b]: [Type; 2]) -> Result<InferredType> {
@@ -98,13 +158,17 @@ fn merge_direct_types([a, b]: [Type; 2]) -> Result<InferredType> {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum InferredType {
+    IndirectFunction { signature: IndirectSignature },
     Direct(Type),
     Unknown,
 }
 
 impl InferredType {
-    pub fn into_type(self, _: &mut InferredTypes) -> Result<Option<Type>> {
+    pub fn into_type(self, types: &mut InferredTypes) -> Result<Option<Type>> {
         let type_ = match self {
+            Self::IndirectFunction { signature } => signature
+                .to_direct(types)?
+                .map(|signature| Type::Function { signature }),
             Self::Direct(type_) => Some(type_),
             Self::Unknown { .. } => None,
         };
@@ -114,9 +178,15 @@ impl InferredType {
 
     pub fn into_expected_type(
         self,
-        _: &mut InferredTypes,
+        types: &mut InferredTypes,
     ) -> Result<ExpectedType> {
         let expected_type = match self {
+            InferredType::IndirectFunction { signature } => signature
+                .to_direct(types)?
+                .map(|signature| {
+                    ExpectedType::Specific(Type::Function { signature })
+                })
+                .unwrap_or(ExpectedType::Function),
             InferredType::Direct(type_) => ExpectedType::Specific(type_),
             InferredType::Unknown => ExpectedType::Unknown,
         };
