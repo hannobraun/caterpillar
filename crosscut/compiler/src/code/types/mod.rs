@@ -463,8 +463,8 @@ mod tests {
                 f: fn
                     br ->
                         fn
-                            br x ->
-                                x not
+                            br 0 ->
+                                0
                             end
                         end
                     end
