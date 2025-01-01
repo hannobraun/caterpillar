@@ -320,11 +320,12 @@ fn infer_expression(
         Expression::LocalFunction { .. } => {
             let location = FunctionLocation::from(expression.location.clone());
             output.functions.get(&location).map(|signature| {
+                let function = Type::Function {
+                    signature: signature.clone(),
+                };
                 let signature = Signature {
                     inputs: vec![],
-                    outputs: vec![Type::Function {
-                        signature: signature.clone(),
-                    }],
+                    outputs: vec![function],
                 };
                 IndirectSignature::from_direct(
                     signature,
