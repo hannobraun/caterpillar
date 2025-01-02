@@ -12,8 +12,8 @@ use crosscut_game_engine::{
 use crosscut_protocol::updates::Updates;
 
 use crate::model::{
-    function::DebugNamedFunction, ActiveFunctions, ActiveFunctionsEntry,
-    DebugBranch, DebugFunction, DebugMember, DebugMemberKind, PersistentState,
+    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFunction,
+    DebugMember, DebugMemberKind, DebugNamedFunction, PersistentState,
     TransientState, UserAction,
 };
 

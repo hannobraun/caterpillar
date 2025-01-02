@@ -12,8 +12,7 @@ use crosscut_protocol::host_state::HostState;
 use crosscut_runtime::{Effect, InstructionAddress};
 
 use super::{
-    function::DebugNamedFunction, Breakpoints, DebugBranch, DebugFunction,
-    DebugMember,
+    Breakpoints, DebugBranch, DebugFunction, DebugMember, DebugNamedFunction,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
