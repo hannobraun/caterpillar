@@ -108,7 +108,7 @@ impl ActiveFunctions {
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugNamedFunction {
-                    name: named_function.name.clone(),
+                    name: named_function.name,
                     inner: DebugFunction::new(
                         named_function.inner,
                         FunctionLocation::Named {
