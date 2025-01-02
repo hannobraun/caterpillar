@@ -1,6 +1,6 @@
-use crate::code::Index;
+use crate::code::{Index, Type};
 
-use super::types::InferredType;
+use super::types::{InferredType, InferredTypes, Result};
 
 #[derive(Debug)]
 pub struct LocalStack {
@@ -27,4 +27,14 @@ impl Default for LocalStack {
             inner: Some(Vec::new()),
         }
     }
+}
+
+pub fn make_stack_direct(
+    local_stack: &[Index<InferredType>],
+    types: &mut InferredTypes,
+) -> Result<Option<Vec<Type>>> {
+    local_stack
+        .iter()
+        .map(|index| types.resolve(index)?.into_type(types))
+        .collect()
 }

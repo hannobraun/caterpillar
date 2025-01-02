@@ -10,7 +10,7 @@ use crate::{
         },
         types::repr::Stacks,
         Bindings, Dependencies, DependencyCluster, Environment,
-        IdentifierTarget, Identifiers, Index, Signature, Type, TypeAnnotations,
+        IdentifierTarget, Identifiers, Signature, Type, TypeAnnotations,
     },
     intrinsics::IntrinsicFunction,
 };
@@ -19,7 +19,7 @@ use super::{
     context::InferenceContext,
     function::InferredFunction,
     signature::{self, IndirectSignature},
-    stack::LocalStack,
+    stack::{make_stack_direct, LocalStack},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -486,14 +486,4 @@ fn infer_intrinsic(
     };
 
     Ok(signature)
-}
-
-fn make_stack_direct(
-    local_stack: &[Index<InferredType>],
-    types: &mut InferredTypes,
-) -> Result<Option<Vec<Type>>> {
-    local_stack
-        .iter()
-        .map(|index| types.resolve(index)?.into_type(types))
-        .collect()
 }
