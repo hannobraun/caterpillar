@@ -51,9 +51,9 @@ async fn start_inner(
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/code", get(serve_code))
-        .route("/code/:timestamp", get(serve_code))
+        .route("/code/{timestamp}", get(serve_code))
         .route("/", get(serve_index))
-        .route("/*path", get(serve_static))
+        .route("/{*path}", get(serve_static))
         .with_state(ServerState { code });
 
     let listener = TcpListener::bind(address).await?;
