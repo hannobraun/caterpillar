@@ -13,6 +13,11 @@ use crosscut_runtime::Effect;
 use super::{Breakpoints, DebugBranch};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DebugNamedFunction {
+    pub inner: DebugFunction,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFunction {
     pub name: Option<String>,
     pub branches: Vec<DebugBranch>,

@@ -11,7 +11,10 @@ use crosscut_compiler::{
 use crosscut_protocol::host_state::HostState;
 use crosscut_runtime::{Effect, InstructionAddress};
 
-use super::{Breakpoints, DebugBranch, DebugFunction, DebugMember};
+use super::{
+    function::DebugNamedFunction, Breakpoints, DebugBranch, DebugFunction,
+    DebugMember,
+};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
@@ -104,22 +107,24 @@ impl ActiveFunctions {
                 .find_cluster_by_named_function(&function_index_in_root_context)
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
-                DebugFunction::new(
-                    named_function.inner,
-                    Some(named_function.name),
-                    FunctionLocation::Named {
-                        index: function_index_in_root_context,
-                    },
-                    active_expression,
-                    active_instructions.is_empty(),
-                    cluster,
-                    &code.functions,
-                    &code.function_calls,
-                    &code.types,
-                    &code.source_map,
-                    breakpoints,
-                    effects.as_ref(),
-                ),
+                DebugNamedFunction {
+                    inner: DebugFunction::new(
+                        named_function.inner,
+                        Some(named_function.name),
+                        FunctionLocation::Named {
+                            index: function_index_in_root_context,
+                        },
+                        active_expression,
+                        active_instructions.is_empty(),
+                        cluster,
+                        &code.functions,
+                        &code.function_calls,
+                        &code.types,
+                        &code.source_map,
+                        breakpoints,
+                        effects.as_ref(),
+                    ),
+                },
             ));
         }
 
@@ -180,7 +185,7 @@ impl ActiveFunctionsEntries {
                 ActiveFunctionsEntry::Function(function) => Some(function),
                 ActiveFunctionsEntry::Gap => None,
             })
-            .filter_map(|function| match function.active_branch() {
+            .filter_map(|function| match function.inner.active_branch() {
                 Ok(branch) => Some(branch),
                 Err(_) => None,
             })
@@ -203,7 +208,7 @@ impl ActiveFunctionsEntries {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctionsEntry {
-    Function(DebugFunction),
+    Function(DebugNamedFunction),
     Gap,
 }
 
@@ -217,7 +222,7 @@ impl ActiveFunctionsEntry {
             ));
         };
 
-        Ok(function)
+        Ok(&function.inner)
     }
 }
 
@@ -315,20 +320,22 @@ fn reconstruct_function(
         .dependencies
         .find_cluster_by_named_function(&function.index())
         .expect("All functions must be part of a cluster.");
-    entries.push_front(ActiveFunctionsEntry::Function(DebugFunction::new(
-        function.inner.clone(),
-        Some(function.name.clone()),
-        function.location(),
-        tail_call.as_ref(),
-        false,
-        cluster,
-        &code.functions,
-        &code.function_calls,
-        &code.types,
-        &code.source_map,
-        breakpoints,
-        effect,
-    )));
+    entries.push_front(ActiveFunctionsEntry::Function(DebugNamedFunction {
+        inner: DebugFunction::new(
+            function.inner.clone(),
+            Some(function.name.clone()),
+            function.location(),
+            tail_call.as_ref(),
+            false,
+            cluster,
+            &code.functions,
+            &code.function_calls,
+            &code.types,
+            &code.source_map,
+            breakpoints,
+            effect,
+        ),
+    }));
 
     expected_next_function
 }

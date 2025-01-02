@@ -168,7 +168,9 @@ impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
     fn expect_functions(&self) -> Vec<DebugFunction> {
         self.iter()
             .map(|entry| match entry {
-                ActiveFunctionsEntry::Function(function) => function.clone(),
+                ActiveFunctionsEntry::Function(function) => {
+                    function.inner.clone()
+                }
                 ActiveFunctionsEntry::Gap => {
                     panic!(
                         "Expected function, encountered gap. Entries:\n\

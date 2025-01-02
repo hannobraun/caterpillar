@@ -46,7 +46,7 @@ pub fn ActiveFunctions(
                         }
                     };
 
-                    let name = function.name.expect(
+                    let name = function.inner.name.expect(
                         "Only dealing with top-level functions here; should \
                         be named.",
                     );
@@ -54,7 +54,7 @@ pub fn ActiveFunctions(
                     view! {
                         <NamedFunction
                             name=name
-                            branches=function.branches
+                            branches=function.inner.branches
                             actions=actions.clone() />
                     }
                     .into_any()
