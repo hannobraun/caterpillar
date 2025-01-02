@@ -186,16 +186,17 @@ pub trait FunctionsExt {
     fn with_name(self, name: &str) -> DebugFunction;
 }
 
-impl FunctionsExt for Vec<DebugFunction> {
+impl FunctionsExt for Vec<DebugNamedFunction> {
     fn expect_leaf(mut self, name: &str) -> DebugFunction {
         let f = self.remove(0);
-        assert_eq!(f.name.as_deref(), Some(name));
-        f
+        assert_eq!(f.name, name);
+        f.inner
     }
 
     fn with_name(self, name: &str) -> DebugFunction {
         self.into_iter()
-            .find(|function| function.name.as_deref() == Some(name))
+            .find(|function| function.name == name)
+            .map(|function| function.inner)
             .unwrap()
     }
 }
