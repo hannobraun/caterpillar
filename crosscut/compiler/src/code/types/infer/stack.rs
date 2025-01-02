@@ -12,10 +12,8 @@ impl MaybeLocalStack {
         self.inner.as_ref()
     }
 
-    pub fn get_mut(&mut self) -> Option<&mut Vec<Index<InferredType>>> {
-        self.inner
-            .as_mut()
-            .map(|local_stack| &mut local_stack.inner)
+    pub fn get_mut(&mut self) -> Option<&mut LocalStack> {
+        self.inner.as_mut()
     }
 
     pub fn invalidate(&mut self) {

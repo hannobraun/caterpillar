@@ -221,8 +221,10 @@ fn infer_branch(
     // type of an earlier one. So let's handle the stacks we collected _after_
     // we look at all of the expressions.
     for (location, local_stack) in stacks {
-        let Some(local_stack) =
-            stack::make_direct(&local_stack, &mut inference_context.types)?
+        let Some(local_stack) = stack::make_direct(
+            &local_stack.inner,
+            &mut inference_context.types,
+        )?
         else {
             continue;
         };
@@ -382,7 +384,7 @@ fn infer_expression(
     if let Some(signature) = signature {
         if let Some(local_stack) = local_stack.get_mut() {
             for input in signature.inputs.iter().rev() {
-                match local_stack.pop() {
+                match local_stack.inner.pop() {
                     Some(operand) => {
                         inference_context.types.unify([&operand, input]);
                     }
@@ -400,7 +402,7 @@ fn infer_expression(
                 }
             }
             for output in signature.outputs.iter() {
-                local_stack.push(*output);
+                local_stack.inner.push(*output);
             }
         }
 
@@ -423,6 +425,7 @@ fn infer_intrinsic(
     };
 
     let top_operand = local_stack
+        .inner
         .last()
         .map(|index| types.resolve(index))
         .transpose()?;
