@@ -31,7 +31,7 @@ impl Default for MaybeLocalStack {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct LocalStack {
     pub inner: Vec<Index<InferredType>>,
 }
