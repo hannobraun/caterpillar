@@ -8,8 +8,8 @@ pub struct MaybeLocalStack {
 }
 
 impl MaybeLocalStack {
-    pub fn get(&self) -> Option<&Vec<Index<InferredType>>> {
-        self.inner.as_ref().map(|local_stack| &local_stack.inner)
+    pub fn get(&self) -> Option<&LocalStack> {
+        self.inner.as_ref()
     }
 
     pub fn get_mut(&mut self) -> Option<&mut Vec<Index<InferredType>>> {

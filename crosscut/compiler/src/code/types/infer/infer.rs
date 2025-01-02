@@ -231,7 +231,10 @@ fn infer_branch(
     }
 
     let inputs = parameters;
-    let outputs = local_stack.get().cloned();
+    let outputs = local_stack
+        .get()
+        .cloned()
+        .map(|local_stack| local_stack.inner);
 
     Ok(InferredFunction { inputs, outputs })
 }
