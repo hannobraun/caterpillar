@@ -19,7 +19,7 @@ use super::{
     context::InferenceContext,
     function::InferredFunction,
     signature::{self, IndirectSignature},
-    stack::{make_stack_direct, LocalStack},
+    stack::{self, LocalStack},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -221,8 +221,10 @@ fn infer_branch(
     // type of an earlier one. So let's handle the stacks we collected _after_
     // we look at all of the expressions.
     for (location, local_stack) in stacks {
-        let Some(local_stack) =
-            make_stack_direct(&local_stack, &mut inference_context.types)?
+        let Some(local_stack) = stack::make_stack_direct(
+            &local_stack,
+            &mut inference_context.types,
+        )?
         else {
             continue;
         };
