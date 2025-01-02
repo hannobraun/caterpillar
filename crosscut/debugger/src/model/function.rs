@@ -4,7 +4,7 @@ use crosscut_compiler::{
         syntax::{
             self, BranchLocation, FunctionLocation, Located, MemberLocation,
         },
-        DependencyCluster, FunctionCalls, Functions, Types,
+        DependencyCluster, FunctionCalls, Functions, Signature, Types,
     },
     source_map::SourceMap,
 };
@@ -21,6 +21,7 @@ pub struct DebugNamedFunction {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFunction {
     pub branches: Vec<DebugBranch>,
+    pub signature: Option<Signature>,
 }
 
 impl DebugFunction {
@@ -63,7 +64,12 @@ impl DebugFunction {
             })
             .collect();
 
-        Self { branches }
+        let signature = types.signature_of_function(&location).cloned();
+
+        Self {
+            branches,
+            signature,
+        }
     }
 
     pub fn active_branch(&self) -> anyhow::Result<&DebugBranch> {
