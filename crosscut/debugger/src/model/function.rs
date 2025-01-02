@@ -14,6 +14,7 @@ use super::{Breakpoints, DebugBranch};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugNamedFunction {
+    pub name: String,
     pub inner: DebugFunction,
 }
 

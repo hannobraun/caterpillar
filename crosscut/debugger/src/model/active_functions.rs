@@ -108,6 +108,7 @@ impl ActiveFunctions {
                 .expect("All named functions must be part of a cluster.");
             entries.push_front(ActiveFunctionsEntry::Function(
                 DebugNamedFunction {
+                    name: named_function.name.clone(),
                     inner: DebugFunction::new(
                         named_function.inner,
                         Some(named_function.name),
@@ -321,6 +322,7 @@ fn reconstruct_function(
         .find_cluster_by_named_function(&function.index())
         .expect("All functions must be part of a cluster.");
     entries.push_front(ActiveFunctionsEntry::Function(DebugNamedFunction {
+        name: function.name.clone(),
         inner: DebugFunction::new(
             function.inner.clone(),
             Some(function.name.clone()),
