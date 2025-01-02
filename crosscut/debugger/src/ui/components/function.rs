@@ -17,7 +17,7 @@ use leptos::{
 use crate::{
     model::{
         DebugBranch, DebugMember, DebugMemberData, DebugMemberKind,
-        DebugParameter, UserAction,
+        DebugNamedFunction, DebugParameter, UserAction,
     },
     ui::{actions::send_action, ActionsTx},
 };
@@ -26,17 +26,16 @@ use super::button::Button;
 
 #[component]
 pub fn NamedFunction(
-    name: String,
-    branches: Vec<DebugBranch>,
+    function: DebugNamedFunction,
     actions: ActionsTx,
 ) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <span class="mr-2 font-bold">
-                {name}:
+                {function.name}:
             </span>
             <Function
-                branches=branches
+                branches=function.inner.branches
                 actions=actions />
         </div>
     }

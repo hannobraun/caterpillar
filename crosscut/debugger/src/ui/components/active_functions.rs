@@ -48,8 +48,7 @@ pub fn ActiveFunctions(
 
                     view! {
                         <NamedFunction
-                            name=function.name
-                            branches=function.inner.branches
+                            function=function
                             actions=actions.clone() />
                     }
                     .into_any()
