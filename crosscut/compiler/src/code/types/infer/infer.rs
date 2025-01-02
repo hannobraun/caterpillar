@@ -425,6 +425,14 @@ fn infer_intrinsic(
     local_stack: &LocalStack,
 ) -> Result<Option<IndirectSignature>> {
     let signature = match intrinsic {
+        IntrinsicFunction::Copy => {
+            let type_ = types.push(InferredType::Unknown);
+
+            Some(Signature {
+                inputs: vec![type_],
+                outputs: vec![type_, type_],
+            })
+        }
         IntrinsicFunction::Drop => {
             let input = types.push(InferredType::Unknown);
 
