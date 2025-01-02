@@ -111,7 +111,6 @@ impl ActiveFunctions {
                     name: named_function.name.clone(),
                     inner: DebugFunction::new(
                         named_function.inner,
-                        Some(named_function.name),
                         FunctionLocation::Named {
                             index: function_index_in_root_context,
                         },
@@ -325,7 +324,6 @@ fn reconstruct_function(
         name: function.name.clone(),
         inner: DebugFunction::new(
             function.inner.clone(),
-            Some(function.name.clone()),
             function.location(),
             tail_call.as_ref(),
             false,

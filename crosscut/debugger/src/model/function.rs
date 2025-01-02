@@ -27,7 +27,6 @@ impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         function: syntax::Function,
-        _: Option<String>,
         location: FunctionLocation,
         active_expression: Option<&MemberLocation>,
         is_innermost_active_function: bool,

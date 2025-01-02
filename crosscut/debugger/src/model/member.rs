@@ -149,7 +149,6 @@ impl DebugMemberKind {
                 Expression::LocalFunction { function } => {
                     let function = DebugFunction::new(
                         function,
-                        None,
                         FunctionLocation::Local { location },
                         active_expression,
                         is_in_innermost_active_function,
