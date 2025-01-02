@@ -418,7 +418,7 @@ fn infer_intrinsic(
     types: &mut InferredTypes,
     local_stack: &mut MaybeLocalStack,
 ) -> Result<Option<IndirectSignature>> {
-    let Some(local_stack) = local_stack.get_mut() else {
+    let Some(local_stack) = local_stack.get() else {
         return Ok(None);
     };
 
