@@ -89,6 +89,9 @@ fn set_breakpoint_and_stop_there() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .with_name("main")
             .active_expression()
             .data
@@ -135,6 +138,9 @@ fn step_over_brk() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -149,6 +155,9 @@ fn step_over_brk() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -200,6 +209,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -216,6 +228,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -228,6 +243,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_branch()?
             .body
@@ -246,6 +264,9 @@ fn step_over_breakpoints() -> anyhow::Result<()> {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -325,6 +346,9 @@ fn step_into_function() {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("f")
             .active_expression()
             .data
@@ -400,6 +424,9 @@ fn step_out_of_function_if_at_last_expression() {
             .active_functions
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -500,6 +527,9 @@ fn step_over_function_call() {
         dbg!(debugger.transient_state().active_functions)
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data
@@ -570,6 +600,9 @@ fn step_out_of_function() {
         dbg!(debugger.transient_state().active_functions)
             .expect_entries()
             .expect_functions()
+            .into_iter()
+            .map(|function| function.inner)
+            .collect::<Vec<_>>()
             .expect_leaf("main")
             .active_expression()
             .data

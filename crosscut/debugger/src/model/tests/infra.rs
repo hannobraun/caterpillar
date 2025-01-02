@@ -12,8 +12,9 @@ use crosscut_game_engine::{
 use crosscut_protocol::updates::Updates;
 
 use crate::model::{
-    ActiveFunctions, ActiveFunctionsEntry, DebugBranch, DebugFunction,
-    DebugMember, DebugMemberKind, PersistentState, TransientState, UserAction,
+    function::DebugNamedFunction, ActiveFunctions, ActiveFunctionsEntry,
+    DebugBranch, DebugFunction, DebugMember, DebugMemberKind, PersistentState,
+    TransientState, UserAction,
 };
 
 pub fn debugger() -> TestDebugger {
@@ -113,7 +114,7 @@ impl TestDebugger {
             .expect_functions()
             .into_iter()
             .find_map(|function| {
-                function.branches.iter().find_map(|branch| {
+                function.inner.branches.iter().find_map(|branch| {
                     branch.body.iter().find_map(|expression| {
                         if &expression.data.location == location {
                             Some(expression.clone())
@@ -155,22 +156,20 @@ impl ActiveFunctionsExt for ActiveFunctions {
         self.expect_entries()
             .expect_functions()
             .into_iter()
-            .filter_map(|function| function.name)
+            .map(|function| function.name)
             .collect()
     }
 }
 
 pub trait ActiveFunctionsEntriesExt {
-    fn expect_functions(&self) -> Vec<DebugFunction>;
+    fn expect_functions(&self) -> Vec<DebugNamedFunction>;
 }
 
 impl ActiveFunctionsEntriesExt for Vec<ActiveFunctionsEntry> {
-    fn expect_functions(&self) -> Vec<DebugFunction> {
+    fn expect_functions(&self) -> Vec<DebugNamedFunction> {
         self.iter()
             .map(|entry| match entry {
-                ActiveFunctionsEntry::Function(function) => {
-                    function.inner.clone()
-                }
+                ActiveFunctionsEntry::Function(function) => function.clone(),
                 ActiveFunctionsEntry::Gap => {
                     panic!(
                         "Expected function, encountered gap. Entries:\n\

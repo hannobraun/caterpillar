@@ -71,6 +71,9 @@ fn stopped_at_host_function() {
         .active_functions
         .expect_entries()
         .expect_functions()
+        .into_iter()
+        .map(|function| function.inner)
+        .collect::<Vec<_>>()
         .with_name("main")
         .active_expression()
         .expect_call_to_host_function(
@@ -114,6 +117,9 @@ fn stopped_in_anonymous_function() {
         .active_functions
         .expect_entries()
         .expect_functions()
+        .into_iter()
+        .map(|function| function.inner)
+        .collect::<Vec<_>>()
         .with_name("main")
         .only_branch()
         .expression(0)
@@ -167,6 +173,9 @@ fn call_stack_reconstruction_missing_main() {
         .active_functions
         .expect_entries()
         .expect_functions()
+        .into_iter()
+        .map(|function| function.inner)
+        .collect::<Vec<_>>()
         .with_name("main")
         .active_expression()
         .expect_call_to_function(
@@ -229,6 +238,9 @@ fn call_stack_reconstruction_missing_single_branch_function() {
         .active_functions
         .expect_entries()
         .expect_functions()
+        .into_iter()
+        .map(|function| function.inner)
+        .collect::<Vec<_>>()
         .with_name("f")
         .active_expression()
         .expect_call_to_function(
