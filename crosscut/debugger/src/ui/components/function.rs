@@ -56,13 +56,18 @@ fn Function(function: DebugFunction, actions: ActionsTx) -> impl IntoView {
         })
         .collect::<Vec<_>>();
 
+    let signature = function
+        .signature
+        .map(|signature| format!(": {signature}"))
+        .unwrap_or_default();
+
     view! {
         <span>
             "fn"
             <ol>
                 {branches}
             </ol>
-            "end"
+            "end"{signature}
         </span>
     }
 }
