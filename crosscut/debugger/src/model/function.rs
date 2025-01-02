@@ -20,7 +20,6 @@ pub struct DebugNamedFunction {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DebugFunction {
-    pub name: Option<String>,
     pub branches: Vec<DebugBranch>,
 }
 
@@ -28,7 +27,7 @@ impl DebugFunction {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         function: syntax::Function,
-        name: Option<String>,
+        _: Option<String>,
         location: FunctionLocation,
         active_expression: Option<&MemberLocation>,
         is_innermost_active_function: bool,
@@ -65,7 +64,7 @@ impl DebugFunction {
             })
             .collect();
 
-        Self { name, branches }
+        Self { branches }
     }
 
     pub fn active_branch(&self) -> anyhow::Result<&DebugBranch> {
