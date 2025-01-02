@@ -19,7 +19,7 @@ use super::{
     context::InferenceContext,
     function::InferredFunction,
     signature::{self, IndirectSignature},
-    stack::MaybeLocalStack,
+    stack::{LocalStack, MaybeLocalStack},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -296,12 +296,18 @@ fn infer_expression(
                         Some(signature)
                     }
                     IdentifierTarget::IntrinsicFunction(intrinsic) => {
-                        infer_intrinsic(
-                            intrinsic,
-                            &expression.location,
-                            &mut inference_context.types,
-                            local_stack,
-                        )?
+                        local_stack
+                            .get()
+                            .and_then(|local_stack| {
+                                infer_intrinsic(
+                                    intrinsic,
+                                    &expression.location,
+                                    &mut inference_context.types,
+                                    local_stack,
+                                )
+                                .transpose()
+                            })
+                            .transpose()?
                     }
                     IdentifierTarget::UserDefinedFunction(location) => {
                         inference_context.function(location, &output.functions)
@@ -416,12 +422,8 @@ fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
     types: &mut InferredTypes,
-    local_stack: &MaybeLocalStack,
+    local_stack: &LocalStack,
 ) -> Result<Option<IndirectSignature>> {
-    let Some(local_stack) = local_stack.get() else {
-        return Ok(None);
-    };
-
     let top_operand = local_stack
         .inner
         .last()
