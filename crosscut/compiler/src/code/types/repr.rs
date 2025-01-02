@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::code::{
-    syntax::{MemberLocation, ParameterLocation, SyntaxTree},
+    syntax::{FunctionLocation, MemberLocation, ParameterLocation, SyntaxTree},
     Bindings, Dependencies, Identifiers,
 };
 
@@ -53,6 +53,7 @@ impl TypeAnnotations {
 /// # The resolved types
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Types {
+    functions: BTreeMap<FunctionLocation, Signature>,
     parameters: BTreeMap<ParameterLocation, Type>,
     expressions: BTreeMap<MemberLocation, Signature>,
     stacks: Stacks,
@@ -74,7 +75,7 @@ impl Types {
         annotations: TypeAnnotations,
     ) -> Self {
         let InferenceOutput {
-            functions: _,
+            functions,
             expressions,
             parameters,
             stacks,
@@ -87,6 +88,7 @@ impl Types {
         });
 
         Self {
+            functions,
             parameters,
             expressions,
             stacks,
