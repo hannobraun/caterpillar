@@ -34,13 +34,14 @@ pub struct LocalStack {
     pub inner: Vec<Index<InferredType>>,
 }
 
-pub fn make_direct(
-    local_stack: &LocalStack,
-    types: &mut InferredTypes,
-) -> Result<Option<Vec<Type>>> {
-    local_stack
-        .inner
-        .iter()
-        .map(|index| types.resolve(index)?.into_type(types))
-        .collect()
+impl LocalStack {
+    pub fn make_direct(
+        &self,
+        types: &mut InferredTypes,
+    ) -> Result<Option<Vec<Type>>> {
+        self.inner
+            .iter()
+            .map(|index| types.resolve(index)?.into_type(types))
+            .collect()
+    }
 }
