@@ -29,7 +29,7 @@ impl Default for LocalStack {
     }
 }
 
-pub fn make_stack_direct(
+pub fn make_direct(
     local_stack: &[Index<InferredType>],
     types: &mut InferredTypes,
 ) -> Result<Option<Vec<Type>>> {

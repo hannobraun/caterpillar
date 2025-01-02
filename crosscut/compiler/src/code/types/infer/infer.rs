@@ -221,10 +221,8 @@ fn infer_branch(
     // type of an earlier one. So let's handle the stacks we collected _after_
     // we look at all of the expressions.
     for (location, local_stack) in stacks {
-        let Some(local_stack) = stack::make_stack_direct(
-            &local_stack,
-            &mut inference_context.types,
-        )?
+        let Some(local_stack) =
+            stack::make_direct(&local_stack, &mut inference_context.types)?
         else {
             continue;
         };
