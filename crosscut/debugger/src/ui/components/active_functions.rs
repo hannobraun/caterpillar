@@ -46,11 +46,9 @@ pub fn ActiveFunctions(
                         }
                     };
 
-                    let name = function.name;
-
                     view! {
                         <NamedFunction
-                            name=name
+                            name=function.name
                             branches=function.inner.branches
                             actions=actions.clone() />
                     }
