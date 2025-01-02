@@ -3,11 +3,11 @@ use crate::code::{Index, Type};
 use super::types::{InferredType, InferredTypes, Result};
 
 #[derive(Debug)]
-pub struct LocalStack {
+pub struct MaybeLocalStack {
     inner: Option<Vec<Index<InferredType>>>,
 }
 
-impl LocalStack {
+impl MaybeLocalStack {
     pub fn get(&self) -> Option<&Vec<Index<InferredType>>> {
         self.inner.as_ref()
     }
@@ -21,7 +21,7 @@ impl LocalStack {
     }
 }
 
-impl Default for LocalStack {
+impl Default for MaybeLocalStack {
     fn default() -> Self {
         Self {
             inner: Some(Vec::new()),

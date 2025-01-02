@@ -19,7 +19,7 @@ use super::{
     context::InferenceContext,
     function::InferredFunction,
     signature::{self, IndirectSignature},
-    stack::{self, LocalStack},
+    stack::{self, MaybeLocalStack},
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -196,7 +196,7 @@ fn infer_branch(
         register_binding(binding.location, &output.parameters);
     }
 
-    let mut local_stack = LocalStack::default();
+    let mut local_stack = MaybeLocalStack::default();
     let mut stacks = BTreeMap::new();
 
     for expression in branch.expressions() {
@@ -239,7 +239,7 @@ fn infer_branch(
 fn infer_expression(
     expression: Located<&Expression>,
     inference_context: &mut InferenceContext,
-    local_stack: &mut LocalStack,
+    local_stack: &mut MaybeLocalStack,
     compiler_context: CompilerContext,
     output: &InferenceOutput,
 ) -> Result<Option<IndirectSignature>> {
@@ -413,7 +413,7 @@ fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
     types: &mut InferredTypes,
-    local_stack: &mut LocalStack,
+    local_stack: &mut MaybeLocalStack,
 ) -> Result<Option<IndirectSignature>> {
     let Some(local_stack) = local_stack.get_mut() else {
         return Ok(None);
