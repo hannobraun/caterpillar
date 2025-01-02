@@ -426,29 +426,12 @@ fn infer_intrinsic(
 ) -> Result<Option<IndirectSignature>> {
     let signature = match intrinsic {
         IntrinsicFunction::Drop => {
-            let top_operand = local_stack
-                .inner
-                .last()
-                .map(|index| types.resolve(index))
-                .transpose()?;
+            let input = types.push(InferredType::Unknown);
 
-            match top_operand {
-                Some(
-                    type_ @ InferredType::IndirectFunction { .. }
-                    | type_ @ InferredType::Direct(_),
-                ) => Some(Signature {
-                    inputs: vec![types.push(type_)],
-                    outputs: vec![],
-                }),
-                Some(InferredType::Unknown { .. }) => None,
-                None => {
-                    return Err(TypeError {
-                        expected: ExpectedType::Unknown,
-                        actual: None,
-                        location: Some(location.clone()),
-                    });
-                }
-            }
+            Some(Signature {
+                inputs: vec![input],
+                outputs: vec![],
+            })
         }
         IntrinsicFunction::Eval => {
             let top_operand = local_stack
