@@ -95,6 +95,14 @@ impl Types {
         }
     }
 
+    /// # Access the signature of the function at the given location, if any
+    pub fn signature_of_function(
+        &self,
+        location: &FunctionLocation,
+    ) -> Option<&Signature> {
+        self.functions.get(location)
+    }
+
     /// # Access the type of the parameter at the given location, if any
     pub fn type_of_parameter(
         &self,
