@@ -237,4 +237,3 @@ impl fmt::Display for Type {
         Ok(())
     }
 }
-
