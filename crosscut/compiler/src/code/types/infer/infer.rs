@@ -485,9 +485,16 @@ fn infer_intrinsic(
                 IndirectSignature { inputs, outputs }
             })
         }
-        intrinsic => intrinsic
-            .signature()
-            .map(|signature| IndirectSignature::from_direct(signature, types)),
+        intrinsic => {
+            let Some(signature) = intrinsic.signature() else {
+                unreachable!(
+                    "All intrinsics that do not provide a signature are \
+                    handled above.",
+                );
+            };
+
+            Some(IndirectSignature::from_direct(signature, types))
+        }
     };
 
     Ok(signature)
