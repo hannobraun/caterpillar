@@ -416,7 +416,7 @@ fn infer_intrinsic(
     intrinsic: &IntrinsicFunction,
     location: &MemberLocation,
     types: &mut InferredTypes,
-    local_stack: &mut MaybeLocalStack,
+    local_stack: &MaybeLocalStack,
 ) -> Result<Option<IndirectSignature>> {
     let Some(local_stack) = local_stack.get() else {
         return Ok(None);
