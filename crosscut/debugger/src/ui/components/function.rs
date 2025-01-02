@@ -16,7 +16,7 @@ use leptos::{
 
 use crate::{
     model::{
-        DebugBranch, DebugMember, DebugMemberData, DebugMemberKind,
+        DebugFunction, DebugMember, DebugMemberData, DebugMemberKind,
         DebugNamedFunction, DebugParameter, UserAction,
     },
     ui::{actions::send_action, ActionsTx},
@@ -35,15 +35,16 @@ pub fn NamedFunction(
                 {function.name}:
             </span>
             <Function
-                branches=function.inner.branches
+                function=function.inner
                 actions=actions />
         </div>
     }
 }
 
 #[component]
-fn Function(branches: Vec<DebugBranch>, actions: ActionsTx) -> impl IntoView {
-    let branches = branches
+fn Function(function: DebugFunction, actions: ActionsTx) -> impl IntoView {
+    let branches = function
+        .branches
         .into_iter()
         .map(|branch| {
             view! {
@@ -135,7 +136,7 @@ pub fn Member(member: DebugMember, actions: ActionsTx) -> impl IntoView {
         DebugMemberKind::Function { function } => (
             view! {
                 <Function
-                    branches=function.branches
+                    function=function
                     actions=actions />
             }
             .into_any(),
