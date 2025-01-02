@@ -424,31 +424,39 @@ fn infer_intrinsic(
     types: &mut InferredTypes,
     local_stack: &LocalStack,
 ) -> Result<Option<IndirectSignature>> {
-    let top_operand = local_stack
-        .inner
-        .last()
-        .map(|index| types.resolve(index))
-        .transpose()?;
-
     let signature = match intrinsic {
-        IntrinsicFunction::Drop => match top_operand {
-            Some(
-                type_ @ InferredType::IndirectFunction { .. }
-                | type_ @ InferredType::Direct(_),
-            ) => Some(Signature {
-                inputs: vec![types.push(type_)],
-                outputs: vec![],
-            }),
-            Some(InferredType::Unknown { .. }) => None,
-            None => {
-                return Err(TypeError {
-                    expected: ExpectedType::Unknown,
-                    actual: None,
-                    location: Some(location.clone()),
-                });
+        IntrinsicFunction::Drop => {
+            let top_operand = local_stack
+                .inner
+                .last()
+                .map(|index| types.resolve(index))
+                .transpose()?;
+
+            match top_operand {
+                Some(
+                    type_ @ InferredType::IndirectFunction { .. }
+                    | type_ @ InferredType::Direct(_),
+                ) => Some(Signature {
+                    inputs: vec![types.push(type_)],
+                    outputs: vec![],
+                }),
+                Some(InferredType::Unknown { .. }) => None,
+                None => {
+                    return Err(TypeError {
+                        expected: ExpectedType::Unknown,
+                        actual: None,
+                        location: Some(location.clone()),
+                    });
+                }
             }
-        },
+        }
         IntrinsicFunction::Eval => {
+            let top_operand = local_stack
+                .inner
+                .last()
+                .map(|index| types.resolve(index))
+                .transpose()?;
+
             let signature = match top_operand {
                 Some(InferredType::IndirectFunction { signature }) => {
                     Some(signature)
