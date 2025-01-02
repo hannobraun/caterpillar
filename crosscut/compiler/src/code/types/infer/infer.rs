@@ -414,45 +414,34 @@ fn infer_intrinsic(
     types: &mut InferredTypes,
     local_stack: &mut LocalStack,
 ) -> Result<Option<IndirectSignature>> {
+    let Some(local_stack) = local_stack.get_mut() else {
+        return Ok(None);
+    };
+
+    let top_operand = local_stack
+        .last()
+        .map(|index| types.resolve(index))
+        .transpose()?;
+
     let signature = match intrinsic {
-        IntrinsicFunction::Drop => {
-            let Some(local_stack) = local_stack.get_mut() else {
-                return Ok(None);
-            };
-
-            let top_operand = local_stack
-                .last()
-                .map(|index| types.resolve(index))
-                .transpose()?;
-
-            match top_operand {
-                Some(
-                    type_ @ InferredType::IndirectFunction { .. }
-                    | type_ @ InferredType::Direct(_),
-                ) => Some(Signature {
-                    inputs: vec![types.push(type_)],
-                    outputs: vec![],
-                }),
-                Some(InferredType::Unknown { .. }) => None,
-                None => {
-                    return Err(TypeError {
-                        expected: ExpectedType::Unknown,
-                        actual: None,
-                        location: Some(location.clone()),
-                    });
-                }
+        IntrinsicFunction::Drop => match top_operand {
+            Some(
+                type_ @ InferredType::IndirectFunction { .. }
+                | type_ @ InferredType::Direct(_),
+            ) => Some(Signature {
+                inputs: vec![types.push(type_)],
+                outputs: vec![],
+            }),
+            Some(InferredType::Unknown { .. }) => None,
+            None => {
+                return Err(TypeError {
+                    expected: ExpectedType::Unknown,
+                    actual: None,
+                    location: Some(location.clone()),
+                });
             }
-        }
+        },
         IntrinsicFunction::Eval => {
-            let Some(local_stack) = local_stack.get_mut() else {
-                return Ok(None);
-            };
-
-            let top_operand = local_stack
-                .last()
-                .map(|index| types.resolve(index))
-                .transpose()?;
-
             let signature = match top_operand {
                 Some(InferredType::IndirectFunction { signature }) => {
                     Some(signature)
