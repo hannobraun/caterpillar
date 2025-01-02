@@ -46,10 +46,7 @@ pub fn ActiveFunctions(
                         }
                     };
 
-                    let name = function.inner.name.expect(
-                        "Only dealing with top-level functions here; should \
-                        be named.",
-                    );
+                    let name = function.name;
 
                     view! {
                         <NamedFunction
