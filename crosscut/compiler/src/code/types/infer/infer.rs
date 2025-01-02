@@ -19,6 +19,7 @@ use super::{
     context::InferenceContext,
     function::InferredFunction,
     signature::{self, IndirectSignature},
+    stack::LocalStack,
     types::{ExpectedType, InferredType, InferredTypes, Result, TypeError},
 };
 
@@ -495,30 +496,4 @@ fn make_stack_direct(
         .iter()
         .map(|index| types.resolve(index)?.into_type(types))
         .collect()
-}
-
-#[derive(Debug)]
-struct LocalStack {
-    inner: Option<Vec<Index<InferredType>>>,
-}
-impl LocalStack {
-    fn get(&self) -> Option<&Vec<Index<InferredType>>> {
-        self.inner.as_ref()
-    }
-
-    fn get_mut(&mut self) -> Option<&mut Vec<Index<InferredType>>> {
-        self.inner.as_mut()
-    }
-
-    fn invalidate(&mut self) {
-        self.inner = None;
-    }
-}
-
-impl Default for LocalStack {
-    fn default() -> Self {
-        Self {
-            inner: Some(Vec::new()),
-        }
-    }
 }
