@@ -44,10 +44,7 @@ impl TypeAnnotations {
     }
 
     /// # Access the annotation of the binding at the given location, if any
-    pub fn annotation_of_binding(
-        &self,
-        location: &ParameterLocation,
-    ) -> Option<&Type> {
+    pub fn of_binding(&self, location: &ParameterLocation) -> Option<&Type> {
         self.bindings.get(location)
     }
 

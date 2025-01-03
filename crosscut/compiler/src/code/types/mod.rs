@@ -533,9 +533,7 @@ mod tests {
         for function in syntax_tree.all_functions() {
             for branch in function.branches() {
                 for binding in branch.bindings() {
-                    if type_annotations
-                        .annotation_of_binding(&binding.location)
-                        .is_none()
+                    if type_annotations.of_binding(&binding.location).is_none()
                     {
                         panic!(
                             "No type annotation on binding at {}",
