@@ -148,7 +148,8 @@ mod tests {
 
                         fn
                             br ->
-                                value not # type of `value` can be inferred here
+                                value
+                                not # type of `value` can be inferred here
                             end
                         end
                     end
