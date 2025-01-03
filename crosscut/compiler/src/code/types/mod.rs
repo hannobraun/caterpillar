@@ -11,8 +11,7 @@ mod tests {
     use crate::{
         code::{
             syntax::{Expression, SyntaxTree},
-            Bindings, Dependencies, FunctionCalls, Identifiers, Signature,
-            Tokens, Type,
+            Bindings, Dependencies, FunctionCalls, Identifiers, Tokens, Type,
         },
         host::NoHost,
     };
@@ -41,31 +40,12 @@ mod tests {
             .into_located_function();
         let f_branch = f.find_single_branch().unwrap();
 
-        let value_parameter = f_branch
-            .parameters()
-            .map(|parameter| parameter.location)
-            .next()
-            .unwrap();
         let value_expression = f_branch
             .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();
 
-        assert_eq!(
-            types.type_of_parameter(&value_parameter).cloned().unwrap(),
-            Type::Number,
-        );
-        assert_eq!(
-            types
-                .signature_of_expression(&value_expression)
-                .cloned()
-                .unwrap(),
-            Signature {
-                inputs: vec![],
-                outputs: vec![Type::Number],
-            },
-        );
         assert_eq!(types.stack_at(&value_expression).unwrap(), &[]);
     }
 
@@ -103,31 +83,13 @@ mod tests {
                 .unwrap()
                 .into_located_function();
 
-            let (parameter_a, parameter_b) = f
-                .branches()
-                .map(|branch| branch.parameters().next().unwrap().location)
-                .collect_tuple()
-                .unwrap();
             let (expression_a, expression_b) = f
                 .branches()
                 .map(|branch| branch.expressions().next().unwrap().location)
                 .collect_tuple()
                 .unwrap();
 
-            for location in [parameter_a, parameter_b] {
-                assert_eq!(
-                    types.type_of_parameter(&location).cloned().unwrap(),
-                    Type::Number,
-                );
-            }
             for location in [expression_a, expression_b] {
-                assert_eq!(
-                    types.signature_of_expression(&location).cloned().unwrap(),
-                    Signature {
-                        inputs: vec![],
-                        outputs: vec![Type::Number],
-                    },
-                );
                 assert_eq!(types.stack_at(&location).unwrap(), &[]);
             }
         }
@@ -164,31 +126,12 @@ mod tests {
             .into_located_function();
         let f_branch = f.find_single_branch().unwrap();
 
-        let value_parameter = f_branch
-            .parameters()
-            .map(|parameter| parameter.location)
-            .next()
-            .unwrap();
         let value_expression = f_branch
             .expressions()
             .map(|expression| expression.location)
             .next()
             .unwrap();
 
-        assert_eq!(
-            types.type_of_parameter(&value_parameter).cloned().unwrap(),
-            Type::Number,
-        );
-        assert_eq!(
-            types
-                .signature_of_expression(&value_expression)
-                .cloned()
-                .unwrap(),
-            Signature {
-                inputs: vec![],
-                outputs: vec![Type::Number],
-            },
-        );
         assert_eq!(types.stack_at(&value_expression).unwrap(), &[]);
     }
 
@@ -217,13 +160,6 @@ mod tests {
             .next()
             .unwrap();
 
-        assert_eq!(
-            types.signature_of_expression(&value).cloned().unwrap(),
-            Signature {
-                inputs: vec![],
-                outputs: vec![Type::Number],
-            },
-        );
         assert_eq!(types.stack_at(&value).unwrap(), &[]);
     }
 
@@ -262,13 +198,6 @@ mod tests {
             .nth(1)
             .unwrap();
 
-        assert_eq!(
-            types.signature_of_expression(&g).cloned().unwrap(),
-            Signature {
-                inputs: vec![Type::Number],
-                outputs: vec![Type::Number],
-            },
-        );
         assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
     }
 
@@ -311,13 +240,6 @@ mod tests {
             .nth(2)
             .unwrap();
 
-        assert_eq!(
-            types.signature_of_expression(&g).cloned().unwrap(),
-            Signature {
-                inputs: vec![Type::Number, Type::Number],
-                outputs: vec![Type::Number],
-            },
-        );
         assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number, Type::Number]);
     }
 
@@ -370,13 +292,6 @@ mod tests {
                 .nth(1)
                 .unwrap();
 
-            assert_eq!(
-                types.signature_of_expression(&g).cloned().unwrap(),
-                Signature {
-                    inputs: vec![Type::Number],
-                    outputs: vec![Type::Number],
-                },
-            );
             assert_eq!(types.stack_at(&g).unwrap(), &[Type::Number]);
         }
     }
@@ -452,13 +367,6 @@ mod tests {
             .unwrap();
 
         let check = |call, stack: &[Type]| {
-            assert_eq!(
-                types.signature_of_expression(call).cloned().unwrap(),
-                Signature {
-                    inputs: vec![Type::Number],
-                    outputs: vec![Type::Number],
-                },
-            );
             assert_eq!(types.stack_at(call).unwrap(), stack);
         };
 
@@ -507,18 +415,6 @@ mod tests {
             .nth(1)
             .unwrap();
 
-        assert_eq!(
-            types.signature_of_expression(&f_local).cloned().unwrap(),
-            Signature {
-                inputs: vec![],
-                outputs: vec![Type::Function {
-                    signature: Signature {
-                        inputs: vec![Type::Number],
-                        outputs: vec![Type::Number],
-                    },
-                }],
-            },
-        );
         assert_eq!(types.stack_at(&f_local).unwrap(), &[Type::Number]);
     }
 
