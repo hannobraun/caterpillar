@@ -179,7 +179,7 @@ fn infer_branch(
             let type_ = match parameter.fragment {
                 Parameter::Binding { .. } => compiler_context
                     .annotations
-                    .type_of_binding(&parameter.location)
+                    .annotation_of_binding(&parameter.location)
                     .cloned(),
                 Parameter::Literal { .. } => Some(Type::Number),
             };

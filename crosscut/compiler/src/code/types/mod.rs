@@ -534,7 +534,7 @@ mod tests {
             for branch in function.branches() {
                 for binding in branch.bindings() {
                     if type_annotations
-                        .type_of_binding(&binding.location)
+                        .annotation_of_binding(&binding.location)
                         .is_none()
                     {
                         panic!(

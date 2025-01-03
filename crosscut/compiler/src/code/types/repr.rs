@@ -44,7 +44,7 @@ impl TypeAnnotations {
     }
 
     /// # Access the type of the binding at the given location, if any
-    pub fn type_of_binding(
+    pub fn annotation_of_binding(
         &self,
         location: &ParameterLocation,
     ) -> Option<&Type> {
