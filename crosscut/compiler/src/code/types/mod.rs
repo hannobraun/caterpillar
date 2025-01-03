@@ -517,12 +517,16 @@ mod tests {
         let identifiers =
             Identifiers::resolve(&syntax_tree, &bindings, &function_calls);
         let dependencies = Dependencies::resolve(&syntax_tree, &function_calls);
+
+        // Don't use any of the type annotations for the inference. Only use
+        // them to _check_ the inference later.
+        let _ = type_annotations;
         let types = Types::infer(
             &syntax_tree,
             &bindings,
             &identifiers,
             &dependencies,
-            type_annotations,
+            TypeAnnotations::empty(),
         );
 
         (syntax_tree, types)
