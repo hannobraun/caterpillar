@@ -28,7 +28,8 @@ mod tests {
             r"
                 f: fn
                     br value ->
-                        value not
+                        value
+                        not
                     end
                 end
             ",
