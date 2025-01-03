@@ -43,7 +43,7 @@ impl TypeAnnotations {
         }
     }
 
-    /// # Access the type of the binding at the given location, if any
+    /// # Access the annotation of the binding at the given location, if any
     pub fn annotation_of_binding(
         &self,
         location: &ParameterLocation,
@@ -51,7 +51,7 @@ impl TypeAnnotations {
         self.bindings.get(location)
     }
 
-    /// # Access the signature of the expression at the given location, if any
+    /// # Access the annotation of the expression at the given location, if any
     pub fn annotation_of_expression(
         &self,
         location: &MemberLocation,
