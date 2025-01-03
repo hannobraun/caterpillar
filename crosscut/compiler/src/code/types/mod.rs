@@ -329,7 +329,8 @@ mod tests {
 
         let branch_recursive = r"
             br 0 ->
-                1 g
+                1
+                g
             end
         ";
         let branch_non_recursive = r"
@@ -346,7 +347,8 @@ mod tests {
                 r"
                     f: fn
                         br ->
-                            0 g
+                            0
+                            g
                         end
                     end
 
