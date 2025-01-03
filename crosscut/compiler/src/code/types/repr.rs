@@ -15,7 +15,9 @@ use super::{
 /// ## Implementation Note
 ///
 /// The long-term goal for Crosscut is to be fully inferred, with no explicit
-/// types annotations being necessary at all. Then this type can be removed.
+/// types annotations being necessary at all. Type annotations are still used
+/// for testing though, so it's likely that this code will stay, but the
+/// compiler pipeline will forbid type annotations in regular code.
 #[derive(Debug)]
 pub struct TypeAnnotations {
     bindings: BTreeMap<ParameterLocation, Type>,
