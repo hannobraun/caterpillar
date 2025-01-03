@@ -23,6 +23,14 @@ pub struct TypeAnnotations {
 }
 
 impl TypeAnnotations {
+    /// # Create an empty instance with no type annotations
+    pub fn empty() -> Self {
+        Self {
+            bindings: BTreeMap::default(),
+            expressions: BTreeMap::default(),
+        }
+    }
+
     /// # Resolve all explicit type annotations
     pub fn resolve(syntax_tree: &SyntaxTree) -> Self {
         let (bindings, expressions) = resolve_type_annotations(syntax_tree);
