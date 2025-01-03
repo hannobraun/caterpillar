@@ -282,7 +282,9 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0 0 g
+                        0
+                        0
+                        g
                     end
                 end
 
