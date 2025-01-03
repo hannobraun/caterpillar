@@ -62,6 +62,13 @@ impl TypeAnnotations {
     ) -> impl Iterator<Item = (&ParameterLocation, &Type)> {
         self.bindings.iter()
     }
+
+    /// # Iterate over the type annotations of all expressions
+    pub fn of_all_expressions(
+        &self,
+    ) -> impl Iterator<Item = (&MemberLocation, &Signature)> {
+        self.expressions.iter()
+    }
 }
 
 /// # The resolved types
