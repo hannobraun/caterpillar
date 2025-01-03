@@ -545,7 +545,7 @@ mod tests {
                 }
                 for expression in branch.expressions() {
                     if type_annotations
-                        .signature_of_expression(&expression.location)
+                        .annotation_of_expression(&expression.location)
                         .is_none()
                     {
                         panic!(

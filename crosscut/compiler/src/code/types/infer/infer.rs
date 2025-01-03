@@ -248,7 +248,7 @@ fn infer_expression(
 ) -> Result<Option<IndirectSignature>> {
     let explicit = compiler_context
         .annotations
-        .signature_of_expression(&expression.location)
+        .annotation_of_expression(&expression.location)
         .cloned()
         .map(|signature| {
             IndirectSignature::from_direct(
