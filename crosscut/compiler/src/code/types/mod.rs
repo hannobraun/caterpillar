@@ -391,24 +391,29 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0 g
-                        0 h
+                        0
+                        g
+                        0
+                        h
                     end
                 end
 
                 g: fn
                     br 0 ->
-                        0 h
+                        0
+                        h
                     end
                     
                     br _ ->
-                        1 h
+                        1
+                        h
                     end
                 end
 
                 h: fn
                     br 0 ->
-                        1 g
+                        1
+                        g
                     end
 
                     br _ ->
