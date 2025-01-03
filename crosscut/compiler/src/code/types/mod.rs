@@ -563,7 +563,6 @@ mod tests {
 
         // Don't use any of the type annotations for the inference. They'll be
         // used to _check_ the inference later.
-        let _ = type_annotations;
         let types = Types::infer(
             &syntax_tree,
             &bindings,
@@ -571,6 +570,16 @@ mod tests {
             &dependencies,
             TypeAnnotations::none(),
         );
+
+        for (location, type_) in type_annotations.of_all_bindings() {
+            assert_eq!(types.type_of_parameter(location), Some(type_));
+        }
+        for (location, signature) in type_annotations.of_all_expressions() {
+            assert_eq!(
+                types.signature_of_expression(location),
+                Some(signature),
+            );
+        }
 
         (syntax_tree, types)
     }
