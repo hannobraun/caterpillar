@@ -26,7 +26,7 @@ pub struct TypeAnnotations {
 
 impl TypeAnnotations {
     /// # Create an empty instance with no type annotations
-    pub fn empty() -> Self {
+    pub fn none() -> Self {
         Self {
             bindings: BTreeMap::default(),
             expressions: BTreeMap::default(),

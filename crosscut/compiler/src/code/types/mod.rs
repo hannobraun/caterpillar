@@ -571,7 +571,7 @@ mod tests {
             &bindings,
             &identifiers,
             &dependencies,
-            TypeAnnotations::empty(),
+            TypeAnnotations::none(),
         );
 
         (syntax_tree, types)
