@@ -27,9 +27,9 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    br value ->
-                        value
-                        not
+                    br value: Number ->
+                        value: -> Number .
+                        not: Number -> Number .
                     end
                 end
             ",
@@ -76,12 +76,12 @@ mod tests {
 
         let branch_with_known_type = r"
             br 0 ->
-                0
+                0: -> Number .
             end
         ";
         let branch_with_unknown_type = r"
-            br x ->
-                x
+            br x: Number ->
+                x: -> Number .
             end
         ";
 
@@ -141,18 +141,18 @@ mod tests {
         let (syntax_tree, types) = infer_types(
             r"
                 f: fn
-                    br value ->
+                    br value: Number ->
                         # We should know the type of `value` from its use within
                         # the local function.
-                        value
+                        value: -> Number .
 
                         fn
                             br ->
-                                value
+                                value: -> Number .
                                 # Type of `value` can be inferred from this.
-                                not
+                                not: Number -> Number .
                             end
-                        end
+                        end: -> fn -> Number end .
                     end
                 end
             ",
@@ -200,7 +200,7 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        1
+                        1: -> Number .
                     end
                 end
             ",
@@ -237,15 +237,15 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0
-                        g
+                        0: -> Number .
+                        g: Number -> Number .
                     end
                 end
 
                 g: fn
-                    br x ->
-                        x
-                        not
+                    br x: Number ->
+                        x: -> Number .
+                        not: Number -> Number .
                     end
                 end
             ",
@@ -282,19 +282,19 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0
-                        0
-                        g
+                        0: -> Number .
+                        0: -> Number .
+                        g: Number, Number -> Number .
                     end
                 end
 
                 g: fn
-                    br 0, x ->
-                        x
+                    br 0, x: Number ->
+                        x: -> Number .
                     end
 
-                    br x, 0 ->
-                        x
+                    br x: Number, 0 ->
+                        x: -> Number .
                     end
                 end
             ",
@@ -329,13 +329,13 @@ mod tests {
 
         let branch_recursive = r"
             br 0 ->
-                1
-                g
+                1: -> Number .
+                g: Number -> Number .
             end
         ";
         let branch_non_recursive = r"
-            br x ->
-                x
+            br x: Number ->
+                x: -> Number .
             end
         ";
 
@@ -347,8 +347,8 @@ mod tests {
                 r"
                     f: fn
                         br ->
-                            0
-                            g
+                            0: -> Number .
+                            g: Number -> Number .
                         end
                     end
 
@@ -391,33 +391,33 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0
-                        g
-                        0
-                        h
+                        0: -> Number .
+                        g: Number -> Number .
+                        0: -> Number .
+                        h: Number -> Number .
                     end
                 end
 
                 g: fn
                     br 0 ->
-                        0
-                        h
+                        0: -> Number .
+                        h: Number -> Number .
                     end
                     
-                    br _ ->
-                        1
-                        h
+                    br _: Number ->
+                        1: -> Number .
+                        h: Number -> Number .
                     end
                 end
 
                 h: fn
                     br 0 ->
-                        1
-                        g
+                        1: -> Number .
+                        g: Number -> Number .
                     end
 
-                    br _ ->
-                        0
+                    br _: Number ->
+                        0: -> Number .
                     end
                 end
             ",
@@ -476,21 +476,21 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0
+                        0: -> Number .
                         fn
                             br 0 ->
-                                0
+                                0: -> Number .
                             end
 
                             # Add this branch to make sure that `f` and the
                             # local function are in the same cluster. This more
                             # complicated to handle, resulting in this test
                             # covering a bit more ground.
-                            br _ ->
-                                f
+                            br _: Number ->
+                                f: -> Number .
                             end
-                        end
-                        eval
+                        end: -> fn Number -> Number end .
+                        eval: Number, fn Number -> Number end -> Number .
                     end
                 end
             ",
@@ -525,7 +525,38 @@ mod tests {
     fn infer_types(input: &str) -> (SyntaxTree, Types) {
         let tokens = Tokens::tokenize(input);
         let syntax_tree = SyntaxTree::parse(tokens);
+
+        // Expect anything that _can_ be annotated to actually _be_ annotated.
+        // These annotations will later be used to check the results of the
+        // inference.
         let type_annotations = TypeAnnotations::resolve(&syntax_tree);
+        for function in syntax_tree.all_functions() {
+            for branch in function.branches() {
+                for binding in branch.bindings() {
+                    if type_annotations
+                        .type_of_binding(&binding.location)
+                        .is_none()
+                    {
+                        panic!(
+                            "No type annotation on binding at {}",
+                            binding.location.display(&syntax_tree),
+                        );
+                    }
+                }
+                for expression in branch.expressions() {
+                    if type_annotations
+                        .signature_of_expression(&expression.location)
+                        .is_none()
+                    {
+                        panic!(
+                            "No type annotation on expression at {}",
+                            expression.location.display(&syntax_tree),
+                        );
+                    }
+                }
+            }
+        }
+
         let bindings = Bindings::resolve(&syntax_tree);
         let function_calls = FunctionCalls::resolve(&syntax_tree, &NoHost);
         let identifiers =
