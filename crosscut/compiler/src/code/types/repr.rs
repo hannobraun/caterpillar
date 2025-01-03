@@ -49,7 +49,7 @@ impl TypeAnnotations {
     }
 
     /// # Access the annotation of the expression at the given location, if any
-    pub fn annotation_of_expression(
+    pub fn of_expression(
         &self,
         location: &MemberLocation,
     ) -> Option<&Signature> {

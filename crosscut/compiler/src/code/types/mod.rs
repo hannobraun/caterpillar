@@ -543,7 +543,7 @@ mod tests {
                 }
                 for expression in branch.expressions() {
                     if type_annotations
-                        .annotation_of_expression(&expression.location)
+                        .of_expression(&expression.location)
                         .is_none()
                     {
                         panic!(
