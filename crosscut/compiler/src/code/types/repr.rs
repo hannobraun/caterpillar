@@ -58,6 +58,13 @@ impl TypeAnnotations {
     ) -> Option<&Signature> {
         self.expressions.get(location)
     }
+
+    /// # Iterate over the type annotations of all bindings
+    pub fn of_all_bindings(
+        &self,
+    ) -> impl Iterator<Item = (&ParameterLocation, &Type)> {
+        self.bindings.iter()
+    }
 }
 
 /// # The resolved types
