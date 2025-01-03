@@ -237,13 +237,15 @@ mod tests {
             r"
                 f: fn
                     br ->
-                        0 g
+                        0
+                        g
                     end
                 end
 
                 g: fn
                     br x ->
-                        x not
+                        x
+                        not
                     end
                 end
             ",
