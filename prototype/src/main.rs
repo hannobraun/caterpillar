@@ -73,31 +73,7 @@ impl ApplicationHandler for Application {
         let _ = resources.window;
 
         if let WindowEvent::RedrawRequested = event {
-            let surface_texture =
-                resources.renderer.surface.get_current_texture().unwrap();
-            let view = surface_texture
-                .texture
-                .create_view(&wgpu::TextureViewDescriptor::default());
-
-            let mut encoder = resources.renderer.device.create_command_encoder(
-                &wgpu::CommandEncoderDescriptor { label: None },
-            );
-            encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                label: None,
-                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
-                        store: wgpu::StoreOp::Store,
-                    },
-                })],
-                depth_stencil_attachment: None,
-                timestamp_writes: None,
-                occlusion_query_set: None,
-            });
-            resources.renderer.queue.submit(Some(encoder.finish()));
-            surface_texture.present();
+            resources.renderer.render();
         }
     }
 }
@@ -167,5 +143,32 @@ impl Renderer {
             device,
             queue,
         })
+    }
+
+    fn render(&self) {
+        let surface_texture = self.surface.get_current_texture().unwrap();
+        let view = surface_texture
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
+        let mut encoder = self.device.create_command_encoder(
+            &wgpu::CommandEncoderDescriptor { label: None },
+        );
+        encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+            label: None,
+            color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                view: &view,
+                resolve_target: None,
+                ops: wgpu::Operations {
+                    load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                    store: wgpu::StoreOp::Store,
+                },
+            })],
+            depth_stencil_attachment: None,
+            timestamp_writes: None,
+            occlusion_query_set: None,
+        });
+        self.queue.submit(Some(encoder.finish()));
+        surface_texture.present();
     }
 }
