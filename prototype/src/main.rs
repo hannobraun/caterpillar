@@ -42,9 +42,16 @@ impl ApplicationHandler for Application {
         self.resources = match ApplicationResources::init(event_loop) {
             Ok(resources) => Some(resources),
             Err(err) => {
-                if let Err(SendError(_)) = self.error.send(err) {
+                if let Err(SendError(err)) = self.error.send(err) {
                     // The other end has already hung up. Nothing we can do
                     // about it.
+                    println!(
+                        "Error while initializing application resources:\n\
+                        {err:?}\n\
+                        \n\
+                        Failed to report this error properly, as the main \
+                        thread isn't listening anymore."
+                    );
                 };
                 event_loop.exit();
                 return;
