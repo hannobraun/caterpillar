@@ -83,15 +83,21 @@ impl ApplicationHandler for Application {
         };
         let _ = resources.window;
 
-        if let WindowEvent::RedrawRequested = event {
-            if let Err(err) = resources.renderer.render() {
-                self.handle_error(err, event_loop);
-
-                // I want to have this explicit return here, to make sure this
-                // stays working as the code here shifts.
-                #[allow(clippy::needless_return)]
-                return;
+        match event {
+            WindowEvent::CloseRequested => {
+                event_loop.exit();
             }
+            WindowEvent::RedrawRequested => {
+                if let Err(err) = resources.renderer.render() {
+                    self.handle_error(err, event_loop);
+
+                    // I want to have this explicit return here, to make sure
+                    // this stays working as the code here shifts.
+                    #[allow(clippy::needless_return)]
+                    return;
+                }
+            }
+            _ => {}
         }
     }
 }
