@@ -7,8 +7,9 @@ use anyhow::anyhow;
 use pollster::FutureExt;
 use winit::{
     application::ApplicationHandler,
-    event::WindowEvent,
+    event::{KeyEvent, WindowEvent},
     event_loop::{ActiveEventLoop, EventLoop},
+    keyboard::{Key, NamedKey},
     window::{Window, WindowId},
 };
 
@@ -85,6 +86,16 @@ impl ApplicationHandler for Application {
 
         match event {
             WindowEvent::CloseRequested => {
+                event_loop.exit();
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        logical_key: Key::Named(NamedKey::Escape),
+                        ..
+                    },
+                ..
+            } => {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
