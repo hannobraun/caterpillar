@@ -39,7 +39,7 @@ struct Application {
 
 impl ApplicationHandler for Application {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        self.resources = match ApplicationResources::init(event_loop) {
+        self.resources = match ApplicationResources::main(event_loop) {
             Ok(resources) => Some(resources),
             Err(err) => {
                 if let Err(SendError(err)) = self.error.send(err) {
@@ -77,7 +77,7 @@ struct ApplicationResources {
 }
 
 impl ApplicationResources {
-    fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
+    fn main(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
         let window = {
             let window =
                 event_loop.create_window(Window::default_attributes())?;
