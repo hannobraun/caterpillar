@@ -14,7 +14,6 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-#[derive(Default)]
 struct Application {
     window: Option<Window>,
 }
