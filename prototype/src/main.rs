@@ -115,7 +115,7 @@ impl ApplicationResources {
             Arc::new(window)
         };
 
-        let renderer = Renderer::new(window.clone()).block_on()?;
+        let renderer = Renderer::new(&window).block_on()?;
 
         Ok(Self { window, renderer })
     }
@@ -128,7 +128,7 @@ struct Renderer {
 }
 
 impl Renderer {
-    async fn new(window: Arc<Window>) -> anyhow::Result<Self> {
+    async fn new(window: &Arc<Window>) -> anyhow::Result<Self> {
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
         let Some(adapter) = instance
