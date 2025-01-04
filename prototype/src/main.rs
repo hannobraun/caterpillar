@@ -36,18 +36,17 @@ struct Application {
 
 impl ApplicationHandler for Application {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window =
-            match event_loop.create_window(Window::default_attributes()) {
-                Ok(window) => window,
-                Err(err) => {
-                    if let Err(SendError(_)) = self.error.send(err.into()) {
-                        // The other end has hung up. Nothing else we can do
-                        // with this error now.
-                    };
-                    event_loop.exit();
-                    return;
-                }
-            };
+        let window = match init(event_loop) {
+            Ok(window) => window,
+            Err(err) => {
+                if let Err(SendError(_)) = self.error.send(err) {
+                    // The other end has hung up. Nothing else we can do
+                    // with this error now.
+                };
+                event_loop.exit();
+                return;
+            }
+        };
 
         self.window = Some(window);
     }
@@ -59,4 +58,9 @@ impl ApplicationHandler for Application {
         _: WindowEvent,
     ) {
     }
+}
+
+fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Window> {
+    let window = event_loop.create_window(Window::default_attributes())?;
+    Ok(window)
 }
