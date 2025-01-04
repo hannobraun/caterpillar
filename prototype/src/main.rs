@@ -2,7 +2,6 @@ use std::sync::mpsc::{self, RecvError, SendError};
 
 use winit::{
     application::ApplicationHandler,
-    error::OsError,
     event::WindowEvent,
     event_loop::{ActiveEventLoop, EventLoop},
     window::{Window, WindowId},
@@ -20,7 +19,7 @@ fn main() -> anyhow::Result<()> {
     event_loop.run_app(&mut application)?;
 
     match error_rx.recv() {
-        Ok(err) => return Err(err.into()),
+        Ok(err) => return Err(err),
         Err(RecvError) => {
             // The other end has hung up. If it didn't send us an error before,
             // then all should be well.
@@ -32,7 +31,7 @@ fn main() -> anyhow::Result<()> {
 
 struct Application {
     window: Option<Window>,
-    error: mpsc::Sender<OsError>,
+    error: mpsc::Sender<anyhow::Error>,
 }
 
 impl ApplicationHandler for Application {
@@ -41,7 +40,7 @@ impl ApplicationHandler for Application {
             match event_loop.create_window(Window::default_attributes()) {
                 Ok(window) => window,
                 Err(err) => {
-                    if let Err(SendError(_)) = self.error.send(err) {
+                    if let Err(SendError(_)) = self.error.send(err.into()) {
                         // The other end has hung up. Nothing else we can do
                         // with this error now.
                     };
