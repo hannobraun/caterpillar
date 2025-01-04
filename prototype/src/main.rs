@@ -73,7 +73,7 @@ impl ApplicationHandler for Application {
         let _ = resources.window;
 
         if let WindowEvent::RedrawRequested = event {
-            resources.renderer.render();
+            resources.renderer.render().unwrap();
         }
     }
 }
@@ -145,8 +145,8 @@ impl Renderer {
         })
     }
 
-    fn render(&self) {
-        let surface_texture = self.surface.get_current_texture().unwrap();
+    fn render(&self) -> anyhow::Result<()> {
+        let surface_texture = self.surface.get_current_texture()?;
         let view = surface_texture
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
@@ -170,5 +170,7 @@ impl Renderer {
         });
         self.queue.submit(Some(encoder.finish()));
         surface_texture.present();
+
+        Ok(())
     }
 }
