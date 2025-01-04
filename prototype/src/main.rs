@@ -40,7 +40,7 @@ struct Application {
 impl ApplicationHandler for Application {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         let resources = match ApplicationResources::init(event_loop) {
-            Ok(window) => window,
+            Ok(resources) => resources,
             Err(err) => {
                 if let Err(SendError(_)) = self.error.send(err) {
                     // The other end has hung up. Nothing else we can do
