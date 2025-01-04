@@ -51,7 +51,7 @@ impl ApplicationHandler for Application {
             }
         };
 
-        self.resources = Some(ApplicationResources { window });
+        self.resources = Some(window);
     }
 
     fn window_event(
@@ -72,13 +72,13 @@ struct ApplicationResources {
 }
 
 impl ApplicationResources {
-    fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Arc<Window>> {
+    fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
         let window = {
             let window =
                 event_loop.create_window(Window::default_attributes())?;
             Arc::new(window)
         };
 
-        Ok(window)
+        Ok(Self { window })
     }
 }
