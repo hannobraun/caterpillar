@@ -3,6 +3,8 @@ use std::sync::{
     Arc,
 };
 
+use anyhow::anyhow;
+use pollster::FutureExt;
 use winit::{
     application::ApplicationHandler,
     event::WindowEvent,
@@ -63,17 +65,48 @@ impl ApplicationHandler for Application {
         &mut self,
         _: &ActiveEventLoop,
         _: WindowId,
-        _: WindowEvent,
+        event: WindowEvent,
     ) {
         let Some(resources) = self.resources.as_ref() else {
             return;
         };
         let _ = resources.window;
+
+        if let WindowEvent::RedrawRequested = event {
+            let surface_texture =
+                resources.surface.get_current_texture().unwrap();
+            let view = surface_texture
+                .texture
+                .create_view(&wgpu::TextureViewDescriptor::default());
+
+            let mut encoder = resources.device.create_command_encoder(
+                &wgpu::CommandEncoderDescriptor { label: None },
+            );
+            encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: None,
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                        store: wgpu::StoreOp::Store,
+                    },
+                })],
+                depth_stencil_attachment: None,
+                timestamp_writes: None,
+                occlusion_query_set: None,
+            });
+            resources.queue.submit(Some(encoder.finish()));
+            surface_texture.present();
+        }
     }
 }
 
 struct ApplicationResources {
     window: Arc<Window>,
+    surface: wgpu::Surface<'static>,
+    device: wgpu::Device,
+    queue: wgpu::Queue,
 }
 
 impl ApplicationResources {
@@ -84,6 +117,44 @@ impl ApplicationResources {
             Arc::new(window)
         };
 
-        Ok(Self { window })
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
+        let surface = instance.create_surface(window.clone())?;
+        let Some(adapter) = instance
+            .request_adapter(&wgpu::RequestAdapterOptions {
+                power_preference: wgpu::PowerPreference::default(),
+                force_fallback_adapter: false,
+                compatible_surface: Some(&surface),
+            })
+            .block_on()
+        else {
+            return Err(anyhow!(
+                "Did not find adapter that can render to surface."
+            ));
+        };
+        let (device, queue) = adapter
+            .request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    required_features: wgpu::Features::empty(),
+                    required_limits: wgpu::Limits::downlevel_webgl2_defaults(),
+                    memory_hints: wgpu::MemoryHints::default(),
+                },
+                None,
+            )
+            .block_on()?;
+        let size = window.inner_size();
+        let config = surface
+            .get_default_config(&adapter, size.width, size.height)
+            .ok_or_else(|| {
+                anyhow!("Could not acquire default surface configuration.")
+            })?;
+        surface.configure(&device, &config);
+
+        Ok(Self {
+            window,
+            surface,
+            device,
+            queue,
+        })
     }
 }
