@@ -1,5 +1,5 @@
 use std::sync::{
-    mpsc::{self, RecvError, SendError},
+    mpsc::{self, SendError, TryRecvError},
     Arc,
 };
 
@@ -23,11 +23,16 @@ fn main() -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
     event_loop.run_app(&mut application)?;
 
-    match error_rx.recv() {
+    match error_rx.try_recv() {
         Ok(err) => return Err(err),
-        Err(RecvError) => {
-            // The other end has hung up. If it didn't send us an error before,
-            // then all should be well.
+        Err(TryRecvError::Empty) => {
+            // There's no error in the channel. All should be well.
+        }
+        Err(TryRecvError::Disconnected) => {
+            unreachable!(
+                "Error channel can't disconnect. The sender lives on the local \
+                stack."
+            );
         }
     }
 
