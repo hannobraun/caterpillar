@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
     let (error_tx, error_rx) = mpsc::channel();
 
     let mut application = Application {
-        window: None,
+        resources: None,
         error: error_tx,
     };
 
@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 struct Application {
-    window: Option<ApplicationResources>,
+    resources: Option<ApplicationResources>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -51,7 +51,7 @@ impl ApplicationHandler for Application {
             }
         };
 
-        self.window = Some(ApplicationResources { window });
+        self.resources = Some(ApplicationResources { window });
     }
 
     fn window_event(
@@ -60,7 +60,7 @@ impl ApplicationHandler for Application {
         _: WindowId,
         _: WindowEvent,
     ) {
-        let Some(resources) = self.window.as_ref() else {
+        let Some(resources) = self.resources.as_ref() else {
             return;
         };
         let _ = resources.window;
