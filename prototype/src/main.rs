@@ -1,4 +1,7 @@
-use std::sync::mpsc::{self, RecvError, SendError};
+use std::sync::{
+    mpsc::{self, RecvError, SendError},
+    Arc,
+};
 
 use winit::{
     application::ApplicationHandler,
@@ -30,7 +33,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 struct Application {
-    window: Option<Window>,
+    window: Option<Arc<Window>>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -60,7 +63,11 @@ impl ApplicationHandler for Application {
     }
 }
 
-fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Window> {
-    let window = event_loop.create_window(Window::default_attributes())?;
+fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Arc<Window>> {
+    let window = {
+        let window = event_loop.create_window(Window::default_attributes())?;
+        Arc::new(window)
+    };
+
     Ok(window)
 }
