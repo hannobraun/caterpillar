@@ -120,6 +120,7 @@ impl Renderer {
     async fn new(window: &Arc<Window>) -> anyhow::Result<Self> {
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
+
         let Some(adapter) = instance
             .request_adapter(&wgpu::RequestAdapterOptions {
                 power_preference: wgpu::PowerPreference::default(),
@@ -132,6 +133,7 @@ impl Renderer {
                 "Did not find adapter that can render to surface."
             ));
         };
+
         let (device, queue) = adapter
             .request_device(
                 &wgpu::DeviceDescriptor {
@@ -143,6 +145,7 @@ impl Renderer {
                 None,
             )
             .await?;
+        
         let size = window.inner_size();
         let config = surface
             .get_default_config(&adapter, size.width, size.height)
