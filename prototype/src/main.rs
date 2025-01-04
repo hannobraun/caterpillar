@@ -69,7 +69,7 @@ impl ApplicationHandler for Application {
 
     fn window_event(
         &mut self,
-        _: &ActiveEventLoop,
+        event_loop: &ActiveEventLoop,
         _: WindowId,
         event: WindowEvent,
     ) {
@@ -79,7 +79,14 @@ impl ApplicationHandler for Application {
         let _ = resources.window;
 
         if let WindowEvent::RedrawRequested = event {
-            resources.renderer.render().unwrap();
+            if let Err(err) = resources.renderer.render() {
+                self.handle_error(err, event_loop);
+
+                // I want to have this explicit return here, to make sure this
+                // stays working as the code here shifts.
+                #[allow(clippy::needless_return)]
+                return;
+            }
         }
     }
 }
