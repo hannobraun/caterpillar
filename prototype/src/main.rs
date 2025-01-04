@@ -60,6 +60,9 @@ impl ApplicationHandler for Application {
         _: WindowId,
         _: WindowEvent,
     ) {
+        let Some(_) = self.window.as_ref() else {
+            return;
+        };
     }
 }
 
