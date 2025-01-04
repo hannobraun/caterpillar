@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 struct Application {
-    window: Option<Arc<Window>>,
+    window: Option<ApplicationResources>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -51,7 +51,7 @@ impl ApplicationHandler for Application {
             }
         };
 
-        self.window = Some(window);
+        self.window = Some(ApplicationResources { window });
     }
 
     fn window_event(
@@ -60,10 +60,15 @@ impl ApplicationHandler for Application {
         _: WindowId,
         _: WindowEvent,
     ) {
-        let Some(_) = self.window.as_ref() else {
+        let Some(resources) = self.window.as_ref() else {
             return;
         };
+        let _ = resources.window;
     }
+}
+
+struct ApplicationResources {
+    window: Arc<Window>,
 }
 
 fn init(event_loop: &ActiveEventLoop) -> anyhow::Result<Arc<Window>> {
