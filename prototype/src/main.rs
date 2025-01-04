@@ -115,6 +115,20 @@ impl ApplicationResources {
             Arc::new(window)
         };
 
+        let renderer = Renderer::new(window.clone())?;
+
+        Ok(Self { window, renderer })
+    }
+}
+
+struct Renderer {
+    surface: wgpu::Surface<'static>,
+    device: wgpu::Device,
+    queue: wgpu::Queue,
+}
+
+impl Renderer {
+    fn new(window: Arc<Window>) -> anyhow::Result<Self> {
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
         let Some(adapter) = instance
@@ -149,18 +163,9 @@ impl ApplicationResources {
         surface.configure(&device, &config);
 
         Ok(Self {
-            window,
-            renderer: Renderer {
-                surface,
-                device,
-                queue,
-            },
+            surface,
+            device,
+            queue,
         })
     }
-}
-
-struct Renderer {
-    surface: wgpu::Surface<'static>,
-    device: wgpu::Device,
-    queue: wgpu::Queue,
 }
