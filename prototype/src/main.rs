@@ -39,23 +39,29 @@ struct Application {
     error: mpsc::Sender<anyhow::Error>,
 }
 
+impl Application {
+    fn handle_error(&self, err: anyhow::Error, event_loop: &ActiveEventLoop) {
+        if let Err(SendError(err)) = self.error.send(err) {
+            // The other end has already hung up. Nothing we can do
+            // about it.
+            println!(
+                "Error while initializing application resources:\n\
+                {err:?}\n\
+                \n\
+                Failed to report this error properly, as the main thread isn't
+                listening anymore."
+            );
+        };
+        event_loop.exit();
+    }
+}
+
 impl ApplicationHandler for Application {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         self.resources = match ApplicationResources::new(event_loop) {
             Ok(resources) => Some(resources),
             Err(err) => {
-                if let Err(SendError(err)) = self.error.send(err) {
-                    // The other end has already hung up. Nothing we can do
-                    // about it.
-                    println!(
-                        "Error while initializing application resources:\n\
-                        {err:?}\n\
-                        \n\
-                        Failed to report this error properly, as the main \
-                        thread isn't listening anymore."
-                    );
-                };
-                event_loop.exit();
+                self.handle_error(err, event_loop);
                 return;
             }
         };
