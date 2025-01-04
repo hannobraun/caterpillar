@@ -43,8 +43,8 @@ impl ApplicationHandler for Application {
             Ok(resources) => Some(resources),
             Err(err) => {
                 if let Err(SendError(_)) = self.error.send(err) {
-                    // The other end has hung up. Nothing else we can do
-                    // with this error now.
+                    // The other end has already hung up. Nothing we can do
+                    // about it.
                 };
                 event_loop.exit();
                 return;
