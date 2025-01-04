@@ -115,7 +115,7 @@ impl ApplicationResources {
             Arc::new(window)
         };
 
-        let renderer = Renderer::new(window.clone())?;
+        let renderer = Renderer::new(window.clone()).block_on()?;
 
         Ok(Self { window, renderer })
     }
@@ -128,7 +128,7 @@ struct Renderer {
 }
 
 impl Renderer {
-    fn new(window: Arc<Window>) -> anyhow::Result<Self> {
+    async fn new(window: Arc<Window>) -> anyhow::Result<Self> {
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
         let Some(adapter) = instance
@@ -137,7 +137,7 @@ impl Renderer {
                 force_fallback_adapter: false,
                 compatible_surface: Some(&surface),
             })
-            .block_on()
+            .await
         else {
             return Err(anyhow!(
                 "Did not find adapter that can render to surface."
@@ -153,7 +153,7 @@ impl Renderer {
                 },
                 None,
             )
-            .block_on()?;
+            .await?;
         let size = window.inner_size();
         let config = surface
             .get_default_config(&adapter, size.width, size.height)
