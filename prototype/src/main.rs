@@ -39,7 +39,7 @@ struct Application {
 
 impl ApplicationHandler for Application {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window = match ApplicationResources::init(event_loop) {
+        let resources = match ApplicationResources::init(event_loop) {
             Ok(window) => window,
             Err(err) => {
                 if let Err(SendError(_)) = self.error.send(err) {
@@ -51,7 +51,7 @@ impl ApplicationHandler for Application {
             }
         };
 
-        self.resources = Some(window);
+        self.resources = Some(resources);
     }
 
     fn window_event(
