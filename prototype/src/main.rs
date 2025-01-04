@@ -74,12 +74,12 @@ impl ApplicationHandler for Application {
 
         if let WindowEvent::RedrawRequested = event {
             let surface_texture =
-                resources.surface.get_current_texture().unwrap();
+                resources.renderer.surface.get_current_texture().unwrap();
             let view = surface_texture
                 .texture
                 .create_view(&wgpu::TextureViewDescriptor::default());
 
-            let mut encoder = resources.device.create_command_encoder(
+            let mut encoder = resources.renderer.device.create_command_encoder(
                 &wgpu::CommandEncoderDescriptor { label: None },
             );
             encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
@@ -96,7 +96,7 @@ impl ApplicationHandler for Application {
                 timestamp_writes: None,
                 occlusion_query_set: None,
             });
-            resources.queue.submit(Some(encoder.finish()));
+            resources.renderer.queue.submit(Some(encoder.finish()));
             surface_texture.present();
         }
     }
@@ -104,9 +104,7 @@ impl ApplicationHandler for Application {
 
 struct ApplicationResources {
     window: Arc<Window>,
-    surface: wgpu::Surface<'static>,
-    device: wgpu::Device,
-    queue: wgpu::Queue,
+    renderer: Renderer,
 }
 
 impl ApplicationResources {
@@ -152,9 +150,17 @@ impl ApplicationResources {
 
         Ok(Self {
             window,
-            surface,
-            device,
-            queue,
+            renderer: Renderer {
+                surface,
+                device,
+                queue,
+            },
         })
     }
+}
+
+struct Renderer {
+    surface: wgpu::Surface<'static>,
+    device: wgpu::Device,
+    queue: wgpu::Queue,
 }
