@@ -145,7 +145,7 @@ impl Renderer {
                 None,
             )
             .await?;
-        
+
         let size = window.inner_size();
         let config = surface
             .get_default_config(&adapter, size.width, size.height)
@@ -184,6 +184,7 @@ impl Renderer {
             timestamp_writes: None,
             occlusion_query_set: None,
         });
+
         self.queue.submit(Some(encoder.finish()));
         surface_texture.present();
 
