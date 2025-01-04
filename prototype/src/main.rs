@@ -8,7 +8,7 @@ use winit::{
 fn main() -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
-    let mut application = Application::default();
+    let mut application = Application { window: None };
     event_loop.run_app(&mut application)?;
 
     Ok(())
